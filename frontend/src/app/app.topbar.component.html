@@ -1,0 +1,84 @@
+<div *ngIf="isAuth" class="layout-topbar" >
+    <div class="layout-topbar-logo">
+        <a href="#">
+            <img src="../assets/layout/images/logo.png" Style="width: 15em;" >
+        </a>
+    </div>
+    <a class="layout-menu-button" href="#" (click)="app.onMenuButtonClick($event)" >
+        <i class="pi pi-bars"></i>
+    </a>
+    <ul class="layout-topbar-menu" role="menu">
+
+     
+        <li #profile  class="user-profile"
+            [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
+            <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                <div class="user-profile-info profile-link">
+                    <span class="user-profile-name"></span>
+                           
+                    
+                            <span class="user-profile-role" ></span>
+                </div>
+                <!--<img class="logo"  [src]="profilePicture" alt="prestige-layout"/>-->
+                <!-- <button *ngIf="connected" pTooltip="Notifications"  tooltipPosition="bottom" style="
+               
+            height: 30px;
+            width: 30px;
+            font-size: 15px;
+            font-weight: bold;
+
+            border-color: white;
+            text-align: center;
+          
+            color:white;
+            background-color:darkmagenta;
+            border-radius: 60%;
+            display: inline-block;padding-left:2%;color:white"> {{ notifications }}</button> -->
+
+
+            </a>
+
+
+            <span  class="p-overlay-badge p-mr-5">
+                <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom" style="  background-color:#3cb371;
+                border-radius: 50%; font-size: 1.6em; color: white;"></i>
+                <span class="p-badge" style="font-size: 15px;  font-weight: bold;
+                color: #3cb371"></span>
+            </span>
+
+            <ul class="fadeInDown">
+                <li class="profile-detail">
+                    <div class="user-profile-info">
+                        <img class="logo"  [src]="profilePicture" alt="prestige-layout"/>
+                        <div class="profile-info">
+                            <span class="user-profile-name"></span>
+                            <span class="user-profile-role"></span>
+                        </div>
+                        <a href="#" class="profile-detail-icon" (click)="app.onTopbarSubItemClick($event)">
+                            <i pTooltip="Déconnexion"  (click)="onLogout()"  class="pi pi-sign-out"></i>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" routerLink="../profil">
+                        <i class="pi pi-user" style="color:#3cb371"></i>
+                        <div class="menu-text">
+                                    <span class="menu-title"  >Modifier votre profil</span>
+                        </div>
+
+                        <i class="right-icon pi pi-angle-right"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="#"  (click)="app.onTopbarSubItemClick($event)">
+                        <i class="pi pi-bell" style="color:#3cb371"></i>
+                        <div class="menu-text">
+                            <span class="menu-title">Notifications</span>
+                        </div>
+                        <i class="right-icon pi pi-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
