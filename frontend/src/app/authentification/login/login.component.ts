@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,7 +13,9 @@ import { environment } from 'src/environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private AuthService:AuthService,private messageService: MessageService) { }
+
+  errorLogin=false;
 
   LoginForm: FormGroup= new FormGroup({
     email:new FormControl('',[Validators.required,Validators.email]),
@@ -19,21 +24,34 @@ export class LoginComponent implements OnInit {
 
   login(){
     //Connexion
-    const ListUser=environment.listUser;
-    ListUser.forEach(user => {
-      let json = JSON.parse(user)
-      if(json.email == this.LoginForm.value.email && json.password == this.LoginForm.value.password){
-        //authentified
-        environment.User=JSON.stringify(json)
-        this.router.navigate(['/listUser']);
+    let user = <any>{
+      email:this.LoginForm.value.email,
+      password:this.LoginForm.value.password
+    }
+    this.AuthService.login(user).subscribe((data)=>{
+      if(data.token!=null){
+        localStorage.setItem("token",data.token);
+        window.location.reload();
+
       }
+    },(error)=>{
+      if(error.status==404){
+        //Not Found (Pas de correspondance pour le duo email/passwd)
+        this.messageService.add({severity:'error', summary:'Erreur de Connexion', detail:'Email ou mot de passe incorrect'});
+        this.errorLogin=true;
+      }
+      console.log(error)
     });
   }
+  
 
   get email() { return this.LoginForm.get('email'); }
   get password() { return this.LoginForm.get('password'); }
 
   ngOnInit(): void {
+    if(localStorage.getItem("token")!=null){
+      this.router.navigate(['/'])
+    }
   }
 
 }

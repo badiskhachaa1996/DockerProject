@@ -264,7 +264,7 @@ body .ui-inputswitch.ui-inputswitch-checked .ui-inputswitch-slider {
   border-color: #4ddbff;
 }
 body .ui-inputswitch.ui-inputswitch-checked .ui-inputswitch-slider:before {
-  background-color: #1ad1ff;
+  background-color: #3da827;/*focus*/
 }
 body .ui-inputswitch.ui-inputswitch-checked:not(.ui-state-disabled):hover .ui-inputswitch-slider {
   background-color: #4ddbff;
@@ -1151,7 +1151,7 @@ body .ui-button:enabled:hover {
 body .ui-button:enabled:focus {
   outline: 2px dotted #3da827;
   outline-offset: 1px;
-  background-color: #1ad1ff;
+  background-color: #3da827;/*focus*/
 }
 body .ui-button:enabled:active {
   background-color: #024B4C;
@@ -2029,7 +2029,7 @@ body .fc .fc-button:enabled:not(:focus):not(.fc-button-active):hover {
 body .fc .fc-button:enabled:not(.fc-button-active):focus {
   outline: 2px dotted #3da827;
   outline-offset: 1px;
-  background-color: #1ad1ff;
+  background-color: #3da827;/*focus*/
   box-shadow: none;
 }
 body .fc .fc-button.fc-button-active {

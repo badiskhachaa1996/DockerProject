@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from './app.component';
 import { interval, Subscription } from 'rxjs';
-
+import jwt_decode from "jwt-decode";
+import { User } from './models/User';
+import { AuthService } from './services/auth.service';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-topbar',
@@ -20,35 +24,30 @@ export class AppTopBarComponent implements OnInit {
   keycloak: any;
   isAuth = false;
   userInformations: any;
-  role: any;
-  userconnected: any;
-  constructor(public app: AppComponent) {
+  role: string;
+  userconnected: User;
 
-  }
+  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router,private messageService:MessageService) { }
+
   ngOnInit() {
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
-
-
-    //  localStorage.setItem('email',this.keycloak.tokenParsed.email)
-    if (this.isAuth) {
-      this.userInformations = {};
+    if (localStorage.getItem("token") != null) {
+      this.isAuth = true;
+      let temp: User = jwt_decode(localStorage.getItem("token"))
+      this.AuthService.getById(temp.id).subscribe((data) => {
+        this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+      }, (error) => {
+        console.log(error)
+      })
+    } else {
+      this.router.navigate(['/login'])
     }
-
-    //  console.log('email user connected : ' + this.keycloak.tokenParsed.email);
   }
-
-
-
-
   onLogout() {
-   
     localStorage.clear();
+    this.isAuth = false;
+    this.router.navigate(['/login'])
   }
-  
-
-
-
-
 }
 

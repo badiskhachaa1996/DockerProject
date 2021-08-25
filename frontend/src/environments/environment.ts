@@ -3,30 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  listUser:[JSON.stringify({
-    nom:"UserLambda",
-    prenom:"Liste",
-    email:"a@a",
-    phone:"0222222222",
-    adresse:"20 Place de l'église",
-    password:"azet",
-  })],
-  UserPreInscrit:[JSON.stringify({
-    nom:"UserLambda2",
-    prenom:"PreInscrit",
-    email:"a1@a",
-    phone:"021111111",
-    adresse:"14 Rue du fou",
-    password:"azert",
-  })],
-  UserInscrit:[JSON.stringify({
-    nom:"UserLambda3",
-    prenom:"Inscrit",
-    email:"a2@a",
-    phone:"0231313131",
-    adresse:"15 Rue de jesaispasquoi",
-    password:"azert",
-  })],
   key:"JESUISUNECLESECRETE",
   User:null,
   
