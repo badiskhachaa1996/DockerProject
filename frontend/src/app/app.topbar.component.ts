@@ -40,8 +40,6 @@ export class AppTopBarComponent implements OnInit {
       }, (error) => {
         console.log(error)
       })
-    } else {
-      this.router.navigate(['/login'])
     }
   }
   onLogout() {
