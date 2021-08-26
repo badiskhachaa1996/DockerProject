@@ -12,6 +12,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 
 export class AuthService {
   apiUrl ="http://localhost:3000/"
+  private Services = [];
 
   constructor(private http : HttpClient, private _router: Router) {  }
 
@@ -33,4 +34,13 @@ export class AuthService {
     let loginUrl=this.apiUrl+"user/getUser/"+id;
     return this.http.get<any>(loginUrl,httpOptions1);
   }
+  createServices(service){
+    const newService = { id: Date.now(), ...service};
+    this.Services = [service, ...this.Services] ;
+    console.log(this.Services);
+     }
+
+     getServices(){
+       return this.Services;
+     }
 }

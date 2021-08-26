@@ -80,6 +80,7 @@ import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { DragDropModule } from 'primeng/dragdrop';
+import { ServiceComponent } from './service/service.component';
 
 
 
@@ -170,6 +171,7 @@ import { DragDropModule } from 'primeng/dragdrop';
         LoginComponent,
         RegisterComponent,
         HomeComponent,
+        ServiceComponent,
        
 
                
