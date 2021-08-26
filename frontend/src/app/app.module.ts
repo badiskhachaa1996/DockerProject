@@ -80,6 +80,8 @@ import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { DragDropModule } from 'primeng/dragdrop';
+import { ServiceComponent } from './Gestion_Application/service/service.component';
+import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
 
 
 
@@ -170,11 +172,13 @@ import { DragDropModule } from 'primeng/dragdrop';
         LoginComponent,
         RegisterComponent,
         HomeComponent,
+        ServiceComponent,
+        SujetComponent,
        
 
                
     ],
-        providers: [  MessageService ,ConfirmationService],
+        providers: [  MessageService ,ConfirmationService,ServiceComponent],
         bootstrap: [AppComponent]
         })
       export class AppModule { }
