@@ -1,19 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SujetService {
-  private Sujets = [];
-  constructor() { }
 
-  createSujets(sujet){
-      const newService = { id: Date.now(), ...sujet};
-      this.Sujets = [sujet, ...this.Sujets] ;
-      console.log(this.Sujets);
-       }
-  
-       getSujets(){
-         return this.Sujets;
-       }
+  constructor(private http: HttpClient) { }
+  apiUrl ="http://localhost:3000/"
+  getAll(){
+    let loginUrl=this.apiUrl+"sujet/getAll";
+    return this.http.get<any>(loginUrl);
+  }
 }

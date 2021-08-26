@@ -14,7 +14,7 @@ export class TicketService {
 
   constructor(private http : HttpClient) {  }
 
-  create(ticket :Ticket){
+  create(ticket){
     let registreUrl=this.apiUrl+"create";
     return this.http.post<any>(registreUrl,ticket,httpOptions);
   }

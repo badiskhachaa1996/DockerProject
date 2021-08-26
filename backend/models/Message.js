@@ -8,11 +8,11 @@ const message_schema= new mongoose.Schema({
         type:String
     },
     user_id:{
-         type: String,
+         type: mongoose.SchemaTypes.ObjectId,
          required:true
         },
     ticket_id:{
-        type: String,
+        type: mongoose.SchemaTypes.ObjectId,
          required:true
     },
     date_ajout:{

@@ -8,7 +8,8 @@ const sujet_schema= new mongoose.Schema({
             },
     service: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Service"
+        ref: "Service",
+        required:true
       }
    
 });

@@ -6,7 +6,8 @@ const { Sujet } = require("./../models/sujet");
 app.post("/addsujet", (req, res) => {
     let data = req.body;
     let sujet = new Sujet({
-        label: data.label
+        label: data.label,
+        service_id:data.service_id
     })
     sujet.save().then((sujetFromDb) => {
         res.status(200).send({ message: "Sujet : "+sujetFromDb.sujet_id + "registration done sujet :"+sujetFromDb.label });
@@ -52,7 +53,9 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
+app.get("/createDefault",(req,res)=>{
 
+})
 
 
 
