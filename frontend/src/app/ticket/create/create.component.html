@@ -1,1 +1,37 @@
-<p>create works!</p>
+<div class="p-grid mt-2">
+    <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
+        <p-card>
+            <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
+                <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
+                  <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                    <h3 class="text-center">Création de ticket</h3>
+                        <div class="grid">
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <select type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom" pInputText></select>
+                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                    <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
+                                    <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <select type="text" formControlName="firstname" class="form-control col-12" placeholder="Prénom" pInputText></select>
+                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                    <span class="error" *ngIf="firstname.errors?.required">*Le prénom est obligatoire.</span>
+                                    <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <input type="text" formControlName="description" class="form-control col-12" placeholder="Description" pInputText>
+                                <div *ngIf="description.invalid && (email.touched || email.dirty)">
+                                    <span class="error" *ngIf="description.errors?.required">*La description est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                                <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+  </div>

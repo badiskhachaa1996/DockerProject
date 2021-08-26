@@ -7,7 +7,7 @@ const sujet_schema= new mongoose.Schema({
                 required : true
             },
     service_id: {
-        type: String,
+        type: mongoose.SchemaTypes.ObjectId,
         required:true
     }
    
