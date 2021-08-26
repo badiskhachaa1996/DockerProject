@@ -59,3 +59,4 @@ app.get("/getAll",(req, res) => {
             console.log(err);
         })
 });
+module.exports = app;

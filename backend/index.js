@@ -31,9 +31,15 @@ app.listen(3000,  ()=>console.log("Node.JS started"));
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
+const messageController = require('./controllers/messageController')
+const ticketController = require('./controllers/ticketController')
 
 app.use("/user",UserController);
 
 app.use("/service",ServiceController);
 
 app.use("/sujet",SujetController);
+
+app.use("/message",messageController);
+
+app.use('/ticket',ticketController)

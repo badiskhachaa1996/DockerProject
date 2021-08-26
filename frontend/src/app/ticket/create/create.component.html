@@ -7,22 +7,24 @@
                     <h3 class="text-center">Création de ticket</h3>
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <select type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom" pInputText></select>
-                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                    <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                                    <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
-                                </div>
+                                <select class="form-control col-12" >
+                                    <option [ngValue]="null" disabled>Choissisez un service</option>
+                                    <option *ngFor="let service of listServices">
+                                        {{ service.label }}
+                                       </option>
+                                </select>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <select type="text" formControlName="firstname" class="form-control col-12" placeholder="Prénom" pInputText></select>
-                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                    <span class="error" *ngIf="firstname.errors?.required">*Le prénom est obligatoire.</span>
-                                    <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont acceptés.</span>
-                                </div>
+                                <select fromControlName="sujet" class="form-control col-12" >
+                                    <option [ngValue]="null" disabled>Choissisez un sujet</option>
+                                    <option *ngFor="let sujet of listSujet" [ngValue]="sujet">
+                                        {{ sujet.label }}
+                                       </option>
+                                </select>
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <input type="text" formControlName="description" class="form-control col-12" placeholder="Description" pInputText>
-                                <div *ngIf="description.invalid && (email.touched || email.dirty)">
+                                <div *ngIf="description.invalid && (description.touched || description.dirty)">
                                     <span class="error" *ngIf="description.errors?.required">*La description est obligatoire.</span>
                                 </div>
                             </div>

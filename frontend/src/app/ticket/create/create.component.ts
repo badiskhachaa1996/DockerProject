@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
+import { ServService } from 'src/app/services/service.service';
 
 @Component({
   selector: 'app-create',
@@ -13,9 +14,12 @@ import jwt_decode from "jwt-decode";
 export class CreateComponent implements OnInit {
 
   selectedService;
+  listServices;
+  listSujets;
 
   TicketForm: FormGroup= new FormGroup({
-    description:new FormControl('',Validators.required)
+    description:new FormControl('',Validators.required),
+    sujet:new FormControl(null,Validators.required)
   })
 
   addTicket(){
@@ -37,9 +41,15 @@ export class CreateComponent implements OnInit {
 
   get description() { return this.TicketForm.get('description'); }
 
-  constructor(private router: Router,private TicketService:TicketService,private messageService: MessageService) { }
+  constructor(private router: Router,private TicketService:TicketService,private serv:ServService,private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.serv.getAll().subscribe((data)=>{
+      console.log(data);
+      this.listServices=data;
+    },(error)=>{
+      console.log(error)
+    })
   }
 
 }
