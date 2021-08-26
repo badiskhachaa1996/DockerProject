@@ -40,7 +40,7 @@ export class AppTopBarComponent implements OnInit {
       }, (error) => {
         console.log(error)
       })
-    }
+    } 
   }
   onLogout() {
     localStorage.clear();

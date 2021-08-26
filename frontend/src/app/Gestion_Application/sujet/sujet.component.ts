@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SujetService } from 'src/app/services/sujet.service';
 
 @Component({
   selector: 'app-sujet',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sujet.component.css']
 })
 export class SujetComponent implements OnInit {
-
-  constructor() { }
+  allSujets = []; 
+  constructor(private ts:SujetService) { }
 
   ngOnInit(): void {
+  }
+  getSujets(){
+    this.allSujets = this.ts.getSujets();
   }
 
 }
