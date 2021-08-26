@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { User } from '../models/User';
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
@@ -13,7 +12,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 export class AuthService {
   apiUrl ="http://localhost:3000/"
 
-  constructor(private http : HttpClient, private _router: Router) {  }
+  constructor(private http : HttpClient) {  }
 
   register(user :User){
     let registreUrl=this.apiUrl+"user/registre";

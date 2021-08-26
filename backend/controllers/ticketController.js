@@ -61,7 +61,7 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
-//Récuperer tous les menus
+//Récuperer tous les tickets
 app.get("/getAll",(req, res) => {
     Ticket.find()
         .then(result=>{
@@ -72,3 +72,24 @@ app.get("/getAll",(req, res) => {
             console.log(err);
         })
 });
+
+//Récupérer tous les tickets d'un User
+app.get("/getAllbyUser/:id",(req, res) => {
+    Ticket.find({ createur_id: req.params.id })
+        .then(result=>{
+            console.log('result: ',result)
+            res.send(result.length>0?result:'No Tickets');
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+});
+//Récupérer le premier message d'un Ticket
+app.get("/getFirstMessage/:id",(req,res)=>{
+    Message.findOne({ticket_id:req.params.id}).sort({date_ajout:1}).then((dataMessage) => {
+        res.status(200).send({ dataMessage });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+
+})
