@@ -11,11 +11,13 @@ app.post("/create",(req, res) => {
     });
 
     ticket.save((err, doc) => {
+        console.log(doc)
+        console.log(err)
         const message = new Message({
             user_id:req.body.id,
             description:req.body.description,
             document:req.body?.document,
-            ticket_id:doc._id
+            ticket_id:doc.id
         });
         message.save((err,doc)=>{
             res.send({message: "Votre ticket a été crée!"});

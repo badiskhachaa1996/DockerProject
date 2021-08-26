@@ -31,9 +31,7 @@ const ticket_schema= new mongoose.Schema({
         type: String
     },
     isAffected:{
-        type:Boolean,
-        required:true,
-        default:null
+        type:Boolean
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

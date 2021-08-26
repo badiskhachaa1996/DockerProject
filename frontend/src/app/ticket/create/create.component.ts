@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { ServService } from 'src/app/services/service.service';
+import { SujetService } from 'src/app/services/sujet.service';
 
 @Component({
   selector: 'app-create',
@@ -15,20 +16,23 @@ export class CreateComponent implements OnInit {
 
   selectedService;
   listServices;
-  listSujets;
+  listSujets:any=[];
+  listSujetSelected=[];
 
   TicketForm: FormGroup= new FormGroup({
     description:new FormControl('',Validators.required),
-    sujet:new FormControl(null,Validators.required)
+    sujet:new FormControl('',Validators.required),//Ils doit forcément selectionner
+    service:new FormControl('',Validators.required),
   })
 
   addTicket(){
     //Enregistrement du Ticket
+    console.log(this.TicketForm.value)
     let req = <any>{
-      id:jwt_decode(localStorage.getItem("token")["id"]),
-      sujet_id:this.TicketForm.value,//TODO
+      id:jwt_decode(localStorage.getItem("token"))["id"],
+      sujet_id:this.TicketForm.value.sujet._id,
       description:this.TicketForm.value.description,
-      document:this.TicketForm.value//TODO
+      //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Création du Ticket', detail:'Création réussie'});
@@ -41,15 +45,25 @@ export class CreateComponent implements OnInit {
 
   get description() { return this.TicketForm.get('description'); }
 
-  constructor(private router: Router,private TicketService:TicketService,private serv:ServService,private messageService: MessageService) { }
+  constructor(private router: Router,private TicketService:TicketService,private sujetServ:SujetService,private serv:ServService,private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.serv.getAll().subscribe((data)=>{
       console.log(data);
       this.listServices=data;
+      data.forEach(service => {
+        this.listSujets[service._id]=[];
+      });
+      this.sujetServ.getAll().subscribe((data)=>{
+        data.forEach(sujet => {
+          this.listSujets[sujet.service_id].push(sujet);
+        });
+        console.log(this.listSujets)
+      })
     },(error)=>{
       console.log(error)
     })
+
   }
 
 }
