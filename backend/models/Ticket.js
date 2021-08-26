@@ -32,7 +32,6 @@ const ticket_schema= new mongoose.Schema({
     },
     isAffected:{
         type:Boolean,
-        required:true,
         default:null
     }
 });

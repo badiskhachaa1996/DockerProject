@@ -39,5 +39,15 @@ export class TicketService {
     return this.http.get<any>(registreUrl);
   }
 
+  getQueue(){
+    let registreUrl=this.apiUrl+"getQueue";
+    return this.http.get<any>(registreUrl);
+  }
+
+  getAccAff(){
+    let registreUrl=this.apiUrl+"getAccAff";
+    return this.http.get<any>(registreUrl);
+  }
+
 
 }

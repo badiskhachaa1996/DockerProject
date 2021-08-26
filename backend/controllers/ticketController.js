@@ -11,11 +11,13 @@ app.post("/create",(req, res) => {
     });
 
     ticket.save((err, doc) => {
+        console.log(doc)
+        console.log(err)
         const message = new Message({
             user_id:req.body.id,
             description:req.body.description,
             document:req.body?.document,
-            ticket_id:doc._id
+            ticket_id:doc.id
         });
         message.save((err,doc)=>{
             res.send({message: "Votre ticket a été crée!"});
@@ -66,7 +68,7 @@ app.get("/getAll",(req, res) => {
     Ticket.find()
         .then(result=>{
             console.log('result: ',result)
-            res.send(result.length>0?result:'No Tickets');
+            res.send({message:"Pas de Tickets"});
         })
         .catch(err=>{
             console.log(err);
@@ -78,7 +80,7 @@ app.get("/getAllbyUser/:id",(req, res) => {
     Ticket.find({ createur_id: req.params.id })
         .then(result=>{
             console.log('result: ',result)
-            res.send(result.length>0?result:'No Tickets');
+            res.send({message:"Pas de Tickets crée par cette User"});
         })
         .catch(err=>{
             console.log(err);
@@ -91,6 +93,32 @@ app.get("/getFirstMessage/:id",(req,res)=>{
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
     })
+
+})
+
+//Récupérer la queue d'entrée
+app.get("/getQueue",(req,res)=>{
+    Ticket.find({ statut: "Queue d'entrée" })
+        .then(result=>{
+            console.log('result: ',result)
+            res.send({message:"Pas de Tickets dans la Queue d'entrée"});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+
+})
+
+//Récupérer les Tickets Acceptes ou Affectés
+app.get("/getAccAff",(req,res)=>{
+    Ticket.find({ statut: "Acc/Aff" })
+        .then(result=>{
+            console.log('result: ',result)
+            res.send({message:"Pas de Tickets Acceptés ou Affectés"});
+        })
+        .catch(err=>{
+            console.log(err);
+        })
 
 })
 module.exports = app;

@@ -1,0 +1,101 @@
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <h3>Tableau de la Queue d'entrée</h3>
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" pDroppable="InscritToList"
+                (onDrop)="dragInscritToList($event)">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>
+                            Service
+                        </th>
+                        <th>
+                            Sujet
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr pDraggable="ListToPreInscrit"
+                    (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
+                        </td>
+                        <td>
+                            {{sujetList[rowData.sujet_id].label}}
+                        </td>
+                        <td>
+                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <h3>Tableau des Tickets Acceptés/Affectés</h3>
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="UserPreInscrit" [columns]="cols" [value]="UserPreInscrit" pDroppable="ListToPreInscrit"
+                (onDrop)="dragListToPreInscrit($event)">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>
+                            Service
+                        </th>
+                        <th>
+                            Sujet
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr pDraggable="PreInscritToInscrit" (onDragStart)="dragStart($event, rowData)"
+                        (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
+                        </td>
+                        <td>
+                            {{sujetList[rowData.sujet_id].label}}
+                        </td>
+                        <td>
+                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<!--
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <h3>Tableau des Utilisateurs Inscrit</h3>
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="UserInscrit" [columns]="cols" [value]="UserInscrit" pDroppable="PreInscritToInscrit"
+                (onDrop)="dragPreInscritToInscrit($event)">
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            {{col.header}}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td style="background-color: white;" *ngFor="let col of columns" pDraggable="InscritToList"
+                            (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)">
+                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="InscritToList(rowData)" *ngIf="!col.field"></i>
+                            {{rowData[col.field]}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>-->

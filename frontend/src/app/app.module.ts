@@ -84,6 +84,7 @@ import { ServiceComponent } from './Gestion_Application/service/service.componen
 import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { UpdateComponent } from './ticket/update/update.component';
+import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
 
 
 
@@ -178,6 +179,7 @@ import { UpdateComponent } from './ticket/update/update.component';
         SujetComponent,
         CreateComponent,
         UpdateComponent,
+        ListTicketComponent,
        
 
                

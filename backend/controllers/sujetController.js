@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des Sujets
 const { Sujet } = require("./../models/sujet");
+//const { Service } = require("./../models/service");
 
 
 app.post("/addsujet", (req, res) => {
@@ -23,7 +24,7 @@ app.get("/getAll",(req,res)=>{
     Sujet.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:'Pas de Sujet');
+        res.send({message:"Pas de Sujets"});
     })
     .catch(err=>{   
         console.log(err);
@@ -49,13 +50,46 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(Sujet)
+            res.send(sujet)
         })
 });
 
-app.get("/createDefault",(req,res)=>{
+/*app.get("/createDefault",(req,res)=>{
+    let service = new Service({
+        label:"Pedagogique"
+    })
+    service.save().then((serviceData)=>{
+        let sujet = new Sujet({
+            label: "Récupérer mes notes",
+            service_id:serviceData._id
+        })
+        sujet.save()
+        sujet = new Sujet({
+            label: "Récupérer mon emploi du temps",
+            service_id:serviceData._id
+        })
+        sujet.save()
+    })
 
-})
+    service = new Service({
+        label:"Financier"
+    })
+    service.save().then((serviceData)=>{
+        sujet = new Sujet({
+            label: "Récupérer ma fiche de paie",
+            service_id:serviceData._id
+        })
+        sujet.save()
+        sujet = new Sujet({
+            label: "Récupérer l'avancement de mon payement",
+            service_id:serviceData._id
+        })
+        sujet.save().then(()=>{
+            res.status(200).send("Default loaded")
+        })
+    })
+
+})*/
 
 
 
