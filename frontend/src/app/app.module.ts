@@ -173,7 +173,7 @@ import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
         RegisterComponent,
         HomeComponent,
         ServiceComponent,
-       
+        SujetComponent
 
                
     ],
