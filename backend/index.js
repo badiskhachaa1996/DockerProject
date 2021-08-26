@@ -28,5 +28,12 @@ app.get("/",(req,res)=>res.status(200).send("GG ça marche"));
 //il va attendre le lancement du serveur et lire à partir du port 3000 et si il est strated affiche moi le serveur il est up.
 app.listen(3000,  ()=>console.log("Node.JS started"));
 
-const UserController = require('./controllers/userController')
-app.use("/user",UserController)
+const UserController = require('./controllers/userController');
+const ServiceController = require('./controllers/serviceController');
+const SujetController = require('./controllers/sujetController');
+
+app.use("/user",UserController);
+
+app.use("/service",ServiceController);
+
+app.use("/sujet",SujetController);
