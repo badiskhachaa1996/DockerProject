@@ -6,10 +6,10 @@ const sujet_schema= new mongoose.Schema({
                 type: String,
                 required : true
             },
-    service_id: {
-        type: String,
-        required:true
-    }
+    service: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Service"
+      }
    
 });
 //creation de la table avec le nom Sujet ( model/classe) à l'aide de la biblio mongoose et son schema
