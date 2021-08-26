@@ -1,6 +1,9 @@
+import { Service } from "./Service";
+
 export interface Sujet {
-    id?: string;
+    
     label:string;
+    service_id:Service;
    
 }
   

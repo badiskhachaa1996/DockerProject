@@ -81,7 +81,6 @@ import { RegisterComponent } from './authentification/register/register.componen
 import { HomeComponent } from './home/home.component';
 import { DragDropModule } from 'primeng/dragdrop';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
-import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { UpdateComponent } from './ticket/update/update.component';
 
@@ -175,7 +174,6 @@ import { UpdateComponent } from './ticket/update/update.component';
         RegisterComponent,
         HomeComponent,
         ServiceComponent,
-        SujetComponent,
         CreateComponent,
         UpdateComponent,
        

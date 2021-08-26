@@ -4,7 +4,7 @@ import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
-import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
+
 
 
 const routes: Routes = [
@@ -12,8 +12,8 @@ const routes: Routes = [
     { path: '', component: HomeComponent},
     {path:'login',component:LoginComponent},
     {path:'register',component:RegisterComponent},
-    {path:'service',component:ServiceComponent},
-    {path:'sujet',component:SujetComponent}
+    {path:'servicesujet',component:ServiceComponent},
+
     
     // { path: '**', redirectTo: '/' }
   ];

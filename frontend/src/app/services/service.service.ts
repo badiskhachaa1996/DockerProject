@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Service } from '../models/Service';
+import { Sujet } from '../models/Sujet';
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
 const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
@@ -20,5 +21,23 @@ export class ServService {
     return this.http.post<any>(add_serv,service,httpOptions);
   }
   
+
+  update(sujet :Sujet){
+    let registreUrl=this.apiUrl+"updateById/"+sujet.service_id;
+    return this.http.post<any>(registreUrl,sujet,httpOptions1);
+  }
+
+  delete(id:string){
+    let registreUrl=this.apiUrl+"deleteById/"+id;
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
+
+  getAServiceByid(id:string){
+    let registreUrl=this.apiUrl+"service/getById/"+id;
+    return this.http.get<any>(registreUrl,httpOptions);
+  }
+
+  
+
 
 }
