@@ -1,13 +1,25 @@
-//Création d'un nouveau ticket TODO
-pp.post("/create",(req, res) => {
+const express = require("express");
+const { Message } = require("../models/Message");
+const app = express(); //à travers ça je peux faire la creation des services
+const { Ticket } = require("./../models/Ticket");
+
+//Création d'un nouveau ticket
+app.post("/create",(req, res) => {
     const ticket = new Ticket({
-        titre:req.body.title,
-        id_plats:req.body.plats,
-        prix:req.body.prix
+        createur_id:req.body.id,
+        sujet_id:req.body.sujet_id
     });
 
-    ticket.save((err, user) => {
-        res.send({message: "Votre ticket a été crée!"});
+    ticket.save((err, doc) => {
+        const message = new Message({
+            user_id:req.body.id,
+            description:req.body.description,
+            document:req.body?.document,
+            ticket_id:doc._id
+        });
+        message.save((err,doc)=>{
+            res.send({message: "Votre ticket a été crée!"});
+        })
     });
 });
 
@@ -54,7 +66,7 @@ app.get("/getAll",(req, res) => {
     Ticket.find()
         .then(result=>{
             console.log('result: ',result)
-            res.send(result.length>0?result:'No Menus');
+            res.send(result.length>0?result:'No Tickets');
         })
         .catch(err=>{
             console.log(err);

@@ -8,9 +8,6 @@ const ticket_schema= new mongoose.Schema({
         type:String,
         required:true
     },
-    message_id:{
-         type: [any]
-        },
     date_ajout:{
         type: Date,
         required : true,
