@@ -80,7 +80,12 @@ import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { DragDropModule } from 'primeng/dragdrop';
+<<<<<<< HEAD
 import { ServiceComponent } from './service/service.component';
+=======
+import { ServiceComponent } from './Gestion_Application/service/service.component';
+import { SujetComponent } from './Gestion_Application/sujet/sujet.component';
+>>>>>>> d0140e6312210298de44d3cd5e9b9420940b7b7f
 
 
 
@@ -172,11 +177,15 @@ import { ServiceComponent } from './service/service.component';
         RegisterComponent,
         HomeComponent,
         ServiceComponent,
+<<<<<<< HEAD
+=======
+        SujetComponent,
+>>>>>>> d0140e6312210298de44d3cd5e9b9420940b7b7f
        
 
                
     ],
-        providers: [  MessageService ,ConfirmationService],
+        providers: [  MessageService ,ConfirmationService,ServiceComponent],
         bootstrap: [AppComponent]
         })
       export class AppModule { }

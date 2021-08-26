@@ -38,7 +38,7 @@ app.post("/login", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
-app.get("/getUser/:id", (req, res) => {
+app.get("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
         let userToken = jwt.sign({userFromDb},"userData")

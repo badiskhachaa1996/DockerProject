@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   getById(id){
-    let loginUrl=this.apiUrl+"user/getUser/"+id;
+    let loginUrl=this.apiUrl+"user/getById/"+id;
     return this.http.get<any>(loginUrl,httpOptions1);
   }
   createServices(service){
