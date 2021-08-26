@@ -34,13 +34,13 @@ export class AuthService {
     let loginUrl=this.apiUrl+"user/getById/"+id;
     return this.http.get<any>(loginUrl,httpOptions1);
   }
-  createServices(service){
-    const newService = { id: Date.now(), ...service};
-    this.Services = [service, ...this.Services] ;
-    console.log(this.Services);
-     }
+  // createServices(service){
+  //   const newService = { id: Date.now(), ...service};
+  //   this.Services = [service, ...this.Services] ;
+  //   console.log(this.Services);
+  //    }
 
-     getServices(){
-       return this.Services;
-     }
+  //    getServices(){
+  //      return this.Services;
+  //    }
 }
