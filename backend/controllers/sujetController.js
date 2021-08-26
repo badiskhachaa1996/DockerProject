@@ -24,7 +24,7 @@ app.get("/getAll",(req,res)=>{
     Sujet.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:'Pas de Sujet');
+        res.send({message:"Pas de Sujets"});
     })
     .catch(err=>{   
         console.log(err);
@@ -50,7 +50,7 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(Sujet)
+            res.send(sujet)
         })
 });
 
