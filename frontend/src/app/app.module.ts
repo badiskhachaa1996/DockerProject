@@ -83,6 +83,7 @@ import { DragDropModule } from 'primeng/dragdrop';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { UpdateComponent } from './ticket/update/update.component';
+import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
 
 
 
@@ -176,6 +177,7 @@ import { UpdateComponent } from './ticket/update/update.component';
         ServiceComponent,
         CreateComponent,
         UpdateComponent,
+        ListTicketComponent,
        
 
                

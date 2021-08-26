@@ -4,16 +4,18 @@ import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
+import { CreateComponent } from './ticket/create/create.component';
+import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
 
 
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
-    { path: '', component: HomeComponent},
+    { path: '', component: ListTicketComponent},
     {path:'login',component:LoginComponent},
     {path:'register',component:RegisterComponent},
-    {path:'servicesujet',component:ServiceComponent},
-
+    {path:'service',component:ServiceComponent},
+    {path:"ticket/create",component:CreateComponent}
     
     // { path: '**', redirectTo: '/' }
   ];

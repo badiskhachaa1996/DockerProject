@@ -14,7 +14,7 @@ export class TicketService {
 
   constructor(private http : HttpClient) {  }
 
-  create(ticket :Ticket){
+  create(ticket){
     let registreUrl=this.apiUrl+"create";
     return this.http.post<any>(registreUrl,ticket,httpOptions);
   }
@@ -36,6 +36,16 @@ export class TicketService {
 
   getFirstMessage(id:string){
     let registreUrl=this.apiUrl+"getFirstMessage/"+id;
+    return this.http.get<any>(registreUrl);
+  }
+
+  getQueue(){
+    let registreUrl=this.apiUrl+"getQueue";
+    return this.http.get<any>(registreUrl);
+  }
+
+  getAccAff(){
+    let registreUrl=this.apiUrl+"getAccAff";
     return this.http.get<any>(registreUrl);
   }
 

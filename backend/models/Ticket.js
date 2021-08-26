@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 const ticket_schema= new mongoose.Schema({
     createur_id:{
-        type: String,
+        type: mongoose.SchemaTypes.ObjectId,
         required : true
     },
     sujet_id: {
-        type:String,
+        type:mongoose.SchemaTypes.ObjectId,
         required:true
     },
     date_ajout:{
@@ -14,7 +14,7 @@ const ticket_schema= new mongoose.Schema({
         default:Date.now()
     },
     agent_id:{
-        type: String
+        type: mongoose.SchemaTypes.ObjectId
     },
     statut :{
         type: String,
@@ -32,7 +32,6 @@ const ticket_schema= new mongoose.Schema({
     },
     isAffected:{
         type:Boolean,
-        required:true,
         default:null
     }
 });

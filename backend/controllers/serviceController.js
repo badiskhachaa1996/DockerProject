@@ -20,7 +20,7 @@ app.get("/getAll",(req,res)=>{
     Service.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:'Pas de Service');
+        res.send({message:"Pas de Services"});
     })
     .catch(err=>{   
         console.log(err);
@@ -46,7 +46,7 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(Service)
+            res.send(service)
         })
 });
 

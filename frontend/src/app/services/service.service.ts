@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Service } from '../models/Service';
 import { Sujet } from '../models/Sujet';
 
-const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
+const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
+const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.getItem('token')) };
 @Injectable({
   providedIn: 'root'
 })
@@ -14,13 +14,18 @@ export class ServService {
   private serviceForm = [];
   apiUrl ="http://localhost:3000/"
 
-  constructor(private http : HttpClient, private _router: Router) {  }
+  constructor(private http: HttpClient) { }
 
- public  addService(service :Service){
-    let add_serv=this.apiUrl+"service/addService";
-    return this.http.post<any>(add_serv,service,httpOptions);
+  public addService(service: Service) {
+    let add_serv = this.apiUrl + "service/addService";
+    return this.http.post<any>(add_serv, service, httpOptions);
   }
-  
+
+  getAll() {
+    let loginUrl = this.apiUrl + "service/getAll";
+    return this.http.get<any>(loginUrl, httpOptions1);
+  }
+
 
   update(sujet :Sujet){
     let registreUrl=this.apiUrl+"updateById/"+sujet.service_id;
@@ -36,10 +41,7 @@ export class ServService {
     let registreUrl=this.apiUrl+"service/getById/"+id;
     return this.http.get<any>(registreUrl,httpOptions);
   }
-  getAll(){
-    let loginUrl=this.apiUrl+"service/getAll";
-    return this.http.get<any>(loginUrl,httpOptions1);
-  }
+
 
   
 
