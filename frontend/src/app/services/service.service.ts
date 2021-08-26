@@ -11,7 +11,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 })
 
 export class ServService {
-  
+  private serviceForm = [];
   apiUrl ="http://localhost:3000/"
 
   constructor(private http : HttpClient, private _router: Router) {  }
@@ -36,8 +36,24 @@ export class ServService {
     let registreUrl=this.apiUrl+"service/getById/"+id;
     return this.http.get<any>(registreUrl,httpOptions);
   }
+  getAll(){
+    let loginUrl=this.apiUrl+"service/getAll";
+    return this.http.get<any>(loginUrl,httpOptions1);
+  }
 
   
 
+
+  createServices(service){
+    this.serviceForm = [service, ...this.serviceForm] ;
+    console.log(this.serviceForm);
+     }
+
+     getServices(){
+       return this.serviceForm;
+     }
+
+  
+  
 
 }

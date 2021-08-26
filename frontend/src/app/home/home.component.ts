@@ -48,12 +48,16 @@ export class HomeComponent implements OnInit {
   constructor(private AuthService: AuthService) { }
 
   ngOnInit(): void {
-    this.ServService.getAServiceByid().subscribe((data) => {
+    this.AuthService.getAll().subscribe((data) => {
       this.tabUser = data;
     })
 
     this.cols = [
-      { field: 'label', header: 'label' },
+      { field: 'lastname', header: 'Nom' },
+      { field: 'firstname', header: 'Prenom' },
+      { field: 'email', header: 'Email' },
+      { field: 'phone', header: 'Téléphone' },
+      { field: 'adresse', header: 'Adresse' },
       { field: null, header: "Action" }
     ];
   }

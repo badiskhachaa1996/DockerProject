@@ -19,26 +19,27 @@ export class ServiceComponent implements OnInit {
     nom:new FormControl('',[Validators.required]),
   });
   
-  idserv:String =  "612760a38655f1b1a8ca979a";
+  idserv:string =  "612760a38655f1b1a8ca979a";
  
   emailExists: boolean;
 
- tabserv: any[] = [];
-  cols: any[];
+//  tabserv: any[] = [];
+//   cols: any[];
 
- 
+//   get label() { return this.serviceForm.get('label'); }
+//   get nom() { return this.sujetForm.get('nom'); }
 
-  get label() { return this.serviceForm.get('label'); }
-  get nom() { return this.sujetForm.get('nom'); }
-
- 
-  saveService(){
+allServices :any[]
+  saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
     };
-    this.tabserv.push(this.serviceForm.value)
+    this.ServService.createServices(this.serviceForm.value);
+ 
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
+     
+      console.log(this.allServices);
       this.serviceForm.reset();
       this.router.navigate(['/servicesujet'])
 
@@ -51,6 +52,7 @@ export class ServiceComponent implements OnInit {
       console.log(error)
     });
   }
+
   saveSujet(Service){
     let sujet = <Sujet> {
       label:this.sujetForm.value.label,    
@@ -74,15 +76,16 @@ export class ServiceComponent implements OnInit {
   constructor(private ServService :ServService,private sujet: SujetService,private router: Router,private messageService: MessageService,private ts:SujetService) { }
 
   ngOnInit(): void {
-    this.ServService.getAServiceByid("string").subscribe((data) => {
-      this. tabserv = data;
-    })
-
-    this.cols = [
-      { field: 'label', header: 'label' },
-      { field: null, header: "Action" }
-    ];
+    
+   this.ServService.getAll().subscribe((data) => {
+       this.allServices.push(JSON.parse(data));
+       console.log(this.allServices);
+     })
   }
+  
+
+   
+  
  
 
 }
