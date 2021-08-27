@@ -172,4 +172,66 @@ app.get("/getTicketsByService/:id", (req, res) => {
         console.log(err);
     })
 })
+
+//Get All Tickets de la queue d'entrée by Service ID
+app.get("/getQueueByService/:id", (req, res) => {
+    let id = req.params.id
+    let listSujetofService = []
+    let TicketList=[]
+    Sujet.find()
+        .then(listSujets => {
+            listSujets.forEach(sujet => {
+                if (sujet.service_id == id) {
+                    listSujetofService.push(sujet._id)
+                }
+            });
+            Ticket.find({ statut: "Queue d'entrée" })
+            .then(result => {
+                let listTicket=result.length > 0 ? result : []
+                listTicket.forEach(ticket=>{
+                    if(ticket.sujet_id in listSujetofService){
+                        TicketList.push(ticket)
+                    }
+                })
+                res.status(200).send({TicketList})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    .catch(err => {
+        console.log(err);
+    })
+})
+
+//Get All Tickets Accepted or Affected by Service ID
+app.get("/getAccAffByService/:id", (req, res) => {
+    let id = req.params.id
+    let listSujetofService = []
+    let TicketList=[]
+    Sujet.find()
+        .then(listSujets => {
+            listSujets.forEach(sujet => {
+                if (sujet.service_id == id) {
+                    listSujetofService.push(sujet._id)
+                }
+            });
+            Ticket.find({ statut: "Acc/Aff" })
+            .then(result => {
+                let listTicket=result.length > 0 ? result : []
+                listTicket.forEach(ticket=>{
+                    if(ticket.sujet_id in listSujetofService){
+                        TicketList.push(ticket)
+                    }
+                })
+                res.status(200).send({TicketList})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    .catch(err => {
+        console.log(err);
+    })
+})
 module.exports = app;
