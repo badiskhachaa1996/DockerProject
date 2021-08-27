@@ -8,6 +8,7 @@ import { CreateComponent } from './ticket/create/create.component';
 import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
 
 
+
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
