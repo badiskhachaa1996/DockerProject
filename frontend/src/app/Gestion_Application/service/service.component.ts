@@ -17,27 +17,25 @@ export class ServiceComponent implements OnInit {
     label:new FormControl('',[Validators.required]),
   });
   sujetForm: FormGroup= new FormGroup({
-    nom:new FormControl('',[Validators.required]),
+    label:new FormControl('',[Validators.required]),
+    service_id:new FormControl('',[Validators.required]),
   });
   
   idserv:string =  "612760a38655f1b1a8ca979a";
  
   emailExists: boolean;
 
-//  tabserv: any[] = [];
-//   cols: any[];
-
-//   get label() { return this.serviceForm.get('label'); }
-//   get nom() { return this.sujetForm.get('nom'); }
 services : any;
 currentService = null;
 currentIndex = -1;
 label = '';
 
-allServices :any[]
+allServices :any ;
+
   saveService(){   
     let service = <Service> {
-      label:this.serviceForm.value.label
+      label:this.serviceForm.value.label,
+      service_id:this.serviceForm.value.service_id
     };
  
     this.ServService.addService(service).subscribe((data)=>{
@@ -45,7 +43,7 @@ allServices :any[]
      
       console.log(this.allServices);
       this.serviceForm.reset();
-      this.router.navigate(['/servicesujet'])
+    
 
     },(error)=>{
       if(error.status==400){
@@ -57,14 +55,14 @@ allServices :any[]
     });
   }
 
-  saveSujet(Service){
+  saveSujet(){
     let sujet = <Sujet> {
-      label:this.sujetForm.value.label,    
+      label:this.sujetForm.value.label,  
+      service_id:this.sujetForm.value.service_id  
     };
     this.sujet.addSujet(sujet).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de sujet réussie'});
       this.sujetForm.reset();
-      this.router.navigate(['/servicesujet'])
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
@@ -86,11 +84,7 @@ allServices :any[]
         console.log(error);
       });
   }
-  // refrechList(): void{
-  //     this.Services();
-  //     this.currentService = null;
-  //     this.currentIndex = -8;
-  // }
+ 
   SetActiveServices(service, index): void{
       this.currentService = service;
       this.currentIndex = index;
@@ -101,12 +95,14 @@ allServices :any[]
   constructor(private ServService :ServService,private sujet: SujetService,private router: Router,private messageService: MessageService,private ts:SujetService) { }
 
   ngOnInit(): void {
-    
-  //  this.ServService.getAll().subscribe((data) => {
-  //      this.allServices.push(JSON.parse(data));
-  //      console.log(this.allServices);
-  //    })
-  this.Services();
+    this.ServService.getAll()
+    .subscribe(
+      data => {
+        this.allServices = data;
+        console.log(data);
+      });
+    this.allServices=this.Services();
+  console.log(this.allServices)
   }
   
 
