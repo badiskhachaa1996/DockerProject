@@ -48,12 +48,12 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
-//Récuperer tous les menus
+//Récuperer tous les messages
 app.get("/getAll",(req, res) => {
     Message.find()
         .then(result=>{
             console.log('result: ',result)
-            res.send({message:"Pas de Messages"});
+            res.send(result.length>0?result:{message:"Pas de Messages"});
         })
         .catch(err=>{
             console.log(err);

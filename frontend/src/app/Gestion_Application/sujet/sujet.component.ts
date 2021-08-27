@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SujetService } from 'src/app/services/sujet.service';
 
 @Component({
   selector: 'app-sujet',
@@ -8,12 +7,9 @@ import { SujetService } from 'src/app/services/sujet.service';
 })
 export class SujetComponent implements OnInit {
   allSujets = []; 
-  constructor(private ts:SujetService) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-  getSujets(){
-    this.allSujets = this.ts.getSujets();
   }
 
 }

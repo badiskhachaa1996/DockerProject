@@ -6,6 +6,9 @@ import { HomeComponent } from './home/home.component';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
+import { SuiviComponent } from './ticket/suivi/suivi.component';
+import { UpdateComponent } from './ticket/update/update.component';
+
 
 
 const routes: Routes = [
@@ -14,7 +17,9 @@ const routes: Routes = [
     {path:'login',component:LoginComponent},
     {path:'register',component:RegisterComponent},
     {path:'service',component:ServiceComponent},
-    {path:"ticket/create",component:CreateComponent}
+    {path:"ticket/create",component:CreateComponent},
+    {path:"ticket/suivi",component:SuiviComponent},
+    {path:"ticket/update",component:UpdateComponent}
     
     // { path: '**', redirectTo: '/' }
   ];

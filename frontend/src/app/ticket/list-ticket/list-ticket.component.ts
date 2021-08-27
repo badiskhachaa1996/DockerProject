@@ -50,10 +50,12 @@ export class ListTicketComponent implements OnInit {
 
   ngOnInit(): void {
     this.TicketService.getQueue().subscribe((data) => {
+      console.log(data)
       this.tabUser = data;
     })
 
     this.SujetService.getAll().subscribe((data) => {
+      console.log(data)
       if(!data.message){
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
@@ -62,6 +64,7 @@ export class ListTicketComponent implements OnInit {
     })
 
     this.ServService.getAll().subscribe((data) => {
+      console.log(data)
       if(!data.message){
         data.forEach(service => {
           this.serviceList[service._id]=service.label;

@@ -28,7 +28,7 @@ export class TicketService {
     let registreUrl=this.apiUrl+"deleteById/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
-
+  //Avoir tous les tickets d'un User via son ID
   getAllByUser(id:string){
     let registreUrl=this.apiUrl+"getAllbyUser/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);

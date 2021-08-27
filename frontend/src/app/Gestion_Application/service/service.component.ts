@@ -4,6 +4,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Service } from 'src/app/models/Service';
 import { ServService} from 'src/app/services/service.service';
 import {MessageService} from 'primeng/api';
+import { SujetService } from 'src/app/services/sujet.service';
+import { Sujet } from 'src/app/models/Sujet';
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -13,17 +15,34 @@ export class ServiceComponent implements OnInit {
   serviceForm: FormGroup= new FormGroup({
     label:new FormControl('',[Validators.required]),
   });
+  sujetForm: FormGroup= new FormGroup({
+    nom:new FormControl('',[Validators.required]),
+  });
   
+  idserv:string =  "612760a38655f1b1a8ca979a";
  
   emailExists: boolean;
 
-  saveService(){
+//  tabserv: any[] = [];
+//   cols: any[];
+
+//   get label() { return this.serviceForm.get('label'); }
+//   get nom() { return this.sujetForm.get('nom'); }
+
+allServices :any[]
+  saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
     };
-    this.serv.addService(service).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de service réussie'});
-      this.router.navigate(['/service'])
+    this.ServService.createServices(this.serviceForm.value);
+ 
+    this.ServService.addService(service).subscribe((data)=>{
+      this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
+     
+      console.log(this.allServices);
+      this.serviceForm.reset();
+      this.router.navigate(['/servicesujet'])
+
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
@@ -32,13 +51,41 @@ export class ServiceComponent implements OnInit {
       }
       console.log(error)
     });
+  }
+
+  saveSujet(Service){
+    let sujet = <Sujet> {
+      label:this.sujetForm.value.label,    
+    };
+    this.sujet.addSujet(sujet).subscribe((data)=>{
+      this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de sujet réussie'});
+      this.sujetForm.reset();
+      this.router.navigate(['/servicesujet'])
+    },(error)=>{
+      if(error.status==400){
+        //Bad Request (service deja existant)
+        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+        this.emailExists=true;
+      }
+      console.log(error)
+    });
     
   }
 
 
-  constructor(private serv :ServService,private router: Router,private messageService: MessageService) { }
+  constructor(private ServService :ServService,private sujet: SujetService,private router: Router,private messageService: MessageService,private ts:SujetService) { }
 
   ngOnInit(): void {
+    
+   this.ServService.getAll().subscribe((data) => {
+       this.allServices.push(JSON.parse(data));
+       console.log(this.allServices);
+     })
   }
+  
+
+   
+  
+ 
 
 }

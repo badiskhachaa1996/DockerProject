@@ -20,7 +20,7 @@ app.get("/getAll",(req,res)=>{
     Service.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send({message:"Pas de Services"});
+        res.send(result.length>0?result:{message:"Pas de Services"});
     })
     .catch(err=>{   
         console.log(err);

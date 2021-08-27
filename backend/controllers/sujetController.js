@@ -8,7 +8,7 @@ app.post("/addsujet", (req, res) => {
     let data = req.body;
     let sujet = new Sujet({
         label: data.label,
-        service_id:data.service_id
+        service_id: data.service_id
     })
     sujet.save().then((sujetFromDb) => {
         res.status(200).send({ message: "Sujet : "+sujetFromDb.sujet_id + "registration done sujet :"+sujetFromDb.label });
@@ -24,7 +24,7 @@ app.get("/getAll",(req,res)=>{
     Sujet.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send({message:"Pas de Sujets"});
+        res.send(result.length>0?result:{message:"Pas de Sujets"});
     })
     .catch(err=>{   
         console.log(err);

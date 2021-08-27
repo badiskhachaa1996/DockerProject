@@ -1,5 +1,6 @@
 export interface Ticket {
     id?:string;
+    _id?:string;
     createur_id: string;
     sujet_id:string;
     date_ajout?:Date;
