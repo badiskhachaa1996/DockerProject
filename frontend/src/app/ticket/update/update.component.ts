@@ -31,9 +31,8 @@ export class UpdateComponent implements OnInit {
     service: new FormControl('', Validators.required),
   })
 
-  addTicket(){
-    //Enregistrement du Ticket
-    console.log(this.TicketForm.value)
+  modifyTicket(){
+    //Modification du Ticket
     let req = {
       id:this.Ticket._id,
       id_message:this.firstMessage._id,
@@ -48,6 +47,13 @@ export class UpdateComponent implements OnInit {
       console.log(error)
     });
     
+  }
+
+  
+  onChange(){
+    this.TicketForm.patchValue({
+      sujet:this.listSujets[this.TicketForm.value.service._id][0]
+    })
   }
 
   get description() { return this.TicketForm.get('description'); }

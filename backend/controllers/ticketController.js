@@ -2,32 +2,33 @@ const express = require("express");
 const { Message } = require("../models/Message");
 const app = express(); //à travers ça je peux faire la creation des services
 const { Ticket } = require("./../models/Ticket");
+const { Sujet } = require("./../models/Service");
 
 //Création d'un nouveau ticket
-app.post("/create",(req, res) => {
+app.post("/create", (req, res) => {
     const ticket = new Ticket({
-        createur_id:req.body.id,
-        sujet_id:req.body.sujet_id
+        createur_id: req.body.id,
+        sujet_id: req.body.sujet_id
     });
 
     ticket.save((err, doc) => {
         console.log(doc)
         console.log(err)
         const message = new Message({
-            user_id:req.body.id,
-            description:req.body.description,
-            document:req.body?.document,
-            ticket_id:doc.id
+            user_id: req.body.id,
+            description: req.body.description,
+            document: req.body?.document,
+            ticket_id: doc.id
         });
-        message.save((err,doc)=>{
-            res.send({message: "Votre ticket a été crée!"});
+        message.save((err, doc) => {
+            res.send({ message: "Votre ticket a été crée!" });
         })
     });
 });
 
 
 //Suppression d'un ticket
-app.get("/deleteById/:id",(req, res) => {
+app.get("/deleteById/:id", (req, res) => {
     Ticket.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
@@ -40,15 +41,15 @@ app.get("/deleteById/:id",(req, res) => {
 app.post("/updateById/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
-            sujet_id:req.body.sujet_id,
-            agent_id:req.body.agent_id,
-            statut :req.body.statut,
-            date_affec_accep:req.body.date_affec_accep,
-            temp_traitement:req.body.temp_traitement,
-            temp_fin:req.body.temp_fin,
-            isAffected:req.body.isAffected,
+            sujet_id: req.body.sujet_id,
+            agent_id: req.body.agent_id,
+            statut: req.body.statut,
+            date_affec_accep: req.body.date_affec_accep,
+            temp_traitement: req.body.temp_traitement,
+            temp_fin: req.body.temp_fin,
+            isAffected: req.body.isAffected,
 
-        }, {new: true}, (err, user) => {
+        }, { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
             }
@@ -65,29 +66,29 @@ app.get("/getById/:id", (req, res) => {
     })
 });
 //Récuperer tous les tickets
-app.get("/getAll",(req, res) => {
+app.get("/getAll", (req, res) => {
     Ticket.find()
-        .then(result=>{
-            res.send(result.length>0?result:{message:"Pas de Tickets"});
+        .then(result => {
+            res.send(result.length > 0 ? result : { message: "Pas de Tickets" });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         })
 });
 
 //Récupérer tous les tickets d'un User
-app.get("/getAllbyUser/:id",(req, res) => {
+app.get("/getAllbyUser/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id })
-        .then(result=>{
-            res.send(result.length>0?result:{message:"Pas de Tickets crée par cette User"});
+        .then(result => {
+            res.send(result.length > 0 ? result : { message: "Pas de Tickets crée par cette User" });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         })
 });
 //Récupérer le premier message d'un Ticket
-app.get("/getFirstMessage/:id",(req,res)=>{
-    Message.findOne({ticket_id:req.params.id}).sort({date_ajout:1}).then((dataMessage) => {
+app.get("/getFirstMessage/:id", (req, res) => {
+    Message.findOne({ ticket_id: req.params.id }).sort({ date_ajout: 1 }).then((dataMessage) => {
         res.status(200).send({ dataMessage });
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
@@ -96,25 +97,25 @@ app.get("/getFirstMessage/:id",(req,res)=>{
 })
 
 //Récupérer la queue d'entrée
-app.get("/getQueue",(req,res)=>{
+app.get("/getQueue", (req, res) => {
     Ticket.find({ statut: "Queue d'entrée" })
-        .then(result=>{
-            res.send(result.length>0?result:{message:"Pas de Tickets dans la Queue d'entrée"});
+        .then(result => {
+            res.send(result.length > 0 ? result : { message: "Pas de Tickets dans la Queue d'entrée" });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         })
 
 })
 
 //Récupérer les Tickets Acceptes ou Affectés
-app.get("/getAccAff",(req,res)=>{
+app.get("/getAccAff", (req, res) => {
     Ticket.find({ statut: "Acc/Aff" })
-        .then(result=>{
-            console.log('result: ',result)
-            res.send(result.length>0?result:{message:"Pas de Tickets Acceptés ou Affectés"});
+        .then(result => {
+            console.log('result: ', result)
+            res.send(result.length > 0 ? result : { message: "Pas de Tickets Acceptés ou Affectés" });
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         })
 
@@ -124,20 +125,51 @@ app.get("/getAccAff",(req,res)=>{
 app.post("/updateFirst/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
-            sujet_id:req.body.sujet_id
-        }, {new: true}, (err, user) => {
+            sujet_id: req.body.sujet_id
+        }, { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
             }
         })
 
-    Message.findByIdAndUpdate(req.body.id_message,{
-        description:req.body.description
-    }, {new: true}, (err, user) => {
+    Message.findByIdAndUpdate(req.body.id_message, {
+        description: req.body.description
+    }, { new: true }, (err, user) => {
         if (err) {
             res.send(err)
         }
         res.send(user)
     })
 });
+
+//Get All Tickets by Service ID
+app.get("/getTicketsByService/:id", (req, res) => {
+    let id = req.params.id
+    let listSujetofService = []
+    let TicketList=[]
+    Sujet.find()
+        .then(listSujets => {
+            listSujets.forEach(sujet => {
+                if (sujet.service_id == id) {
+                    listSujetofService.push(sujet._id)
+                }
+            });
+            Ticket.find()
+            .then(result => {
+                let result=result.length > 0 ? result : []
+                result.forEach(ticket=>{
+                    if(ticket.sujet_id in listSujetofService){
+                        TicketList.push(ticket)
+                    }
+                })
+                res.status(200).send({TicketList})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        })
+    .catch(err => {
+        console.log(err);
+    })
+})
 module.exports = app;

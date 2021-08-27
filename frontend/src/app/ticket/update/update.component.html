@@ -7,7 +7,8 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <select formControlName="service" class="form-control col-12" >
+                                Service
+                                <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of listServices" [ngValue]="service">
                                         {{ service.label }}
@@ -15,8 +16,9 @@
                                 </select>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                Sujet:
                                 <select [disabled]="!TicketForm.value.service" formControlName="sujet" class="form-control col-12" >
-                                    <option *ngIf="!TicketForm.value.service" [ngValue]="null" disabled>Choissisez un service</option>
+                                    <option [ngValue]="null" disabled>Choissisez un sujet</option>
                                     <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]" [ngValue]="sujet">
                                         {{ sujet.label }}
                                        </option>
@@ -29,7 +31,7 @@
                                 </div>
                             </div>
                             <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
+                                <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid" label="Ajouter" (click)="modifyTicket()"></button>
                             </div>
                         </div>
                 </form>

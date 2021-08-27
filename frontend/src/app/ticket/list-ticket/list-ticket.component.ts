@@ -34,6 +34,7 @@ export class ListTicketComponent implements OnInit {
   dragListToPreInscrit(event?) {
     this.tabUser.splice(this.tabUser.indexOf(this.draggedUser), 1)
     this.UserPreInscrit.push(this.draggedUser)
+    this.Accepted()
   }
 
   dragPreInscritToInscrit(event?) {
@@ -83,6 +84,7 @@ export class ListTicketComponent implements OnInit {
   ListToPreInscrit(user, event?) {
     this.tabUser.splice(this.tabUser.indexOf(user), 1)
     this.UserPreInscrit.push(user)
+    this.Accepted()
   }
 
   PreInscritToInscrit(user, event?) {
@@ -93,5 +95,10 @@ export class ListTicketComponent implements OnInit {
   InscritToList(user, event?) {
     this.UserInscrit.splice(this.UserInscrit.indexOf(user), 1)
     this.tabUser.push(user)
+  }
+
+  Accepted(){
+    //TODO Affected to the user
+
   }
 }

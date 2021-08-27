@@ -55,5 +55,10 @@ export class TicketService {
     return this.http.get<any>(registreUrl);
   }
 
+  getTicketsByService(id){
+    let registreUrl=this.apiUrl+"getTicketsByService"+id;
+    return this.http.get<any>(registreUrl);
+  }
+
 
 }
