@@ -34,6 +34,7 @@ currentIndex = -1;
 label = '';
 
 allServices :any[]
+  cols: { field: string; header: string; }[];
   saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
@@ -90,22 +91,27 @@ allServices :any[]
   //     this.currentService = null;
   //     this.currentIndex = -8;
   // }
-  SetActiveServices(service, index): void{
-      this.currentService = service;
-      this.currentIndex = index;
-  }
+  // SetActiveServices(service, index): void{
+  //     this.currentService = service;
+  //     this.currentIndex = index;
+  // }
 
 
 
-  constructor(private ServService :ServService,private sujet: SujetService,private router: Router,private messageService: MessageService,private ts:SujetService) { }
+  constructor(private ServService :ServService,
+    private sujet: SujetService,private router: Router,
+    private messageService: MessageService,
+    private ts:SujetService) { }
 
   ngOnInit(): void {
     
-  //  this.ServService.getAll().subscribe((data) => {
-  //      this.allServices.push(JSON.parse(data));
-  //      console.log(this.allServices);
-  //    })
-  this.Services();
+    this.cols = [
+      { field: 'label', header: 'Service' },
+    
+
+    ];
+  
+    this.Services();
   }
   
 

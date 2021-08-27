@@ -20,18 +20,29 @@
                 <h3>Tableau des services</h3>
                
         <div class="col-12 card shadow-lg my-5">
-            <p-table    >
-                <ng-template pTemplate="header" let-columns>
+            <p-table *ngIf="services" [columns]="cols" [value]="services" >
+                <ng-template pTemplate="header" let-columns >
                     <tr>
-                        <th *ngFor="let service of services; let i = index"
-                        [class.active]="i == currentIndex"
-                        (click)="SetActiveServices(service, i)"
-                        >
-                            {{service.label}}
+                        <th>
+                            service
                         </th>
+                        <th>
+                            action
+                         </th>
                     </tr>
                 </ng-template>
-               
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td style="background-color: white;" *ngFor="let col of columns">
+                            
+                            {{rowData.label}}
+                        </td>
+                        <td>
+                            <i class="pi pi-pencil" routerLink="/edit"></i>
+                        </td>
+
+                    </tr>
+                </ng-template>
             </p-table>
         </div>
 

@@ -34,7 +34,7 @@ export class UpdateComponent implements OnInit {
 
   ngOnInit(): void {
     this.Ticket = <Ticket>history.state;
-    if (!this.Ticket._id) {
+    if (!this.Ticket.id) {
       this.router.navigate(["/"])
     }
     this.serv.getAll().subscribe((data) => {
@@ -55,7 +55,7 @@ export class UpdateComponent implements OnInit {
       console.log(error)
     })
 
-    this.TicketService.getFirstMessage(this.Ticket._id).subscribe((data)=>{
+    this.TicketService.getFirstMessage(this.Ticket.id).subscribe((data)=>{
       this.firstMessage=data;
     },(error)=>{
       console.log(error)
