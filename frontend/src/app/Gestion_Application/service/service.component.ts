@@ -28,13 +28,16 @@ export class ServiceComponent implements OnInit {
 
 //   get label() { return this.serviceForm.get('label'); }
 //   get nom() { return this.sujetForm.get('nom'); }
+services : any;
+currentService = null;
+currentIndex = -1;
+label = '';
 
 allServices :any[]
   saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
     };
-    this.ServService.createServices(this.serviceForm.value);
  
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
@@ -71,16 +74,38 @@ allServices :any[]
     });
     
   }
+  Services(){
+    this.ServService.getAll()
+    .subscribe(
+      data => {
+        this.services = data;
+        console.log(data);
+      },
+      error => {
+        console.log(error);
+      });
+  }
+  // refrechList(): void{
+  //     this.Services();
+  //     this.currentService = null;
+  //     this.currentIndex = -8;
+  // }
+  SetActiveServices(service, index): void{
+      this.currentService = service;
+      this.currentIndex = index;
+  }
+
 
 
   constructor(private ServService :ServService,private sujet: SujetService,private router: Router,private messageService: MessageService,private ts:SujetService) { }
 
   ngOnInit(): void {
     
-   this.ServService.getAll().subscribe((data) => {
-       this.allServices.push(JSON.parse(data));
-       console.log(this.allServices);
-     })
+  //  this.ServService.getAll().subscribe((data) => {
+  //      this.allServices.push(JSON.parse(data));
+  //      console.log(this.allServices);
+  //    })
+  this.Services();
   }
   
 
