@@ -11,7 +11,7 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 })
 
 export class ServService {
-  private serviceForm = [];
+
   apiUrl ="http://localhost:3000/"
 
   constructor(private http: HttpClient) { }
@@ -45,15 +45,6 @@ export class ServService {
 
   
 
-
-  createServices(service){
-    this.serviceForm = [service, ...this.serviceForm] ;
-    console.log(this.serviceForm);
-     }
-
-     getServices(){
-       return this.serviceForm;
-     }
 
   
   

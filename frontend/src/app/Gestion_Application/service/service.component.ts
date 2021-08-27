@@ -38,7 +38,6 @@ allServices :any[]
     let service = <Service> {
       label:this.serviceForm.value.label
     };
-    this.ServService.createServices(this.serviceForm.value);
  
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
@@ -86,11 +85,11 @@ allServices :any[]
         console.log(error);
       });
   }
-  refrechList(): void{
-      this.Services();
-      this.currentService = null;
-      this.currentIndex = -1;
-  }
+  // refrechList(): void{
+  //     this.Services();
+  //     this.currentService = null;
+  //     this.currentIndex = -8;
+  // }
   SetActiveServices(service, index): void{
       this.currentService = service;
       this.currentIndex = index;
