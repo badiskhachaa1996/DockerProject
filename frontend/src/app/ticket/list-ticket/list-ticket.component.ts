@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { TicketService } from 'src/app/services/ticket.service';
@@ -47,7 +48,7 @@ export class ListTicketComponent implements OnInit {
     this.tabUser.push(this.draggedUser)
   }
 
-  constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService) { }
+  constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private router:Router) { }
 
   ngOnInit(): void {
     this.TicketService.getQueue().subscribe((data) => {
@@ -100,5 +101,9 @@ export class ListTicketComponent implements OnInit {
   Accepted(){
     //TODO Affected to the user
 
+  }
+
+  modify(data){
+    this.router.navigateByUrl("/ticket/update",{state:data})
   }
 }
