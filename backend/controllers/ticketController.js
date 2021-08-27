@@ -68,7 +68,7 @@ app.get("/getAll",(req, res) => {
     Ticket.find()
         .then(result=>{
             console.log('result: ',result)
-            res.send({message:"Pas de Tickets"});
+            res.send(result.length>0?result:{message:"Pas de Tickets"});
         })
         .catch(err=>{
             console.log(err);
@@ -80,7 +80,7 @@ app.get("/getAllbyUser/:id",(req, res) => {
     Ticket.find({ createur_id: req.params.id })
         .then(result=>{
             console.log('result: ',result)
-            res.send({message:"Pas de Tickets crée par cette User"});
+            res.send(result.length>0?result:{message:"Pas de Tickets crée par cette User"});
         })
         .catch(err=>{
             console.log(err);
@@ -101,7 +101,7 @@ app.get("/getQueue",(req,res)=>{
     Ticket.find({ statut: "Queue d'entrée" })
         .then(result=>{
             console.log('result: ',result)
-            res.send({message:"Pas de Tickets dans la Queue d'entrée"});
+            res.send(result.length>0?result:{message:"Pas de Tickets dans la Queue d'entrée"});
         })
         .catch(err=>{
             console.log(err);
@@ -114,7 +114,7 @@ app.get("/getAccAff",(req,res)=>{
     Ticket.find({ statut: "Acc/Aff" })
         .then(result=>{
             console.log('result: ',result)
-            res.send({message:"Pas de Tickets Acceptés ou Affectés"});
+            res.send(result.length>0?result:{message:"Pas de Tickets Acceptés ou Affectés"});
         })
         .catch(err=>{
             console.log(err);

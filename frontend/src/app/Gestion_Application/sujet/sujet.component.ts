@@ -12,8 +12,5 @@ export class SujetComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  getSujets(){
-    this.allSujets = this.ts.getSujets();
-  }
 
 }

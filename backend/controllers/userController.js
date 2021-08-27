@@ -51,7 +51,7 @@ app.get("/getAll",(req,res)=>{
     User.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send({message:"Pas de Users"});
+        res.send(result.length>0?result:{message:"Pas de Users"});
     })
     .catch(err=>{
         console.log(err);

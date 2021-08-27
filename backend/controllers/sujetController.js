@@ -24,7 +24,7 @@ app.get("/getAll",(req,res)=>{
     Sujet.find()
     .then(result=>{
         //console.log('result: ',result)
-        res.send({message:"Pas de Sujets"});
+        res.send(result.length>0?result:{message:"Pas de Sujets"});
     })
     .catch(err=>{   
         console.log(err);
