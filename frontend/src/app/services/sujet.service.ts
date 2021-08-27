@@ -21,5 +21,10 @@ export class SujetService {
     return this.http.post<any>(add_sujet,sujet,httpOptions);
   }
 
+  getAll() {
+    let loginUrl = this.apiUrl + "sujet/getAll";
+    return this.http.get<any>(loginUrl, httpOptions1);
+  }
+
 
 }
