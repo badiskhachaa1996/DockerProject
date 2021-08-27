@@ -47,6 +47,7 @@ app.post("/updateById/:id", (req, res) => {
             temp_traitement:req.body.temp_traitement,
             temp_fin:req.body.temp_fin,
             isAffected:req.body.isAffected,
+
         }, {new: true}, (err, user) => {
             if (err) {
                 res.send(err)
@@ -67,7 +68,6 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req, res) => {
     Ticket.find()
         .then(result=>{
-            console.log('result: ',result)
             res.send(result.length>0?result:{message:"Pas de Tickets"});
         })
         .catch(err=>{
@@ -79,7 +79,6 @@ app.get("/getAll",(req, res) => {
 app.get("/getAllbyUser/:id",(req, res) => {
     Ticket.find({ createur_id: req.params.id })
         .then(result=>{
-            console.log('result: ',result)
             res.send(result.length>0?result:{message:"Pas de Tickets crée par cette User"});
         })
         .catch(err=>{
@@ -100,7 +99,6 @@ app.get("/getFirstMessage/:id",(req,res)=>{
 app.get("/getQueue",(req,res)=>{
     Ticket.find({ statut: "Queue d'entrée" })
         .then(result=>{
-            console.log('result: ',result)
             res.send(result.length>0?result:{message:"Pas de Tickets dans la Queue d'entrée"});
         })
         .catch(err=>{
@@ -121,4 +119,25 @@ app.get("/getAccAff",(req,res)=>{
         })
 
 })
+
+//Update d'un ticket et de son premier Message
+app.post("/updateFirst/:id", (req, res) => {
+    Ticket.findByIdAndUpdate(req.params.id,
+        {
+            sujet_id:req.body.sujet_id
+        }, {new: true}, (err, user) => {
+            if (err) {
+                res.send(err)
+            }
+        })
+
+    Message.findByIdAndUpdate(req.body.id_message,{
+        description:req.body.description
+    }, {new: true}, (err, user) => {
+        if (err) {
+            res.send(err)
+        }
+        res.send(user)
+    })
+});
 module.exports = app;
