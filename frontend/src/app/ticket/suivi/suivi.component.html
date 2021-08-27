@@ -1,0 +1,54 @@
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
+                [showCurrentPageReport]="false"
+                currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
+                [rowsPerPageOptions]="[5,10,20]">
+                <ng-template pTemplate="caption">
+                    <div class="table-header">
+                        Liste de vos tickets
+                        <!--<span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Faire une recherche" />
+                        </span>-->
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>
+                            Service 
+                        </th>
+                        <th>
+                            Sujet
+                        </th>
+                        <th>
+                            Statut
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
+                        </td>
+                        <td>
+                            {{sujetList[rowData.sujet_id].label}}
+                        </td>
+                        <td>
+                            {{rowData.statut}}
+                        </td>
+                        <td>
+                            <i style="margin-left: 30%;" class="pi pi-pencil"
+                                (click)="modify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
