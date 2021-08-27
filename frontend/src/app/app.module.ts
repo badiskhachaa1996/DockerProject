@@ -91,6 +91,7 @@ import { SuiviComponent } from './ticket/suivi/suivi.component';
 
 @NgModule({
     imports: [
+        
         BrowserModule,CaptchaModule,
         FormsModule,
         HttpClientModule,

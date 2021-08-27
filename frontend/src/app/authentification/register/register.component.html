@@ -55,7 +55,13 @@
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
                             </div>
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <div class="mt-2 mb-2 col-lg-12 col-12" >
+                                <div *ngIf=IsAdmin>
+                                    <span class="label" >Role : </span>     <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value"></p-dropdown>
+                                </div>    
+                            </div>
+
+                                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="S'inscrire" (click)="saveUser()"></button>
                             </div>
                         </div>

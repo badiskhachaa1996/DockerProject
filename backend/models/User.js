@@ -23,9 +23,9 @@ const user_schema= new mongoose.Schema({
         type: String,
         required : true
     },
-    role :{
+    role:{
         type: String,
-        default: "user"
+        required:true
     },
     etat: {
         type: Boolean,
