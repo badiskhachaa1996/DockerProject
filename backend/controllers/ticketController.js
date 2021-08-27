@@ -156,8 +156,8 @@ app.get("/getTicketsByService/:id", (req, res) => {
             });
             Ticket.find()
             .then(result => {
-                let result=result.length > 0 ? result : []
-                result.forEach(ticket=>{
+                let listTicket=result.length > 0 ? result : []
+                listTicket.forEach(ticket=>{
                     if(ticket.sujet_id in listSujetofService){
                         TicketList.push(ticket)
                     }
