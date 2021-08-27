@@ -92,6 +92,7 @@ import { EditComponent } from './Gestion_Application/edit/edit.component';
 
 @NgModule({
     imports: [
+        
         BrowserModule,CaptchaModule,
         FormsModule,
         HttpClientModule,

@@ -6,8 +6,12 @@
                     <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Modifier le service</h3>
                         <div class="p-grid">
-                          
-                            <div *ngIf="currentService">
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                Service      
+                            <input type="text" formControlName="label" name="label" pInputText/>
+                            </div>
+                           
+                            <!-- <div *ngIf="currentService">
                                 <h4>Service</h4>
                                 <input id = "label" type="text" formControlName="currentService.label" name="label" pInputText/>  
                               
@@ -17,6 +21,7 @@
                                 label="Enregistrer" (click)="updateService()"></button>
                             </div>
                             <p>{{ message }}</p>
+                        </div> -->
                         </div>
                 </form>
                 </div>

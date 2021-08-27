@@ -20,7 +20,7 @@ const routes: Routes = [
     {path:"ticket/create",component:CreateComponent},
     {path:"ticket/suivi",component:SuiviComponent},
     {path:"ticket/update",component:UpdateComponent},
-    {path:"edit",component:EditComponent}
+    {path:"service/edit",component:EditComponent}
     
     // { path: '**', redirectTo: '/' }
   ];

@@ -22,7 +22,13 @@ serviceForm: FormGroup = new FormGroup({
   constructor(private ServService :ServService,private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.message = '';
+    // this.message = '';
+    this.Service = <Service>history.state;
+    if (!this.Service._id) {
+      this.router.navigate(["/service/edit"])
+      
+    }
+    this.serviceForm.setValue({label:this.Service.label})
   // this.getService(this.route.snapshot.paramMap.get('id'));
   // this.Service = <Service>history.state;
   // if (!this.Service.id) {

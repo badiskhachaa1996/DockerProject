@@ -27,7 +27,8 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
-                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"></i>
+                            <i style="margin-left: 30%;" class="pi pi-check" (click)="ListToPreInscrit(rowData)"></i>
+                            <i style="margin-left: 15%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>

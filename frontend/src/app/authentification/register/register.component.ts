@@ -5,7 +5,8 @@ import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import {MessageService} from 'primeng/api';
-
+import jwt_decode from "jwt-decode";
+import {DropdownModule} from 'primeng/dropdown';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -13,8 +14,11 @@ import {MessageService} from 'primeng/api';
 })
 export class RegisterComponent implements OnInit {
 
+  IsAdmin : boolean=false;
+  User_role:String ;
   emailExists=false;
-
+  Roles = environment.role;
+   
   RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
@@ -22,10 +26,13 @@ export class RegisterComponent implements OnInit {
     phone:new FormControl('',[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
     adresse:new FormControl('',[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)])
+    verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
+    role:new FormControl('user'),
+
   })
 
   saveUser(){
+    console.log(localStorage.getItem("token"));
     //Enregistrement de l'user
     //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
     let user = <User>{
@@ -34,7 +41,8 @@ export class RegisterComponent implements OnInit {
       phone:this.RegisterForm.value.phone,
       email:this.RegisterForm.value.email,
       password:this.RegisterForm.value.password,
-      adresse:this.RegisterForm.value.adresse
+      adresse:this.RegisterForm.value.adresse,
+      role: this.RegisterForm.value.role.value
     }
     this.AuthService.register(user).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Message d\'inscription', detail:'Inscription réussie'});
@@ -57,10 +65,25 @@ export class RegisterComponent implements OnInit {
   get adresse() { return this.RegisterForm.get('adresse'); }
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
-
+  
   constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
 
   ngOnInit(): void {
+    if(localStorage.getItem("token")!=null){
+      jwt_decode : jwt_decode; 
+    console.log(jwt_decode(localStorage.getItem("token")));
+      let decodeToken:any =jwt_decode(localStorage.getItem("token"))
+     this.User_role = decodeToken.role;
+     console.log(this.User_role);
+    
+    }
+    if(this.User_role =="admin"){
+      this.IsAdmin = true
+      console.log(this.IsAdmin);
+    }
+    else{this.IsAdmin == false};
+    console.log("+"+this.IsAdmin);
+ 
   }
 
 }

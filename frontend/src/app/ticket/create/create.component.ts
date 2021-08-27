@@ -17,17 +17,15 @@ export class CreateComponent implements OnInit {
   selectedService;
   listServices;
   listSujets:any=[];
-  listSujetSelected=[];
 
   TicketForm: FormGroup= new FormGroup({
     description:new FormControl('',Validators.required),
-    sujet:new FormControl('',Validators.required),//Ils doit forcément selectionner
+    sujet:new FormControl('',Validators.required),
     service:new FormControl('',Validators.required),
   })
 
   addTicket(){
     //Enregistrement du Ticket
-    console.log(this.TicketForm.value)
     let req = <any>{
       id:jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id:this.TicketForm.value.sujet._id,
@@ -41,6 +39,12 @@ export class CreateComponent implements OnInit {
       console.log(error)
     });
     
+  }
+
+  onChange(){
+    this.TicketForm.patchValue({
+      sujet:this.listSujets[this.TicketForm.value.service._id][0]
+    })
   }
 
   get description() { return this.TicketForm.get('description'); }

@@ -28,7 +28,7 @@ export const environment = {
       { id: 6, value: 'Responsable finances', valeur: 'Role_responsable_finances' },
       { id: 7, value: 'Administration', valeur: 'Role_admin' },
       { id: 8, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires' },
-  
+      { id: 9, value: 'admin', valeur: 'admin' }
       ],
 
 

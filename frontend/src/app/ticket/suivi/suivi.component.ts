@@ -63,8 +63,8 @@ export class SuiviComponent implements OnInit {
     },(error)=>{
       console.log(error)
     })
+    
     this.SujetService.getAll().subscribe((data) => {
-      console.log(data)
       if(!data.message){
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
@@ -73,7 +73,6 @@ export class SuiviComponent implements OnInit {
     })
 
     this.ServService.getAll().subscribe((data) => {
-      console.log(data)
       if(!data.message){
         data.forEach(service => {
           this.serviceList[service._id]=service.label;

@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { TicketService } from 'src/app/services/ticket.service';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-list-ticket',
@@ -13,49 +15,51 @@ export class ListTicketComponent implements OnInit {
   serviceList=[];
   sujetList=[];
 
-  tabUser: any[] = [];
-  UserPreInscrit: any[] = [];
-  UserInscrit: any[] = [];
+  queueList: any[] = [];
+  AccAffList: any[] = [];
+  allTickets: any[] = [];
 
   cols: any[];
 
-  draggedUser: any;
+  draggedTicket: any;
 
   showForm: string = "Ajouter";
 
   dragStart(event, user: any) {
-    this.draggedUser = user;
+    this.draggedTicket = user;
   }
 
   dragEnd(event) {
-    this.draggedUser = null;
+    this.draggedTicket = null;
   }
 
+  //QueueToAccAff
   dragListToPreInscrit(event?) {
-    this.tabUser.splice(this.tabUser.indexOf(this.draggedUser), 1)
-    this.UserPreInscrit.push(this.draggedUser)
+    this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
+    this.AccAffList.push(this.draggedTicket)
+    this.Accepted()
   }
 
+  //AccAffToAll
   dragPreInscritToInscrit(event?) {
-    this.UserPreInscrit.splice(this.UserPreInscrit.indexOf(this.draggedUser), 1)
-    this.UserInscrit.push(this.draggedUser)
+    this.AccAffList.splice(this.AccAffList.indexOf(this.draggedTicket), 1)
+    this.allTickets.push(this.draggedTicket)
   }
 
+  //AllToQueue
   dragInscritToList(event?) {
-    this.UserInscrit.splice(this.UserInscrit.indexOf(this.draggedUser), 1)
-    this.tabUser.push(this.draggedUser)
+    this.allTickets.splice(this.allTickets.indexOf(this.draggedTicket), 1)
+    this.queueList.push(this.draggedTicket)
   }
 
-  constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService) { }
+  constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private router:Router) { }
 
   ngOnInit(): void {
     this.TicketService.getQueue().subscribe((data) => {
-      console.log(data)
-      this.tabUser = data;
+      this.queueList = data;
     })
 
     this.SujetService.getAll().subscribe((data) => {
-      console.log(data)
       if(!data.message){
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
@@ -64,7 +68,6 @@ export class ListTicketComponent implements OnInit {
     })
 
     this.ServService.getAll().subscribe((data) => {
-      console.log(data)
       if(!data.message){
         data.forEach(service => {
           this.serviceList[service._id]=service.label;
@@ -74,7 +77,7 @@ export class ListTicketComponent implements OnInit {
 
     this.TicketService.getAccAff().subscribe((data) => {
       if(!data.message){
-        this.tabUser = data;
+        this.queueList = data;
       }
     })
 
@@ -83,18 +86,45 @@ export class ListTicketComponent implements OnInit {
       { field: 'sujetList[sujet_id]', header: 'Sujet' },
     ];
   }
+
+  //QueueToAccAff
   ListToPreInscrit(user, event?) {
-    this.tabUser.splice(this.tabUser.indexOf(user), 1)
-    this.UserPreInscrit.push(user)
+    this.queueList.splice(this.queueList.indexOf(user), 1)
+    this.AccAffList.push(user)
+    this.Accepted()
   }
 
+  //AccAffToAll
   PreInscritToInscrit(user, event?) {
-    this.UserPreInscrit.splice(this.UserPreInscrit.indexOf(user), 1)
-    this.UserInscrit.push(user)
+    this.AccAffList.splice(this.AccAffList.indexOf(user), 1)
+    this.allTickets.push(user)
   }
 
+  //AllToQueue
   InscritToList(user, event?) {
-    this.UserInscrit.splice(this.UserInscrit.indexOf(user), 1)
-    this.tabUser.push(user)
+    this.allTickets.splice(this.allTickets.indexOf(user), 1)
+    this.queueList.push(user)
+  }
+
+  Accepted(){
+    //TODO Affected to the user
+  }
+
+  getServiceIDOfUser(){
+    //TODO En fonction du role du joueur doit return l'id de son service
+    let token = localStorage.getItem("token")
+    let user;
+    if(token!=null){
+      user=jwt_decode(token)
+      if(user.role=="admin"){
+        return "Admin"
+      }else if(user.role=="Agent Admission" || user.role=="Responsable Admission"){
+        return "Admission"
+      }
+    }
+  }
+
+  modify(data){
+    this.router.navigateByUrl("/ticket/update",{state:data})
   }
 }

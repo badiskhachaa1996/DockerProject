@@ -24,6 +24,12 @@ export class TicketService {
     return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
+  //Update le ticket et son premier Message
+  updateFirst(newTicket){
+    let registreUrl=this.apiUrl+"updateFirst/"+newTicket.id;
+    return this.http.post<any>(registreUrl,newTicket,httpOptions1);
+  }
+
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
@@ -46,6 +52,21 @@ export class TicketService {
 
   getAccAff(){
     let registreUrl=this.apiUrl+"getAccAff";
+    return this.http.get<any>(registreUrl);
+  }
+
+  getTicketsByService(id){
+    let registreUrl=this.apiUrl+"getTicketsByService"+id;
+    return this.http.get<any>(registreUrl);
+  }
+
+  getQueueByService(id){
+    let registreUrl=this.apiUrl+"getQueueByService"+id;
+    return this.http.get<any>(registreUrl);
+  }
+
+  getAccAffByService(id){
+    let registreUrl=this.apiUrl+"getAccAffByService"+id;
     return this.http.get<any>(registreUrl);
   }
 

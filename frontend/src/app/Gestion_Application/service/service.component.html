@@ -10,7 +10,7 @@
                             <div class="mt-2 mb-2 col-12">
                                 <input type="text" formControlName="label" class="form-control col-12" placeholder="Le nom du service" pInputText>
                             </div>
-                            
+                          
                             <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid" (click)="saveService()" label="Ajouter"></button>
                             </div>
@@ -38,7 +38,8 @@
                             {{rowData.label}}
                         </td>
                         <td>
-                            <i class="pi pi-pencil" routerLink="/edit"></i>
+                            <i class="pi pi-pencil"
+                            (click)="edit(rowData)" ></i>
                         </td>
 
                     </tr>
@@ -54,7 +55,15 @@
                             <div class="mt-2 mb-2 col-12">
                                 <input type="text" formControlName="label" class="form-control col-12" placeholder="Le nom du sujet" pInputText>
                             </div>
-                            
+
+                            <div class="mt-2 mb-2 col-12">
+                                <select formControlName="service_id" class="form-control col-12" >
+                                        <option [ngValue]="null" disabled>Choissisez un service</option>
+                                        <option *ngFor="let service of allServices" [ngValue]="service">
+                                            {{ service.label }}
+                                           </option>
+                                    </select>
+                                </div>
                             <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid" (click)=" saveSujet()" label="Ajouter"></button>
                             </div>

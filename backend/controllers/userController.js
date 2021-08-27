@@ -11,7 +11,8 @@ app.post("/registre", (req, res) => {
         phone: data.phone,
         adresse:data.adresse,
         email: data.email,
-        password: data.password
+        password: data.password,
+        role : data.role
     })
     user.save().then((userFromDb) => {
         res.status(200).send({ message: "registration done" });

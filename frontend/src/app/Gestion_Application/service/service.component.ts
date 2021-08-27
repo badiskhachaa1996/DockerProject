@@ -6,6 +6,7 @@ import { ServService} from 'src/app/services/service.service';
 import {MessageService} from 'primeng/api';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Sujet } from 'src/app/models/Sujet';
+
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -16,28 +17,26 @@ export class ServiceComponent implements OnInit {
     label:new FormControl('',[Validators.required]),
   });
   sujetForm: FormGroup= new FormGroup({
-    nom:new FormControl('',[Validators.required]),
+    label:new FormControl('',[Validators.required]),
+    service_id:new FormControl('',[Validators.required]),
   });
   
   idserv:string =  "612760a38655f1b1a8ca979a";
  
   emailExists: boolean;
 
-//  tabserv: any[] = [];
-//   cols: any[];
-
-//   get label() { return this.serviceForm.get('label'); }
-//   get nom() { return this.sujetForm.get('nom'); }
 services : any;
 currentService = null;
 currentIndex = -1;
 label = '';
+cols: any[];
 
-allServices :any[]
-  cols: { field: string; header: string; }[];
+allServices :any ;
+
   saveService(){   
     let service = <Service> {
-      label:this.serviceForm.value.label
+      label:this.serviceForm.value.label,
+      service_id:this.serviceForm.value.service_id
     };
  
     this.ServService.addService(service).subscribe((data)=>{
@@ -45,7 +44,7 @@ allServices :any[]
      
       console.log(this.allServices);
       this.serviceForm.reset();
-      this.router.navigate(['/servicesujet'])
+    
 
     },(error)=>{
       if(error.status==400){
@@ -57,14 +56,14 @@ allServices :any[]
     });
   }
 
-  saveSujet(Service){
+  saveSujet(){
     let sujet = <Sujet> {
-      label:this.sujetForm.value.label,    
+      label:this.sujetForm.value.label,  
+      service_id:this.sujetForm.value.service_id  
     };
     this.sujet.addSujet(sujet).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de sujet réussie'});
       this.sujetForm.reset();
-      this.router.navigate(['/servicesujet'])
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
@@ -114,7 +113,9 @@ allServices :any[]
     this.Services();
   }
   
-
+  edit(data){
+    this.router.navigateByUrl("/service/edit",{state:data})
+  }
    
   
  
