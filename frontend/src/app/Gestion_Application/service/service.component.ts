@@ -20,8 +20,6 @@ export class ServiceComponent implements OnInit {
     label:new FormControl('',[Validators.required]),
     service_id:new FormControl('',[Validators.required]),
   });
-  
-  idserv:string =  "612760a38655f1b1a8ca979a";
  
   emailExists: boolean;
 
@@ -40,9 +38,8 @@ allServices :any ;
     };
  
     this.ServService.addService(service).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
-     
-      console.log(this.allServices);
+      this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});  
+   //   console.log(this.allServices);
       this.serviceForm.reset();
     
 
@@ -85,15 +82,7 @@ allServices :any ;
         console.log(error);
       });
   }
-  // refrechList(): void{
-  //     this.Services();
-  //     this.currentService = null;
-  //     this.currentIndex = -8;
-  // }
-  // SetActiveServices(service, index): void{
-  //     this.currentService = service;
-  //     this.currentIndex = index;
-  // }
+
 
 
 
@@ -116,6 +105,19 @@ allServices :any ;
   edit(data){
     this.router.navigateByUrl("/service/edit",{state:data})
   }
+  deleteService(): void{
+  
+    this.ServService.delete(this.currentService._id)
+    .subscribe(
+      response => {
+        console.log(response);
+        this.router.navigate(['/service']);
+      },
+      error => {
+        console.log(error);
+      });
+    }
+    
    
   
  

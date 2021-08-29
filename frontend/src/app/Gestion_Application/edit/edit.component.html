@@ -22,7 +22,11 @@
                             </div>
                             <p>{{ message }}</p>
                         </div> -->
+                        
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid" label="Valider" (click)="modifyService()"></button>
                         </div>
+                    </div>
                 </form>
                 </div>
                 </p-card>

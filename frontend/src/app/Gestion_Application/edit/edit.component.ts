@@ -3,6 +3,10 @@ import { ServService} from 'src/app/services/service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Service } from 'src/app/models/Service';
+import { MessageService } from 'primeng/api';
+import { Message } from 'src/app/models/Message';
+import { SujetService } from 'src/app/services/sujet.service';
+import { Sujet } from 'src/app/models/Sujet';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -13,11 +17,14 @@ currentService = null;
 message = '';
 label = '';
 Service : Service;
+firstMessage:Message;
 
 serviceForm: FormGroup = new FormGroup({
   label: new FormControl('', Validators.required),
  
 })
+  messageService: any;
+
 
   constructor(private ServService :ServService,private route: ActivatedRoute, private router: Router) { }
 
@@ -29,42 +36,22 @@ serviceForm: FormGroup = new FormGroup({
       
     }
     this.serviceForm.setValue({label:this.Service.label})
-  // this.getService(this.route.snapshot.paramMap.get('id'));
-  // this.Service = <Service>history.state;
-  // if (!this.Service.id) {
-  //   this.router.navigate(["/"])
-  // }
-  // this.Service.getAll().subscribe((data) => {
-  //   this.Service = data;
-  //   data.forEach(service => {
-  //     this.Service[service._id] = [];
-  //   });
-  // }, (error) => {
-  //   console.log(error)
-  // })
-  }
-  // getService(id): void{
-  //   this.ServService.getAServiceByid(id)
-  //   .subscribe(
-  //     data => {
-  //       this.currentService = data;
-  //       console.log(data);
-  //     },
-  //     error =>{
-  //         console.log(error);
-  //     });
-  // }
 
-  // updateService(): void {
-  //   this.ServService.update(this.currentService.id )
-  //   .subscribe(
-  //     response => {
-  //       console.log(response);
-  //       this.message = 'le service a été bien modifier';
-  //     },
-  //     error => {
-  //       console.log(error);
-  //     });
-  // }
+  }
+  modifyService(){
+    let req = {
+      id:this.Service._id,
+      id_message:this.firstMessage._id,
+    }
+    this.ServService.updateNew(req).subscribe((data)=>{
+   this.messageService.add({severity:'success', summary:'Modification du Service', detail:'Modification réussie'});
+      this.router.navigate(['/service'])
+    },(error)=>{
+      console.log(error)
+    });
+    
+  }
+
+  
 
 }

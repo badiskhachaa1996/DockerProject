@@ -20,6 +20,10 @@ export class ServService {
     let add_serv = this.apiUrl + "service/addService";
     return this.http.post<any>(add_serv, service, httpOptions);
   }
+  updateNew(newService){
+    let registreUrl=this.apiUrl+"updateNew/"+newService.id;
+    return this.http.post<any>(registreUrl,newService,httpOptions1);
+  }
 
   getAll() {
     let loginUrl = this.apiUrl + "service/getAll";
