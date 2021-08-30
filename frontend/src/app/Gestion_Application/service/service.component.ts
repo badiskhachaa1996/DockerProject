@@ -137,12 +137,12 @@ cols: any[];
     }
 
     
-    deleteSujet(sujet): void{
+    deleteSujet(rowdata): void{
   
-      this.SujetService.delete(sujet._id)
+      this.SujetService.delete(rowdata._id)
       .subscribe(
         response => {
-          this.services.splice(this.sujets.indexOf(sujet), 1);
+          this.services.splice(this.sujets.indexOf(rowdata), 1);
         },
         error => {
           console.log(error);
