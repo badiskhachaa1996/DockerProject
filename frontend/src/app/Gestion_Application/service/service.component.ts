@@ -28,6 +28,8 @@ currentService = null;
 currentIndex = -1;
 label = '';
 cols: any[];
+sujetList=[];
+sujetShow=[];
 
 allServices :any ;
 
@@ -60,7 +62,7 @@ allServices :any ;
       label:this.sujetForm.value.label,  
       service_id:this.sujetForm.value.service_id  
     };
-    this.sujet.addSujet(sujet).subscribe((data)=>{
+    this.SujetService.addSujet(sujet).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de sujet réussie'});
       this.sujetForm.reset();
     },(error)=>{
@@ -89,17 +91,23 @@ allServices :any ;
 
 
   constructor(private ServService :ServService,
-    private sujet: SujetService,private router: Router,
-    private messageService: MessageService,
-    private ts:SujetService) { }
+    private SujetService: SujetService,private router: Router,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     
     this.cols = [
       { field: 'label', header: 'Service' },
     
-
     ];
+    this.SujetService.getAll().subscribe((data) => {
+      if(!data.message){
+        data.forEach(sujet => {
+          this.sujetList.push(sujet);
+        });
+      }
+    })
+
   
     this.Services();
   }
@@ -108,6 +116,7 @@ allServices :any ;
     this.router.navigateByUrl("/service/edit",{state:data})
   }
   deleteService(service): void{
+    
   
     this.ServService.delete(service._id)
     .subscribe(
@@ -120,7 +129,19 @@ allServices :any ;
     }
     
    
-  
+    onRowSelect($event){
+      this.sujetList=[]
+      this.sujetList.forEach(sujet => {
+        if(sujet.service_id==this.currentService._id){
+          this.sujetShow.push(sujet)
+        }
+      });
+      console.log(this.currentService)
+    }
+
+    onRowUnselect($event){
+      this.currentService=null
+    }
  
 
 }
