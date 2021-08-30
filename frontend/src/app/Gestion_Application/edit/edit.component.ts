@@ -17,6 +17,7 @@ currentService = null;
 message = '';
 label = '';
 Service : Service;
+Sujet : Sujet;
 firstMessage:Message;
 
 serviceForm: FormGroup = new FormGroup({
@@ -33,11 +34,15 @@ serviceForm: FormGroup = new FormGroup({
     console.log(this.Service)
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
-      
     }
-    this.serviceForm.setValue({label:this.Service.label})
+      // this.Sujet = <Sujet>history.state;
+      // if (!this.Sujet._id) {
+      //   this.router.navigate(["/service/edit"])
+      // }
+  //   }
+  //   this.serviceForm.setValue({label:this.Service.label})
 
-  }
+}
   modifyService(){
     let req = <Service>{
       id:this.Service._id,
@@ -51,7 +56,5 @@ serviceForm: FormGroup = new FormGroup({
     });
     
   }
-
-  
 
 }

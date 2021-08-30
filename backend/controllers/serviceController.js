@@ -49,9 +49,23 @@ app.post("/updateById/:id", (req, res) => {
             res.send(service)
         })
 });
-
-
-
+app.post("/updateFirst/:id", (req, res) => {
+    Service.findByIdAndUpdate(req.params.id,
+        {
+            service_id: req.body.service_id
+        }, { new: true }, (err, user) => {
+            if (err) {
+                res.send(err)
+            }
+        })
+    Message.findByIdAndUpdate(req.body.id_message, {
+    }, { new: true }, (err, user) => {
+        if (err) {
+            res.send(err)
+        }
+        res.send(user)
+    })
+});
 
 
 

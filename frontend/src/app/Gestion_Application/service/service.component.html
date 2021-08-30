@@ -33,6 +33,23 @@
                                 <th>
                                     Action
                                 </th>
+                                <th>
+                                    Action
+                                 </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td style="background-color: white;" *ngFor="let col of columns">
+                                    
+                                    {{rowData.label}}
+                                </td>
+                                <td>
+                                    <i class="pi pi-pencil"
+                                    (click)="edit2(rowData)" ></i>
+                                    <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>
+                                </td>
+        
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
