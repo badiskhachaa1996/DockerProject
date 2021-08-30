@@ -35,7 +35,7 @@ sujetForm: FormGroup = new FormGroup({
     }
     this.sujetForm.setValue({label:this.Sujet.label})
   }
-  modifySujet(){
+modifySujet(){
     let req = {
       id:this.Sujet._id,
     }
