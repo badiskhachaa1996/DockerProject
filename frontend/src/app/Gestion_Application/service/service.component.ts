@@ -120,6 +120,10 @@ cols: any[];
   edit(data){
     this.router.navigateByUrl("/service/edit",{state:data})
   }
+
+  edit2(data){
+    this.router.navigateByUrl("/sujet/edit2",{state:data})
+  }
   deleteService(service): void{
   
     this.ServService.delete(service._id)
@@ -133,13 +137,12 @@ cols: any[];
     }
 
     
-    deleteSujet(): void{
+    deleteSujet(sujet): void{
   
-      this.SujetService.delete(this.currentService._id)
+      this.SujetService.delete(sujet._id)
       .subscribe(
         response => {
-          console.log(response);
-          this.router.navigate(['/service']);
+          this.services.splice(this.sujets.indexOf(sujet), 1);
         },
         error => {
           console.log(error);
