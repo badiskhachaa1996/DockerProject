@@ -110,7 +110,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés
 app.get("/getAccAff", (req, res) => {
-    Ticket.find({ statut: "Acc/Aff" })
+    Ticket.find({ statut: "En cours de traitement" })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : { message: "Pas de Tickets Acceptés ou Affectés" });
         })

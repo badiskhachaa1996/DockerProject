@@ -17,8 +17,8 @@
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Sujet:
-                                <select [disabled]="!TicketForm.value.service" formControlName="sujet" class="form-control col-12" >
-                                    <option *ngIf="TicketForm.value.service" [ngValue]="null" disabled>Choissisez un sujet</option>
+                                <select [disabled]="selectedService" formControlName="sujet" class="form-control col-12" >
+                                    <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet</option>
                                     <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]" [ngValue]="sujet">
                                         {{ sujet.label }}
                                        </option>
