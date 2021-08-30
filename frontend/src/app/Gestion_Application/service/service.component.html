@@ -1,88 +1,38 @@
 <div class="p-grid">
+    {{currentService}}
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
-          <div class="p-grid">
+            <div class="p-grid">
                 <form class="col-8 col-offset-2" [formGroup]="serviceForm">
                     <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Ajouter un service</h3>
-                        <div class="p-grid">
-                          
-                            <div class="mt-2 mb-2 col-12">
-                                <input type="text" formControlName="label" class="form-control col-12" placeholder="Le nom du service" pInputText>
-                            </div>
-                          
-                            <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid" (click)="saveService()" label="Ajouter"></button>
-                            </div>
+                    <div class="p-grid">
+
+                        <div class="mt-2 mb-2 col-12">
+                            <input type="text" formControlName="label" class="form-control col-12"
+                                placeholder="Le nom du service" pInputText>
                         </div>
+
+                        <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid"
+                                (click)="saveService()" label="Ajouter"></button>
+                        </div>
+                    </div>
                 </form>
 
                 <h3>Tableau des services</h3>
-               
-        <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="services" [columns]="cols" [value]="services" >
-                <ng-template pTemplate="header" let-columns >
-                    <tr>
-                        <th>
-                            service
-                        </th>
-                        <th>
-                            action
-                         </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr>
-                        <td style="background-color: white;" *ngFor="let col of columns">
-                            
-                            {{rowData.label}}
-                        </td>
-                        <td>
-                            <i class="pi pi-pencil"
-                            (click)="edit(rowData)" ></i>
-                            <i class="pi pi-trash" (click)="deleteService(rowData)"></i>
-                        </td>
 
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-
-                <form class="col-8 col-offset-2" [formGroup]="sujetForm">
-                 
-                    <h3 class="text-center">Ajouter un sujet</h3>
-                        <div class="p-grid">
-                          
-                            <div class="mt-2 mb-2 col-12">
-                                <input type="text" formControlName="label" class="form-control col-12" placeholder="Le nom du sujet" pInputText>
-                            </div>
-
-                            <div class="mt-2 mb-2 col-12">
-                                <select formControlName="service_id" class="form-control col-12" >
-                                        <option [ngValue]="null" disabled>Choissisez un service</option>
-                                        <option *ngFor="let service of services" [ngValue]="services">
-                                            {{ service.label }}
-                                           </option>
-                                    </select>
-                             </div>
-                            <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid" (click)=" saveSujet()" label="Ajouter"></button>
-                            </div>
-                        </div>
-                </form>
- 
-                <h3>Tableau des sujets</h3>
-               
                 <div class="col-12 card shadow-lg my-5">
-                    <p-table *ngIf="sujets" [columns]="cols" [value]="sujets" >
-                        <ng-template pTemplate="header" let-columns >
+                    <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
+                        [(selection)]="currentService" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                        <ng-template pTemplate="header" let-columns>
                             <tr>
                                 <th>
-                                    Sujet
+                                    Service
                                 </th>
                                 <th>
                                     Action
-                                 </th>
+                                </th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -99,18 +49,80 @@
         
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                                <td style="background-color: white;" *ngFor="let col of columns">
+
+                                    {{rowData.label}}
+                                </td>
+                                <td>
+                                    <i class="pi pi-pencil" (click)="edit(rowData)"></i>
+                                    <i class="pi pi-trash" (click)="deleteService(rowData)"></i>
+                                </td>
+
+                            </tr>
+                        </ng-template>
                     </p-table>
                 </div>
+<<<<<<< HEAD
+                <div *ngIf="currentService">
+                    <form class="col-8 col-offset-2" [formGroup]="sujetForm">
+
+                        <h3 class="text-center">Ajouter un sujet</h3>
+                        <div class="p-grid">
+=======
               </div>
         </p-card>
     
     </div>
   </div>
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
+
+                            <div class="mt-2 mb-2 col-12">
+                                <input type="text" formControlName="label" class="form-control col-12"
+                                    placeholder="Le nom du sujet" pInputText>
+                            </div>
+                            
+                            <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
+                                <button pButton class="ui-button-raised ui-button-success"
+                                    [disabled]="sujetForm.invalid" (click)=" saveSujet()" label="Ajouter"></button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <h3>Tableau des sujets</h3>
+                    <div class="col-12 card shadow-lg my-5">
+                        <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th>
+                                        Sujet
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                                    <td style="background-color: white;" *ngFor="let col of columns">
+    
+                                        {{rowData.label}}
+                                    </td>
+                                    <td>
+                                        <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
+                                        <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>
+                                    </td>
+    
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
 
 
+            </div>
+        </p-card>
 
-  
-
- 
-        
-
+    </div>
+</div>

@@ -9,7 +9,7 @@ app.post("/addService", (req, res) => {
         label: data.label
     })
     service.save().then((servFromDb) => {
-        res.status(200).send({ message: "Service : "+servFromDb.label + "registration done" });
+        res.status(200).send(servFromDb);
     }).catch((error) => {
         res.status(400).send(error);
     })

@@ -17,8 +17,7 @@ export class ServiceComponent implements OnInit {
     label:new FormControl('',[Validators.required]),
   });
   sujetForm: FormGroup= new FormGroup({
-    label:new FormControl('',[Validators.required]),
-    service_id:new FormControl('',[Validators.required]),
+    label:new FormControl('',[Validators.required])
   });
  
   emailExists: boolean;
@@ -29,15 +28,19 @@ currentService = null;
 currentIndex = -1;
 label = '';
 cols: any[];
+sujetList=[];
+sujetShow=[];
+
+allServices :any ;
+
   saveService(){   
     let service = <Service> {
-      label:this.serviceForm.value.label,
-      service_id:this.serviceForm.value.service_id
+      label:this.serviceForm.value.label
     };
  
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
-      this.services.push(service)
+      this.services.push(data)
       
    //   console.log(this.allServices);
       this.serviceForm.reset();
@@ -56,9 +59,12 @@ cols: any[];
   saveSujet(){   
     let sujet = <Sujet> {
       label:this.sujetForm.value.label,
+      service_id:this.currentService._id
     };
  
     this.SujetService.addSujet(sujet).subscribe((data)=>{
+      this.sujetShow.push(data)
+      this.sujetList.push(data);
       this.messageService.add({severity:'success', summary:'Gestion de sujet', detail:'Creation de sujet réussie'});  
    //   console.log(this.allServices);
       this.sujetForm.reset();
@@ -100,21 +106,30 @@ cols: any[];
 
 
   constructor(private ServService :ServService,
-    private sujet: SujetService,private router: Router,
+    private router: Router,
     private messageService: MessageService,
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
     
     this.cols = [
-      { field: 'label', header: 'Service' },
-    ];
-    this.cols = [
       { field: 'label', header: 'Sujet' },
+    
     ];
+    this.SujetService.getAll().subscribe((data) => {
+      if(!data.message){
+        data.forEach(sujet => {
+          this.sujetList.push(sujet);
+        });
+      }
+    })
   
   
     this.Services();
+  }
+
+  editSujet(data){
+    this.router.navigateByUrl("/sujet/edit",{state:data})
   }
   
   edit(data){
@@ -125,6 +140,7 @@ cols: any[];
     this.router.navigateByUrl("/sujet/edit2",{state:data})
   }
   deleteService(service): void{
+    
   
     this.ServService.delete(service._id)
     .subscribe(
@@ -137,12 +153,13 @@ cols: any[];
     }
 
     
-    deleteSujet(rowdata): void{
+    deleteSujet(rowData): void{
   
-      this.SujetService.delete(rowdata._id)
+      this.SujetService.delete(rowData._id)
       .subscribe(
         response => {
-          this.services.splice(this.sujets.indexOf(rowdata), 1);
+          this.sujetShow.splice(this.sujetShow.indexOf(rowData), 1);
+          this.sujetList.splice(this.sujetList.indexOf(rowData), 1);
         },
         error => {
           console.log(error);
@@ -150,7 +167,18 @@ cols: any[];
       }
     
    
-  
+    onRowSelect($event){
+      this.sujetShow=[]
+      this.sujetList.forEach(sujet => {
+        if(sujet.service_id==this.currentService._id){
+          this.sujetShow.push(sujet)
+        }
+      });
+    }
+
+    onRowUnselect($event){
+      this.currentService=null
+    }
  
 
 }

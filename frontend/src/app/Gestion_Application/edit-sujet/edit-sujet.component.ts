@@ -33,13 +33,16 @@ sujetForm: FormGroup = new FormGroup({
       this.router.navigate(["/sujet/edit"])
       
     }
+    console.log(this.Sujet)
     this.sujetForm.setValue({label:this.Sujet.label})
   }
-modifySujet(){
-    let req = {
+  modifySujet(){
+    let req = <Sujet>{
       id:this.Sujet._id,
+      label:this.sujetForm.value.label
     }
-    this.SujetService.updateNew(req).subscribe((data)=>{
+    this.SujetService.update(req).subscribe((data)=>{
+      console.log(data)
       this.router.navigate(['/service'])
     },(error)=>{
       console.log(error)

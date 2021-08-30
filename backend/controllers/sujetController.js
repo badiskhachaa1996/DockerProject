@@ -11,7 +11,7 @@ app.post("/addsujet", (req, res) => {
         service_id: data.service_id
     })
     sujet.save().then((sujetFromDb) => {
-        res.status(200).send({ message: "Sujet : "+sujetFromDb.sujet_id + "registration done sujet :"+sujetFromDb.label });
+        res.status(200).send(sujetFromDb);
     }).catch((error) => {
         res.status(400).send(error);
     })
