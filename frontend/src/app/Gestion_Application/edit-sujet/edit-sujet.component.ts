@@ -39,10 +39,7 @@ sujetForm: FormGroup = new FormGroup({
   modifySujet(){
     let req = <Sujet>{
       id:this.Sujet._id,
-<<<<<<< HEAD
       label:this.sujetForm.value.label
-=======
->>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
     }
     this.SujetService.update(req).subscribe((data)=>{
       console.log(data)

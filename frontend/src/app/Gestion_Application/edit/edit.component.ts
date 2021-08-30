@@ -44,12 +44,7 @@ serviceForm: FormGroup = new FormGroup({
   
   
 
-<<<<<<< HEAD
-}
-  modifyService(){
-=======
 modifyService(){
->>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
     let req = <Service>{
       id:this.Service._id,
       label:this.serviceForm.value.label
@@ -61,13 +56,7 @@ modifyService(){
       console.log(error)
     });
     
-<<<<<<< HEAD
-  }
-
-}
-=======
 
 }
 }
   
->>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
