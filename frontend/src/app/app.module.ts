@@ -87,6 +87,7 @@ import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component'
 import { SuiviComponent } from './ticket/suivi/suivi.component';
 import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
+import { ListUserComponent } from './authentification/list-user/list-user.component';
 
 
 
@@ -185,6 +186,7 @@ import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.
         SuiviComponent,
         EditComponent,
         EditSujetComponent,
+        ListUserComponent,
        
 
                

@@ -1,0 +1,34 @@
+<div *ngIf="showForm=='Fermer'">
+    
+    <app-register></app-register>
+    </div>
+    
+    <button pButton type="button" [label]="showForm" style="margin-left: 90%;"
+        (click)="toggleForm()" >  <i class="pi pi-user-plus" style="color: rgb(255, 255, 255);"></i>    </button>
+    <div class="grid">
+        <div class="col-10 col-offset-1">
+            <h3 style="margin-left: 40%;">La liste des Utilisateurs</h3>
+            <div class="col-12 card shadow-lg my-5">
+                <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" >
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" style="padding-right: 20%;">
+                                {{col.header}}
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td style="background-color: white;" *ngFor="let col of columns"> 
+                               
+                                <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="modify()" *ngIf='col.field=="action"'></i>
+                                {{rowData[col.field]}}
+                            </td>
+                            
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+     

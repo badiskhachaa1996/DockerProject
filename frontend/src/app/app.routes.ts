@@ -10,6 +10,7 @@ import { SuiviComponent } from './ticket/suivi/suivi.component';
 import { UpdateComponent } from './ticket/update/update.component';
 import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
+import { ListUserComponent } from './authentification/list-user/list-user.component';
 
 
 const routes: Routes = [
@@ -22,8 +23,10 @@ const routes: Routes = [
     {path:"ticket/suivi",component:SuiviComponent},
     {path:"ticket/update",component:UpdateComponent},
     {path:"service/edit",component:EditComponent},
-    {path:"sujet/edit",component:EditSujetComponent}
-    
+    {path:"sujet/edit",component:EditSujetComponent},
+    { path: 'home', component: HomeComponent},
+    { path: 'listuser', component: ListUserComponent},
+
     // { path: '**', redirectTo: '/' }
   ];
 
