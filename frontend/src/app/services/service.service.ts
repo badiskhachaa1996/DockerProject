@@ -20,10 +20,6 @@ export class ServService {
     let add_serv = this.apiUrl + "service/addService";
     return this.http.post<any>(add_serv, service, httpOptions);
   }
-  updateNew(newService){
-    let registreUrl=this.apiUrl+"updateNew/"+newService.id;
-    return this.http.post<any>(registreUrl,newService,httpOptions1);
-  }
 
   getAll() {
     let loginUrl = this.apiUrl + "service/getAll";
@@ -31,13 +27,13 @@ export class ServService {
   }
 
 
-  update(sujet :Sujet){
-    let registreUrl=this.apiUrl+"updateById/"+sujet.service_id;
-    return this.http.post<any>(registreUrl,sujet,httpOptions1);
+  update(service :Service){
+    let registreUrl=this.apiUrl+"service/updateById/"+service.id;
+    return this.http.post<any>(registreUrl,service,httpOptions1);
   }
 
   delete(id:string){
-    let registreUrl=this.apiUrl+"deleteById/"+id;
+    let registreUrl=this.apiUrl+"service/deleteById/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
