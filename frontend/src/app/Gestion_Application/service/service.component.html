@@ -1,5 +1,4 @@
 <div class="p-grid">
-    {{currentService}}
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -36,28 +35,14 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr>
-                                <td style="background-color: white;" *ngFor="let col of columns">
-                                    
-                                    {{rowData.label}}
-                                </td>
-                                <td>
-                                    <i class="pi pi-pencil"
-                                    (click)="edit2(rowData)" ></i>
-                                    <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>
-                                </td>
-        
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
                             <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
-                                <td style="background-color: white;" *ngFor="let col of columns">
+                                <td *ngFor="let col of columns">
 
                                     {{rowData.label}}
                                 </td>
                                 <td>
                                     <i class="pi pi-pencil" (click)="edit(rowData)"></i>
-                                    <i class="pi pi-trash" (click)="deleteService(rowData)"></i>
+                                    <!--<i class="pi pi-trash" (click)="deleteService(rowData)"></i>-->
                                 </td>
 
                             </tr>
@@ -103,7 +88,7 @@
                                     </td>
                                     <td>
                                         <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
-                                        <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>
+                                        <!--<i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>-->
                                     </td>
     
                                 </tr>

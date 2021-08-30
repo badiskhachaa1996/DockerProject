@@ -21,6 +21,10 @@ export class SuiviComponent implements OnInit {
   serviceList=[];
   sujetList=[];
 
+  filterService;
+  filterSujet;
+  filterStatut;
+
   first = 0;
   rows = 10;
 
@@ -60,6 +64,8 @@ export class SuiviComponent implements OnInit {
     
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
+        //{ label: 'Tous les sujets', value: null }
+        this.filterSujet=data;
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
         });
@@ -68,6 +74,8 @@ export class SuiviComponent implements OnInit {
     
     this.ServService.getAll().subscribe((data) => {
       if(!data.message){
+        //{ label: 'Tous les services', value: null }
+        this.filterService=data;
         data.forEach(service => {
           this.serviceList[service._id]=service.label;
         });

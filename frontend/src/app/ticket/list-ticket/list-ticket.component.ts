@@ -59,7 +59,7 @@ export class ListTicketComponent implements OnInit {
     if(token==null){
       this.router.navigate(["/login"])
     }else if(!token["role"].includes("agent")){
-      this.router.navigate(["/ticket/suivi"])
+      //this.router.navigate(["/ticket/suivi"])
     }
     this.TicketService.getQueue().subscribe((data) => {
       this.queueList = data;
