@@ -17,13 +17,13 @@ currentService = null;
 message = '';
 label = '';
 Service : Service;
+Sujet : Sujet;
 firstMessage:Message;
 
 serviceForm: FormGroup = new FormGroup({
   label: new FormControl('', Validators.required),
  
 })
-  messageService: any;
 
 
   constructor(private ServService :ServService,private route: ActivatedRoute, private router: Router) { }
@@ -33,25 +33,29 @@ serviceForm: FormGroup = new FormGroup({
     this.Service = <Service>history.state;
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
-      
     }
-    this.serviceForm.setValue({label:this.Service.label})
+      // this.Sujet = <Sujet>history.state;
+      // if (!this.Sujet._id) {
+      //   this.router.navigate(["/service/edit"])
+      // }
+  //   }
+  //   this.serviceForm.setValue({label:this.Service.label})
 
-  }
-  modifyService(){
-    let req = {
-      id:this.Service._id,
-      id_message:this.firstMessage._id,
-    }
-    this.ServService.updateNew(req).subscribe((data)=>{
-   this.messageService.add({severity:'success', summary:'Modification du Service', detail:'Modification réussie'});
-      this.router.navigate(['/service'])
-    },(error)=>{
-      console.log(error)
-    });
-    
-  }
+   //}
 
+}
   
-
+modifyService(){
+  let req = {
+    id:this.Service,
+    id_message:this.firstMessage._id,
+  }
+  this.ServService.updateNew(req).subscribe((data)=>{
+ //this.messageService.add({severity:'success', summary:'Modification du Service', detail:'Modification réussie'});
+    this.router.navigate(['/service'])
+  },(error)=>{
+    console.log(error)
+  });
+  
+}
 }

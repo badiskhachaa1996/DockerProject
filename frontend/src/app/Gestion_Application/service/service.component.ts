@@ -24,13 +24,11 @@ export class ServiceComponent implements OnInit {
   emailExists: boolean;
 
 services : any;
+sujets : any;
 currentService = null;
 currentIndex = -1;
 label = '';
 cols: any[];
-
-allServices :any ;
-
   saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label,
@@ -53,29 +51,42 @@ allServices :any ;
     });
   }
 
-  saveSujet(){
+  saveSujet(){   
     let sujet = <Sujet> {
-      label:this.sujetForm.value.label,  
-      service_id:this.sujetForm.value.service_id  
+      label:this.sujetForm.value.label,
     };
-    this.sujet.addSujet(sujet).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Gestion de service/Sujet', detail:'Creation de sujet réussie'});
+ 
+    this.SujetService.addSujet(sujet).subscribe((data)=>{
+      this.messageService.add({severity:'success', summary:'Gestion de sujet', detail:'Creation de sujet réussie'});  
+   //   console.log(this.allServices);
       this.sujetForm.reset();
+    
+
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
-        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du service est deja existant'});
         this.emailExists=true;
       }
       console.log(error)
     });
-    
   }
   Services(){
     this.ServService.getAll()
     .subscribe(
       data => {
         this.services = data;
+        console.log(data);
+      },
+      error => {
+        console.log(error);
+      });
+  }
+  Sujets(){
+    this.SujetService.getAll()
+    .subscribe(
+      data => {
+        this.sujets = data;
         console.log(data);
       },
       error => {
@@ -89,20 +100,25 @@ allServices :any ;
   constructor(private ServService :ServService,
     private sujet: SujetService,private router: Router,
     private messageService: MessageService,
-    private ts:SujetService) { }
+    private SujetService:SujetService) { }
 
   ngOnInit(): void {
     
     this.cols = [
       { field: 'label', header: 'Service' },
-    
-
     ];
+    this.cols = [
+      { field: 'label', header: 'Sujet' },
+    ];
+  
   
     this.Services();
   }
   
   edit(data){
+    this.router.navigateByUrl("/service/edit",{state:data})
+  }
+  edit2(data){
     this.router.navigateByUrl("/service/edit",{state:data})
   }
   deleteService(): void{
@@ -117,6 +133,20 @@ allServices :any ;
         console.log(error);
       });
     }
+
+    
+    deleteSujet(): void{
+  
+      this.SujetService.delete(this.currentService._id)
+      .subscribe(
+        response => {
+          console.log(response);
+          this.router.navigate(['/service']);
+        },
+        error => {
+          console.log(error);
+        });
+      }
     
    
   
