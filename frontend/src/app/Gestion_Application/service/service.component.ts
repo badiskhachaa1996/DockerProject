@@ -36,7 +36,9 @@ cols: any[];
     };
  
     this.ServService.addService(service).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});  
+      this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
+      this.services.push(service)
+      
    //   console.log(this.allServices);
       this.serviceForm.reset();
     
@@ -118,16 +120,12 @@ cols: any[];
   edit(data){
     this.router.navigateByUrl("/service/edit",{state:data})
   }
-  edit2(data){
-    this.router.navigateByUrl("/service/edit",{state:data})
-  }
-  deleteService(): void{
+  deleteService(service): void{
   
-    this.ServService.delete(this.currentService._id)
+    this.ServService.delete(service._id)
     .subscribe(
       response => {
-        console.log(response);
-        this.router.navigate(['/service']);
+        this.services.splice(this.services.indexOf(service), 1);
       },
       error => {
         console.log(error);

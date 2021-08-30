@@ -26,11 +26,12 @@ serviceForm: FormGroup = new FormGroup({
 })
 
 
-  constructor(private ServService :ServService,private route: ActivatedRoute, private router: Router) { }
+  constructor(private ServService :ServService,private route: ActivatedRoute, private router: Router,private messageService:MessageService) { }
 
   ngOnInit(): void {
     // this.message = '';
     this.Service = <Service>history.state;
+    console.log(this.Service)
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
     }
@@ -41,7 +42,24 @@ serviceForm: FormGroup = new FormGroup({
   //   }
   //   this.serviceForm.setValue({label:this.Service.label})
 
+<<<<<<< HEAD
    //}
+=======
+  }
+  modifyService(){
+    let req = <Service>{
+      id:this.Service._id,
+      label:this.serviceForm.value.label
+    }
+    this.ServService.update(req).subscribe((data)=>{
+   this.messageService.add({severity:'success', summary:'Modification du Service', detail:'Modification réussie'});
+      this.router.navigate(['/service'])
+    },(error)=>{
+      console.log(error)
+    });
+    
+  }
+>>>>>>> e7821473e583950cfdd49c79f4db8d6ddfadced7
 
 }
   
