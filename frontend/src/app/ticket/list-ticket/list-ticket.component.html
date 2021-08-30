@@ -1,6 +1,6 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Tableau de la Queue d'entrée</h3>
+        <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" pDroppable="InscritToList"
                 (onDrop)="dragInscritToList($event)">
@@ -38,7 +38,7 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Tableau des Tickets Acceptés/Affectés</h3>
+        <h3>Mes tickers en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="ListToPreInscrit"
                 (onDrop)="dragListToPreInscrit($event)">
@@ -49,6 +49,12 @@
                         </th>
                         <th>
                             Sujet
+                        </th>
+                        <th>
+                            Date d'acceptation
+                        </th>
+                        <th>
+                            Désignation
                         </th>
                         <th>
                             Action
@@ -65,6 +71,12 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
+                            {{rowData.date_affec_accep | date:'d/MM/yy'}}
+                        </td>
+                        <td>
+                            {{rowData.isAffected}}
+                        </td>
+                        <td>
                             <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"></i>
                         </td>
                     </tr>
@@ -73,10 +85,10 @@
         </div>
     </div>
 </div>
-<!--
+
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Tableau des Utilisateurs Inscrit</h3>
+        <h3>Les tickets de mon service</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="UserInscrit" [columns]="cols" [value]="allTickets" pDroppable="PreInscritToInscrit"
                 (onDrop)="dragPreInscritToInscrit($event)">
@@ -99,4 +111,4 @@
             </p-table>
         </div>
     </div>
-</div>-->
+</div>

@@ -22,7 +22,8 @@ const routes: Routes = [
     {path:"ticket/suivi",component:SuiviComponent},
     {path:"ticket/update",component:UpdateComponent},
     {path:"service/edit",component:EditComponent},
-    {path:"sujet/edit",component:EditSujetComponent}
+    {path:"sujet/edit",component:EditSujetComponent},
+    {path:"user/list",component:HomeComponent}
     
     // { path: '**', redirectTo: '/' }
   ];

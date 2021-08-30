@@ -19,7 +19,7 @@
                     </div>
                 </form>
 
-                <h3>Tableau des services</h3>
+                <h3>Liste des services</h3>
 
                 <div class="col-12 card shadow-lg my-5">
                     <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
@@ -67,7 +67,7 @@
                         </div>
                     </form>
 
-                    <h3>Tableau des sujets</h3>
+                    <h3>Liste des sujets du service: {{currentService.label}}</h3>
                     <div class="col-12 card shadow-lg my-5">
                         <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow">
                             <ng-template pTemplate="header" let-columns>

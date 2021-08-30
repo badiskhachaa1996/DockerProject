@@ -19,8 +19,6 @@ export class ListTicketComponent implements OnInit {
   AccAffList: any[] = [];
   allTickets: any[] = [];
 
-  cols: any[];
-
   draggedTicket: any;
 
   showForm: string = "Ajouter";
@@ -61,6 +59,7 @@ export class ListTicketComponent implements OnInit {
     }else if(!token["role"].includes("agent")){
       //this.router.navigate(["/ticket/suivi"])
     }
+    //getQueueByService
     this.TicketService.getQueue().subscribe((data) => {
       this.queueList = data;
     })
@@ -81,16 +80,19 @@ export class ListTicketComponent implements OnInit {
       }
     })
 
+    //getAccAffByService
     this.TicketService.getAccAff().subscribe((data) => {
       if(!data.message){
         this.queueList = data;
       }
     })
+    /*Token service switch
 
-    this.cols = [
-      { field: 'serviceList[sujetList[sujet_id].service_id]', header: 'Service' },
-      { field: 'sujetList[sujet_id]', header: 'Sujet' },
-    ];
+    this.TicketService.getTicketsByService().subscribe((data) => {
+      if(!data.message){
+        this.allTickets = data;
+      }
+    })*/
   }
 
   //QueueToAccAff
