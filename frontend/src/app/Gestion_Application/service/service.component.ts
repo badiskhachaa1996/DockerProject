@@ -170,7 +170,6 @@ allServices :any ;
           this.sujetShow.push(sujet)
         }
       });
-      console.log(this.currentService)
     }
 
     onRowUnselect($event){

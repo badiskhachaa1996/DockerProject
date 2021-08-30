@@ -16,7 +16,7 @@ export class SujetService {
   constructor(private http : HttpClient, private _router: Router) { }
 
 
-  public  addSujet(sujet: Sujet){
+  public addSujet(sujet: Sujet){
     let add_sujet=this.apiUrl+"sujet/addsujet";
     return this.http.post<any>(add_sujet,sujet,httpOptions);
   }
@@ -26,13 +26,9 @@ export class SujetService {
     let loginUrl = this.apiUrl + "sujet/getAll";
     return this.http.get<any>(loginUrl, httpOptions1);
   }
-  updateNew(newSujet){
-    let registreUrl=this.apiUrl+"sujet/updateNew/"+newSujet.id;
-    return this.http.post<any>(registreUrl,newSujet,httpOptions1);
-  }
 
   update(sujet :Sujet){
-    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.service_id;
+    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.id;
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 
