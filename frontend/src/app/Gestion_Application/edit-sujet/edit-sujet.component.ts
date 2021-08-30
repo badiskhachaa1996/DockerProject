@@ -30,7 +30,7 @@ sujetForm: FormGroup = new FormGroup({
   ngOnInit(): void {
     this.Sujet = <Sujet>history.state;
     if (!this.Sujet._id) {
-      this.router.navigate(["/service/edit"])
+      this.router.navigate(["/sujet/edit"])
       
     }
     console.log(this.Sujet)
@@ -39,7 +39,10 @@ sujetForm: FormGroup = new FormGroup({
   modifySujet(){
     let req = <Sujet>{
       id:this.Sujet._id,
+<<<<<<< HEAD
       label:this.sujetForm.value.label
+=======
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
     }
     this.SujetService.update(req).subscribe((data)=>{
       console.log(data)

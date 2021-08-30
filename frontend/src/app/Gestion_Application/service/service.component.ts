@@ -135,6 +135,10 @@ allServices :any ;
   edit(data){
     this.router.navigateByUrl("/service/edit",{state:data})
   }
+
+  edit2(data){
+    this.router.navigateByUrl("/sujet/edit2",{state:data})
+  }
   deleteService(service): void{
     
   
@@ -149,6 +153,7 @@ allServices :any ;
     }
 
     
+<<<<<<< HEAD
     deleteSujet(rowData): void{
   
       this.SujetService.delete(rowData._id)
@@ -156,6 +161,14 @@ allServices :any ;
         response => {
           this.sujetShow.splice(this.sujetShow.indexOf(rowData), 1);
           this.sujetList.splice(this.sujetList.indexOf(rowData), 1);
+=======
+    deleteSujet(rowdata): void{
+  
+      this.SujetService.delete(rowdata._id)
+      .subscribe(
+        response => {
+          this.services.splice(this.sujets.indexOf(rowdata), 1);
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
         },
         error => {
           console.log(error);

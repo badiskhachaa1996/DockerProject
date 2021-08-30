@@ -35,15 +35,21 @@ serviceForm: FormGroup = new FormGroup({
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
     }
-      // this.Sujet = <Sujet>history.state;
-      // if (!this.Sujet._id) {
-      //   this.router.navigate(["/service/edit"])
-      // }
-  //   }
-  //   this.serviceForm.setValue({label:this.Service.label})
+      this.Sujet = <Sujet>history.state;
+      if (!this.Sujet._id) {
+        this.router.navigate(["/service/edit"])
+      }
+    }
+   // this.serviceForm.setValue({label:this.Service.label})
+  
+  
 
+<<<<<<< HEAD
 }
   modifyService(){
+=======
+modifyService(){
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
     let req = <Service>{
       id:this.Service._id,
       label:this.serviceForm.value.label
@@ -55,6 +61,13 @@ serviceForm: FormGroup = new FormGroup({
       console.log(error)
     });
     
+<<<<<<< HEAD
   }
 
 }
+=======
+
+}
+}
+  
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07

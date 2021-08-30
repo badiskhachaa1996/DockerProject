@@ -26,9 +26,19 @@ export class SujetService {
     let loginUrl = this.apiUrl + "sujet/getAll";
     return this.http.get<any>(loginUrl, httpOptions1);
   }
+<<<<<<< HEAD
 
   update(sujet :Sujet){
     let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.id;
+=======
+  updateNew(newSujet){
+    let registreUrl=this.apiUrl+"sujet/updateNew/"+newSujet.id;
+    return this.http.post<any>(registreUrl,newSujet,httpOptions1);
+  }
+
+  update(sujet :Sujet){
+    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.service_id;
+>>>>>>> 64e3a73d0f386348fbebba052f4964bce2085d07
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 
