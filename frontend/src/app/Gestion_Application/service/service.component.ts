@@ -84,7 +84,6 @@ allServices :any ;
     .subscribe(
       data => {
         this.services = data;
-        console.log(data);
       },
       error => {
         console.log(error);
@@ -95,7 +94,6 @@ allServices :any ;
     .subscribe(
       data => {
         this.sujets = data;
-        console.log(data);
       },
       error => {
         console.log(error);
@@ -136,9 +134,6 @@ allServices :any ;
     this.router.navigateByUrl("/service/edit",{state:data})
   }
 
-  edit2(data){
-    this.router.navigateByUrl("/sujet/edit2",{state:data})
-  }
   deleteService(service): void{
     
   

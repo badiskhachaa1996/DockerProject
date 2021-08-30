@@ -15,7 +15,6 @@ import { ServService } from 'src/app/services/service.service';
 })
 export class SuiviComponent implements OnInit {
 
-  user:User;
   ticketList:Ticket[];
   token:any;
 
@@ -53,11 +52,6 @@ export class SuiviComponent implements OnInit {
       this.router.navigate(["/login"])
     }
     this.token=jwt_decode(token);
-    this.AuthService.getById(this.token["id"]).subscribe((data)=>{
-      this.user=data;
-    },(error)=>{
-      console.log(error)
-    })
     this.TicketService.getAllByUser(this.token["id"]).subscribe((data)=>{
       this.ticketList=data;
     },(error)=>{
@@ -71,7 +65,7 @@ export class SuiviComponent implements OnInit {
         });
       }
     })
-
+    
     this.ServService.getAll().subscribe((data) => {
       if(!data.message){
         data.forEach(service => {

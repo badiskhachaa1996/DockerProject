@@ -55,6 +55,12 @@ export class ListTicketComponent implements OnInit {
   constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private router:Router) { }
 
   ngOnInit(): void {
+    let token = jwt_decode(localStorage.getItem("token"))
+    if(token==null){
+      this.router.navigate(["/login"])
+    }else if(!token["role"].includes("agent")){
+      this.router.navigate(["/ticket/suivi"])
+    }
     this.TicketService.getQueue().subscribe((data) => {
       this.queueList = data;
     })
