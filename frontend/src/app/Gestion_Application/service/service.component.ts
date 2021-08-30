@@ -17,8 +17,7 @@ export class ServiceComponent implements OnInit {
     label:new FormControl('',[Validators.required]),
   });
   sujetForm: FormGroup= new FormGroup({
-    label:new FormControl('',[Validators.required]),
-    service_id:new FormControl('',[Validators.required]),
+    label:new FormControl('',[Validators.required])
   });
  
   emailExists: boolean;
@@ -36,13 +35,12 @@ allServices :any ;
 
   saveService(){   
     let service = <Service> {
-      label:this.serviceForm.value.label,
-      service_id:this.serviceForm.value.service_id
+      label:this.serviceForm.value.label
     };
  
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
-      this.services.push(service)
+      this.services.push(data)
       
    //   console.log(this.allServices);
       this.serviceForm.reset();
@@ -61,9 +59,12 @@ allServices :any ;
   saveSujet(){   
     let sujet = <Sujet> {
       label:this.sujetForm.value.label,
+      service_id:this.currentService._id
     };
  
     this.SujetService.addSujet(sujet).subscribe((data)=>{
+      this.sujetShow.push(data)
+      this.sujetList.push(data);
       this.messageService.add({severity:'success', summary:'Gestion de sujet', detail:'Creation de sujet réussie'});  
    //   console.log(this.allServices);
       this.sujetForm.reset();
@@ -126,6 +127,10 @@ allServices :any ;
   
     this.Services();
   }
+
+  editSujet(data){
+    this.router.navigateByUrl("/sujet/edit",{state:data})
+  }
   
   edit(data){
     this.router.navigateByUrl("/service/edit",{state:data})
@@ -144,13 +149,13 @@ allServices :any ;
     }
 
     
-    deleteSujet(): void{
+    deleteSujet(rowData): void{
   
-      this.SujetService.delete(this.currentService._id)
+      this.SujetService.delete(rowData._id)
       .subscribe(
         response => {
-          console.log(response);
-          this.router.navigate(['/service']);
+          this.sujetShow.splice(this.sujetShow.indexOf(rowData), 1);
+          this.sujetList.splice(this.sujetList.indexOf(rowData), 1);
         },
         error => {
           console.log(error);
@@ -159,7 +164,7 @@ allServices :any ;
     
    
     onRowSelect($event){
-      this.sujetList=[]
+      this.sujetShow=[]
       this.sujetList.forEach(sujet => {
         if(sujet.service_id==this.currentService._id){
           this.sujetShow.push(sujet)

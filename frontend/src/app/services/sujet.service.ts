@@ -27,17 +27,17 @@ export class SujetService {
     return this.http.get<any>(loginUrl, httpOptions1);
   }
   updateNew(newSujet){
-    let registreUrl=this.apiUrl+"updateNew/"+newSujet.id;
+    let registreUrl=this.apiUrl+"sujet/updateNew/"+newSujet.id;
     return this.http.post<any>(registreUrl,newSujet,httpOptions1);
   }
 
   update(sujet :Sujet){
-    let registreUrl=this.apiUrl+"updateById/"+sujet.service_id;
+    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.service_id;
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 
   delete(id:string){
-    let registreUrl=this.apiUrl+"deleteById/"+id;
+    let registreUrl=this.apiUrl+"sujet/deleteById/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
