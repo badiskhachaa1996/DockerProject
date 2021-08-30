@@ -112,7 +112,6 @@ app.get("/getQueue", (req, res) => {
 app.get("/getAccAff", (req, res) => {
     Ticket.find({ statut: "Acc/Aff" })
         .then(result => {
-            console.log('result: ', result)
             res.send(result.length > 0 ? result : { message: "Pas de Tickets Acceptés ou Affectés" });
         })
         .catch(err => {

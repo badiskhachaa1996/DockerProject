@@ -2,7 +2,7 @@
     <div class="col-10 col-offset-1">
         <h3>Tableau de la Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" pDroppable="InscritToList"
+            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" pDroppable="InscritToList"
                 (onDrop)="dragInscritToList($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -40,7 +40,7 @@
     <div class="col-10 col-offset-1">
         <h3>Tableau des Tickets Acceptés/Affectés</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="UserPreInscrit" [columns]="cols" [value]="UserPreInscrit" pDroppable="ListToPreInscrit"
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="ListToPreInscrit"
                 (onDrop)="dragListToPreInscrit($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -78,7 +78,7 @@
     <div class="col-10 col-offset-1">
         <h3>Tableau des Utilisateurs Inscrit</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="UserInscrit" [columns]="cols" [value]="UserInscrit" pDroppable="PreInscritToInscrit"
+            <p-table *ngIf="UserInscrit" [columns]="cols" [value]="allTickets" pDroppable="PreInscritToInscrit"
                 (onDrop)="dragPreInscritToInscrit($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
