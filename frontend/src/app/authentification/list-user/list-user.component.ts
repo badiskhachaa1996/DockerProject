@@ -3,8 +3,16 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import {CardModule} from 'primeng/card';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
+import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
+
+import { MenuItem } from 'primeng/api';
+import { Router, RouterLink } from '@angular/router';
+import { RowToggler } from 'primeng/table';
+import { parse } from 'querystring';
+
+import {AccordionModule} from 'primeng/accordion';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -12,7 +20,8 @@ import { User } from 'src/app/models/User';
 })
 export class ListUserComponent implements OnInit {
 
- 
+
+    items: MenuItem[];
   tabUser = [];
 
 datasource: User [];
@@ -22,14 +31,16 @@ datasource: User [];
 
   showForm: string = "Ajouter";
   loading: boolean;
-  router: any;
-  constructor(private AuthService: AuthService) { }
+  
+  selectedUser: any;
+  formtype:string="edit";
+  constructor(private AuthService: AuthService,private router:Router) { }
 
   ngOnInit(): void {
     this.AuthService.getAll().subscribe((data) => {
       this.tabUser = data;
       this.totalRecords=this.tabUser.length;
-      console.log(this.totalRecords)
+      console.log(this.totalRecords);
     })
 
     this.cols = [
@@ -38,6 +49,7 @@ datasource: User [];
       { field: 'email', header: 'Email' },
       { field: 'phone', header: 'Téléphone' },
       { field: 'adresse', header: 'Adresse' },
+      { field: 'service_id', header: 'Service' },
       { field: 'action', header: "Action" }
     ];
     this.loading = true;
@@ -47,9 +59,23 @@ datasource: User [];
 
   toggleForm() {
     if (this.showForm == "Ajouter") {
+      this.formtype = "new";
       this.showForm = "Fermer";
+     
     } else {
-      this.showForm = "Ajouter"
+      this.formtype = "new";
+      this.showForm = "Ajouter";
+    }
+   
+  }
+  toggleType(){
+    if (this.formtype == "new") {
+      this.formtype = "edit";
+
+    } else {
+      this.formtype = "new";
+      
+      this.showForm = "Fermer";
     }
 
   }
@@ -84,14 +110,7 @@ datasource: User [];
   loadUsersLazy(event: LazyLoadEvent) {
     this.loading = true;
 
-    //in a real application, make a remote request to load data using state metadata from event
-    //event.first = First row offset
-    //event.rows = Number of rows per page
-    //event.sortField = Field name to sort with
-    //event.sortOrder = Sort order as number, 1 for asc and -1 for dec
-    //filters: FilterMetadata object having field as key and filter value, filter matchMode as value
-
-    //imitate db connection over a network
+    
     setTimeout(() => {
         if (this.datasource) {
             this.tabUser = this.datasource.slice(event.first, (event.first + event.rows));
@@ -99,9 +118,18 @@ datasource: User [];
         }
     }, 1000);
 }
-modify(data){
-  console.log(data)
-  this.router.navigateByUrl("/ticket/update",{state:data});
+modify(rowData){
+
+  this.toggleType()
+  this.selectedUser= rowData.email;
+  console.log("selected user : "+this.selectedUser)
+  
+  console.log(this.showForm 
+    +"" +
+     this.formtype)
+
+  
+ // this.router.navigateByUrl("/listuser/update",{state:rowData})
 }
 }
 

@@ -11,7 +11,7 @@ import { UpdateComponent } from './ticket/update/update.component';
 import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
-
+import { UpdateUserComponent } from './authentification/update/update.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
@@ -26,12 +26,14 @@ const routes: Routes = [
     {path:"sujet/edit",component:EditSujetComponent},
     { path: 'home', component: HomeComponent},
     { path: 'listuser', component: ListUserComponent},
+    { path: 'listuser/update',component: UpdateUserComponent},
+
 
     // { path: '**', redirectTo: '/' }
   ];
 
   
-  @NgModule({
+  @NgModule({   
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
   })

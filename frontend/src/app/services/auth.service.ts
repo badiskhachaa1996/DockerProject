@@ -33,13 +33,9 @@ export class AuthService {
     let loginUrl=this.apiUrl+"user/getById/"+id;
     return this.http.get<any>(loginUrl,httpOptions1);
   }
-  // createServices(service){
-  //   const newService = { id: Date.now(), ...service};
-  //   this.Services = [service, ...this.Services] ;
-  //   console.log(this.Services);
-  //    }
 
-  //    getServices(){
-  //      return this.Services;
-  //    }
+  update(user :User){
+    let registreUrl=this.apiUrl+"user/updateById/"+user.id;
+    return this.http.post<any>(registreUrl,user,httpOptions1);
+  }
 }
