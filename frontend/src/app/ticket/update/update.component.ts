@@ -10,7 +10,7 @@ import { TicketService } from 'src/app/services/ticket.service';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  selector: 'app-update',
+  selector: 'app-update-user',
   templateUrl: './update.component.html',
   styleUrls: ['./update.component.css']
 })
