@@ -13,7 +13,7 @@ app.post("/registre", (req, res) => {
         email: data.email,
         password: data.password,
         role : data.role,
-        service : data.service
+        service_id : data.service_id
     })
     user.save().then((userFromDb) => {
         res.status(200).send({ message: "registration done" });
@@ -29,7 +29,7 @@ app.post("/login", (req, res) => {
             res.status(404).send({ message: data });
         }
         else {
-            let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role }, "mykey")
+            let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role ,service_id:userFromDb.service_id }, "mykey")
             //on est entrain d'envoyer le token dans response donc dans le headers du coup dans le body on reçoit le msg logged
             //res.set('token',token);
             //res.status(200).send({message:"user logged"});
@@ -58,6 +58,27 @@ app.get("/getAll",(req,res)=>{
     .catch(err=>{
         console.log(err);
     })
+});
+
+
+app.post("/updateById/:id", (req, res) => {
+    User.findByIdAndUpdate(req.params.id,
+        {   
+            firstname:req.body.firstname,
+            lastname:req.body.lastname,
+            email:req.body.email,
+            phone:req.body.phone,
+            password:req.body.password,
+            role:req.body.role,
+            adresse:req.body.adresse,
+            service_id:req.body.service_id
+
+        }, {new: true}, (err, user) => {
+            if (err) {
+                res.send(err)
+            }
+            res.send(user)
+        })
 })
 app.get("/getAllbyService/:id",(req,res)=>{
     User.find({service:req.params.id})

@@ -1,0 +1,135 @@
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
+import {CardModule} from 'primeng/card';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { User } from 'src/app/models/User';
+import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
+
+import { MenuItem } from 'primeng/api';
+import { Router, RouterLink } from '@angular/router';
+import { RowToggler } from 'primeng/table';
+import { parse } from 'querystring';
+
+import {AccordionModule} from 'primeng/accordion';
+@Component({
+  selector: 'app-list-user',
+  templateUrl: './list-user.component.html',
+  styleUrls: ['./list-user.component.css']
+})
+export class ListUserComponent implements OnInit {
+
+
+    items: MenuItem[];
+  tabUser = [];
+
+datasource: User [];
+  cols: any[];
+
+  totalRecords: number;
+
+  showForm: string = "Ajouter";
+  loading: boolean;
+  
+  selectedUser: any;
+  formtype:string="edit";
+  constructor(private AuthService: AuthService,private router:Router) { }
+
+  ngOnInit(): void {
+    this.AuthService.getAll().subscribe((data) => {
+      this.tabUser = data;
+      this.totalRecords=this.tabUser.length;
+      console.log(this.totalRecords);
+    })
+
+    this.cols = [
+      { field: 'lastname', header: 'Nom' },
+      { field: 'firstname', header: 'Prenom' },
+      { field: 'email', header: 'Email' },
+      { field: 'phone', header: 'Téléphone' },
+      { field: 'adresse', header: 'Adresse' },
+      { field: 'service_id', header: 'Service' },
+      { field: 'action', header: "Action" }
+    ];
+    this.loading = true;
+  }
+
+  
+
+  toggleForm() {
+    if (this.showForm == "Ajouter") {
+      this.formtype = "new";
+      this.showForm = "Fermer";
+     
+    } else {
+      this.formtype = "new";
+      this.showForm = "Ajouter";
+    }
+   
+  }
+  toggleType(){
+    if (this.formtype == "new") {
+      this.formtype = "edit";
+
+    } else {
+      this.formtype = "new";
+      
+      this.showForm = "Fermer";
+    }
+
+  }
+
+  RegisterForm: FormGroup = new FormGroup({
+    lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
+    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
+    adresse: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)])
+  })
+
+  saveUser() {
+    //Enregistrement de l'user
+    this.tabUser.push(this.RegisterForm.value)
+    this.RegisterForm.reset()
+    this.toggleForm()
+  }
+
+  get lastname() { return this.RegisterForm.get('lastname'); }
+  get firstname() { return this.RegisterForm.get('firstname'); }
+  get email() { return this.RegisterForm.get('email'); }
+  get phone() { return this.RegisterForm.get('phone'); }
+  get adresse() { return this.RegisterForm.get('adresse'); }
+  get password() { return this.RegisterForm.get('password'); }
+  get verifypassword() { return this.RegisterForm.get('verifypassword'); }
+
+
+
+  loadUsersLazy(event: LazyLoadEvent) {
+    this.loading = true;
+
+    
+    setTimeout(() => {
+        if (this.datasource) {
+            this.tabUser = this.datasource.slice(event.first, (event.first + event.rows));
+            this.loading = false;
+        }
+    }, 1000);
+}
+modify(rowData){
+
+  this.toggleType()
+  this.selectedUser= rowData.email;
+  console.log("selected user : "+this.selectedUser)
+  
+  console.log(this.showForm 
+    +"" +
+     this.formtype)
+
+  
+ // this.router.navigateByUrl("/listuser/update",{state:rowData})
+}
+}
+

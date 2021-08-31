@@ -3,12 +3,11 @@
         <p-card>
             <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
                 <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
-                  <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png" class="logo"></div>
-                    <h3 class="text-center" *ngIf="currentRoot=='/register'">Inscription</h3>
+                   
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                
-                                <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom" pInputText>
+                                <input type="text" formControlName="lastname" class="form-control col-12" placeholder="nom" pInputText>
                                 <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                                     <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
                                     <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
@@ -64,7 +63,7 @@
                             
 
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="S'inscrire" (click)="saveUser()"></button>
+                                <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Modifer" (click)="UpdateUser()"></button>
                             </div>
                         </div>
                 </form>

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateUserComponent } from './authentification/update/update.component';
+import { UpdateUserComponent } from './update.component';
 
 describe('UpdateUserComponent', () => {
   let component: UpdateUserComponent;
