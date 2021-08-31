@@ -1,3 +1,41 @@
+<div class="p-grid mt-2" *ngIf="isModify">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <form class="col-8 col-offset-2" [formGroup]="TicketForm">
+                    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                    <h3 class="text-center">Modification d'un ticket</h3>
+                    <div class="grid">
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            Service
+                            <select formControlName="service" class="form-control col-12" (change)="onChange()">
+                                <option [ngValue]="null" disabled>Choissisez un service</option>
+                                <option *ngFor="let service of listServices" [ngValue]="service">
+                                    {{ service.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            Sujet:
+                            <select [disabled]="!TicketForm.value.service" formControlName="sujet"
+                                class="form-control col-12">
+                                <option [ngValue]="null" disabled>Choissisez un sujet</option>
+                                <option *ngFor="let sujet of listSujetSelected[TicketForm.value.service._id]"
+                                    [ngValue]="sujet">
+                                    {{ sujet.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid"
+                                label="Ajouter" (click)="modifyTicket()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
@@ -18,8 +56,8 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr pDraggable="ListToPreInscrit"
-                    (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                    <tr pDraggable="ListToPreInscrit" (onDragStart)="dragStart($event, rowData)"
+                        (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
@@ -29,6 +67,11 @@
                         <td>
                             <i style="margin-left: 30%;" class="pi pi-check" (click)="ListToPreInscrit(rowData)"></i>
                             <i style="margin-left: 15%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i style="margin-left: 15%;" *ngIf="isReponsable" class="pi pi-user-plus"
+                                (click)="showDropdownUser(rowData)"></i>
+                            <p-dropdown *ngIf="showDropDown" [options]="userList" [(ngModel)]="selectedUser"
+                                optionLabel="firstname" (onChange)="Affected()" placeholder="Choissiez un agent">
+                            </p-dropdown>
                         </td>
                     </tr>
                 </ng-template>
@@ -73,11 +116,15 @@
                         <td>
                             {{rowData.date_affec_accep | date:'d/MM/yy'}}
                         </td>
-                        <td>
-                            {{rowData.isAffected}}
+                        <td *ngIf="rowData.isAffected">
+                            Affecté
+                        </td>
+                        <td *ngIf="!rowData.isAffected">
+                            Accepté
                         </td>
                         <td>
-                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"></i>
+                            <i style="margin-left: 30%;" class="pi pi-arrow-right"
+                                (click)="ListToPreInscrit(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -103,7 +150,8 @@
                     <tr>
                         <td style="background-color: white;" *ngFor="let col of columns" pDraggable="InscritToList"
                             (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)">
-                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="InscritToList(rowData)" *ngIf="!col.field"></i>
+                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="InscritToList(rowData)"
+                                *ngIf="!col.field"></i>
                             {{rowData[col.field]}}
                         </td>
                     </tr>
