@@ -40,8 +40,8 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
 
-  dragStart(event, user: any) {
-    this.draggedTicket = user;
+  dragStart(event, ticket: Ticket) {
+    this.draggedTicket = ticket;
   }
 
   dragEnd(event) {
@@ -49,13 +49,11 @@ export class ListTicketComponent implements OnInit {
   }
 
   //QueueToAccAff
-  dragListToPreInscrit(event?) {
-    this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
-    this.AccAffList.push(this.draggedTicket)
+  dragQueueToAccAff(event?) {
     this.Accepted(this.draggedTicket)
   }
 
-  //AccAffToAll
+  /*AccAffToAll
   dragPreInscritToInscrit(event?) {
     this.AccAffList.splice(this.AccAffList.indexOf(this.draggedTicket), 1)
     this.allTickets.push(this.draggedTicket)
@@ -65,7 +63,7 @@ export class ListTicketComponent implements OnInit {
   dragInscritToList(event?) {
     this.allTickets.splice(this.allTickets.indexOf(this.draggedTicket), 1)
     this.queueList.push(this.draggedTicket)
-  }
+  }*/
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
@@ -92,20 +90,17 @@ export class ListTicketComponent implements OnInit {
           this.listSujetSelected[service._id] = [];
           this.serviceList[service._id] = service.label;
         });
+        this.SujetService.getAll().subscribe((data) => {
+          this.listSujets = data;
+          if (!data.message) {
+            data.forEach(sujet => {
+              this.listSujetSelected[sujet.service_id].push(sujet);
+              this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
+            });
+          }
+        })
       }
     })
-
-    this.SujetService.getAll().subscribe((data) => {
-      this.listSujets = data;
-      if (!data.message) {
-        data.forEach(sujet => {
-          this.listSujetSelected[sujet.service_id].push(sujet);
-          this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
-        });
-      }
-    })
-
-
 
     //getAccAffByService
     this.TicketService.getAccAff(token["id"]).subscribe((data) => {
@@ -119,9 +114,6 @@ export class ListTicketComponent implements OnInit {
         this.userList = data;
       }
     })
-
-
-
 
     /*Token service
 
@@ -139,13 +131,13 @@ export class ListTicketComponent implements OnInit {
   }
 
   //QueueToAccAff
-  ListToPreInscrit(user, event?) {
+  QueueToAccAff(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
     this.AccAffList.push(user)
     this.Accepted(user)
   }
 
-  //AccAffToAll
+  /*AccAffToAll
   PreInscritToInscrit(user, event?) {
     this.AccAffList.splice(this.AccAffList.indexOf(user), 1)
     this.allTickets.push(user)
@@ -155,7 +147,7 @@ export class ListTicketComponent implements OnInit {
   InscritToList(user, event?) {
     this.allTickets.splice(this.allTickets.indexOf(user), 1)
     this.queueList.push(user)
-  }
+  }*/
 
   Accepted(rawData) {
     let data = {
@@ -225,11 +217,11 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.changeService(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
-      /*TODO If service_id == data
-      if(this.sujetList[data.sujet_id].service_id==token.service){
-
+      /*TODO If service_id == data --> push
+      if(this.sujetList[data.sujet_id].service_id==token.service_id){
+        this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
       }*/
-      this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
+      this.queueList.splice(this.queueList.indexOf(this.isModify),1)
       this.isModify=null;
       
     }, (error) => {
