@@ -38,4 +38,17 @@ export class AuthService {
     let registreUrl=this.apiUrl+"user/updateById/"+user.id;
     return this.http.post<any>(registreUrl,user,httpOptions1);
   }
+  getAllByService(id){
+    let loginUrl=this.apiUrl+"user/getAllbyService/"+id;
+    return this.http.get<any>(loginUrl,httpOptions1);
+  }
+  // createServices(service){
+  //   const newService = { id: Date.now(), ...service};
+  //   this.Services = [service, ...this.Services] ;
+  //   console.log(this.Services);
+  //    }
+
+  //    getServices(){
+  //      return this.Services;
+  //    }
 }

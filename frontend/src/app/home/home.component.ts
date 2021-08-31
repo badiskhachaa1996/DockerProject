@@ -83,7 +83,7 @@ export class HomeComponent implements OnInit {
       this.showForm = "Ajouter"
     }
 
-  }
+  }    
 
   RegisterForm: FormGroup = new FormGroup({
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace

@@ -13,7 +13,7 @@ app.post("/registre", (req, res) => {
         email: data.email,
         password: data.password,
         role : data.role,
-        service_id:data.service_id
+        service_id : data.service_id
     })
     user.save().then((userFromDb) => {
         res.status(200).send({ message: "registration done" });
@@ -79,5 +79,15 @@ app.post("/updateById/:id", (req, res) => {
             }
             res.send(user)
         })
+})
+app.get("/getAllbyService/:id",(req,res)=>{
+    User.find({service:req.params.id})
+    .then(result=>{
+        //console.log('result: ',result)
+        res.send(result.length>0?result:{message:"Pas de Users"});
+    })
+    .catch(err=>{
+        console.log(err);
+    })
 })
 module.exports = app;

@@ -1,9 +1,14 @@
 <div class="p-grid">
+<<<<<<< HEAD
+    
+=======
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <form class="col-8 col-offset-2" [formGroup]="serviceForm">
-                    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="a_masquer" *ngIf="showForm" >
+                    
                     <h3 class="text-center">Ajouter un service</h3>
                     <div class="p-grid">
 
@@ -12,37 +17,65 @@
                                 placeholder="Le nom du service" pInputText>
                         </div>
 
-                        <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid"
-                                (click)="saveService()" label="Ajouter"></button>
-                        </div>
+                      
+                            
+                       
                     </div>
                 </form>
+                <!--[disabled]="serviceForm.invalid" -->
+                <div class=" xl:col-offset-10 sm:col-offset-4">
+                 <button pButton class="ui-button-raised ui-button-success" 
+                                (click)="masquer_div2('a_masquer'); toggleForm()"  [label]="showForm"></button>
+                </div>
 
+<<<<<<< HEAD
+                <h3>Liste des services  </h3>
+=======
                 <h3>Liste des services</h3>
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
 
-                <div class="col-12 card shadow-lg my-5">
+                <div class="col-12 card shadow-lg my-5 ">
                     <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
-                        [(selection)]="currentService" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)">
+                        [(selection)]="currentService" (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect($event)"
+                         [rows]="4"  
+                        [paginator]="true" [pageLinks]="5" [responsive]="true">
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th>
+                                <th class="col-8 col-offset-4" >
                                     Service
                                 </th>
-                                <th>
+
+                                <th class="col-4 col-offset-2">
                                     Action
                                 </th>
                             </tr>
                         </ng-template>
+<<<<<<< HEAD
+                    
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                              
+                                <td  style="color:black;"*ngFor="let col of columns"  >
+                      
+=======
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
                             <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
                                 <td *ngFor="let col of columns">
 
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                     {{rowData.label}}
+                            
                                 </td>
+                             
                                 <td>
+                                    <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;" >
                                     <i class="pi pi-pencil" (click)="edit(rowData)"></i>
+<<<<<<< HEAD
+                                    </div>
+                                    <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
+=======
                                     <!--<i class="pi pi-trash" (click)="deleteService(rowData)"></i>-->
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                 </td>
 
                             </tr>
@@ -50,7 +83,7 @@
                     </p-table>
                 </div>
                 <div *ngIf="currentService">
-                    <form class="col-8 col-offset-2" [formGroup]="sujetForm">
+                    <form class="col-8 col-offset-2" [formGroup]="sujetForm" style="display: none;" id="aa_masquer" *ngIf="showwForm">
 
                         <h3 class="text-center">Ajouter un sujet</h3>
                         <div class="p-grid">
@@ -60,35 +93,47 @@
                                     placeholder="Le nom du sujet" pInputText>
                             </div>
                             
-                            <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="sujetForm.invalid" (click)=" saveSujet()" label="Ajouter"></button>
-                            </div>
                         </div>
                     </form>
+                    <div class=" xl:col-offset-10 sm:col-offset-4" >
+                        <button pButton class="ui-button-raised ui-button-success"
+                             (click)="masquer_div('aa_masquer'); toggleForm2()"  [label]="showwForm"></button>
+                    </div>
 
+<<<<<<< HEAD
+                    <h3>Liste des sujets du {{ currentService.label }} </h3>
+=======
                     <h3>Liste des sujets du service: {{currentService.label}}</h3>
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                     <div class="col-12 card shadow-lg my-5">
-                        <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow">
+                        <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow"  [rows]="4"  
+                        [paginator]="true" [pageLinks]="5" [responsive]="true">
                             <ng-template pTemplate="header" let-columns>
-                                <tr>
-                                    <th>
-                                        Sujet
-                                    </th>
-                                    <th>
-                                        Action
-                                    </th>
-                                </tr>
+                                <th class="col-8 col-offset-4" >
+                                    Sujet
+                                </th>
+
+                                <th class="col-4 col-offset-2">
+                                    Action
+                                </th>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
-                                    <td style="background-color: white;" *ngFor="let col of columns">
+                                    <div class=" xl:col-offset-6 sm:col-offset-4" >
+                                    <td  *ngFor="let col of columns">
     
                                         {{rowData.label}}
                                     </td>
+                                    </div>
                                     <td>
+                                        <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;">
                                         <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
+<<<<<<< HEAD
+                                        </div>
+                                        <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
+=======
                                         <!--<i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>-->
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                     </td>
     
                                 </tr>

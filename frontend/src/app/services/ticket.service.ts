@@ -50,24 +50,34 @@ export class TicketService {
     return this.http.get<any>(registreUrl);
   }
 
-  getAccAff(){
-    let registreUrl=this.apiUrl+"getAccAff";
+  getAccAff(id){
+    let registreUrl=this.apiUrl+"getAccAff/"+id;
     return this.http.get<any>(registreUrl);
   }
 
   getTicketsByService(id){
-    let registreUrl=this.apiUrl+"getTicketsByService"+id;
+    let registreUrl=this.apiUrl+"getTicketsByService/"+id;
     return this.http.get<any>(registreUrl);
   }
 
   getQueueByService(id){
-    let registreUrl=this.apiUrl+"getQueueByService"+id;
+    let registreUrl=this.apiUrl+"getQueueByService/"+id;
     return this.http.get<any>(registreUrl);
   }
 
   getAccAffByService(id){
-    let registreUrl=this.apiUrl+"getAccAffByService"+id;
+    let registreUrl=this.apiUrl+"getAccAffByService/"+id;
     return this.http.get<any>(registreUrl);
+  }
+
+  setAccAff(info:any){
+    let registreUrl=this.apiUrl+"AccAff/"+info.id;
+    return this.http.post<any>(registreUrl,info,httpOptions1);
+  }
+
+  changeService(info){
+    let registreUrl=this.apiUrl+"changeService/"+info.id;
+    return this.http.post<any>(registreUrl,info,httpOptions1);
   }
 
 
