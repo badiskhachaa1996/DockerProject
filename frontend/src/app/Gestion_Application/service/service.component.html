@@ -25,7 +25,7 @@
                                 (click)="masquer_div2('a_masquer'); toggleForm()"  [label]="showForm"></button>
                 </div>
 
-                <h3>Liste des services  </h3>
+                <h3>Liste des services</h3>
 
                 <div class="col-12 card shadow-lg my-5 ">
                     <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
@@ -43,12 +43,10 @@
                                 </th>
                             </tr>
                         </ng-template>
-                    
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
                             <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
-                              
-                                <td *ngFor="let col of columns"  >
-                      
+                                <td *ngFor="let col of columns">
+
                                     {{rowData.label}}
                                
                                 </td>
@@ -82,7 +80,7 @@
                              (click)="masquer_div('aa_masquer'); toggleForm2()"  [label]="showwForm"></button>
                     </div>
 
-                    <h3>Liste des sujets du {{ currentService.label }} </h3>
+                    <h3>Liste des sujets du service: {{currentService.label}}</h3>
                     <div class="col-12 card shadow-lg my-5">
                         <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow"  [rows]="4"  
                         [paginator]="true" [pageLinks]="5" [responsive]="true">
