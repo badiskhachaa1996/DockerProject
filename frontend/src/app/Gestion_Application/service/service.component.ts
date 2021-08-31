@@ -30,9 +30,11 @@ label = '';
 cols: any[];
 sujetList=[];
 sujetShow=[];
-
-allServices :any ;
-
+serviceList=[];
+first = 0;
+rows = 10;
+showForm: string = "Ajouter";
+showwForm: string = "Ajouter";
   saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
@@ -41,15 +43,11 @@ allServices :any ;
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
       this.services.push(data)
-      
-   //   console.log(this.allServices);
       this.serviceForm.reset();
-    
-
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
-        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom de service est deja existant'});
+       // this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom de service est deja existant'});
         this.emailExists=true;
       }
       console.log(error)
@@ -68,12 +66,10 @@ allServices :any ;
       this.messageService.add({severity:'success', summary:'Gestion de sujet', detail:'Creation de sujet réussie'});  
    //   console.log(this.allServices);
       this.sujetForm.reset();
-    
-
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
-        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du service est deja existant'});
+      //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
         this.emailExists=true;
       }
       console.log(error)
@@ -123,8 +119,6 @@ allServices :any ;
         });
       }
     })
-  
-  
     this.Services();
   }
 
@@ -136,38 +130,35 @@ allServices :any ;
     this.router.navigateByUrl("/service/edit",{state:data})
   }
 
-  edit2(data){
-    this.router.navigateByUrl("/sujet/edit2",{state:data})
-  }
-  deleteService(service): void{
+ 
+  // deleteService(service): void{
     
   
-    this.ServService.delete(service._id)
-    .subscribe(
-      response => {
-        this.services.splice(this.services.indexOf(service), 1);
-      },
-      error => {
-        console.log(error);
-      });
-    }
+  //   this.ServService.delete(service._id)
+  //   .subscribe(
+  //     response => {
+  //       this.services.splice(this.services.indexOf(service), 1);
+  //     },
+  //     error => {
+  //       console.log(error);
+  //     });
+  //   }
 
     
-    deleteSujet(rowData): void{
+    // deleteSujet(rowData): void{
   
-      this.SujetService.delete(rowData._id)
-      .subscribe(
-        response => {
-          this.sujetShow.splice(this.sujetShow.indexOf(rowData), 1);
-          this.sujetList.splice(this.sujetList.indexOf(rowData), 1);
-        },
-        error => {
-          console.log(error);
-        });
-      }
-    
-   
+    //   this.SujetService.delete(rowData._id)
+    //   .subscribe(
+    //     response => {
+    //       this.sujetShow.splice(this.sujetShow.indexOf(rowData), 1);
+    //       this.sujetList.splice(this.sujetList.indexOf(rowData), 1);
+    //     },
+    //     error => {
+    //       console.log(error);
+    //     });
+    //   }   
     onRowSelect($event){
+  
       this.sujetShow=[]
       this.sujetList.forEach(sujet => {
         if(sujet.service_id==this.currentService._id){
@@ -179,6 +170,58 @@ allServices :any ;
     onRowUnselect($event){
       this.currentService=null
     }
- 
+    masquer_div2(id)
+    {
+      if (document.getElementById(id).style.display == 'none' )
+      {      
+           document.getElementById(id).style.display = 'block';
+      }
+      else 
+      {    
+        // if(this.serviceForm.value){
+        //   document.getElementById(id).style.display = 'none';  
+        // }
+        // else{
+        this.saveService();
+        // this.services.push((this.serviceForm.value))
+          this.serviceForm.reset();
+           document.getElementById(id).style.display = 'none';  
+        // }
+      }
+    }
+    toggleForm() {
+      if (this.showForm == "Ajouter") {
+        this.showForm = "Fermer";
+      } else {
+        this.showForm= "Ajouter"
+      }
+  
+    } 
+    masquer_div(id)
+    {
+      if (document.getElementById(id).style.display == 'none' )
+      {      
+           document.getElementById(id).style.display = 'block';
+      }
+      else 
+      {    
+            this.saveSujet();
+            // this.sujets.push((this.sujetForm.value))
+              this.sujetForm.reset();
+           document.getElementById(id).style.display = 'none';  
+        
+      }
+    }
+
+    toggleForm2() {
+      if (this.showwForm == "Ajouter") {
+        this.showwForm = "Fermer";
+      } else {
+        this.showwForm= "Ajouter"
+      }
+  
+    } 
+  
+
 
 }
