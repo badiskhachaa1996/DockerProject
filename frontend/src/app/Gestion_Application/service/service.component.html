@@ -1,5 +1,8 @@
 <div class="p-grid">
+<<<<<<< HEAD
     
+=======
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -25,7 +28,11 @@
                                 (click)="masquer_div2('a_masquer'); toggleForm()"  [label]="showForm"></button>
                 </div>
 
+<<<<<<< HEAD
                 <h3>Liste des services  </h3>
+=======
+                <h3>Liste des services</h3>
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
 
                 <div class="col-12 card shadow-lg my-5 ">
                     <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
@@ -43,12 +50,19 @@
                                 </th>
                             </tr>
                         </ng-template>
+<<<<<<< HEAD
                     
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
                             <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
                               
                                 <td  style="color:black;"*ngFor="let col of columns"  >
                       
+=======
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                                <td *ngFor="let col of columns">
+
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                     {{rowData.label}}
                             
                                 </td>
@@ -56,8 +70,12 @@
                                 <td>
                                     <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;" >
                                     <i class="pi pi-pencil" (click)="edit(rowData)"></i>
+<<<<<<< HEAD
                                     </div>
                                     <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
+=======
+                                    <!--<i class="pi pi-trash" (click)="deleteService(rowData)"></i>-->
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                 </td>
 
                             </tr>
@@ -82,7 +100,11 @@
                              (click)="masquer_div('aa_masquer'); toggleForm2()"  [label]="showwForm"></button>
                     </div>
 
+<<<<<<< HEAD
                     <h3>Liste des sujets du {{ currentService.label }} </h3>
+=======
+                    <h3>Liste des sujets du service: {{currentService.label}}</h3>
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                     <div class="col-12 card shadow-lg my-5">
                         <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow"  [rows]="4"  
                         [paginator]="true" [pageLinks]="5" [responsive]="true">
@@ -106,8 +128,12 @@
                                     <td>
                                         <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;">
                                         <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
+<<<<<<< HEAD
                                         </div>
                                         <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
+=======
+                                        <!--<i class="pi pi-trash" (click)="deleteSujet(rowData)"></i>-->
+>>>>>>> 720639cc7ad3ced36b4373c8a8dd844f15f01e3e
                                     </td>
     
                                 </tr>

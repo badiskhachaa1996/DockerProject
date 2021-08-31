@@ -18,7 +18,7 @@
   .logo {
     max-width: 30%;
   }
-  .tr.td{
-    background-color: white;
+  td,tr{
+    background-color:white ;
+    background: white;
   }
- 

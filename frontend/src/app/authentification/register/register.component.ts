@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     adresse:new FormControl('',[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl('user'),
+    role:new FormControl('user',[Validators.required])
 
   })
 
@@ -42,11 +42,13 @@ export class RegisterComponent implements OnInit {
       email:this.RegisterForm.value.email,
       password:this.RegisterForm.value.password,
       adresse:this.RegisterForm.value.adresse,
-      role: this.RegisterForm.value.role.value
+      role: this.RegisterForm.value.role.value ||"user"
+      
     }
+    console.log(user)
     this.AuthService.register(user).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Message d\'inscription', detail:'Inscription réussie'});
-      this.router.navigate(['/login'])
+      //this.router.navigate(['/login'])
     },(error)=>{
       if(error.status==400){
         //Bad Request (Email déjà utilisé)
@@ -65,6 +67,7 @@ export class RegisterComponent implements OnInit {
   get adresse() { return this.RegisterForm.get('adresse'); }
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
+  get role() { return this.RegisterForm.get('role'); }
   
   constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
 

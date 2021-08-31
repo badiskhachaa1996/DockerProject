@@ -109,8 +109,8 @@ app.get("/getQueue", (req, res) => {
 })
 
 //Récupérer les Tickets Acceptes ou Affectés
-app.get("/getAccAff", (req, res) => {
-    Ticket.find({ statut: "Acc/Aff" })
+app.get("/getAccAff/:id", (req, res) => {
+    Ticket.find({ agent_id: req.params.id })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : { message: "Pas de Tickets Acceptés ou Affectés" });
         })
@@ -233,4 +233,37 @@ app.get("/getAccAffByService/:id", (req, res) => {
         console.log(err);
     })
 })
+
+app.post("/AccAff/:id", (req, res) => {
+    Ticket.findByIdAndUpdate(req.params.id,
+        {
+            agent_id: req.body.agent_id,
+            statut:"En cours de traitement",
+            date_affec_accep:Date.now(),
+            isAffected:req.body?.isAffected || false
+        },
+         { new: true }, (err, user) => {
+            if (err) {
+                res.send(err)
+            }else{
+                res.status(200).send(user)
+            }
+            
+        })
+});
+
+app.post("/changeService/:id", (req, res) => {
+    Ticket.findByIdAndUpdate(req.params.id,
+        {
+            sujet_id: req.body.sujet_id
+        },
+         { new: true }, (err, user) => {
+            if (err) {
+                res.send(err)
+            }else{
+                res.status(200).send(user)
+            }
+            
+        })
+});
 module.exports = app;

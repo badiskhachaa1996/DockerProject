@@ -4,6 +4,14 @@ import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
+import { User } from 'src/app/models/User';
+import { Ticket } from 'src/app/models/Ticket';
+import { Service } from 'src/app/models/Service';
+import { Sujet } from 'src/app/models/Sujet';
+import { AuthService } from 'src/app/services/auth.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
+import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 
 @Component({
   selector: 'app-list-ticket',
@@ -12,18 +20,25 @@ import jwt_decode from "jwt-decode";
 })
 export class ListTicketComponent implements OnInit {
 
-  serviceList=[];
-  sujetList=[];
+  serviceList: any[] = [];
+  sujetList: any[] = [];
+  listServices: Service[];
+  listSujets: Sujet[] = [];
+  listSujetSelected = [];
 
-  queueList: any[] = [];
-  AccAffList: any[] = [];
-  allTickets: any[] = [];
+  queueList: Ticket[] = [];
+  AccAffList: Ticket[] = [];
+  allTickets: Ticket[] = [];
 
-  cols: any[];
+  userList: User[] = []
 
-  draggedTicket: any;
+  draggedTicket: Ticket;
+  selectedUser: User;
 
   showForm: string = "Ajouter";
+  showDropDown: Ticket;
+  isReponsable: boolean = true;
+  isModify: Ticket;
 
   dragStart(event, user: any) {
     this.draggedTicket = user;
@@ -37,7 +52,7 @@ export class ListTicketComponent implements OnInit {
   dragListToPreInscrit(event?) {
     this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
     this.AccAffList.push(this.draggedTicket)
-    this.Accepted()
+    this.Accepted(this.draggedTicket)
   }
 
   //AccAffToAll
@@ -52,46 +67,82 @@ export class ListTicketComponent implements OnInit {
     this.queueList.push(this.draggedTicket)
   }
 
-  constructor(private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private router:Router) { }
+  constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    let token = jwt_decode(localStorage.getItem("token"))
+    if (token == null) {
+      this.router.navigate(["/login"])
+    } else if (token["role"].includes("responsable")) {
+      //this.router.navigate(["/ticket/suivi"])
+      this.isReponsable = true;
+    } else if (!token["role"].includes("agent")) {
+      //this.router.navigate(["/ticket/suivi"])
+    }
+    //getQueueByService
     this.TicketService.getQueue().subscribe((data) => {
-      this.queueList = data;
-    })
-
-    this.SujetService.getAll().subscribe((data) => {
-      if(!data.message){
-        data.forEach(sujet => {
-          this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
-        });
-      }
-    })
-
-    this.ServService.getAll().subscribe((data) => {
-      if(!data.message){
-        data.forEach(service => {
-          this.serviceList[service._id]=service.label;
-        });
-      }
-    })
-
-    this.TicketService.getAccAff().subscribe((data) => {
-      if(!data.message){
+      if (!data.message) {
         this.queueList = data;
       }
     })
+    this.ServService.getAll().subscribe((data) => {
+      this.listServices = data;
+      if (!data.message) {
+        data.forEach(service => {
+          this.listSujetSelected[service._id] = [];
+          this.serviceList[service._id] = service.label;
+        });
+      }
+    })
 
-    this.cols = [
-      { field: 'serviceList[sujetList[sujet_id].service_id]', header: 'Service' },
-      { field: 'sujetList[sujet_id]', header: 'Sujet' },
-    ];
+    this.SujetService.getAll().subscribe((data) => {
+      this.listSujets = data;
+      if (!data.message) {
+        data.forEach(sujet => {
+          this.listSujetSelected[sujet.service_id].push(sujet);
+          this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
+        });
+      }
+    })
+
+
+
+    //getAccAffByService
+    this.TicketService.getAccAff(token["id"]).subscribe((data) => {
+      if (!data.message) {
+        this.AccAffList = data;
+      }
+    })
+
+    this.AuthService.getAll().subscribe((data) => {
+      if (!data.message) {
+        this.userList = data;
+      }
+    })
+
+
+
+
+    /*Token service
+
+    this.AuthService.getAllByService(token['service']).subscribe((data) => {
+      if(!data.message){
+        this.userList = data;
+      }
+    })
+
+    this.TicketService.getTicketsByService(token['service']).subscribe((data) => {
+      if(!data.message){
+        this.allTickets = data;
+      }
+    })*/
   }
 
   //QueueToAccAff
   ListToPreInscrit(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
     this.AccAffList.push(user)
-    this.Accepted()
+    this.Accepted(user)
   }
 
   //AccAffToAll
@@ -106,25 +157,91 @@ export class ListTicketComponent implements OnInit {
     this.queueList.push(user)
   }
 
-  Accepted(){
-    //TODO Affected to the user
-  }
-
-  getServiceIDOfUser(){
-    //TODO En fonction du role du joueur doit return l'id de son service
-    let token = localStorage.getItem("token")
-    let user;
-    if(token!=null){
-      user=jwt_decode(token)
-      if(user.role=="admin"){
-        return "Admin"
-      }else if(user.role=="Agent Admission" || user.role=="Responsable Admission"){
-        return "Admission"
-      }
+  Accepted(rawData) {
+    let data = {
+      id: rawData._id,
+      agent_id: jwt_decode(localStorage.getItem("token"))['id'],
+      isAffected: false
     }
+    this.TicketService.setAccAff(data).subscribe((res) => {
+
+    }, (error) => {
+      console.log(error)
+    })
   }
 
-  modify(data){
-    this.router.navigateByUrl("/ticket/update",{state:data})
+  showDropdownUser(rawData) {
+    this.showDropDown = (this.showDropDown) ? null : rawData;
+  }
+
+  Affected() {
+    let data = {
+      id: this.showDropDown._id,
+      agent_id: this.selectedUser._id,
+      isAffected: true
+    }
+    this.TicketService.setAccAff(data).subscribe((data) => {
+      this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
+      if(this.selectedUser._id==jwt_decode(localStorage.getItem("token"))["id"]){
+        this.AccAffList.push(data)
+      }
+      this.showDropDown = null;
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+
+
+  TicketForm: FormGroup = new FormGroup({
+    sujet: new FormControl('', Validators.required),//Ils doit forcément selectionner
+    service: new FormControl('', Validators.required),
+  })
+
+  modify(data) {
+    console.log(data)
+    this.listServices.forEach(element => {
+      if (element._id == this.sujetList[data.sujet_id].service_id) {
+        this.TicketForm.patchValue({ service: element })
+      }
+    });
+    this.listSujets.forEach(element => {
+      if (element._id == data.sujet_id) {
+        this.TicketForm.patchValue({ sujet: element })
+        console.log(this.TicketForm.value)
+      }
+    });
+
+    this.isModify = (this.isModify) ? null : data;
+  }
+
+
+
+  modifyTicket() {
+    //Modification du Ticket
+    let req = {
+      id: this.isModify._id,
+      sujet_id: this.TicketForm.value.sujet._id
+    }
+    this.TicketService.changeService(req).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
+      /*TODO If service_id == data
+      if(this.sujetList[data.sujet_id].service_id==token.service){
+
+      }*/
+      this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
+      this.isModify=null;
+      
+    }, (error) => {
+      console.log(error)
+    });
+
+  }
+
+
+  onChange() {
+    this.TicketForm.patchValue({
+      sujet: this.listSujetSelected[this.TicketForm.value.service._id][0]
+    })
   }
 }

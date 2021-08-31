@@ -15,12 +15,15 @@ import { ServService } from 'src/app/services/service.service';
 })
 export class SuiviComponent implements OnInit {
 
-  user:User;
   ticketList:Ticket[];
   token:any;
 
   serviceList=[];
   sujetList=[];
+
+  filterService;
+  filterSujet;
+  filterStatut;
 
   first = 0;
   rows = 10;
@@ -53,11 +56,6 @@ export class SuiviComponent implements OnInit {
       this.router.navigate(["/login"])
     }
     this.token=jwt_decode(token);
-    this.AuthService.getById(this.token["id"]).subscribe((data)=>{
-      this.user=data;
-    },(error)=>{
-      console.log(error)
-    })
     this.TicketService.getAllByUser(this.token["id"]).subscribe((data)=>{
       this.ticketList=data;
     },(error)=>{
@@ -66,14 +64,18 @@ export class SuiviComponent implements OnInit {
     
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
+        //{ label: 'Tous les sujets', value: null }
+        this.filterSujet=data;
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
         });
       }
     })
-
+    
     this.ServService.getAll().subscribe((data) => {
       if(!data.message){
+        //{ label: 'Tous les services', value: null }
+        this.filterService=data;
         data.forEach(service => {
           this.serviceList[service._id]=service.label;
         });

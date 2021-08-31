@@ -80,7 +80,6 @@ showwForm: string = "Ajouter";
     .subscribe(
       data => {
         this.services = data;
-        console.log(data);
       },
       error => {
         console.log(error);
@@ -91,7 +90,6 @@ showwForm: string = "Ajouter";
     .subscribe(
       data => {
         this.sujets = data;
-        console.log(data);
       },
       error => {
         console.log(error);
