@@ -20,3 +20,7 @@
   i.pi:hover{
     cursor: pointer;
   }
+.bodytab {
+ padding-left: 20%;
+ text-align: center;
+}
