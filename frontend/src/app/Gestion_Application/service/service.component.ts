@@ -189,7 +189,7 @@ showwForm: string = "Ajouter";
     }
     toggleForm() {
       if (this.showForm == "Ajouter") {
-        this.showForm = "Fermer";
+        this.showForm = "Enregistrer";
       } else {
         this.showForm= "Ajouter"
       }
@@ -213,7 +213,7 @@ showwForm: string = "Ajouter";
 
     toggleForm2() {
       if (this.showwForm == "Ajouter") {
-        this.showwForm = "Fermer";
+        this.showwForm = "Enregistrer";
       } else {
         this.showwForm= "Ajouter"
       }

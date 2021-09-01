@@ -95,12 +95,12 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
-                                    <div class=" xl:col-offset-6 sm:col-offset-4" >
+                                   
                                     <td  *ngFor="let col of columns">
     
                                         {{rowData.label}}
                                     </td>
-                                    </div>
+                                  
                                     <td>
                                         <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;">
                                         <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
