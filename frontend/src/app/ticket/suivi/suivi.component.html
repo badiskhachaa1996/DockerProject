@@ -114,6 +114,8 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width: 3rem"></th>
+
                         <th>
                             Service
                         </th>
@@ -127,31 +129,32 @@
                             Action
                         </th>
                     </tr>
-                    <!--<tr>
-                            <th *ngIf="filterService">
-                                <p-dropdown [options]="filterService" (onChange)="dt.filter($event.value, 'Service', 'equals')" styleClass="p-column-filter" placeholder="Select a Service" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                            <th *ngIf="filterSujet">
-                                <p-dropdown [options]="filterSujet" (onChange)="dt.filter($event.value, 'Sujet', 'equals')" styleClass="p-column-filter" placeholder="Select a Sujet" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                            <th *ngIf="filterStatut">
-                                <p-dropdown [options]="filterStatut" (onChange)="dt.filter($event.value, 'Statut', 'equals')" styleClass="p-column-filter" placeholder="Select a Statut" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                        </tr>-->
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData>
+                    <tr *ngIf="sujetList[rowData.sujet_id]">
+                        <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                       
+                        <td>
+                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
+                        </td>
+                        <td>
+                            {{sujetList[rowData.sujet_id].label}}
+                        </td>
+                        <td>
+                            {{rowData.statut}}
+                        </td>
+                        <td>
+                            <i style="margin-left: 30%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+
+
+
+                <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr *ngIf="sujetList[rowData.sujet_id]">
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
@@ -168,6 +171,8 @@
                         </td>
                     </tr>
                 </ng-template>
+
+
             </p-table>
         </div>
     </div>
