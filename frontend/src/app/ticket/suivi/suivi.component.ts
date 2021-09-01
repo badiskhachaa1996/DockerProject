@@ -4,10 +4,12 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from "jwt-decode";
 import { Ticket } from 'src/app/models/Ticket';
+import { Message } from 'src/app/models/Message';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { ServService } from 'src/app/services/service.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -36,6 +38,16 @@ export class SuiviComponent implements OnInit {
   selectedService;
   listServices;
   listSujets:any=[];
+  
+  
+  
+  Ticket: Ticket;
+  firstMessage:Message;
+  dicIDServices;
+  selectedService1;
+  listServices1;
+  listSujetSelected = [];
+  listSujets1: any = [];
 
 
   
@@ -60,9 +72,10 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
-  constructor(private router:Router, private AuthService:AuthService,private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService) { }
+  constructor(private router:Router, private AuthService:AuthService,private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private messageService:MessageService) { }
 
   ngOnInit(): void {
+
     let token = localStorage.getItem("token")
     if(token==null){
       this.router.navigate(["/login"])
@@ -94,8 +107,72 @@ export class SuiviComponent implements OnInit {
       }
     })
   }
+
+  TicketForm: FormGroup= new FormGroup({
+    description:new FormControl('',Validators.required),
+    sujet:new FormControl('',Validators.required),
+    service:new FormControl('',Validators.required),
+  })
+
+  TicketForm1: FormGroup= new FormGroup({
+    description:new FormControl('',Validators.required),
+    sujet:new FormControl('',Validators.required),
+    service:new FormControl('',Validators.required),
+  }) 
   modify(data){
-    this.router.navigateByUrl("/ticket/update",{state:data})
+    this.Ticket = data;
+
+    document.getElementById("modifier").style.display="block";
+
+    this.ServService.getAll().subscribe((data) => {
+      this.listServices1 = data;
+      data.forEach(service => {
+        this.listSujets1[service._id] = [];
+      });
+
+      this.SujetService.getAll().subscribe((data) => {
+        data.forEach(sujet => {
+          this.listSujets1[sujet.service_id].push(sujet);
+          if(sujet._id==this.Ticket.sujet_id){
+            this.listServices1.forEach(serv => {
+              console.log(serv)
+              console.log(sujet)
+              if(serv._id==sujet.service_id){
+                this.TicketForm1.patchValue({service:serv,sujet:sujet})
+              }
+            });
+          }
+        });
+      }, (error) => {
+        console.log(error)
+      })
+    }, (error) => {
+      console.log(error)
+    })
+
+    this.TicketService.getFirstMessage(data._id).subscribe((data)=>{
+      this.firstMessage=data.dataMessage;
+      this.TicketForm1.patchValue({description:this.firstMessage.description})
+    },(error)=>{
+      console.log(error)
+    })
+
+  
+  }
+  modifyTicket(){
+  //Modification du Ticket
+  let req = {
+    id:this.Ticket._id,
+    id_message:this.firstMessage._id,
+    sujet_id:this.TicketForm1.value.sujet._id,
+    description:this.TicketForm1.value.description,}
+
+  this.TicketService.updateFirst(req).subscribe((data)=>{
+    this.messageService.add({severity:'success', summary:'Modification du Ticket', detail:'Modification réussie'});
+    document.getElementById("modifier").style.display="none";
+  },(error)=>{
+    console.log(error)
+  });
   }
 
   toggleForm() {
@@ -106,12 +183,6 @@ export class SuiviComponent implements OnInit {
     }
 
   }
-
-  TicketForm: FormGroup= new FormGroup({
-    description:new FormControl('',Validators.required),
-    sujet:new FormControl('',Validators.required),
-    service:new FormControl('',Validators.required),
-  })
 
 
   addTicket(){
@@ -136,8 +207,14 @@ export class SuiviComponent implements OnInit {
       sujet:this.listSujets[this.TicketForm.value.service._id][0]
     })
   }
+  onChange2(){
+    this.TicketForm1.patchValue({
+      sujet:this.listSujets1[this.TicketForm1.value.service._id][0]
+    })
+  }
 
   get description() { return this.TicketForm.get('description'); }
+
  }
 
 
