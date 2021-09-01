@@ -14,8 +14,6 @@ app.post("/create", (req, res) => {
     });
 
     ticket.save((err, doc) => {
-        console.log(doc)
-        console.log(err)
         const message = new Message({
             user_id: req.body.id,
             description: req.body.description,

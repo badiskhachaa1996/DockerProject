@@ -53,7 +53,6 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req, res) => {
     Message.find()
         .then(result=>{
-            console.log('result: ',result)
             res.send(result.length>0?result:{message:"Pas de Messages"});
         })
         .catch(err=>{

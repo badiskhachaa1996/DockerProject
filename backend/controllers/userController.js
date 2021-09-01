@@ -52,7 +52,6 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req,res)=>{
     User.find()
     .then(result=>{
-        console.log('result: ',result)
         res.send(result.length>0?result:{message:"Pas de Users"});
     })
     .catch(err=>{
