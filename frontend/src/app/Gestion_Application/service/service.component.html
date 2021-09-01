@@ -4,7 +4,9 @@
         <p-card>
             <div class="p-grid">
                 <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
-                <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="a_masquer" *ngIf="showForm" >
+            
+                <form class="col-8 col-offset-2" [formGroup]="serviceForm" 
+                style="display: none;" id="a_masquer" *ngIf="showForm"   >
                     
                     <h3 class="text-center">Ajouter un service</h3>
                     <div class="p-grid">
@@ -12,17 +14,33 @@
                         <div class="mt-2 mb-2 col-12">
                             <input type="text" formControlName="label" class="form-control col-12"
                                 placeholder="Le nom du service" pInputText>
-                        </div>
+                        </div>                           
+                    </div>        
+                </form>
+          
+             
+                <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="aa_masquer">
+                   
+                    <h3 class="text-center">Modifier le service</h3>
+                        <div class="p-grid">
+                            <div class="mt-2 mb-2 col-12">       
+                            <input type="text" formControlName="label" name="label" class="form-control col-12"
+                            placeholder="Le nom du service"pInputText/>
+                            </div>
 
-                      
-                            
-                       
+                           
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid" 
+                            label="Valider" 
+                            (click)="modifyService();div3('aa_masquer')"></button>
+                        </div>
                     </div>
                 </form>
+        
                 <!--[disabled]="serviceForm.invalid" -->
-                <div class=" xl:col-offset-10 sm:col-offset-4">
+                <div class=" xl:col-offset-10 sm:col-offset-4 " >
                  <button pButton class="ui-button-raised ui-button-success" 
-                                (click)="masquer_div2('a_masquer'); toggleForm()"  [label]="showForm"></button>
+                  (click)="masquer_div2('a_masquer'); toggleForm()"  id="btnAccept" [label]="showForm"></button>
                 </div>
 
                 <h3>Liste des services</h3>
@@ -53,7 +71,7 @@
                              
                                 <td>
                                     <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;" >
-                                    <i class="pi pi-pencil" (click)="edit(rowData)"></i>
+                                    <i class="pi pi-pencil" (click)="edit(rowData);div3('aa_masquer')"  ></i>
                                     </div>
                                     <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
                                 </td>
@@ -63,7 +81,8 @@
                     </p-table>
                 </div>
                 <div *ngIf="currentService">
-                    <form class="col-8 col-offset-2" [formGroup]="sujetForm" style="display: none;" id="aa_masquer" *ngIf="showwForm">
+                    <form class="col-8 col-offset-2" [formGroup]="sujetForm" style="display: none;" id="2aa_masquer" 
+                    *ngIf="showwForm">
 
                         <h3 class="text-center">Ajouter un sujet</h3>
                         <div class="p-grid">
@@ -74,11 +93,29 @@
                             </div>
                             
                         </div>
+                      
+                    </form>
+                    <form class="col-8 col-offset-2" [formGroup]="sujetForm"style="display: none;" id="1aa_masquer">
+                        <h3 class="text-center">Modifier le sujet</h3>
+                            <div class="p-grid">
+                                <div class="mt-2 mb-2 col-12">
+                                    
+                                <input type="text" formControlName="label" name="label" class="form-control col-12"
+                                placeholder="Le nom du service" pInputText/>
+                                </div>  
+                                
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                                <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid" label="Valider" 
+                                (click)="modifySujet();div3('1aa_masquer')"></button>
+                            </div>
+                        </div>
                     </form>
                     <div class=" xl:col-offset-10 sm:col-offset-4" >
                         <button pButton class="ui-button-raised ui-button-success"
-                             (click)="masquer_div('aa_masquer'); toggleForm2()"  [label]="showwForm"></button>
+                             (click)="masquer_div('2aa_masquer'); toggleForm2()" id="btnAccept2" [label]="showwForm"></button>
+                             
                     </div>
+                   
 
                     <h3>Liste des sujets du service: {{currentService.label}}</h3>
                     <div class="col-12 card shadow-lg my-5">
@@ -103,7 +140,7 @@
                                   
                                     <td>
                                         <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;">
-                                        <i class="pi pi-pencil" (click)="editSujet(rowData)"></i>
+                                        <i class="pi pi-pencil" (click)="editSujet(rowData);div3('1aa_masquer')"></i>
                                         </div>
                                         <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
                                     </td>
