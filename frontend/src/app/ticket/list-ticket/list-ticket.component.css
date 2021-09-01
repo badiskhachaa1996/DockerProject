@@ -21,4 +21,7 @@ td{
   .logo {
     max-width: 50%;
   }
-  
+  tr > th, tr>td{
+
+    text-align: center!important;
+  }

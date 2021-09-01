@@ -1,23 +1,26 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
-    <script>
-        if (global === undefined) {
-          var global = window;
-        }
-      </script>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="ESTYA, étudiant, consultant, mission, stage, offre, CDI, commercial, SSII, formation, école, alternance, job étudiant, mastère, licence, BTS"/>
-    <meta name="description" content="ESTYA permet de centraliser les offres de stages et de missions pour les étudiants et les consultants dans le domaine de l'IT. En outre, elle permet de suivre les affectations des consultants aux missions et des étudiants aux stages." />
-    <meta name="author" content="ESTYA Teams" />
-    <meta name="copyright" content="Copyright ©2020 ESTYA.io All Rights Reserved." />
-    <meta name="TitleImage" content="assets/layout/images/logo-estya.svg" />
-    <meta name="google" content="nositelinkssearchbox">
-    <meta name="robots" content="noarchive,nocache,noindex">
-    <title>Estya</title>
-    <base href="/">
+  <script>
+    if (global === undefined) {
+      var global = window;
+    }
+  </script>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords"
+    content="ESTYA, étudiant, consultant, mission, stage, offre, CDI, commercial, SSII, formation, école, alternance, job étudiant, mastère, licence, BTS" />
+  <meta name="description"
+    content="ESTYA permet de centraliser les offres de stages et de missions pour les étudiants et les consultants dans le domaine de l'IT. En outre, elle permet de suivre les affectations des consultants aux missions et des étudiants aux stages." />
+  <meta name="author" content="ESTYA Teams" />
+  <meta name="copyright" content="Copyright ©2020 ESTYA.io All Rights Reserved." />
+  <meta name="TitleImage" content="assets/layout/images/logo-estya.svg" />
+  <meta name="google" content="nositelinkssearchbox">
+  <meta name="robots" content="noarchive,nocache,noindex">
+  <title>Estya</title>
+  <base href="/">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css">
   <link rel="icon" type="image/x-icon" href="assets/layout/images/logoEstya.png">
@@ -25,17 +28,31 @@
   <link id="layout-css" rel="stylesheet" type="text/css" href="assets/layout/css/layout-turquoise.css">
 
 </head>
-<body style="font-family: sans-serif, cursive ">
-  
-<app-root>
+
+<body>
+
+  <app-root>
 
     <div class="loader-wrapper">
-        <div class="loader"></div>
-        <div class="loader-section section-left"></div>
-        <div class="loader-section section-right"></div>
+      <div class="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
     </div>
-  
-</app-root>
+    
+
+  </app-root>
 
 </body>
+
+<footer class="sticky-footer col-md-8 footerbox">
+  <div class="container my-auto">
+    <div class="copyright col-md-12 text-center my-auto">
+      <span>Copyright &copy; ESTYA</span>
+      <!-- Récupération de l'année en cours dans le copyright dans la balise script -->
+      <span id="year"></span>
+      <script>document.getElementById("year").innerHTML = new Date().getFullYear();</script>
+    </div>
+  </div>
+</footer>
+
 </html>

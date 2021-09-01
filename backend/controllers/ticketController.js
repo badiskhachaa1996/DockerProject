@@ -1,8 +1,10 @@
 const express = require("express");
+const mongoose = require("mongoose")
 const { Message } = require("../models/Message");
+const Sujet = mongoose.model('sujet')
 const app = express(); //à travers ça je peux faire la creation des services
 const { Ticket } = require("./../models/Ticket");
-const { Sujet } = require("./../models/Service");
+
 
 //Création d'un nouveau ticket
 app.post("/create", (req, res) => {
@@ -12,8 +14,6 @@ app.post("/create", (req, res) => {
     });
 
     ticket.save((err, doc) => {
-        console.log(doc)
-        console.log(err)
         const message = new Message({
             user_id: req.body.id,
             description: req.body.description,
@@ -145,38 +145,37 @@ app.post("/updateFirst/:id", (req, res) => {
 app.get("/getTicketsByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
-    let TicketList=[]
+    let TicketList = []
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
                 if (sujet.service_id == id) {
-                    listSujetofService.push(sujet._id)
+                    listSujetofService.push(sujet._id.toString())
                 }
             });
-            Ticket.find()
-            .then(result => {
-                let listTicket=result.length > 0 ? result : []
-                listTicket.forEach(ticket=>{
-                    if(ticket.sujet_id in listSujetofService){
-                        TicketList.push(ticket)
-                    }
+            Ticket.find({statut:'En cours de traitement'})
+                .then(result => {
+                    result.forEach(ticket => {
+                        if (listSujetofService.includes(ticket.sujet_id.toString())) {
+                            TicketList.push(ticket)
+                        }
+                    })
+                    res.status(200).send({ TicketList })
                 })
-                res.status(200).send({TicketList})
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                .catch(err => {
+                    console.log(err);
+                })
         })
-    .catch(err => {
-        console.log(err);
-    })
+        .catch(err => {
+            console.log(err);
+        })
 })
 
 //Get All Tickets de la queue d'entrée by Service ID
 app.get("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
-    let TicketList=[]
+    let TicketList = []
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
@@ -185,29 +184,29 @@ app.get("/getQueueByService/:id", (req, res) => {
                 }
             });
             Ticket.find({ statut: "Queue d'entrée" })
-            .then(result => {
-                let listTicket=result.length > 0 ? result : []
-                listTicket.forEach(ticket=>{
-                    if(ticket.sujet_id in listSujetofService){
-                        TicketList.push(ticket)
-                    }
+                .then(result => {
+                    let listTicket = result.length > 0 ? result : []
+                    listTicket.forEach(ticket => {
+                        if (ticket.sujet_id in listSujetofService) {
+                            TicketList.push(ticket)
+                        }
+                    })
+                    res.status(200).send({ TicketList })
                 })
-                res.status(200).send({TicketList})
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                .catch(err => {
+                    console.log(err);
+                })
         })
-    .catch(err => {
-        console.log(err);
-    })
+        .catch(err => {
+            console.log(err);
+        })
 })
 
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAccAffByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
-    let TicketList=[]
+    let TicketList = []
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
@@ -216,39 +215,39 @@ app.get("/getAccAffByService/:id", (req, res) => {
                 }
             });
             Ticket.find({ statut: "Acc/Aff" })
-            .then(result => {
-                let listTicket=result.length > 0 ? result : []
-                listTicket.forEach(ticket=>{
-                    if(ticket.sujet_id in listSujetofService){
-                        TicketList.push(ticket)
-                    }
+                .then(result => {
+                    let listTicket = result.length > 0 ? result : []
+                    listTicket.forEach(ticket => {
+                        if (ticket.sujet_id in listSujetofService) {
+                            TicketList.push(ticket)
+                        }
+                    })
+                    res.status(200).send({ TicketList })
                 })
-                res.status(200).send({TicketList})
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                .catch(err => {
+                    console.log(err);
+                })
         })
-    .catch(err => {
-        console.log(err);
-    })
+        .catch(err => {
+            console.log(err);
+        })
 })
 
 app.post("/AccAff/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             agent_id: req.body.agent_id,
-            statut:"En cours de traitement",
-            date_affec_accep:Date.now(),
-            isAffected:req.body?.isAffected || false
+            statut: "En cours de traitement",
+            date_affec_accep: Date.now(),
+            isAffected: req.body?.isAffected || false
         },
-         { new: true }, (err, user) => {
+        { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
-            }else{
+            } else {
                 res.status(200).send(user)
             }
-            
+
         })
 });
 
@@ -257,13 +256,13 @@ app.post("/changeService/:id", (req, res) => {
         {
             sujet_id: req.body.sujet_id
         },
-         { new: true }, (err, user) => {
+        { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
-            }else{
+            } else {
                 res.status(200).send(user)
             }
-            
+
         })
 });
 module.exports = app;
