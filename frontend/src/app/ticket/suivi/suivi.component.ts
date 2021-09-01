@@ -7,6 +7,8 @@ import { Ticket } from 'src/app/models/Ticket';
 import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { ServService } from 'src/app/services/service.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-suivi',
@@ -14,6 +16,7 @@ import { ServService } from 'src/app/services/service.service';
   styleUrls: ['./suivi.component.css']
 })
 export class SuiviComponent implements OnInit {
+  [x: string]: any;
 
   ticketList:Ticket[];
   token:any;
@@ -28,6 +31,15 @@ export class SuiviComponent implements OnInit {
   first = 0;
   rows = 10;
 
+  showForm: string = "Ajouter";
+
+  selectedService;
+  listServices;
+  listSujets:any=[];
+
+
+  
+  
   next() {
     this.first = this.first + this.rows;
   }
@@ -48,7 +60,7 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
-  constructor(private router:Router,private AuthService:AuthService,private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService) { }
+  constructor(private router:Router, private AuthService:AuthService,private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService) { }
 
   ngOnInit(): void {
     let token = localStorage.getItem("token")
@@ -65,7 +77,7 @@ export class SuiviComponent implements OnInit {
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
         //{ label: 'Tous les sujets', value: null }
-        this.filterSujet=data;
+          this.filterSujet=data;
         data.forEach(sujet => {
           this.sujetList[sujet._id]={"label":sujet.label,"service_id":sujet.service_id};
         });
@@ -86,4 +98,46 @@ export class SuiviComponent implements OnInit {
     this.router.navigateByUrl("/ticket/update",{state:data})
   }
 
-}
+  toggleForm() {
+    if (this.showForm == "Ajouter") {
+      this.showForm = "Fermer";
+    } else {
+      this.showForm = "Ajouter"
+    }
+
+  }
+
+  TicketForm: FormGroup= new FormGroup({
+    description:new FormControl('',Validators.required),
+    sujet:new FormControl('',Validators.required),
+    service:new FormControl('',Validators.required),
+  })
+
+
+  addTicket(){
+    //Enregistrement du Ticket
+    let req = <any>{
+      id:jwt_decode(localStorage.getItem("token"))["id"],
+      sujet_id:this.TicketForm.value.sujet._id,
+      description:this.TicketForm.value.description,
+      //document:this.TicketForm.value//TODO
+    }
+    this.TicketService.create(req).subscribe((data)=>{
+      this.messageService.add({severity:'success', summary:'Création du Ticket', detail:'Création réussie'});
+      this.router.navigate(['/'])
+    },(error)=>{
+      console.log(error)
+    });
+    
+  }
+
+  onChange(){
+    this.TicketForm.patchValue({
+      sujet:this.listSujets[this.TicketForm.value.service._id][0]
+    })
+  }
+
+  get description() { return this.TicketForm.get('description'); }
+ }
+
+
