@@ -101,15 +101,11 @@
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
                 [showCurrentPageReport]="false"
                 currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
-                [rowsPerPageOptions]="[5,10,20]">
+                [rowsPerPageOptions]="[5,10,20]"  dataKey="_id">
                 <ng-template pTemplate="caption">
                     <div class="table-header">
                         Liste de mes tickets
-                        <!--<span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                    placeholder="Faire une recherche" />
-                            </span>-->
+                      
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -134,8 +130,9 @@
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="rowData" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                        </td>
+                            <button type="button" pButton pRipple [pRowToggler]="rowData"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>                        </td>
                        
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -155,21 +152,18 @@
 
 
                 <ng-template pTemplate="rowexpansion" let-rowData>
-                    <tr *ngIf="sujetList[rowData.sujet_id]">
-                        <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
-                        <td>
-                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
-                        </td>
-                        <td>
-                            {{sujetList[rowData.sujet_id].label}}
-                        </td>
-                        <td >
-                            {{rowData.statut}}
-                        </td>
-                        <td>
-                            <i class="pi pi-pencil" (click)="modify(rowData)"></i>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="p-p-3">
+                                                <h4>ID: {{rowData._id}}</h4>
+                                            
+                                                <h4>date d'ajout: {{rowData.date_ajout}}</h4>
+                                            
+                                                <h4>id de créateur: {{rowData.createur_id}}</h4>
+                                       
+                                </div>
+                            </td>
+                        </tr>
                 </ng-template>
 
 
