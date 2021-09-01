@@ -40,9 +40,10 @@
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList">
+            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
+                        <th style="width: 3rem"></th>
                         <th>
                             Service
                         </th>
@@ -60,9 +61,14 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr pDraggable="QueueToAccAff" (onDragStart)="dragStart($event, rowData)"
                         (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="rowData"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
@@ -80,9 +86,35 @@
                             <i style="margin-left: 5%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i style="margin-left: 5%;" *ngIf="isReponsable" class="pi pi-user-plus"
                                 (click)="showDropdownUser(rowData)"></i>
-                            <p-dropdown *ngIf="showDropDown" [options]="userList" [(ngModel)]="selectedUser"
+                            <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList" [(ngModel)]="selectedUser"
                                 optionLabel="firstname" (onChange)="Affected()" placeholder="Choissiez un agent">
                             </p-dropdown>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr>
+                        <td colspan="7">
+                            <div class="p-p-3">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID: {{rowData._id}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Statut: {{rowData.statut}}</th>
+                                        </tr>
+                                    </thead>
+                                    <!--<tbody>
+                                        <tr>
+                                            <td>{{rowData._id}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{rowData.statut}}</td>
+                                        </tr>
+                                    </tbody>-->
+                                </table>
+                            </div>
                         </td>
                     </tr>
                 </ng-template>
@@ -155,61 +187,61 @@
         <h3>Les tickets de mon service</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets">
-            <ng-template pTemplate="header" let-columns>
-                <tr>
-                    <th>
-                        Service
-                    </th>
-                    <th>
-                        Sujet
-                    </th>
-                    <th>
-                        Date d'acceptation
-                    </th>
-                    <th>
-                        Temps de traitement
-                    </th>
-                    <th>
-                        Agent
-                    </th>
-                    <th>
-                        Désignation
-                    </th>
-                    <th>
-                        Action
-                    </th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr *ngIf="sujetList[rowData.sujet_id]">
-                    <td>
-                        {{serviceList[sujetList[rowData.sujet_id].service_id]}}
-                    </td>
-                    <td>
-                        {{sujetList[rowData.sujet_id].label}}
-                    </td>
-                    <td>
-                        {{rowData.date_affec_accep | date:'d/MM/yy'}}
-                    </td>
-                    <td>
-                        {{showWorkingTime(rowData)}}
-                    </td>
-                    <td *ngIf="userDic[rowData.agent_id]">
-                        {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
-                    </td>
-                    <td *ngIf="rowData.isAffected">
-                        Affecté
-                    </td>
-                    <td *ngIf="!rowData.isAffected">
-                        Accepté
-                    </td>
-                    <td>
-                        <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th>
+                            Service
+                        </th>
+                        <th>
+                            Sujet
+                        </th>
+                        <th>
+                            Date d'acceptation
+                        </th>
+                        <th>
+                            Temps de traitement
+                        </th>
+                        <th>
+                            Agent
+                        </th>
+                        <th>
+                            Désignation
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            {{serviceList[sujetList[rowData.sujet_id].service_id]}}
+                        </td>
+                        <td>
+                            {{sujetList[rowData.sujet_id].label}}
+                        </td>
+                        <td>
+                            {{rowData.date_affec_accep | date:'d/MM/yy'}}
+                        </td>
+                        <td>
+                            {{showWorkingTime(rowData)}}
+                        </td>
+                        <td *ngIf="userDic[rowData.agent_id]">
+                            {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
+                        </td>
+                        <td *ngIf="rowData.isAffected">
+                            Affecté
+                        </td>
+                        <td *ngIf="!rowData.isAffected">
+                            Accepté
+                        </td>
+                        <td>
+                            <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                             (click)="ListToPreInscrit(rowData)"></i>-->
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
     </div>
 </div>
