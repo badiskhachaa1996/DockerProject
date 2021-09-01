@@ -1,55 +1,46 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
-import { AuthService } from '../services/auth.service';
+import {CardModule} from 'primeng/card';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { User } from 'src/app/models/User';
+import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
 
+import { MenuItem } from 'primeng/api';
+import { Router, RouterLink } from '@angular/router';
+import { RowToggler } from 'primeng/table';
+import { parse } from 'querystring';
+
+import {AccordionModule} from 'primeng/accordion';
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-list-user',
+  templateUrl: './list-user.component.html',
+  styleUrls: ['./list-user.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ListUserComponent implements OnInit {
 
-  User = JSON.parse(environment.User);
 
-  tabUser: any[] = [];
-  UserPreInscrit: any[] = [];
-  UserInscrit: any[] = [];
+    items: MenuItem[];
+  tabUser = [];
 
+datasource: User [];
   cols: any[];
 
-  draggedUser: any;
+  totalRecords: number;
 
   showForm: string = "Ajouter";
-
-  dragStart(event, user: any) {
-    this.draggedUser = user;
-  }
-
-  dragEnd(event) {
-    this.draggedUser = null;
-  }
-
-  dragListToPreInscrit(event?) {
-    this.tabUser.splice(this.tabUser.indexOf(this.draggedUser), 1)
-    this.UserPreInscrit.push(this.draggedUser)
-  }
-
-  dragPreInscritToInscrit(event?) {
-    this.UserPreInscrit.splice(this.UserPreInscrit.indexOf(this.draggedUser), 1)
-    this.UserInscrit.push(this.draggedUser)
-  }
-
-  dragInscritToList(event?) {
-    this.UserInscrit.splice(this.UserInscrit.indexOf(this.draggedUser), 1)
-    this.tabUser.push(this.draggedUser)
-  }
-
-  constructor(private AuthService: AuthService) { }
+  loading: boolean;
+  
+  selectedUser: any;
+  formtype:string="edit";
+  constructor(private AuthService: AuthService,private router:Router) { }
 
   ngOnInit(): void {
     this.AuthService.getAll().subscribe((data) => {
       this.tabUser = data;
+      this.totalRecords=this.tabUser.length;
+      console.log(this.totalRecords);
     })
 
     this.cols = [
@@ -58,32 +49,36 @@ export class HomeComponent implements OnInit {
       { field: 'email', header: 'Email' },
       { field: 'phone', header: 'Téléphone' },
       { field: 'adresse', header: 'Adresse' },
-      { field: null, header: "Action" }
+      { field: 'service_id', header: 'Service' },
+      { field: 'action', header: "Action" }
     ];
-  }
-  ListToPreInscrit(user, event?) {
-    this.tabUser.splice(this.tabUser.indexOf(user), 1)
-    this.UserPreInscrit.push(user)
+    this.loading = true;
   }
 
-  PreInscritToInscrit(user, event?) {
-    this.UserPreInscrit.splice(this.UserPreInscrit.indexOf(user), 1)
-    this.UserInscrit.push(user)
-  }
-
-  InscritToList(user, event?) {
-    this.UserInscrit.splice(this.UserInscrit.indexOf(user), 1)
-    this.tabUser.push(user)
-  }
+  
 
   toggleForm() {
     if (this.showForm == "Ajouter") {
+      this.formtype = "new";
       this.showForm = "Fermer";
+     
     } else {
-      this.showForm = "Ajouter"
+      this.formtype = "new";
+      this.showForm = "Ajouter";
+    }
+   
+  }
+  toggleType(){
+    if (this.formtype == "new") {
+      this.formtype = "edit";
+
+    } else {
+      this.formtype = "new";
+      
+      this.showForm = "Fermer";
     }
 
-  }    
+  }
 
   RegisterForm: FormGroup = new FormGroup({
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
@@ -110,4 +105,31 @@ export class HomeComponent implements OnInit {
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
 
+
+
+  loadUsersLazy(event: LazyLoadEvent) {
+    this.loading = true;
+
+    
+    setTimeout(() => {
+        if (this.datasource) {
+            this.tabUser = this.datasource.slice(event.first, (event.first + event.rows));
+            this.loading = false;
+        }
+    }, 1000);
 }
+modify(rowData){
+
+  this.toggleType()
+  this.selectedUser= rowData.email;
+  console.log("selected user : "+this.selectedUser)
+  
+  console.log(this.showForm 
+    +"" +
+     this.formtype)
+
+  
+ // this.router.navigateByUrl("/listuser/update",{state:rowData})
+}
+}
+

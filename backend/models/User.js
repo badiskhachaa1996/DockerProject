@@ -35,9 +35,10 @@ const user_schema= new mongoose.Schema({
         type: String,
         required:true
     },
-    service:{
+    service_id:{
         type: mongoose.SchemaTypes.ObjectId
     }
+
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const User= mongoose.model("user",user_schema);

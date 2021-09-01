@@ -1,0 +1,22 @@
+.content{
+    max-width: 500px;
+    margin:auto;
+    background-color: #fff;
+    padding: 2% 2%;
+  }
+  button{
+    color: #fff;
+  }
+  button:hover{
+    color: #fff;
+  }
+  .error
+  {
+      color: red;
+  }
+  .logo {
+    max-width: 50%;
+  }
+  i.pi:hover{
+    cursor: pointer;
+  }

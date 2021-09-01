@@ -1,58 +1,63 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
-import { AuthService } from 'src/app/services/auth.service';
-import {MessageService} from 'primeng/api';
+import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import {DropdownModule} from 'primeng/dropdown';
+import { AuthService } from 'src/app/services/auth.service';
+import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface';
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'app-upduser',
+  templateUrl: './update.component.html',
+  styleUrls: ['./update.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class UpdateUserComponent implements OnInit {
+
   currentRoot:String = this.router.url;
   IsAdmin : boolean=false;
   User_role:String ;
   emailExists=false;
   Roles = environment.role;
-   
+  servicesRoles =environment.service_id;
+  userupdate:User = <User>history.state;
   RegisterForm: FormGroup= new FormGroup({
-    lastname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
-    firstname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    email:new FormControl('',[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    phone:new FormControl('',[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
-    adresse:new FormControl('',[Validators.required]),
+    lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
+    email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
+    adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl('user',[Validators.required])
+    role:new FormControl(this.userupdate.role,[Validators.required])
+    
 
   })
 
-  saveUser(){
-    console.log(localStorage.getItem("token"));
-    //Enregistrement de l'user
-    //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
+
+  UpdateUser(){
+   
     let user = <User>{
+      id:this.userupdate._id,
       firstname:this.RegisterForm.value.firstname,
       lastname: this.RegisterForm.value.lastname,
       phone:this.RegisterForm.value.phone,
       email:this.RegisterForm.value.email,
       password:this.RegisterForm.value.password,
       adresse:this.RegisterForm.value.adresse,
-      role: this.RegisterForm.value.role.value ||"user"
+      role: this.RegisterForm.value.role.value ||"user",
+      service_id:this.servicesRoles.values[1]
       
     }
     console.log(user)
-    this.AuthService.register(user).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Message d\'inscription', detail:'Inscription réussie'});
-      //this.router.navigate(['/login'])
+    this.AuthService.update(user).subscribe((data)=>{
+      this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
+   
     },(error)=>{
       if(error.status==400){
         //Bad Request (Email déjà utilisé)
-        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Email déjà utilisé'});
+        this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'auth service update '});
         this.emailExists=true;
       }
       console.log(error)
@@ -72,6 +77,12 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.userupdate = <User>history.state;
+    if (!this.userupdate.id) {
+      console.log("zzz"+environment.service_id.values[1])
+     
+    }
+    console.log(this.userupdate._id)
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
     console.log(jwt_decode(localStorage.getItem("token")));

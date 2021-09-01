@@ -1,6 +1,7 @@
 export interface User {
+    name: any;
     id?: string;
-    _id?:string;
+    _id?: string;
     firstname:string;
     lastname: string;
     phone:string;
@@ -9,5 +10,6 @@ export interface User {
     role :string;
     etat?: boolean;
     adresse:string;
+    service_id:string
 }
   

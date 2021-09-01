@@ -28,10 +28,18 @@ export const environment = {
       { id: 6, value: 'Responsable finances', valeur: 'Role_responsable_finances' },
       { id: 7, value: 'Administration', valeur: 'Role_admin' },
       { id: 8, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires' },
-      { id: 9, value: 'admin', valeur: 'admin' }
+      { id: 9, value: 'Agent Pedagogie', valeur: 'Role_agent_pedagogie' },
+      { id: 10, value: 'Responsable Pedagogie', valeur: 'Role_responsable_Pedagogie' },
+      { id: 11, value: 'admin', valeur: 'admin' }
       ],
 
-
+ service_id : [
+  { role_id: 1, value: 'Service Admission', valeur: 'Role_agent_admission' },
+  { role_id: 2, value: 'Service Commercial', valeur: 'Role_agent_commercial' },
+  { role_id: 3, value: "Agent finances", valeur: 'Role_agent_finance' },
+  { role_id: 4, value: 'Administration', valeur: 'Role_admin' },
+  { role_id: 5, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires' },
+ ],
 civilite: [
   { value: 'M', viewValue: 'M' },
   { value: 'Mme', viewValue: 'Mme' },
