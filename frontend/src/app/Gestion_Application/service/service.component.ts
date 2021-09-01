@@ -7,6 +7,8 @@ import {MessageService} from 'primeng/api';
 import { SujetService } from 'src/app/services/sujet.service';
 import { Sujet } from 'src/app/models/Sujet';
 
+import { Message } from 'src/app/models/Message';
+
 @Component({
   selector: 'app-service',
   templateUrl: './service.component.html',
@@ -19,22 +21,26 @@ export class ServiceComponent implements OnInit {
   sujetForm: FormGroup= new FormGroup({
     label:new FormControl('',[Validators.required])
   });
- 
-  emailExists: boolean;
-
+  currentService = null;
+  message = '';
+  label = '';
+  Service: Service;
+  Sujet: Sujet;
+  firstMessage: Message;
+emailExists: boolean;
 services : any;
 sujets : any;
-currentService = null;
 currentIndex = -1;
-label = '';
 cols: any[];
 sujetList=[];
 sujetShow=[];
 serviceList=[];
 first = 0;
 rows = 10;
+currentSujet = null;
 showForm: string = "Ajouter";
 showwForm: string = "Ajouter";
+
   saveService(){   
     let service = <Service> {
       label:this.serviceForm.value.label
@@ -105,6 +111,19 @@ showwForm: string = "Ajouter";
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
+
+    this.Service = <Service>history.state;
+    console.log(this.Service)
+    // if (!this.Service._id) {
+      // this.router.navigate(["/service"])
+    // }
+    // console.log(this.Service)
+    // this.serviceForm.setValue({label:this.Service.label})
+
+      this.Sujet = <Sujet>history.state;
+      // if (!this.Sujet._id) {
+      //   this.router.navigate(["/service"])
+      // }
     
     this.cols = [
       { field: 'label', header: 'Sujet' },
@@ -121,11 +140,17 @@ showwForm: string = "Ajouter";
   }
 
   editSujet(data){
-    this.router.navigateByUrl("/sujet/edit",{state:data})
+    document.getElementById('btnAccept2').style.display = 'none';  
+    this.sujetForm.patchValue({label:data.label})
+    this.Sujet=data;
+   // this.router.navigateByUrl("/sujet",{state:data})
   }
   
   edit(data){
-    this.router.navigateByUrl("/service/edit",{state:data})
+    document.getElementById('btnAccept').style.display = 'none';  
+    this.serviceForm.patchValue({label:data.label})
+    this.Service=data;
+    // this.router.navigateByUrl("/service",{state:data})
   }
 
  
@@ -176,20 +201,30 @@ showwForm: string = "Ajouter";
       }
       else 
       {    
-        // if(this.serviceForm.value){
-        //   document.getElementById(id).style.display = 'none';  
-        // }
-        // else{
+     
         this.saveService();
-        // this.services.push((this.serviceForm.value))
           this.serviceForm.reset();
            document.getElementById(id).style.display = 'none';  
-        // }
       }
     }
+
+    div3(id)
+    {
+      if (document.getElementById(id).style.display == 'none' )
+      {      
+
+           document.getElementById(id).style.display = 'block';
+           
+      }
+      else 
+      {    
+            document.getElementById(id).style.display = 'none';  
+      }
+    }
+
     toggleForm() {
       if (this.showForm == "Ajouter") {
-        this.showForm = "Enregistrer";
+        this.showForm = "Enregister";
       } else {
         this.showForm= "Ajouter"
       }
@@ -213,13 +248,47 @@ showwForm: string = "Ajouter";
 
     toggleForm2() {
       if (this.showwForm == "Ajouter") {
-        this.showwForm = "Enregistrer";
+
+        this.showwForm = "Enregister";
       } else {
         this.showwForm= "Ajouter"
       }
   
     } 
-  
+    modifyService(id) {
+      let req = <Service>{
+        id: this.Service._id,
+        label: this.serviceForm.value.label
+      }
+      this.ServService.update(req).subscribe((data) => {
+        this.services.splice(this.services.indexOf(this.Service),1,data)
+        this.serviceForm.reset();
+        document.getElementById('btnAccept').style.display = 'block';  
+        this.messageService.add({ severity: 'success', summary: 'Modification du Service', detail: 'Modification réussie' });
+        // this.router.navigate(['/service'])
+      }, (error) => {
+        console.log(error)
+      });
+    }
+    modifySujet(){
+      let req = <Sujet>{
+        id:this.Sujet._id,
+        label:this.sujetForm.value.label
+      }
+      this.SujetService.update(req).subscribe((data)=>{
+        this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet),1,data)
+        this.sujetForm.reset();
+        document.getElementById('btnAccept2').style.display = 'block'; 
+        // console.log(data)
+        // this.router.navigate(['/service'])
+      },(error)=>{
+        console.log(error)
+      });
+      
+    }
+
+   
+
 
 
 }
