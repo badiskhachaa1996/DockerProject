@@ -106,6 +106,23 @@ export class SuiviComponent implements OnInit {
         });
       }
     })
+
+    this.ServService.getAll().subscribe((data)=>{
+      console.log(data);
+      this.listServices=data;
+      data.forEach(service => {
+        this.listSujets[service._id]=[];
+      });
+      this.SujetService.getAll().subscribe((data)=>{
+        data.forEach(sujet => {
+          this.listSujets[sujet.service_id].push(sujet);
+        });
+        console.log(this.listSujets)
+      })
+    },(error)=>{
+      console.log(error)
+    })
+
   }
 
   TicketForm: FormGroup= new FormGroup({
