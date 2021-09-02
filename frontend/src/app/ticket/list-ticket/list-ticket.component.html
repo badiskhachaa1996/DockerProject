@@ -76,7 +76,7 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
-                            {{rowData.date_ajout | date:'d/MM/yy'}}
+                            {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                         </td>
                         <td>
                             {{showWaitingTime(rowData)}}
@@ -126,7 +126,7 @@
     <div class="col-10 col-offset-1">
         <h3>Mes tickers en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff">
                 (onDrop)="dragQueueToAccAff($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
@@ -160,7 +160,7 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
-                            {{rowData.date_affec_accep | date:'d/MM/yy'}}
+                            {{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}
                         </td>
                         <td>
                             {{showWorkingTime(rowData)}}
