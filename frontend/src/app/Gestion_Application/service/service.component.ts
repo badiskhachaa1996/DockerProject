@@ -45,7 +45,7 @@ showForm: string = "Ajouter";
 showwForm: string = "Ajouter";
 
   saveService(){   
-    let service = <Service> {
+    let service = {
       label:this.serviceForm.value.label
     };
  
@@ -63,11 +63,8 @@ showwForm: string = "Ajouter";
     });
   }
 
-  saveSujet(){   
-    let sujet = <Sujet> {
-      label:this.sujetForm.value.label,
-      service_id:this.currentService._id
-    };
+  saveSujet(){    
+    let sujet = new Sujet(this.sujetForm.value.label,this.currentService._id)
  
     this.SujetService.addSujet(sujet).subscribe((data)=>{
       this.sujetShow.push(data)
@@ -114,16 +111,17 @@ showwForm: string = "Ajouter";
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
+<<<<<<< HEAD
   //  this.test = new Test(12,"farah")
     this.Service = <Service>history.state;
     console.log(this.Service)
+=======
+>>>>>>> a46564404410e350efd21f67719d5e32c62ba161
     // if (!this.Service._id) {
       // this.router.navigate(["/service"])
     // }
     // console.log(this.Service)
     // this.serviceForm.setValue({label:this.Service.label})
-
-      this.Sujet = <Sujet>history.state;
       // if (!this.Sujet._id) {
       //   this.router.navigate(["/service"])
       // }
@@ -262,7 +260,7 @@ showwForm: string = "Ajouter";
   
     } 
     modifyService(id) {
-      let req = <Service>{
+      let req = {
         id: this.Service._id,
         label: this.serviceForm.value.label
       }
@@ -277,7 +275,7 @@ showwForm: string = "Ajouter";
       });
     }
     modifySujet(){
-      let req = <Sujet>{
+      let req = {
         id:this.Sujet._id,
         label:this.sujetForm.value.label
       }

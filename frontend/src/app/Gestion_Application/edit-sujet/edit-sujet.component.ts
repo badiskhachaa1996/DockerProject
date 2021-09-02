@@ -28,7 +28,7 @@ sujetForm: FormGroup = new FormGroup({
   constructor(private route: ActivatedRoute, private router: Router, private SujetService:SujetService) { }
 
   ngOnInit(): void {
-    this.Sujet = <Sujet>history.state;
+    this.Sujet = new Sujet(history.state)
     if (!this.Sujet._id) {
       this.router.navigate(["/sujet/edit"])
       
@@ -39,7 +39,7 @@ sujetForm: FormGroup = new FormGroup({
 
   
   modifySujet(){
-    let req = <Sujet>{
+    let req = {
       id:this.Sujet._id,
       label:this.sujetForm.value.label
     }

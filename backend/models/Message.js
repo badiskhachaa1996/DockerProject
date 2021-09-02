@@ -9,11 +9,13 @@ const message_schema= new mongoose.Schema({
     },
     user_id:{
          type: mongoose.SchemaTypes.ObjectId,
-         required:true
+         required:true,
+         ref:'user'
         },
     ticket_id:{
         type: mongoose.SchemaTypes.ObjectId,
-         required:true
+         required:true,
+         ref:'ticket'
     },
     date_ajout:{
         type: Date,

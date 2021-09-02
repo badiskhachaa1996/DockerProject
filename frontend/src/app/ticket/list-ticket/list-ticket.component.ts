@@ -19,19 +19,18 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
   styleUrls: ['./list-ticket.component.css']
 })
 export class ListTicketComponent implements OnInit {
-
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
   listSujets: Sujet[] = [];
-  listSujetSelected: any[]=[];
+  listSujetSelected: any[] = [];
 
   queueList: Ticket[] = [];
   AccAffList: Ticket[] = [];
   allTickets: Ticket[] = [];
 
   userList: User[] = [];
-  userDic: any[]=[];
+  userDic: any[] = [];
 
   draggedTicket: Ticket;
   selectedUser: User;
@@ -114,10 +113,10 @@ export class ListTicketComponent implements OnInit {
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
         data.forEach(user => {
-          this.userDic[user._id]=null;
-          this.userDic[user._id]=user;
+          this.userDic[user._id] = null;
+          this.userDic[user._id] = user;
         });
-        this.userList=data;
+        this.userList = data;
       }
     })
 
@@ -130,7 +129,7 @@ export class ListTicketComponent implements OnInit {
     })*/
 
     this.TicketService.getTicketsByService('61279209649616413cda8a3d').subscribe((data) => {
-      if(!data.message){
+      if (!data.message) {
         this.allTickets = data.TicketList;
       }
     })
@@ -162,6 +161,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.AccAffList.push(res)
+      this.allTickets.push(res)
     }, (error) => {
       console.log(error)
     })
@@ -179,7 +179,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
-      if(this.selectedUser._id==jwt_decode(localStorage.getItem("token"))["id"]){
+      if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
       this.allTickets.push(data)
@@ -188,8 +188,6 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
   }
-
-
 
   TicketForm: FormGroup = new FormGroup({
     sujet: new FormControl('', Validators.required),//Ils doit forcément selectionner
@@ -227,9 +225,9 @@ export class ListTicketComponent implements OnInit {
       if(this.sujetList[data.sujet_id].service_id==token.service_id){
         this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
       }*/
-      this.queueList.splice(this.queueList.indexOf(this.isModify),1)
-      this.isModify=null;
-      
+      this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+      this.isModify = null;
+
     }, (error) => {
       console.log(error)
     });
@@ -243,24 +241,24 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  showWaitingTime(rawData){
+  showWaitingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
     let days = calc.getUTCDate() - 1
     let month = calc.getUTCMonth()
     let Hours = calc.getUTCHours()
     let minutes = calc.getUTCMinutes()
-    if(days==0 && month==0){
-      return Hours.toString()+" heures et "+minutes+" minutes"
+    if (days == 0 && month == 0) {
+      return Hours.toString() + " H " + minutes + " M"
     }
-    return Hours.toString()+" heures, "+minutes+" minutes"+days+" jours et "+month+" mois"
+    return Hours.toString() + " H, " + minutes + " M" + days + " Jr"
   }
 
-  showWorkingTime(rawData){
+  showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
-    let days = (calc.getUTCDate() - 1>0)?""+(calc.getUTCDate() - 1)+" jours":" ";
-    let month = (calc.getUTCMonth()>0)?(" et "+calc.getUTCMonth()+" mois"):""
+    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " Jr" : " ";
+    let month = (calc.getUTCMonth() > 0) ? (" et " + calc.getUTCMonth() + " mois") : ""
     let Hours = calc.getUTCHours();
     let minutes = calc.getUTCMinutes();
-    return Hours.toString()+" heures, "+minutes+" minutes "+days+month;
+    return Hours.toString() + " H, " + minutes + " M " + days;
   }
 }

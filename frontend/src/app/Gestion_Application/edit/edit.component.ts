@@ -30,7 +30,7 @@ export class EditComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.Service = <Service>history.state;
+    this.Service = new Service(history.state);
     console.log(this.Service)
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
@@ -38,7 +38,7 @@ export class EditComponent implements OnInit {
     console.log(this.Service)
     this.serviceForm.setValue({label:this.Service.label})
 
-      this.Sujet = <Sujet>history.state;
+      this.Sujet = new Sujet(history.state); //TODO Verifier
       if (!this.Sujet._id) {
         this.router.navigate(["/service/edit"])
       }
@@ -49,7 +49,7 @@ export class EditComponent implements OnInit {
 
 
   modifyService() {
-    let req = <Service>{
+    let req = {
       id: this.Service._id,
       label: this.serviceForm.value.label
     }
