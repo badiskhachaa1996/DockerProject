@@ -36,8 +36,9 @@ const user_schema= new mongoose.Schema({
         required:true
     },
     service_id:{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref:"Service"
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Service",
+        required:true
     }
 
 });

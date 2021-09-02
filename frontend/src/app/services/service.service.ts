@@ -1,6 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Service } from '../models/Service';
 import { Sujet } from '../models/Sujet';
 
@@ -18,12 +20,14 @@ export class ServService {
 
   public addService(service: Service) {
     let add_serv = this.apiUrl + "service/addService";
-    return this.http.post<any>(add_serv, service, httpOptions);
+    return this.http.post<any>(add_serv, service, httpOptions) .pipe(
+      catchError(this.handleError)
+    );
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "service/getAll";
-    return this.http.get<any>(loginUrl, httpOptions1);
+    return this.http.get<any>(loginUrl, httpOptions);
   }
 
 
@@ -42,7 +46,19 @@ export class ServService {
     return this.http.get<any>(registreUrl,httpOptions);
   }
 
-
+// Error 
+handleError(error: HttpErrorResponse) {
+  let errorMessage = '';
+  if (error.error instanceof ErrorEvent) {
+    // Handle client error
+    errorMessage = error.error.message;
+  } else {
+    // Handle server error
+    errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+  }
+  console.log(errorMessage);
+  return throwError(errorMessage);
+}
   
 
 
