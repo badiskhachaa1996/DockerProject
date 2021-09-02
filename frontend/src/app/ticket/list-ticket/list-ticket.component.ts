@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
+import { Usermodel } from 'src/app/models/usermodel';
 
 @Component({
   selector: 'app-list-ticket',
@@ -19,6 +20,7 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
   styleUrls: ['./list-ticket.component.css']
 })
 export class ListTicketComponent implements OnInit {
+ user : Usermodel
 
   serviceList: any[] = [];
   sujetList: any[] = [];
@@ -68,6 +70,8 @@ export class ListTicketComponent implements OnInit {
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.user=new Usermodel(2,"red","red")
+    console.log(this.user.nom)
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
       this.router.navigate(["/login"])

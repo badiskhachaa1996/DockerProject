@@ -1,3 +1,5 @@
+import { Service } from "./Service";
+
 export interface User {
     name: any;
     id?: string;
@@ -10,6 +12,6 @@ export interface User {
     role :string;
     etat?: boolean;
     adresse:string;
-    service_id:string
+    service_id:string;
 }
   

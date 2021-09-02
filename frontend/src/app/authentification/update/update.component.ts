@@ -8,21 +8,24 @@ import jwt_decode from "jwt-decode";
 import {DropdownModule} from 'primeng/dropdown';
 import { AuthService } from 'src/app/services/auth.service';
 import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface';
+import { ServService } from 'src/app/services/service.service';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
   styleUrls: ['./update.component.css']
 })
 export class UpdateUserComponent implements OnInit {
-
+  Services :Service[]
   currentRoot:String = this.router.url;
   IsAdmin : boolean=false;
   User_role:String ;
+  id_role:any;
   emailExists=false;
   Roles = environment.role;
-  servicesRoles =environment.service_id;
-  userupdate:User = <User>history.state;
-  RegisterForm: FormGroup= new FormGroup({
+  servicesRoles = environment.service_id;
+  userupdate:any=history.state ; 
+ RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -30,16 +33,19 @@ export class UpdateUserComponent implements OnInit {
     adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl(this.userupdate.role,[Validators.required])
+    role:new FormControl(this.userupdate.role,[Validators.required]),
+    service_id:new FormControl(this.userupdate.service_id,[Validators.required])
+    
     
 
   })
 
 
   UpdateUser(){
-   
+    this.id_role = this.Roles[this.RegisterForm.value.role.id].id;
+    console.log("idrole:"+this.id_role)
     let user = <User>{
-      id:this.userupdate._id,
+      id:localStorage.getItem('UpdateUser'),
       firstname:this.RegisterForm.value.firstname,
       lastname: this.RegisterForm.value.lastname,
       phone:this.RegisterForm.value.phone,
@@ -47,11 +53,11 @@ export class UpdateUserComponent implements OnInit {
       password:this.RegisterForm.value.password,
       adresse:this.RegisterForm.value.adresse,
       role: this.RegisterForm.value.role.value ||"user",
-      service_id:this.servicesRoles.values[1]
-      
+      service_id:this.RegisterForm.value.service_id._id
     }
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
+      
       this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
    
     },(error)=>{
@@ -73,16 +79,17 @@ export class UpdateUserComponent implements OnInit {
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
-  
-  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
+  get service_id() { return this.RegisterForm.get('service_id'); }
+  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService,private servService:ServService) { }
 
   ngOnInit(): void {
-    this.userupdate = <User>history.state;
-    if (!this.userupdate.id) {
-      console.log("zzz"+environment.service_id.values[1])
-     
-    }
-    console.log(this.userupdate._id)
+
+    this.servService.getAll().subscribe((data) => {
+     this.Services=data;
+      })
+      this.AuthService.getById(localStorage.getItem('UpdateUser')) .subscribe((data)=>{this.userupdate=data})
+  
+   
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
     console.log(jwt_decode(localStorage.getItem("token")));

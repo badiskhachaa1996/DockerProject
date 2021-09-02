@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import {MessageService} from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import {DropdownModule} from 'primeng/dropdown';
+import { ServService } from 'src/app/services/service.service';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -18,7 +20,9 @@ export class RegisterComponent implements OnInit {
   User_role:String ;
   emailExists=false;
   Roles = environment.role;
-   
+  
+  Services :any[]
+  
   RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl('',[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
@@ -27,14 +31,17 @@ export class RegisterComponent implements OnInit {
     adresse:new FormControl('',[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl('user',[Validators.required])
+    role:new FormControl('user',[Validators.required]),
+    
+    service_id:new FormControl('',[Validators.required])
 
   })
 
   saveUser(){
-    console.log(localStorage.getItem("token"));
-    //Enregistrement de l'user
-    //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
+    
+  let Sservice 
+
+
     let user = <User>{
       firstname:this.RegisterForm.value.firstname,
       lastname: this.RegisterForm.value.lastname,
@@ -42,10 +49,16 @@ export class RegisterComponent implements OnInit {
       email:this.RegisterForm.value.email,
       password:this.RegisterForm.value.password,
       adresse:this.RegisterForm.value.adresse,
-      role: this.RegisterForm.value.role.value ||"user"
+      role: this.RegisterForm.value.role.value ||"user",
+      service_id:this.RegisterForm.value.service_id._id
       
     }
     console.log(user)
+    
+    console.log(localStorage.getItem("token"));
+    //Enregistrement de l'user
+    //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
+ 
     this.AuthService.register(user).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Message d\'inscription', detail:'Inscription réussie'});
       //this.router.navigate(['/login'])
@@ -57,8 +70,8 @@ export class RegisterComponent implements OnInit {
       }
       console.log(error)
     });
-    
-  }
+
+  } 
 
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
@@ -68,10 +81,18 @@ export class RegisterComponent implements OnInit {
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
-  
-  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
+  get service_id() { return this.RegisterForm.get('service_id'); }
+  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService, private servService:ServService) { }
 
   ngOnInit(): void {
+    this.servService.getAll().subscribe((data) => {
+    this.Services=data;
+    
+    console.log(this.Services)
+    
+    })
+   
+    console.log(this.Services)
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
     console.log(jwt_decode(localStorage.getItem("token")));
