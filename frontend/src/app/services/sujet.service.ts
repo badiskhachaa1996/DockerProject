@@ -28,7 +28,7 @@ export class SujetService {
   }
 
   update(sujet :Sujet){
-    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.id;
+    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet._id;
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 

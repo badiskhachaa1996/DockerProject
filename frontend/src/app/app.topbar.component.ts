@@ -35,7 +35,7 @@ export class AppTopBarComponent implements OnInit {
     if (localStorage.getItem("token") != null) {
       this.isAuth = true;
       let temp: User = jwt_decode(localStorage.getItem("token"))
-      this.AuthService.getById(temp.id).subscribe((data) => {
+      this.AuthService.getById(temp._id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
       }, (error) => {
         console.log(error)
