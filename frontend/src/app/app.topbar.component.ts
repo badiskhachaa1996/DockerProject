@@ -34,8 +34,13 @@ export class AppTopBarComponent implements OnInit {
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
       this.isAuth = true;
-      let temp: User = jwt_decode(localStorage.getItem("token"))
+<<<<<<< HEAD
+      let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
+=======
+      let temp: User = jwt_decode(localStorage.getItem("token"))
+      this.AuthService.getById(temp._id).subscribe((data) => {
+>>>>>>> 5f4c5691f853c590f4664188c65c0c8b967ac685
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
       }, (error) => {
         console.log(error)

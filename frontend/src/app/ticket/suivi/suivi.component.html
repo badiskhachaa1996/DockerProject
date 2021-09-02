@@ -1,4 +1,4 @@
-<div *ngIf="showForm=='Fermer'">
+<div *ngIf="showForm=='Fermer'" id ="ajouter"> 
     <div class="p-grid mt-2">
         <div class="xl:col-8 xl:col-offset-2 col-12">
             <p-card>
@@ -36,7 +36,7 @@
                                         obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <div class="col-offset-2 md:col-offset- sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
                                     [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
                             </div>
@@ -47,8 +47,6 @@
         </div>
     </div>
 </div>
-
-<button pButton type="button" [label]="showForm" style="margin-left: 90%;" (click)="toggleForm()"></button>
 
 
 <div class="p-grid mt-2" id="modifier" style="display: none;">
@@ -93,81 +91,88 @@
     </div>
   </div>
 
-
-
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <div class="col-12 card shadow-lg my-5">
+        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
+<br><br>
+        <div class=" card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
                 [showCurrentPageReport]="false"
                 currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
-                [rowsPerPageOptions]="[5,10,20]">
+                [rowsPerPageOptions]="[5,10,20]"  dataKey="_id">
                 <ng-template pTemplate="caption">
                     <div class="table-header">
                         Liste de mes tickets
-                        <!--<span class="p-input-icon-left">
-                                <i class="pi pi-search"></i>
-                                <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                    placeholder="Faire une recherche" />
-                            </span>-->
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width: 3rem"></th>
+
                         <th>
                             Service
+
                         </th>
                         <th>
                             Sujet
+
                         </th>
                         <th>
                             Statut
+
                         </th>
                         <th>
                             Action
                         </th>
                     </tr>
-                    <!--<tr>
-                            <th *ngIf="filterService">
-                                <p-dropdown [options]="filterService" (onChange)="dt.filter($event.value, 'Service', 'equals')" styleClass="p-column-filter" placeholder="Select a Service" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                            <th *ngIf="filterSujet">
-                                <p-dropdown [options]="filterSujet" (onChange)="dt.filter($event.value, 'Sujet', 'equals')" styleClass="p-column-filter" placeholder="Select a Sujet" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                            <th *ngIf="filterStatut">
-                                <p-dropdown [options]="filterStatut" (onChange)="dt.filter($event.value, 'Statut', 'equals')" styleClass="p-column-filter" placeholder="Select a Statut" [showClear]="true">
-                                    <ng-template let-option pTemplate="item">
-                                        <span [class]="'customer-badge status-' + option.value">{{option.label}}</span>
-                                    </ng-template>
-                                </p-dropdown>
-                            </th>
-                        </tr>-->
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData>
+                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
+                        <td>
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                       
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
                         <td>
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
-                        <td >
+                        <td>
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <i class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i style="margin-left: 30%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
+
+
+
+                <ng-template pTemplate="rowexpansion"  let-rowData>
+                        <tr>
+                            <td colspan="5">
+                                <p-fieldset legend="Informations sur le Ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-5 ui-md-5"><b style="text-align:left !important;" >Date d'ajout: </b> </div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" >{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-5 ui-md-5"> <b style="text-align:left !important;" >Descripttion: </b></div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" > {{rowData.description}} </div>
+                                    </div>
+                                    
+                                </div>
+                            </p-fieldset>
+
+                            </td>
+                        </tr>
+                </ng-template>
+
+
             </p-table>
         </div>
     </div>

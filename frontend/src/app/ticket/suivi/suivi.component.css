@@ -1,3 +1,6 @@
+ng-template{
+  overflow-y: hidden;
+}
 .content{
     max-width: 500px;
     margin:auto;

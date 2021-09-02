@@ -22,7 +22,7 @@ export class SuiviComponent implements OnInit {
 
   ticketList:Ticket[];
   token:any;
-
+  tickets: any;
   serviceList=[];
   sujetList=[];
 
@@ -75,6 +75,7 @@ export class SuiviComponent implements OnInit {
   constructor(private router:Router, private AuthService:AuthService,private TicketService:TicketService,private SujetService:SujetService,private ServService:ServService,private messageService:MessageService) { }
 
   ngOnInit(): void {
+    this.Ticket = <Ticket>history.state;
 
     let token = localStorage.getItem("token")
     if(token==null){
@@ -86,6 +87,9 @@ export class SuiviComponent implements OnInit {
     },(error)=>{
       console.log(error)
     })
+    
+
+
     
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
@@ -123,6 +127,7 @@ export class SuiviComponent implements OnInit {
       console.log(error)
     })
 
+    this.Tickets();
   }
 
   TicketForm: FormGroup= new FormGroup({
@@ -176,6 +181,22 @@ export class SuiviComponent implements OnInit {
 
   
   }
+
+
+  Tickets(){
+    this.TicketService.getQueue()
+    .subscribe(
+      data => {
+        this.ticketList = data;
+        console.log(this.ticketList);
+        
+      },
+      error => {
+        console.log(error);
+      });
+  }
+
+
   modifyTicket(){
   //Modification du Ticket
   let req = {
@@ -185,6 +206,9 @@ export class SuiviComponent implements OnInit {
     description:this.TicketForm1.value.description,}
 
   this.TicketService.updateFirst(req).subscribe((data)=>{
+    this.ticketList.splice(this.ticketList.indexOf(this.Ticket),1);
+    this.ticketList.push(data); 
+
     this.messageService.add({severity:'success', summary:'Modification du Ticket', detail:'Modification réussie'});
     document.getElementById("modifier").style.display="none";
   },(error)=>{
@@ -211,6 +235,7 @@ export class SuiviComponent implements OnInit {
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data)=>{
+      
       this.messageService.add({severity:'success', summary:'Création du Ticket', detail:'Création réussie'});
       this.router.navigate(['/'])
     },(error)=>{
