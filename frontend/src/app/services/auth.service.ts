@@ -52,11 +52,11 @@ export class AuthService {
     );
   }
 
+
   update(user :User){
-    let registreUrl=this.apiUrl+"user/updateById/"+user.id;
-    return this.http.post<any>(registreUrl,user,httpOptions1) .pipe(
-      catchError(this.handleError)
-    );
+    let registreUrl=this.apiUrl+"user/updateById/"+user._id;
+    return this.http.post<any>(registreUrl,user,httpOptions1);
+
   }
   getAllByService(id){
     let loginUrl=this.apiUrl+"user/getAllbyService/"+id;

@@ -23,7 +23,6 @@ app.post("/addsujet", (req, res) => {
 app.get("/getAll",(req,res)=>{
     Sujet.find()
     .then(result=>{
-        //console.log('result: ',result)
         res.send(result.length>0?result:{message:"Pas de Sujets"});
     })
     .catch(err=>{   

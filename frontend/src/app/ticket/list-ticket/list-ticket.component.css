@@ -7,10 +7,6 @@ td{
     background-color: #fff;
     padding: 2% 2%;
   }
-  button{
-    background-color: green;
-    color: #fff;
-  }
   button:hover{
     color: #fff;
   }
@@ -21,4 +17,3 @@ td{
   .logo {
     max-width: 50%;
   }
-  

@@ -61,7 +61,7 @@ export class UpdateComponent implements OnInit {
   constructor(private router: Router,private TicketService:TicketService,private sujetServ:SujetService,private serv:ServService,private messageService:MessageService) { }
 
   ngOnInit(): void {
-    this.Ticket = <Ticket>history.state;
+    this.Ticket = new Ticket(history.state);
     if (!this.Ticket._id) {
       this.router.navigate(["/ticket/suivi"])
     }

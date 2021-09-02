@@ -1,8 +1,6 @@
-export interface Service {
-    
-   label : string;
-   _id?:string;
-   id?:string;
-
+export class Service {
+   constructor(
+      public label: string,
+      public _id?: string
+   ) { }
 }
-  

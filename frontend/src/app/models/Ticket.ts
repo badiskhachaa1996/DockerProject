@@ -1,15 +1,19 @@
-export interface Ticket {
-    id?:string;
-    _id?:string;
-    createur_id: string;
-    sujet_id:string;
-    date_ajout?:Date;
-    agent_id?:string;
-    statut?:string;
-    date_affec_accep?:string;
-    temp_traitement?:string;
-    temp_fin?:string;
-    isAffected?:boolean;
+export class Ticket {
+
+    constructor(
+        public _id?:string,
+        public createur_id?: string,
+        public sujet_id?:string,
+        public date_ajout?:Date,
+        public agent_id?:string,
+        public statut?:string,
+        public date_affec_accep?:string,
+        public temp_traitement?:string,
+        public temp_fin?:string,
+        public isAffected?:boolean,
+        public description?:string
+    ){}
+
    
 }
   

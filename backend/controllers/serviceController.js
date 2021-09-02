@@ -19,7 +19,6 @@ app.post("/addService", (req, res) => {
 app.get("/getAll",(req,res)=>{
     Service.find()
     .then(result=>{
-        //console.log('result: ',result)
         res.send(result.length>0?result:{message:"Pas de Services"});
     })
     .catch(err=>{   

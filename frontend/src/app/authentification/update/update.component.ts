@@ -23,9 +23,9 @@ export class UpdateUserComponent implements OnInit {
   id_role:any;
   emailExists=false;
   Roles = environment.role;
-  servicesRoles = environment.service_id;
-  userupdate:any=history.state ; 
- RegisterForm: FormGroup= new FormGroup({
+  servicesRoles =environment.service_id;
+  userupdate:any = history.state;
+  RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -42,19 +42,8 @@ export class UpdateUserComponent implements OnInit {
 
 
   UpdateUser(){
-    this.id_role = this.Roles[this.RegisterForm.value.role.id].id;
-    console.log("idrole:"+this.id_role)
-    let user = <User>{
-      id:localStorage.getItem('UpdateUser'),
-      firstname:this.RegisterForm.value.firstname,
-      lastname: this.RegisterForm.value.lastname,
-      phone:this.RegisterForm.value.phone,
-      email:this.RegisterForm.value.email,
-      password:this.RegisterForm.value.password,
-      adresse:this.RegisterForm.value.adresse,
-      role: this.RegisterForm.value.role.value ||"user",
-      service_id:this.RegisterForm.value.service_id._id
-    }
+   
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
       

@@ -71,7 +71,7 @@ export class ListTicketComponent implements OnInit {
 
   ngOnInit(): void {
     this.user=new Usermodel(2,"red","red")
-    console.log(this.user.nom)
+    console.log(this.user)
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
       this.router.navigate(["/login"])

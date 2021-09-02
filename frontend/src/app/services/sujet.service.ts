@@ -27,8 +27,13 @@ export class SujetService {
     return this.http.get<any>(loginUrl, httpOptions1);
   }
 
-  update(sujet :Sujet){
+<<<<<<< HEAD
+  update(sujet :any){
     let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.id;
+=======
+  update(sujet :Sujet){
+    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet._id;
+>>>>>>> 5f4c5691f853c590f4664188c65c0c8b967ac685
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 

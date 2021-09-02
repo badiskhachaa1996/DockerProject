@@ -41,6 +41,7 @@ app.post("/updateById/:id", (req, res) => {
 });
 
 //Récuperer un message
+
 app.get("/getById/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((dataTicket) => {
         res.status(200).send({ dataTicket });
@@ -52,7 +53,6 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req, res) => {
     Message.find()
         .then(result=>{
-            console.log('result: ',result)
             res.send(result.length>0?result:{message:"Pas de Messages"});
         })
         .catch(err=>{
