@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   login(){
     //Connexion
-    let user = <any>{
+    let user = {
       email:this.LoginForm.value.email,
       password:this.LoginForm.value.password
     }
