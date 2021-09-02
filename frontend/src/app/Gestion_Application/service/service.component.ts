@@ -8,6 +8,8 @@ import { SujetService } from 'src/app/services/sujet.service';
 import { Sujet } from 'src/app/models/Sujet';
 
 import { Message } from 'src/app/models/Message';
+import { User } from 'src/app/models/User';
+import { Test } from 'src/app/test';
 
 @Component({
   selector: 'app-service',
@@ -21,6 +23,7 @@ export class ServiceComponent implements OnInit {
   sujetForm: FormGroup= new FormGroup({
     label:new FormControl('',[Validators.required])
   });
+  // test: Test;
   currentService = null;
   message = '';
   label = '';
@@ -108,6 +111,12 @@ showwForm: string = "Ajouter";
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
+<<<<<<< HEAD
+  //  this.test = new Test(12,"farah")
+    this.Service = <Service>history.state;
+    console.log(this.Service)
+=======
+>>>>>>> a46564404410e350efd21f67719d5e32c62ba161
     // if (!this.Service._id) {
       // this.router.navigate(["/service"])
     // }
@@ -119,7 +128,6 @@ showwForm: string = "Ajouter";
     
     this.cols = [
       { field: 'label', header: 'Sujet' },
-    
     ];
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
@@ -137,13 +145,15 @@ showwForm: string = "Ajouter";
     this.Sujet=data;
    // this.router.navigateByUrl("/sujet",{state:data})
   }
-  
+ 
   edit(data){
-    document.getElementById('btnAccept').style.display = 'none';  
+    // document.getElementById('form1').style.display = 'none'; 
+    document.getElementById('btnAccept').style.display = 'none'; 
     this.serviceForm.patchValue({label:data.label})
     this.Service=data;
     // this.router.navigateByUrl("/service",{state:data})
   }
+
 
  
   // deleteService(service): void{
@@ -210,6 +220,8 @@ showwForm: string = "Ajouter";
       }
       else 
       {    
+        document.getElementById('btnAccept').style.display = 'block'; 
+        document.getElementById('btnAccept2').style.display = 'block'; 
             document.getElementById(id).style.display = 'none';  
       }
     }
@@ -267,6 +279,7 @@ showwForm: string = "Ajouter";
         id:this.Sujet._id,
         label:this.sujetForm.value.label
       }
+     
       this.SujetService.update(req).subscribe((data)=>{
         this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet),1,data)
         this.sujetForm.reset();
@@ -275,8 +288,7 @@ showwForm: string = "Ajouter";
         // this.router.navigate(['/service'])
       },(error)=>{
         console.log(error)
-      });
-      
+      }); 
     }
 
    
