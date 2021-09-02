@@ -36,7 +36,7 @@
                                         obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <div class="col-offset-2 md:col-offset- sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
                                     [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
                             </div>
@@ -47,8 +47,6 @@
         </div>
     </div>
 </div>
-
-<button pButton type="button" [label]="showForm" style="margin-left: 90%;" (click)="toggleForm()"></button>
 
 
 <div class="p-grid mt-2" id="modifier" style="display: none;">
@@ -93,11 +91,11 @@
     </div>
   </div>
 
-
-
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <div class="col-12 card shadow-lg my-5">
+        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
+<br><br>
+        <div class="card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
                 [showCurrentPageReport]="false"
                 currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
@@ -132,7 +130,8 @@
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="rowData"
                             class="p-button-text p-button-rounded p-button-plain"
-                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>                        </td>
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
                        
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -153,7 +152,7 @@
 
                 <ng-template pTemplate="rowexpansion" let-rowData>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="5">
                                 <div class="p-p-3">
                                                 <h4>ID: {{rowData._id}}</h4>
                                             
