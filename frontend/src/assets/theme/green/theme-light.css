@@ -3445,16 +3445,19 @@ body .ui-fluid .ui-inplace.ui-inplace-closable .ui-inplace-content > :first-chil
 button.expanded:hover,button.expanded:enabled:focus,button.expanded:enabled,button.expanded:hover:enabled{
   background-color: white;
   border:none;
+  outline:none;
 }
 .expanded span{
   background-color: white;
   border:none;
-  color:#3da827
+  color:#3da827;
+  outline:none;
 }
 .expanded span:hover, .expanded span:enabled:focus,.expanded span:enabled,.expanded span:focus,.expanded span:hover:enabled{
   background-color: white;
   border:none;
-  color:#256b17
+  color:#256b17;
+  outline:none;
 }
 i{
   color:#3da827;
