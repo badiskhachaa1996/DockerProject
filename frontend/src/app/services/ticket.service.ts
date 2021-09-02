@@ -19,7 +19,7 @@ export class TicketService {
     return this.http.post<any>(registreUrl,ticket,httpOptions);
   }
 
-  update(ticket :Ticket){
+  update(ticket :any){
     let registreUrl=this.apiUrl+"updateById/"+ticket.id;
     return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }

@@ -1,11 +1,6 @@
-import { Service } from "./Service";
-
-export interface Sujet {
-    
-    label:string;
-    service_id:string;
-    _id?:string;
-    id?:string;
-   
+export class Sujet {
+    constructor(
+        public label?: string,
+        public service_id?: string,
+        public _id?: string,) { }
 }
-  
