@@ -145,7 +145,7 @@ export class SuiviComponent implements OnInit {
     this.Ticket = data;
 
     document.getElementById("modifier").style.display="block";
-
+    
     this.ServService.getAll().subscribe((data) => {
       this.listServices1 = data;
       data.forEach(service => {
@@ -224,8 +224,7 @@ export class SuiviComponent implements OnInit {
     }
 
   }
-
-
+ 
   addTicket(){
     //Enregistrement du Ticket
     let req = {
