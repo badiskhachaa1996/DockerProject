@@ -10,6 +10,7 @@ export interface Ticket {
     temp_traitement?:string;
     temp_fin?:string;
     isAffected?:boolean;
+    description:string;
    
 }
   

@@ -162,6 +162,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.AccAffList.push(res)
+      this.allTickets.push(res)
     }, (error) => {
       console.log(error)
     })
