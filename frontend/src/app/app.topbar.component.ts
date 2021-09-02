@@ -40,7 +40,7 @@ export class AppTopBarComponent implements OnInit {
 =======
       let temp: User = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp._id).subscribe((data) => {
->>>>>>> 5f4c5691f853c590f4664188c65c0c8b967ac685
+>>>>>>> bc66300c237fd9e12ae9b66767e11eb0b2c54769
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
       }, (error) => {
         console.log(error)

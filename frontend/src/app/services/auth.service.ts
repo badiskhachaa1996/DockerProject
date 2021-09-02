@@ -52,7 +52,6 @@ export class AuthService {
     );
   }
 
-
   update(user :User){
     let registreUrl=this.apiUrl+"user/updateById/"+user._id;
     return this.http.post<any>(registreUrl,user,httpOptions1);
