@@ -111,9 +111,6 @@ showwForm: string = "Ajouter";
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
-  //  this.test = new Test(12,"farah")
-    this.Service = <Service>history.state;
-    console.log(this.Service)
     // if (!this.Service._id) {
       // this.router.navigate(["/service"])
     // }
