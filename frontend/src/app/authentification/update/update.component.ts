@@ -21,7 +21,7 @@ export class UpdateUserComponent implements OnInit {
   emailExists=false;
   Roles = environment.role;
   servicesRoles =environment.service_id;
-  userupdate:User = <User>history.state;
+  userupdate:any = history.state;
   RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
@@ -38,18 +38,7 @@ export class UpdateUserComponent implements OnInit {
 
   UpdateUser(){
    
-    let user = <User>{
-      id:this.userupdate._id,
-      firstname:this.RegisterForm.value.firstname,
-      lastname: this.RegisterForm.value.lastname,
-      phone:this.RegisterForm.value.phone,
-      email:this.RegisterForm.value.email,
-      password:this.RegisterForm.value.password,
-      adresse:this.RegisterForm.value.adresse,
-      role: this.RegisterForm.value.role.value ||"user",
-      service_id:this.servicesRoles.values[1]
-      
-    }
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
@@ -77,7 +66,7 @@ export class UpdateUserComponent implements OnInit {
   constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.userupdate = <User>history.state;
+    this.userupdate = history.state;
     if (!this.userupdate.id) {
       console.log("zzz"+environment.service_id.values[1])
      

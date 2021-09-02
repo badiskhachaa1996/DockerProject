@@ -62,11 +62,10 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
-                    <tr pDraggable="QueueToAccAff" (onDragStart)="dragStart($event, rowData)"
-                        (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                    <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
+                        *ngIf="sujetList[rowData.sujet_id]">
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="rowData"
-                                class="p-button-text p-button-rounded p-button-plain"
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td>
@@ -86,35 +85,58 @@
                             <i style="margin-left: 5%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i style="margin-left: 5%;" *ngIf="isReponsable" class="pi pi-user-plus"
                                 (click)="showDropdownUser(rowData)"></i>
-                            <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList" [(ngModel)]="selectedUser"
-                                optionLabel="firstname" (onChange)="Affected()" placeholder="Choissiez un agent">
+                            <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
+                                [(ngModel)]="selectedUser" optionLabel="firstname" (onChange)="Affected()"
+                                placeholder="Choissiez un agent">
                             </p-dropdown>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
-                    <tr>
-                        <td colspan="6">
-                            <div class="p-p-3">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>ID: {{rowData._id}}</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Statut: {{rowData.statut}}</th>
-                                        </tr>
-                                    </thead>
-                                    <!--<tbody>
-                                        <tr>
-                                            <td>{{rowData._id}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{rowData.statut}}</td>
-                                        </tr>
-                                    </tbody>-->
-                                </table>
-                            </div>
+                    <tr style="text-align: left; margin-left: 2em; background-color:white;">
+                        <td [attr.colspan]="6">
+                            <p-fieldset legend="Informations du Ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Statut: </b>{{rowData.statut}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Description: </b>{{rowData.description}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <p-fieldset legend="Créateur du ticket"
+                                            [style]="{'color':'green','font-weight': 'bold'}">
+                                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Nom et Prénom: </b>{{userDic[rowData.createur_id].firstname |
+                                                        titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
+                                                        }}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Téléphone: </b>{{userDic[rowData.createur_id].phone}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>E-mail: </b>{{userDic[rowData.createur_id].email}}
+                                                    </div>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Adresse: </b>{{userDic[rowData.createur_id].adresse}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Role: </b>{{userDic[rowData.createur_id].role}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Service: </b>{{userDic[rowData.createur_id]?.service_id}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p-fieldset>
+                                    </div>
+                                </div>
+                            </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
@@ -124,12 +146,18 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Mes tickers en cours de traitement</h3>
+        <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
+<<<<<<< HEAD
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff">
                 (onDrop)="dragQueueToAccAff($event)">
+=======
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
+                (onDrop)="dragQueueToAccAff($event)" dataKey="_id">
+>>>>>>> 05172c7491713449ae8df50dc980ff786cc19d73
                 <ng-template pTemplate="header" let-columns>
                     <tr>
+                        <th style="width: 3rem"></th>
                         <th>
                             Service
                         </th>
@@ -150,9 +178,13 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr pDraggable="PreInscritToInscrit" (onDragStart)="dragStart($event, rowData)"
-                        (onDragEnd)="dragEnd($event)" *ngIf="sujetList[rowData.sujet_id]">
+                <ng-template pTemplate="body" let-rowData let-columns="columns"  let-expanded="expanded">
+                    <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
+                        *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
@@ -177,6 +209,55 @@
                         </td>
                     </tr>
                 </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr style="text-align: left; margin-left: 2em; background-color:white;">
+                        <td [attr.colspan]="7">
+                            <p-fieldset legend="Informations du Ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Statut: </b>{{rowData.statut}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Description: </b>{{rowData.description}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <p-fieldset legend="Créateur du ticket"
+                                            [style]="{'color':'green','font-weight': 'bold'}">
+                                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Nom et Prénom: </b>{{userDic[rowData.createur_id].firstname |
+                                                        titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
+                                                        }}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Téléphone: </b>{{userDic[rowData.createur_id].phone}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>E-mail: </b>{{userDic[rowData.createur_id].email}}
+                                                    </div>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Adresse: </b>{{userDic[rowData.createur_id].adresse}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Role: </b>{{userDic[rowData.createur_id].role}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Service: </b>{{userDic[rowData.createur_id]?.service_id}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p-fieldset>
+                                    </div>
+                                    
+                                </div>
+                            </p-fieldset>
+                        </td>
+                    </tr>
+                </ng-template>
             </p-table>
         </div>
     </div>
@@ -186,9 +267,10 @@
     <div class="col-10 col-offset-1">
         <h3>Les tickets de mon service</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets">
-                <ng-template pTemplate="header" let-columns>
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id">
+                <ng-template pTemplate="header" let-columns> 
                     <tr>
+                        <th style="width: 3rem"></th>
                         <th>
                             Service
                         </th>
@@ -212,8 +294,12 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]">
+                        <td>
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
@@ -221,7 +307,7 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
-                            {{rowData.date_affec_accep | date:'d/MM/yy'}}
+                            {{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}
                         </td>
                         <td>
                             {{showWorkingTime(rowData)}}
@@ -238,6 +324,85 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                             (click)="ListToPreInscrit(rowData)"></i>-->
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr style="text-align: left; margin-left: 2em; background-color:white;">
+                        <td [attr.colspan]="8">
+                            <p-fieldset legend="Informations du Ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Statut: </b>{{rowData.statut}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <b>Description: </b>{{rowData.description}}
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <p-fieldset legend="Créateur du ticket"
+                                            [style]="{'color':'green','font-weight': 'bold'}">
+                                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Nom et Prénom: </b>{{userDic[rowData.createur_id].firstname |
+                                                        titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
+                                                        }}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Téléphone: </b>{{userDic[rowData.createur_id].phone}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>E-mail: </b>{{userDic[rowData.createur_id].email}}
+                                                    </div>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Adresse: </b>{{userDic[rowData.createur_id].adresse}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Role: </b>{{userDic[rowData.createur_id].role}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Service: </b>{{userDic[rowData.createur_id]?.service_id}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p-fieldset>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <p-fieldset legend="Agent du ticket"
+                                            [style]="{'color':'green','font-weight': 'bold'}">
+                                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Nom et Prénom: </b>{{userDic[rowData.agent_id].firstname |
+                                                        titlecase }} {{userDic[rowData.agent_id].lastname | titlecase
+                                                        }}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Téléphone: </b>{{userDic[rowData.agent_id].phone}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>E-mail: </b>{{userDic[rowData.agent_id].email}}
+                                                    </div>
+                                                </div>
+                                                <div class="ui-g-12 ui-md-12">
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Adresse: </b>{{userDic[rowData.agent_id].adresse}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Role: </b>{{userDic[rowData.agent_id].role}}
+                                                    </div>
+                                                    <div class="ui-g-12 ui-md-4">
+                                                        <b>Service: </b>{{userDic[rowData.agent_id]?.service_id}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p-fieldset>
+                                    </div>
+                                </div>
+                            </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>

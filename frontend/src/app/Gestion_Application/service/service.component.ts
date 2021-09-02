@@ -8,6 +8,8 @@ import { SujetService } from 'src/app/services/sujet.service';
 import { Sujet } from 'src/app/models/Sujet';
 
 import { Message } from 'src/app/models/Message';
+import { User } from 'src/app/models/User';
+import { Test } from 'src/app/test';
 
 @Component({
   selector: 'app-service',
@@ -21,6 +23,7 @@ export class ServiceComponent implements OnInit {
   sujetForm: FormGroup= new FormGroup({
     label:new FormControl('',[Validators.required])
   });
+  // test: Test;
   currentService = null;
   message = '';
   label = '';
@@ -42,7 +45,7 @@ showForm: string = "Ajouter";
 showwForm: string = "Ajouter";
 
   saveService(){   
-    let service = <Service> {
+    let service = {
       label:this.serviceForm.value.label
     };
  
@@ -60,11 +63,8 @@ showwForm: string = "Ajouter";
     });
   }
 
-  saveSujet(){   
-    let sujet = <Sujet> {
-      label:this.sujetForm.value.label,
-      service_id:this.currentService._id
-    };
+  saveSujet(){    
+    let sujet = new Sujet(this.sujetForm.value.label,this.currentService._id)
  
     this.SujetService.addSujet(sujet).subscribe((data)=>{
       this.sujetShow.push(data)
@@ -111,23 +111,17 @@ showwForm: string = "Ajouter";
     private SujetService:SujetService) { }
 
   ngOnInit(): void {
-
-    this.Service = <Service>history.state;
-    console.log(this.Service)
     // if (!this.Service._id) {
       // this.router.navigate(["/service"])
     // }
     // console.log(this.Service)
     // this.serviceForm.setValue({label:this.Service.label})
-
-      this.Sujet = <Sujet>history.state;
       // if (!this.Sujet._id) {
       //   this.router.navigate(["/service"])
       // }
     
     this.cols = [
       { field: 'label', header: 'Sujet' },
-    
     ];
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
@@ -145,13 +139,15 @@ showwForm: string = "Ajouter";
     this.Sujet=data;
    // this.router.navigateByUrl("/sujet",{state:data})
   }
-  
+ 
   edit(data){
-    document.getElementById('btnAccept').style.display = 'none';  
+    // document.getElementById('form1').style.display = 'none'; 
+    document.getElementById('btnAccept').style.display = 'none'; 
     this.serviceForm.patchValue({label:data.label})
     this.Service=data;
     // this.router.navigateByUrl("/service",{state:data})
   }
+
 
  
   // deleteService(service): void{
@@ -218,6 +214,8 @@ showwForm: string = "Ajouter";
       }
       else 
       {    
+        document.getElementById('btnAccept').style.display = 'block'; 
+        document.getElementById('btnAccept2').style.display = 'block'; 
             document.getElementById(id).style.display = 'none';  
       }
     }
@@ -256,7 +254,7 @@ showwForm: string = "Ajouter";
   
     } 
     modifyService(id) {
-      let req = <Service>{
+      let req = {
         id: this.Service._id,
         label: this.serviceForm.value.label
       }
@@ -271,10 +269,11 @@ showwForm: string = "Ajouter";
       });
     }
     modifySujet(){
-      let req = <Sujet>{
+      let req = {
         id:this.Sujet._id,
         label:this.sujetForm.value.label
       }
+     
       this.SujetService.update(req).subscribe((data)=>{
         this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet),1,data)
         this.sujetForm.reset();
@@ -283,8 +282,7 @@ showwForm: string = "Ajouter";
         // this.router.navigate(['/service'])
       },(error)=>{
         console.log(error)
-      });
-      
+      }); 
     }
 
    

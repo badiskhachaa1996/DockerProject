@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose")
-const { Message } = require("../models/Message");
 const Sujet = mongoose.model('sujet')
 const app = express(); //à travers ça je peux faire la creation des services
 const { Ticket } = require("./../models/Ticket");
@@ -10,19 +9,13 @@ const { Ticket } = require("./../models/Ticket");
 app.post("/create", (req, res) => {
     const ticket = new Ticket({
         createur_id: req.body.id,
-        sujet_id: req.body.sujet_id
+        sujet_id: req.body.sujet_id,
+        description:req.body.description,
+        date_ajout:Date.now()
     });
 
     ticket.save((err, doc) => {
-        const message = new Message({
-            user_id: req.body.id,
-            description: req.body.description,
-            document: req.body?.document,
-            ticket_id: doc.id
-        });
-        message.save((err, doc) => {
-            res.send({ message: "Votre ticket a été crée!" });
-        })
+        res.send({ message: "Votre ticket a été crée!",doc });
     });
 });
 
@@ -41,13 +34,14 @@ app.get("/deleteById/:id", (req, res) => {
 app.post("/updateById/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
-            sujet_id: req.body.sujet_id,
-            agent_id: req.body.agent_id,
-            statut: req.body.statut,
-            date_affec_accep: req.body.date_affec_accep,
-            temp_traitement: req.body.temp_traitement,
-            temp_fin: req.body.temp_fin,
-            isAffected: req.body.isAffected,
+            sujet_id: req.body?.sujet_id,
+            agent_id: req.body?.agent_id,
+            statut: req.body?.statut,
+            date_affec_accep: req.body?.date_affec_accep,
+            temp_traitement: req.body?.temp_traitement,
+            temp_fin: req.body?.temp_fin,
+            isAffected: req.body?.isAffected,
+            description:req.body?.description
 
         }, { new: true }, (err, user) => {
             if (err) {
@@ -88,7 +82,7 @@ app.get("/getAllbyUser/:id", (req, res) => {
 });
 //Récupérer le premier message d'un Ticket
 app.get("/getFirstMessage/:id", (req, res) => {
-    Message.findOne({ ticket_id: req.params.id }).sort({ date_ajout: 1 }).then((dataMessage) => {
+    Ticket.findOne({ _id: req.params.id }).sort({ date_ajout: 1 }).then((dataMessage) => {
         res.status(200).send({ dataMessage });
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
@@ -124,21 +118,14 @@ app.get("/getAccAff/:id", (req, res) => {
 app.post("/updateFirst/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
-            sujet_id: req.body.sujet_id
+            sujet_id: req.body.sujet_id,
+            description:req.body.description
         }, { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
             }
+            res.send(user)
         })
-
-    Message.findByIdAndUpdate(req.body.id_message, {
-        description: req.body.description
-    }, { new: true }, (err, user) => {
-        if (err) {
-            res.send(err)
-        }
-        res.send(user)
-    })
 });
 
 //Get All Tickets by Service ID
