@@ -148,8 +148,13 @@
     <div class="col-10 col-offset-1">
         <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
+<<<<<<< HEAD
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff">
+                (onDrop)="dragQueueToAccAff($event)">
+=======
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id">
+>>>>>>> 05172c7491713449ae8df50dc980ff786cc19d73
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
