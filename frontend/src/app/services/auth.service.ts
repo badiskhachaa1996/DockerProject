@@ -34,8 +34,8 @@ export class AuthService {
     return this.http.get<any>(loginUrl,httpOptions1);
   }
 
-  update(user :any){
-    let registreUrl=this.apiUrl+"user/updateById/"+user.id;
+  update(user :User){
+    let registreUrl=this.apiUrl+"user/updateById/"+user._id;
     return this.http.post<any>(registreUrl,user,httpOptions1);
   }
   getAllByService(id){
