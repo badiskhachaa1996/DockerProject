@@ -8,12 +8,14 @@ import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import {DropdownModule} from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  Services : any[];
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
   User_role: String;
@@ -29,6 +31,7 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
     role: new FormControl('user', [Validators.required])
+
 
   })
 
@@ -59,7 +62,7 @@ export class RegisterComponent implements OnInit {
       console.log(error)
     });
 
-  }
+  } 
 
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
@@ -69,19 +72,27 @@ export class RegisterComponent implements OnInit {
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
-
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
+  get service_id() { return this.RegisterForm.get('service_id'); }
+  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService, private servService:ServService) { }
 
   ngOnInit(): void {
-    if (localStorage.getItem("token") != null) {
-      jwt_decode: jwt_decode;
-      console.log(jwt_decode(localStorage.getItem("token")));
-      let decodeToken: any = jwt_decode(localStorage.getItem("token"))
-      this.User_role = decodeToken.role;
-      console.log(this.User_role);
-      console.log("first log : " + this.currentRoot);
-
-      console.log("first log : " + this.currentRoot);
+    this.servService.getAll().subscribe((data) => {
+    this.Services=data;
+    
+    console.log(this.Services)
+    
+    })
+   
+    console.log(this.Services)
+    if(localStorage.getItem("token")!=null){
+      jwt_decode : jwt_decode; 
+    console.log(jwt_decode(localStorage.getItem("token")));
+      let decodeToken:any =jwt_decode(localStorage.getItem("token"))
+     this.User_role = decodeToken.role;
+     console.log(this.User_role);
+     console.log("first log : "+  this.currentRoot);
+    
+     console.log("first log : "+  this.currentRoot);
     }
     if (this.User_role == "admin") {
       this.IsAdmin = true
