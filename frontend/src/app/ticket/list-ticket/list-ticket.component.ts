@@ -162,6 +162,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.AccAffList.push(res)
+      this.allTickets.push(res)
     }, (error) => {
       console.log(error)
     })
@@ -250,17 +251,17 @@ export class ListTicketComponent implements OnInit {
     let Hours = calc.getUTCHours()
     let minutes = calc.getUTCMinutes()
     if(days==0 && month==0){
-      return Hours.toString()+" heures et "+minutes+" minutes"
+      return Hours.toString()+" H "+minutes+" M"
     }
-    return Hours.toString()+" heures, "+minutes+" minutes"+days+" jours et "+month+" mois"
+    return Hours.toString()+" H, "+minutes+" M"+days+" Jr"
   }
 
   showWorkingTime(rawData){
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
-    let days = (calc.getUTCDate() - 1>0)?""+(calc.getUTCDate() - 1)+" jours":" ";
+    let days = (calc.getUTCDate() - 1>0)?""+(calc.getUTCDate() - 1)+" Jr":" ";
     let month = (calc.getUTCMonth()>0)?(" et "+calc.getUTCMonth()+" mois"):""
     let Hours = calc.getUTCHours();
     let minutes = calc.getUTCMinutes();
-    return Hours.toString()+" heures, "+minutes+" minutes "+days+month;
+    return Hours.toString()+" H, "+minutes+" M "+days;
   }
 }

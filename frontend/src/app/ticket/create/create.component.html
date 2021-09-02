@@ -26,8 +26,8 @@
                             </select>
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
-                            <input type="text" formControlName="description" class="form-control col-12"
-                                placeholder="Description" pInputText>
+                            <textarea type="text" formControlName="description" class="form-control col-12"
+                                placeholder="Description" pInputTextarea></textarea>
                             <div *ngIf="description.invalid && (description.touched || description.dirty)">
                                 <span class="error" *ngIf="description.errors?.required">*La description est
                                     obligatoire.</span>

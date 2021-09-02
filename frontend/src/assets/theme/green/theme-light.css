@@ -1817,8 +1817,10 @@ body .ui-table .ui-table-thead > tr > th {
   font-weight: 700;
   color: #4a4a4a;
   background-color: #ffffff;
+  text-align: center;
 }
 body .ui-table .ui-table-tbody > tr > td {
+  text-align: center;
   padding: 0.5em 1.214em;
 }
 body .ui-table .ui-table-tfoot > tr > td {
@@ -3440,5 +3442,28 @@ body .ui-fluid .ui-inplace.ui-inplace-closable .ui-inplace-content > :first-chil
   display: inline-block;
   width: calc(100% - 2.143em);
 }
-
+button.expanded:hover,button.expanded:enabled:focus,button.expanded:enabled,button.expanded:hover:enabled{
+  background-color: white;
+  border:none;
+}
+.expanded span{
+  background-color: white;
+  border:none;
+  color:#3da827
+}
+.expanded span:hover, .expanded span:enabled:focus,.expanded span:enabled,.expanded span:focus,.expanded span:hover:enabled{
+  background-color: white;
+  border:none;
+  color:#256b17
+}
+i{
+  color:#3da827;
+}
+i:hover{
+  color:#256b17;
+  cursor :pointer;
+}
+h3{
+  color: #3da827;
+}
 /* Add your customizations of the theme here */
