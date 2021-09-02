@@ -1,4 +1,4 @@
-<div *ngIf="showForm=='Fermer'">
+<div *ngIf="showForm=='Fermer'" id ="ajouter"> 
     <div class="p-grid mt-2">
         <div class="xl:col-8 xl:col-offset-2 col-12">
             <p-card>
@@ -154,14 +154,20 @@
                 <ng-template pTemplate="rowexpansion"  let-rowData>
                         <tr>
                             <td colspan="5">
-                                <div class="p-p-3">
-                                                <h4>ID: {{rowData._id}}</h4>
-                                            
-                                                <h4>date d'ajout: {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</h4>
-                                            
-                                                <h4>id de créateur: {{rowData.createur_id}}</h4>
-                                       
+                                <p-fieldset legend="Informations sur le Ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-5 ui-md-5"><b style="text-align:left !important;" >Date d'ajout: </b> </div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" >{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-5 ui-md-5"> <b style="text-align:left !important;" >Descripttion: </b></div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" > {{rowData.description}} </div>
+                                    </div>
+                                    
                                 </div>
+                            </p-fieldset>
+
                             </td>
                         </tr>
                 </ng-template>

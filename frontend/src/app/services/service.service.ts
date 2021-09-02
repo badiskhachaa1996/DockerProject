@@ -27,7 +27,7 @@ export class ServService {
   }
 
 
-  update(service :Service){
+  update(service :any){
     let registreUrl=this.apiUrl+"service/updateById/"+service.id;
     return this.http.post<any>(registreUrl,service,httpOptions1);
   }
