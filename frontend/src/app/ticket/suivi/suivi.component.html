@@ -95,7 +95,7 @@
     <div class="col-10 col-offset-1">
         <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
 <br><br>
-        <div class="card shadow-lg my-5">
+        <div class=" card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
                 [showCurrentPageReport]="false"
                 currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
@@ -103,7 +103,6 @@
                 <ng-template pTemplate="caption">
                     <div class="table-header">
                         Liste de mes tickets
-                      
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -112,24 +111,26 @@
 
                         <th>
                             Service
+
                         </th>
                         <th>
                             Sujet
+
                         </th>
                         <th>
                             Statut
+
                         </th>
                         <th>
                             Action
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData>
+                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="rowData"
-                            class="p-button-text p-button-rounded p-button-plain"
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                        
@@ -150,13 +151,13 @@
 
 
 
-                <ng-template pTemplate="rowexpansion" let-rowData>
+                <ng-template pTemplate="rowexpansion"  let-rowData>
                         <tr>
                             <td colspan="5">
                                 <div class="p-p-3">
                                                 <h4>ID: {{rowData._id}}</h4>
                                             
-                                                <h4>date d'ajout: {{rowData.date_ajout}}</h4>
+                                                <h4>date d'ajout: {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</h4>
                                             
                                                 <h4>id de créateur: {{rowData.createur_id}}</h4>
                                        

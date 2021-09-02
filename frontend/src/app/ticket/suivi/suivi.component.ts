@@ -88,6 +88,9 @@ export class SuiviComponent implements OnInit {
       console.log(error)
     })
     
+
+
+    
     this.SujetService.getAll().subscribe((data) => {
       if(!data.message){
         //{ label: 'Tous les sujets', value: null }
