@@ -3,9 +3,12 @@
         <div class="xl:col-8 xl:col-offset-2 col-12">
             <p-card>
                 <div class="p-grid">
+                    <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormAdd()"> </i>
+
                     <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                         <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                         <h3 class="text-center">Création d'un ticket</h3>
+
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Service:
@@ -53,6 +56,8 @@
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"> </i>
+
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm1">
                     <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Modification d'un ticket</h3>
@@ -99,8 +104,6 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
-        <button *ngIf="showFormAdd" pButton type="button" label="fermer" style="float:right;" (click)="toggleFormAdd()"></button>
-
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
