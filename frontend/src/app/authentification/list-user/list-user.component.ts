@@ -127,7 +127,7 @@ export class ListUserComponent implements OnInit {
     console.log(localStorage.getItem('updateUser'));
     history.state;
     
-    this.router.navigateByUrl("/listuser/update",{state:rowData})
+    this.router.navigateByUrl("/listUser/update",{state:rowData})
   }
 }
 
