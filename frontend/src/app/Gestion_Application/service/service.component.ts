@@ -26,12 +26,13 @@ export class ServiceComponent implements OnInit {
   currentService = null;
   message = '';
   label = '';
+  
   Service: Service;
   Sujet: Sujet;
   firstMessage: Message;
 emailExists: boolean;
-services : any;
-sujets : any;
+services : any=[];
+sujets : any=[];
 currentIndex = -1;
 cols: any[];
 sujetList=[];
@@ -50,7 +51,12 @@ showwForm: string = "Ajouter";
  
     this.ServService.addService(service).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Gestion de service/Service', detail:'Creation de service réussie'});
-      this.services.push(data)
+      try{
+        this.services.push(data)
+      }catch (e){
+        this.services = [data]
+      }
+      
       this.serviceForm.reset();
     },(error)=>{
       if(error.status==400){

@@ -145,7 +145,6 @@ export class SuiviComponent implements OnInit {
   modify(data) {
     this.toggleFormUpdate()
     this.Ticket = data;
-
     this.ServService.getAll().subscribe((data) => {
       this.listServices1 = data;
       data.forEach(service => {
@@ -226,10 +225,16 @@ export class SuiviComponent implements OnInit {
     this.showFormUpdate = !this.showFormUpdate
     this.showFormAdd = false
   }
+   
+
+  
+
 
 
   addTicket() {
     //Enregistrement du Ticket
+     
+
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
