@@ -42,7 +42,8 @@ first = 0;
 rows = 10;
 currentSujet = null;
 showForm: string = "Ajouter";
-showwForm: string = "Ajouter";
+showwForm: string = "Ajouter"; 
+// showFormUpdate: boolean = false;
 
   saveService(){   
     let service = {
@@ -67,7 +68,10 @@ showwForm: string = "Ajouter";
       console.log(error)
     });
   }
-
+  // toggleFormUpdate() {
+  //   this.showFormUpdate = !this.showFormUpdate
+  //   this.showForm = false
+  // }
   saveSujet(){    
     let sujet = new Sujet(this.sujetForm.value.label,this.currentService._id)
  
@@ -77,6 +81,8 @@ showwForm: string = "Ajouter";
       this.messageService.add({severity:'success', summary:'Gestion de sujet', detail:'Creation de sujet réussie'});  
    //   console.log(this.allServices);
       this.sujetForm.reset();
+      // this.toggleFormUpdate();
+    
     },(error)=>{
       if(error.status==400){
         //Bad Request (service deja existant)
@@ -227,7 +233,7 @@ showwForm: string = "Ajouter";
 
     toggleForm() {
       if (this.showForm == "Ajouter") {
-        this.showForm = "Enregister";
+        this.showForm = "Fermer";
       } else {
         this.showForm= "Ajouter"
       }
@@ -256,8 +262,7 @@ showwForm: string = "Ajouter";
       } else {
         this.showwForm= "Ajouter"
       }
-  
-    } 
+} 
     modifyService(id) {
       let req = {
         id: this.Service._id,
