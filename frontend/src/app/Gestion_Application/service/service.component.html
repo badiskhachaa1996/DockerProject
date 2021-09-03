@@ -1,13 +1,13 @@
-<div class="p-grid" >
+  <div class="p-grid" >
     
     <div class="xl:col-8 xl:col-offset-2 col-12" >
-        <p-card>
+  
             <div class="p-grid">
-                <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                
             
                 <form class="col-8 col-offset-2 " [formGroup]="serviceForm" 
                 style="display: none;" id="a_masquer" *ngIf="showForm"   >
-                    
+                <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     
                     <div class="p-grid" >
                         
@@ -18,9 +18,21 @@
                         </div>                           
                     </div>        
                 </form>
-          
-             
-                <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="aa_masquer">        
+                <div class=" xl:col-offset-12  " >
+                    <button pButton class="ui-button-raised ui-button-success" 
+                     (click)="masquer_div2('a_masquer'); toggleForm()"  id="btnAccept" [label]="showForm"></button>
+                   </div>
+    </div>
+    </div>
+    </div>  
+                
+       
+    <div class="p-grid" >
+    
+        <div class="xl:col-8 xl:col-offset-2 col-12" >
+      
+                <div class="p-grid">
+                 <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="aa_masquer">        
                     <h3 class="text-center">Modifier le service</h3>
                         <div class="p-grid">
                             <div class="mt-2 mb-2 col-12">       
@@ -34,12 +46,16 @@
                         </div>
                     </div>
                 </form>
-   
-                <div class=" xl:col-offset-10 sm:col-offset-4 " >
-                 <button pButton class="ui-button-raised ui-button-success" 
-                  (click)="masquer_div2('a_masquer'); toggleForm()"  id="btnAccept" [label]="showForm"></button>
+                </div> 
                 </div>
+                </div> 
+                
+                
 
+
+                <!-- tableau -->
+                 <div class="grid">
+                    <div class="col-10 col-offset-1">
                 <h3>Liste des services</h3>
 
                 <div class="col-12 card shadow-lg my-5 ">
@@ -67,20 +83,30 @@
                                 </td>
                              
                                 <td>
-                                    <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;" >
-                                    <i class="pi pi-pencil" (click)="edit(rowData);div3('aa_masquer');" id="btnAccept" ></i>
-                                    </div>
+                                    
+                                    <i class="pi pi-pencil" (click)="edit(rowData);div3('aa_masquer');" style="cursor: pointer;" id="btnAccept" ></i> 
+                                  
                                     <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
-                                </td>
+                                  </td>
 
                             </tr>
                         </ng-template>
                     </p-table>
                 </div>
-                <div *ngIf="currentService">
+                </div>
+                </div>
+          
+                
+                
+              
+                     <div class="p-grid" >
+                        
+                        <div class="xl:col-8 xl:col-offset-2 col-12" >
+                      
+                                <div class="p-grid" >
                     <form class="col-8 col-offset-2" [formGroup]="sujetForm" style="display: none;" id="2aa_masquer" 
-                    *ngIf="showwForm">
-
+                    *ngIf="showwForm" >
+                    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                         <h3 class="text-center">Ajouter un sujet</h3>
                         <div class="p-grid">
 
@@ -92,6 +118,20 @@
                         </div>
                       
                     </form>
+                    <div class=" xl:col-offset-12 " >
+                        <button pButton class="ui-button-raised ui-button-success"
+                             (click)="masquer_div('2aa_masquer'); toggleForm2()" id="btnAccept2" [label]="showwForm"></button>
+                             
+                    </div>
+
+                    </div> 
+                    </div>
+                    </div> 
+                    <div class="p-grid" >
+    
+                        <div class="xl:col-8 xl:col-offset-2 col-12" >
+                      
+                                <div class="p-grid">
                     <form class="col-8 col-offset-2" [formGroup]="sujetForm"style="display: none;" id="1aa_masquer">
                         <h3 class="text-center">Modifier le sujet</h3>
                             <div class="p-grid">
@@ -107,12 +147,16 @@
                             </div>
                         </div>
                     </form>
-                    <div class=" xl:col-offset-10 sm:col-offset-4 " >
-                        <button pButton class="ui-button-raised ui-button-success"
-                             (click)="masquer_div('2aa_masquer'); toggleForm2()" id="btnAccept2" [label]="showwForm"></button>
-                             
                     </div>
-                   
+                    </div>
+                    </div>
+                    
+                 
+                
+
+                <!-- Tableau -->
+                 <div class="grid">
+                    <div class="col-10 col-offset-1">
 
                     <h3>{{currentService.label}}: Liste des sujets </h3>
                     <div class="col-12 card shadow-lg my-5">
@@ -136,12 +180,11 @@
                                     </td>
                                   
                                     <td>
-                                        <div class=" xl:col-offset-6 sm:col-offset-4" style="cursor: pointer;">
-                                        <i class="pi pi-pencil" (click)="editSujet(rowData);div3('1aa_masquer')"></i>
-                                        </div>
-                                        <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
-                                    </td>
-    
+                                    
+                                        <i class="pi pi-pencil" (click)="editSujet(rowData);div3('1aa_masquer')" style="cursor: pointer;"></i> 
+                                        
+                                      <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
+                                     </td>    
                                 </tr>
                             </ng-template>
                         </p-table>
@@ -149,8 +192,6 @@
                 </div>
 
 
-            </div>
-        </p-card>
+            </div> 
+       
 
-    </div>
-</div>
