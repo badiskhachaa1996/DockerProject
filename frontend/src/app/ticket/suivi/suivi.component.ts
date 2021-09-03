@@ -38,7 +38,7 @@ export class SuiviComponent implements OnInit {
 
   selectedService;
   listServices;
-  listSujets: any = [];
+  listSujets: any[] = [];
 
 
 
@@ -113,16 +113,16 @@ export class SuiviComponent implements OnInit {
     })
 
     this.ServService.getAll().subscribe((data) => {
-      console.log(data);
       this.listServices = data;
       data.forEach(service => {
         this.listSujets[service._id] = [];
       });
       this.SujetService.getAll().subscribe((data) => {
         data.forEach(sujet => {
+          console.log(this.listSujets)
+          console.log(sujet)
           this.listSujets[sujet.service_id].push(sujet);
         });
-        console.log(this.listSujets)
       })
     }, (error) => {
       console.log(error)
