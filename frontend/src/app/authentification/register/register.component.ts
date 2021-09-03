@@ -53,7 +53,7 @@ export class RegisterComponent implements OnInit {
     console.log(user)
     this.AuthService.register(user).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
-      this.router.navigate(['/login'])
+      
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (Email déjà utilisé)
