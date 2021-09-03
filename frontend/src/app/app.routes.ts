@@ -21,8 +21,8 @@ const routes: Routes = [
     {path:'service',component:ServiceComponent},
     {path:"ticket/suivi",component:SuiviComponent},
     { path: 'home', component: HomeComponent},
-    { path: 'listuser', component: ListUserComponent},
-    { path: 'listuser/update',component: UpdateUserComponent},
+    { path: 'listUser', component: ListUserComponent},
+    { path: 'listUser/update',component: UpdateUserComponent},
 
 
     // { path: '**', redirectTo: '/' }

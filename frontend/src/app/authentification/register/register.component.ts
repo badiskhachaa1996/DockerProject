@@ -6,7 +6,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
-import {DropdownModule} from 'primeng/dropdown';
+import { DropdownModule } from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 @Component({
@@ -15,7 +15,7 @@ import { Service } from 'src/app/models/Service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  Services : any[];
+  Services: any[];
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
   User_role: String;
@@ -56,13 +56,15 @@ export class RegisterComponent implements OnInit {
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (Email déjà utilisé)
-        this.messageService.add({ severity: 'error', summary: 'Message d\'inscription', detail: 'Email déjà utilisé' });
+        this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Email déjà utilisé' });
         this.emailExists = true;
+      }else if(error.status == 500) {
+        //Bad Request (Champ non fourni)
+        this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Tous les champs ne sont pas remplis' });
       }
-      console.log(error)
     });
 
-  } 
+  }
 
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
@@ -73,34 +75,18 @@ export class RegisterComponent implements OnInit {
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
   get service_id() { return this.RegisterForm.get('service_id'); }
-  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService, private servService:ServService) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService) { }
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
-    this.Services=data;
-    
-    console.log(this.Services)
-    
+      this.Services = data;
     })
-   
-    console.log(this.Services)
-    if(localStorage.getItem("token")!=null){
-      jwt_decode : jwt_decode; 
-    console.log(jwt_decode(localStorage.getItem("token")));
-      let decodeToken:any =jwt_decode(localStorage.getItem("token"))
-     this.User_role = decodeToken.role;
-     console.log(this.User_role);
-     console.log("first log : "+  this.currentRoot);
-    
-     console.log("first log : "+  this.currentRoot);
-    }
-    if (this.User_role == "admin") {
-      this.IsAdmin = true
-      console.log(this.IsAdmin);
-    }
-    else { this.IsAdmin == false };
-    console.log("+" + this.IsAdmin);
 
+    if (localStorage.getItem("token") != null) {
+      let decodeToken: any = jwt_decode(localStorage.getItem("token"))
+      this.User_role = decodeToken.role;
+    }
+    this.IsAdmin=this.User_role == "admin"
   }
 
 }
