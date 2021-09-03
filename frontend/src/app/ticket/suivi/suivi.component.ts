@@ -143,9 +143,7 @@ export class SuiviComponent implements OnInit {
   }) 
   modify(data){
     this.Ticket = data;
-
-    document.getElementById("modifier").style.display="block";
-    
+    document.getElementById("d2").style.display="block";
     this.ServService.getAll().subscribe((data) => {
       this.listServices1 = data;
       data.forEach(service => {
@@ -210,7 +208,7 @@ export class SuiviComponent implements OnInit {
     this.ticketList.push(data); 
 
     this.messageService.add({severity:'success', summary:'Modification du Ticket', detail:'Modification réussie'});
-    document.getElementById("modifier").style.display="none";
+    document.getElementById("d2").style.display="none";
   },(error)=>{
     console.log(error)
   });
@@ -224,9 +222,16 @@ export class SuiviComponent implements OnInit {
     }
 
   }
- 
+   
+
+  
+
+
+
   addTicket(){
     //Enregistrement du Ticket
+     
+
     let req = {
       id:jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id:this.TicketForm.value.sujet._id,
@@ -255,6 +260,9 @@ export class SuiviComponent implements OnInit {
   }
 
   get description() { return this.TicketForm.get('description'); }
+
+
+ 
 
  }
 

@@ -1,55 +1,4 @@
-<div *ngIf="showForm=='Fermer'" id ="ajouter"> 
-    <div class="p-grid mt-2">
-        <div class="xl:col-8 xl:col-offset-2 col-12">
-            <p-card>
-                <div class="p-grid">
-                    <form class="col-8 col-offset-2" [formGroup]="TicketForm">
-                        <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
-                        <h3 class="text-center">Création de ticket</h3>
-                        <div class="grid">
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                Service:
-                                <select formControlName="service" class="form-control col-12" (change)="onChange()">
-                                    <option [ngValue]="null" disabled>Choissisez un service</option>
-                                    <option *ngFor="let service of filterService" [ngValue]="service">
-                                        {{ service.label }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                Sujet:
-                                <select [disabled]="selectedService" formControlName="sujet"
-                                    class="form-control col-12">
-                                    <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet
-                                    </option>
-                                    <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]"
-                                        [ngValue]="sujet">
-                                        {{ sujet.label }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <input type="text" formControlName="description" class="form-control col-12"
-                                    placeholder="Description" pInputText>
-                                <div *ngIf="description.invalid && (description.touched || description.dirty)">
-                                    <span class="error" *ngIf="description.errors?.required">*La description est
-                                        obligatoire.</span>
-                                </div>
-                            </div>
-                            <div class="col-offset-2 md:col-offset- sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </p-card>
-        </div>
-    </div>
-</div>
-
-
-<div class="p-grid mt-2" id="modifier" style="display: none;">
+<div class="p-grid mt-2" id="d2" style="display: none;">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -91,10 +40,65 @@
     </div>
   </div>
 
+
+
+<div *ngIf="showForm=='Fermer'" id="d1"> 
+    <div class="p-grid mt-2">
+        <div class="xl:col-8 xl:col-offset-2 col-12">
+            <p-card>
+                <div class="p-grid">
+                    <form class="col-8 col-offset-2" [formGroup]="TicketForm">
+                        <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                        <h3 class="text-center">Création de ticket</h3>
+                        <div class="grid">
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                Service:
+                                <select formControlName="service" class="form-control col-12" (change)="onChange()">
+                                    <option [ngValue]="null" disabled>Choissisez un service</option>
+                                    <option *ngFor="let service of filterService" [ngValue]="service">
+                                        {{ service.label }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                Sujet:
+                                <select [disabled]="selectedService" formControlName="sujet"
+                                    class="form-control col-12">
+                                    <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet
+                                    </option>
+                                    <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]"
+                                        [ngValue]="sujet">
+                                        {{ sujet.label }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <input type="text" formControlName="description" class="form-control col-12"
+                                    placeholder="Description" pInputText>
+                                <div *ngIf="description.invalid && (description.touched || description.dirty)">
+                                    <span class="error" *ngIf="description.errors?.required">*La description est
+                                        obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="col-offset-4 md:col-offset-5 sm:col-offset-5">
+                                <button pButton class="ui-button-raised ui-button-success"
+                                    [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</div>
+
+
+
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Liste de mes tickets</h3>
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
+        <button pButton type="button" [label]="showForm" id="togg1" style="float:right;"  id="ajout" (click)="toggleForm()"></button>
         <br>
         <div class=" card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
@@ -140,7 +144,7 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i style="margin-left: 2%;" class="pi pi-pencil" id="togg2" (click)="modify(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -173,3 +177,4 @@
         </div>
     </div>
 </div>
+
