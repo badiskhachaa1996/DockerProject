@@ -81,9 +81,9 @@
                             {{showWaitingTime(rowData)}}
                         </td>
                         <td>
-                            <i class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
-                            <i style="margin-left: 5%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
-                            <i style="margin-left: 5%;" *ngIf="isReponsable" class="pi pi-user-plus"
+                            <i  pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
+                            <i  pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i  pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;" *ngIf="isReponsable" class="pi pi-user-plus"
                                 (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
                                 [(ngModel)]="selectedUser" optionLabel="firstname" (onChange)="Affected()"
