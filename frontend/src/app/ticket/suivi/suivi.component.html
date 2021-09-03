@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
+                                    [disabled]="TicketForm.invalid" label="Enregistrer" (click)="addTicket()"></button>
                             </div>
                         </div>
                     </form>
@@ -143,6 +143,10 @@
                         </td>
                         <td>
                             <i  pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+<<<<<<< HEAD
+=======
+                            <i style="margin-left: 2%;" class="pi pi-pencil" id="togg2" (click)="modify(rowData)"></i>
+>>>>>>> 91b83776135120f6d66b9b045d3f295fe523b5f9
                         </td>
                     </tr>
                 </ng-template>
