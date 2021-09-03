@@ -253,14 +253,12 @@ showwForm: string = "Ajouter";
       }
   
     } 
-    modifyService() {
+    modifyService(id) {
       let req = {
-        _id: this.Service._id,
+        id: this.Service._id,
         label: this.serviceForm.value.label
       }
-      console.log(req)
       this.ServService.update(req).subscribe((data) => {
-        console.log(data)
         this.services.splice(this.services.indexOf(this.Service),1,data)
         this.serviceForm.reset();
         document.getElementById('btnAccept').style.display = 'block';  
@@ -272,7 +270,7 @@ showwForm: string = "Ajouter";
     }
     modifySujet(){
       let req = {
-        _id:this.Sujet._id,
+        id:this.Sujet._id,
         label:this.sujetForm.value.label
       }
      
