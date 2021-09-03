@@ -1,4 +1,4 @@
-<div *ngIf="showForm=='Fermer'" id ="ajouter"> 
+<div *ngIf="showFormAdd">
     <div class="p-grid mt-2">
         <div class="xl:col-8 xl:col-offset-2 col-12">
             <p-card>
@@ -29,14 +29,14 @@
                                 </select>
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <input type="text" formControlName="description" class="form-control col-12"
-                                    placeholder="Description" pInputText>
+                                <textarea type="text" formControlName="description" class="form-control col-12"
+                                    placeholder="Description" pInputTextarea></textarea>
                                 <div *ngIf="description.invalid && (description.touched || description.dirty)">
                                     <span class="error" *ngIf="description.errors?.required">*La description est
                                         obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="col-offset-2 md:col-offset- sm:col-offset-4">
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
                                     [disabled]="TicketForm.invalid" label="Ajouter" (click)="addTicket()"></button>
                             </div>
@@ -49,58 +49,60 @@
 </div>
 
 
-<div class="p-grid mt-2" id="modifier" style="display: none;">
+<div *ngIf="showFormUpdate" class="p-grid mt-2">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm1">
-                  <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Modification d'un ticket</h3>
-                        <div class="grid">
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                Service
-                                <select formControlName="service" class="form-control col-12" (change)="onChange2()">
-                                    <option [ngValue]="null" disabled>Choissisez un service</option>
-                                    <option *ngFor="let service of listServices1" [ngValue]="service">
-                                        {{ service.label }}
-                                       </option>
-                                </select>
-                            </div>
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                Sujet:
-                                <select [disabled]="!TicketForm1.value.service" formControlName="sujet" class="form-control col-12" >
-                                    <option [ngValue]="null" disabled>Choissisez un sujet</option>
-                                    <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]" [ngValue]="sujet">
-                                        {{ sujet.label }}
-                                       </option>
-                                </select>
-                            </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <input type="text" formControlName="description" class="form-control col-12" placeholder="Description" pInputText>
-                                <div *ngIf="description.invalid && (description.touched || description.dirty)">
-                                    <span class="error" *ngIf="description.errors?.required">*La description est obligatoire.</span>
-                                </div>
-                            </div>
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm1.invalid" [routerLink]="['/ticket/suivi']" label="Enregistrer" (click)="modifyTicket()"></button>
+                    <div class="grid">
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            Service
+                            <select formControlName="service" class="form-control col-12" (change)="onChange2()">
+                                <option [ngValue]="null" disabled>Choissisez un service</option>
+                                <option *ngFor="let service of listServices1" [ngValue]="service">
+                                    {{ service.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            Sujet:
+                            <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
+                                class="form-control col-12">
+                                <option [ngValue]="null" disabled>Choissisez un sujet</option>
+                                <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
+                                    [ngValue]="sujet">
+                                    {{ sujet.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <textarea pInputTextarea type="text" formControlName="description"
+                                class="form-control col-12" placeholder="Description"></textarea>
+                            <div *ngIf="description.invalid && (description.touched || description.dirty)">
+                                <span class="error" *ngIf="description.errors?.required">*La description est
+                                    obligatoire.</span>
                             </div>
                         </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm1.invalid"
+                                [routerLink]="['/ticket/suivi']" label="Enregistrer" (click)="modifyTicket()"></button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </p-card>
     </div>
-  </div>
+</div>
 
 <div class="grid">
     <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
-        <br>
-        <div class=" card shadow-lg my-5">
-            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
-                [showCurrentPageReport]="false"
-                currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
-                [rowsPerPageOptions]="[5,10,20]"  dataKey="_id">
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
+            [paginator]="true" [pageLinks]="5" dataKey="_id">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
@@ -127,9 +129,9 @@
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
-                       
+
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
                         </td>
@@ -147,28 +149,29 @@
 
 
 
-                <ng-template pTemplate="rowexpansion"  let-rowData>
-                        <tr>
-                            <td colspan="5">
-                                <p-fieldset legend="Informations sur le Ticket"
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr>
+                        <td colspan="5">
+                            <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    
-                                    <div class="ui-g-12 ui-md-12">
-                                        <div class="ui-g-5 ui-md-5"><b style="text-align:left !important;" >Date d'ajout: </b> </div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" >{{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Date
+                                                d'ajout:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12">
-                                        <div class="ui-g-5 ui-md-5"> <b style="text-align:left !important;" >Description: </b></div> <div class="ui-g-7 ui-md-7" style="text-align:left !important;" > {{rowData.description}} </div>
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Description:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.description}} </div>
                                     </div>
-                                    
                                 </div>
                             </p-fieldset>
-
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                 </ng-template>
-
-
             </p-table>
         </div>
     </div>
