@@ -5,6 +5,6 @@
     box-shadow: 0 0 5px 1px rgba(255, 0, 0, 0.2) inset !important;
 }
 
-body html{
+html{
     overflow-x: hidden;
 }
