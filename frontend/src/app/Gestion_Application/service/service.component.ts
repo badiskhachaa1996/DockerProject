@@ -9,7 +9,6 @@ import { Sujet } from 'src/app/models/Sujet';
 
 import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
-import { Test } from 'src/app/test';
 
 @Component({
   selector: 'app-service',
@@ -259,6 +258,7 @@ showwForm: string = "Ajouter";
         label: this.serviceForm.value.label
       }
       this.ServService.update(req).subscribe((data) => {
+        console.log(data)
         this.services.splice(this.services.indexOf(this.Service),1,data)
         this.serviceForm.reset();
         document.getElementById('btnAccept').style.display = 'block';  

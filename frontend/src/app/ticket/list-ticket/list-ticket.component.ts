@@ -12,7 +12,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
-import { Usermodel } from 'src/app/models/usermodel';
 
 @Component({
   selector: 'app-list-ticket',
@@ -20,19 +19,18 @@ import { Usermodel } from 'src/app/models/usermodel';
   styleUrls: ['./list-ticket.component.css']
 })
 export class ListTicketComponent implements OnInit {
- user : Usermodel
-
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
   listSujets: Sujet[] = [];
-  listSujetSelected = [];
+  listSujetSelected: any[] = [];
 
   queueList: Ticket[] = [];
   AccAffList: Ticket[] = [];
   allTickets: Ticket[] = [];
 
-  userList: User[] = []
+  userList: User[] = [];
+  userDic: any[] = [];
 
   draggedTicket: Ticket;
   selectedUser: User;
@@ -52,6 +50,7 @@ export class ListTicketComponent implements OnInit {
 
   //QueueToAccAff
   dragQueueToAccAff(event?) {
+    this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
     this.Accepted(this.draggedTicket)
   }
 
@@ -70,8 +69,6 @@ export class ListTicketComponent implements OnInit {
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.user=new Usermodel(2,"red","red")
-    console.log(this.user)
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
       this.router.navigate(["/login"])
@@ -90,9 +87,9 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
       if (!data.message) {
-        data.forEach(service => {
-          this.listSujetSelected[service._id] = [];
-          this.serviceList[service._id] = service.label;
+        data.forEach(element => {
+          this.listSujetSelected[element._id] = [];
+          this.serviceList[element._id] = element.label;
         });
         this.SujetService.getAll().subscribe((data) => {
           this.listSujets = data;
@@ -115,29 +112,32 @@ export class ListTicketComponent implements OnInit {
 
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
+        data.forEach(user => {
+          this.userDic[user._id] = null;
+          this.userDic[user._id] = user;
+        });
         this.userList = data;
       }
     })
 
-    /*Token service
 
-    this.AuthService.getAllByService(token['service']).subscribe((data) => {
+    /*TODO Token['service']
+    this.AuthService.getAllByService('61279209649616413cda8a3d').subscribe((data) => {
       if(!data.message){
         this.userList = data;
-      }
-    })
-
-    this.TicketService.getTicketsByService(token['service']).subscribe((data) => {
-      if(!data.message){
-        this.allTickets = data;
       }
     })*/
+
+    this.TicketService.getTicketsByService('61279209649616413cda8a3d').subscribe((data) => {
+      if (!data.message) {
+        this.allTickets = data.TicketList;
+      }
+    })
   }
 
   //QueueToAccAff
   QueueToAccAff(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
-    this.AccAffList.push(user)
     this.Accepted(user)
   }
 
@@ -160,7 +160,8 @@ export class ListTicketComponent implements OnInit {
       isAffected: false
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
-
+      this.AccAffList.push(res)
+      this.allTickets.push(res)
     }, (error) => {
       console.log(error)
     })
@@ -178,16 +179,15 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
-      if(this.selectedUser._id==jwt_decode(localStorage.getItem("token"))["id"]){
+      if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
+      this.allTickets.push(data)
       this.showDropDown = null;
     }, (error) => {
       console.error(error)
     })
   }
-
-
 
   TicketForm: FormGroup = new FormGroup({
     sujet: new FormControl('', Validators.required),//Ils doit forcément selectionner
@@ -225,9 +225,9 @@ export class ListTicketComponent implements OnInit {
       if(this.sujetList[data.sujet_id].service_id==token.service_id){
         this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
       }*/
-      this.queueList.splice(this.queueList.indexOf(this.isModify),1)
-      this.isModify=null;
-      
+      this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+      this.isModify = null;
+
     }, (error) => {
       console.log(error)
     });
@@ -239,5 +239,26 @@ export class ListTicketComponent implements OnInit {
     this.TicketForm.patchValue({
       sujet: this.listSujetSelected[this.TicketForm.value.service._id][0]
     })
+  }
+
+  showWaitingTime(rawData) {
+    let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
+    let days = calc.getUTCDate() - 1
+    let month = calc.getUTCMonth()
+    let Hours = calc.getUTCHours()
+    let minutes = calc.getUTCMinutes()
+    if (days == 0 && month == 0) {
+      return Hours.toString() + " H " + minutes + " M"
+    }
+    return Hours.toString() + " H, " + minutes + " M" + days + " Jr"
+  }
+
+  showWorkingTime(rawData) {
+    let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
+    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " Jr" : " ";
+    let month = (calc.getUTCMonth() > 0) ? (" et " + calc.getUTCMonth() + " mois") : ""
+    let Hours = calc.getUTCHours();
+    let minutes = calc.getUTCMinutes();
+    return Hours.toString() + " H, " + minutes + " M " + days;
   }
 }

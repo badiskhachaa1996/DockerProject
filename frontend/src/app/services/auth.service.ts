@@ -23,7 +23,7 @@ export class AuthService {
     let registreUrl=this.apiUrl+"user/registre";
     return this.http.post<any>(registreUrl,user,httpOptions);
   }*/
-  register(user: User): Observable<any> {
+  register(user: User) {
     let API_URL = this.apiUrl+"user/registre";
     return this.http.post(API_URL, user)
       .pipe(
