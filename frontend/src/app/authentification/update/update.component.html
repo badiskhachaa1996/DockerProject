@@ -25,8 +25,8 @@
                              
                                 <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
                                     <span class="error" *ngIf="email.errors?.required">*L'adresse mail est obligatoire.</span>
-                                    <span class="error" *ngIf="email.errors?.pattern">*L'email n'est pas correct.</span>
-                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span>
+                                    <span class="error" *ngIf="email.errors?.pattern">*L'adresse email n'est pas correct.</span>
+                                    <span class="error" *ngIf="emailExists">*L'adresse email est déjà utilisé.</span>
                                     
                                 </div>
                             </div>
