@@ -32,13 +32,13 @@ export class SuiviComponent implements OnInit {
 
   first = 0;
   rows = 10;
-
+  showForm: string = "Ajouter";
   showFormAdd: boolean = false;
   showFormUpdate: boolean = false;
 
   selectedService;
   listServices;
-  listSujets: any = [];
+  listSujets: any[] = [];
 
 
 
@@ -113,16 +113,16 @@ export class SuiviComponent implements OnInit {
     })
 
     this.ServService.getAll().subscribe((data) => {
-      console.log(data);
       this.listServices = data;
       data.forEach(service => {
         this.listSujets[service._id] = [];
       });
       this.SujetService.getAll().subscribe((data) => {
         data.forEach(sujet => {
+          console.log(this.listSujets)
+          console.log(sujet)
           this.listSujets[sujet.service_id].push(sujet);
         });
-        console.log(this.listSujets)
       })
     }, (error) => {
       console.log(error)
@@ -219,11 +219,16 @@ export class SuiviComponent implements OnInit {
   toggleFormAdd() {
     this.showFormAdd = !this.showFormAdd
     this.showFormUpdate = false;
+    this.showForm = "Fermer"
+
+
   }
 
   toggleFormUpdate() {
     this.showFormUpdate = !this.showFormUpdate
     this.showFormAdd = false
+    this.showForm = "Fermer"
+
   }
    
 
@@ -243,7 +248,12 @@ export class SuiviComponent implements OnInit {
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Création réussie' });
-      this.ticketList.push(data.doc)
+     
+      try{
+        this.ticketList.push(data.doc)
+      }catch (e){
+        this.ticketList = [data.doc]
+      }
       this.toggleFormAdd()
 
     }, (error) => {

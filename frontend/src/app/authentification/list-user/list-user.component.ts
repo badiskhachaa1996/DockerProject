@@ -20,7 +20,7 @@ import { AccordionModule } from 'primeng/accordion';
 })
 export class ListUserComponent implements OnInit {
 
-
+  userupdate:any=[]; 
   items: MenuItem[];
   tabUser = [];
 
@@ -37,6 +37,7 @@ export class ListUserComponent implements OnInit {
   constructor(private AuthService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+   
     this.AuthService.getAll().subscribe((data) => {
       this.tabUser = data;
       this.totalRecords = this.tabUser.length;
@@ -80,14 +81,19 @@ export class ListUserComponent implements OnInit {
 
   }
 
-  RegisterForm: FormGroup = new FormGroup({
-    lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
-    firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
-    adresse: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)])
+  RegisterForm: FormGroup= new FormGroup({
+    lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
+    email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
+    adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
+    password:new FormControl('',[Validators.required,Validators.minLength(5)]),
+    verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
+    role:new FormControl(this.userupdate.role,[Validators.required]),
+    service_id:new FormControl(this.userupdate.service_id,[Validators.required])
+    
+    
+
   })
 
 
@@ -112,7 +118,7 @@ export class ListUserComponent implements OnInit {
       }
     }, 1000);
   }
-  modify(rowData) {
+  modify(rowData: User) {
     this.selectedUser = rowData;
     this.toggleType()
   
@@ -122,12 +128,12 @@ export class ListUserComponent implements OnInit {
       + "" +
       this.formtype)
 
-    localStorage.setItem('updateUser', this.selectedUser._id)
+    localStorage.setItem('updateUser', JSON.stringify({rowData}))
 
     console.log(localStorage.getItem('updateUser'));
     history.state;
     
-    this.router.navigateByUrl("/listuser/update",{state:rowData})
+    //this.router.navigateByUrl("/listUser/update",{state:rowData})
   }
 }
 

@@ -10,6 +10,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
+import { SelectableRow } from 'primeng/table';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
@@ -24,7 +25,8 @@ export class UpdateUserComponent implements OnInit {
   emailExists=false;
   Roles = environment.role;
   servicesRoles =environment.service_id;
-  userupdate:any = history.state;
+  userupdate:any=[]; 
+ 
   RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
@@ -42,7 +44,7 @@ export class UpdateUserComponent implements OnInit {
 
 
   UpdateUser(){
-   
+    console.log('to'+this.userupdate);
     let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
@@ -73,21 +75,24 @@ export class UpdateUserComponent implements OnInit {
 
   ngOnInit(): void {
 
+console.log(this.userupdate +"   : console//this.userupdate")
     this.servService.getAll().subscribe((data) => {
      this.Services=data;
       })
-      this.AuthService.getById(localStorage.getItem('UpdateUser')) .subscribe((data)=>{this.userupdate=data})
-  
    
+   this.AuthService.getById(localStorage.getItem('updateUser')).subscribe((data)=>{
+     this.userupdate=data._id
+   })
+  
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
-    console.log(jwt_decode(localStorage.getItem("token")));
+    console.log("decode token :  "+jwt_decode(localStorage.getItem("token")));
       let decodeToken:any =jwt_decode(localStorage.getItem("token"))
      this.User_role = decodeToken.role;
-     console.log(this.User_role);
+     console.log("userROle : " + this.User_role);
      console.log("first log : "+  this.currentRoot);
     
-     console.log("first log : "+  this.currentRoot);
+     
     }
     if(this.User_role =="admin"){
       this.IsAdmin = true

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   <div class="p-grid" >
     
     <div class="xl:col-8 xl:col-offset-2 col-12" >
@@ -30,21 +31,45 @@
     
         <div class="xl:col-8 xl:col-offset-2 col-12" >
       
+=======
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddService">
+        <div class="p-grid">
+            <form class="col-8 col-offset-2" [formGroup]="serviceForm">
+                <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+                <h3 class="text-center">Ajouter un service</h3>
+>>>>>>> 8e37aa2f0bc455543f53c902d9f2bcb1277e6d13
                 <div class="p-grid">
-                 <form class="col-8 col-offset-2" [formGroup]="serviceForm" style="display: none;" id="aa_masquer">        
+                    <div class="mt-2 mb-2 col-12">
+                        <input type="text" formControlName="label" class="form-control col-12"
+                            placeholder="Nom du service" pInputText>
+                    </div>
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid"
+                            label="Enregistrer" (click)="saveService()"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateService">
+            <div class="p-grid">
+                <form class="col-8 col-offset-2" [formGroup]="serviceForm">
+                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modifier le service</h3>
-                        <div class="p-grid">
-                            <div class="mt-2 mb-2 col-12">       
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-12">
                             <input type="text" formControlName="label" name="label" class="form-control col-12"
-                            placeholder="Le nom du service"pInputText/>
-                            </div>        
+                                placeholder="Le nom du service" pInputText />
+                        </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid" 
-                            label="Enregistrer" 
-                            (click)="modifyService();div3('aa_masquer')"></button>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="serviceForm.invalid"
+                                label="Enregistrer" (click)="modifyService();"></button>
                         </div>
                     </div>
                 </form>
+<<<<<<< HEAD
                 </div> 
                 </div>
                 </div> 
@@ -151,9 +176,80 @@
                             </div>
                         </div>
                     </form>
+=======
+            </div>
+        </div>
+    </div>
+    <!-- tableau -->
+    <div class="grid">
+        <div class="col-10 col-offset-1">
+            <button *ngIf="!showFormAddService" pButton class="ui-button-raised ui-button-success"
+                (click)="toggleFormServiceAdd()" style="float:right;" label="Ajouter"></button>
+            <h3>Liste des services</h3>
+            <div class="col-12 card shadow-lg my-5 ">
+                <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
+                    [(selection)]="currentService" (onRowSelect)="onRowSelect($event)"
+                    (onRowUnselect)="onRowUnselect($event)" [rows]="4" [paginator]="true" [pageLinks]="5"
+                    [responsive]="true">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th class="col-8 col-offset-4">
+                                Service
+                            </th>
+                            <th class="col-4 col-offset-2">
+                                Action
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                            <td *ngFor="let col of columns">
+                                {{rowData.label}}
+                            </td>
+                            <td>
+                                <i class="pi pi-pencil" (click)="editService(rowData);toggleFormServiceUpdate();"></i>
+                                <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="p-grid" *ngIf="currentService">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <div class="p-grid">
+            <form class="col-8 col-offset-2" [formGroup]="sujetForm" *ngIf="showFormAddSujet">
+                <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+                <h3 class="text-center">Ajouter un sujet</h3>
+                <div class="p-grid">
+                    <div class="mt-2 mb-2 col-12">
+                        <input type="text" formControlName="label" class="form-control col-12"
+                            placeholder="Le nom du sujet" pInputText>
+>>>>>>> 8e37aa2f0bc455543f53c902d9f2bcb1277e6d13
                     </div>
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid"
+                            label="Enregistrer" (click)="saveSujet();"></button>
                     </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="p-grid" *ngIf="currentService">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <div class="p-grid">
+            <form class="col-8 col-offset-2" [formGroup]="sujetForm" *ngIf="showFormUpdateSujet">
+                <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+                <h3 class="text-center">Modifier le sujet</h3>
+                <div class="p-grid">
+                    <div class="mt-2 mb-2 col-12">
+                        <input type="text" formControlName="label" name="label" class="form-control col-12"
+                            placeholder="Le nom du service" pInputText />
                     </div>
+<<<<<<< HEAD
                     
                  
                 
@@ -193,10 +289,48 @@
                                 </tr>
                             </ng-template>
                         </p-table>
+=======
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid"
+                            label="Enregistrer" (click)="modifySujet();"></button>
+>>>>>>> 8e37aa2f0bc455543f53c902d9f2bcb1277e6d13
                     </div>
                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Tableau -->
+<div class="grid" *ngIf="currentService">
+    <div class="col-10 col-offset-1">
+        <button pButton class="ui-button-raised ui-button-success" (click)="toggleFormSujetAdd()" style="float:right;"
+            label="Ajouter"></button>
+        <h3>{{currentService.label}}: Liste des sujets </h3>
+        <div class="col-12 card shadow-lg my-5">
+            <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow" [rows]="4" [paginator]="true"
+                [pageLinks]="5" [responsive]="true">
+                <ng-template pTemplate="header" let-columns>
+                    <th class="col-8 col-offset-4">
+                        Sujet
+                    </th>
+                    <th class="col-4 col-offset-2">
+                        Action
+                    </th>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                        <td *ngFor="let col of columns">
+                            {{rowData.label}}
+                        </td>
+                        <td>
+                            <i class="pi pi-pencil" (click)="editSujet(rowData);toggleFormSujetUpdate()"
+                                style="cursor: pointer;"></i>
 
-
-            </div> 
-       
-
+                            <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
