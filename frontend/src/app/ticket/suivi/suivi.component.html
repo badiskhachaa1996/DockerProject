@@ -98,7 +98,9 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button  pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
+        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
+        <button *ngIf="showFormAdd" pButton type="button" label="fermer" style="float:right;" (click)="toggleFormAdd()"></button>
+
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
