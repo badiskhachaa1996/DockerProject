@@ -25,8 +25,8 @@ const routes: Routes = [
     {path:"service/edit",component:EditComponent},
     {path:"sujet/edit",component:EditSujetComponent},
     { path: 'home', component: HomeComponent},
-    { path: 'listuser', component: ListUserComponent},
-    { path: 'listuser/update',component: UpdateUserComponent},
+    { path: 'listUser', component: ListUserComponent},
+    { path: 'listUser/update',component: UpdateUserComponent},
 
 
     // { path: '**', redirectTo: '/' }

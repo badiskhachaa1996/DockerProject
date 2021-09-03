@@ -236,8 +236,9 @@ export class SuiviComponent implements OnInit {
     }
     this.TicketService.create(req).subscribe((data)=>{
       
-      this.messageService.add({severity:'success', summary:'Création du Ticket', detail:'Création réussie'});
-      this.router.navigate(['/'])
+      this.messageService.add({severity:'success', summary:'Création du ticket', detail:'Création réussie'});
+      this.ticketList.push(data)
+
     },(error)=>{
       console.log(error)
     });
