@@ -190,7 +190,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   TicketForm: FormGroup = new FormGroup({
-    sujet: new FormControl('', Validators.required),//Ils doit forcément selectionner
+    sujet: new FormControl('', Validators.required),//Il doit forcément selectionner
     service: new FormControl('', Validators.required),
   })
 
@@ -249,14 +249,16 @@ export class ListTicketComponent implements OnInit {
     if (days == 0) {
       return Hours.toString() + " h " + minutes + " min"
     }
-    return Hours.toString() + " h " + minutes + " min" + days + " j"
+    return days.toString() + Hours + " h " + minutes + " min "
+
   }
 
   showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
-    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j" : " ";
+    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j " : " ";
     let Hours = calc.getUTCHours();
     let minutes = calc.getUTCMinutes();
-    return Hours.toString() + " h " + minutes + " min " + days;
+
+    return days.toString() + Hours + " h " + minutes + " min "
   }
 }
