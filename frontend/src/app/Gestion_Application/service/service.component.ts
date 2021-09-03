@@ -43,7 +43,7 @@ rows = 10;
 currentSujet = null;
 showForm: string = "Ajouter";
 showwForm: string = "Ajouter"; 
-// showFormUpdate: boolean = false;
+
 
   saveService(){   
     let service = {
@@ -68,10 +68,7 @@ showwForm: string = "Ajouter";
       console.log(error)
     });
   }
-  // toggleFormUpdate() {
-  //   this.showFormUpdate = !this.showFormUpdate
-  //   this.showForm = false
-  // }
+  
   saveSujet(){    
     let sujet = new Sujet(this.sujetForm.value.label,this.currentService._id)
  
