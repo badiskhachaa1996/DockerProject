@@ -128,7 +128,7 @@ export class ListUserComponent implements OnInit {
       + "" +
       this.formtype)
 
-    localStorage.setItem('updateUser', JSON.stringify({rowData}))
+    localStorage.setItem('updateUser', JSON.stringify(rowData))
 
     console.log(localStorage.getItem('updateUser'));
     history.state;

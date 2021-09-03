@@ -24,8 +24,9 @@ export class UpdateUserComponent implements OnInit {
   id_role:any;
   emailExists=false;
   Roles = environment.role;
-  servicesRoles =environment.service_id;
+  
   userupdate:any=[]; 
+  
  
   RegisterForm: FormGroup= new FormGroup({
     lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
@@ -45,7 +46,7 @@ export class UpdateUserComponent implements OnInit {
 
   UpdateUser(){
     console.log('to'+this.userupdate);
-    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.role.value)
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
       
@@ -75,22 +76,23 @@ export class UpdateUserComponent implements OnInit {
 
   ngOnInit(): void {
 
-console.log(this.userupdate +"   : console//this.userupdate")
     this.servService.getAll().subscribe((data) => {
      this.Services=data;
       })
-   
-   this.AuthService.getById(localStorage.getItem('updateUser')).subscribe((data)=>{
-     this.userupdate=data._id
-   })
+  let idu :any= JSON.parse(localStorage.getItem('updateUser'))._id 
+  console.log("JE SAIS PAS ")
+  console.log(idu)
+   this.AuthService.getById(idu).subscribe((data)=>{
+     console.log(jwt_decode(data['userToken'])['userFromDb'])
+
+     this.userupdate= jwt_decode(data['userToken'])['userFromDb']
+   },(err)=>console.log(err))
   
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
-    console.log("decode token :  "+jwt_decode(localStorage.getItem("token")));
+   
       let decodeToken:any =jwt_decode(localStorage.getItem("token"))
      this.User_role = decodeToken.role;
-     console.log("userROle : " + this.User_role);
-     console.log("first log : "+  this.currentRoot);
     
      
     }
