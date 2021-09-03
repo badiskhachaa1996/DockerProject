@@ -25,27 +25,23 @@
                 [rowsPerPageOptions]="[5,10,20]" > 
                
                 <ng-template pTemplate="header" let-columns>
-                    <tr>
+              
                         <th *ngFor="let col of columns" [pSortableColumn]="col.field" >
                             {{col.header}}
                             <span>
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </span>
                         </th>
-                    </tr>
+                   
                 </ng-template>
                 
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData">
-                        <td *ngFor="let col of columns">
-
-                           
-                           <span style="font-size:120%">{{rowData[col.field]}}</span>
-                           <i class="pi pi-user-edit" (click)="modify(rowData) "
-                            *ngIf='col.field=="action"'></i>
+                    <tr [pSelectableRow]="rowData"  class="bodytab">
+                        <td *ngFor="let col of columns"> 
+                           {{rowData[col.field]}}
+                           <i class="pi pi-user-edit" (click)="modify(rowData) " *ngIf='col.field=="action"'></i>
                         </td>
-                   
-
+                
                     </tr>
                 </ng-template>
             </p-table>
