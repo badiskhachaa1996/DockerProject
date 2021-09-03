@@ -13,7 +13,7 @@ app.post("/registre", (req, res) => {
         email: data.email,
         password: data.password,
         role : data.role,
-        service_id : data.service_id
+        service_id : data.service_id || "61279209649616413cda8a3d"
     })
     user.save().then((userFromDb) => {
         res.status(200).send({ message: "registration done" });

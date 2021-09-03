@@ -9,7 +9,6 @@ import { Sujet } from 'src/app/models/Sujet';
 
 import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
-import { Test } from 'src/app/test';
 
 @Component({
   selector: 'app-service',
@@ -253,12 +252,11 @@ showwForm: string = "Ajouter";
       }
   
     } 
-    modifyService() {
+    modifyService(id) {
       let req = {
-        _id: this.Service._id,
+        id: this.Service._id,
         label: this.serviceForm.value.label
       }
-      console.log(req)
       this.ServService.update(req).subscribe((data) => {
         console.log(data)
         this.services.splice(this.services.indexOf(this.Service),1,data)
@@ -272,7 +270,7 @@ showwForm: string = "Ajouter";
     }
     modifySujet(){
       let req = {
-        _id:this.Sujet._id,
+        id:this.Sujet._id,
         label:this.sujetForm.value.label
       }
      
