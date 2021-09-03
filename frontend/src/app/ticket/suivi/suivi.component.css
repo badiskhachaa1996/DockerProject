@@ -20,9 +20,6 @@ ng-template{
   .logo {
     max-width: 50%;
   }
-  i.pi:hover{
-    cursor: pointer;
-  }
 .bodytab {
  padding-left: 20%;
  text-align: center;

@@ -244,21 +244,19 @@ export class ListTicketComponent implements OnInit {
   showWaitingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
     let days = calc.getUTCDate() - 1
-    let month = calc.getUTCMonth()
     let Hours = calc.getUTCHours()
     let minutes = calc.getUTCMinutes()
-    if (days == 0 && month == 0) {
-      return Hours.toString() + " H " + minutes + " M"
+    if (days == 0) {
+      return Hours.toString() + " h " + minutes + " min"
     }
-    return Hours.toString() + " H, " + minutes + " M" + days + " Jr"
+    return Hours.toString() + " h " + minutes + " min" + days + " j"
   }
 
   showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
-    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " Jr" : " ";
-    let month = (calc.getUTCMonth() > 0) ? (" et " + calc.getUTCMonth() + " mois") : ""
+    let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j" : " ";
     let Hours = calc.getUTCHours();
     let minutes = calc.getUTCMinutes();
-    return Hours.toString() + " H, " + minutes + " M " + days;
+    return Hours.toString() + " h " + minutes + " min " + days;
   }
 }

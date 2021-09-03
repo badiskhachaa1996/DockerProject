@@ -19,14 +19,10 @@ const routes: Routes = [
     {path:'login',component:LoginComponent},
     {path:'register',component:RegisterComponent},
     {path:'service',component:ServiceComponent},
-    {path:"ticket/create",component:CreateComponent},
     {path:"ticket/suivi",component:SuiviComponent},
-    {path:"ticket/update",component:UpdateComponent},
-    {path:"service/edit",component:EditComponent},
-    {path:"sujet/edit",component:EditSujetComponent},
     { path: 'home', component: HomeComponent},
-    { path: 'listuser', component: ListUserComponent},
-    { path: 'listuser/update',component: UpdateUserComponent},
+    { path: 'listUser', component: ListUserComponent},
+    { path: 'listUser/update',component: UpdateUserComponent},
 
 
     // { path: '**', redirectTo: '/' }
