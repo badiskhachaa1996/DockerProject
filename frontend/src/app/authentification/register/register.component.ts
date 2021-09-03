@@ -48,11 +48,12 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.role.value || "user",
       null,
       this.RegisterForm.value.adresse,
+      this.RegisterForm.value.service_id
     )
     console.log(user)
     this.AuthService.register(user).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
-      this.router.navigate(['/login'])
+      
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (Email déjà utilisé)
@@ -73,7 +74,7 @@ export class RegisterComponent implements OnInit {
   get adresse() { return this.RegisterForm.get('adresse'); }
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
-  get role() { return this.RegisterForm.get('role'); }
+  get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService) { }
 
