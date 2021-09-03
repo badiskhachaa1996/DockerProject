@@ -54,7 +54,7 @@
                  <div class="grid" >
                     <div class="col-10 col-offset-1">
                         <button pButton class="ui-button-raised ui-button-success" 
-                        (click)="masquer_div2('a_masquer'); toggleForm()" style="float:right;"  id="btnAccept" [label]="showForm"></button>
+                        (click)="masquer_div2('a_masquer'); toggleForm()"  style="float: right;"id="btnAccept" [label]="showForm"></button>
                       
                 <h3>Liste des services</h3>
 
@@ -95,7 +95,7 @@
                 </div>
                 </div>
                 </div>
-                </div>
+  </div>
           
                 
                 
@@ -119,7 +119,11 @@
                         </div>
                       
                     </form>
-                   
+                    <div class=" xl:col-offset-12 " >
+                        <button pButton class="ui-button-raised ui-button-success"
+                             (click)="masquer_div('2aa_masquer'); toggleForm2()" id="btnAccept2" [label]="showwForm"></button>
+                             
+                    </div>
 
                     </div> 
                     </div>
@@ -155,11 +159,7 @@
                 <!-- Tableau -->
                  <div class="grid" *ngIf="currentService">
                     <div class="col-10 col-offset-1">
-                      
-                            <button pButton class="ui-button-raised ui-button-success"
-                                 (click)="masquer_div('2aa_masquer'); toggleForm2()" style="float:right;" id="btnAccept2" [label]="showwForm"></button>
-                                 
-                  
+
                     <h3>{{currentService.label}}: Liste des sujets </h3>
                     <div class="col-12 card shadow-lg my-5">
                         <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow"  [rows]="4"  
