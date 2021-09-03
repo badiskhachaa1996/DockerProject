@@ -1,4 +1,4 @@
-<div *ngIf="showForm=='Fermer'" id="ajouter">
+<div *ngIf="showFormAdd">
     <div class="p-grid mt-2">
         <div class="xl:col-8 xl:col-offset-2 col-12">
             <p-card>
@@ -49,7 +49,7 @@
 </div>
 
 
-<div class="p-grid mt-2" id="modifier" style="display: none;">
+<div *ngIf="showFormUpdate" class="p-grid mt-2">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -98,13 +98,11 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"></button>
+        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5"
-                [showCurrentPageReport]="false"
-                currentPageReportTemplate="Affiche {first} à {last} de {totalRecords} résultats"
-                [rowsPerPageOptions]="[5,10,20]" dataKey="_id">
+            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
+            [paginator]="true" [pageLinks]="5" dataKey="_id">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
