@@ -98,7 +98,7 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
+        <button  pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
@@ -142,11 +142,7 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-<<<<<<< HEAD
                             <i  pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
-=======
-                            <i style="margin-left: 2%;" class="pi pi-pencil" id="togg2" (click)="modify(rowData)"></i>
->>>>>>> 55a5acd0d1f3cf98cff456f3e915378a504f1354
                         </td>
                     </tr>
                 </ng-template>
