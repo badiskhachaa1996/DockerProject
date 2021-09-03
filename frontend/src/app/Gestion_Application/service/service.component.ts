@@ -29,17 +29,20 @@ export class ServiceComponent implements OnInit {
 
   Service: Service;
   Sujet: Sujet;
-  firstMessage: Message;
-  emailExists: boolean;
+
   services: any = [];
   sujets: any = [];
+
   currentIndex = -1;
-  cols: any[];
+  first = 0;
+  rows = 10;
+
   sujetList = [];
   sujetShow = [];
   serviceList = [];
-  first = 0;
-  rows = 10;
+
+  cols: any[];
+
   currentSujet = null;
 
   showFormAddService: boolean = false;
@@ -60,13 +63,12 @@ export class ServiceComponent implements OnInit {
       } catch (e) {
         this.services = [data]
       }
-
+      this.showFormAddService=false;
       this.serviceForm.reset();
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (service deja existant)
         // this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom de service est deja existant'});
-        this.emailExists = true;
       }
       console.log(error)
     });
@@ -79,17 +81,17 @@ export class ServiceComponent implements OnInit {
       this.sujetShow.push(data)
       this.sujetList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Creation de sujet réussie' });
-      //   console.log(this.allServices);
+      this.showFormAddSujet=false;
       this.sujetForm.reset();
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (service deja existant)
         //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
-        this.emailExists = true;
       }
       console.log(error)
     });
   }
+
   Services() {
     this.ServService.getAll()
       .subscribe(
@@ -100,6 +102,7 @@ export class ServiceComponent implements OnInit {
           console.log(error);
         });
   }
+
   Sujets() {
     this.SujetService.getAll()
       .subscribe(
@@ -136,10 +139,12 @@ export class ServiceComponent implements OnInit {
     this.Sujet = data;
   }
 
-  edit(data) {
+  
+  editService(data) {
     this.serviceForm.patchValue({ label: data.label })
     this.Service = data;
   }
+
   onRowSelect($event) {
     this.sujetShow = []
     this.sujetList.forEach(sujet => {
@@ -181,12 +186,10 @@ export class ServiceComponent implements OnInit {
       label: this.serviceForm.value.label
     }
     this.ServService.update(req).subscribe((data) => {
-      console.log(data)
       this.services.splice(this.services.indexOf(this.Service), 1, data)
       this.serviceForm.reset();
-      document.getElementById('btnAccept').style.display = 'block';
+      this.showFormUpdateService=false;
       this.messageService.add({ severity: 'success', summary: 'Modification du Service', detail: 'Modification réussie' });
-      // this.router.navigate(['/service'])
     }, (error) => {
       console.log(error)
     });
@@ -199,10 +202,8 @@ export class ServiceComponent implements OnInit {
 
     this.SujetService.update(req).subscribe((data) => {
       this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet), 1, data)
+      this.showFormUpdateSujet=false;
       this.sujetForm.reset();
-      document.getElementById('btnAccept2').style.display = 'block';
-      // console.log(data)
-      // this.router.navigate(['/service'])
     }, (error) => {
       console.log(error)
     });
