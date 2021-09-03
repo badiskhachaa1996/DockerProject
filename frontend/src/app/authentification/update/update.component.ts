@@ -8,16 +8,19 @@ import jwt_decode from "jwt-decode";
 import {DropdownModule} from 'primeng/dropdown';
 import { AuthService } from 'src/app/services/auth.service';
 import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface';
+import { ServService } from 'src/app/services/service.service';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
   styleUrls: ['./update.component.css']
 })
 export class UpdateUserComponent implements OnInit {
-
+  Services :Service[]
   currentRoot:String = this.router.url;
   IsAdmin : boolean=false;
   User_role:String ;
+  id_role:any;
   emailExists=false;
   Roles = environment.role;
   servicesRoles =environment.service_id;
@@ -30,7 +33,9 @@ export class UpdateUserComponent implements OnInit {
     adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl(this.userupdate.role,[Validators.required])
+    role:new FormControl(this.userupdate.role,[Validators.required]),
+    service_id:new FormControl(this.userupdate.service_id,[Validators.required])
+    
     
 
   })
@@ -41,6 +46,7 @@ export class UpdateUserComponent implements OnInit {
     let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
+      
       this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
    
     },(error)=>{
@@ -62,16 +68,17 @@ export class UpdateUserComponent implements OnInit {
   get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
-  
-  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService) { }
+  get service_id() { return this.RegisterForm.get('service_id'); }
+  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService,private servService:ServService) { }
 
   ngOnInit(): void {
-    this.userupdate = history.state;
-    if (!this.userupdate.id) {
-      console.log("zzz"+environment.service_id.values[1])
-     
-    }
-    console.log(this.userupdate._id)
+
+    this.servService.getAll().subscribe((data) => {
+     this.Services=data;
+      })
+      this.AuthService.getById(localStorage.getItem('UpdateUser')) .subscribe((data)=>{this.userupdate=data})
+  
+   
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
     console.log(jwt_decode(localStorage.getItem("token")));

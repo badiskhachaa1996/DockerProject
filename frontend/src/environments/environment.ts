@@ -20,26 +20,28 @@ export const environment = {
     },
 
     role : [
-      { id: 1, value: 'Agent Admission', valeur: 'Role_agent_admission' },
-      { id: 2, value: 'Responsable Admission', valeur: 'Role_responsable_Admission' },
-      { id: 3, value: 'Agent Commercial', valeur: 'Role_agent_commercial' },
-      { id: 4, value: 'Responsable Commercial', valeur: 'Role_responsable_commercial' },
-      { id: 5, value: "Agent finances", valeur: 'Role_agent_finance' },
-      { id: 6, value: 'Responsable finances', valeur: 'Role_responsable_finances' },
-      { id: 7, value: 'Administration', valeur: 'Role_admin' },
-      { id: 8, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires' },
-      { id: 9, value: 'Agent Pedagogie', valeur: 'Role_agent_pedagogie' },
-      { id: 10, value: 'Responsable Pedagogie', valeur: 'Role_responsable_Pedagogie' },
+      { id: 1, value: 'Agent Admission', valeur: 'Role_agent_admission' ,idservice:'1'},
+      { id: 2, value: 'Responsable Admission', valeur: 'Role_responsable_Admission',idservice:'1' },
+      { id: 3, value: 'Agent Commercial', valeur: 'Role_agent_commercial',idservice:'2' },
+      { id: 4, value: 'Responsable Commercial', valeur: 'Role_responsable_commercial',idservice:'2' },
+      { id: 5, value: "Agent finances", valeur: 'Role_agent_finance' ,idservice:'3'},
+      { id: 6, value: 'Responsable finances', valeur: 'Role_responsable_finances' ,idservice:'3'},
+      { id: 7, value: 'Administration', valeur: 'Role_admin' ,idservice:'4'},
+      { id: 8, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires',idservice:'4' },
+      { id: 9, value: 'Agent Pedagogie', valeur: 'Role_agent_pedagogie',idservice:'5' },
+      { id: 10, value: 'Responsable Pedagogie', valeur: 'Role_responsable_Pedagogie',idservice:'5' },
       { id: 11, value: 'admin', valeur: 'admin' }
       ],
 
  service_id : [
-  { role_id: 1, value: 'Service Admission', valeur: 'Role_agent_admission' },
-  { role_id: 2, value: 'Service Commercial', valeur: 'Role_agent_commercial' },
-  { role_id: 3, value: "Agent finances", valeur: 'Role_agent_finance' },
-  { role_id: 4, value: 'Administration', valeur: 'Role_admin' },
-  { role_id: 5, value: 'Apporteur d\'affaires', valeur: 'Role_apporteur_d_affaires' },
+  { id: 1, value: 'Service Admission', valeur: 'Role_agent_admission' },
+  { id: 2, value: 'Service Commercial', valeur: 'Role_agent_commercial' },
+  { id: 3, value: "Service finances", valeur: 'Role_agent_finance' },
+  { id: 4, value: 'Service Administration', valeur: 'Role_admin' },
+  { id: 5, value: 'Service Pedagogie', valeur: 'Pedagogie' },
  ],
+ 
+
 civilite: [
   { value: 'M', viewValue: 'M' },
   { value: 'Mme', viewValue: 'Mme' },

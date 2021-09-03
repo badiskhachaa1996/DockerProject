@@ -56,9 +56,15 @@
                                     <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
-                                <div *ngIf=IsAdmin class="mt-4   mb-2 col-lg-12 col-12" >
-                                    <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value"></p-dropdown>
-                                    </div>
+                                <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12" >
+                                    <span  style="margin-left: 15%;">
+                                         <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" ></p-dropdown>
+                                     </span>
+                                     
+                                     <span style="margin-left: 15%;"> 
+                                         <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" ></p-dropdown>
+                                  </span> 
+                                 </div>
                             </div>
                             
 
