@@ -1,23 +1,14 @@
-<<<<<<< HEAD
   <div class="p-grid" >
-=======
-<div class="p-grid">
->>>>>>> 87d79367fb1190337d9fbba77de9a95562c8f295
     
     <div class="xl:col-8 xl:col-offset-2 col-12" >
   
             <div class="p-grid">
-<<<<<<< HEAD
                 
             
                 <form class="col-8 col-offset-2 " [formGroup]="serviceForm" 
                 style="display: none;" id="a_masquer" *ngIf="showForm"   >
                 <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     
-=======
-                <form class="col-8 col-offset-2 " [formGroup]="serviceForm" 
-                style="display: none;" id="a_masquer" *ngIf="showForm">
->>>>>>> 87d79367fb1190337d9fbba77de9a95562c8f295
                     <div class="p-grid" >
                         <div class="mt-2 mb-2 col-12" id="form1" >
                             <h3 class="text-center" >Ajouter un service</h3>
@@ -62,7 +53,7 @@
 
 
                 <!-- tableau -->
-                 <div class="grid">
+                 <div class="grid" >
                     <div class="col-10 col-offset-1">
                 <h3>Liste des services</h3>
 
@@ -107,7 +98,7 @@
                 
                 
               
-                     <div class="p-grid" >
+                     <div class="p-grid" *ngIf="currentService">
                         
                         <div class="xl:col-8 xl:col-offset-2 col-12" >
                       
@@ -135,7 +126,8 @@
                     </div> 
                     </div>
                     </div> 
-                    <div class="p-grid" >
+
+                    <div class="p-grid" *ngIf="currentService" >
     
                         <div class="xl:col-8 xl:col-offset-2 col-12" >
                       
@@ -163,7 +155,7 @@
                 
 
                 <!-- Tableau -->
-                 <div class="grid">
+                 <div class="grid" *ngIf="currentService">
                     <div class="col-10 col-offset-1">
 
                     <h3>{{currentService.label}}: Liste des sujets </h3>
@@ -178,6 +170,7 @@
                                 <th class="col-4 col-offset-2">
                                     Action
                                 </th>
+                                
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
