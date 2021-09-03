@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       if(data.token!=null){
         localStorage.setItem("token",data.token);
         window.location.reload();
-
+       
       }
     },(error)=>{
       if(error.status==404){
@@ -48,7 +48,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if(localStorage.getItem("token")!=null){
-      this.router.navigate(['/'])
+      this.router.navigate(['/ticket/suivi'])
     }
   }
 
