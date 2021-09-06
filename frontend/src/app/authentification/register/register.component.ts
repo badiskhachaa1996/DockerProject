@@ -41,6 +41,15 @@ export class RegisterComponent implements OnInit {
 
   toggleForm(){
     this.showForm=!this.showForm
+    if (this.listUserComponenet.showForm == "Ajouter") {
+      this.listUserComponenet.formtype = "new";
+      this.listUserComponenet.showForm = "Fermer";
+
+    } else {
+      this.listUserComponenet.formtype = "new";
+      this.listUserComponenet.showForm = "Ajouter";
+    }
+
   }
 
   saveUser() {

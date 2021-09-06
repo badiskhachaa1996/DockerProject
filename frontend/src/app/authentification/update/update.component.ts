@@ -47,6 +47,14 @@ userupdate:any=[User];
 
   toggleForm(){
     this.showForm=!this.showForm
+    if (this.listUserComponent.showForm == "Ajouter") {
+      this.listUserComponent.formtype = "new";
+      this.listUserComponent.showForm = "Fermer";
+
+    } else {
+      this.listUserComponent.formtype = "new";
+      this.listUserComponent.showForm = "Ajouter";
+    }
   }
 
 
