@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
@@ -33,7 +33,7 @@ export class ListTicketComponent implements OnInit {
 
   userList: User[] = [];
   userDic: any[] = [];
-  serviceDic: any[]=[]
+  serviceDic: any[] = []
 
   draggedTicket: Ticket;
   selectedUser: User;
@@ -43,6 +43,8 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   dragStart(event, ticket: Ticket) {
     this.draggedTicket = ticket;
@@ -83,10 +85,10 @@ export class ListTicketComponent implements OnInit {
       //this.router.navigate(["/ticket/suivi"])
     }
 
-    this.ServService.getDic().subscribe((data)=>{
-      this.serviceDic=data;
+    this.ServService.getDic().subscribe((data) => {
+      this.serviceDic = data;
     })
-    
+
     this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
@@ -271,16 +273,35 @@ export class ListTicketComponent implements OnInit {
   }
 
 
-  
+
   toggleFormUpdate() {
     this.isModify = null;
   }
 
 
   toggleFormCommentAdd() {
-    this.showFormAddComment=!this.showFormAddComment;
+    this.showFormAddComment = !this.showFormAddComment;
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
+  }
+
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        /*this.form.get('file').setValue({
+            filename: file.name,
+            filetype: file.type,
+            value: reader.result.toString().split(',')[1]
+        })*/
+      };
+    }
+  }
+  clearFile() {
+    //this.form.get('file').setValue(null);
+    this.fileInput.nativeElement.value = '';
   }
 
 }
