@@ -292,10 +292,6 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
-<<<<<<< HEAD
-  toggleFormAdd(){
-    this.showFormAddComment= !this.showFormAddComment
-=======
   SendComment() {
     let sujet = new Sujet(this.commentForm.value.label, this.currentComment._id)
 
@@ -312,7 +308,6 @@ export class ListTicketComponent implements OnInit {
       }
       console.log(error)
     });
->>>>>>> 7353f0b37ab5eb2f35c29337f78284c9f10b72b9
   }
 
   Comments() {
