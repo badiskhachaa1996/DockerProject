@@ -201,7 +201,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id)
                 }
             });
-            Ticket.find({ statut: "Acc/Aff" })
+            Ticket.find({$or:[{ statut: "En cours de traitement"},{statut:"En attente d'une réponse"}] })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -252,4 +252,25 @@ app.post("/changeService/:id", (req, res) => {
 
         })
 });
+
+app.post("/changeStatut/:id", (req, res) => {
+    Ticket.findByIdAndUpdate(req.params.id,
+        {
+            statut: req.body.statut
+        },
+        { new: true }, (err, user) => {
+            if (err) {
+                res.send(err)
+            } else {
+                res.status(200).send(user)
+            }
+
+        })
+});
+
+/*app.post("/storeDoc", (req, res) => {
+    require("fs").writeFile(req.body.filename, req.body.value, 'base64', function(err) {
+        console.log(err);
+      });
+});*/
 module.exports = app;

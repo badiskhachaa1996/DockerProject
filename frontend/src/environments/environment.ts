@@ -20,8 +20,8 @@ export const environment = {
     },
 
     role : [
-      { id: 1, value: 'agent ', valeur: 'Role_agent' },
-      { id: 2, value: 'responsable ', valeur: 'Role_responsable' },
+      { id: 1, value: 'agent', valeur: 'Role_agent' },
+      { id: 2, value: 'responsable', valeur: 'Role_responsable' },
       { id: 3, value: 'admin', valeur: 'admin' }
       ],
 

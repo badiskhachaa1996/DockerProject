@@ -90,7 +90,8 @@ app.get("/getAllbyService/:id",(req,res)=>{
     })
 });
 app.get("/getAllAgent/",(req,res)=>{
-    User.find({role:["admin","agent","responsable"]})
+    User.find({role:["responsable","agent ","admin"] })
+
     .then(result=>{
         //console.log('result: ',result)
         res.send(result.length>0?result:{message:"Pas de Users"});
