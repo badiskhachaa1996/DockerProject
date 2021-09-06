@@ -102,4 +102,20 @@ app.get("/getAllDic", (req, res) => {
             console.log(err);
         })
 });
+
+//Récupérer en base 64 le fichier TOD0
+app.get("/downloadFile/:id", (req, res) => {
+    Message.findOne({ _id: req.params.id }).then((data) => {
+        let filename = data.document
+        let file = fs.readFileSync("storage/"+data.ticket_id+"/"+filename,{encoding:'base64'}, (err) => {
+            if (err) {
+              return console.error(err);
+            }
+          });
+        console.log(file)
+        res.status(200).send({file})
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
 module.exports = app;

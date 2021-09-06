@@ -154,14 +154,6 @@ CommentList = [];
       }
     })
 
-
-    /*TODO Token['service']
-    this.AuthService.getAllByService('61279209649616413cda8a3d').subscribe((data) => {
-      if(!data.message){
-        this.userList = data;
-      }
-    })*/
-
     this.TicketService.getTicketsByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.allTickets = data.TicketList;
@@ -320,6 +312,11 @@ CommentList = [];
     this.MsgServ.create(comment).subscribe((data) => {
       //this.CommentShow.push(data)
       //this.CommentList.push(data);
+      this.MsgServ.downloadFile(data.doc._id).subscribe((data)=>{
+        console.log(data)
+      },(error)=>{
+        console.error(error)
+      })
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment=false;
       this.selectedTicket=null;

@@ -46,4 +46,9 @@ export class MessageService {
     let registreUrl=this.apiUrl+"getAllDic";
     return this.http.get<any>(registreUrl,httpOptions1);
   }
+
+  downloadFile(id){
+    let registreUrl=this.apiUrl+"downloadFile/"+id;
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
 }

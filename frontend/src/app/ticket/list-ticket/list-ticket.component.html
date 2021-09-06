@@ -340,12 +340,11 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments[rowData._id]" legend="Conversation" [style]="{'color':'green','font-weight': 'bold'}">
                                 <p-table [value]="comments[rowData._id]" dataKey="id">
-                                    
-                                    <ng-template pTemplate="body" let-order>
+                                    <ng-template pTemplate="body" let-message>
                                         <tr>
-                                            <td>{{order.description}}</td>
+                                            <td>{{message.description}}</td>
                                         </tr>
                                     </ng-template>
                                </p-table>
