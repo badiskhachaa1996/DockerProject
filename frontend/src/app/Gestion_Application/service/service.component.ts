@@ -143,6 +143,7 @@ export class ServiceComponent implements OnInit {
   editService(data) {
     this.serviceForm.patchValue({ label: data.label })
     this.Service = data;
+    
   }
 
   onRowSelect($event) {
@@ -160,8 +161,8 @@ export class ServiceComponent implements OnInit {
 
   toggleFormServiceAdd() {
     this.showFormAddService=!this.showFormAddService;
-    this.showFormUpdateService=false;
-    this.serviceForm.reset();
+    // this.showFormUpdateService=false;
+    // this.serviceForm.reset();
   }
 
   toggleFormSujetAdd() {

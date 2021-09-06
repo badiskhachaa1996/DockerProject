@@ -36,7 +36,40 @@
         </p-card>
     </div>
 </div>
+
 <div class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddComment" >
+    <p-card>
+        <div class="p-grid">
+            <form class="col-8 col-offset-2" >     
+                <h3 class="text-center">Envoyé un message</h3>
+                <div class="p-grid">
+                    
+                  <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" placeholder="Entrer le message"></textarea>
+      
+                <p-button label="Joindre" icon="pi pi-paperclip" iconPos="left" ></p-button>    
+                    <div class=" col mt-2 mb-2 col-lg-6 col-6">  
+                        Statut:
+                        <select formControlName="commentForm" class="form-control col-12" >
+                            <option [ngValue]="null" disabled>Choissisez un statut</option>
+                                <option> En cours de traitement</option>
+                                <option>En attente d'une réponse</option> 
+                                <option>Traité</option>    
+                        </select>
+                    </div>
+                    
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button pButton class="ui-button-raised ui-button-success" 
+                            label="Envoyé"  ></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </p-card>
+    </div>
+    </div>
+<div class="grid">
+  
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
@@ -218,6 +251,8 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
+                                <i  pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments" style="margin-left: 5%;"  *ngIf="!showFormAddComment"
+                            (click)="toggleFormCommentAdd() "></i>
                         </td>
                     </tr>
                 </ng-template>

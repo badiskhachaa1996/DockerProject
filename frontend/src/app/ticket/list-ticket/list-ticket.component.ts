@@ -39,6 +39,7 @@ export class ListTicketComponent implements OnInit {
   showDropDown: Ticket;
   isReponsable: boolean = true;
   isModify: Ticket;
+  showFormAddComment: boolean = false;
 
   dragStart(event, ticket: Ticket) {
     this.draggedTicket = ticket;
@@ -261,4 +262,11 @@ export class ListTicketComponent implements OnInit {
 
     return days.toString() + Hours + " h " + minutes + " min "
   }
+
+  toggleFormCommentAdd() {
+    this.showFormAddComment=!this.showFormAddComment;
+    // this.showFormUpdateService=false;
+    // this.serviceForm.reset();
+  }
+
 }
