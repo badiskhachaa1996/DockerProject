@@ -204,15 +204,6 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset>
-                            <p-table [value]="CommentList" dataKey="id">
-                                <ng-template pTemplate="body" let-order>
-                                    <tr>
-                                        <td>{{order.description}}</td>
-                                    </tr>
-                                </ng-template>
-                           </p-table>
-                        </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
@@ -348,6 +339,16 @@
                                         </div>
                                     </div>
                                 </div>
+                            </p-fieldset>
+                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments[rowData._id]" dataKey="id">
+                                    
+                                    <ng-template pTemplate="body" let-order>
+                                        <tr>
+                                            <td>{{order.description}}</td>
+                                        </tr>
+                                    </ng-template>
+                               </p-table>
                             </p-fieldset>
                         </td>
                     </tr>
