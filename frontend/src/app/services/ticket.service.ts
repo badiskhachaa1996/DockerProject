@@ -80,5 +80,9 @@ export class TicketService {
     return this.http.post<any>(registreUrl,info,httpOptions1);
   }
 
+  changeStatut(data){
+    let registreUrl=this.apiUrl+"changeStatut/"+data.id;
+    return this.http.post<any>(registreUrl,data,httpOptions1);
+  }
 
 }
