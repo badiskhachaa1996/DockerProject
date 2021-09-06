@@ -43,7 +43,7 @@
     <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddComment">
         <p-card>
             <div class="p-grid">
-                <form class="col-8 col-offset-2">
+                <form class="col-8 col-offset-2" [formGroup]="commentForm">
                     <h3 class="text-center">Envoyer un message</h3>
                     <textarea rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
@@ -126,6 +126,8 @@
                         </td>
                     </tr>
                 </ng-template>
+
+            
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
                         <td [attr.colspan]="6">
@@ -146,15 +148,7 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset legend="les messages"
-                            [style]="{'color':'green','font-weight': 'bold'}">
-                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                <div class="ui-g-6 ui-md-6">
-                                    <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">description:</b> </div>
-                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;"> {{rowData.description}} </div>
-                                </div>       
-                            </div>
-                        </p-fieldset>
+                        
                             <p-fieldset legend="Créateur du ticket" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
@@ -201,6 +195,15 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+                            <p-fieldset>
+                            <p-table [value]="CommentList" dataKey="id">
+                                <ng-template pTemplate="body" let-order>
+                                    <tr>
+                                        <td>{{order.description}}</td>
+                                    </tr>
+                                </ng-template>
+                           </p-table>
+                        </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>

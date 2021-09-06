@@ -294,7 +294,7 @@ CommentList = [];
     // this.serviceForm.reset();
   }
   SendComment() {
-    let comment = new Comment(this.commentForm.value.description,)
+    let comment = new Comment(this.commentForm.value.description)
 
     this.MsgServ.create(comment).subscribe((data) => {
       this.CommentShow.push(data)
