@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
@@ -34,7 +34,7 @@ export class ListTicketComponent implements OnInit {
 
   userList: User[] = [];
   userDic: any[] = [];
-  serviceDic: any[]=[]
+  serviceDic: any[] = []
 
   draggedTicket: Ticket;
   selectedUser: User;
@@ -44,14 +44,17 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+  loading:boolean=false;
 
+  @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = [];
 CommentList = [];
   CommentShow = [];
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
-    user_id: new FormControl('',[Validators.required]),
-    ticket_id: new FormControl('',[Validators.required]),
+    statut:new FormControl('',Validators.required),
+    file: new FormControl(''),
+    value:new FormControl(null,Validators.maxLength(10000000))
   });
 
   dragStart(event, ticket: Ticket) {
@@ -94,10 +97,10 @@ CommentList = [];
       //this.router.navigate(["/ticket/suivi"])
     }
 
-    this.ServService.getDic().subscribe((data)=>{
-      this.serviceDic=data;
+    this.ServService.getDic().subscribe((data) => {
+      this.serviceDic = data;
     })
-    
+
     this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
@@ -282,14 +285,14 @@ CommentList = [];
   }
 
 
-  
+
   toggleFormUpdate() {
     this.isModify = null;
   }
 
 
   toggleFormCommentAdd() {
-    this.showFormAddComment=!this.showFormAddComment;
+    this.showFormAddComment = !this.showFormAddComment;
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
@@ -310,6 +313,31 @@ CommentList = [];
       console.log(error)
     });
   }
+
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      this.loading=true
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.commentForm.get('file').setValue({
+            filename: file.name,
+            filetype: file.type,
+            value: reader.result.toString().split(',')[1]
+        })
+        this.commentForm.get('value').setValue(reader.result.toString().split(',')[1])
+        this.loading=false;
+      };
+    }
+  }
+  clearFile() {
+    this.commentForm.get('file').setValue(null);
+    this.commentForm.get('value').setValue(null);
+    this.fileInput.nativeElement.value = '';
+  }
+
+  get value() { return this.commentForm.get('value'); }
 
   Comments() {
     this.MsgServ.getAll()
