@@ -24,8 +24,8 @@ export class UpdateUserComponent implements OnInit {
   id_role:any;
   emailExists=false;
   Roles = environment.role;
-  
-  
+  showForm : boolean =true;
+
 userupdate:any=[User];
   
  
@@ -43,6 +43,10 @@ userupdate:any=[User];
     
 
   })
+
+  toggleForm(){
+    this.showForm=!this.showForm
+  }
 
 
   UpdateUser(){
