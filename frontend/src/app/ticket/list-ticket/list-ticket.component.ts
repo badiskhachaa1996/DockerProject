@@ -88,6 +88,17 @@ CommentList = [];
      private AuthService: AuthService, private messageService: MessageService,private MsgServ : MsgServ) { }
 
   ngOnInit(): void {
+     
+    this.MsgServ.getAllDic()
+    .subscribe(
+      data => {
+        this.comments = data;
+        console.log(data)
+      },
+      error => {
+        console.log(error);
+      });
+
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
       this.router.navigate(["/login"])
@@ -302,7 +313,8 @@ CommentList = [];
     let comment = {
       description:this.commentForm.value.description,
       id:jwt_decode(localStorage.getItem('token'))['id'],
-      ticket_id:this.selectedTicket._id
+      ticket_id:this.selectedTicket._id,
+      file:this.commentForm.value.file
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
@@ -341,14 +353,14 @@ CommentList = [];
 
   get value() { return this.commentForm.get('value'); }
 
-  Comments() {
-    this.MsgServ.getAll()
-      .subscribe(
-        data => {
-          this.comments = data;
-        },
-        error => {
-          console.log(error);
-        });
-  }
+  // Comments() {
+  //   this.MsgServ.getAllDic()
+  //     .subscribe(
+  //       data => {
+  //         this.comments = data;
+  //       },
+  //       error => {
+  //         console.log(error);
+  //       });
+  // }
 }

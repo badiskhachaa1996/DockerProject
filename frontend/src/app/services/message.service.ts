@@ -43,7 +43,7 @@ export class MessageService {
   }
 
   getAllDic(){
-    let registreUrl=this.apiUrl+"getAllDic/";
+    let registreUrl=this.apiUrl+"getAllDic";
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 }

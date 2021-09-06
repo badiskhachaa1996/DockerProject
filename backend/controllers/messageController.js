@@ -81,13 +81,17 @@ app.get("/getAllByTicketID/:id", (req, res) => {
 });
 
 //Récupérer tous les messages par TicketID
-app.get("/getAllDic/:id", (req, res) => {
+app.get("/getAllDic", (req, res) => {
     let dic={}
     Message.find()
         .then(result => {
             result.forEach(msg => {
+                dic[msg.ticket_id]=[]
+            });
+            result.forEach(msg => {
                 dic[msg.ticket_id].push(msg)
             });
+            res.status(200).send(dic)
         })
         .catch(err => {
             console.log(err);

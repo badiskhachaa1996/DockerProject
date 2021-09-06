@@ -204,15 +204,6 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset>
-                            <p-table [value]="CommentList" dataKey="id">
-                                <ng-template pTemplate="body" let-order>
-                                    <tr>
-                                        <td>{{order.description}}</td>
-                                    </tr>
-                                </ng-template>
-                           </p-table>
-                        </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
@@ -279,11 +270,7 @@
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments"
                                 style="margin-left: 5%;"
-<<<<<<< HEAD
-                                (click)="toggleFormCommentAdd() "></i>
-=======
                                 (click)="toggleFormCommentAdd(rowData) "></i>
->>>>>>> fa9f7c382836dacd8eb21f2b5b90418ae11c7138
                         </td>
                     </tr>
                 </ng-template>
@@ -352,6 +339,16 @@
                                         </div>
                                     </div>
                                 </div>
+                            </p-fieldset>
+                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments[rowData._id]" dataKey="id">
+                                    
+                                    <ng-template pTemplate="body" let-order>
+                                        <tr>
+                                            <td>{{order.description}}</td>
+                                        </tr>
+                                    </ng-template>
+                               </p-table>
                             </p-fieldset>
                         </td>
                     </tr>
