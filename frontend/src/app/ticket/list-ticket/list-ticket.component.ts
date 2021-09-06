@@ -273,5 +273,21 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+  // SendComment() {
+  //   let sujet = new Sujet(this.sujetForm.value.label, this.currentService._id)
 
+  //   this.SujetService.addSujet(sujet).subscribe((data) => {
+  //     this.sujetShow.push(data)
+  //     this.sujetList.push(data);
+  //     this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Creation de sujet réussie' });
+  //     this.showFormAddSujet=false;
+  //     this.sujetForm.reset();
+  //   }, (error) => {
+  //     if (error.status == 400) {
+  //       //Bad Request (service deja existant)
+  //       //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+  //     }
+  //     console.log(error)
+  //   });
+  // }
 }

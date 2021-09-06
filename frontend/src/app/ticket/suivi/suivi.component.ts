@@ -238,8 +238,6 @@ export class SuiviComponent implements OnInit {
 
   addTicket() {
     //Enregistrement du Ticket
-     
-
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
