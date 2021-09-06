@@ -311,7 +311,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   Comments() {
-    this.ServService.getAll()
+    this.MsgServ.getAll()
       .subscribe(
         data => {
           this.comments = data;
