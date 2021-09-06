@@ -33,6 +33,7 @@ export class ListTicketComponent implements OnInit {
 
   userList: User[] = [];
   userDic: any[] = [];
+  serviceDic: any[]=[]
 
   draggedTicket: Ticket;
   selectedUser: User;
@@ -41,6 +42,7 @@ export class ListTicketComponent implements OnInit {
   showDropDown: Ticket;
   isReponsable: boolean = true;
   isModify: Ticket;
+  showFormAddComment: boolean = false;
 
   dragStart(event, ticket: Ticket) {
     this.draggedTicket = ticket;
@@ -80,10 +82,14 @@ export class ListTicketComponent implements OnInit {
     } else if (!token["role"].includes("agent")) {
       //this.router.navigate(["/ticket/suivi"])
     }
-    //getQueueByService
-    this.TicketService.getQueue().subscribe((data) => {
+
+    this.ServService.getDic().subscribe((data)=>{
+      this.serviceDic=data;
+    })
+    
+    this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
-        this.queueList = data;
+        this.queueList = data.TicketList;
       }
     })
     this.ServService.getAll().subscribe((data) => {
@@ -130,7 +136,7 @@ export class ListTicketComponent implements OnInit {
       }
     })*/
 
-    this.TicketService.getTicketsByService('61279209649616413cda8a3d').subscribe((data) => {
+    this.TicketService.getTicketsByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.allTickets = data.TicketList;
       }
@@ -268,8 +274,13 @@ export class ListTicketComponent implements OnInit {
   
   toggleFormUpdate() {
     this.isModify = null;
+  }
 
 
+  toggleFormCommentAdd() {
+    this.showFormAddComment=!this.showFormAddComment;
+    // this.showFormUpdateService=false;
+    // this.serviceForm.reset();
   }
 
 }

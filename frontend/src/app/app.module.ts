@@ -168,7 +168,8 @@ import { UpdateUserComponent } from './authentification/update/update.component'
         ReactiveFormsModule,
         TriStateCheckboxModule,
         ProgressSpinnerModule,
-        DragDropModule
+        DragDropModule,
+        
        
     ],
     declarations: [
@@ -188,7 +189,7 @@ import { UpdateUserComponent } from './authentification/update/update.component'
         EditSujetComponent,
         ListUserComponent,
         UpdateUserComponent,
-
+        
                
     ],
         providers: [  MessageService ,ConfirmationService,ServiceComponent],

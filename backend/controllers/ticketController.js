@@ -138,6 +138,7 @@ app.get("/getTicketsByService/:id", (req, res) => {
             listSujets.forEach(sujet => {
                 if (sujet.service_id == id) {
                     listSujetofService.push(sujet._id.toString())
+                    
                 }
             });
             Ticket.find({statut:'En cours de traitement'})
