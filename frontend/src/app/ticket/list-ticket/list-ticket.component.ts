@@ -282,5 +282,8 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+  toggleFormAdd(){
+    this.showFormAddComment= !this.showFormAddComment
+  }
 
 }
