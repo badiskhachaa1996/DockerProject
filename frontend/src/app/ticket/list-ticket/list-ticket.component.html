@@ -1,7 +1,9 @@
-<div class="p-grid mt-2" *ngIf="isModify">
-    <div class="xl:col-8 xl:col-offset-2 col-12">
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="isModify">
         <p-card>
             <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"> </i>
+
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
