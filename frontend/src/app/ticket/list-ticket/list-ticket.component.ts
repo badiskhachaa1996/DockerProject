@@ -302,7 +302,8 @@ CommentList = [];
     let comment = {
       description:this.commentForm.value.description,
       id:jwt_decode(localStorage.getItem('token'))['id'],
-      ticket_id:this.selectedTicket._id
+      ticket_id:this.selectedTicket._id,
+      file:this.commentForm.value.file
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
