@@ -77,4 +77,19 @@ app.get("/deleteById/:id",(req, res) => {
     })
 });
 
+app.get("/getDic",(req,res)=>{
+    let dic = {};
+    Service.find()
+    .then(result=>{
+        result.forEach(serv => {
+            dic[serv._id]=serv;
+        });
+        res.status(200).send(dic)
+    })
+    .catch(err=>{   
+        console.log(err);
+    })
+    
+})
+
 module.exports = app;

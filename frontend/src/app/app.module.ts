@@ -32,7 +32,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { LightboxModule } from 'primeng/lightbox';
 import { ListboxModule } from 'primeng/listbox';
 import { MegaMenuModule } from 'primeng/megamenu';
-import { MenuModule } from 'primeng/menu';
+import { MenuItemContent, MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
@@ -70,12 +70,12 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 import { AppComponent } from './app.component';
 import { AppMenuComponent, AppSubMenuComponent } from './app.menu.component';
 import { AppTopBarComponent } from './app.topbar.component';
-import {KeyFilterModule} from 'primeng/keyfilter';
+import { KeyFilterModule } from 'primeng/keyfilter';
 import { AppRoutingModule } from './app.routes';
-import {TriStateCheckboxModule} from 'primeng/tristatecheckbox';
-import {CaptchaModule} from 'primeng/captcha';
+import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
+import { CaptchaModule } from 'primeng/captcha';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
@@ -89,6 +89,9 @@ import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
+import { NavbarComponent } from './navbar/navbar.component'
+
+
 
 
 
@@ -168,7 +171,8 @@ import { UpdateUserComponent } from './authentification/update/update.component'
         ReactiveFormsModule,
         TriStateCheckboxModule,
         ProgressSpinnerModule,
-        DragDropModule
+        DragDropModule,
+        
        
     ],
     declarations: [
@@ -188,6 +192,7 @@ import { UpdateUserComponent } from './authentification/update/update.component'
         EditSujetComponent,
         ListUserComponent,
         UpdateUserComponent,
+        NavbarComponent,
 
                
     ],

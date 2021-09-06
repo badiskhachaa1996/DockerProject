@@ -1,7 +1,9 @@
-<div class="p-grid mt-2" *ngIf="isModify">
-    <div class="xl:col-8 xl:col-offset-2 col-12">
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="isModify">
         <p-card>
             <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"> </i>
+
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
@@ -36,7 +38,40 @@
         </p-card>
     </div>
 </div>
+
 <div class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddComment" >
+    <p-card>
+        <div class="p-grid">
+            <form class="col-8 col-offset-2" >     
+                <h3 class="text-center">Envoyé un message</h3>
+                <div class="p-grid">
+                    
+                  <textarea rows="5" cols="30" pInputTextarea autoResize="autoResize" placeholder="Entrer le message"></textarea>
+      
+                <p-button label="Joindre" icon="pi pi-paperclip" iconPos="left" ></p-button>    
+                    <div class=" col mt-2 mb-2 col-lg-6 col-6">  
+                        Statut:
+                        <select formControlName="commentForm" class="form-control col-12" >
+                            <option [ngValue]="null" disabled>Choissisez un statut</option>
+                                <option> En cours de traitement</option>
+                                <option>En attente d'une réponse</option> 
+                                <option>Traité</option>    
+                        </select>
+                    </div>
+                    
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button pButton class="ui-button-raised ui-button-success" 
+                            label="Envoyé"  ></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        </p-card>
+    </div>
+    </div>
+<div class="grid">
+  
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
@@ -145,11 +180,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -218,6 +253,8 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
+                                <i  pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments" style="margin-left: 5%;"  *ngIf="!showFormAddComment"
+                            (click)="toggleFormCommentAdd() "></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -274,11 +311,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -408,11 +445,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -459,7 +496,7 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.agent_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>

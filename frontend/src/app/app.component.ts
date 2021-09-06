@@ -1,6 +1,8 @@
-import {Component, Renderer2} from '@angular/core';
-import {trigger, state, style, transition, animate} from '@angular/animations';
-import {  AuthConfig } from 'angular-oauth2-oidc';
+import { Component, Renderer2 } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { AuthConfig } from 'angular-oauth2-oidc';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TicketService } from './services/ticket.service';
 
 @Component({
     selector: 'app-root',
@@ -17,7 +19,7 @@ import {  AuthConfig } from 'angular-oauth2-oidc';
         ])
     ]
 })
-export class AppComponent  {
+export class AppComponent {
 
     layout = 'layout-blue';
     layoutMode = 'overlay';
@@ -34,21 +36,21 @@ export class AppComponent  {
     connected: Boolean = false;
     overlayMenuMobileActive: boolean;
     authConfig: AuthConfig = {
-    issuer: 'https://dev-keycloak.estya.io/auth/realms/ems_sso',
-    redirectUri: window.location.origin + "/users",
-    clientId: 'ems-Frontend-dev',
-    scope: 'openid profile email offline_access ems_sso',
-    responseType: 'code',
-    // at_hash is not present in JWT token
-    disableAtHashCheck: true,
-    showDebugInformation: true
-  }
-
-    constructor(public renderer: Renderer2) {
-       
+        issuer: 'https://dev-keycloak.estya.io/auth/realms/ems_sso',
+        redirectUri: window.location.origin + "/users",
+        clientId: 'ems-Frontend-dev',
+        scope: 'openid profile email offline_access ems_sso',
+        responseType: 'code',
+        // at_hash is not present in JWT token
+        disableAtHashCheck: true,
+        showDebugInformation: true
     }
 
-  
+    constructor(public renderer: Renderer2,public TicketService:TicketService) {
+
+    }
+
+
 
     outClick() {
         if (!this.topbarItemClick) {
@@ -164,4 +166,34 @@ export class AppComponent  {
     isHorizontal() {
         return this.layoutMode === 'horizontal';
     }
+
+    /*form: FormGroup = new FormGroup({
+        file: new FormControl(null, Validators.required)
+    })
+
+
+    onFileChange(event) {
+        let reader = new FileReader();
+        if (event.target.files && event.target.files.length > 0) {
+            let file = event.target.files[0];
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                this.form.get('file').setValue({
+                    filename: file.name,
+                    filetype: file.type,
+                    value: reader.result.toString().split(',')[1]
+                })
+            };
+        }
+    }
+    onSubmit() {
+        const formModel = this.form.value;
+        console.log(this.form.value.file)
+        this.TicketService.storeDoc(this.form.value.file).subscribe((data)=>{
+            console.log(data)
+        },(error)=>{
+            console.error(error)
+        })
+        console.log(formModel);
+    }*/
 }
