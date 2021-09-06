@@ -38,6 +38,7 @@ export class ListTicketComponent implements OnInit {
 
   draggedTicket: Ticket;
   selectedUser: User;
+  selectedTicket:Ticket;
 
   showForm: string = "Ajouter";
   showDropDown: Ticket;
@@ -291,25 +292,26 @@ CommentList = [];
   }
 
 
-  toggleFormCommentAdd() {
+  toggleFormCommentAdd(ticket) {
+    this.selectedTicket=ticket;
     this.showFormAddComment = !this.showFormAddComment;
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
   SendComment() {
-    let comment = new Comment(this.commentForm.value.description)
+    let comment = {
+      description:this.commentForm.value.description,
+      id:jwt_decode(localStorage.getItem('token'))['id'],
+      ticket_id:this.selectedTicket._id
+    }
 
     this.MsgServ.create(comment).subscribe((data) => {
-      this.CommentShow.push(data)
-      this.CommentList.push(data);
+      //this.CommentShow.push(data)
+      //this.CommentList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment=false;
       this.commentForm.reset();
     }, (error) => {
-      if (error.status == 400) {
-        //Bad Request (service deja existant)
-        //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
-      }
       console.log(error)
     });
   }
