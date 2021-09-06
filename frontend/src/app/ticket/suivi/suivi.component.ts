@@ -219,7 +219,6 @@ export class SuiviComponent implements OnInit {
   toggleFormAdd() {
     this.showFormAdd = !this.showFormAdd
     this.showFormUpdate = false;
-    this.showForm = "Fermer"
 
 
   }
@@ -227,7 +226,6 @@ export class SuiviComponent implements OnInit {
   toggleFormUpdate() {
     this.showFormUpdate = !this.showFormUpdate
     this.showFormAdd = false
-    this.showForm = "Fermer"
 
   }
    

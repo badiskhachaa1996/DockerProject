@@ -1,9 +1,8 @@
-<div *ngIf="showForm=='Fermer'" class="card card-w-title">
-    <div class=" col-10 col-offset-1  header" style="padding-left: 37%;">
-        <h1>Ajouter un utilisateur</h1>
-    </div>
-    <div *ngIf="formtype=='new'">
-    <app-register></app-register>
+<div *ngIf="showForm=='Fermer'" >
+     <div *ngIf="formtype=='new'">
+    
+        <app-register></app-register>
+   
     </div>    
 
     <div *ngIf="formtype=='edit'">

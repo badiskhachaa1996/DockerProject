@@ -19,6 +19,8 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
   styleUrls: ['./list-ticket.component.css']
 })
 export class ListTicketComponent implements OnInit {
+  showFormUpdate: boolean = false;
+
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
@@ -233,7 +235,7 @@ export class ListTicketComponent implements OnInit {
       }*/
       this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
       this.isModify = null;
-
+      this.toggleFormUpdate();
     }, (error) => {
       console.log(error)
     });
@@ -267,6 +269,13 @@ export class ListTicketComponent implements OnInit {
 
     return days.toString() + Hours + " h " + minutes + " min "
   }
+
+
+  
+  toggleFormUpdate() {
+    this.isModify = null;
+  }
+
 
   toggleFormCommentAdd() {
     this.showFormAddComment=!this.showFormAddComment;

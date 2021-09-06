@@ -1,6 +1,10 @@
-<div class="p-grid">
+<div class="p-grid mt-2">
     <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddService">
+        <p-card>
+
         <div class="p-grid">
+            <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormServiceAdd()"> </i>
+
             <form class="col-8 col-offset-2" [formGroup]="serviceForm">
                 <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                 <h3 class="text-center">Ajouter un service</h3>
@@ -16,10 +20,21 @@
                 </div>
             </form>
         </div>
+    </p-card>
+
     </div>
+</div>
+
+
+
+
     <div class="p-grid">
         <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateService">
+            <p-card>
+
             <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormServiceUpdate()"> </i>
+
                 <form class="col-8 col-offset-2" [formGroup]="serviceForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modifier le service</h3>
@@ -35,8 +50,13 @@
                     </div>
                 </form>
             </div>
+        </p-card>
+
         </div>
     </div>
+
+
+
     <!-- tableau -->
     <div class="grid">
         <div class="col-10 col-offset-1">
@@ -73,12 +93,19 @@
             </div>
         </div>
     </div>
-</div>
-<div class="p-grid" *ngIf="currentService">
-    <div class="xl:col-8 xl:col-offset-2 col-12">
+
+
+
+
+
+<div class="p-grid mt-2" *ngIf="showFormAddSujet">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="currentService">
+        <p-card>
+
         <div class="p-grid">
+            <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormSujetAdd()"> </i>
             <form class="col-8 col-offset-2" [formGroup]="sujetForm" *ngIf="showFormAddSujet">
-                <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+ <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                 <h3 class="text-center">Ajouter un sujet</h3>
                 <div class="p-grid">
                     <div class="mt-2 mb-2 col-12">
@@ -92,13 +119,23 @@
                 </div>
             </form>
         </div>
+    </p-card>
+
     </div>
 </div>
-<div class="p-grid" *ngIf="currentService">
-    <div class="xl:col-8 xl:col-offset-2 col-12">
+
+
+
+
+<div class="p-grid mt-2" *ngIf="showFormUpdateSujet">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="currentService">
+        <p-card>
+
         <div class="p-grid">
+         <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormSujetUpdate()"> </i>
+
             <form class="col-8 col-offset-2" [formGroup]="sujetForm" *ngIf="showFormUpdateSujet">
-                <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+ <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                 <h3 class="text-center">Modifier le sujet</h3>
                 <div class="p-grid">
                     <div class="mt-2 mb-2 col-12">
@@ -112,12 +149,18 @@
                 </div>
             </form>
         </div>
+    </p-card>
+
     </div>
 </div>
+
+
+
+
 <!-- Tableau -->
 <div class="grid" *ngIf="currentService">
     <div class="col-10 col-offset-1">
-        <button pButton class="ui-button-raised ui-button-success" (click)="toggleFormSujetAdd()" style="float:right;"
+        <button *ngIf="!showFormAddSujet" pButton class="ui-button-raised ui-button-success" (click)="toggleFormSujetAdd()" style="float:right;"
             label="Ajouter"></button>
         <h3>{{currentService.label}}: Liste des sujets </h3>
         <div class="col-12 card shadow-lg my-5">

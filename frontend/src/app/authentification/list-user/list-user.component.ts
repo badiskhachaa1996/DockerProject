@@ -29,7 +29,7 @@ export class ListUserComponent implements OnInit {
 
   totalRecords: number;
 
-  showForm: string = "Ajouter";
+ public showForm: string = "Ajouter";
   loading: boolean;
 
   selectedUser: User;
@@ -134,6 +134,7 @@ export class ListUserComponent implements OnInit {
     history.state;
     
     //this.router.navigateByUrl("/listUser/update",{state:rowData})
+  
   }
 }
 
