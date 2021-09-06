@@ -63,6 +63,12 @@ export class AuthService {
       catchError(this.handleError)
     );
   }
+  getAllAgent(){
+    let loginUrl=this.apiUrl+"user/getAllAgent/";
+    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
+      catchError(this.handleError)
+    );
+  }
   // createServices(service){
   //   const newService = { id: Date.now(), ...service};
   //   this.Services = [service, ...this.Services] ;

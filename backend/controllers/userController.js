@@ -12,7 +12,7 @@ app.post("/registre", (req, res) => {
         adresse:data.adresse,
         email: data.email,
         password: data.password,
-        role : data.role,
+        role : data.role || "user",
         service_id : data.service_id || "61279209649616413cda8a3d"
     })
     user.save().then((userFromDb) => {
@@ -81,6 +81,16 @@ app.post("/updateById/:id", (req, res) => {
 })
 app.get("/getAllbyService/:id",(req,res)=>{
     User.find({service:req.params.id})
+    .then(result=>{
+        //console.log('result: ',result)
+        res.send(result.length>0?result:{message:"Pas de Users"});
+    })
+    .catch(err=>{
+        console.log(err);
+    })
+});
+app.get("/getAllAgent/",(req,res)=>{
+    User.find({role:["admin","agent","responsable"]})
     .then(result=>{
         //console.log('result: ',result)
         res.send(result.length>0?result:{message:"Pas de Users"});

@@ -30,8 +30,8 @@ export class RegisterComponent implements OnInit {
     adresse: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    role: new FormControl('user', [Validators.required])
-
+    role: new FormControl('', ),
+    service_id :new FormControl('',),
 
   })
 
