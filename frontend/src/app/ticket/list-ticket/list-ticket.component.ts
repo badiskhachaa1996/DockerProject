@@ -46,6 +46,7 @@ export class ListTicketComponent implements OnInit {
   showFormAddComment: boolean = false;
 
   comments: any = [];
+CommentList = [];
   CommentShow = [];
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
@@ -293,11 +294,11 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
   SendComment() {
-    let sujet = new Sujet(this.commentForm.value.label, this.currentComment._id)
+    let comment = new Comment(this.commentForm.value.description,)
 
-    this.SujetService.addSujet(sujet).subscribe((data) => {
+    this.MsgServ.create(comment).subscribe((data) => {
       this.CommentShow.push(data)
-      this.sujetList.push(data);
+      this.CommentList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment=false;
       this.commentForm.reset();
