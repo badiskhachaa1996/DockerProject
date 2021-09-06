@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
+import { MessageService as MsgServ } from 'src/app/services/message.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { User } from 'src/app/models/User';
@@ -20,7 +21,7 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 })
 export class ListTicketComponent implements OnInit {
   showFormUpdate: boolean = false;
-
+  currentComment = null;
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
@@ -43,8 +44,17 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+  loading:boolean=false;
 
   @ViewChild('fileInput') fileInput: ElementRef;
+  comments: any = [];
+  CommentShow = [];
+  commentForm: FormGroup = new FormGroup({
+    description: new FormControl('', [Validators.required]),
+    statut:new FormControl('',Validators.required),
+    file: new FormControl(''),
+    value:new FormControl(null,Validators.maxLength(10000000))
+  });
 
   dragStart(event, ticket: Ticket) {
     this.draggedTicket = ticket;
@@ -72,7 +82,8 @@ export class ListTicketComponent implements OnInit {
     this.queueList.push(this.draggedTicket)
   }*/
 
-  constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
+  constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
+     private AuthService: AuthService, private messageService: MessageService,private MsgServ : MsgServ) { }
 
   ngOnInit(): void {
     let token = jwt_decode(localStorage.getItem("token"))
@@ -284,24 +295,43 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+  SendComment() {
+    console.log(this.commentForm.value)
+  }
 
   onFileChange(event) {
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
+      this.loading=true
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        /*this.form.get('file').setValue({
+        this.commentForm.get('file').setValue({
             filename: file.name,
             filetype: file.type,
             value: reader.result.toString().split(',')[1]
-        })*/
+        })
+        this.commentForm.get('value').setValue(reader.result.toString().split(',')[1])
+        this.loading=false;
       };
     }
   }
   clearFile() {
-    //this.form.get('file').setValue(null);
+    this.commentForm.get('file').setValue(null);
+    this.commentForm.get('value').setValue(null);
     this.fileInput.nativeElement.value = '';
   }
 
+  get value() { return this.commentForm.get('value'); }
+
+  Comments() {
+    this.ServService.getAll()
+      .subscribe(
+        data => {
+          this.comments = data;
+        },
+        error => {
+          console.log(error);
+        });
+  }
 }
