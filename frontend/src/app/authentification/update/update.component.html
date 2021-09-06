@@ -40,11 +40,25 @@
                                 <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse n'est pas correct.</span>
                             </div>
                             </div>
+                            
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <input type="text" formControlName="phone" class="form-control col-12" placeholder="Téléphone" pInputText>
                                 <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
                                     <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
                                     <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le téléphone doit être composé de 10 chiffres.</span>
+                                </div>
+                            </div>
+                           
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <input type="password" formControlName="verifypassword" class="form-control col-12" placeholder="Mot de passe" pInputText>
+                                <div *ngIf="(verifypassword.invalid || verifypassword.value!=password.value) && (verifypassword.touched || verifypassword.dirty)">
+                                    <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
+                                    <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
+                                </div>
+                                 <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <input type="password" formControlName="password" class="form-control col-12" placeholder="Confirmation mot de passe" pInputText>
+                                <div *ngIf="password.invalid && (password.touched || password.dirty)">
+                                    <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
                                 </div>
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
@@ -53,12 +67,6 @@
                                     <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <input type="password" formControlName="verifypassword" class="form-control col-12" placeholder="Mot de passe" pInputText>
-                                <div *ngIf="(verifypassword.invalid || verifypassword.value!=password.value) && (verifypassword.touched || verifypassword.dirty)">
-                                    <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
-                                    <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
-                                </div>
                                 <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12" >
                                     <span  style="margin-left: 15%;">
                                          <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" ></p-dropdown>

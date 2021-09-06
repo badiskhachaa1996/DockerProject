@@ -41,4 +41,9 @@ export class MessageService {
     let registreUrl=this.apiUrl+"getAllByTicketID/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
+
+  getAllDic(){
+    let registreUrl=this.apiUrl+"getAllDic/";
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
 }
