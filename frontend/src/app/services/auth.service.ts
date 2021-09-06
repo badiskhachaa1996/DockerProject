@@ -60,7 +60,7 @@ export class AuthService {
     );
   }
   getAllAgent(){
-    let loginUrl=this.apiUrl+"user/getAllAgent/";
+    let loginUrl=this.apiUrl+"getAllAgent/";
     return this.http.get<any>(loginUrl,httpOptions1) .pipe(
       catchError(this.handleError)
     );
