@@ -39,11 +39,11 @@
     </div>
 </div>
 
-<div class="grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf=" showFormAddComment" >
+<div class="grid" *ngIf=" showFormAddComment">
+    <div class="xl:col-8 xl:col-offset-2 col-12"  *ngIf="currentComment" >
     <p-card>
         <div class="p-grid">
-            <form class="col-8 col-offset-2" >     
+            <form class="col-8 col-offset-2" [formGroup]="commentForm" >     
                 <h3 class="text-center">Envoyé un message</h3>
                 <div class="p-grid">
                     
@@ -62,7 +62,7 @@
                     
                     <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                         <button pButton class="ui-button-raised ui-button-success" 
-                            label="Envoyé"  ></button>
+                            label="Envoyé" (click)="SendComment()" ></button>
                     </div>
                 </div>
             </form>
