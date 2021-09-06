@@ -13,7 +13,7 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()">  </button>
+        <button pButton type="button" label="Ajouter"  *ngIf="showForm=='Ajouter'" style="float:right;" (click)="toggleForm()">  </button>
              <h3>Liste des utilisateurs</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
