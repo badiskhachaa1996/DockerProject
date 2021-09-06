@@ -48,6 +48,7 @@ export class ListTicketComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = [];
+CommentList = [];
   CommentShow = [];
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
@@ -296,7 +297,21 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
   SendComment() {
-    console.log(this.commentForm.value)
+    let comment = new Comment(this.commentForm.value.description,)
+
+    this.MsgServ.create(comment).subscribe((data) => {
+      this.CommentShow.push(data)
+      this.CommentList.push(data);
+      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
+      this.showFormAddComment=false;
+      this.commentForm.reset();
+    }, (error) => {
+      if (error.status == 400) {
+        //Bad Request (service deja existant)
+        //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+      }
+      console.log(error)
+    });
   }
 
   onFileChange(event) {
@@ -325,7 +340,7 @@ export class ListTicketComponent implements OnInit {
   get value() { return this.commentForm.get('value'); }
 
   Comments() {
-    this.ServService.getAll()
+    this.MsgServ.getAll()
       .subscribe(
         data => {
           this.comments = data;
