@@ -135,6 +135,8 @@
                         </td>
                     </tr>
                 </ng-template>
+
+            
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
                         <td [attr.colspan]="6">
@@ -155,15 +157,7 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset legend="les messages"
-                            [style]="{'color':'green','font-weight': 'bold'}">
-                            <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                <div class="ui-g-6 ui-md-6">
-                                    <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">description:</b> </div>
-                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;"> {{rowData.description}} </div>
-                                </div>       
-                            </div>
-                        </p-fieldset>
+                        
                             <p-fieldset legend="Créateur du ticket" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
@@ -210,6 +204,15 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+                            <p-fieldset>
+                            <p-table [value]="CommentList" dataKey="id">
+                                <ng-template pTemplate="body" let-order>
+                                    <tr>
+                                        <td>{{order.description}}</td>
+                                    </tr>
+                                </ng-template>
+                           </p-table>
+                        </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
@@ -276,7 +279,11 @@
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments"
                                 style="margin-left: 5%;"
+<<<<<<< HEAD
                                 (click)="toggleFormCommentAdd() "></i>
+=======
+                                (click)="toggleFormCommentAdd(rowData) "></i>
+>>>>>>> fa9f7c382836dacd8eb21f2b5b90418ae11c7138
                         </td>
                     </tr>
                 </ng-template>
