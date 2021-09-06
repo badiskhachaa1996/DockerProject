@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
+import { MessageService as MsgServ } from 'src/app/services/message.service';
 import { TicketService } from 'src/app/services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { User } from 'src/app/models/User';
@@ -20,7 +21,7 @@ import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
 })
 export class ListTicketComponent implements OnInit {
   showFormUpdate: boolean = false;
-
+  currentComment = null;
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
@@ -43,6 +44,14 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+
+  comments: any = [];
+  CommentShow = [];
+  commentForm: FormGroup = new FormGroup({
+    description: new FormControl('', [Validators.required]),
+    user_id: new FormControl('',[Validators.required]),
+    ticket_id: new FormControl('',[Validators.required]),
+  });
 
   dragStart(event, ticket: Ticket) {
     this.draggedTicket = ticket;
@@ -70,7 +79,8 @@ export class ListTicketComponent implements OnInit {
     this.queueList.push(this.draggedTicket)
   }*/
 
-  constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
+  constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
+     private AuthService: AuthService, private messageService: MessageService,private MsgServ : MsgServ) { }
 
   ngOnInit(): void {
     let token = jwt_decode(localStorage.getItem("token"))
@@ -282,21 +292,32 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
-  // SendComment() {
-  //   let sujet = new Sujet(this.sujetForm.value.label, this.currentService._id)
+  SendComment() {
+    let sujet = new Sujet(this.commentForm.value.label, this.currentComment._id)
 
-  //   this.SujetService.addSujet(sujet).subscribe((data) => {
-  //     this.sujetShow.push(data)
-  //     this.sujetList.push(data);
-  //     this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Creation de sujet réussie' });
-  //     this.showFormAddSujet=false;
-  //     this.sujetForm.reset();
-  //   }, (error) => {
-  //     if (error.status == 400) {
-  //       //Bad Request (service deja existant)
-  //       //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
-  //     }
-  //     console.log(error)
-  //   });
-  // }
+    this.SujetService.addSujet(sujet).subscribe((data) => {
+      this.CommentShow.push(data)
+      this.sujetList.push(data);
+      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
+      this.showFormAddComment=false;
+      this.commentForm.reset();
+    }, (error) => {
+      if (error.status == 400) {
+        //Bad Request (service deja existant)
+        //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+      }
+      console.log(error)
+    });
+  }
+
+  Comments() {
+    this.ServService.getAll()
+      .subscribe(
+        data => {
+          this.comments = data;
+        },
+        error => {
+          console.log(error);
+        });
+  }
 }
