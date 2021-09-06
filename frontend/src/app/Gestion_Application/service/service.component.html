@@ -84,7 +84,7 @@
                                 {{rowData.label}}
                             </td>
                             <td>
-                                <i class="pi pi-pencil" (click)="editService(rowData);toggleFormServiceUpdate();"></i>
+                                <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="editService(rowData);toggleFormServiceUpdate();"></i>
                                 <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
                             </td>
                         </tr>
@@ -180,7 +180,7 @@
                             {{rowData.label}}
                         </td>
                         <td>
-                            <i class="pi pi-pencil" (click)="editSujet(rowData);toggleFormSujetUpdate()"
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="editSujet(rowData);toggleFormSujetUpdate()"
                                 style="cursor: pointer;"></i>
 
                             <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->

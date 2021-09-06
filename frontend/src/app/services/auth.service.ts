@@ -47,7 +47,7 @@ export class AuthService {
 
   getById(id){
     let loginUrl=this.apiUrl+"user/getById/"+id;
-    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
+    return this.http.get<any>(loginUrl,httpOptions) .pipe(
       catchError(this.handleError)
     );
   }
@@ -59,6 +59,12 @@ export class AuthService {
   }
   getAllByService(id){
     let loginUrl=this.apiUrl+"user/getAllbyService/"+id;
+    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
+      catchError(this.handleError)
+    );
+  }
+  getAllAgent(){
+    let loginUrl=this.apiUrl+"user/getAllAgent/";
     return this.http.get<any>(loginUrl,httpOptions1) .pipe(
       catchError(this.handleError)
     );
