@@ -196,7 +196,7 @@ import { NavbarComponent } from './navbar/navbar.component'
 
                
     ],
-        providers: [MessageService ,ConfirmationService,ServiceComponent],
+        providers: [  MessageService ,ConfirmationService,ServiceComponent,ListUserComponent],
         bootstrap: [AppComponent]
         })
       export class AppModule { }

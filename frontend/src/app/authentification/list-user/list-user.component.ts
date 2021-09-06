@@ -29,7 +29,7 @@ export class ListUserComponent implements OnInit {
 
   totalRecords: number;
 
-  showForm: string = "Ajouter";
+ public showForm: string = "Ajouter";
   loading: boolean;
 
   selectedUser: User;
@@ -71,7 +71,7 @@ export class ListUserComponent implements OnInit {
   toggleType() {
     if (this.formtype == "new") {
       this.formtype = "edit";
-
+      this.showForm = "Fermer";
     } else {
       this.formtype = "edit";
       this.formtype = "edit";
@@ -134,6 +134,7 @@ export class ListUserComponent implements OnInit {
     history.state;
     
     //this.router.navigateByUrl("/listUser/update",{state:rowData})
+    
   }
 }
 

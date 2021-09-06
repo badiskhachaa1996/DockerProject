@@ -11,6 +11,7 @@ import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { SelectableRow } from 'primeng/table';
+import { ListUserComponent } from '../list-user/list-user.component';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
@@ -30,15 +31,15 @@ userupdate:any=[User];
   
  
   RegisterForm: FormGroup= new FormGroup({
-    lastname:new FormControl([this.userupdate.lastname],[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
-    firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
-    adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
+    lastname:new FormControl([this.listUserComponent.selectedUser.lastname],[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    firstname:new FormControl(this.listUserComponent.selectedUser.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
+    email:new FormControl(this.listUserComponent.selectedUser.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    phone:new FormControl(this.listUserComponent.selectedUser.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
+    adresse:new FormControl(this.listUserComponent.selectedUser.adresse,[Validators.required]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)]),
     verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl(this.userupdate.role,[Validators.required]),
-    service_id:new FormControl(this.userupdate.service_id,[Validators.required])
+    role:new FormControl(this.listUserComponent.selectedUser.role,[Validators.required]),
+    service_id:new FormControl(this.listUserComponent.selectedUser.service_id,[Validators.required])
     
     
 
@@ -46,6 +47,14 @@ userupdate:any=[User];
 
   toggleForm(){
     this.showForm=!this.showForm
+    if (this.listUserComponent.showForm == "Ajouter") {
+      this.listUserComponent.formtype = "new";
+      this.listUserComponent.showForm = "Fermer";
+
+    } else {
+      this.listUserComponent.formtype = "new";
+      this.listUserComponent.showForm = "Ajouter";
+    }
   }
 
 
@@ -65,7 +74,7 @@ userupdate:any=[User];
       }
       console.log(error)
     });
-    
+    this.listUserComponent.showForm="Ajouter"
   }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
@@ -76,7 +85,7 @@ userupdate:any=[User];
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
   get service_id() { return this.RegisterForm.get('service_id'); }
-  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService,private servService:ServService) { }
+  constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService,private servService:ServService,private listUserComponent:ListUserComponent) { }
 
   ngOnInit(): void {
 
