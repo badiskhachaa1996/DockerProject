@@ -38,7 +38,7 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.AuthService.getAll().subscribe((data) => {
+    this.AuthService.getAllAgent().subscribe((data) => {
       this.tabUser = data;
       this.totalRecords = this.tabUser.length;
     })

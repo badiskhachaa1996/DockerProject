@@ -25,11 +25,12 @@ export class UpdateUserComponent implements OnInit {
   emailExists=false;
   Roles = environment.role;
   
-  userupdate:any=[]; 
+  
+userupdate:any=[User];
   
  
   RegisterForm: FormGroup= new FormGroup({
-    lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    lastname:new FormControl([this.userupdate.lastname],[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
@@ -62,7 +63,6 @@ export class UpdateUserComponent implements OnInit {
     });
     
   }
-
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -84,7 +84,7 @@ export class UpdateUserComponent implements OnInit {
   console.log(idu)
    this.AuthService.getById(idu).subscribe((data)=>{
      console.log(jwt_decode(data['userToken'])['userFromDb'])
-
+   
      this.userupdate= jwt_decode(data['userToken'])['userFromDb']
    },(err)=>console.log(err))
   

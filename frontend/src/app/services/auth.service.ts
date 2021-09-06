@@ -59,6 +59,13 @@ export class AuthService {
       catchError(this.handleError)
     );
   }
+  getAllAgent(){
+    let loginUrl=this.apiUrl+"user/getAllAgent/";
+    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
+      catchError(this.handleError)
+    );
+  }
+ 
   handleError(error: HttpErrorResponse) {
     let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
