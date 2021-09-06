@@ -3469,4 +3469,7 @@ h3{
 b{
   text-decoration: underline;
 }
+input,select,textarea{
+  font-family: "Sarabun", sans-serif;
+}
 /* Add your customizations of the theme here */

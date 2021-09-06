@@ -11,6 +11,14 @@
 
     <div [ngClass]="connected? 'layout-content':''" >
         <router-outlet></router-outlet>
+        <!--<form [formGroup]="form">
+            <div class="form-group">
+              <label for="avatar">Avatar</label>
+              <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
+              <button type="button" class="btn btn-sm btn-default" (click)="clearFile()">clear file</button>
+            </div>
+            <button type="submit" (click)="onSubmit()" [disabled]="form.invalid" class="btn btn-success">Submit </button>
+          </form>-->
     </div>
 
     <div class="layout-mask"></div>

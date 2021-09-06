@@ -178,11 +178,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -309,11 +309,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -443,11 +443,11 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -494,7 +494,7 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id]?.service_id}}</div>
+                                                {{serviceDic[userDic[rowData.agent_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
