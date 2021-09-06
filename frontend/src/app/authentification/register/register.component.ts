@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 import { DropdownModule } from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
+import { NonNullAssert } from '@angular/compiler';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -21,6 +22,9 @@ export class RegisterComponent implements OnInit {
   User_role: String;
   emailExists = false;
   Roles = environment.role;
+  showForm : boolean =true;
+
+
 
   RegisterForm: FormGroup = new FormGroup({
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
@@ -30,10 +34,14 @@ export class RegisterComponent implements OnInit {
     adresse: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    role: new FormControl('user', [Validators.required])
-
+    role: new FormControl('', ),
+    service_id :new FormControl('',),
 
   })
+
+  toggleForm(){
+    this.showForm=!this.showForm
+  }
 
   saveUser() {
     console.log(localStorage.getItem("token"));

@@ -12,33 +12,33 @@ export class SujetService {
     throw new Error('Method not implemented.');
   }
 
-  apiUrl ="http://localhost:3000/"
+  apiUrl ="http://localhost:3000/sujet/"
   constructor(private http : HttpClient, private _router: Router) { }
 
 
   public addSujet(sujet: Sujet){
-    let add_sujet=this.apiUrl+"sujet/addsujet";
+    let add_sujet=this.apiUrl+"addsujet";
     return this.http.post<any>(add_sujet,sujet,httpOptions);
   }
 
 
   getAll() {
-    let loginUrl = this.apiUrl + "sujet/getAll";
+    let loginUrl = this.apiUrl + "getAll";
     return this.http.get<any>(loginUrl, httpOptions1);
   }
 
   update(sujet :any){
-    let registreUrl=this.apiUrl+"sujet/updateById/"+sujet.id;
+    let registreUrl=this.apiUrl+"updateById/"+sujet.id;
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 
   delete(id:string){
-    let registreUrl=this.apiUrl+"sujet/deleteById/"+id;
+    let registreUrl=this.apiUrl+"deleteById/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getASujetByid(id:string){
-    let registreUrl=this.apiUrl+"sujet/getById/"+id;
+    let registreUrl=this.apiUrl+"getById/"+id;
     return this.http.get<any>(registreUrl,httpOptions);
   }
 

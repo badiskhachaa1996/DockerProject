@@ -24,11 +24,13 @@ export class UpdateUserComponent implements OnInit {
   id_role:any;
   emailExists=false;
   Roles = environment.role;
-  servicesRoles =environment.service_id;
-  userupdate:any=[]; 
+  showForm : boolean =true;
+
+userupdate:any=[User];
+  
  
   RegisterForm: FormGroup= new FormGroup({
-    lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    lastname:new FormControl([this.userupdate.lastname],[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
@@ -42,10 +44,14 @@ export class UpdateUserComponent implements OnInit {
 
   })
 
+  toggleForm(){
+    this.showForm=!this.showForm
+  }
+
 
   UpdateUser(){
     console.log('to'+this.userupdate);
-    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.servicesRoles.values[1])
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.role.value)
     console.log(user)
     this.AuthService.update(user).subscribe((data)=>{
       
@@ -61,7 +67,6 @@ export class UpdateUserComponent implements OnInit {
     });
     
   }
-
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -75,22 +80,23 @@ export class UpdateUserComponent implements OnInit {
 
   ngOnInit(): void {
 
-console.log(this.userupdate +"   : console//this.userupdate")
     this.servService.getAll().subscribe((data) => {
      this.Services=data;
       })
+  let idu :any= JSON.parse(localStorage.getItem('updateUser'))._id 
+  console.log("JE SAIS PAS ")
+  console.log(idu)
+   this.AuthService.getById(idu).subscribe((data)=>{
+     console.log(jwt_decode(data['userToken'])['userFromDb'])
    
-   this.AuthService.getById(localStorage.getItem('updateUser')).subscribe((data)=>{
-     this.userupdate=data._id
-   })
+     this.userupdate= jwt_decode(data['userToken'])['userFromDb']
+   },(err)=>console.log(err))
   
     if(localStorage.getItem("token")!=null){
       jwt_decode : jwt_decode; 
-    console.log("decode token :  "+jwt_decode(localStorage.getItem("token")));
+   
       let decodeToken:any =jwt_decode(localStorage.getItem("token"))
      this.User_role = decodeToken.role;
-     console.log("userROle : " + this.User_role);
-     console.log("first log : "+  this.currentRoot);
     
      
     }

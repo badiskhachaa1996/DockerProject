@@ -171,7 +171,8 @@ import { NavbarComponent } from './navbar/navbar.component'
         ReactiveFormsModule,
         TriStateCheckboxModule,
         ProgressSpinnerModule,
-        DragDropModule
+        DragDropModule,
+        
        
     ],
     declarations: [

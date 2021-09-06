@@ -38,7 +38,7 @@ export class ListUserComponent implements OnInit {
 
   ngOnInit(): void {
    
-    this.AuthService.getAll().subscribe((data) => {
+    this.AuthService.getAllAgent().subscribe((data) => {
       this.tabUser = data;
       this.totalRecords = this.tabUser.length;
     })
@@ -128,7 +128,7 @@ export class ListUserComponent implements OnInit {
       + "" +
       this.formtype)
 
-    localStorage.setItem('updateUser', JSON.stringify({rowData}))
+    localStorage.setItem('updateUser', JSON.stringify(rowData))
 
     console.log(localStorage.getItem('updateUser'));
     history.state;
