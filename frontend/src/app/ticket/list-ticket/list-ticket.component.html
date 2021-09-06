@@ -207,11 +207,15 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+<<<<<<< HEAD
                             <p-fieldset>
                                 <p-table [value]="CommentList" dataKey="id">
                                     <ng-template pTemplate="body" let-order>
                     <tr>
                         <td>{{order.description}}</td>
+=======
+                        </td>
+>>>>>>> db61a7ecfbeac5089ba18e6e3f0bc5b82d441351
                     </tr>
                 </ng-template>
             </p-table>
@@ -281,7 +285,12 @@
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments"
+<<<<<<< HEAD
                                 style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
+=======
+                                style="margin-left: 5%;"
+                                (click)="toggleFormCommentAdd(rowData) "></i>
+>>>>>>> db61a7ecfbeac5089ba18e6e3f0bc5b82d441351
                         </td>
                     </tr>
                 </ng-template>
@@ -350,6 +359,16 @@
                                         </div>
                                     </div>
                                 </div>
+                            </p-fieldset>
+                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments[rowData._id]" dataKey="id">
+                                    
+                                    <ng-template pTemplate="body" let-order>
+                                        <tr>
+                                            <td>{{order.description}}</td>
+                                        </tr>
+                                    </ng-template>
+                               </p-table>
                             </p-fieldset>
                         </td>
                     </tr>

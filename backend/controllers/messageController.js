@@ -6,15 +6,20 @@ const fs = require("fs")
 //Création d'un nouveau message TODO
 app.post("/create", (req, res) => {
     if(req.body.file.value){
-        fs.mkdir("storage/"+ticket_id)
-        fs.writeFile("storage/"+ticket_id+"/"+req.body.file.filename, req.body.file.value, 'base64', function(err) {
+        fs.mkdir("./storage/"+req.body.ticket_id+"/",
+        { recursive: true }, (err) => {
+          if (err) {
+            return console.error(err);
+          }
+        });
+        fs.writeFile("storage/"+req.body.ticket_id+"/"+req.body.file.filename, req.body.file.value, 'base64', function(err) {
             console.log(err);
           });
     }
     const message = new Message({
         user_id: req.body.id,
         description: req.body.description,
-        document: req.body?.filename,
+        document: req.body?.file?.filename,
         ticket_id: req.body.ticket_id,
         date_ajout: Date.now()
     });
@@ -81,13 +86,17 @@ app.get("/getAllByTicketID/:id", (req, res) => {
 });
 
 //Récupérer tous les messages par TicketID
-app.get("/getAllDic/:id", (req, res) => {
+app.get("/getAllDic", (req, res) => {
     let dic={}
     Message.find()
         .then(result => {
             result.forEach(msg => {
+                dic[msg.ticket_id]=[]
+            });
+            result.forEach(msg => {
                 dic[msg.ticket_id].push(msg)
             });
+            res.status(200).send(dic)
         })
         .catch(err => {
             console.log(err);
