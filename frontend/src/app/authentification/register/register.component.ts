@@ -9,7 +9,7 @@ import jwt_decode from "jwt-decode";
 import { DropdownModule } from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
-import { NonNullAssert } from '@angular/compiler';
+import { ListUserComponent } from 'src/app/authentification/list-user/list-user.component'
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
     console.log(localStorage.getItem("token"));
     //Enregistrement de l'user
     //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
-    let user = new User(null,
+   let user = new User(null,
       this.RegisterForm.value.firstname,
       this.RegisterForm.value.lastname,
       this.RegisterForm.value.phone,
@@ -71,8 +71,9 @@ export class RegisterComponent implements OnInit {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Tous les champs ne sont pas remplis' });
       }
-    });
-
+    }); 
+    this.listUserComponenet.showForm="Ajouter"
+    console.log(   this.listUserComponenet.showForm)
   }
 
   get lastname() { return this.RegisterForm.get('lastname'); }
@@ -84,7 +85,7 @@ export class RegisterComponent implements OnInit {
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet:ListUserComponent) { }
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
