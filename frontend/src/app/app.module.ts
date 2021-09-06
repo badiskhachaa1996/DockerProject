@@ -191,7 +191,7 @@ import { UpdateUserComponent } from './authentification/update/update.component'
 
                
     ],
-        providers: [  MessageService ,ConfirmationService,ServiceComponent],
+        providers: [  MessageService ,ConfirmationService,ServiceComponent,ListUserComponent],
         bootstrap: [AppComponent]
         })
       export class AppModule { }
