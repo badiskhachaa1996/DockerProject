@@ -50,9 +50,6 @@
                     <textarea rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
 
-                    <textarea formControlName="description" rows="5" cols="30" pInputTextarea autoResize="autoResize"
-                        placeholder="Saisir un message"></textarea>
-
                     <input type="file" (change)="onFileChange($event)" #fileInput>
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
