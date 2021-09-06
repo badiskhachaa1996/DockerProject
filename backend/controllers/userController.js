@@ -90,7 +90,7 @@ app.get("/getAllbyService/:id",(req,res)=>{
     })
 });
 app.get("/getAllAgent/",(req,res)=>{
-    User.find({role:["Responsable","Agent ","Admin"] })
+    User.find({role:["responsable","agent","admin"] })
 
     .then(result=>{
         //console.log('result: ',result)

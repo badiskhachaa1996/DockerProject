@@ -322,10 +322,22 @@ CommentList = [];
       //this.CommentList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment=false;
+      this.selectedTicket=null;
       this.commentForm.reset();
     }, (error) => {
       console.log(error)
     });
+
+    let dataTicket = {
+      id:this.selectedTicket._id,
+      statut:this.commentForm.value.statut
+    }
+
+    this.TicketService.changeStatut(dataTicket).subscribe((data)=>{
+      console.log(data)
+    },(error)=>{
+      console.log(error)
+    })
   }
 
   onFileChange(event) {
