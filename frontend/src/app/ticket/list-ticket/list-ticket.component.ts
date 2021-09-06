@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServService } from 'src/app/services/service.service';
 import { SujetService } from 'src/app/services/sujet.service';
@@ -34,23 +34,28 @@ export class ListTicketComponent implements OnInit {
 
   userList: User[] = [];
   userDic: any[] = [];
-  serviceDic: any[]=[]
+  serviceDic: any[] = []
 
   draggedTicket: Ticket;
   selectedUser: User;
+  selectedTicket:Ticket;
 
   showForm: string = "Ajouter";
   showDropDown: Ticket;
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+  loading:boolean=false;
 
+  @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = [];
+CommentList = [];
   CommentShow = [];
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
-    user_id: new FormControl('',[Validators.required]),
-    ticket_id: new FormControl('',[Validators.required]),
+    statut:new FormControl('',Validators.required),
+    file: new FormControl(''),
+    value:new FormControl(null,Validators.maxLength(10000000))
   });
 
   dragStart(event, ticket: Ticket) {
@@ -93,10 +98,10 @@ export class ListTicketComponent implements OnInit {
       //this.router.navigate(["/ticket/suivi"])
     }
 
-    this.ServService.getDic().subscribe((data)=>{
-      this.serviceDic=data;
+    this.ServService.getDic().subscribe((data) => {
+      this.serviceDic = data;
     })
-    
+
     this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
@@ -281,37 +286,63 @@ export class ListTicketComponent implements OnInit {
   }
 
 
-  
+
   toggleFormUpdate() {
     this.isModify = null;
   }
 
 
-  toggleFormCommentAdd() {
-    this.showFormAddComment=!this.showFormAddComment;
+  toggleFormCommentAdd(ticket) {
+    this.selectedTicket=ticket;
+    this.showFormAddComment = !this.showFormAddComment;
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
   SendComment() {
-    let sujet = new Sujet(this.commentForm.value.label, this.currentComment._id)
+    let comment = {
+      description:this.commentForm.value.description,
+      id:jwt_decode(localStorage.getItem('token'))['id'],
+      ticket_id:this.selectedTicket._id
+    }
 
-    this.SujetService.addSujet(sujet).subscribe((data) => {
-      this.CommentShow.push(data)
-      this.sujetList.push(data);
+    this.MsgServ.create(comment).subscribe((data) => {
+      //this.CommentShow.push(data)
+      //this.CommentList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment=false;
       this.commentForm.reset();
     }, (error) => {
-      if (error.status == 400) {
-        //Bad Request (service deja existant)
-        //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
-      }
       console.log(error)
     });
   }
 
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      this.loading=true
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.commentForm.get('file').setValue({
+            filename: file.name,
+            filetype: file.type,
+            value: reader.result.toString().split(',')[1]
+        })
+        this.commentForm.get('value').setValue(reader.result.toString().split(',')[1])
+        this.loading=false;
+      };
+    }
+  }
+  clearFile() {
+    this.commentForm.get('file').setValue(null);
+    this.commentForm.get('value').setValue(null);
+    this.fileInput.nativeElement.value = '';
+  }
+
+  get value() { return this.commentForm.get('value'); }
+
   Comments() {
-    this.ServService.getAll()
+    this.MsgServ.getAll()
       .subscribe(
         data => {
           this.comments = data;

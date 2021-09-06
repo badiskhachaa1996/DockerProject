@@ -1,13 +1,20 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { Message } = require("./../models/Message");
+const fs = require("fs")
 
 //Création d'un nouveau message TODO
 app.post("/create", (req, res) => {
+    if(req.body.file.value){
+        fs.mkdir("storage/"+ticket_id)
+        fs.writeFile("storage/"+ticket_id+"/"+req.body.file.filename, req.body.file.value, 'base64', function(err) {
+            console.log(err);
+          });
+    }
     const message = new Message({
         user_id: req.body.id,
         description: req.body.description,
-        document: req.body?.document,
+        document: req.body?.filename,
         ticket_id: req.body.ticket_id,
         date_ajout: Date.now()
     });
@@ -67,6 +74,20 @@ app.get("/getAllByTicketID/:id", (req, res) => {
     Message.find({ ticket_id: req.params.id })
         .then(result => {
             res.send(result.length > 0 ? result : { message: "Pas de Messages" });
+        })
+        .catch(err => {
+            console.log(err);
+        })
+});
+
+//Récupérer tous les messages par TicketID
+app.get("/getAllDic/:id", (req, res) => {
+    let dic={}
+    Message.find()
+        .then(result => {
+            result.forEach(msg => {
+                dic[msg.ticket_id].push(msg)
+            });
         })
         .catch(err => {
             console.log(err);

@@ -161,35 +161,24 @@ export class ServiceComponent implements OnInit {
 
   toggleFormServiceAdd() {
     this.showFormAddService=!this.showFormAddService;
-    this.showFormUpdateService=false;
-    this.showFormAddSujet=false;
-    this.showFormUpdateSujet=false;
-    this.serviceForm.reset();
+    // this.showFormUpdateService=false;
+    // this.serviceForm.reset();
   }
 
   toggleFormSujetAdd() {
     this.showFormAddSujet=!this.showFormAddSujet
     this.showFormUpdateSujet=false;
-    this.showFormAddService=false;
-    this.showFormUpdateService=false;
-
     this.sujetForm.reset();
   }
 
   toggleFormServiceUpdate() {
     this.showFormUpdateService=!this.showFormUpdateService;
     this.showFormAddService=false;
-    this.showFormAddSujet=false;
-    this.showFormUpdateSujet=false;
-    this.sujetForm.reset();
   }
 
   toggleFormSujetUpdate() {
     this.showFormUpdateSujet=!this.showFormUpdateSujet
     this.showFormAddSujet=false;
-    this.showFormAddService=false;
-    this.showFormUpdateService=false;
-    this.sujetForm.reset();
   }
 
   modifyService(id) {
