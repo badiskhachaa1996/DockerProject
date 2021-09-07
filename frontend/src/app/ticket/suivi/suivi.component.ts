@@ -198,6 +198,14 @@ export class SuiviComponent implements OnInit {
 
   }
 
+  toggleFormCommentAdd(ticket) {
+    this.selectedTicket = ticket;
+    this.showFormAddComment = !this.showFormAddComment;
+    this.showFormAdd=false;
+    // this.showFormUpdateService=false;
+    // this.serviceForm.reset();
+  }
+
   toggleFormUpdate() {
     this.showFormUpdate = !this.showFormUpdate
     this.showFormAdd = false
