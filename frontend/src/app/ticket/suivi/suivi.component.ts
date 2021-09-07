@@ -130,8 +130,6 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
-
-    this.Tickets();
   }
 
   TicketForm: FormGroup = new FormGroup({
