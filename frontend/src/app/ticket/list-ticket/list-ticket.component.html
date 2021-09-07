@@ -58,7 +58,7 @@
                         </p-fileUpload></div> 
                         <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB max).</span>
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
                     </div>
                     <!-- <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     <button pButton type="button" label="Vider" (click)="clearFile()"></button> -->
@@ -344,21 +344,21 @@
                             <p-fieldset *ngIf="comments" legend="Messages">
                                 <p-table [value]="comments" dataKey="id">
                                     <ng-template pTemplate="body" let-message>
-                                        <tr>
+                                        <tr *ngIf="message.user_id==token['_id']">
                                             <td>  
                                                 <span class="ui-g-6 ui-md-6">
-                                                <span  class="ui-g-12 ui-md-12" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </span>
+                                                <span  class="ui-g-12 ui-md-12" id="messageUser" > {{message.description}} </span>
                                                 <span class="ui-g-12 ui-md-12"><button class="pi pi-paperclip" id="charger" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span> 
                                             </span> 
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr *ngIf="message.user_id!=token['_id']">
                                             <td> 
                                                 <span class="ui-g-6 ui-md-6" style="float: right;">
                                                 <span  class="ui-g-12 ui-md-12" id="messageAgent" > {{message.description}} </span> 
                                                 
-                                                <span class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span>
                                                 
                                             </span> 
