@@ -72,8 +72,10 @@ app.get("/getAll", (req, res) => {
 
 //Récupérer tous les tickets d'un User
 app.get("/getAllbyUser/:id", (req, res) => {
+    console.log(req.params.id)
     Ticket.find({ createur_id: req.params.id })
         .then(result => {
+            console.log(result)
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {

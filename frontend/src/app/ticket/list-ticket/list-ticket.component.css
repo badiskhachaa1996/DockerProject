@@ -1,3 +1,20 @@
+#messageAgent{
+
+    border-radius: 15px;
+    background-color: #92cf80;
+    text-align:left !important;
+    float:right !important; 
+
+}
+
+#messageUser{
+  text-align:left !important;
+  border-radius: 15px;
+  background-color: #ccd3c9e3;
+
+
+}
+
 td{
     background-color: white;
 }

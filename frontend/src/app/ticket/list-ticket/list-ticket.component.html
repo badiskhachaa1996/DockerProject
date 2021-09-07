@@ -38,25 +38,30 @@
         </p-card>
     </div>
 </div>
-
-<div class="grid" *ngIf="showFormAddComment">
+<div class="p-grid mt-2"  *ngIf="showFormAddComment">
     <div class="xl:col-8 xl:col-offset-2 col-12">
+
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormAdd()"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
 
-                <form class="col-8 col-offset-2" [formGroup]="commentForm">
+                <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
                     <h3 class="text-center">Envoyer un message</h3>
-                    <textarea rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message"
-                        formControlName="description"></textarea>
 
-                    <input type="file" (change)="onFileChange($event)" #fileInput>
+        
+                    <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
+                        placeholder="Saisir un message"></textarea>
+                        <div class="col-9" ><p-fileUpload (change)="onFileChange($event)"> 
+                        </p-fileUpload></div> 
+
+
+                        <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
                             max).</span>
                     </div>
-                    <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
-                    <button pButton type="button" label="Vider" (click)="clearFile()"></button>
+                    <!-- <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                    <button pButton type="button" label="Vider" (click)="clearFile()"></button> -->
 
                     <div class=" col mt-2 mb-2 col-lg-6 col-6">
                         Statut:
@@ -67,9 +72,9 @@
                             <option>Traité</option>
                         </select>
                     </div>
-                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    <div class="col-10 col-offset-5 md:col-offset-5 sm:col-offset-4">
                         <button [disabled]="commentForm.invalid || loading" pButton
-                            class="ui-button-raised ui-button-success" label="Envoyé" (click)="SendComment()"></button>
+                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
                 </form>
             </div>
@@ -269,8 +274,8 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
-                            <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-envelope"
-                                style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
+                            <i pTooltip="Traiter" (click)="toggleFormCommentAdd(rowData) "><img src="../../../assets/images/traiter.png" width="20px" height="20px"> </i>
+                           
                         </td>
                     </tr>
                 </ng-template>
@@ -335,25 +340,42 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments" legend="Conversation"
+                            <p-fieldset *ngIf="comments" legend="Messages"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <p-table [value]="comments" dataKey="id">
+<<<<<<< HEAD
                                     <ng-template pTemplate="body" let-message>
                     <tr>
                         <td>{{message.description}}</td>
                         <button pButton (click)="downloadFile(message)">Télécharger le document<i class="pi pi-spin pi-spinner" *ngIf="loadingMessage==message._id"></i><i class="pi pi-download" *ngIf="loadingMessage!=message._id"></i></button>
+=======
+
+                                    <ng-template pTemplate="body" let-order>
+                                        <tr>
+                                              <td>  <div  class="ui-g-6 ui-md-6" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </div> </td>
+                                        </tr>
+                                        <tr>
+                                            <td>  <div  class="ui-g-6 ui-md-6" id="messageAgent" > {{order.description}} </div>    </td> 
+
+                                        </tr>
+                                         <tr>
+                                             <td>
+                                                <button pButton label="charger un fichier" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                            </td>
+                                        </tr>
+                   
+                                    </ng-template>
+                                </p-table>
+                            </p-fieldset>
+                        </td>
+>>>>>>> 77ec8a942a822a935df431d603a5cad228251c06
                     </tr>
                 </ng-template>
-            </p-table>
-            </p-fieldset>
-            </td>
-            </tr>
-            </ng-template>
             </p-table>
         </div>
     </div>
@@ -527,7 +549,7 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.agent_id].role}}</div>
                                         </div>
-                                        <div *ngIf="serviceDic[userDic[rowData.agent_id]?.service_id]"
+                                        <div *ngIf="serviceDic[userDic[rowData.agent_id].service_id]"
                                             class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
