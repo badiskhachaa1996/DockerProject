@@ -5,11 +5,12 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const socketIo = require("socket.io");
-const io = socketIo(server);
 const app = express(); //à travers ça je peux faire la création de service
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
-app.use(cors({origin: "*"}));
+app.use(cors({origin:"*"}));
+
+
 
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
@@ -30,16 +31,21 @@ mongoose
 //lors de chargement et lancement du serveur
 app.get("/",(req,res)=>res.status(200).send("GG ça marche"));
 //il va attendre le lancement du serveur et lire à partir du port 3000 et si il est strated affiche moi le serveur il est up.
-app.listen(3000,  ()=>console.log("Node.JS started"));
+//app.listen(3000,  ()=>console.log("Node.JS started"));
 
-io.on('connection',function (socket)  {
-    socket.emit('hello',
-       'heelo estya'
-    );
-});
-server.listen(3000,() => {
-     console("socket is listenning on port 3000");
-});
+// const io = socketIo(server);
+
+// io.on('connection',(socket) => {
+//     socket.emit('hello', {
+//         greeting: 'heelo estya'
+//     });
+// });
+
+
+
+// server.listen(3000,  ()=>{
+//     console.log("socket ");
+// });
 ////
 // app.post("/sendmail",(req,res) => {
 //       console.log("request came");
@@ -89,3 +95,15 @@ app.use("/sujet",SujetController);
 app.use("/message",messageController);
 
 app.use('/ticket',ticketController)
+
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+io.on('connection',function (socket)  {
+    socket.emit('hello', 
+         'heelo estya'
+    );
+    
+});
+server.listen(3000, () => {
+    console.log("socket.io est connecté")
+ });
