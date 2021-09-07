@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
     adresse: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    role: new FormControl('', Validators.required),
+    role: new FormControl('user', Validators.required),
     service_id :new FormControl(''),
 
   })
@@ -106,6 +106,9 @@ export class RegisterComponent implements OnInit {
       this.User_role = decodeToken.role;
     }
     this.IsAdmin=this.User_role == "admin"
+    if(this.IsAdmin){
+      this.RegisterForm.get('role').setValue(this.Roles[0].value)
+    }
   }
 
 }
