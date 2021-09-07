@@ -10,6 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { ListUserComponent } from 'src/app/authentification/list-user/list-user.component'
+import { HttpClientModule, HttpHeaders ,HttpErrorResponse} from '@angular/common/http';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -68,7 +69,7 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.service_id
     )
     console.log(user)
-    this.AuthService.register(user).subscribe((data) => {
+    this.AuthService.register(user).subscribe( (data) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
       
     }, (error) => {
@@ -81,10 +82,38 @@ export class RegisterComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Tous les champs ne sont pas remplis' });
       }
     }); 
+//     this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+//       data=> {
+//         let res:any = data;
+//         console.log(
+//          '   ${user.name} is succefuly ${res.messageId}'
+//         );
+//       },
+
+// );
     this.listUserComponenet.showForm="Ajouter"
     console.log(   this.listUserComponenet.showForm)
   }
-
+//   sendEmail(){
+//     //  this.loading = true;
+//     //  this.buttonText = "submiting";
+//      let user = {
+//        name : this.nameFormControl.value,
+//        email: this.emailFormControl.value,
+//      }
+//      this.http.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+//             data=> {
+//               let res:any = data;
+//               console.log(
+//                '   ${user.name} is succefuly ${res.messageId}'
+//               );
+//             },
+//             err=> {
+//               console.log(err);
+              
+//             }
+//      );
+// }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -107,5 +136,7 @@ export class RegisterComponent implements OnInit {
     }
     this.IsAdmin=this.User_role == "admin"
   }
+  
+
 
 }
