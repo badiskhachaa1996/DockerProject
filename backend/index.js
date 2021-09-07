@@ -7,7 +7,6 @@ const app = express(); //à travers ça je peux faire la création de service
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 app.use(cors());
-
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex:true,
