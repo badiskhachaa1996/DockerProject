@@ -340,7 +340,7 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -359,7 +359,7 @@
                                         </tr>
                                          <tr>
                                              <td>
-                                                <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                                <button pButton label="charger un fichier" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                             </td>
                                         </tr>
                    
@@ -542,7 +542,7 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.agent_id].role}}</div>
                                         </div>
-                                        <div *ngIf="serviceDic[userDic[rowData.agent_id]?.service_id]"
+                                        <div *ngIf="serviceDic[userDic[rowData.agent_id].service_id]"
                                             class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
