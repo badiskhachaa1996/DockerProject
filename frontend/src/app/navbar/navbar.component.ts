@@ -12,20 +12,20 @@ import { MenuItem, MessageService } from 'primeng/api';
 })
 export class NavbarComponent implements OnInit {
 
-  items : MenuItem[];
+  items: MenuItem[];
 
   constructor(private messageService: MessageService) { }
 
   ngOnInit(): void {
 
     this.items = [{
-      label: 'Gestions de mes tickets',
-      icon: 'pi pi-ticket',
-      routerLink : '/ticket/suivi'
+      label: 'Suivre mes tickets',
+      icon: 'pi pi-list',
+      routerLink: '/ticket/suivi'
     },
     {
       label: 'Gestions des tickets',
-      icon: 'pi pi-ticket',
+      icon: 'pi pi-list',
       routerLink: '/'
     },
     {
@@ -33,9 +33,9 @@ export class NavbarComponent implements OnInit {
       icon: 'pi pi-users',
       routerLink: '/listUser'
     }
-  ]
- 
-    
-  } 
+    ]
+
+
+  }
 
 }

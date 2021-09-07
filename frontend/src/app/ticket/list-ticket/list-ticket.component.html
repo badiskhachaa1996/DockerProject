@@ -222,7 +222,7 @@
         <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
-                (onDrop)="dragQueueToAccAff($event)" dataKey="_id">
+                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -251,7 +251,7 @@
                         *ngIf="sujetList[rowData.sujet_id]">
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)='loadMessages(rowData)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -357,7 +357,11 @@
                         <td>  <div  class="ui-g-6 ui-md-6" id="messageAgent" > {{order.description}} </div>    </td> 
 
                     </tr>
-                     
+                     <tr>
+                         <td>
+                            <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                         </td>
+                     </tr>
                    
                 </ng-template>
             </p-table>
@@ -374,7 +378,7 @@
     <div class="col-10 col-offset-1">
         <h3>Les tickets de mon service</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id">
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -405,7 +409,7 @@
                     <tr *ngIf="sujetList[rowData.sujet_id]">
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)='loadMessages(rowData)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -538,7 +542,8 @@
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.agent_id].role}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="serviceDic[userDic[rowData.agent_id]?.service_id]"
+                                            class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
@@ -547,6 +552,17 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+                            <p-fieldset *ngIf="comments" legend="Conversation"
+                            [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-table [value]="comments" dataKey="id">
+                                <ng-template pTemplate="body" let-message>
+                <tr>
+                    <td>{{message.description}}</td>
+                    <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                </tr>
+            </ng-template>
+        </p-table>
+        </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>

@@ -7,6 +7,9 @@ const message_schema= new mongoose.Schema({
     document: {
         type:String
     },
+    documentType:{
+        type:String
+    },
     user_id:{
          type: mongoose.SchemaTypes.ObjectId,
          required:true,
