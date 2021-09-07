@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
@@ -83,6 +83,10 @@ export class RegisterComponent implements OnInit {
     }); 
     this.listUserComponenet.showForm="Ajouter"
     console.log(   this.listUserComponenet.showForm)
+    if (this.router.url=="/register") {
+      this.router.navigateByUrl('/login')
+      
+    }
   }
 
   get lastname() { return this.RegisterForm.get('lastname'); }
