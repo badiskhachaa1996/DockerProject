@@ -348,32 +348,22 @@
                             <p-fieldset *ngIf="comments" legend="Messages"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <p-table [value]="comments" dataKey="id">
-<<<<<<< HEAD
-                                    <ng-template pTemplate="body" let-message>
-                    <tr>
-                        <td>{{message.description}}</td>
-                        <button pButton (click)="downloadFile(message)">Télécharger le document<i class="pi pi-spin pi-spinner" *ngIf="loadingMessage==message._id"></i><i class="pi pi-download" *ngIf="loadingMessage!=message._id"></i></button>
-=======
-
                                     <ng-template pTemplate="body" let-order>
                                         <tr>
-                                              <td>  <div  class="ui-g-6 ui-md-6" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </div> </td>
+                                            <td><div  class="ui-g-6 ui-md-6" id="messageUser"> Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </div> </td>
                                         </tr>
                                         <tr>
-                                            <td>  <div  class="ui-g-6 ui-md-6" id="messageAgent" > {{order.description}} </div>    </td> 
-
+                                            <td><div  class="ui-g-6 ui-md-6" id="messageAgent"> {{order.description}} </div></td> 
                                         </tr>
                                          <tr>
                                              <td>
                                                 <button pButton label="charger un fichier" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                             </td>
-                                        </tr>
-                   
+                                        </tr>                   
                                     </ng-template>
                                 </p-table>
                             </p-fieldset>
                         </td>
->>>>>>> 77ec8a942a822a935df431d603a5cad228251c06
                     </tr>
                 </ng-template>
             </p-table>
