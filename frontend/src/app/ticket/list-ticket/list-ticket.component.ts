@@ -49,6 +49,8 @@ export class ListTicketComponent implements OnInit {
   loading:boolean = false;
   loadingMessage;
 
+  token=null;
+
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
   commentForm: FormGroup = new FormGroup({
@@ -88,18 +90,17 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
 
   ngOnInit(): void {
-    let token =null
     try{
-      token = jwt_decode(localStorage.getItem("token"))
+      this.token = jwt_decode(localStorage.getItem("token"))
     }catch(e){
-      token =null
+      this.token =null
       console.error(e)
     }
-    if (token == null) {
+    if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (token["role"].includes("responsable")) {
+    } else if (this.token["role"].includes("responsable")) {
       this.isReponsable = true;
-    } else if (token["role"].includes("user")) {
+    } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
     }
 
@@ -107,7 +108,7 @@ export class ListTicketComponent implements OnInit {
       this.serviceDic = data;
     })
 
-    this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
+    this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
       }
@@ -132,7 +133,7 @@ export class ListTicketComponent implements OnInit {
     })
 
     //getAccAffByService
-    this.TicketService.getAccAff(token["id"]).subscribe((data) => {
+    this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
       }
@@ -145,11 +146,10 @@ export class ListTicketComponent implements OnInit {
           this.userDic[user._id] = user;
         });
         this.userList = data;
-        console.log(this.userDic)
       }
     })
 
-    this.TicketService.getTicketsByService(token['service_id']).subscribe((data) => {
+    this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.allTickets = data.TicketList;
       }
