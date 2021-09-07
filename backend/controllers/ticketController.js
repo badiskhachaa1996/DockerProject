@@ -63,7 +63,7 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll", (req, res) => {
     Ticket.find()
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Tickets" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
@@ -74,7 +74,7 @@ app.get("/getAll", (req, res) => {
 app.get("/getAllbyUser/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id })
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Tickets crée par cette User" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
@@ -94,7 +94,7 @@ app.get("/getFirstMessage/:id", (req, res) => {
 app.get("/getQueue", (req, res) => {
     Ticket.find({ statut: "Queue d'entrée" })
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Tickets dans la Queue d'entrée" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
@@ -106,7 +106,7 @@ app.get("/getQueue", (req, res) => {
 app.get("/getAccAff/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id })//Et "En attente d'une réponse"
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Tickets Acceptés ou Affectés" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
