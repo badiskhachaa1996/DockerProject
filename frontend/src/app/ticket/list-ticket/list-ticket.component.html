@@ -54,8 +54,7 @@
                         <div class="col-9" >
                             <p-fileUpload (change)="onFileChange($event)"
                             chooseLabel="Joindre" 
-                            uploadLabel="Enregistrer"
-                            cancelLabel="supprimer"
+                            mode="basic"
                             fileLimit="1" 
                             accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
                             maxFileSize="20000000"
