@@ -12,7 +12,8 @@ import { Sujet } from 'src/app/models/Sujet';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { tokenize } from '@angular/compiler/src/ml_parser/lexer';
+import {saveAs as importedSaveAs} from "file-saver";
+import { Message } from 'src/app/models/Message';
 
 @Component({
   selector: 'app-list-ticket',
@@ -331,14 +332,11 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  downloadFile(message) {
+  downloadFile(message:Message) {
     console.log(message)
     this.MsgServ.downloadFile(message._id).subscribe((data) => {
-      const blob: Blob = new Blob([data])
-      const url = window.URL.createObjectURL(blob);
-      window.open(url);
-      console.log(data)
-      console.log(blob)
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray],{type:data.documentType}),message.document)
     }, (error) => {
       console.error(error)
     })
