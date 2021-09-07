@@ -6,7 +6,9 @@
     float:right !important; 
 
 }
-
+p-fileUpload{
+  size: 50px;
+}
 #messageUser{
   text-align:left !important;
   border-radius: 15px;
