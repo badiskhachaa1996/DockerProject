@@ -114,7 +114,7 @@
 
                     <input type="file" (change)="onFileChange($event)" #fileInput>
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div>
                     <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
@@ -176,6 +176,7 @@
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i pTooltip="Traiter" (click)="toggleFormCommentAdd(rowData) "><img src="../../../assets/images/traiter.png" width="20px" height="20px"> </i>
                         </td>
                     </tr>
                 </ng-template>
@@ -208,9 +209,8 @@
                                     <ng-template pTemplate="body" let-message>
                     <tr>
                         <td>{{message.description}}</td>
-                        <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
-                        <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-envelope"
-                                style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
+                        <button pButton (click)="downloadFile(message)">Télécharger le document<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                        <i pTooltip="Répondre" tooltipPosition="bottom" class="pi pi-send" style="margin-left: 5%; " (click)="toggleFormCommentAdd(rowData)"></i>
                     </tr>
                 </ng-template>
             </p-table>

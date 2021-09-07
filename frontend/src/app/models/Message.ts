@@ -3,7 +3,8 @@ export class Message {
         public _id?:string,
         public document?:string,
         public documentType?:string,
-        public description? : string
+        public description? : string,
+        public user_id?:string
     ){}
 
  }
