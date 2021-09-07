@@ -12,6 +12,7 @@ import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
+import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 
 
 const routes: Routes = [
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path:'home', component: HomeComponent},
     { path:'listUser', component: ListUserComponent},
     { path:'listUser/update',component: UpdateUserComponent},
+    { path: 'reset', component: ResetMdpComponent}
 
 
     // { path: '**', redirectTo: '/' }

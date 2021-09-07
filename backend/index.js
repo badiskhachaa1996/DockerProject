@@ -6,11 +6,17 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const socketIo = require("socket.io");
 const app = express(); //à travers ça je peux faire la création de service
+<<<<<<< HEAD
 app.use(bodyParser.json({limit: '10mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '10mb', extended: true}))
 app.use(cors({origin:"*"}));
 
 
+=======
+app.use(bodyParser.json({limit: '20mb', extended: true}))
+app.use(bodyParser.urlencoded({limit: '20mb', extended: true}))
+app.use(cors({origin: "*"}));
+>>>>>>> 4f122969e3f3dca172b6c56a63ddb5df5e85798a
 
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {

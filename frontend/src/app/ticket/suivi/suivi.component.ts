@@ -100,7 +100,6 @@ export class SuiviComponent implements OnInit {
 
     this.SujetService.getAll().subscribe((data) => {
       if (!data.message) {
-        //{ label: 'Tous les sujets', value: null }
         this.filterSujet = data;
         data.forEach(sujet => {
           this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id };
@@ -131,8 +130,6 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
-
-    this.Tickets();
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -161,7 +158,7 @@ export class SuiviComponent implements OnInit {
           if (sujet._id == this.Ticket.sujet_id) {
             this.listServices1.forEach(serv => {
               if (serv._id == sujet.service_id) {
-                this.TicketForm1.patchValue({ service: serv, sujet: sujet })
+                this.TicketForm1.patchValue({ service: serv, sujet: sujet,description:this.Ticket.description })
               }
             });
           }
@@ -172,30 +169,7 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
-
-    this.TicketService.getFirstMessage(data._id).subscribe((data) => {
-      this.firstMessage = data.dataMessage;
-      this.TicketForm1.patchValue({ description: this.firstMessage.description })
-    }, (error) => {
-      console.log(error)
-    })
-
-
   }
-
-
-  Tickets() {
-    this.TicketService.getQueue()
-      .subscribe(
-        data => {
-          this.ticketList = data;
-
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
 
   modifyTicket() {
     //Modification du Ticket
@@ -275,7 +249,7 @@ export class SuiviComponent implements OnInit {
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
     file: new FormControl(''),
-    value: new FormControl(null, Validators.maxLength(10000000))
+    value: new FormControl(null, Validators.maxLength(20000000))
   });
 
   loadMessages(ticket:Ticket){
@@ -283,7 +257,6 @@ export class SuiviComponent implements OnInit {
     this.MsgServ.getAllByTicketID(ticket._id)
     .subscribe(
       data => {
-        console.log(data)
         this.comments = data;
       },
       error => {

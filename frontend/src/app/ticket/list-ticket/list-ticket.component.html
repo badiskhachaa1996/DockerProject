@@ -40,29 +40,28 @@
 </div>
 <div class="p-grid mt-2"  *ngIf="showFormAddComment">
     <div class="xl:col-8 xl:col-offset-2 col-12">
-
         <p-card>
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
-
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                    <h3 class="text-center">Envoyer un message</h3>
-
-        
+                    <h3 class="text-center">Envoyer un message</h3>       
                     <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
-                        <div class="col-9" ><p-fileUpload (change)="onFileChange($event)"> 
+                        <div class="col-9">
+                            <p-fileUpload (change)="onFileChange($event)">
+                            chooseLabel="Joindre" 
+                            uploadLabel="Enregistrer"
+                            cancelLabel="Supprimer"
+                            fileLimit="1" 
+                            accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
+                            maxFileSize="20000000"
                         </p-fileUpload></div> 
-
-
                         <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
-                            max).</span>
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB max).</span>
                     </div>
                     <!-- <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     <button pButton type="button" label="Vider" (click)="clearFile()"></button> -->
-
                     <div class=" col mt-2 mb-2 col-lg-6 col-6">
                         Statut:
                         <select formControlName="statut" class="form-control col-12">
@@ -82,7 +81,6 @@
     </div>
 </div>
 <div class="grid">
-
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
@@ -140,7 +138,6 @@
                         </td>
                     </tr>
                 </ng-template>
-
 
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
@@ -209,7 +206,6 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-
                         </td>
                     </tr>
                 </ng-template>
@@ -345,24 +341,34 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments" legend="Messages"
-                                [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments" legend="Messages">
                                 <p-table [value]="comments" dataKey="id">
-
-                                    <ng-template pTemplate="body" let-order>
+                                    <ng-template pTemplate="body" let-message>
                                         <tr>
-                                              <td>  <div  class="ui-g-6 ui-md-6" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </div> </td>
+                                            <td>  
+                                                <span class="ui-g-6 ui-md-6">
+                                                <span  class="ui-g-12 ui-md-12" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </span>
+                                                <span class="ui-g-12 ui-md-12"><button class="pi pi-paperclip" id="charger" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                                </span> 
+                                            </span> 
+                                            </td>
                                         </tr>
                                         <tr>
-                                            <td>  <div  class="ui-g-6 ui-md-6" id="messageAgent" > {{order.description}} </div>    </td> 
-
+                                            <td> 
+                                                <span class="ui-g-6 ui-md-6" style="float: right;">
+                                                <span  class="ui-g-12 ui-md-12" id="messageAgent" > {{message.description}} </span> 
+                                                
+                                                <span class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                                </span>
+                                                
+                                            </span> 
+                                            </td> 
                                         </tr>
-                                         <tr>
+                                         <!-- <tr>
                                              <td>
                                                 <button pButton label="charger un fichier" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                             </td>
-                                        </tr>
-                   
+                                        </tr> -->
                                     </ng-template>
                                 </p-table>
                             </p-fieldset>
@@ -558,7 +564,7 @@
                                 <ng-template pTemplate="body" let-message>
                 <tr>
                     <td>{{message.description}}</td>
-                    <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                    <button class="expended" pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                 </tr>
             </ng-template>
         </p-table>

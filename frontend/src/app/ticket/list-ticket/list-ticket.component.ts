@@ -88,15 +88,19 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
 
   ngOnInit(): void {
-
-    let token = jwt_decode(localStorage.getItem("token"))
+    let token =null
+    try{
+      token = jwt_decode(localStorage.getItem("token"))
+    }catch(e){
+      token =null
+      console.error(e)
+    }
     if (token == null) {
       this.router.navigate(["/login"])
     } else if (token["role"].includes("responsable")) {
-      //this.router.navigate(["/ticket/suivi"])
       this.isReponsable = true;
-    } else if (!token["role"].includes("agent")) {
-      //this.router.navigate(["/ticket/suivi"])
+    } else if (token["role"].includes("user")) {
+      this.router.navigate(["/ticket/suivi"])
     }
 
     this.ServService.getDic().subscribe((data) => {
