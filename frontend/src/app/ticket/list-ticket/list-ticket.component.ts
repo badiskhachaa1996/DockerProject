@@ -38,24 +38,24 @@ export class ListTicketComponent implements OnInit {
 
   draggedTicket: Ticket;
   selectedUser: User;
-  selectedTicket:Ticket;
+  selectedTicket: Ticket;
 
   showForm: string = "Ajouter";
   showDropDown: Ticket;
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
-  loading:boolean=false;
+  loading: boolean = false;
 
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = [];
-CommentList = [];
+  CommentList = [];
   CommentShow = [];
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
-    statut:new FormControl('',Validators.required),
+    statut: new FormControl('', Validators.required),
     file: new FormControl(''),
-    value:new FormControl(null,Validators.maxLength(10000000))
+    value: new FormControl(null, Validators.maxLength(10000000))
   });
 
   dragStart(event, ticket: Ticket) {
@@ -85,19 +85,18 @@ CommentList = [];
   }*/
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-     private AuthService: AuthService, private messageService: MessageService,private MsgServ : MsgServ) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
 
   ngOnInit(): void {
-     
+
     this.MsgServ.getAllDic()
-    .subscribe(
-      data => {
-        this.comments = data;
-        console.log(data)
-      },
-      error => {
-        console.log(error);
-      });
+      .subscribe(
+        data => {
+          this.comments = data;
+        },
+        error => {
+          console.log(error);
+        });
 
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
@@ -296,61 +295,69 @@ CommentList = [];
 
 
   toggleFormCommentAdd(ticket) {
-    this.selectedTicket=ticket;
+    this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
   SendComment() {
     let comment = {
-      description:this.commentForm.value.description,
-      id:jwt_decode(localStorage.getItem('token'))['id'],
-      ticket_id:this.selectedTicket._id,
-      file:this.commentForm.value.file
+      description: this.commentForm.value.description,
+      id: jwt_decode(localStorage.getItem('token'))['id'],
+      ticket_id: this.selectedTicket._id,
+      file: this.commentForm.value.file
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
       //this.CommentShow.push(data)
       //this.CommentList.push(data);
-      this.MsgServ.downloadFile(data.doc._id).subscribe((data)=>{
-        console.log(data)
-      },(error)=>{
-        console.error(error)
-      })
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
-      this.showFormAddComment=false;
-      this.selectedTicket=null;
+      this.showFormAddComment = false;
+      this.selectedTicket = null;
       this.commentForm.reset();
     }, (error) => {
       console.log(error)
     });
 
     let dataTicket = {
-      id:this.selectedTicket._id,
-      statut:this.commentForm.value.statut
+      id: this.selectedTicket._id,
+      statut: this.commentForm.value.statut
     }
 
-    this.TicketService.changeStatut(dataTicket).subscribe((data)=>{
+    this.TicketService.changeStatut(dataTicket).subscribe((data) => {
       console.log(data)
-    },(error)=>{
+    }, (error) => {
       console.log(error)
+    })
+  }
+
+  downloadFile(message) {
+    console.log(message)
+    this.MsgServ.downloadFile(message._id).subscribe((data) => {
+      const blob: Blob = new Blob([data])
+      const url = window.URL.createObjectURL(blob);
+      window.open(url);
+      console.log(data)
+      console.log(blob)
+    }, (error) => {
+      console.error(error)
     })
   }
 
   onFileChange(event) {
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
-      this.loading=true
+      this.loading = true
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.commentForm.get('file').setValue({
-            filename: file.name,
-            filetype: file.type,
-            value: reader.result.toString().split(',')[1]
+          filename: file.name,
+          filetype: file.type,
+          value: reader.result.toString().split(',')[1]
         })
         this.commentForm.get('value').setValue(reader.result.toString().split(',')[1])
-        this.loading=false;
+        this.loading = false;
       };
     }
   }
