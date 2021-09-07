@@ -71,7 +71,7 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll", (req, res) => {
     Message.find()
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Messages" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
@@ -81,7 +81,7 @@ app.get("/getAll", (req, res) => {
 app.get("/getAllByTicketID/:id", (req, res) => {
     Message.find({ ticket_id: req.params.id })
         .then(result => {
-            res.send(result.length > 0 ? result : { message: "Pas de Messages" });
+            res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             console.log(err);
