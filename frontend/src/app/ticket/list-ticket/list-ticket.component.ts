@@ -46,12 +46,11 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
-  loading: boolean = false;
+  loading:boolean = false;
+  loadingMessage;
 
   @ViewChild('fileInput') fileInput: ElementRef;
-  comments: any = [];
-  CommentList = [];
-  CommentShow = [];
+  comments: any = null;
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
     statut: new FormControl('', Validators.required),
@@ -90,15 +89,6 @@ export class ListTicketComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.MsgServ.getAllDic()
-      .subscribe(
-        data => {
-          this.comments = data;
-        },
-        error => {
-          console.log(error);
-        });
-
     let token = jwt_decode(localStorage.getItem("token"))
     if (token == null) {
       this.router.navigate(["/login"])
@@ -114,6 +104,8 @@ export class ListTicketComponent implements OnInit {
     })
 
     this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
+      console.log(token['service_id'])
+      console.log(data)
       if (!data.message) {
         this.queueList = data.TicketList;
       }
@@ -301,6 +293,18 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+
+  loadMessages(ticket:Ticket){
+    this.comments = null
+    this.MsgServ.getAllByTicketID(ticket._id)
+    .subscribe(
+      data => {
+        this.comments = data;
+      },
+      error => {
+        console.log(error);
+      });
+  }
   SendComment() {
     let comment = {
       description: this.commentForm.value.description,
@@ -310,8 +314,6 @@ export class ListTicketComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
-      //this.CommentShow.push(data)
-      //this.CommentList.push(data);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
@@ -333,10 +335,11 @@ export class ListTicketComponent implements OnInit {
   }
 
   downloadFile(message:Message) {
-    console.log(message)
+    this.loadingMessage=message._id;
     this.MsgServ.downloadFile(message._id).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray],{type:data.documentType}),message.document)
+      this.loadingMessage=null;
     }, (error) => {
       console.error(error)
     })
