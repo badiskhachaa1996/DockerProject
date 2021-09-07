@@ -38,28 +38,30 @@
         </p-card>
     </div>
 </div>
-
-<div class="grid" *ngIf="showFormAddComment">
+<div class="p-grid mt-2"  *ngIf="showFormAddComment">
     <div class="xl:col-8 xl:col-offset-2 col-12">
+<!-- <div class="grid" *ngIf="showFormAddComment">
+    <div class="xl:col-8 xl:col-offset-2 col-12"> -->
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormAdd()"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
 
-                <form class="col-8 col-offset-2">
+                <form class="col-8 col-offset-2" [formGroup]="commentForm">
                     <h3 class="text-center">Envoyer un message</h3>
-                    <textarea rows="5" cols="100" pInputTextarea autoResize="autoResize"
+
+        
+                    <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
+                        <p-fileUpload (change)="onFileChange($event)" > </p-fileUpload>
 
-                    <textarea formControlName="description" rows="5" cols="30" pInputTextarea autoResize="autoResize"
-                        placeholder="Entrer le message"></textarea>
 
-                    <input type="file" (change)="onFileChange($event)" #fileInput>
+                        <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
                             max).</span>
                     </div>
-                    <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
-                    <button pButton type="button" label="Vider" (click)="clearFile()"></button>
+                    <!-- <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                    <button pButton type="button" label="Vider" (click)="clearFile()"></button> -->
 
                     <div class=" col mt-2 mb-2 col-lg-6 col-6">
                         Statut:
@@ -72,12 +74,12 @@
                     </div>
                     <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                         <button [disabled]="commentForm.invalid || loading" pButton
-                            class="ui-button-raised ui-button-success" label="Envoyé" (click)="SendComment()"></button>
+                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
-            </form>
+                </form>
+            </div>
+        </p-card>
     </div>
-    </p-card>
-</div>
 </div>
 <div class="grid">
 
@@ -207,22 +209,10 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-<<<<<<< HEAD
-                            <p-fieldset>
-                                <p-table [value]="CommentList" dataKey="id">
-                                    <ng-template pTemplate="body" let-order>
-                    <tr>
-                        <td>{{order.description}}</td>
-=======
+
                         </td>
->>>>>>> db61a7ecfbeac5089ba18e6e3f0bc5b82d441351
                     </tr>
                 </ng-template>
-            </p-table>
-            </p-fieldset>
-            </td>
-            </tr>
-            </ng-template>
             </p-table>
         </div>
     </div>
@@ -284,13 +274,8 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
-                            <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments"
-<<<<<<< HEAD
-                                style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
-=======
-                                style="margin-left: 5%;"
-                                (click)="toggleFormCommentAdd(rowData) "></i>
->>>>>>> db61a7ecfbeac5089ba18e6e3f0bc5b82d441351
+                            <i pTooltip="Traiter" (click)="toggleFormCommentAdd(rowData) "><img src="../../../assets/images/traiter.png" width="20px" height="20px"> </i>
+                           
                         </td>
                     </tr>
                 </ng-template>
@@ -360,19 +345,26 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments[rowData._id]" legend="Messages"
+                                [style]="{'color':'green','font-weight': 'bold'}">
                                 <p-table [value]="comments[rowData._id]" dataKey="id">
-                                    
+
                                     <ng-template pTemplate="body" let-order>
-                                        <tr>
-                                            <td>{{order.description}}</td>
-                                        </tr>
-                                    </ng-template>
-                               </p-table>
-                            </p-fieldset>
-                        </td>
+                    <tr>
+                        <td>  <div  class="ui-g-6 ui-md-6" id="messageUser" > Salut je suis étudint en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </div> </td>
                     </tr>
+                    <tr>
+                        <td>  <div  class="ui-g-6 ui-md-6" id="messageAgent" > {{order.description}} </div>    </td> 
+
+                    </tr>
+                     
+                   
                 </ng-template>
+            </p-table>
+            </p-fieldset>
+            </td>
+            </tr>
+            </ng-template>
             </p-table>
         </div>
     </div>

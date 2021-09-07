@@ -309,6 +309,10 @@ CommentList = [];
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+  toggleFormCancel(){
+    this.showFormAddComment = !this.showFormAddComment;
+
+  }
   SendComment() {
     let comment = {
       description:this.commentForm.value.description,
