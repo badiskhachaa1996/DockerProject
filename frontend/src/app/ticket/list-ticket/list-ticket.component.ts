@@ -104,8 +104,6 @@ export class ListTicketComponent implements OnInit {
     })
 
     this.TicketService.getQueueByService(token['service_id']).subscribe((data) => {
-      console.log(token['service_id'])
-      console.log(data)
       if (!data.message) {
         this.queueList = data.TicketList;
       }
@@ -143,6 +141,7 @@ export class ListTicketComponent implements OnInit {
           this.userDic[user._id] = user;
         });
         this.userList = data;
+        console.log(this.userDic)
       }
     })
 
@@ -293,7 +292,10 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
+  toggleFormCancel(){
+    this.showFormAddComment = !this.showFormAddComment;
 
+  }
   loadMessages(ticket:Ticket){
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)

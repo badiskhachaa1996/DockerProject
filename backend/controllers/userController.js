@@ -2,19 +2,29 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+var nodemailer = require('nodemailer');
+
+
 let transporter = nodemailer.createTransport({
-    host: "hotmail",
+    host: "smtp.gmail.com",
     port: 587,
-    secure: false, 
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
     auth: {
-      user: "estya-ticketing@estya.com", 
-      pass: "ESTYA@@2021", 
+        user: 'babacislimane@gmail.com', 
+        pass: '16janvier2020', 
     },
-  });
+});
+
+
+
+
+
+
 
 //service registre
 app.post("/registre", (req, res) => {
+    
     let data = req.body;
     let user = new User({
         firstname: data.firstname,
@@ -27,9 +37,22 @@ app.post("/registre", (req, res) => {
         service_id : data.service_id || "61279209649616413cda8a3d"
     })
     user.save().then((userFromDb) => {
+
+        let mailOptions = {
+            from: 'babacislimane@gmail.com',
+            to: data.email,
+            subject: 'Estya-Ticketing',
+            text: 'Felicitation ! Votre compte E-Ticketing a été crée avec succés'
+        };
         res.status(200).send({ message: "registration done" });
 
-
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+               console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
         
     }).catch((error) => {
         res.status(400).send(error);
@@ -66,7 +89,7 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req,res)=>{
     User.find()
     .then(result=>{
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);
@@ -97,7 +120,7 @@ app.get("/getAllbyService/:id",(req,res)=>{
     User.find({service:req.params.id})
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);
@@ -108,7 +131,7 @@ app.get("/getAllAgent/",(req,res)=>{
 
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);
