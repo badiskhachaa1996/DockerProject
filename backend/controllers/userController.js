@@ -89,7 +89,7 @@ app.get("/getById/:id", (req, res) => {
 app.get("/getAll",(req,res)=>{
     User.find()
     .then(result=>{
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);
@@ -120,7 +120,7 @@ app.get("/getAllbyService/:id",(req,res)=>{
     User.find({service:req.params.id})
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);
@@ -131,7 +131,7 @@ app.get("/getAllAgent/",(req,res)=>{
 
     .then(result=>{
         //console.log('result: ',result)
-        res.send(result.length>0?result:{message:"Pas de Users"});
+        res.send(result.length>0?result:[]);
     })
     .catch(err=>{
         console.log(err);

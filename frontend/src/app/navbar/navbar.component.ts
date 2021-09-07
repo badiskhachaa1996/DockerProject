@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
 
     this.items = [{
       label: 'Suivre mes tickets',
-      icon: 'pi pi-list',
+      icon: 'pi pi-check-circle',
       routerLink: '/ticket/suivi'
     },
     {
