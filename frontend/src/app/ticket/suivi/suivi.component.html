@@ -129,10 +129,6 @@
         </p-card>
     </div>
 </div>
-<div *ngIf="ticketList">
-    <p>{{ticketList.length}}</p>
-    <p>{{ticketList | json}}</p>
-</div>
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
