@@ -8,3 +8,8 @@
 html{
     overflow-x: hidden;
 }
+
+.btn-menu {
+    padding-left: 30px;
+    text-align: left;
+}

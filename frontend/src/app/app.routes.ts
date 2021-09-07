@@ -20,11 +20,11 @@ const routes: Routes = [
     { path:'login',component:LoginComponent},
     { path:'register',component:RegisterComponent},
     { path:'service',component:ServiceComponent},
-    { path:"ticket/suivi",component:SuiviComponent},
-    { path: 'home', component: HomeComponent},
-    { path: 'listUser', component: ListUserComponent},
-    { path: 'listUser/update',component: UpdateUserComponent},
-    { path: 'navbar', component : NavbarComponent}
+    { path:'ticket/suivi',component:SuiviComponent},
+    { path:'home', component: HomeComponent},
+    { path:'listUser', component: ListUserComponent},
+    { path:'listUser/update',component: UpdateUserComponent},
+    { path:'navbar', component : NavbarComponent}
 
 
     // { path: '**', redirectTo: '/' }
