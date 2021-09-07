@@ -141,7 +141,7 @@ app.get("/getTicketsByService/:id", (req, res) => {
                     
                 }
             });
-            Ticket.find({statut:'En cours de traitement'})
+            Ticket.find({$or:[{ statut: "En cours de traitement"},{statut:"En attente d'une réponse"}] })
                 .then(result => {
                     result.forEach(ticket => {
                         if (listSujetofService.includes(ticket.sujet_id.toString())) {
@@ -168,14 +168,14 @@ app.get("/getQueueByService/:id", (req, res) => {
         .then(listSujets => {
             listSujets.forEach(sujet => {
                 if (sujet.service_id == id) {
-                    listSujetofService.push(sujet._id)
+                    listSujetofService.push(sujet._id.toString())
                 }
             });
             Ticket.find({ statut: "Queue d'entrée" })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
-                        if (ticket.sujet_id in listSujetofService) {
+                        if (listSujetofService.includes(ticket.sujet_id.toString())) {
                             TicketList.push(ticket)
                         }
                     })
