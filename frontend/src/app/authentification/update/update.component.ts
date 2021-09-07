@@ -60,12 +60,12 @@ userupdate:any=[User];
 
   UpdateUser(){
     console.log('to'+this.userupdate);
-    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.role.value)
-    console.log(user)
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.service_id)
+    console.log("user : "+user)
     this.AuthService.update(user).subscribe((data)=>{
       
       this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
-   
+   console.log(data)
     },(error)=>{
       if(error.status==400){
         //Bad Request (Email déjà utilisé)

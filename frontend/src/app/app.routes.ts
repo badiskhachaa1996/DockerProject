@@ -12,7 +12,7 @@ import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
-import { NavbarComponent } from './navbar/navbar.component';
+
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
@@ -20,11 +20,10 @@ const routes: Routes = [
     { path:'login',component:LoginComponent},
     { path:'register',component:RegisterComponent},
     { path:'service',component:ServiceComponent},
-    { path:"ticket/suivi",component:SuiviComponent},
-    { path: 'home', component: HomeComponent},
-    { path: 'listUser', component: ListUserComponent},
-    { path: 'listUser/update',component: UpdateUserComponent},
-    { path: 'navbar', component : NavbarComponent}
+    { path:'ticket/suivi',component:SuiviComponent},
+    { path:'home', component: HomeComponent},
+    { path:'listUser', component: ListUserComponent},
+    { path:'listUser/update',component: UpdateUserComponent},
 
 
     // { path: '**', redirectTo: '/' }

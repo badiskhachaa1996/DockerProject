@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
@@ -35,8 +35,8 @@ export class RegisterComponent implements OnInit {
     adresse: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    role: new FormControl('', ),
-    service_id :new FormControl('',),
+    role: new FormControl('user', Validators.required),
+    service_id :new FormControl(''),
 
   })
 
@@ -93,6 +93,10 @@ export class RegisterComponent implements OnInit {
 // );
     this.listUserComponenet.showForm="Ajouter"
     console.log(   this.listUserComponenet.showForm)
+    if (this.router.url=="/register") {
+      this.router.navigateByUrl('/login')
+      
+    }
   }
 //   sendEmail(){
 //     //  this.loading = true;
@@ -135,6 +139,9 @@ export class RegisterComponent implements OnInit {
       this.User_role = decodeToken.role;
     }
     this.IsAdmin=this.User_role == "admin"
+    if(this.IsAdmin){
+      this.RegisterForm.get('role').setValue(this.Roles[0].value)
+    }
   }
   
 

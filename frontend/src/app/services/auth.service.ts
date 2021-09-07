@@ -50,7 +50,7 @@ export class AuthService {
 
   update(user :User){
     let registreUrl=this.apiUrl+"updateById/"+user._id;
-    return this.http.post<any>(registreUrl,user,httpOptions1);
+    return this.http.post<any>(registreUrl,user,httpOptions);
 
   }
   getAllByService(id){

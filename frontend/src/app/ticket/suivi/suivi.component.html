@@ -101,30 +101,59 @@
     </div>
 </div>
 
+<div class="grid" *ngIf="showFormAddComment">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormAdd()"> </i>
+
+                <form class="col-8 col-offset-2" [formGroup]="commentForm">
+                    <h3 class="text-center">Envoyer un message</h3>
+                    <textarea rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message"
+                        formControlName="description"></textarea>
+
+                    <input type="file" (change)="onFileChange($event)" #fileInput>
+                    <div *ngIf="value.invalid">
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
+                            max).</span>
+                    </div>
+                    <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
+                    <button pButton type="button" label="Vider" (click)="clearFile()"></button>
+
+                    <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <button [disabled]="commentForm.invalid || loading" pButton
+                            class="ui-button-raised ui-button-success" label="Envoyé" (click)="SendComment()"></button>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
-            [paginator]="true" [pageLinks]="5" dataKey="_id">
+            [paginator]="true" [pageLinks]="5" dataKey="_id" rowExpandMode="single">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
 
-                        <th>
+                        <th style="text-decoration: underline;">
                             Service
 
                         </th>
-                        <th>
+                        <th style="text-decoration: underline;">
                             Sujet
 
                         </th>
-                        <th>
+                        <th style="text-decoration: underline;">
                             Statut
 
                         </th>
-                        <th>
+                        <th style="text-decoration: underline;">
                             Action
                         </th>
                     </tr>
@@ -134,7 +163,7 @@
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)='loadMessages(rowData)'></button>
                         </td>
 
                         <td>
@@ -174,6 +203,19 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+                            <p-fieldset *ngIf="comments" legend="Conversation"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments" dataKey="id">
+                                    <ng-template pTemplate="body" let-message>
+                    <tr>
+                        <td>{{message.description}}</td>
+                        <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                        <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-envelope"
+                                style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
+                    </tr>
+                </ng-template>
+            </p-table>
+            </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>

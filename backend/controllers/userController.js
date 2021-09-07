@@ -2,6 +2,17 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+let transporter = nodemailer.createTransport({
+    host: "hotmail",
+    port: 587,
+    secure: false, 
+    auth: {
+      user: "estya-ticketing@estya.com", 
+      pass: "ESTYA@@2021", 
+    },
+  });
+
 //service registre
 app.post("/registre", (req, res) => {
     let data = req.body;
@@ -17,6 +28,9 @@ app.post("/registre", (req, res) => {
     })
     user.save().then((userFromDb) => {
         res.status(200).send({ message: "registration done" });
+
+
+        
     }).catch((error) => {
         res.status(400).send(error);
     })
@@ -90,7 +104,7 @@ app.get("/getAllbyService/:id",(req,res)=>{
     })
 });
 app.get("/getAllAgent/",(req,res)=>{
-    User.find({role:["Responsable","Agent ","Admin"] })
+    User.find({role:["responsable","agent","admin"] })
 
     .then(result=>{
         //console.log('result: ',result)

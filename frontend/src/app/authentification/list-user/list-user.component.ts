@@ -28,10 +28,12 @@ export class ListUserComponent implements OnInit {
   cols: any[];
 
   totalRecords: number;
+  showFormAdd : boolean =false;
+  add : boolean =true;
 
  public showForm: string = "Ajouter";
   loading: boolean;
-
+ 
   selectedUser: User;
   formtype: string = "edit";
   constructor(private AuthService: AuthService, private router: Router) { }
@@ -61,10 +63,12 @@ export class ListUserComponent implements OnInit {
     if (this.showForm == "Ajouter") {
       this.formtype = "new";
       this.showForm = "Fermer";
-
+      this.add=!this.add;
     } else {
       this.formtype = "new";
       this.showForm = "Ajouter";
+      this.add=this.add;
+
     }
 
   }
@@ -79,6 +83,10 @@ export class ListUserComponent implements OnInit {
       this.showForm = "Fermer";
     }
 
+  }
+
+  toggleAdd(){
+    this.showFormAdd=!this.showFormAdd;
   }
 
   RegisterForm: FormGroup= new FormGroup({
