@@ -1,17 +1,16 @@
-<div class="layout-wrapper" (click)="onLayoutClick()"
-     [ngClass]="{'layout-menu-overlay': isOverlay(),
+<div class="layout-wrapper" (click)="onLayoutClick()" [ngClass]="{'layout-menu-overlay': isOverlay(),
                 'layout-menu-overlay-active': overlayMenuActive,
                 'layout-menu-horizontal': isHorizontal(),
                 'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
+  <app-topbar></app-topbar>
+  <app-navbar></app-navbar>
+
+  <app-menu [reset]="resetMenu"></app-menu>
 
 
-    <app-topbar></app-topbar>
-    <app-menu  [reset]="resetMenu"></app-menu>
-
-
-    <div [ngClass]="connected? 'layout-content':''" >
-        <router-outlet></router-outlet>
-        <!--<form [formGroup]="form">
+  <div [ngClass]="connected? 'layout-content':''">
+    <router-outlet></router-outlet>
+    <!--<form [formGroup]="form">
             <div class="form-group">
               <label for="avatar">Avatar</label>
               <input type="file" id="avatar" (change)="onFileChange($event)" #fileInput>
@@ -19,11 +18,8 @@
             </div>
             <button type="submit" (click)="onSubmit()" [disabled]="form.invalid" class="btn btn-success">Submit </button>
           </form>-->
-    </div>
+  </div>
 
-    <div class="layout-mask"></div>
-    <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
+  <div class="layout-mask"></div>
+  <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
 </div>
-
-
-

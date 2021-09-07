@@ -46,7 +46,8 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
-  loading: boolean = false;
+  loading:boolean = false;
+  loadingMessage;
 
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
@@ -332,9 +333,11 @@ export class ListTicketComponent implements OnInit {
   }
 
   downloadFile(message:Message) {
+    this.loadingMessage=message._id;
     this.MsgServ.downloadFile(message._id).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray],{type:data.documentType}),message.document)
+      this.loadingMessage=null;
     }, (error) => {
       console.error(error)
     })
