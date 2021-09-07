@@ -3,7 +3,6 @@ const mongoose = require ("mongoose");
 const express= require("express");
 const bodyParser = require("body-parser");                   
 const cors = require("cors");
-const nodemailer = require("nodemailer");
 const app = express(); //à travers ça je peux faire la création de service
 app.use(bodyParser.json({limit: '20mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}))

@@ -2,22 +2,19 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
 
 
 let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "smtp.office365.com",
     port: 587,
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'babacislimane@gmail.com', 
-        pass: '16janvier2020', 
+        user: 'estya-ticketing@estya.com', 
+        pass: 'ESTYA@@2021', 
     },
 });
-
-
-
 
 
 
@@ -39,7 +36,7 @@ app.post("/registre", (req, res) => {
     user.save().then((userFromDb) => {
 
         let mailOptions = {
-            from: 'babacislimane@gmail.com',
+            from: 'estya-ticketing@estya.com',
             to: data.email,
             subject: 'Estya-Ticketing',
             text: 'Felicitation ! Votre compte E-Ticketing a été crée avec succés'
