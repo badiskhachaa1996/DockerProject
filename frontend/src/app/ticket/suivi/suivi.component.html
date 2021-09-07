@@ -210,7 +210,7 @@
                     <tr>
                         <td>{{message.description}}</td>
                         <button pButton (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
-                        <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-comments"
+                        <i pTooltip="Traiter" tooltipPosition="bottom" class="pi pi-envelope"
                                 style="margin-left: 5%;" (click)="toggleFormCommentAdd(rowData) "></i>
                     </tr>
                 </ng-template>
