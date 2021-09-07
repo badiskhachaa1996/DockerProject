@@ -5,22 +5,25 @@ const fs = require("fs")
 
 //Création d'un nouveau message TODO
 app.post("/create", (req, res) => {
-    if(req.body.file.value){
-        fs.mkdir("./storage/"+req.body.ticket_id+"/",
-        { recursive: true }, (err) => {
-          if (err) {
-            return console.error(err);
-          }
+    if (req.body.file.value) {
+        fs.mkdir("./storage/" + req.body.ticket_id + "/",
+            { recursive: true }, (err) => {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+        fs.writeFile("storage/" + req.body.ticket_id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
+            if (err) {
+                console.log(err);
+            }
         });
-        fs.writeFile("storage/"+req.body.ticket_id+"/"+req.body.file.filename, req.body.file.value, 'base64', function(err) {
-            console.log(err);
-          });
     }
     const message = new Message({
         user_id: req.body.id,
         description: req.body.description,
         document: req.body?.file?.filename,
         ticket_id: req.body.ticket_id,
+        documentType: req.body?.file?.type,
         date_ajout: Date.now()
     });
 
@@ -87,11 +90,11 @@ app.get("/getAllByTicketID/:id", (req, res) => {
 
 //Récupérer tous les messages par TicketID
 app.get("/getAllDic", (req, res) => {
-    let dic={}
+    let dic = {}
     Message.find()
         .then(result => {
             result.forEach(msg => {
-                dic[msg.ticket_id]=[]
+                dic[msg.ticket_id] = []
             });
             result.forEach(msg => {
                 dic[msg.ticket_id].push(msg)
@@ -107,13 +110,12 @@ app.get("/getAllDic", (req, res) => {
 app.get("/downloadFile/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         let filename = data.document
-        let file = fs.readFileSync("storage/"+data.ticket_id+"/"+filename,{encoding:'base64'}, (err) => {
+        let file = fs.readFileSync("storage/" + data.ticket_id + "/" + filename, { encoding: 'base64' }, (err) => {
             if (err) {
-              return console.error(err);
+                return console.error(err);
             }
-          });
-        console.log(file)
-        res.status(200).send({file})
+        });
+        res.status(200).send({ file: file, documentType: data.documentType })
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
     })
