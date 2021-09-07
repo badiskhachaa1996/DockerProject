@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
+import { ServService } from 'src/app/services/service.service';
 import { environment } from 'src/environments/environment';
 import { CardModule } from 'primeng/card';
 import { LazyLoadEvent, MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
 import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
-
+import jwt_decode from "jwt-decode";
 import { MenuItem } from 'primeng/api';
 import { Router, RouterLink } from '@angular/router';
 import { RowToggler } from 'primeng/table';
@@ -39,6 +40,22 @@ export class ListUserComponent implements OnInit {
   constructor(private AuthService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+
+    let token =null
+    try{
+      token = jwt_decode(localStorage.getItem("token"))
+    }catch(e){
+      token =null
+      console.error(e)
+    }
+    if (token == null) {
+      this.router.navigate(["/login"])
+    } else if (token["role"].includes("admin")) {
+      
+    } else if (token["role"].includes("user")) {
+      this.router.navigate(["/ticket/suivi"])
+    }
+
    
     this.AuthService.getAllAgent().subscribe((data) => {
       this.tabUser = data;
@@ -46,12 +63,14 @@ export class ListUserComponent implements OnInit {
     })
 
     this.cols = [
+      
+      { field: 'role', header: 'Role' },
       { field: 'lastname', header: 'Nom' },
       { field: 'firstname', header: 'Prenom' },
       { field: 'email', header: 'Email' },
       { field: 'phone', header: 'Téléphone' },
       { field: 'adresse', header: 'Adresse' },
-      { field: 'service_id', header: 'Service' },
+      
       { field: 'action', header: "Action" }
     ];
     this.loading = true;
