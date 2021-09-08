@@ -14,6 +14,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import {saveAs as importedSaveAs} from "file-saver";
 import { Message } from 'src/app/models/Message';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-list-ticket',
@@ -87,7 +89,7 @@ export class ListTicketComponent implements OnInit {
   }*/
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService:NotificationService) { }
 
   ngOnInit(): void {
     try{
@@ -113,7 +115,6 @@ export class ListTicketComponent implements OnInit {
         this.queueList = data.TicketList;
         console.log(this.queueList)
       }
-      console.log('this.queueList')
       console.log(this.queueList)
     })
     this.ServService.getAll().subscribe((data) => {
@@ -318,12 +319,15 @@ export class ListTicketComponent implements OnInit {
       ticket_id: this.selectedTicket._id,
       file: this.commentForm.value.file
     }
-    console.log(comment)
-    /*this.MsgServ.create(comment).subscribe((data) => {
+    this.MsgServ.create(comment).subscribe((message) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
       this.commentForm.reset();
+
+      this.NotifService.create(new Notification(null,this.selectedTicket._id,false,"Nouveau Message")).subscribe((notif)=>{
+        this.NotifService.newNotif(notif,message.user_id)
+      })
     }, (error) => {
       console.log(error)
     });
@@ -337,7 +341,7 @@ export class ListTicketComponent implements OnInit {
       console.log(data)
     }, (error) => {
       console.log(error)
-    })*/
+    })
   }
 
   downloadFile(message:Message) {
