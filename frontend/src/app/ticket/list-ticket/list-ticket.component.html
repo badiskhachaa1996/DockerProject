@@ -343,11 +343,7 @@
                                         <tr *ngIf="message.user_id==token['_id']">
                                             <td>  
                                                 <span class="ui-g-6 ui-md-6">
-<<<<<<< HEAD
-                                                <span class="ui-g-12 ui-md-12" id="messageUser" > Salut je suis étudiant en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </span>
-=======
                                                 <span  class="ui-g-12 ui-md-12" id="messageUser" > {{message.description}} </span>
->>>>>>> d69535810afc5c4645fe0d2c40aa814c75662665
                                                 <span class="ui-g-12 ui-md-12"><button class="pi pi-paperclip" id="charger" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span> 
                                             </span> 
@@ -356,17 +352,11 @@
                                         <tr *ngIf="message.user_id!=token['_id']">
                                             <td> 
                                                 <span class="ui-g-6 ui-md-6" style="float: right;">
-<<<<<<< HEAD
-                                                <span  class="ui-g-12 ui-md-12" id="messageAgent"> {{message.description}} </span>                                               
-                                                <span class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
-                                                </span>          
-=======
                                                 <span  class="ui-g-12 ui-md-12" id="messageAgent" > {{message.description}} </span> 
                                                 
                                                 <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span>
                                                 
->>>>>>> d69535810afc5c4645fe0d2c40aa814c75662665
                                             </span> 
                                             </td> 
                                         </tr>
