@@ -349,7 +349,6 @@ export class ListTicketComponent implements OnInit {
   }
 
   onFileChange(event) {
-
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
       this.loading = true
