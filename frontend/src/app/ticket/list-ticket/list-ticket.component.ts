@@ -16,6 +16,7 @@ import {saveAs as importedSaveAs} from "file-saver";
 import { Message } from 'src/app/models/Message';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-ticket',
@@ -30,6 +31,7 @@ export class ListTicketComponent implements OnInit {
   listServices: Service[];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
+  statutList = environment.statut;
 
   queueList: Ticket[] = [];
   AccAffList: Ticket[] = [];
@@ -245,7 +247,7 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       /*TODO If service_id == data --> push
       if(this.sujetList[data.sujet_id].service_id==token.service_id){
         this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)

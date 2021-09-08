@@ -33,7 +33,7 @@ export class CreateComponent implements OnInit {
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Création du Ticket', detail:'Création réussie'});
+      this.messageService.add({severity:'success', summary:'Création du ticket', detail:'Votre ticket a bien été crée'});
       this.router.navigate(['/'])
     },(error)=>{
       console.log(error)
