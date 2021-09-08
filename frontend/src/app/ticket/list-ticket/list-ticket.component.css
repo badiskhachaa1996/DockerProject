@@ -31,7 +31,12 @@
   margin:  0px !important;
 
 }
+.badyT{
 
+  height: 200px; 
+  position: relative; 
+  overflow-y:scroll; 
+}
 td{
     background-color: white;
 }
@@ -54,3 +59,4 @@ td{
   p-button{
     margin-left: 40%;
   }
+  

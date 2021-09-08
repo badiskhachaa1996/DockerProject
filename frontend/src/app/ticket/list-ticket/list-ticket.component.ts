@@ -52,6 +52,7 @@ export class ListTicketComponent implements OnInit {
   showFormAddComment: boolean = false;
   loading: boolean = false;
   loadingMessage;
+  uplo: File;
 
   token = null;
 
@@ -207,6 +208,11 @@ export class ListTicketComponent implements OnInit {
       if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
+      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté")).subscribe((notif) => {
+        this.NotifService.newNotif(notif, this.selectedUser._id)
+      }, (error) => {
+        console.log(error)
+      });
       this.allTickets.push(data)
       this.showDropDown = null;
     }, (error) => {
@@ -245,11 +251,15 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
-      /*TODO If service_id == data --> push
-      if(this.sujetList[data.sujet_id].service_id==token.service_id){
-        this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
-      }*/
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
+      this.NotifService.create(new Notification(null, this.isModify._id, false, "Modification d'un ticket")).subscribe((notif) => {
+        this.NotifService.newNotif(notif, this.isModify.createur_id)
+      }, (error) => {
+        console.log(error)
+      });
+      if(this.sujetList[data.sujet_id].service_id==this.token.service_id){
+        this.allTickets.push(data)
+      }
       this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
       this.isModify = null;
       this.toggleFormUpdate();
@@ -324,12 +334,20 @@ export class ListTicketComponent implements OnInit {
       this.showFormAddComment = false;
 
       this.commentForm.reset();
+      if(this.commentForm.value.statut.value!="Traité"){
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message")).subscribe((notif) => {
+          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+      }else{
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket")).subscribe((notif) => {
+          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+      }
 
-      this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message")).subscribe((notif) => {
-        this.NotifService.newNotif(notif, message.doc.user_id)
-      }, (error) => {
-        console.log(error)
-      });
     }, (error) => {
       console.log(error)
     });
@@ -356,7 +374,12 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
   }
-
+  onUpload(event) {
+    for (let file of event.files) {
+      this.uplo = file;
+    }
+    this.onFileChange(event);
+  }
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
@@ -380,6 +403,9 @@ export class ListTicketComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
 
+  toggleFormCancel(){
+    this.showFormAddComment=!this.showFormAddComment;
+  }
   get value() { return this.commentForm.get('value'); }
 
   // Comments() {

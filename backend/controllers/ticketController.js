@@ -321,22 +321,18 @@ app.post("/changeService/:id", (req, res) => {
         {
             sujet_id: req.body.sujet_id
         },
-        { new: true }, (err, user) => {
+        { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             } else {
               
-                console.log(user.createur_id)
+                console.log(ticket.createur_id)
 
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB = userFromDb
-                    res.send({ userFromDb });
-
-
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
+                        to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
                         html: '<h3>Notification ! Ticket ' + user._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
                         attachments: [{
@@ -354,6 +350,7 @@ app.post("/changeService/:id", (req, res) => {
                             console.log('Email sent: ' + info.response);
                         }
                     });
+                    res.statut(200).send(ticket);
                 }).catch((error) => {
                     res.status(404).send("erreur :" + error);
                 })
@@ -385,7 +382,7 @@ app.post("/changeStatut/:id", (req, res) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
-                        subject: 'Notification E-Ticketing',
+                        subject: 'Notification E-Ticketing',gi
                         html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                         attachments: [{
                             filename: 'signature.png',

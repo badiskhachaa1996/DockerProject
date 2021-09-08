@@ -5,27 +5,128 @@
         </a>
     </div>
     
-        <ul class="layout-topbar-menu" role="menu">     
-            <li #profile  class="user-profile"
-                [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
-                <a href="#" (click)="app.onTopbarItemClick($event,profile)">
-                    <span  class="p-overlay-badge p-mr-5">
-                        <i class="pi pi-user" pTooltip="Profile" tooltipPosition="bottom" style="background-color:#3cb371;
-                        border-radius: 50%; font-size: 1.6em; color: white;"></i>
-                        <span class="p-badge" style="font-size: 15px;  font-weight: bold;
-                        color: #3cb371">{{Notifications.length | i18nPlural:notifMapping}}</span>
-                    </span>
-                    <div class="user-profile-info profile-link">
-                        <span class="user-profile-name"></span>
-                        <span class="user-profile-role"></span>
-                    </div>
-                    
-                </a>
+      
+    
+    
+    
+    
 
-            <ul class="fadeInDown">
+
+    
+    
+    
+    
+    
+    <!-- <ul   class="layout-topbar-menu " role="menu">     
+            <li #profile style="height: 40px; line-height: 1.5em; " class="user-profile"
+                [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
+              
+               
+                <span  class="p-overlay-badge p-mr-5">
+                    <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom" style="  
+                    border-radius: 50%; font-size: 1.6em; color: #3da827;"></i>
+                    <span class="p-badge" style="font-size: 15px;  font-weight: bold;
+                    color: #3cb371">{{Notifications.length | i18nPlural:notifMapping}}</span>
+                </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                
+
+                <a href="#" *ngIf="userconnected" style="line-height: 0px;" (click)="app.onTopbarItemClick($event,profile)">   
+                                   
+                    <span style="top: 0px;" > {{userconnected.firstname}} {{userconnected.lastname}}</span> 
+
+                </a>  &nbsp;      
+                
+                <span class="user" style="padding-top: 0em;" *ngIf="userconnected" class="user-profile-name">
+  
+                <a href="#" (click)="app.onTopbarItemClick($event,profile)">   
+            
+                        <i pTooltip="Profile" tooltipPosition="bottom" >
+                            <img src="../assets/images/avatar.PNG" width="40px" height="40px">    
+                        </i> 
+               
+              </a>  
+            </span>  -->
+
+                    
+
+         
+         
+                   
+
+
+
+
+
+
+            <ul class="layout-topbar-menu" role="menu">
+               
+                
+            
+                <li #profile class="user-profile" role="menuitem" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
+                    <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                        <div class="user-profile-info profile-link">
+                            <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
+                            <span class="user-profile-role">{{userconnected.role}}</span>
+                        </div>
+                        <img src="../assets/images/avatar.PNG" width="40px" height="40px">    
+
+                   
+                    </a>
+                    <ul class="fadeInDown">
+                        <li class="profile-detail">
+                            <div class="user-profile-info">
+                                <img src="../assets/images/avatar.PNG" width="40px" height="40px">    
+                                <div class="profile-info">
+                                    <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
+                                    <span class="user-profile-role">{{userconnected.role}}</span>
+                                </div>
+                                <a href="#" class="profile-detail-icon" (click)="onLogout()" >
+                                    <i class="pi pi-sign-out"></i>
+                                </a>
+                            </div>
+                        </li>
+                        <li>
+                            <a href="#"(click)="app.onTopbarItemClick($event,profile)">
+                                <i style="color: #3da827;" class="pi pi-user"></i>
+                                <div class="menu-text">
+                                    <span class="menu-title">Profile</span>
+                                    <span class="menu-subtitle">Modifier votre profile</span>
+                                </div>
+        
+                                <i class="right-icon pi pi-angle-right"></i>
+                            </a>
+                        </li>
+                        
+                       
+                        <li>
+                            <a href="#" (click)="app.onTopbarSubItemClick($event)">
+                                <i style="color: #3da827;" class="pi pi-globe"></i>
+                                <div class="menu-text">
+                                    <span class="menu-title">Notifications</span>
+                                    <span class="menu-subtitle">Nouveaux notifications</span>
+                                </div>
+                                <i class="right-icon pi pi-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!-- <ul class="fadeInDown">
                 <li class="profile-detail">
                     <div class="user-profile-info">
-                        <!--<img class="logo"  [src]="profilePicture" alt="prestige-layout"/>-->
                         <div class="profile-info">
                             <span *ngIf="userconnected" class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
                             <span *ngIf="userconnected" class="user-profile-role">{{userconnected.role}}</span>
@@ -38,8 +139,8 @@
                 <li>
                     <a href="#" routerLink="../profil">
                         <span  class="p-overlay-badge p-mr-5">
-                            <i class="pi pi-user" pTooltip="profile" tooltipPosition="bottom" style="  background-color:#3cb371;
-                            border-radius: 50%; font-size: 1.6em; color: white;"></i>
+                            <i class="pi pi-user" pTooltip="profile" tooltipPosition="bottom" style="
+                            border-radius: 50%; font-size: 1.6em; color: #3cb371;"></i>
                             <span class="p-badge" style="font-size: 15px;  font-weight: bold;
                             color: #3cb371"></span>
                         </span>
@@ -61,6 +162,6 @@
                 </li>
             </ul>
         </li>
-    </ul>
+    </ul> -->
 </div>
 <p-toast></p-toast>
