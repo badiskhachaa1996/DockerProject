@@ -4,6 +4,7 @@ import { AuthConfig } from 'angular-oauth2-oidc';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from './services/ticket.service';
 import * as socketIo from 'socket.io-client';
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
