@@ -321,29 +321,20 @@ app.post("/changeService/:id", (req, res) => {
         {
             sujet_id: req.body.sujet_id
         },
-        { new: true }, (err, user) => {
+        { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             } else {
               
-                console.log(user.createur_id)
+                console.log(ticket.createur_id)
 
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB = userFromDb
-                    res.send({ userFromDb });
-
-
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
+                        to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
-                        html: '<h3>Notification ! Ticket ' + user._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
-                        attachments: [{
-                            filename: 'logo.png',
-                            path: 'storage/logo.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
+                        html: '<h3>Notification ! Ticket ' + ticket._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>'
 
                     };
 
@@ -354,6 +345,7 @@ app.post("/changeService/:id", (req, res) => {
                             console.log('Email sent: ' + info.response);
                         }
                     });
+                    res.statut(200).send(ticket);
                 }).catch((error) => {
                     res.status(404).send("erreur :" + error);
                 })
