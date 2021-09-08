@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     },(error)=>{
       if(error.status==404){
         //Not Found (Pas de correspondance pour le duo email/passwd)
-        this.messageService.add({severity:'error', summary:'Erreur de Connexion', detail:'Email ou mot de passe incorrect'});
+        this.messageService.add({severity:'error', summary:'Erreur de connexion', detail:'Email ou mot de passe incorrect'});
         this.errorLogin=true;
       }
       console.log(error)

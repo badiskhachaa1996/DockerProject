@@ -64,7 +64,7 @@ userupdate:any=[User];
     console.log("user : "+user)
     this.AuthService.update(user).subscribe((data)=>{
       
-      this.messageService.add({severity:'success', summary:'Message de modification', detail:'Modification réussie'});
+      this.messageService.add({severity:'success', summary:'Message de modification', detail:'Votre message a bien été modifié'});
    console.log(data)
     },(error)=>{
       if(error.status==400){

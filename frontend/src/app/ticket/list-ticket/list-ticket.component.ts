@@ -246,7 +246,7 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       /*TODO If service_id == data --> push
       if(this.sujetList[data.sujet_id].service_id==token.service_id){
         this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
