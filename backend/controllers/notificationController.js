@@ -76,7 +76,7 @@ app.get("/getAllByUserID/:id", (req, res) => {
                     Notifs.push(notif)
                 }
             });
-            res.status(200).send(notif)
+            res.status(200).send(Notifs)
         })
     })
 });

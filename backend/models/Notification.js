@@ -12,7 +12,7 @@ const schema= new mongoose.Schema({
     date_ajout:{
         type:Date,
         required:true,
-        default:new Date.now()
+        default:Date.now()
     },
     ticket_id:{
         type: mongoose.SchemaTypes.ObjectId,
