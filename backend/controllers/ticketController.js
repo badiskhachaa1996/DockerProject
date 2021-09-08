@@ -284,7 +284,7 @@ app.post("/AccAff/:id", (req, res) => {
                 console.log(user.createur_id)
 
                 let UserDB;
-                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                User.findOne({ _id: user.agent_id }).then((userFromDb) => {
                     UserDB = userFromDb
                     res.send({ userFromDb });
 
@@ -293,7 +293,7 @@ app.post("/AccAff/:id", (req, res) => {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
                         subject: 'Notification E-Ticketing',
-                        html: 'Notification ! Votre Ticket ' + user._id + 'a été pris en charge et en cours de traitement <img  src="red"/>',
+                        html: '<h3 style="color:red">Notification ! </3><p> Le Ticket ' + user._id + '  vous a été  affecter </p><img  src="red"/>',
                         attachments: [{
                             filename: 'logo.png',
                             path: 'storage/logo.png',
