@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const Sujet = mongoose.model('sujet')
 const app = express(); //à travers ça je peux faire la creation des services
 const { Ticket } = require("./../models/Ticket");
+const { User } = require("./../models/User");
 const nodemailer = require('nodemailer');
 
 //creation d'un transporter smtp
@@ -198,7 +199,7 @@ app.get("/getQueueByService/:id", (req, res) => {
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
-                if (sujet.service_id == id) {
+                if (sujet.service_id = id) {
                     listSujetofService.push(sujet._id.toString())
                 }
             });
@@ -264,7 +265,31 @@ app.post("/AccAff/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-                res.status(200).send(user)
+                console.log(user.createur_id)
+  
+                let UserDB;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB=userFromDb
+                    res.send({ userFromDb });
+               
+ 
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: UserDB.email,
+                    subject: 'Notification E-Ticketing',
+                    text: 'Notification ! Votre Ticket '+user._id+'a été pris en charge et en cours de traitement '
+                };
+                
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                       console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }).catch((error) => {
+                res.status(404).send("erreur :" + error);
+            })
             }
 
         })
