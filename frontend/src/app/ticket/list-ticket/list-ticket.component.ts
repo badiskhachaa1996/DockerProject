@@ -297,10 +297,7 @@ export class ListTicketComponent implements OnInit {
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
-  toggleFormCancel(){
-    this.showFormAddComment = !this.showFormAddComment;
 
-  }
   loadMessages(ticket:Ticket){
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
@@ -319,8 +316,8 @@ export class ListTicketComponent implements OnInit {
       ticket_id: this.selectedTicket._id,
       file: this.commentForm.value.file
     }
-
-    this.MsgServ.create(comment).subscribe((data) => {
+    console.log(comment)
+    /*this.MsgServ.create(comment).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
@@ -338,7 +335,7 @@ export class ListTicketComponent implements OnInit {
       console.log(data)
     }, (error) => {
       console.log(error)
-    })
+    })*/
   }
 
   downloadFile(message:Message) {
@@ -358,10 +355,11 @@ export class ListTicketComponent implements OnInit {
     this.onFileChange(event);
   }
   onFileChange(event) {
+
     let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
+    if (event.files && event.files.length > 0) {
       this.loading = true
-      let file = event.target.files[0];
+      let file = event.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.commentForm.get('file').setValue({

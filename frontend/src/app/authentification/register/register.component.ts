@@ -82,15 +82,15 @@ export class RegisterComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Tous les champs ne sont pas remplis' });
       }
     }); 
-//     this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-//       data=> {
-//         let res:any = data;
-//         console.log(
-//          '   ${user.name} is succefuly ${res.messageId}'
-//         );
-//       },
+    this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+      data=> {
+        let res:any = data;
+        console.log(
+         '   ${user.name} is succefuly ${res.messageId}'
+        );
+      },
 
-// );
+);
     this.listUserComponenet.showForm="Ajouter"
     console.log(   this.listUserComponenet.showForm)
     if (this.router.url=="/register") {

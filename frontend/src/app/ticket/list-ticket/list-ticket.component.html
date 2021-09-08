@@ -48,16 +48,24 @@
                     <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
                         <div class="col-9">
-                            <p-fileUpload (uploadHandler)="onUpload($event)"
-                            chooseLabel="Joindre" 
+                            <p-fileUpload (uploadHandler)="onFileChange($event)"
                             mode="basic"
-                            customUpload="true"
+                            chooseLabel="Joindre" 
+                            customUpload="true" 
                             fileLimit="1" 
                             accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
-                            maxFileSize="20000000">
-                            
+                            maxFileSize="20000000"
+                            [auto]="true" #fileInput>
                         </p-fileUpload></div> 
-                        <!-- <input type="file"  #fileInput> -->
+
+                        <!-- <p-fileUpload (uploadHandler)="onUpload($event)"
+                        chooseLabel="Joindre" 
+                        mode="basic"
+                        customUpload="true"
+                        fileLimit="1" 
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
+                        maxFileSize="20000000"> -->
+
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
                     </div>

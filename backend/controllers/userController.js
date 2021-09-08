@@ -35,14 +35,16 @@ app.post("/registre", (req, res) => {
     })
     user.save().then((userFromDb) => {
 
+        res.status(200).send({ message: "registration done" });
+
+        
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
             subject: 'Estya-Ticketing',
-            text: 'Felicitation ! Votre compte E-Ticketing a été crée avec succés'
+            text: '<h1>Felicitation ! Votre compte E-Ticketing a été crée avec succés</h1>'
         };
-        res.status(200).send({ message: "registration done" });
-
+        
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
                console.log(error);

@@ -1,9 +1,9 @@
-import { Component, Renderer2 } from '@angular/core';
+import { Component, Renderer2 , OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from './services/ticket.service';
-
+import * as socketIo from 'socket.io-client';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -19,7 +19,17 @@ import { TicketService } from './services/ticket.service';
         ])
     ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+    
+    
+    title = 'app';
+    
+    ngOnInit(): void {
+        //const socket = socketIo('http://localhost:3000');
+
+        //socket.on('helllo',(data)=> console.log(data));
+    }
+
 
     layout = 'layout-blue';
     layoutMode = 'overlay';
@@ -46,10 +56,12 @@ export class AppComponent {
         showDebugInformation: true
     }
 
+
+
     constructor(public renderer: Renderer2,public TicketService:TicketService) {
 
     }
-
+  
 
 
     outClick() {
@@ -166,34 +178,4 @@ export class AppComponent {
     isHorizontal() {
         return this.layoutMode === 'horizontal';
     }
-
-    /*form: FormGroup = new FormGroup({
-        file: new FormControl(null, Validators.required)
-    })
-
-
-    onFileChange(event) {
-        let reader = new FileReader();
-        if (event.target.files && event.target.files.length > 0) {
-            let file = event.target.files[0];
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                this.form.get('file').setValue({
-                    filename: file.name,
-                    filetype: file.type,
-                    value: reader.result.toString().split(',')[1]
-                })
-            };
-        }
-    }
-    onSubmit() {
-        const formModel = this.form.value;
-        console.log(this.form.value.file)
-        this.TicketService.storeDoc(this.form.value.file).subscribe((data)=>{
-            console.log(data)
-        },(error)=>{
-            console.error(error)
-        })
-        console.log(formModel);
-    }*/
 }

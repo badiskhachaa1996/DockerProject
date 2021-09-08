@@ -6,6 +6,8 @@ import { User } from './models/User';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { NotificationService } from './services/notification.service';
+import { Notification } from './models/notification';
 
 @Component({
   selector: 'app-topbar',
@@ -26,8 +28,12 @@ export class AppTopBarComponent implements OnInit {
   userInformations: any;
   role: string;
   userconnected: User;
+  Notifications: Notification[] = [];
 
-  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router,private messageService:MessageService) { }
+  notifMapping:
+      {[k: string]: string} = {'=0': '', 'other': '#'};
+
+  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router,private NotificationService:NotificationService) { }
 
   ngOnInit() {
     this.connected = true;
@@ -39,6 +45,12 @@ export class AppTopBarComponent implements OnInit {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
       }, (error) => {
         console.log(error)
+      })
+      this.NotificationService.getAllByUserId(temp.id).subscribe((data)=>{
+        this.Notifications = data;
+        console.log(data)
+      },error=>{
+        console.error(error)
       })
     } 
   }
