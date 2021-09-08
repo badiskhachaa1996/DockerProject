@@ -58,7 +58,9 @@ export class SuiviComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
 
-
+  toggleFormCancel(){
+    this.showFormAddComment=!this.showFormAddComment;
+  }
   next() {
     this.first = this.first + this.rows;
   }

@@ -316,8 +316,7 @@ export class ListTicketComponent implements OnInit {
       ticket_id: this.selectedTicket._id,
       file: this.commentForm.value.file
     }
-    console.log(comment)
-    /*this.MsgServ.create(comment).subscribe((data) => {
+    this.MsgServ.create(comment).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
@@ -335,7 +334,7 @@ export class ListTicketComponent implements OnInit {
       console.log(data)
     }, (error) => {
       console.log(error)
-    })*/
+    })
   }
 
   downloadFile(message:Message) {
@@ -378,6 +377,9 @@ export class ListTicketComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
 
+  toggleFormCancel(){
+    this.showFormAddComment=!this.showFormAddComment;
+  }
   get value() { return this.commentForm.get('value'); }
 
   // Comments() {
