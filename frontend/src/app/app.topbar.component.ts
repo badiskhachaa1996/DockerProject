@@ -34,7 +34,7 @@ export class AppTopBarComponent implements OnInit {
   socket = io("http://localhost:3000");
 
   notifMapping:
-    { [k: string]: string } = { '=0': '', 'other': '#' };
+    { [k: string]: string } = { '=0': '','other':'#' };
 
   constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
@@ -52,13 +52,11 @@ export class AppTopBarComponent implements OnInit {
       })
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
-        console.log(data)
       }, error => {
         console.error(error)
       })
       this.socket.on("NewNotif",(data)=>{
         this.Notifications.push(data)
-        console.log("Une nouvelle notif est arrivé!")
       })
     }
 
