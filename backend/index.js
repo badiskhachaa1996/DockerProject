@@ -9,9 +9,9 @@ const socketIo = require("socket.io");
 const app = express(); //à travers ça je peux faire la création de service
 app.use(bodyParser.json({limit: '20mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}))
-// app.use(cors({
-//     origin:"http://localhost:4200",
-// }));
+app.use(cors({
+    origin:"http://localhost:4200",
+}));
 
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
@@ -67,12 +67,6 @@ app.use("/sujet",SujetController);
 app.use("/message",messageController);
 
 app.use('/ticket',ticketController)
-
-app.use(cors({
-    origin:"http://localhost:4200",
-}));
-const server = require('http').Server(app);
-
 
 app.use('/notification',notifController)
 
