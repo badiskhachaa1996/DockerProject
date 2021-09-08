@@ -12,6 +12,9 @@
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Service:
+                                <!--<span>
+                                    <p-dropdown formControlName="service" [options]="filterService" (onChange)="onChange($event)"></p-dropdown>
+                                </span>-->
                                 <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of filterService" [ngValue]="service">
@@ -21,6 +24,9 @@
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Sujet:
+                                <!--<span>
+                                    <p-dropdown formControlName="sujet" [options]="listSujets"></p-dropdown>
+                                </span>-->
                                 <select [disabled]="selectedService" formControlName="sujet"
                                     class="form-control col-12">
                                     <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet

@@ -31,11 +31,14 @@ export class AppTopBarComponent implements OnInit {
   Notifications: Notification[] = [];
 
   notifMapping:
-      {[k: string]: string} = {'=0': '', 'other': '#'};
+    { [k: string]: string } = { '=0': '', 'other': '#' };
 
-  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router,private NotificationService:NotificationService) { }
+  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
   ngOnInit() {
+    console.log("AHOY")
+    this.NotificationService.test()
+    console.log("YODAYO")
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
@@ -46,13 +49,14 @@ export class AppTopBarComponent implements OnInit {
       }, (error) => {
         console.log(error)
       })
-      this.NotificationService.getAllByUserId(temp.id).subscribe((data)=>{
+      this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
         console.log(data)
-      },error=>{
+      }, error => {
         console.error(error)
       })
-    } 
+    }
+
   }
   onLogout() {
     localStorage.clear();

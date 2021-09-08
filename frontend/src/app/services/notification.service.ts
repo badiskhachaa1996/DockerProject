@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Notification } from '../models/notification';
+const io = require("socket.io-client");
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.getItem('token')) };
@@ -11,9 +12,20 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 })
 export class NotificationService {
 
+  
+
   apiUrl ="http://localhost:3000/notification/"
 
   constructor(private http: HttpClient) { }
+
+  test(){
+    const socket = io("http://localhost:3000");
+    socket.on("connect", () => {
+      console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    });
+    
+    
+  }
 
   create(notif: Notification) {
     let url = this.apiUrl + "addService";
