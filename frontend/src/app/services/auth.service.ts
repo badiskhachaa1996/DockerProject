@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable,throwError } from 'rxjs';
 import { User } from '../models/User';
 import { catchError, map } from 'rxjs/operators';
-
+const io = require("socket.io-client");
 
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
@@ -16,6 +16,8 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 export class AuthService {
   apiUrl ="http://localhost:3000/user/"
   private Services = [];
+
+  socket = io("http://localhost:3000");
 
   constructor(private http : HttpClient) {  }
 

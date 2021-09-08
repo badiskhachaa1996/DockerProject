@@ -41,7 +41,7 @@ export class UpdateComponent implements OnInit {
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.updateFirst(req).subscribe((data)=>{
-      this.messageService.add({severity:'success', summary:'Modification du Ticket', detail:'Modification réussie'});
+      this.messageService.add({severity:'success', summary:'Modification du ticket', detail:'Votre ticket a bien été modifié'});
       this.router.navigate(['/ticket/suivi'])
     },(error)=>{
       console.log(error)

@@ -183,7 +183,7 @@ export class SuiviComponent implements OnInit {
       this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1);
       this.ticketList.push(data);
 
-      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.toggleFormUpdate()
     }, (error) => {
       console.log(error)
@@ -225,7 +225,7 @@ export class SuiviComponent implements OnInit {
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Création réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
      
       try{
         this.ticketList.push(data.doc)
@@ -282,7 +282,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
       this.commentForm.reset();

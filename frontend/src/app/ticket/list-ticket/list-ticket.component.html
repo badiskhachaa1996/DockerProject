@@ -2,7 +2,7 @@
     <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="isModify">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"></i>
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
@@ -295,12 +295,8 @@
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom et
-                                                    Prénom:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].firstname |
-                                                titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
-                                                }}</div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom et Prénom:</b></div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.createur_id].firstname | titlecase }} {{userDic[rowData.createur_id].lastname | titlecase}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
@@ -309,28 +305,24 @@
                                                 {{userDic[rowData.createur_id].phone}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;"> Adresse
-                                                    mail:</b> </div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;"> Adresse mail:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
-                                                    postale:</b> </div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse postale:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].adresse}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
-                                            </div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b
-                                                    style="text-align:left !important;">Service:</b> </div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
@@ -355,8 +347,7 @@
                                                 <span class="ui-g-12 ui-md-12" id="messageAgent"> {{message.description}} </span>  
                                                 <span style="font-style: italic; font-size: 11px; float: right;"> {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</span>  
                                                 <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip" style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>   
-                                                </span>
-                                                
+                                                </span>      
                                             </span> 
                                             </td> 
                                         </tr>
@@ -464,44 +455,34 @@
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom et
-                                                    Prénom:</b> </div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom etPrénom:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].firstname |
-                                                titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
-                                                }}</div>
+                                                {{userDic[rowData.createur_id].firstname | titlecase }} {{userDic[rowData.createur_id].lastname | titlecase}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].phone}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.createur_id].phone}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
-                                                    mail:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].email}}</div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse mail:</b></div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
-                                                    postale:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].adresse}}</div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse postale:</b></div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.createur_id].adresse}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].role}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.createur_id].role}}</div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -510,46 +491,35 @@
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom et
-                                                    Prénom:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id].firstname |
-                                                titlecase }} {{userDic[rowData.agent_id].lastname | titlecase
-                                                }}
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom et Prénom:</b> </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.agent_id].firstname | titlecase }} {{userDic[rowData.agent_id].lastname | titlecase}}
                                             </div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id].phone}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.agent_id].phone}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
-                                                    mail:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id].email}}</div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse mail:</b> </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.agent_id].email}}</div>
                                         </div>
                                     </div>
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
-                                                    postale:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id].adresse}}</div>
+                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse postale:</b> </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.agent_id].adresse}}</div>
                                         </div>
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.agent_id].role}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{userDic[rowData.agent_id].role}}</div>
                                         </div>
                                         <div *ngIf="serviceDic[userDic[rowData.agent_id].service_id]"
                                             class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.agent_id]?.service_id].label}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{serviceDic[userDic[rowData.agent_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
                                 </div>
