@@ -9,7 +9,8 @@ export class User {
         public role?:string,
         public etat?: boolean,
         public adresse?:string,
-        public service_id?:string
+        public service_id?:string,
+        public civilite?:string
     ){}
     
 

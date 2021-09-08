@@ -3,7 +3,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from './services/ticket.service';
-import * as socketIo from 'socket.io-client';
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
@@ -25,9 +24,6 @@ export class AppComponent implements OnInit{
     title = 'app';
     
     ngOnInit(): void {
-        //const socket = socketIo('http://localhost:3000');
-
-        //socket.on('helllo',(data)=> console.log(data));
     }
 
 

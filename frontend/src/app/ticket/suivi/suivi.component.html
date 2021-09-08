@@ -12,6 +12,9 @@
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Service:
+                                <!--<span>
+                                    <p-dropdown formControlName="service" [options]="filterService" (onChange)="onChange($event)"></p-dropdown>
+                                </span>-->
                                 <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of filterService" [ngValue]="service">
@@ -21,6 +24,9 @@
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Sujet:
+                                <!--<span>
+                                    <p-dropdown formControlName="sujet" [options]="listSujets"></p-dropdown>
+                                </span>-->
                                 <select [disabled]="selectedService" formControlName="sujet"
                                     class="form-control col-12">
                                     <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet
@@ -147,11 +153,12 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;" (click)="toggleFormAdd()"></button>
+        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
+            (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4"  
-            [paginator]="true" [pageLinks]="5" dataKey="_id" rowExpandMode="single">
+            <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+                [pageLinks]="5" dataKey="_id" rowExpandMode="single">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
@@ -178,7 +185,8 @@
                         <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)='loadMessages(rowData)'></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)='loadMessages(rowData)'></button>
                         </td>
 
                         <td>
@@ -219,6 +227,7 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+<<<<<<< HEAD
                             <p-fieldset *ngIf="comments" legend="Messages">
                                 <div class="badyT">
 
@@ -248,18 +257,36 @@
 
                             </span>
                         </td>
+=======
+                            <p-fieldset *ngIf="comments" legend="Conversation"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments" dataKey="id">
+                                    <ng-template pTemplate="body" let-message>
+                    <tr>
+                        <td>{{message.description}}</td>
+                        <button pButton (click)="downloadFile(message)">Télécharger le document<i
+                                class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                        <i pTooltip="Répondre" tooltipPosition="bottom" class="pi pi-send" style="margin-left: 5%; "
+                            (click)="toggleFormCommentAdd(rowData)"></i>
+>>>>>>> f8d6a0776f9ba21677f5e0d49f5dcc3f3a88a4f7
                     </tr>
 
                 </ng-template>
 
             </p-table>
+<<<<<<< HEAD
         </div>
         </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
+=======
+            </p-fieldset>
+            </td>
+            </tr>
+            </ng-template>
+>>>>>>> f8d6a0776f9ba21677f5e0d49f5dcc3f3a88a4f7
             </p-table>
         </div>
     </div>
 </div>
-

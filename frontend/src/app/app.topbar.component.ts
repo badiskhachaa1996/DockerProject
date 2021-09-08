@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
+const io = require("socket.io-client");
 
 @Component({
   selector: 'app-topbar',
@@ -30,10 +31,12 @@ export class AppTopBarComponent implements OnInit {
   userconnected: User;
   Notifications: Notification[] = [];
 
-  notifMapping:
-      {[k: string]: string} = {'=0': '', 'other': '#'};
+  socket = io("http://localhost:3000");
 
-  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router,private NotificationService:NotificationService) { }
+  notifMapping:
+    { [k: string]: string } = { '=0': '','other':'#' };
+
+  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
   ngOnInit() {
     this.connected = true;
@@ -43,16 +46,20 @@ export class AppTopBarComponent implements OnInit {
       let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+        this.socket.emit("userLog",this.userconnected)
       }, (error) => {
         console.log(error)
       })
-      this.NotificationService.getAllByUserId(temp.id).subscribe((data)=>{
+      this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
-        console.log(data)
-      },error=>{
+      }, error => {
         console.error(error)
       })
-    } 
+      this.socket.on("NewNotif",(data)=>{
+        this.Notifications.push(data)
+      })
+    }
+
   }
   onLogout() {
     localStorage.clear();
