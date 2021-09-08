@@ -111,7 +111,10 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
+        console.log(this.queueList)
       }
+      console.log('this.queueList')
+      console.log(this.queueList)
     })
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
@@ -349,7 +352,6 @@ export class ListTicketComponent implements OnInit {
   }
 
   onFileChange(event) {
-
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
       this.loading = true
