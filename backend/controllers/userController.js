@@ -24,6 +24,7 @@ app.post("/registre", (req, res) => {
     
     let data = req.body;
     let user = new User({
+        civilite: data.civilite,
         firstname: data.firstname,
         lastname: data.lastname,
         phone: data.phone,
@@ -96,7 +97,8 @@ app.get("/getAll",(req,res)=>{
 
 app.post("/updateById/:id", (req, res) => {
     User.findByIdAndUpdate(req.params.id,
-        {   
+        {
+            civilite:req.body.civilite,
             firstname:req.body.firstname,
             lastname:req.body.lastname,
             email:req.body.email,

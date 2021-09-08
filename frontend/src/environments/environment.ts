@@ -28,10 +28,15 @@ export const environment = {
  
 
 civilite: [
-  { value: 'M', viewValue: 'M' },
-  { value: 'Mme', viewValue: 'Mme' },
+  { value: 'Monsieur', viewValue: 'Mr' },
+  { value: 'Madame', viewValue: 'Mme' },
 ],
 
+statut: [
+  { value: 'En cours de traitement', viewValue : 'En cours de traitement'},
+  { value: 'En attente d\'une réponse', viewValue : 'En attente d\'une réponse'},
+  { value: 'Traité', viewValue : 'Traité'},
+],
 
 sujetTicketing : [
   { value: "Attestation d'emploi et Certificat de travail", viewValue: "Attestation d'emploi et Certificat de travail" },

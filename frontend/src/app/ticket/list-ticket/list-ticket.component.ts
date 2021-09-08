@@ -14,6 +14,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import {saveAs as importedSaveAs} from "file-saver";
 import { Message } from 'src/app/models/Message';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-ticket',
@@ -28,6 +29,7 @@ export class ListTicketComponent implements OnInit {
   listServices: Service[];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
+  statutList = environment.statut;
 
   queueList: Ticket[] = [];
   AccAffList: Ticket[] = [];

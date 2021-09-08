@@ -233,11 +233,14 @@ export class SuiviComponent implements OnInit {
 
   }
 
-  onChange() {
-    this.TicketForm.patchValue({
-      sujet: this.listSujets[this.TicketForm.value.service._id][0]
-    })
+  onChange(event) {
+    console.log(event)
+    console.log(this.TicketForm.get("service"))
+    /*this.TicketForm.patchValue({
+      sujet: this.listSujets[event.value.service._id][0]
+    })*/
   }
+
   onChange2() {
     this.TicketForm1.patchValue({
       sujet: this.listSujets1[this.TicketForm1.value.service._id][0]

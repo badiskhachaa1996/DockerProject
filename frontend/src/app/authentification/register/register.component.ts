@@ -24,10 +24,12 @@ export class RegisterComponent implements OnInit {
   emailExists = false;
   Roles = environment.role;
   showForm : boolean =true;
+  civiliteList = environment.civilite;
 
 
 
   RegisterForm: FormGroup = new FormGroup({
+    civilite : new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -63,10 +65,10 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
       this.RegisterForm.value.password,
-      this.RegisterForm.value.role.value || "user",
-      null,
+      this.RegisterForm.value.role.value || "user",null,
       this.RegisterForm.value.adresse,
-      this.RegisterForm.value.service_id
+      this.RegisterForm.value.service_id,
+      this.RegisterForm.value.civilite
     )
     console.log(user)
     this.AuthService.register(user).subscribe( (data) => {
@@ -127,6 +129,7 @@ export class RegisterComponent implements OnInit {
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
+  get civilite() { return this.RegisterForm.get('civilite'); }
   constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet:ListUserComponent) { }
 
   ngOnInit(): void {
