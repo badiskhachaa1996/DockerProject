@@ -305,6 +305,32 @@ app.post("/changeService/:id", (req, res) => {
                 res.send(err)
             } else {
                 res.status(200).send(user)
+                console.log(user.createur_id)
+  
+                let UserDB;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB=userFromDb
+                    res.send({ userFromDb });
+               
+ 
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: UserDB.email,
+                    subject: 'Notification E-Ticketing',
+                    text: 'Notification ! Ticket '+user._id+' Modifié au niveau de service et sujet '
+                };
+                
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                       console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }).catch((error) => {
+                res.status(404).send("erreur :" + error);
+            })
+                
             }
 
         })
@@ -319,7 +345,34 @@ app.post("/changeStatut/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
+                
                 res.status(200).send(user)
+                console.log(user.createur_id)
+  
+                let UserDB;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB=userFromDb
+                    res.send({ userFromDb });
+               
+ 
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: UserDB.email,
+                    subject: 'Notification E-Ticketing',
+                    text: 'Notification ! Votre Ticket '+user._id+'a été traité par '+user.agent_id+' '
+                };
+                
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                       console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }).catch((error) => {
+                res.status(404).send("erreur :" + error);
+            })
+                
             }
 
         })
