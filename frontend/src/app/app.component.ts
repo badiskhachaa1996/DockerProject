@@ -3,7 +3,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TicketService } from './services/ticket.service';
-import * as socketIo from 'socket.io-client';
+import * as socketIo from 'socket.io';
 
 @Component({
     selector: 'app-root',
