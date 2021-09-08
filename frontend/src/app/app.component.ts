@@ -26,9 +26,9 @@ export class AppComponent implements OnInit{
     title = 'app';
     
     ngOnInit(): void {
-        //const socket = socketIo('http://localhost:3000');
+        const socket = socketIo('http://localhost:3000');
 
-        //socket.on('helllo',(data)=> console.log(data));
+        socket.on('helllo',(data)=> console.log(data));
     }
 
 
