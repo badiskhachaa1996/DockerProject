@@ -47,17 +47,18 @@
                     <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
                         <div class="col-9">
-                            <p-fileUpload (change)="onFileChange($event)"
+                            <p-fileUpload (uploadHandler)="onFileChange($event)"
+                            mode="basic"
                             chooseLabel="Joindre" 
-                            uploadLabel="Enregistrer"
-                            cancelLabel="Supprimer"
+                            customUpload="true" 
                             fileLimit="1" 
                             accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
-                            maxFileSize="20000000">
+                            maxFileSize="20000000"
+                            [auto]="true" #fileInput>
                         </p-fileUpload></div> 
                         <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB max).</span>
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
                     </div>
                     <!-- <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
                     <button pButton type="button" label="Vider" (click)="clearFile()"></button> -->
@@ -197,7 +198,7 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -339,21 +340,33 @@
                             <p-fieldset *ngIf="comments" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <p-table [value]="comments" dataKey="id">
                                     <ng-template pTemplate="body" let-message>
-                                        <tr>
+                                        <tr *ngIf="message.user_id==token['_id']">
                                             <td>  
                                                 <span class="ui-g-6 ui-md-6">
+<<<<<<< HEAD
                                                 <span class="ui-g-12 ui-md-12" id="messageUser" > Salut je suis étudiant en CDA 2019 et j'ai besoin d'une certificat de scolarité pour mon renouvelement de titre séjour </span>
+=======
+                                                <span  class="ui-g-12 ui-md-12" id="messageUser" > {{message.description}} </span>
+>>>>>>> d69535810afc5c4645fe0d2c40aa814c75662665
                                                 <span class="ui-g-12 ui-md-12"><button class="pi pi-paperclip" id="charger" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span> 
                                             </span> 
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr *ngIf="message.user_id!=token['_id']">
                                             <td> 
                                                 <span class="ui-g-6 ui-md-6" style="float: right;">
+<<<<<<< HEAD
                                                 <span  class="ui-g-12 ui-md-12" id="messageAgent"> {{message.description}} </span>                                               
                                                 <span class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
                                                 </span>          
+=======
+                                                <span  class="ui-g-12 ui-md-12" id="messageAgent" > {{message.description}} </span> 
+                                                
+                                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip"  style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                                </span>
+                                                
+>>>>>>> d69535810afc5c4645fe0d2c40aa814c75662665
                                             </span> 
                                             </td> 
                                         </tr>

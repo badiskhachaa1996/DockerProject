@@ -120,7 +120,7 @@
 
                     <input type="file" (change)="onFileChange($event)" #fileInput>
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (10MB
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div>
                     <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loading"></i>
@@ -182,6 +182,7 @@
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>
+                            <i pTooltip="Traiter" (click)="toggleFormCommentAdd(rowData) "><img src="../../../assets/images/traiter.png" width="20px" height="20px"> </i>
                         </td>
                     </tr>
                 </ng-template>
