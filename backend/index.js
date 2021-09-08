@@ -73,27 +73,9 @@ app.use('/notification',notifController)
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const httpServer = require("http");
-// const { io } = require("socket.io-client");
-// const io = require ( "socket.io" )(httpServer, { 
-//     cors: { 
-//       origin: "*" , 
-//       methodes: [ "GET" , "POST" ] 
-//     } 
-//   });
-// const io = require ( "socket.io" )(httpServer, { 
-//     cors: { 
-//         origins:["*"],
-//         handlePreflightRequest: (req, res) => {
-//             res.writeHead(200, {
-//                 "Access-Control-Allow-Origin":"*",
-//                 "Access-Control-Allow-Methods": "Get,Post",
-//                 "Access-Control-Allow-Headers": "my-custum-header",
-//                 "Access-Control-Allow-Credentials": true
-//             });
-//             res.end();
-//         }}
-// });
+
 io.on('connection',function (socket)  {
+    console.log("connecter");
     socket.emit('hello', 
          'heelo estya'
     );
