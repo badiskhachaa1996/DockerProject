@@ -4,11 +4,12 @@ const express= require("express");
 const bodyParser = require("body-parser");                   
 const cors = require("cors");
 const nodemailer = require("nodemailer");
+
 const socketIo = require("socket.io");
 const app = express(); //à travers ça je peux faire la création de service
 app.use(bodyParser.json({limit: '20mb', extended: true}))
 app.use(bodyParser.urlencoded({limit: '20mb', extended: true}))
-app.use(cors({origin: "*"}));
+app.use(cors());
 
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
@@ -95,7 +96,16 @@ app.use("/message",messageController);
 app.use('/ticket',ticketController)
 
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+// const io = require('socket.io')(server);
+const httpServer = require("http");
+const io = require("socket.io")(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true
+    }
+  });
 io.on('connection',function (socket)  {
     socket.emit('hello', 
          'heelo estya'
