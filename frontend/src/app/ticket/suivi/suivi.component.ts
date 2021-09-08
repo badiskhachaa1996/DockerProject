@@ -175,7 +175,6 @@ export class SuiviComponent implements OnInit {
     //Modification du Ticket
     let req = {
       id: this.Ticket._id,
-      id_message: this.firstMessage._id,
       sujet_id: this.TicketForm1.value.sujet._id,
       description: this.TicketForm1.value.description,
     }

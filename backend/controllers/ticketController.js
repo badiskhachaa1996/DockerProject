@@ -13,8 +13,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com', 
-        pass: 'ESTYA@@2021', 
+        user: 'estya-ticketing@estya.com',
+        pass: 'ESTYA@@2021',
     },
 });
 
@@ -23,12 +23,12 @@ app.post("/create", (req, res) => {
     const ticket = new Ticket({
         createur_id: req.body.id,
         sujet_id: req.body.sujet_id,
-        description:req.body.description,
-        date_ajout:Date.now()
+        description: req.body.description,
+        date_ajout: Date.now()
     });
 
     ticket.save((err, doc) => {
-        res.send({ message: "Votre ticket a été crée!",doc });
+        res.send({ message: "Votre ticket a été crée!", doc });
     });
 });
 
@@ -54,7 +54,7 @@ app.post("/updateById/:id", (req, res) => {
             temp_traitement: req.body?.temp_traitement,
             temp_fin: req.body?.temp_fin,
             isAffected: req.body?.isAffected,
-            description:req.body?.description
+            description: req.body?.description
 
         }, { new: true }, (err, user) => {
             if (err) {
@@ -134,28 +134,44 @@ app.post("/updateFirst/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             sujet_id: req.body.sujet_id,
-            description:req.body.description
+            description: req.body.description
         }, { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user)
 
             
-            let mailOptions = {
-                from: 'estya-ticketing@estya.com',
-                to: user.createur_id,
-                subject: 'Notification E-Ticketing',
-                text: 'Notification ! Votre Ticket '+user._id+'a été mis a jours '
-            };
-            
-            transporter.sendMail(mailOptions, function(error, info){
-                if (error) {
-                   console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
-                }
-            });
+            console.log(user.createur_id)
+
+                let UserDB;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB = userFromDb
+                    res.send({ userFromDb });
+
+
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
+                        attachments: [{
+                            filename: 'logo.png',
+                            path: 'storage/logo.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+    
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
 
         })
 });
@@ -170,10 +186,10 @@ app.get("/getTicketsByService/:id", (req, res) => {
             listSujets.forEach(sujet => {
                 if (sujet.service_id == id) {
                     listSujetofService.push(sujet._id.toString())
-                    
+
                 }
             });
-            Ticket.find({$or:[{ statut: "En cours de traitement"},{statut:"En attente d'une réponse"}] })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
                 .then(result => {
                     result.forEach(ticket => {
                         if (listSujetofService.includes(ticket.sujet_id.toString())) {
@@ -234,7 +250,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id)
                 }
             });
-            Ticket.find({$or:[{ statut: "En cours de traitement"},{statut:"En attente d'une réponse"}] })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -266,30 +282,35 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(err)
             } else {
                 console.log(user.createur_id)
-  
+
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB=userFromDb
+                    UserDB = userFromDb
                     res.send({ userFromDb });
-               
- 
-                let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
-                    to: UserDB.email,
-                    subject: 'Notification E-Ticketing',
-                    text: 'Notification ! Votre Ticket '+user._id+'a été pris en charge et en cours de traitement '
-                };
-                
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                       console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                });
-            }).catch((error) => {
-                res.status(404).send("erreur :" + error);
-            })
+
+
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: 'Notification ! Votre Ticket ' + user._id + 'a été pris en charge et en cours de traitement <img  src="red"/>',
+                        attachments: [{
+                            filename: 'logo.png',
+                            path: 'storage/logo.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
             }
 
         })
@@ -304,33 +325,39 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-                res.status(200).send(user)
+              
                 console.log(user.createur_id)
-  
+
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB=userFromDb
+                    UserDB = userFromDb
                     res.send({ userFromDb });
-               
- 
-                let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
-                    to: UserDB.email,
-                    subject: 'Notification E-Ticketing',
-                    text: 'Notification ! Ticket '+user._id+' Modifié au niveau de service et sujet '
-                };
-                
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                       console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                });
-            }).catch((error) => {
-                res.status(404).send("erreur :" + error);
-            })
-                
+
+
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: '<h3>Notification ! Ticket ' + user._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
+                        attachments: [{
+                            filename: 'logo.png',
+                            path: 'storage/logo.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
+
             }
 
         })
@@ -345,33 +372,39 @@ app.post("/changeStatut/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
+
                 
-                res.status(200).send(user)
                 console.log(user.createur_id)
-  
+
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB=userFromDb
+                    UserDB = userFromDb
                     res.send({ userFromDb });
-               
- 
-                let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
-                    to: UserDB.email,
-                    subject: 'Notification E-Ticketing',
-                    text: 'Notification ! Votre Ticket '+user._id+'a été traité par '+user.agent_id+' '
-                };
-                
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                       console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                });
-            }).catch((error) => {
-                res.status(404).send("erreur :" + error);
-            })
+
+
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: '<h3 color:red>Notification ! Votre Ticket ' + user._id + 'a été traité par ' + user.agent_id + '<img src="red"> ',
+                        attachments: [{
+                            filename: 'logo.png',
+                            path: 'storage/logo.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                    res.status(200).send(user)
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
                 
             }
 
