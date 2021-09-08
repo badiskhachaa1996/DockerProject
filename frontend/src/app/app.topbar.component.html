@@ -10,23 +10,17 @@
                 [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
                 <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                     <span  class="p-overlay-badge p-mr-5">
-                        <i class="pi pi-user" pTooltip="Profile" tooltipPosition="bottom" style="  background-color:#3cb371;
+                        <i class="pi pi-user" pTooltip="Profile" tooltipPosition="bottom" style="background-color:#3cb371;
                         border-radius: 50%; font-size: 1.6em; color: white;"></i>
                         <span class="p-badge" style="font-size: 15px;  font-weight: bold;
-                        color: #3cb371"></span>
-                    </span>                    <div class="user-profile-info profile-link">
+                        color: #3cb371">{{Notifications.length | i18nPlural:notifMapping}}</span>
+                    </span>
+                    <div class="user-profile-info profile-link">
                         <span class="user-profile-name"></span>
                         <span class="user-profile-role"></span>
                     </div>
-                  
-
+                    
                 </a>
-            <span  class="p-overlay-badge p-mr-5">
-                <i class="pi pi-bell" pTooltip="Notifications" tooltipPosition="bottom" style="  background-color:#3cb371;
-                border-radius: 50%; font-size: 1.6em; color: white;"></i>
-                <span class="p-badge" style="font-size: 15px;  font-weight: bold;
-                color: #3cb371">{{Notifications.length | i18nPlural:notifMapping}}</span>
-            </span>
 
             <ul class="fadeInDown">
                 <li class="profile-detail">

@@ -379,19 +379,11 @@ app.post("/changeStatut/:id", (req, res) => {
                 let UserDB;
                 User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                     UserDB = userFromDb
-                    res.send({ userFromDb });
-
-
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
                         subject: 'Notification E-Ticketing',
-                        html: '<h3 color:red>Notification ! Votre Ticket ' + user._id + 'a été traité par ' + user.agent_id + '<img src="red"> ',
-                        attachments: [{
-                            filename: 'logo.png',
-                            path: 'storage/logo.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
+                        html: '<h3 color:red>Notification ! Votre Ticket ' + user._id + 'a été traité par ' + user.agent_id + '<img src="red"> '
                     };
 
                     transporter.sendMail(mailOptions, function (error, info) {

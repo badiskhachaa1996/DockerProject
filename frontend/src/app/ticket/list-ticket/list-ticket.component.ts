@@ -12,8 +12,10 @@ import { Sujet } from 'src/app/models/Sujet';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import {saveAs as importedSaveAs} from "file-saver";
+import { saveAs as importedSaveAs } from "file-saver";
 import { Message } from 'src/app/models/Message';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -48,10 +50,10 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
-  loading:boolean = false;
+  loading: boolean = false;
   loadingMessage;
 
-  token=null;
+  token = null;
 
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
@@ -89,13 +91,13 @@ export class ListTicketComponent implements OnInit {
   }*/
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
 
   ngOnInit(): void {
-    try{
+    try {
       this.token = jwt_decode(localStorage.getItem("token"))
-    }catch(e){
-      this.token =null
+    } catch (e) {
+      this.token = null
       console.error(e)
     }
     if (this.token == null) {
@@ -113,10 +115,7 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
-        console.log(this.queueList)
       }
-      console.log('this.queueList')
-      console.log(this.queueList)
     })
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
@@ -302,16 +301,16 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
 
-  loadMessages(ticket:Ticket){
+  loadMessages(ticket: Ticket) {
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
-    .subscribe(
-      data => {
-        this.comments = data;
-      },
-      error => {
-        console.log(error);
-      });
+      .subscribe(
+        data => {
+          this.comments = data;
+        },
+        error => {
+          console.log(error);
+        });
   }
   SendComment() {
     let comment = {
@@ -320,34 +319,39 @@ export class ListTicketComponent implements OnInit {
       ticket_id: this.selectedTicket._id,
       file: this.commentForm.value.file
     }
-    console.log(comment)
-    /*this.MsgServ.create(comment).subscribe((data) => {
+    this.MsgServ.create(comment).subscribe((message) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-      this.selectedTicket = null;
+
       this.commentForm.reset();
+
+      this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message")).subscribe((notif) => {
+        this.NotifService.newNotif(notif, message.doc.user_id)
+      }, (error) => {
+        console.log(error)
+      });
     }, (error) => {
       console.log(error)
     });
 
     let dataTicket = {
       id: this.selectedTicket._id,
-      statut: this.commentForm.value.statut
+      statut: this.commentForm.value.statut.value
     }
 
     this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-      console.log(data)
+      this.selectedTicket = null;
     }, (error) => {
       console.log(error)
-    })*/
+    })
   }
 
-  downloadFile(message:Message) {
-    this.loadingMessage=message._id;
+  downloadFile(message: Message) {
+    this.loadingMessage = message._id;
     this.MsgServ.downloadFile(message._id).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      importedSaveAs(new Blob([byteArray],{type:data.documentType}),message.document)
-      this.loadingMessage=null;
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), message.document)
+      this.loadingMessage = null;
     }, (error) => {
       console.error(error)
     })
