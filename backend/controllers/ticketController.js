@@ -3,7 +3,19 @@ const mongoose = require("mongoose")
 const Sujet = mongoose.model('sujet')
 const app = express(); //à travers ça je peux faire la creation des services
 const { Ticket } = require("./../models/Ticket");
+const nodemailer = require('nodemailer');
 
+//creation d'un transporter smtp
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'estya-ticketing@estya.com', 
+        pass: 'ESTYA@@2021', 
+    },
+});
 
 //Création d'un nouveau ticket
 app.post("/create", (req, res) => {
@@ -48,6 +60,8 @@ app.post("/updateById/:id", (req, res) => {
                 res.send(err)
             }
             res.send(user)
+
+
         })
 });
 
@@ -125,6 +139,23 @@ app.post("/updateFirst/:id", (req, res) => {
                 res.send(err)
             }
             res.send(user)
+
+            
+            let mailOptions = {
+                from: 'estya-ticketing@estya.com',
+                to: user.createur_id,
+                subject: 'Notification E-Ticketing',
+                text: 'Notification ! Votre Ticket '+user._id+'a été mis a jours '
+            };
+            
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                   console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+
         })
 });
 

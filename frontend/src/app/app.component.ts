@@ -26,9 +26,9 @@ export class AppComponent implements OnInit{
     title = 'app';
     
     ngOnInit(): void {
-        const socket = socketIo('http://localhost:3000');
+        //const socket = socketIo('http://localhost:3000');
 
-        socket.on('helllo',(data)=> console.log(data));
+        //socket.on('helllo',(data)=> console.log(data));
     }
 
 
@@ -179,34 +179,4 @@ export class AppComponent implements OnInit{
     isHorizontal() {
         return this.layoutMode === 'horizontal';
     }
-
-    /*form: FormGroup = new FormGroup({
-        file: new FormControl(null, Validators.required)
-    })
-
-
-    onFileChange(event) {
-        let reader = new FileReader();
-        if (event.target.files && event.target.files.length > 0) {
-            let file = event.target.files[0];
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                this.form.get('file').setValue({
-                    filename: file.name,
-                    filetype: file.type,
-                    value: reader.result.toString().split(',')[1]
-                })
-            };
-        }
-    }
-    onSubmit() {
-        const formModel = this.form.value;
-        console.log(this.form.value.file)
-        this.TicketService.storeDoc(this.form.value.file).subscribe((data)=>{
-            console.log(data)
-        },(error)=>{
-            console.error(error)
-        })
-        console.log(formModel);
-    }*/
 }
