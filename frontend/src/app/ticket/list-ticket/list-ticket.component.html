@@ -48,13 +48,14 @@
                     <textarea formControlName="description"  rows="5" cols="100" pInputTextarea autoResize="autoResize"
                         placeholder="Saisir un message"></textarea>
                         <div class="col-9">
-                            <p-fileUpload (change)="onFileChange($event)">
+                            <p-fileUpload (uploadHandler)="onFileChange($event)"
+                            mode="basic"
                             chooseLabel="Joindre" 
-                            uploadLabel="Enregistrer"
-                            cancelLabel="Supprimer"
+                            customUpload="true" 
                             fileLimit="1" 
                             accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" 
                             maxFileSize="20000000"
+                            [auto]="true" #fileInput>
                         </p-fileUpload></div> 
                         <!-- <input type="file"  #fileInput> -->
                     <div *ngIf="value.invalid">

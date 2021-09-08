@@ -28,6 +28,20 @@ mongoose
 app.get("/",(req,res)=>res.status(200).send("GG ça marche"));
 //il va attendre le lancement du serveur et lire à partir du port 3000 et si il est strated affiche moi le serveur il est up.
 app.listen(3000,  ()=>console.log("Node.JS started"));
+
+// const io = socketIo(server);
+
+// io.on('connection',(socket) => {
+//     socket.emit('hello', {
+//         greeting: 'heelo estya'
+//     });
+// });
+
+
+
+// server.listen(3000,  ()=>{
+//     console.log("socket ");
+// });
 ////
 
 ///////////
@@ -36,6 +50,7 @@ const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
 const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
+const notifController = require('./controllers/notificationController')
 
 const { defaultMaxListeners } = require("events");
 
@@ -48,3 +63,17 @@ app.use("/sujet",SujetController);
 app.use("/message",messageController);
 
 app.use('/ticket',ticketController)
+
+app.use('/notification',notifController)
+
+/*const server = require('http').Server(app);
+const io = require('socket.io')(server);
+io.on('connection',function (socket)  {
+    socket.emit('hello', 
+         'heelo estya'
+    );
+
+});
+server.listen(3000, () => {
+    console.log("socket.io est connecté")
+ });*/
