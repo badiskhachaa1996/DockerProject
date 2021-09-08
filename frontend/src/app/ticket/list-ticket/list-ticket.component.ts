@@ -48,6 +48,7 @@ export class ListTicketComponent implements OnInit {
   showFormAddComment: boolean = false;
   loading:boolean = false;
   loadingMessage;
+  uplo: File;
 
   token=null;
 
@@ -350,7 +351,12 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
   }
-
+  onUpload(event) {
+    for (let file of event.files) {
+      this.uplo = file;
+    }
+    this.onFileChange(event);
+  }
   onFileChange(event) {
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
