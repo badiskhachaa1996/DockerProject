@@ -1,6 +1,46 @@
 ng-template{
   overflow-y: hidden;
 }
+
+#messageAgent{
+
+  border-radius: 15px;
+  background-color: #92cf80;
+  text-align:left !important;
+  float:right !important; 
+  margin:  0px !important;
+}
+#charger{ 
+color: #3da827; 
+background-color: transparent; 
+border-color: transparent;
+float : left !important;
+margin:  0px !important;
+
+
+}
+#charger2{ 
+color: #3da827; 
+background-color: transparent; 
+border-color: transparent;
+float: right !important;
+margin:  0px !important;
+
+
+}
+#messageUser{
+text-align:left !important;
+border-radius: 15px;
+background-color: #ccd3c9e3;
+margin:  0px !important;
+
+}
+.badyT{
+
+height: 200px; 
+position: relative; 
+overflow-y:scroll; 
+}
 .content{
     max-width: 500px;
     margin:auto;

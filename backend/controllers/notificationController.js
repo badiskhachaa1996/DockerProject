@@ -3,6 +3,7 @@ const app = express(); //à travers ça je peux faire la creation des services
 const { Notification} = require("./../models/Notification");
 const fs = require("fs");
 const { Ticket } = require("../models/Ticket");
+const io = require("socket.io");
 
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {

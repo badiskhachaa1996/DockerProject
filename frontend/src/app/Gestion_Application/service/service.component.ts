@@ -61,7 +61,7 @@ export class ServiceComponent implements OnInit {
     };
 
     this.ServService.addService(service).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion de service/Service', detail: 'Creation de service réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion de service/service', detail: 'Votre service a bien été ajouté' });
       try {
         this.services.push(data)
       } catch (e) {
@@ -88,7 +88,7 @@ export class ServiceComponent implements OnInit {
     this.SujetService.addSujet(sujet).subscribe((data) => {
       this.sujetShow.push(data)
       this.sujetList.push(data);
-      this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Creation de sujet réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion de sujet', detail: 'Votre sujet a bien été ajouté' });
       this.showFormAddSujet=false;
       this.sujetForm.reset();
     }, (error) => {
@@ -201,7 +201,7 @@ export class ServiceComponent implements OnInit {
       this.services.splice(this.services.indexOf(this.Service), 1, data)
       this.serviceForm.reset();
       this.showFormUpdateService=false;
-      this.messageService.add({ severity: 'success', summary: 'Modification du Service', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
     }, (error) => {
       console.log(error)
     });

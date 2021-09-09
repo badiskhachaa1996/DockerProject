@@ -58,7 +58,9 @@ export class SuiviComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
 
-
+  toggleFormCancel(){
+    this.showFormAddComment=!this.showFormAddComment;
+  }
   next() {
     this.first = this.first + this.rows;
   }
@@ -175,7 +177,6 @@ export class SuiviComponent implements OnInit {
     //Modification du Ticket
     let req = {
       id: this.Ticket._id,
-      id_message: this.firstMessage._id,
       sujet_id: this.TicketForm1.value.sujet._id,
       description: this.TicketForm1.value.description,
     }
@@ -184,7 +185,7 @@ export class SuiviComponent implements OnInit {
       this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1);
       this.ticketList.push(data);
 
-      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.toggleFormUpdate()
     }, (error) => {
       console.log(error)
@@ -226,7 +227,7 @@ export class SuiviComponent implements OnInit {
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Création réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
      
       try{
         this.ticketList.push(data.doc)
@@ -241,11 +242,14 @@ export class SuiviComponent implements OnInit {
 
   }
 
-  onChange() {
-    this.TicketForm.patchValue({
-      sujet: this.listSujets[this.TicketForm.value.service._id][0]
-    })
+  onChange(event) {
+    console.log(event)
+    console.log(this.TicketForm.get("service"))
+    /*this.TicketForm.patchValue({
+      sujet: this.listSujets[event.value.service._id][0]
+    })*/
   }
+
   onChange2() {
     this.TicketForm1.patchValue({
       sujet: this.listSujets1[this.TicketForm1.value.service._id][0]
@@ -280,7 +284,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
       this.commentForm.reset();

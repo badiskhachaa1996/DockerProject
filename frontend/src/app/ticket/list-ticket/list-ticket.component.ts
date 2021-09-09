@@ -12,8 +12,11 @@ import { Sujet } from 'src/app/models/Sujet';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import {saveAs as importedSaveAs} from "file-saver";
+import { saveAs as importedSaveAs } from "file-saver";
 import { Message } from 'src/app/models/Message';
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-list-ticket',
@@ -28,6 +31,7 @@ export class ListTicketComponent implements OnInit {
   listServices: Service[];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
+  statutList = environment.statut;
 
   queueList: Ticket[] = [];
   AccAffList: Ticket[] = [];
@@ -46,10 +50,11 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = true;
   isModify: Ticket;
   showFormAddComment: boolean = false;
-  loading:boolean = false;
+  loading: boolean = false;
   loadingMessage;
+  uplo: File;
 
-  token=null;
+  token = null;
 
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = null;
@@ -87,13 +92,13 @@ export class ListTicketComponent implements OnInit {
   }*/
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
 
   ngOnInit(): void {
-    try{
+    try {
       this.token = jwt_decode(localStorage.getItem("token"))
-    }catch(e){
-      this.token =null
+    } catch (e) {
+      this.token = null
       console.error(e)
     }
     if (this.token == null) {
@@ -111,10 +116,7 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.queueList = data.TicketList;
-        console.log(this.queueList)
       }
-      console.log('this.queueList')
-      console.log(this.queueList)
     })
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
@@ -206,6 +208,11 @@ export class ListTicketComponent implements OnInit {
       if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
+      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté")).subscribe((notif) => {
+        this.NotifService.newNotif(notif, this.selectedUser._id)
+      }, (error) => {
+        console.log(error)
+      });
       this.allTickets.push(data)
       this.showDropDown = null;
     }, (error) => {
@@ -244,11 +251,15 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du Ticket', detail: 'Modification réussie' });
-      /*TODO If service_id == data --> push
-      if(this.sujetList[data.sujet_id].service_id==token.service_id){
-        this.queueList.splice(this.queueList.indexOf(this.isModify),1,data)
-      }*/
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
+      this.NotifService.create(new Notification(null, this.isModify._id, false, "Modification d'un ticket")).subscribe((notif) => {
+        this.NotifService.newNotif(notif, this.isModify.createur_id)
+      }, (error) => {
+        console.log(error)
+      });
+      if(this.sujetList[data.sujet_id].service_id==this.token.service_id){
+        this.allTickets.push(data)
+      }
       this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
       this.isModify = null;
       this.toggleFormUpdate();
@@ -300,16 +311,16 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
 
-  loadMessages(ticket:Ticket){
+  loadMessages(ticket: Ticket) {
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
-    .subscribe(
-      data => {
-        this.comments = data;
-      },
-      error => {
-        console.log(error);
-      });
+      .subscribe(
+        data => {
+          this.comments = data;
+        },
+        error => {
+          console.log(error);
+        });
   }
   SendComment() {
     let comment = {
@@ -318,39 +329,57 @@ export class ListTicketComponent implements OnInit {
       ticket_id: this.selectedTicket._id,
       file: this.commentForm.value.file
     }
-    console.log(comment)
-    /*this.MsgServ.create(comment).subscribe((data) => {
+    this.MsgServ.create(comment).subscribe((message) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-      this.selectedTicket = null;
+
       this.commentForm.reset();
+      if(this.commentForm.value.statut.value!="Traité"){
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message")).subscribe((notif) => {
+          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+      }else{
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket")).subscribe((notif) => {
+          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+      }
+
     }, (error) => {
       console.log(error)
     });
 
     let dataTicket = {
       id: this.selectedTicket._id,
-      statut: this.commentForm.value.statut
+      statut: this.commentForm.value.statut.value
     }
 
     this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-      console.log(data)
+      this.selectedTicket = null;
     }, (error) => {
       console.log(error)
-    })*/
+    })
   }
 
-  downloadFile(message:Message) {
-    this.loadingMessage=message._id;
+  downloadFile(message: Message) {
+    this.loadingMessage = message._id;
     this.MsgServ.downloadFile(message._id).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      importedSaveAs(new Blob([byteArray],{type:data.documentType}),message.document)
-      this.loadingMessage=null;
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), message.document)
+      this.loadingMessage = null;
     }, (error) => {
       console.error(error)
     })
   }
-
+  onUpload(event) {
+    for (let file of event.files) {
+      this.uplo = file;
+    }
+    this.onFileChange(event);
+  }
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
@@ -374,6 +403,9 @@ export class ListTicketComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
 
+  toggleFormCancel(){
+    this.showFormAddComment=!this.showFormAddComment;
+  }
   get value() { return this.commentForm.get('value'); }
 
   // Comments() {

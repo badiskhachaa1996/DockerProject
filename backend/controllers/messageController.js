@@ -5,11 +5,11 @@ const fs = require("fs")
 
 //Création d'un nouveau message TODO
 app.post("/create", (req, res) => {
-    if (req.body.file.value) {
+    if (req.body.file && req.body.file!=null && req.body.file!=''){
         fs.mkdir("./storage/" + req.body.ticket_id + "/",
             { recursive: true }, (err) => {
                 if (err) {
-                    return console.error(err);
+                    console.error(err);
                 }
             });
         fs.writeFile("storage/" + req.body.ticket_id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {

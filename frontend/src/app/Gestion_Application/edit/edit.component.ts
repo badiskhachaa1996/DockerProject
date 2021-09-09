@@ -54,7 +54,7 @@ export class EditComponent implements OnInit {
       label: this.serviceForm.value.label
     }
     this.ServService.update(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du Service', detail: 'Modification réussie' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
       this.router.navigate(['/service'])
     }, (error) => {
       console.log(error)
