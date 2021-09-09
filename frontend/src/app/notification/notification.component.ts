@@ -28,7 +28,7 @@ export class NotificationComponent implements OnInit {
           error => {
             console.log(error);
           });
-
+            
       this.TicketService.getAll()
         .subscribe(
           data => {
