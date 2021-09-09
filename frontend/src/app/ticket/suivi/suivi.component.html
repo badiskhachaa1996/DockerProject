@@ -129,12 +129,12 @@
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div><br>
-                    <p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
+                    <!--<p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
                     <div class="text-center">
                         <span>
                              <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" placeholder="Veuillez choisir un statut"></p-dropdown>
                         </span>
-                    </div><br>
+                    </div><br>-->
                     <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
@@ -194,8 +194,8 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <i pTooltip="Modifier"  tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
-                            <i pTooltip="Répondre" (click)="toggleFormCommentAdd(rowData) "> <img src="../../../assets/images/repondre.png" width="13px" height="13px"> </i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
+                            <i pTooltip="Répondre" (click)="toggleFormCommentAdd(rowData) "> <img src="../../../assets/images/send.png" width="13px" height="13px"> </i>
                         </td>
                     </tr>
                 </ng-template>
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments" legend="Messages">
+                            <p-fieldset *ngIf="comments" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">

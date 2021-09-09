@@ -57,7 +57,8 @@ export class NotificationComponent implements OnInit {
       this.NotificationService.viewNotifs(this.notifications)
       .subscribe(
         response => {
-          this.notifications=[];
+        
+    this.notifications=[];
         },
         error => {
           console.log(error);
