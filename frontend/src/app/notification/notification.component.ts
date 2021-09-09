@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {  NotificationService} from 'src/app/services/notification.service';
 import { MenuItem } from 'primeng/api';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 951e7c866abffe20420da6c679784d36fb7eee81
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
