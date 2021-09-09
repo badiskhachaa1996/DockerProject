@@ -332,7 +332,7 @@
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
-                                        <ng-template pTemplate="body" let-message>
+                                        <ng-template pTemplate="body" let-message let-EnvoyeurList>
                     <tr *ngIf="message.user_id==token['_id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
@@ -342,12 +342,12 @@
                                     (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                         *ngIf="loadingMessage==message._id"></i></button>
 
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  {{userDic[message.user_id].firstname}} </span>
                                 
                                 </div>
                                 <span class="ui-g-12 ui-md-12" >
                                     {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-
+                                     
                                 </span>
                             </span>
                         </td>
@@ -365,7 +365,10 @@
                                         > 
                                         </i>
                                 </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
+                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}   {{userDic[message.user_id].firstname}}
+                                    
+                                
+                                </span>
                                 </div>
                                 <span *ngIf="message.document" class=" ui-g-12 ui-md-12">
                                     {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 

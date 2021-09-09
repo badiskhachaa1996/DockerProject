@@ -38,6 +38,8 @@ export class ListTicketComponent implements OnInit {
   allTickets: Ticket[] = [];
 
   userList: User[] = [];
+  EnvoyeurList: User[] = [];
+
   userDic: any[] = [];
   serviceDic: any[] = []
 
@@ -154,6 +156,7 @@ export class ListTicketComponent implements OnInit {
       }
     })
 
+    
     this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
         this.allTickets = data.TicketList;
@@ -327,8 +330,19 @@ export class ListTicketComponent implements OnInit {
       description: this.commentForm.value.description,
       id: jwt_decode(localStorage.getItem('token'))['id'],
       ticket_id: this.selectedTicket._id,
-      file: this.commentForm.value.file
+      file: this.commentForm.value.file,
+      envoyeur:this.EnvoyeurList
     }
+
+    this.MsgServ.getAll().subscribe((data) => {
+      if (!data.message) {
+        data.forEach(message => {
+          this.userDic[message.user_id] = null;
+          this.userDic[message.user_id] = message;
+        });
+        this.EnvoyeurList = data;
+      }
+    })
     this.MsgServ.create(comment).subscribe((message) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
