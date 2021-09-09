@@ -382,7 +382,7 @@ app.post("/changeStatut/:id", (req, res) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
-                        subject: 'Notification E-Ticketing',gi
+                        subject: 'Notification E-Ticketing',
                         html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                         attachments: [{
                             filename: 'signature.png',

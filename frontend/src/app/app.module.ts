@@ -74,7 +74,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { AppRoutingModule } from './app.routes';
 import { TriStateCheckboxModule } from 'primeng/tristatecheckbox';
 import { CaptchaModule } from 'primeng/captcha';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
@@ -174,7 +174,7 @@ import { NotificationComponent } from './notification/notification.component'
         TriStateCheckboxModule,
         ProgressSpinnerModule,
         DragDropModule,
-        
+     
        
     ],
     declarations: [
