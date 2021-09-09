@@ -61,8 +61,8 @@ export class NotificationService {
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
-  viewNotifs(tickets:Notification[]){
+  viewNotifs(notifications:Notification[]){
     let registreUrl=this.apiUrl+"viewNotifs";
-    return this.http.post<any>(registreUrl,tickets,httpOptions1);
+    return this.http.post<any>(registreUrl,{notifications},httpOptions1);
   }
 }
