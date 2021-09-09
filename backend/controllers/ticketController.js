@@ -329,12 +329,12 @@ app.post("/changeService/:id", (req, res) => {
                 console.log(ticket.createur_id)
 
                 let UserDB;
-                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
-                        html: '<h3>Notification ! Ticket ' + user._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
+                        html: '<h3>Notification ! Ticket ' + ticket._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
                         attachments: [{
                             filename: 'signature.png',
                             path: 'storage/signature.png',
@@ -350,7 +350,8 @@ app.post("/changeService/:id", (req, res) => {
                             console.log('Email sent: ' + info.response);
                         }
                     });
-                    res.statut(200).send(ticket);
+
+                   
                 }).catch((error) => {
                     res.status(404).send("erreur :" + error);
                 })
@@ -405,6 +406,44 @@ app.post("/changeStatut/:id", (req, res) => {
                 })
                  
             }
+            else if(user.statut==="Traité"){
+                
+                let UserDB;
+                let agentService;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB = userFromDb
+                    
+                    
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                        attachments: [{
+                            filename: 'signature.png',
+                            path: 'storage/signature.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                   
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                    res.status(200).send(user)
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
+             
+
+
+            }
+           
+
             }
 
         })

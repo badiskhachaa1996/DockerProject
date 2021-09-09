@@ -92,7 +92,7 @@ import { UpdateUserComponent } from './authentification/update/update.component'
 import { NavbarComponent } from './navbar/navbar.component';
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import { NotificationComponent } from './notification/notification.component'
-
+import {MenuItem} from 'primeng/api';
 
 
 
