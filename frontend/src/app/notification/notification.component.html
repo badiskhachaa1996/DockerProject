@@ -19,7 +19,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                    <tr >
                         <td *ngFor="let col of columns">
                             {{rowData.type}}
                         </td>
@@ -34,30 +34,31 @@
     </div>
 </div> -->
 
-<div class="p-col-12">
-    <div>
-        <h1>Notifications</h1>
-        <div class="p-grid ui-fluid card">
-            <div class="ui-g-12 ui-md-12">
-                <div class="ui-g-1 ui-md-1">
-                    <div class="timeline-icon">
-                        <i class="pi pi-inbox"></i>
-                    </div>
-                </div>
-                <div class="ui-g-11 ui-md-11">
-                    <div>
-                        <p>
-                            Nouveau 
-                        </p>
-                        <div>
-                            Unexpected event happened near San Mateo
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <h3>Notifications</h3>
+        <div class="card shadow-lg timeline">
+            <ul>
+                <li *ngFor="let notif of notifications">
+                    <div class="grid">
+                        <div class="col-fixed">
+                            <div class="timeline-icon">
+                                <i class="pi pi-inbox"></i>
+                            </div>
                         </div>
-                        <div>
-                            2 mins ago
+                        <div class="col" >
+                            <div class="time-line-event">
+                             <div *ngFor="let ligne of notifications">
+                                <span class="timeline-event-title">{{ligne.type}}</span>
+                                <div class="timeline-event-message">{{ligne.type}}
+                                </div>
+                          
+                               </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </li>
+                </ul>
         </div>
     </div>
 </div>
