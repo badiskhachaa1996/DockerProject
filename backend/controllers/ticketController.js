@@ -284,9 +284,10 @@ app.post("/AccAff/:id", (req, res) => {
                 console.log(user.createur_id)
 
                 let UserDB;
+                res.send(user);
                 User.findOne({ _id: user.agent_id }).then((userFromDb) => {
                     UserDB = userFromDb
-                    res.send({ userFromDb });
+                    
 
                     let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + UserDB.lastname + '</p> <p style="color:black"> Le Ticket ' + user._id + '  vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
                     let mailOptions = {
@@ -328,7 +329,7 @@ app.post("/changeService/:id", (req, res) => {
 
                 console.log(ticket.createur_id)
 
-                let UserDB;
+                res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
