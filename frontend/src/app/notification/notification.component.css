@@ -17,39 +17,15 @@
     background-color: #ffffff;
     border: solid 1px #dfe6ee;
     border-radius: 50%;
+    padding: 9px;
   }
    .timeline ul li .p-col-fixed .timeline-icon i {
     font-size: 17px;
+    
   }
-   .timeline ul li:nth-child(1) .timeline-icon {
+   .timeline ul li .timeline-icon {
     padding: 9px;
-  }
-   .timeline ul li:nth-child(1) .timeline-icon i {
-    color: #e73c3c;
-  }
-   .timeline ul li:nth-child(2) .timeline-icon {
-    padding: 7px;
-  }
-   .timeline ul li:nth-child(2) .timeline-icon i {
-    color: #fd4a85;
-  }
-   .timeline ul li:nth-child(3) .timeline-icon {
-    padding: 9px;
-  }
-   .timeline ul li:nth-child(3) .timeline-icon i {
-    color: #e73c3c;
-  }
-   .timeline ul li:nth-child(4) .timeline-icon {
-    padding: 8px;
-  }
-   .timeline ul li:nth-child(4) .timeline-icon i {
-    color: #f4a22e;
-  }
-   .timeline ul li:nth-child(5) .timeline-icon {
-    padding: 8px;
-  }
-   .timeline ul li:nth-child(5) .timeline-icon i {
-    color: #2fc5b3;
+    color:#3da827
   }
    .timeline ul li .time-line-event .timeline-event-title {
     padding: 3px 7px;
