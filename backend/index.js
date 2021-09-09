@@ -55,19 +55,6 @@ app.use('/ticket', ticketController)
 app.use('/notification', notifController)
 
 io.on("connection", (socket) => {
-<<<<<<< HEAD
-    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-  
-    socket.on("send.notification",function(data){
-        io.emit("new-notification", data)
-    });
-
-  });
-
-  
-
-httpServer.listen(3000,()=>{
-=======
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
         console.log("User "+ user._id + " connecté")
@@ -82,6 +69,5 @@ httpServer.listen(3000,()=>{
 });
 
 httpServer.listen(3000, () => {
->>>>>>> b22742ac0a1976bc341f6307ae41a498c8ac5bf7
     console.log("SERVEUR START")
 });
