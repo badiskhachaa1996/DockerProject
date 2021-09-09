@@ -55,7 +55,14 @@ const io = require("socket.io")(httpServer, options);
 
 io.on("connection", (socket) => {
     console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+  
+    socket.on("send.notification",function(data){
+        io.emit("new-notification", data)
+    });
+
   });
+
+  
 
 httpServer.listen(3000,()=>{
     console.log("SERVEUR START")
