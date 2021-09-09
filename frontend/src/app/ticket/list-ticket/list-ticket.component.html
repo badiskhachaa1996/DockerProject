@@ -18,18 +18,13 @@
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             Sujet:
-                            <select [disabled]="!TicketForm.value.service" formControlName="sujet"
-                                class="form-control col-12">
+                            <select [disabled]="!TicketForm.value.service" formControlName="sujet" class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un sujet</option>
-                                <option *ngFor="let sujet of listSujetSelected[TicketForm.value.service._id]"
-                                    [ngValue]="sujet">
-                                    {{ sujet.label }}
-                                </option>
+                                <option *ngFor="let sujet of listSujetSelected[TicketForm.value.service._id]" [ngValue]="sujet">{{ sujet.label }}</option>
                             </select>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid"
-                                label="Enregistrer" (click)="modifyTicket()"></button>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid" label="Enregistrer" (click)="modifyTicket()"></button>
                         </div>
                     </div>
                 </form>
@@ -322,14 +317,8 @@
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
-<<<<<<< HEAD
-                                            <div class="ui-g-6 ui-md-6"><bstyle="text-align:left !important;">Service:</b> </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">Service:</div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
-=======
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Service:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
->>>>>>> a38a6a31302e73243587caee2bb4f962fa46ed69
                                         </div>
                                     </div>
                                 </div>
@@ -350,8 +339,8 @@
                                             <td> 
                                                 <span class="ui-g-6 ui-md-6" style="float: right;">
                                                 <span class="ui-g-12 ui-md-12" id="messageAgent"> {{message.description}} </span>  
-                                                <span style="font-style: italic; font-size: 11px; float: right;"> {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</span>  
-                                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip" style="float: right;" id="charger2"  (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>   
+                                                <span style="font-style: italic; font-size: 11px; float: right;">{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</span>  
+                                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip" style="float: right;" id="charger2" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>   
                                                 </span>      
                                             </span> 
                                             </td> 
