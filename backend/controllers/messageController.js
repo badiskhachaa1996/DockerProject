@@ -62,7 +62,7 @@ app.post("/create", (req, res) => {
             UserDB = userFromDb
             console.log("createur du ticket : "+ createur_id)
             console.log("createur du msg : "+ UserDB._id)
-            console.log("Current root:", req.route);
+        
             if (msg.isRep) {
             let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour '+'M.</p> <p style="color:black"> ' + UserDB.lastname +' '+UserDB.firstname +'  a publier une reponse pour son ticket </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
             let mailOptions = {
