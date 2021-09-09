@@ -40,6 +40,11 @@ export class TicketService {
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
+  getAll(){
+    let registreUrl=this.apiUrl+"getAll";
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
+
   getFirstMessage(id:string){
     let registreUrl=this.apiUrl+"getFirstMessage/"+id;
     return this.http.get<any>(registreUrl);

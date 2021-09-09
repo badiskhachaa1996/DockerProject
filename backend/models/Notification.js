@@ -18,6 +18,11 @@ const schema= new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
          required:true,
          ref:'ticket'
+    },
+    user_id:{
+        type: mongoose.SchemaTypes.ObjectId,
+        required:true,
+        ref:'user'
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

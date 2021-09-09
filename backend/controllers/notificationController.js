@@ -11,7 +11,8 @@ app.post("/create", (req, res) => {
         etat: req.body.etat,
         type: req.body.type,
         ticket_id: req.body.ticket_id,
-        date_ajout: Date.now()
+        date_ajout: Date.now(),
+        user_id:req.body.user_id
     });
 
     notif.save((err, user) => {
@@ -65,20 +66,15 @@ app.get("/getAll", (req, res) => {
 });
 //Récuperer tous les notifications d'un user
 app.get("/getAllByUserID/:id", (req, res) => {
-    let Notifs=[];
-    Ticket.find({createur_id:req.params.id}).then(tickets=>{
-        let ticketId=[];
-        tickets.forEach(ticket=>{
-            ticketId.push(ticket._id.toString())
-        })
-        Notification.find().then(Notifications=>{
-            Notifications.forEach(notif => {
-                if(ticketId.includes(notif.ticket_id.toString())){
-                    Notifs.push(notif)
-                }
-            });
-            res.status(200).send(Notifs)
-        })
+    Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
+        res.status(200).send(Notifications)
+    })
+});
+
+//Récuperer les 20 notifications dernières d'un user
+app.get("/get20ByUserID/:id", (req, res) => {
+    Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
+        res.status(200).send(Notifications.slice(0,20))
     })
 });
 

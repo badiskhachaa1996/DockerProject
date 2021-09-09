@@ -49,19 +49,19 @@
                             <div class="time-line-event" *ngIf="notif">
                                 <span class="timeline-event-title">{{notif.type}}</span>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
-                                    Un nouveau ticket vous a été affecté
+                                    Un nouveau ticket {{listTicket[notif.ticket_id].description}} vous a été affecté
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
-                                    Vous avez reçu un nouveau message sur le ticket : {{notif.ticket_id}}!
+                                    Vous avez reçu un nouveau message sur le ticket : {{listTicket[notif.ticket_id].description}}
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
-                                    Votre ticket a été redirigé à un autre service par un agent
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été redirigé à un autre service par un agent
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
-                                    Votre ticket a été traité
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été traité
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
-                                    Votre ticket a été renvoyé dans la queue d'entrée
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été renvoyé dans la queue d'entrée
                                 </div>
                                 <div class="timeline-event-time">
                                     {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
