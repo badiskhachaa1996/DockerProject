@@ -116,22 +116,26 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
                     <h3 class="text-center">Envoyer un message</h3>
-                    <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"
-                        placeholder="Saisir un message"></textarea>
-                    <div class="col-9">
-                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre"
+                    <div class="text-center">
+                        <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"placeholder="Saisir un message"></textarea>
+                    </div><br>
+                    <div class="text-center">
+                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" #fileInput>
                         </p-fileUpload>
                     </div>
-
-                   
-
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
-                    </div>
-                    <div class="col-10 col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    </div><br>
+                    <p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
+                    <div class="text-center">
+                        <span>
+                             <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" placeholder="Veuillez choisir un statut"></p-dropdown>
+                        </span>
+                    </div><br>
+                    <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>

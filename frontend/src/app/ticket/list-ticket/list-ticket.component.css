@@ -31,6 +31,9 @@
   margin:  0px !important;
 
 }
+#soustitre{
+  font-style: italic; font-size: 11px;
+}
 .badyT{
 
   height: 200px; 
