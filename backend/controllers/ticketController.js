@@ -449,9 +449,9 @@ app.post("/changeStatut/:id", (req, res) => {
         })
 });
 
-/*app.post("/storeDoc", (req, res) => {
-    require("fs").writeFile(req.body.filename, req.body.value, 'base64', function(err) {
-        console.log(err);
-      });
-});*/
+app.post("/viewTicketByID/:id", (req, res) => {
+    Ticket.findByIdAndUpdate(req.params.id,{
+        etat:true
+    })
+})
 module.exports = app;
