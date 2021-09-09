@@ -19,7 +19,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                    <tr >
                         <td *ngFor="let col of columns">
                             {{rowData.type}}
                         </td>
@@ -33,6 +33,7 @@
         </div>
     </div>
 </div> -->
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Notifications</h3>
@@ -45,14 +46,16 @@
                                 <i class="pi pi-inbox"></i>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="time-line-event">
-                                <span class="timeline-event-title">Message Recived</span>
-                                <div class="timeline-event-message">Unexpected event happened near San Mateo
+                        <div class="col" >
+                            <div class="time-line-event"    >
+                             <div *ngFor="let ligne of notifications">
+                                <span class="timeline-event-title">{{ligne.type}}</span>
+                                <div class="timeline-event-message">{{ligne.type}}
                                 </div>
                                 <div class="timeline-event-time">
                                     2 mins ago
                                 </div>
+                               </div>
                             </div>
                         </div>
                     </div>

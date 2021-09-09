@@ -17,11 +17,14 @@ export class NotificationComponent implements OnInit {
     .subscribe(
       data => {
         this.notifications = data;
+        console.log(data)
       },
       error => {
         console.log(error);
       });
 
+
+ 
  
   }
 
