@@ -8,7 +8,7 @@ import { MenuItem } from 'primeng/api';
 })
 export class NotificationComponent implements OnInit {
  
-
+  items: MenuItem[];
   notifications: any = [];
   constructor(private NotificationService:NotificationService) { }
 
@@ -21,6 +21,12 @@ export class NotificationComponent implements OnInit {
       error => {
         console.log(error);
       });
+
+      this.items = [
+        {label: ' '},
+        {label: ' '},
+        {label: ' '}
+    ];
   }
 
     //   deleteNotification(notification): void{
