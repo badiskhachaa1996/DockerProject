@@ -40,6 +40,18 @@ export class NotificationComponent implements OnInit {
             console.log(error);
           });
     }
+  
   }
+  retirer(notification): void{
+    
+    this.NotificationService.delete(notification._id)
+    .subscribe(
+      response => {
+        this.notifications.splice(this.notifications.indexOf(notification), 1);
+      },
+      error => {
+        console.log(error);
+      });
+    }
 
 }
