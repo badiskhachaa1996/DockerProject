@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
 
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite : new FormControl('', [Validators.required]),
+    civilite : new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
     role: new FormControl('user', Validators.required),
-    service_id :new FormControl(''),
+    service_id :new FormControl(null),
 
   })
 
@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.role.value || "user",null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
-      this.RegisterForm.value.civilite
+      this.RegisterForm.value.civilite.value
     )
     console.log(user)
     this.AuthService.register(user).subscribe( (data) => {
