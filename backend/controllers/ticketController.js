@@ -382,7 +382,7 @@ app.post("/changeStatut/:id", (req, res) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
-                        subject: 'Notification E-Ticketing',gi
+                        subject: 'Notification E-Ticketing',
                         html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                         attachments: [{
                             filename: 'signature.png',
@@ -405,6 +405,42 @@ app.post("/changeStatut/:id", (req, res) => {
                 })
                  
             }
+            else if(user.statut==="Traité"){
+                
+                let UserDB;
+                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                    UserDB = userFromDb
+
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: UserDB.email,
+                        subject: 'Notification E-Ticketing',
+                        html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse de '+user.sujet.service_id+'</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                        attachments: [{
+                            filename: 'signature.png',
+                            path: 'storage/signature.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                   
+                    };
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                        }
+                    });
+                    res.status(200).send(user)
+                }).catch((error) => {
+                    res.status(404).send("erreur :" + error);
+                })
+             
+
+
+            }
+            else{}
+
             }
 
         })
