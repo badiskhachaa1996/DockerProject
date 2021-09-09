@@ -359,11 +359,7 @@ export class ListTicketComponent implements OnInit {
 
     this.TicketService.changeStatut(dataTicket).subscribe((data) => {
       this.selectedTicket = null;
-<<<<<<< HEAD
       this.commentForm.reset();
-=======
-      
->>>>>>> c9d3c70ab62fece70583cd8d80d92b22a67b44e7
     }, (error) => {
       console.log(error)
     })
