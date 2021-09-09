@@ -459,6 +459,8 @@ body .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item, body .ui-dropdown-
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
+  min-width : 200px;
+
 }
 body .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item.ui-state-highlight, body .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item-group.ui-state-highlight {
   color: #ffffff;
@@ -3452,6 +3454,7 @@ button.expanded:hover,button.expanded:enabled:focus,button.expanded:enabled,butt
   border:none;
   color:#3da827;
   outline:none;
+
 }
 .expanded span:hover, .expanded span:enabled:focus,.expanded span:enabled,.expanded span:focus,.expanded span:hover:enabled{
   background-color: white;
