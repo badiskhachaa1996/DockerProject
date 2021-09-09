@@ -22,9 +22,14 @@ export class AppComponent implements OnInit{
     
     
     title = 'app';
+    isAuth: boolean = false;
     
     ngOnInit(): void {
+
+        if (localStorage.getItem("token") != null) {
+            this.isAuth = true;
     }
+}
 
 
     layout = 'layout-blue';
@@ -54,7 +59,8 @@ export class AppComponent implements OnInit{
 
 
 
-    constructor(public renderer: Renderer2,public TicketService:TicketService) {
+    constructor(public renderer: Renderer2,
+        public TicketService:TicketService) {
 
     }
   
