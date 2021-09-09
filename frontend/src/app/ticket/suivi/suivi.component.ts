@@ -81,7 +81,7 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
-  constructor(private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService) { }
+  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService) { }
 
   ngOnInit(): void {
     this.Ticket = <Ticket>history.state;
@@ -98,7 +98,15 @@ export class SuiviComponent implements OnInit {
     })
 
 
-
+    this.AuthService.getAll().subscribe((data) => {
+      if (!data.message) {
+        data.forEach(user => {
+          this.userDic[user._id] = null;
+          this.userDic[user._id] = user;
+        });
+        this.userList = data;
+      }
+    })
 
     this.SujetService.getAll().subscribe((data) => {
       if (!data.message) {

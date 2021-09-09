@@ -119,6 +119,7 @@ export class ListTicketComponent implements OnInit {
 
     this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
       if (!data.message) {
+        console.log(data)
         this.queueList = data.TicketList;
       }
     })

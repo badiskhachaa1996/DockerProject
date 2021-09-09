@@ -210,14 +210,13 @@ app.get("/getTicketsByService/:id", (req, res) => {
 //Get All Tickets de la queue d'entrée by Service ID
 app.get("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
+    console.log(id)
     let listSujetofService = []
     let TicketList = []
-    Sujet.find()
+    Sujet.find({service_id:id})
         .then(listSujets => {
             listSujets.forEach(sujet => {
-                if (sujet.service_id = id) {
-                    listSujetofService.push(sujet._id.toString())
-                }
+                listSujetofService.push(sujet._id.toString())
             });
             Ticket.find({ statut: "Queue d'entrée" })
                 .then(result => {
