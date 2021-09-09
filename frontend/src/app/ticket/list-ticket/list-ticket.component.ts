@@ -62,7 +62,7 @@ export class ListTicketComponent implements OnInit {
   comments: any = null;
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
-    statut: new FormControl('', Validators.required),
+    statut: new FormControl(this.statutList[0], Validators.required),
     file: new FormControl(''),
     value: new FormControl(null, Validators.maxLength(10000000))
   });
@@ -97,6 +97,8 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
 
   ngOnInit(): void {
+    console.log(this.statutList[0])
+    console.log(this.commentForm)
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -211,7 +213,7 @@ export class ListTicketComponent implements OnInit {
       if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
-      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté")).subscribe((notif) => {
+      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté",null,this.selectedUser._id)).subscribe((notif) => {
         this.NotifService.newNotif(notif, this.selectedUser._id)
       }, (error) => {
         console.log(error)
@@ -255,7 +257,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.changeService(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
-      this.NotifService.create(new Notification(null, this.isModify._id, false, "Modification d'un ticket")).subscribe((notif) => {
+      this.NotifService.create(new Notification(null, this.isModify._id, false, "Modification d'un ticket",null,this.isModify.createur_id)).subscribe((notif) => {
         this.NotifService.newNotif(notif, this.isModify.createur_id)
       }, (error) => {
         console.log(error)
@@ -346,16 +348,14 @@ export class ListTicketComponent implements OnInit {
     this.MsgServ.create(comment).subscribe((message) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-
-      this.commentForm.reset();
       if(this.commentForm.value.statut.value!="Traité"){
-        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message")).subscribe((notif) => {
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message",null,this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
         }, (error) => {
           console.log(error)
         });
       }else{
-        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket")).subscribe((notif) => {
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket",null,this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
         }, (error) => {
           console.log(error)
@@ -373,6 +373,7 @@ export class ListTicketComponent implements OnInit {
 
     this.TicketService.changeStatut(dataTicket).subscribe((data) => {
       this.selectedTicket = null;
+      this.commentForm.reset();
     }, (error) => {
       console.log(error)
     })

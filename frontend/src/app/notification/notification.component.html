@@ -19,7 +19,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                    <tr >
                         <td *ngFor="let col of columns">
                             {{rowData.type}}
                         </td>
@@ -33,12 +33,13 @@
         </div>
     </div>
 </div> -->
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline">
             <ul>
-                <li>
+                <li *ngFor="let notif of notifications">
                     <div class="grid">
                         <div class="col-fixed">
                             <div class="timeline-icon">
@@ -46,18 +47,35 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="time-line-event">
-                                <span class="timeline-event-title">Message Recived</span>
-                                <div class="timeline-event-message">Unexpected event happened near San Mateo
+                            <div class="time-line-event" *ngIf="notif">
+                                <span class="timeline-event-title">{{notif.type}}</span>
+                                <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
+                                    Un nouveau ticket {{listTicket[notif.ticket_id].description}} vous a été affecté
+                                </div>
+                                <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
+                                    Vous avez reçu un nouveau message sur le ticket :
+                                    {{listTicket[notif.ticket_id].description}}
+                                </div>
+                                <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été redirigé à un autre
+                                    service par un agent
+                                </div>
+                                <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été traité
+                                </div>
+                                <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
+                                    Votre ticket {{listTicket[notif.ticket_id].description}} a été renvoyé dans la queue
+                                    d'entrée
                                 </div>
                                 <div class="timeline-event-time">
-                                    2 mins ago
+                                    {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </li>
-                </ul>
+            </ul>
         </div>
     </div>
 </div>
