@@ -79,11 +79,12 @@
                         </div>
                    
                 </li>
-                </ul> 
-                <i   *ngIf="notifications!=[]" pTooltip="Vu" tooltipPosition="bottom" class="pi pi-check" 
+                </ul>
+                <div *ngIf="notifications.length!=0">
+                <i    pTooltip="Vu" tooltipPosition="bottom" class="pi pi-check" 
                                 style="cursor: pointer; margin-left: 97%; font-size: 50px;" (click)="retirertout()"></i>
                             
-                
+                            </div>
             </div>
         </div>
     </div>
