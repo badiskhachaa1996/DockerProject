@@ -11,6 +11,7 @@ export class NotificationComponent implements OnInit {
 
   notifications: any = [];
   constructor(private NotificationService:NotificationService) { }
+  // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
     this.NotificationService.getAll()

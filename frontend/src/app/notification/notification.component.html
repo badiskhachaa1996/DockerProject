@@ -39,7 +39,7 @@
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline">
             <ul>
-                <li>
+                <li *ngFor="let notif of notifications">
                     <div class="grid">
                         <div class="col-fixed">
                             <div class="timeline-icon">
@@ -52,9 +52,7 @@
                                 <span class="timeline-event-title">{{ligne.type}}</span>
                                 <div class="timeline-event-message">{{ligne.type}}
                                 </div>
-                                <div class="timeline-event-time">
-                                    2 mins ago
-                                </div>
+                          
                                </div>
                             </div>
                         </div>
