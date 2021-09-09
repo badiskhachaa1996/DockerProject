@@ -324,31 +324,31 @@
 
                                     <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
-                    <tr *ngIf="message.user_id==token['_id']">
+                    <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12" >
                                     
-                                    <button class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
                                     (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                         *ngIf="loadingMessage==message._id"></i></button>
 
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  </span>
                                 
                                 </div>
-                                <span class="ui-g-12 ui-md-12" >
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-
+                                <span id="soustitre" class="ui-g-12 ui-md-12" >
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                    
                                 </span>
                             </span>
                         </td>
                     </tr>
 
-                    <tr *ngIf="message.user_id!=token['_id']">
+                    <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12" >
-                                <button class="pi pi-paperclip ui-g-1 ui-md-1"
+                                <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
                                          id="charger2" (click)="downloadFile(message)">
                                         <i
                                         class="fa fa-spinner fa-spin fa-fw"
@@ -356,10 +356,10 @@
                                         > 
                                         </i>
                                 </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
+                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}  </span>
                                 </div>
-                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12" style="font-style: italic; font-size: 12px; float: right;">
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
+                                <span id="soustitre" class=" ui-g-12 ui-md-12">
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
                                    
                                 </span>
 

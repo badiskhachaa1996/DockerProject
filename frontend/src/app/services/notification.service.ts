@@ -51,4 +51,9 @@ export class NotificationService {
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
     return this.http.get<any>(registreUrl,httpOptions);
   }
+
+  get20ByUserID(id:string){
+    let registreUrl=this.apiUrl+"get20ByUserID/"+id;
+    return this.http.get<any>(registreUrl,httpOptions);
+  }
 }

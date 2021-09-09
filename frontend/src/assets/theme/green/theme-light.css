@@ -3475,4 +3475,10 @@ b{
 input,select,textarea{
   font-family: "Sarabun", sans-serif;
 }
+
+.ui-fileupload-choose:not(.ui-state-disabled):hover{
+  background-color: #3da827!important;
+  color:#256b17!important;
+  outline:none!important;
+}
 /* Add your customizations of the theme here */
