@@ -38,7 +38,7 @@ const user_schema= new mongoose.Schema({
     service_id:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",
-        required:true
+        required:false
     },
     civilite:{
         type: String,

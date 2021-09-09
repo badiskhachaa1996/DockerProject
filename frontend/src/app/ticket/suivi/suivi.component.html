@@ -117,31 +117,26 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
                     <h3 class="text-center">Envoyer un message</h3>
-                    <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"
-                        placeholder="Saisir un message"></textarea>
-                    <div class="col-9">
-                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre"
+                    <div class="text-center">
+                        <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"placeholder="Saisir un message"></textarea>
+                    </div><br>
+                    <div class="text-center">
+                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" #fileInput>
                         </p-fileUpload>
                     </div>
-
-                   
-
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
-                    </div>
-                    <div class=" col mt-2 mb-2 col-lg-6 col-6">
-                        Statut:
-                        <select formControlName="statut" class="form-control col-12">
-                            <option [ngValue]="null" disabled>Choissisez un statut</option>
-                            <option>En cours de traitement</option>
-                            <option>En attente d'une réponse</option>
-                            <option>Traité</option>
-                        </select>
-                    </div>
-                    <div class="col-10 col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    </div><br>
+                    <!--<p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
+                    <div class="text-center">
+                        <span>
+                             <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" placeholder="Veuillez choisir un statut"></p-dropdown>
+                        </span>
+                    </div><br>-->
+                    <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
@@ -200,10 +195,9 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <i pTooltip="Modifier"  *ngIf="rowData.statut == 'Queue d\'entrée'" tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
-                            <i pTooltip="Répondre"  *ngIf="rowData.statut == 'En attente d\'une réponse'" (click)="toggleFormCommentAdd(rowData) "> 
-                                <img src="../../../assets/images/repondre.png" width="13px" height="13px"> 
-                            </i>
+                           
+                            <i pTooltip="Modifier" *ngIf="rowData.statut == 'Queue d\'entrée'"  tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
+                            <i pTooltip="Répondre" *ngIf="rowData.statut == 'En attente d\'une réponse'" (click)="toggleFormCommentAdd(rowData) "> <img src="../../../assets/images/send.png" width="13px" height="13px"> </i>
                         </td>
                     </tr>
                 </ng-template>

@@ -28,7 +28,7 @@ export class NotificationComponent implements OnInit {
           error => {
             console.log(error);
           });
-
+            
       this.TicketService.getAll()
         .subscribe(
           data => {
@@ -40,6 +40,29 @@ export class NotificationComponent implements OnInit {
             console.log(error);
           });
     }
+  
   }
+  retirer(notification): void{
+    
+    this.NotificationService.viewNotifByID(notification._id)
+    .subscribe(
+      response => {
+        this.notifications.splice(this.notifications.indexOf(notification), 1);
+      },
+      error => {
+        console.log(error);
+      });
+    }
+    retirertout(){
+      this.NotificationService.viewNotifs(this.notifications)
+      .subscribe(
+        response => {
+        
+    this.notifications=[];
+        },
+        error => {
+          console.log(error);
+        });
+    }
 
 }
