@@ -13,7 +13,7 @@ import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
-
+import {NotificationComponent} from './notification/notification.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
@@ -25,8 +25,9 @@ const routes: Routes = [
     { path:'home', component: HomeComponent},
     { path:'listUser', component: ListUserComponent},
     { path:'listUser/update',component: UpdateUserComponent},
-    { path: 'reset', component: ResetMdpComponent}
-
+    { path: 'reset', component: ResetMdpComponent},
+    { path: 'notification', component: NotificationComponent},
+  
 
     // { path: '**', redirectTo: '/' }
   ];

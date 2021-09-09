@@ -9,6 +9,9 @@ import { Sujet } from 'src/app/models/Sujet';
 
 import { Message } from 'src/app/models/Message';
 import { User } from 'src/app/models/User';
+import { toBase64String } from '@angular/compiler/src/output/source_map';
+import { Socket } from 'net';
+const io = require("socket.io-client");
 
 @Component({
   selector: 'app-service',
@@ -51,6 +54,7 @@ export class ServiceComponent implements OnInit {
   showFormAddSujet: boolean = false;
   showFormUpdateSujet: boolean = false;
 
+
   saveService() {
     let service = {
       label: this.serviceForm.value.label
@@ -65,6 +69,10 @@ export class ServiceComponent implements OnInit {
       }
       this.showFormAddService=false;
       this.serviceForm.reset();
+      // if(msg.trim() !==''){
+      //   Socket.emit("send-notification",msg);
+      //   document.getElementById('msg').value = '';
+      // }
     }, (error) => {
       if (error.status == 400) {
         //Bad Request (service deja existant)
@@ -120,7 +128,10 @@ export class ServiceComponent implements OnInit {
     private SujetService: SujetService) { }
 
   ngOnInit(): void {
-
+//     const socket = io();
+//  socket.on('new-notification',(resp) => {
+//   toastr.success(resp,'New-notification')
+// });
     this.cols = [
       { field: 'label', header: 'Sujet' },
     ];

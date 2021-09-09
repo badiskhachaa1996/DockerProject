@@ -59,7 +59,8 @@ export class AppComponent implements OnInit{
 
 
 
-    constructor(public renderer: Renderer2,public TicketService:TicketService) {
+    constructor(public renderer: Renderer2,
+        public TicketService:TicketService) {
 
     }
   
