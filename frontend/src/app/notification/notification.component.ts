@@ -44,7 +44,7 @@ export class NotificationComponent implements OnInit {
   }
   retirer(notification): void{
     
-    this.NotificationService.delete(notification._id)
+    this.NotificationService.viewNotifByID(notification._id)
     .subscribe(
       response => {
         this.notifications.splice(this.notifications.indexOf(notification), 1);
@@ -52,6 +52,16 @@ export class NotificationComponent implements OnInit {
       error => {
         console.log(error);
       });
+    }
+    retirertout(){
+      this.NotificationService.viewNotifs(this.notifications)
+      .subscribe(
+        response => {
+          this.notifications=[];
+        },
+        error => {
+          console.log(error);
+        });
     }
 
 }
