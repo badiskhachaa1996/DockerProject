@@ -12,6 +12,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { MessageService as MsgService } from 'src/app/services/message.service';
 import { saveAs as importedSaveAs } from 'file-saver';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -51,6 +52,7 @@ export class SuiviComponent implements OnInit {
   listServices1;
   listSujetSelected = [];
   listSujets1: any = [];
+  statutList = environment.statut;
 
   loadingMessage;
   selectedTicket: Ticket;

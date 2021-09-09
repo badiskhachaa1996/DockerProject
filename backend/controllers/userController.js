@@ -23,6 +23,7 @@ let transporter = nodemailer.createTransport({
 app.post("/registre", (req, res) => {
     
     let data = req.body;
+    console.log(data)
     let user = new User({
         civilite: data.civilite,
         firstname: data.firstname,
@@ -32,11 +33,12 @@ app.post("/registre", (req, res) => {
         email: data.email,
         password: data.password,
         role : data.role || "user",
-        service_id : data.service_id 
+        service_id : data?.service_id || null
     })
     user.save().then((userFromDb) => {
+        console.log(userFromDb)
 
-        res.status(200).send({ message: "registration done" });
+        res.status(200).send(userFromDb);
 
         
         let mailOptions = {
@@ -55,6 +57,7 @@ app.post("/registre", (req, res) => {
         });
         
     }).catch((error) => {
+        console.error(error)
         res.status(400).send(error);
     })
 });

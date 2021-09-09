@@ -39,28 +39,25 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
                     <h3 class="text-center">Envoyer un message</h3>
-                    <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"
-                        placeholder="Saisir un message"></textarea>
-                    <div class="col-9">
-                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre"
+                    <div class="text-center">
+                        <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message"></textarea>
+                    </div><br>
+                    <div class="text-center">
+                        <p-fileUpload  #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un ficher"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" #fileInput>
                         </p-fileUpload>
                     </div>
-
-                   
-
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
-                            max).</span>
-                    </div>
-                    <div class=" col mt-2 mb-2 col-lg-6 col-6">
-                        Statut:
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
+                    </div><br>
+                    <p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
+                    <div class=" text-center">
                         <span>
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
+                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" placeholder="Veuillez choisir un statut"></p-dropdown>
                         </span>
-                    </div>
-                    <div class="col-10 col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    </div><br>
+                    <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
@@ -73,7 +70,8 @@
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id">
+            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4" [paginator]="true"
+            [pageLinks]="5" [responsive]="true">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -207,7 +205,8 @@
         <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
-                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single">
+                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
+                [pageLinks]="5" [responsive]="true">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -322,36 +321,36 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments" legend="Messages">
+                            <p-fieldset *ngIf="comments" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
-                    <tr *ngIf="message.user_id==token['_id']">
+                    <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12" >
                                     
-                                    <button class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
                                     (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                         *ngIf="loadingMessage==message._id"></i></button>
 
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  </span>
                                 
                                 </div>
-                                <span class="ui-g-12 ui-md-12" >
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-
+                                <span id="soustitre" class="ui-g-12 ui-md-12" >
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                    
                                 </span>
                             </span>
                         </td>
                     </tr>
 
-                    <tr *ngIf="message.user_id!=token['_id']">
+                    <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12" >
-                                <button class="pi pi-paperclip ui-g-1 ui-md-1"
+                                <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
                                          id="charger2" (click)="downloadFile(message)">
                                         <i
                                         class="fa fa-spinner fa-spin fa-fw"
@@ -359,10 +358,10 @@
                                         > 
                                         </i>
                                 </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
+                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}  </span>
                                 </div>
-                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12">
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
+                                <span id="soustitre" class=" ui-g-12 ui-md-12">
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
                                    
                                 </span>
 
@@ -387,7 +386,9 @@
     <div class="col-10 col-offset-1">
         <h3>Les tickets de mon service</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single">
+            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
+            [rows]="4" [paginator]="true"
+                [pageLinks]="5" [responsive]="true">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
