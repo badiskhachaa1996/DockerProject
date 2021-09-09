@@ -140,38 +140,38 @@ app.post("/updateFirst/:id", (req, res) => {
                 res.send(err)
             }
 
-            
+
             console.log(user.createur_id)
 
-                let UserDB;
-                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB = userFromDb
-                    res.send({ userFromDb });
+            let UserDB;
+            User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                UserDB = userFromDb
+                res.send({ userFromDb });
 
 
-                    let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
-                        subject: 'Notification E-Ticketing',
-                        html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
-                        attachments: [{
-                            filename: 'signature.png',
-                            path: 'storage/signature.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
-    
-                    };
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: UserDB.email,
+                    subject: 'Notification E-Ticketing',
+                    html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
+                    attachments: [{
+                        filename: 'signature.png',
+                        path: 'storage/signature.png',
+                        cid: 'red' //same cid value as in the html img src
+                    }]
 
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
-                }).catch((error) => {
-                    res.status(404).send("erreur :" + error);
-                })
+                };
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            }).catch((error) => {
+                res.status(404).send("erreur :" + error);
+            })
 
         })
 });
@@ -282,13 +282,14 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(err)
             } else {
                 console.log(user.createur_id)
-                
+
                 let UserDB;
+                res.send(user);
                 User.findOne({ _id: user.agent_id }).then((userFromDb) => {
                     UserDB = userFromDb
-                    res.send({ userFromDb });
+                    
 
-                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour '+'M.'+UserDB.lastname +'</p> <p style="color:black"> Le Ticket ' + user._id + '  vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
+                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + UserDB.lastname + '</p> <p style="color:black"> Le Ticket ' + user._id + '  vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: UserDB.email,
@@ -325,10 +326,10 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-              
+
                 console.log(ticket.createur_id)
 
-                let UserDB;
+                res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
@@ -351,7 +352,7 @@ app.post("/changeService/:id", (req, res) => {
                         }
                     });
 
-                   
+
                 }).catch((error) => {
                     res.status(404).send("erreur :" + error);
                 })
@@ -371,87 +372,82 @@ app.post("/changeStatut/:id", (req, res) => {
                 res.send(err)
             } else {
 
-                
+
                 console.log(user.createur_id)
-                if(user.statut=="En attente d\'une réponse"){
-                   
-
-                let UserDB;
-                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB = userFromDb
-
-                    let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
-                        subject: 'Notification E-Ticketing',
-                        html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
-                        attachments: [{
-                            filename: 'signature.png',
-                            path: 'storage/signature.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
-                   
-                    };
-
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
-                    res.status(200).send(user)
-                }).catch((error) => {
-                    res.status(404).send("erreur :" + error);
-                })
-                 
-            }
-            else if(user.statut==="Traité"){
-                
-                let UserDB;
-                let agentService;
-                User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                    UserDB = userFromDb
-                    
-                    
-                    let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
-                        subject: 'Notification E-Ticketing',
-                        html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.'+UserDB.lastname  +',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
-                        attachments: [{
-                            filename: 'signature.png',
-                            path: 'storage/signature.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
-                   
-                    };
-
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
-                    res.status(200).send(user)
-                }).catch((error) => {
-                    res.status(404).send("erreur :" + error);
-                })
-             
+                if (user.statut == "En attente d\'une réponse") {
 
 
-            }
-           
+                    let UserDB;
+                    User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                        UserDB = userFromDb
+
+                        let mailOptions = {
+                            from: 'estya-ticketing@estya.com',
+                            to: UserDB.email,
+                            subject: 'Notification E-Ticketing',
+                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'storage/signature.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+
+                        };
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                            }
+                        });
+                        res.status(200).send(user)
+                    }).catch((error) => {
+                        res.status(404).send("erreur :" + error);
+                    })
+
+                }
+                else if (user.statut === "Traité") {
+
+                    let UserDB;
+                    let agentService;
+                    User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                        UserDB = userFromDb
+
+
+                        let mailOptions = {
+                            from: 'estya-ticketing@estya.com',
+                            to: UserDB.email,
+                            subject: 'Notification E-Ticketing',
+                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'storage/signature.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+
+                        };
+
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                            }
+                        });
+                        res.status(200).send(user)
+                    }).catch((error) => {
+                        res.status(404).send("erreur :" + error);
+                    })
+
+
+
+                }
+
 
             }
 
         })
 });
 
-app.post("/viewTicketByID/:id", (req, res) => {
-    Ticket.findByIdAndUpdate(req.params.id,{
-        etat:true
-    })
-})
 module.exports = app;

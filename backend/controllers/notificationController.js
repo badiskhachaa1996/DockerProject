@@ -78,4 +78,35 @@ app.get("/get20ByUserID/:id", (req, res) => {
     })
 });
 
+app.get("/viewNotifByID/:id", (req, res) => {
+    Notification.findByIdAndUpdate(req.params.id,
+        {
+            etat:true,
+         
+        }, {new: true}, (err, notif) => {
+            if (err) {
+                res.send(err)
+            }
+            res.send(notif)
+        })
+});
+
+app.post("/viewNotifs", (req, res) => {
+    let notifications=req.body.notifications;
+    let returnTick=[];
+    notifications.forEach(element => {
+        Notification.findByIdAndUpdate(element._id,
+            {
+                etat:true,
+             
+            }, {new: true}, (err, notif) => {
+                if (err) {
+                    res.send(err)
+                }
+                returnTick.push(notif)
+            })
+    });
+    res.status(200).send(returnTick)
+});
+
 module.exports = app;
