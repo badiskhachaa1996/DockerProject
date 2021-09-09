@@ -18,18 +18,13 @@
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             Sujet:
-                            <select [disabled]="!TicketForm.value.service" formControlName="sujet"
-                                class="form-control col-12">
+                            <select [disabled]="!TicketForm.value.service" formControlName="sujet" class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un sujet</option>
-                                <option *ngFor="let sujet of listSujetSelected[TicketForm.value.service._id]"
-                                    [ngValue]="sujet">
-                                    {{ sujet.label }}
-                                </option>
+                                <option *ngFor="let sujet of listSujetSelected[TicketForm.value.service._id]" [ngValue]="sujet">{{ sujet.label }}</option>
                             </select>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid"
-                                label="Enregistrer" (click)="modifyTicket()"></button>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm.invalid" label="Enregistrer" (click)="modifyTicket()"></button>
                         </div>
                     </div>
                 </form>
@@ -321,61 +316,42 @@
                                                 {{userDic[rowData.createur_id].role}}</div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
-                                            <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Service:</b> </div>
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">Service:</div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">{{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments" legend="Messages">
-                                <div class="badyT">
-
-                                    <p-table [value]="comments" dataKey="id">
-                                        <ng-template pTemplate="body" let-message let-EnvoyeurList>
-                    <tr *ngIf="message.user_id==token['_id']">
-                        <td>
-                            <span class="ui-g-6 ui-md-6">
-                                <div class="ui-g-12 ui-md-12" >
-                                    
-                                    <button class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
-                                    (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"></i></button>
-
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  {{userDic[message.user_id].firstname}} </span>
-                                
-                                </div>
-                                <span class="ui-g-12 ui-md-12" >
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-                                     
-                                </span>
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="message.user_id!=token['_id']">
-                        <td>
-                            <span class="ui-g-6 ui-md-6" style="float: right;">
-                                <div class="ui-g-12 ui-md-12" >
-                                <button class="pi pi-paperclip ui-g-1 ui-md-1"
-                                         id="charger2" (click)="downloadFile(message)">
-                                        <i
-                                        class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"
-                                        > 
-                                        </i>
-                                </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}   {{userDic[message.user_id].firstname}}
-                                    
-                                
-                                </span>
-                                </div>
-                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12">
-                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
-                                   
-                                </span>
-
-                            </span>
+                            <p-fieldset *ngIf="comments" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                                <p-table [value]="comments" dataKey="id">
+                                    <ng-template pTemplate="body" let-message>
+                                        <tr *ngIf="message.user_id==token['_id']">
+                                            <td>  
+                                                <span class="ui-g-6 ui-md-6">
+                                                <span class="ui-g-12 ui-md-12" id="messageUser"> {{message.description}} </span>
+                                                <span style="font-style: italic; font-size: 11px; float: right;" class="ui-g-12 ui-md-12"><button class="pi pi-paperclip" id="charger" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button></span>
+                                                <span>{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</span>  
+                                            </span> 
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="message.user_id!=token['_id']">
+                                            <td> 
+                                                <span class="ui-g-6 ui-md-6" style="float: right;">
+                                                <span class="ui-g-12 ui-md-12" id="messageAgent"> {{message.description}} </span>  
+                                                <span style="font-style: italic; font-size: 11px; float: right;">{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</span>  
+                                                <span *ngIf="message.document" class=" ui-g-12 ui-md-12"><button class="pi pi-paperclip" style="float: right;" id="charger2" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>   
+                                                </span>      
+                                            </span> 
+                                            </td> 
+                                        </tr>
+                                         <!-- <tr>
+                                             <td>
+                                                <button pButton label="charger un fichier" (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"></i></button>
+                                            </td>
+                                        </tr> -->
+                                    </ng-template>
+                                </p-table>
+                            </p-fieldset>
                         </td>
                     </tr>
 

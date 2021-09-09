@@ -63,8 +63,8 @@
                 
             
                 <li #profile class="user-profile" role="menuitem" [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
-                    <a *ngIf="userconnected" href="#" (click)="app.onTopbarItemClick($event,profile)">
-                        <div class="user-profile-info profile-link">
+                    <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                        <div *ngIf="userconnected" class="user-profile-info profile-link">
                             <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
                             <span class="user-profile-role">{{userconnected.role}}</span>
                         </div>
@@ -76,7 +76,7 @@
                         <li class="profile-detail">
                             <div class="user-profile-info">
                                 <img src="../assets/images/avatar.PNG" width="40px" height="40px">    
-                                <div  *ngIf="userconnected" class="profile-info">
+                                <div *ngIf="userconnected" class="profile-info">
                                     <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
                                     <span class="user-profile-role">{{userconnected.role}}</span>
                                 </div>
