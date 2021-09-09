@@ -359,6 +359,7 @@ export class ListTicketComponent implements OnInit {
 
     this.TicketService.changeStatut(dataTicket).subscribe((data) => {
       this.selectedTicket = null;
+      
     }, (error) => {
       console.log(error)
     })
