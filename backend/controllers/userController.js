@@ -103,21 +103,22 @@ app.get("/getAll",(req,res)=>{
 
 
 app.post("/updateById/:id", (req, res) => {
-    User.findByIdAndUpdate(req.params.id,
+    console.log(req.body)
+    User.findOneAndUpdate({_id:req.params.id},
         {
             civilite:req.body.civilite,
             firstname:req.body.firstname,
             lastname:req.body.lastname,
-            email:req.body.email,
             phone:req.body.phone,
             role:req.body.role,
             adresse:req.body.adresse,
             service_id:req.body.service_id
 
-        }, {new: true}, (err, user) => {
+        }, { new: true }, (err, user) => {
             if (err) {
                 res.send(err)
             }
+            console.log(user)
             res.send(user)
         })
 })
