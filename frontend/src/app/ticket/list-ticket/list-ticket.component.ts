@@ -38,7 +38,7 @@ export class ListTicketComponent implements OnInit {
   allTickets: Ticket[] = [];
 
   userList: User[] = [];
-  AllUsers:User[]=[]
+  AllUsers: User[] = []
   EnvoyeurList: User[] = [];
 
   userDic: any[] = [];
@@ -105,7 +105,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"]=="Responsable") {
+    } else if (this.token["role"] == "Responsable") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -114,7 +114,7 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-    if(this.token['role']=="Admin"){
+    if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
@@ -125,7 +125,7 @@ export class ListTicketComponent implements OnInit {
           this.allTickets = data;
         }
       })
-    }else{
+    } else {
       this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
         if (!data.message) {
           this.queueList = data.TicketList;
@@ -168,11 +168,11 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="Agent" && (user.service_id==this.token["service_id"])){
+          if (user.role == "Agent" && (user.service_id == this.token["service_id"])) {
             this.userList.push(user);
           }
         });
-        this.AllUsers=data;
+        this.AllUsers = data;
       }
     })
   }
@@ -209,12 +209,12 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  showDropdownUser(rawData:Ticket) {
+  showDropdownUser(rawData: Ticket) {
     this.showDropDown = (this.showDropDown) ? null : rawData;
-    if(rawData && this.token.role=="Admin"){
-      this.userList=[]
-      this.AllUsers.forEach(user=>{
-        if(user.service_id==this.sujetList[rawData.sujet_id].service_id){
+    if (rawData && this.token.role == "Admin") {
+      this.userList = []
+      this.AllUsers.forEach(user => {
+        if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
           this.userList.push(user)
         }
       })
@@ -389,9 +389,9 @@ export class ListTicketComponent implements OnInit {
         });
 
       } else {
-        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {  
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-          
+
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.selectedTicket = null;
             this.commentForm.reset();

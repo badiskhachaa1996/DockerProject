@@ -71,7 +71,7 @@
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4" [paginator]="true"
-            [pageLinks]="5" [responsive]="true" rowExpandMode="single">
+            [pageLinks]="5" [responsive]="true" rowExpandMode="single" [totalRecords]="queueList.length">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -206,7 +206,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true">
+                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -389,7 +389,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
             [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true">
+                [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
