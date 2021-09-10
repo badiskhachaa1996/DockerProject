@@ -104,7 +104,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("responsable")) {
+    } else if (this.token["role"]=="Responsable") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -113,7 +113,7 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-    if(this.token['role']=="admin"){
+    if(this.token['role']=="Admin"){
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
@@ -167,7 +167,7 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="agent" && (user.service_id==this.token["service_id"] || this.token['role']=="admin")){
+          if(user.role=="Agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
             this.userList.push(user);
           }
         });

@@ -384,7 +384,8 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Les tickets de mon service</h3>
+        <h3 *ngIf="token['role']!='admin'">Les tickets de mon service</h3>
+        <h3 *ngIf="token['role']=='admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
             [rows]="4" [paginator]="true"
