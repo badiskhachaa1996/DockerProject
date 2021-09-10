@@ -22,11 +22,9 @@ export class RegisterComponent implements OnInit {
   IsAdmin: boolean = false;
   User_role: String;
   emailExists = false;
-  Roles = environment.role;
+  Roles = environment.role.splice(2,1);
   showForm : boolean =true;
   civiliteList = environment.civilite;
-
-
 
   RegisterForm: FormGroup = new FormGroup({
     civilite : new FormControl(environment.civilite[0], [Validators.required]),
@@ -141,9 +139,9 @@ export class RegisterComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
     }
-    this.IsAdmin=this.User_role == "admin"
-    if(this.IsAdmin){
-      this.RegisterForm.get('role').setValue(this.Roles[0].value)
+    this.IsAdmin=this.User_role == "Admin" || this.User_role == "Responsable"
+    if(this.User_role == "Responsable"){
+      this.Roles.splice(1,1)
     }
   }
   

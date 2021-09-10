@@ -43,7 +43,7 @@ export class SuiviComponent implements OnInit {
   listServices;
   listSujets: any[] = [];
 
-
+  userDic: any[] = [];
 
   Ticket: Ticket;
   firstMessage: Message;
@@ -103,7 +103,6 @@ export class SuiviComponent implements OnInit {
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
         data.forEach(user => {
-          this.userDic[user._id] = null;
           this.userDic[user._id] = user;
         });
         this.userList = data;
