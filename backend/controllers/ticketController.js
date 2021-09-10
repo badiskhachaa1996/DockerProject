@@ -419,7 +419,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             from: 'estya-ticketing@estya.com',
                             to: UserDB.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html: '<h3 style="color:green">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
