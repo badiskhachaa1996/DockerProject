@@ -213,10 +213,12 @@ app.get("/getQueueByService/:id", (req, res) => {
     console.log(id)
     let listSujetofService = []
     let TicketList = []
-    Sujet.find({service_id:id})
+    Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
-                listSujetofService.push(sujet._id.toString())
+                if(sujet.service_id==id){
+                    listSujetofService.push(sujet._id.toString())
+                }
             });
             Ticket.find({ statut: "Queue d'entrée" })
                 .then(result => {

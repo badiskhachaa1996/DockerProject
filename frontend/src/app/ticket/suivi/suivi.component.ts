@@ -119,6 +119,7 @@ export class SuiviComponent implements OnInit {
       }
     })
 
+
     this.ServService.getAll().subscribe((data) => {
       if (!data.message) {
         //{ label: 'Tous les services', value: null }
@@ -194,7 +195,7 @@ export class SuiviComponent implements OnInit {
     this.TicketService.updateFirst(req).subscribe((data) => {
       this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1);
       this.ticketList.push(data);
-
+      this.TicketForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.toggleFormUpdate()
     }, (error) => {
@@ -234,6 +235,7 @@ export class SuiviComponent implements OnInit {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
       description: this.TicketForm.value.description,
+
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data) => {
@@ -241,6 +243,8 @@ export class SuiviComponent implements OnInit {
      
       try{
         this.ticketList.push(data.doc)
+        this.TicketForm.reset();
+
       }catch (e){
         this.ticketList = [data.doc]
       }
