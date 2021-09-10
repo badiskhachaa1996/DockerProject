@@ -75,16 +75,6 @@ export class NotificationComponent implements OnInit {
           console.log(error);
         });
   }
-  retirertout() {
-    this.NotificationService.viewNotifs(this.notifications)
-      .subscribe(
-        response => {
 
-          this.notifications = [];
-        },
-        error => {
-          console.log(error);
-        });
-  }
 
 }
