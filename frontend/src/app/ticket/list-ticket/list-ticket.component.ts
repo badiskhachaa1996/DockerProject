@@ -114,12 +114,29 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-
-    this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
-      if (!data.message) {
-        this.queueList = data.TicketList;
-      }
-    })
+    if(this.token['role']=="Admin"){
+      this.TicketService.getQueue().subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data;
+        }
+      })
+      this.TicketService.getAllAccAff().subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data;
+        }
+      })
+    }else{
+      this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data.TicketList;
+        }
+      })
+      this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data.TicketList;
+        }
+      })
+    }
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
       if (!data.message) {
@@ -139,7 +156,7 @@ export class ListTicketComponent implements OnInit {
       }
     })
 
-    //getAccAffByService
+    //getAccAffByUserID
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
@@ -153,13 +170,6 @@ export class ListTicketComponent implements OnInit {
           this.userDic[user._id] = user;
         });
         this.userList = data;
-      }
-    })
-
-
-    this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
-      if (!data.message) {
-        this.allTickets = data.TicketList;
       }
     })
   }
