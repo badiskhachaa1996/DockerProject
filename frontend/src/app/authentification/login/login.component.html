@@ -15,9 +15,8 @@
                             </div>
                             <div class="mb-2 col-12">
                                 <input type="password" formControlName="password" class="form-control col-12" placeholder="Mot de passe" pInputText>
-                                <div *ngIf="password.invalid && (password.touched || email.dirty)">
+                                <div *ngIf="password.invalid && (password.touched || password.dirty)">
                                     <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire</span>
-                                    <span class="error" *ngIf="password.errors?.pattern">*Le mot de passe n'est pas correct</span>
                                 </div>
                             </div>
                             <div class="mt-2 mb-2 col-12">
