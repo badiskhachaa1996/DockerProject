@@ -266,7 +266,7 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
       this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
         this.NotifService.newNotif(notif, data.createur_id)
       }, (error) => {
