@@ -37,11 +37,18 @@ app.post("/registre", (req, res) => {
     })
     user.save().then((userFromDb) => {
         res.status(200).send(userFromDb);
+
+        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><h3 style="color:orange">Felicitation !</h3><p style="color:black"> Votre compte E-Ticketing a été crée avec succés</p><p>Cordialement,</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
             subject: 'Estya-Ticketing',
-            text: '<h1>Felicitation ! Votre compte E-Ticketing a été crée avec succés</h1>'
+            html:htmlmail,
+            attachments: [{
+                filename: 'signature.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
         };
         
         transporter.sendMail(mailOptions, function(error, info){

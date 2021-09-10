@@ -3,7 +3,8 @@
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline">
             <div *ngIf="notifications.length!=0">
-                <i pTooltip="Retirer toutes les notififs" tooltipPosition="bottom" class="pi pi-trash" style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
+                <i pTooltip="Retirer toutes les notififs" tooltipPosition="bottom" class="pi pi-trash"
+                    style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
             </div>
             <ul>
                 <li *ngFor="let notif of notifications">
@@ -14,23 +15,34 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="time-line-event" *ngIf="notif">
+                            <div class="time-line-event" *ngIf="notif && sujetDic[listTicket[notif.ticket_id].sujet_id].label">
                                 <span class="timeline-event-title">{{notif.type}}</span>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
-                                    Un nouveau ticket vous a été affecté
+                                    Un nouveau ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" vous a été affecté
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
-                                    Vous avez reçu un nouveau message sur le ticket : {{notif.ticket_id }}
+                                    <div>Vous avez reçu un nouveau message sur le ticket : "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
+                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
+                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
+                                        (click)="retirer(notif)"></i></div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
-                                    Votre ticket a été redirigé vers un autre service par un agent
-                                    <i pTooltip="Vu" tooltipPosition="bottom" class="pi pi-check" style="cursor: pointer; margin-left: 97%; font-size: 27px; color: green; top: 0;" (click)="retirer(notif)"></i>  
+                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été redirigé vers un autre service par un agent
+                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
+                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
+                                        (click)="retirer(notif)"></i></div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
-                                    Votre ticket a été traité
+                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été traité
+                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
+                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
+                                        (click)="retirer(notif)"></i></div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
-                                    Votre ticket a été renvoyé dans la queue d'entrée 
+                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
+                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
+                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
+                                        (click)="retirer(notif)"></i></div>
                                 </div>
                                 <div class="timeline-event-time">
                                     {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
@@ -39,6 +51,7 @@
                         </div>
                     </div>
                 </li>
+<<<<<<< HEAD
                 </ul>
                 <div *ngIf="notifications.length==0">
                     <i class="pi pi-clock" style="margin-left: 97%; font-size: 30px; color: red; "></i><span style="font-size: 15px;">Vous n'avez aucune notifications pour le moment... Revenez plus tard !</span>
@@ -50,3 +63,12 @@
 
 
                                 
+=======
+            </ul>
+            <div *ngIf="notifications.length==0">
+                <span>Vous n'avez pas de notification</span>
+            </div>
+        </div>
+    </div>
+</div>
+>>>>>>> e93aa0673fd82eef577359574cce94c0e913173a
