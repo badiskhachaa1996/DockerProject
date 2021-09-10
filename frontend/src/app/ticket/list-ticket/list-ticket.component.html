@@ -41,7 +41,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                    <h3 class="text-center">Envoyer un message</h3>
+                    <h3 class="text-center" style="color: green; font-weight: bold;">Envoyer un message</h3>
                     <div class="text-center">
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
@@ -56,11 +56,10 @@
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div><br>
-                    <p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
+                    <p class="text-center" style="color: green; font-weight: bold;">Statut du ticket :</p><br>
                     <div class=" text-center">
                         <span>
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"
-                                placeholder="Veuillez choisir un statut"></p-dropdown>
+                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" ></p-dropdown>
                         </span>
                     </div><br>
                     <div class="text-center">

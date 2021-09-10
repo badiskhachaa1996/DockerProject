@@ -172,6 +172,7 @@ export class ListTicketComponent implements OnInit {
         this.userList = data;
       }
     })
+    console.log(this.TicketForm)
   }
 
   //QueueToAccAff

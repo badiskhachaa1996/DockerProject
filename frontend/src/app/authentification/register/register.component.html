@@ -10,7 +10,7 @@
                     <h3 class="text-center" *ngIf="currentRoot=='/listUser'">Ajouter un utilisateur</h3>
                     <div>
                         <span>
-                            <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value" placeholder="Veuillez choisir une civilité"></p-dropdown><br>
+                            <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
                         </span>
                     </div>
                     <br>
@@ -67,10 +67,10 @@
                                 </div>
                                 <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12" >
                                     <span>
-                                         <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" ></p-dropdown>
+                                         <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
                                      </span>
                                      <span style="margin-left: 15%;"> 
-                                         <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" ></p-dropdown>
+                                         <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
                                   </span> 
                                  </div>
                             </div>

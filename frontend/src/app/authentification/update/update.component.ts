@@ -115,6 +115,8 @@ userupdate:any=[User];
     }
     else{this.IsAdmin == false};
     console.log("+"+this.IsAdmin);
+
+    console.log(this.RegisterForm.value)
  
   }
 

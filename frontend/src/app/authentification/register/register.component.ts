@@ -145,6 +145,8 @@ export class RegisterComponent implements OnInit {
     if(this.IsAdmin){
       this.RegisterForm.get('role').setValue(this.Roles[0].value)
     }
+
+    console.log(this.RegisterForm.value)
   }
   
 
