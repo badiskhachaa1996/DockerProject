@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value
     )
-    this.AuthService.register(user).subscribe((data:any) => {
+    this.AuthService.register(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
       this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
         data => {
@@ -78,9 +78,9 @@ export class RegisterComponent implements OnInit {
 
       if (this.router.url == "/register") {
         this.router.navigateByUrl('/login')
-      }else{
+      } else {
         this.listUserComponenet.showForm = "Ajouter"
-        if(data.role!="user"){
+        if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }
       }
