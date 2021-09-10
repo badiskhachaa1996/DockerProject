@@ -58,7 +58,7 @@ export class SuiviComponent implements OnInit {
   selectedTicket: Ticket;
   showFormAddComment: boolean = false;
   @ViewChild('fileInput') fileInput: ElementRef;
-  comments: any = [null];
+  comments: any = [];
 
   toggleFormCancel(){
     this.showFormAddComment=!this.showFormAddComment;
@@ -279,7 +279,7 @@ export class SuiviComponent implements OnInit {
   });
 
   loadMessages(ticket:Ticket){
-    this.comments = null
+    this.comments = []
     this.MsgServ.getAllByTicketID(ticket._id)
     .subscribe(
       data => {
