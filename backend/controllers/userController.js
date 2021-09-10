@@ -103,7 +103,6 @@ app.post("/updateById/:id", (req, res) => {
             lastname:req.body.lastname,
             email:req.body.email,
             phone:req.body.phone,
-            password:req.body.password,
             role:req.body.role,
             adresse:req.body.adresse,
             service_id:req.body.service_id
