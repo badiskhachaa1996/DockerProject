@@ -70,10 +70,10 @@
                     [responsive]="true" [totalRecords]="services.length">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th class="col-8 col-offset-4">
+                            <th class="col-8 col-offset-4" style="text-decoration: underline;">
                                 Service
                             </th>
-                            <th class="col-4 col-offset-2">
+                            <th class="col-4 col-offset-2" style="text-decoration: underline;">
                                 Action
                             </th>
                         </tr>
@@ -167,10 +167,10 @@
             <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow" [rows]="4" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="sujetShow.length">
                 <ng-template pTemplate="header" let-columns>
-                    <th class="col-8 col-offset-4">
+                    <th class="col-8 col-offset-4" style="text-decoration: underline;">
                         Sujet
                     </th>
-                    <th class="col-4 col-offset-2">
+                    <th class="col-4 col-offset-2" style="text-decoration: underline;">
                         Action
                     </th>
                 </ng-template>

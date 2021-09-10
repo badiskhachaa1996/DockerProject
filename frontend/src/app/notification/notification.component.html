@@ -3,7 +3,7 @@
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline">
             <div *ngIf="notifications.length!=0">
-                <i pTooltip="Retirer toutes les notififs" tooltipPosition="bottom" class="pi pi-trash"
+                <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom" class="pi pi-times-circle"
                     style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
             </div>
             <ul>
@@ -51,11 +51,12 @@
                         </div>
                     </div>
                 </li>
-<<<<<<< HEAD
                 </ul>
                 <div *ngIf="notifications.length==0">
-                    <i class="pi pi-clock" style="margin-left: 97%; font-size: 30px; color: red; "></i><span style="font-size: 15px;">Vous n'avez aucune notifications pour le moment... Revenez plus tard !</span>
-                </div>
+                    <div>Vous n'avez aucune notifications pour le moment... Revenez plus tard !
+                        <i class="pi pi-clock" style="font-size: 25px; color: red; float: right;"></i>
+                    </div>
+                </div>      
             </div>
         </div>
 </div>
@@ -63,12 +64,3 @@
 
 
                                 
-=======
-            </ul>
-            <div *ngIf="notifications.length==0">
-                <span>Vous n'avez pas de notification</span>
-            </div>
-        </div>
-    </div>
-</div>
->>>>>>> e93aa0673fd82eef577359574cce94c0e913173a
