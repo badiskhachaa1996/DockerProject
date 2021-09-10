@@ -142,11 +142,11 @@ app.post("/updateFirst/:id", (req, res) => {
 
 
             console.log(user.createur_id)
-
+            res.send( user );
             let UserDB;
             User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                 UserDB = userFromDb
-                res.send({ userFromDb });
+                
 
 
                 let mailOptions = {
