@@ -113,7 +113,7 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-    if(this.token['role']=="Admin"){
+    if(this.token['role']=="admin"){
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
@@ -167,7 +167,7 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
+          if(user.role=="agent" && (user.service_id==this.token["service_id"] || this.token['role']=="admin")){
             this.userList.push(user);
           }
         });
