@@ -119,7 +119,7 @@
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-                                [(ngModel)]="selectedUser" optionLabel="firstname" (onChange)="Affected($event)"
+                                optionLabel="firstname" (onChange)="Affected($event)"
                                 placeholder="Choissisez un agent">
                             </p-dropdown>
                         </td>

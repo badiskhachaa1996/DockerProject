@@ -44,7 +44,6 @@ export class ListTicketComponent implements OnInit {
   serviceDic: any[] = []
 
   draggedTicket: Ticket;
-  selectedUser: User;
   selectedTicket: Ticket;
 
   showForm: string = "Ajouter";
@@ -213,20 +212,18 @@ export class ListTicketComponent implements OnInit {
   }
 
   Affected(event) {
-    console.log(event)
-    console.log(event.value)
     let data = {
       id: this.showDropDown._id,
-      agent_id: this.selectedUser._id,
+      agent_id: event.value._id,
       isAffected: true
     }
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
-      if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
+      if (event.value._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
-      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, this.selectedUser._id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, this.selectedUser._id)
+      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
+        this.NotifService.newNotif(notif, event.value._id)
       }, (error) => {
         console.log(error)
       });
