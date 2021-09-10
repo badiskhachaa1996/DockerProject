@@ -110,17 +110,11 @@ export class UpdateUserComponent implements OnInit {
       this.IsAdmin = true
       console.log(this.IsAdmin);
     }
-<<<<<<< HEAD
     else{this.IsAdmin == false};
     console.log("+"+this.IsAdmin);
 
     console.log(this.RegisterForm.value)
  
-=======
-    else { this.IsAdmin == false };
-    console.log("+" + this.IsAdmin);
-
->>>>>>> 0afd65e3f56a65394231952e963c07c185cb36ac
   }
 
 }

@@ -29,10 +29,16 @@ export class NavbarComponent implements OnInit {
       routerLink: '/'
     },
     {
+      label :'Gestions des services',
+      icon: 'pi pi-sitemap',
+      routerLink :'/service'
+    },
+    {
       label: 'Gestions des agents',
       icon: 'pi pi-users',
       routerLink: '/listUser'
-    }
+    },
+
     ]
 
 
