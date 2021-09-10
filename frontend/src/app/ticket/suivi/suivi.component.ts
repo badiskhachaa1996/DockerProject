@@ -43,7 +43,7 @@ export class SuiviComponent implements OnInit {
   listServices;
   listSujets: any[] = [];
 
-  userDic:any=[];
+  userDic: any[] = [];
 
   Ticket: Ticket;
   firstMessage: Message;
