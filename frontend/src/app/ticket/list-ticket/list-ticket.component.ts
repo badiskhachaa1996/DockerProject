@@ -168,8 +168,10 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
+          if(user.role=="agent" && user.service_id==this.token["service_id"]){
+            this.userList.push(user);
+          }
         });
-        this.userList = data;
       }
     })
   }
