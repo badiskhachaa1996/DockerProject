@@ -119,7 +119,7 @@
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-                                [(ngModel)]="selectedUser" optionLabel="firstname" (onChange)="Affected()"
+                                optionLabel="firstname" (onChange)="Affected($event)"
                                 placeholder="Choissisez un agent">
                             </p-dropdown>
                         </td>
@@ -384,7 +384,8 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Les tickets de mon service</h3>
+        <h3 *ngIf="token['role']!='admin'">Les tickets de mon service</h3>
+        <h3 *ngIf="token['role']=='admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
             [rows]="4" [paginator]="true"

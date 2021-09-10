@@ -5,7 +5,8 @@ export class Message {
         public documentType?:string,
         public description? : string,
         public user_id?:string,
-        public ticket_id?:string
+        public ticket_id?:string,
+        public isRep?:Boolean,
     ){}
 
  }

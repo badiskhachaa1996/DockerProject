@@ -24,7 +24,10 @@ const message_schema= new mongoose.Schema({
         type: Date,
         required : true,
         default:Date.now()
-    }
+    },
+    isRep:{
+        type:Boolean,
+    },
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Message= mongoose.model("message",message_schema);

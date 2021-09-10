@@ -44,7 +44,6 @@ export class ListTicketComponent implements OnInit {
   serviceDic: any[] = []
 
   draggedTicket: Ticket;
-  selectedUser: User;
   selectedTicket: Ticket;
 
   showForm: string = "Ajouter";
@@ -105,7 +104,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("responsable")) {
+    } else if (this.token["role"]=="Responsable") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -114,12 +113,29 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-
-    this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
-      if (!data.message) {
-        this.queueList = data.TicketList;
-      }
-    })
+    if(this.token['role']=="Admin"){
+      this.TicketService.getQueue().subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data;
+        }
+      })
+      this.TicketService.getAllAccAff().subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data;
+        }
+      })
+    }else{
+      this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data.TicketList;
+        }
+      })
+      this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data.TicketList;
+        }
+      })
+    }
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
       if (!data.message) {
@@ -139,7 +155,7 @@ export class ListTicketComponent implements OnInit {
       }
     })
 
-    //getAccAffByService
+    //getAccAffByUserID
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
@@ -151,15 +167,10 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
+          if(user.role=="Agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
+            this.userList.push(user);
+          }
         });
-        this.userList = data;
-      }
-    })
-
-
-    this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
-      if (!data.message) {
-        this.allTickets = data.TicketList;
       }
     })
   }
@@ -200,19 +211,19 @@ export class ListTicketComponent implements OnInit {
     this.showDropDown = (this.showDropDown) ? null : rawData;
   }
 
-  Affected() {
+  Affected(event) {
     let data = {
       id: this.showDropDown._id,
-      agent_id: this.selectedUser._id,
+      agent_id: event.value._id,
       isAffected: true
     }
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
-      if (this.selectedUser._id == jwt_decode(localStorage.getItem("token"))["id"]) {
+      if (event.value._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.AccAffList.push(data)
       }
-      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, this.selectedUser._id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, this.selectedUser._id)
+      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
+        this.NotifService.newNotif(notif, event.value._id)
       }, (error) => {
         console.log(error)
       });

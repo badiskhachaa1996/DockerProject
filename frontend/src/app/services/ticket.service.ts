@@ -75,6 +75,11 @@ export class TicketService {
     return this.http.get<any>(registreUrl);
   }
 
+  getAllAccAff(){
+    let registreUrl=this.apiUrl+"getAllAccAff";
+    return this.http.get<any>(registreUrl);
+  }
+
   setAccAff(info:any){
     let registreUrl=this.apiUrl+"AccAff/"+info.id;
     return this.http.post<any>(registreUrl,info,httpOptions1);
