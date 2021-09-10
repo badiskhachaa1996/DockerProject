@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationService } from 'src/app/services/notification.service';
 import { TicketService } from '../services/ticket.service';
 import jwt_decode from "jwt-decode";
+import { AppTopBarComponent } from '../app.topbar.component';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -48,6 +49,9 @@ export class NotificationComponent implements OnInit {
     .subscribe(
       response => {
         this.notifications.splice(this.notifications.indexOf(notification), 1);
+         if(this.notifications.length==0){
+           //this.topbar.notif=false
+        }
       },
       error => {
         console.log(error);
@@ -59,6 +63,7 @@ export class NotificationComponent implements OnInit {
         response => {
         
     this.notifications=[];
+    //this.topbar.notif=false
         },
         error => {
           console.log(error);

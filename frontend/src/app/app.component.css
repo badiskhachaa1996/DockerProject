@@ -1,3 +1,46 @@
-.user{
+/* .user{
     line-height: 0px;
 }
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    display:flex;
+    align-items: center;
+    justify-content:center;
+    height: 100vh;
+    overflow: hidden;
+}
+.not{
+    position: relative;
+    background-color: aquamarine;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:100vh;
+    overflow: hidden;
+}
+.notification{
+    position: relative;
+    background: brown;
+    height: 100px;
+    width: 100px;
+    padding-top: 20px ;
+    text-align:center;
+    font-size: 3em;
+    color: #fff;
+    border-radius:50%;
+    border:4px solid transparent;
+
+}
+.number{
+    position: absolute;
+    right: -5px;
+    top:0;
+    background: turquoise;
+    border:3px solid #fff;
+    border-radius: 50%;
+    padding-top: px;
+} */
