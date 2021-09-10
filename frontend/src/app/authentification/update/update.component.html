@@ -9,7 +9,7 @@
                     <h3 class="text-center"> Modifier un utilisateur</h3>
                     <div>
                         <span>
-                            <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value" placeholder="Veuillez choisir une civilité"></p-dropdown><br>
+                            <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown><br>
                         </span>
                     </div>
                     <div class="grid">
@@ -85,7 +85,7 @@
 
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success"
-                                [disabled]="RegisterForm.invalid || verifypassword.value!=password.value"
+                                [disabled]="RegisterForm.invalid"
                                 label="Modifer" (click)="UpdateUser()"></button>
                         </div>
                     </div>
