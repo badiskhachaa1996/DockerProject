@@ -34,6 +34,7 @@ export class ListTicketComponent implements OnInit {
   statutList = environment.statut;
 
   queueList: Ticket[] = [];
+
   AccAffList: Ticket[] = [];
   allTickets: Ticket[] = [];
 
@@ -56,10 +57,14 @@ export class ListTicketComponent implements OnInit {
   loadingMessage;
   uplo: File;
 
+  messageList: Message[];
+
+
   token = null;
 
   @ViewChild('fileInput') fileInput: ElementRef;
-  comments: any = null;
+  comments: any = [];
+
   commentForm: FormGroup = new FormGroup({
     description: new FormControl('', [Validators.required]),
     statut: new FormControl(this.statutList[0], Validators.required),
@@ -358,10 +363,6 @@ export class ListTicketComponent implements OnInit {
 
     this.MsgServ.getAll().subscribe((data) => {
       if (!data.message) {
-        data.forEach(message => {
-          this.userDic[message.user_id] = null;
-          this.userDic[message.user_id] = message;
-        });
         this.EnvoyeurList = data;
       }
     })
@@ -371,7 +372,9 @@ export class ListTicketComponent implements OnInit {
       statut: this.commentForm.value.statut.value
     }
 
-    this.MsgServ.create(comment).subscribe((message) => {
+    this.MsgServ.create(comment).subscribe((message) => {   
+       this.comments.push(message.doc);
+
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
 
