@@ -49,7 +49,7 @@ export class ListTicketComponent implements OnInit {
 
   showForm: string = "Ajouter";
   showDropDown: Ticket;
-  isReponsable: boolean = true;
+  isReponsable: boolean = false;
   isModify: Ticket;
   showFormAddComment: boolean = false;
   loading: boolean = false;
@@ -105,7 +105,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"] == "Responsable") {
+    } else if (this.token["role"]=="Responsable" || this.token["role"]=="Admin") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])

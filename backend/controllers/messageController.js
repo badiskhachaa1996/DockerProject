@@ -49,7 +49,7 @@ app.post("/create", (req, res) => {
     
 
     message.save((err, msg) => {
-       
+        res.send({ message: "Votre message a été crée!", doc: msg });
         let createur_id;
     Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
         createur_id = tickFromDb.createur_id
