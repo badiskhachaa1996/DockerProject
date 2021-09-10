@@ -43,7 +43,7 @@ export class SuiviComponent implements OnInit {
   listServices;
   listSujets: any[] = [];
 
-
+  userDic: any[] = [];
 
   Ticket: Ticket;
   firstMessage: Message;
@@ -83,7 +83,7 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
-  constructor(private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService) { }
+  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService) { }
 
   ngOnInit(): void {
     this.Ticket = <Ticket>history.state;
@@ -100,7 +100,14 @@ export class SuiviComponent implements OnInit {
     })
 
 
-
+    this.AuthService.getAll().subscribe((data) => {
+      if (!data.message) {
+        data.forEach(user => {
+          this.userDic[user._id] = user;
+        });
+        this.userList = data;
+      }
+    })
 
     this.SujetService.getAll().subscribe((data) => {
       if (!data.message) {
@@ -110,6 +117,7 @@ export class SuiviComponent implements OnInit {
         });
       }
     })
+
 
     this.ServService.getAll().subscribe((data) => {
       if (!data.message) {
@@ -134,6 +142,8 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
+
+    console.log(this.TicketForm)
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -184,9 +194,8 @@ export class SuiviComponent implements OnInit {
     }
 
     this.TicketService.updateFirst(req).subscribe((data) => {
-      this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1);
-      this.ticketList.push(data);
-
+      this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1,data);
+      this.TicketForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.toggleFormUpdate()
     }, (error) => {
@@ -226,6 +235,7 @@ export class SuiviComponent implements OnInit {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
       description: this.TicketForm.value.description,
+
       //document:this.TicketForm.value//TODO
     }
     this.TicketService.create(req).subscribe((data) => {
@@ -233,6 +243,8 @@ export class SuiviComponent implements OnInit {
      
       try{
         this.ticketList.push(data.doc)
+        this.TicketForm.reset();
+
       }catch (e){
         this.ticketList = [data.doc]
       }
@@ -341,5 +353,3 @@ export class SuiviComponent implements OnInit {
   get value() { return this.commentForm.get('value'); }
 
 }
-
-

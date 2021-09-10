@@ -142,11 +142,11 @@ app.post("/updateFirst/:id", (req, res) => {
 
 
             console.log(user.createur_id)
-
+            res.send( user );
             let UserDB;
             User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                 UserDB = userFromDb
-                res.send({ userFromDb });
+                
 
 
                 let mailOptions = {
@@ -210,12 +210,13 @@ app.get("/getTicketsByService/:id", (req, res) => {
 //Get All Tickets de la queue d'entrée by Service ID
 app.get("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
+    console.log(id)
     let listSujetofService = []
     let TicketList = []
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
-                if (sujet.service_id = id) {
+                if(sujet.service_id==id){
                     listSujetofService.push(sujet._id.toString())
                 }
             });
@@ -449,5 +450,14 @@ app.post("/changeStatut/:id", (req, res) => {
 
         })
 });
-
+//Get All Tickets Accepted or Affected by Service ID
+app.get("/getAllAccAff", (req, res) => {
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+    .then(result => {
+        res.status(200).send(result.length > 0 ? result : [])
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
 module.exports = app;

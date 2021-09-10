@@ -35,11 +35,19 @@
   font-style: italic; font-size: 11px;
 }
 .badyT{
-
-  height: 200px; 
-  position: relative; 
-  overflow-y:scroll; 
+  min-height:200px;
 }
+@media (min-height:200px) {
+  
+  .badyT{
+    
+   position: relative; 
+  overflow-y:scroll;  
+  height: 200px;
+  }
+
+}
+
 td{
     background-color: white;
 }

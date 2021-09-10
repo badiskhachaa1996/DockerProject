@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   errorLogin=false;
 
   LoginForm: FormGroup= new FormGroup({
-    email:new FormControl('',[Validators.required,Validators.email]),
+    email:new FormControl('',[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     password:new FormControl('',[Validators.required,Validators.minLength(5)])
   })
 
@@ -33,13 +33,15 @@ export class LoginComponent implements OnInit {
        
       }
     },(error)=>{
-      if(error.status==404){
+      if(error.status==400){
         //Not Found (Pas de correspondance pour le duo email/passwd)
         this.messageService.add({severity:'error', summary:'Erreur de connexion', detail:'Email ou mot de passe incorrect'});
         this.errorLogin=true;
       }
       console.log(error)
     });
+
+    console.log(this.LoginForm.value)
   }
   
 
