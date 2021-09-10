@@ -70,7 +70,7 @@ export class ListUserComponent implements OnInit {
       { field: 'email', header: 'Email' },
       { field: 'phone', header: 'Téléphone' },
       { field: 'adresse', header: 'Adresse' },
-      
+      { field:"civilite",header:"Civilité"},
       { field: 'action', header: "Action" }
     ];
     this.loading = true;
@@ -108,32 +108,6 @@ export class ListUserComponent implements OnInit {
     this.showFormAdd=!this.showFormAdd;
   }
 
-  RegisterForm: FormGroup= new FormGroup({
-    lastname:new FormControl(this.userupdate.lastname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
-    firstname:new FormControl(this.userupdate.firstname,[Validators.required,Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    email:new FormControl(this.userupdate.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    phone:new FormControl(this.userupdate.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
-    adresse:new FormControl(this.userupdate.adresse,[Validators.required]),
-    password:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    role:new FormControl(this.userupdate.role,[Validators.required]),
-    service_id:new FormControl(this.userupdate.service_id,[Validators.required])
-    
-    
-
-  })
-
-
-  get lastname() { return this.RegisterForm.get('lastname'); }
-  get firstname() { return this.RegisterForm.get('firstname'); }
-  get email() { return this.RegisterForm.get('email'); }
-  get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
-  get password() { return this.RegisterForm.get('password'); }
-  get verifypassword() { return this.RegisterForm.get('verifypassword'); }
-
-
-
   loadUsersLazy(event: LazyLoadEvent) {
     this.loading = true;
 
@@ -146,22 +120,9 @@ export class ListUserComponent implements OnInit {
     }, 1000);
   }
   modify(rowData: User) {
+    console.log(rowData)
     this.selectedUser = rowData;
     this.toggleType()
-  
-    console.log("selected user : " + this.selectedUser.email)
-
-    console.log(this.showForm
-      + "" +
-      this.formtype)
-
-    localStorage.setItem('updateUser', JSON.stringify(rowData))
-
-    console.log(localStorage.getItem('updateUser'));
-    history.state;
-    
-    //this.router.navigateByUrl("/listUser/update",{state:rowData})
-    
   }
 }
 

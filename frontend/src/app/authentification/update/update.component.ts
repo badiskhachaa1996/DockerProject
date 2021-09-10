@@ -26,13 +26,13 @@ export class UpdateUserComponent implements OnInit {
   emailExists = false;
   Roles = environment.role;
   showForm: boolean = true;
-  iviliteList = environment.civilite;
+  civiliteList = environment.civilite;
 
   userupdate: any = [User];
 
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite: new FormControl(environment.civilite[0], [Validators.required]),
+    civilite: new FormControl(this.civiliteList[0], [Validators.required]),
     lastname: new FormControl([this.listUserComponent.selectedUser.lastname], [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl(this.listUserComponent.selectedUser.email, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -59,9 +59,7 @@ export class UpdateUserComponent implements OnInit {
 
 
   UpdateUser() {
-    console.log('to' + this.userupdate);
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite.value)
-    console.log("user : " + user)
+    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id, this.RegisterForm.value.civilite.value)
     this.AuthService.update(user).subscribe((data) => {
 
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Votre message a bien été modifié' });
@@ -99,22 +97,18 @@ export class UpdateUserComponent implements OnInit {
     }, (err) => console.log(err))
 
     if (localStorage.getItem("token") != null) {
-      jwt_decode: jwt_decode;
-
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
 
 
     }
-    if (this.User_role == "admin") {
-      this.IsAdmin = true
-      console.log(this.IsAdmin);
-    }
-    else{this.IsAdmin == false};
-    console.log("+"+this.IsAdmin);
+    this.civiliteList.forEach(civ=>{
+      if(civ.value==this.listUserComponent.selectedUser.civilite){
+        this.RegisterForm.get("civilite").setValue(civ)
+      }
+    })
+    this.IsAdmin = this.User_role == "Admin"
 
-    console.log(this.RegisterForm.value)
- 
   }
 
 }
