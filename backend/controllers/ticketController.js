@@ -142,11 +142,11 @@ app.post("/updateFirst/:id", (req, res) => {
 
 
             console.log(user.createur_id)
-
+            res.send( user );
             let UserDB;
             User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                 UserDB = userFromDb
-                res.send({ userFromDb });
+                
 
 
                 let mailOptions = {
@@ -156,7 +156,7 @@ app.post("/updateFirst/:id", (req, res) => {
                     html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
                     attachments: [{
                         filename: 'signature.png',
-                        path: 'storage/signature.png',
+                        path: 'assets/signature.png',
                         cid: 'red' //same cid value as in the html img src
                     }]
 
@@ -298,7 +298,7 @@ app.post("/AccAff/:id", (req, res) => {
                         html: htmlemail,
                         attachments: [{
                             filename: 'signature.png',
-                            path: 'storage/signature.png',
+                            path: 'assets/signature.png',
                             cid: 'red' //same cid value as in the html img src
                         }]
                     };
@@ -339,7 +339,7 @@ app.post("/changeService/:id", (req, res) => {
                         html: '<h3>Notification ! Ticket ' + ticket._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
                         attachments: [{
                             filename: 'signature.png',
-                            path: 'storage/signature.png',
+                            path: 'assets/signature.png',
                             cid: 'red' //same cid value as in the html img src
                         }]
 
@@ -389,7 +389,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'storage/signature.png',
+                                path: 'assets/signature.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
 
@@ -423,7 +423,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
-                                path: 'storage/signature.png',
+                                path: 'assets/signature.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
 
@@ -450,5 +450,14 @@ app.post("/changeStatut/:id", (req, res) => {
 
         })
 });
-
+//Get All Tickets Accepted or Affected by Service ID
+app.get("/getAllAccAff", (req, res) => {
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+    .then(result => {
+        res.status(200).send(result.length > 0 ? result : [])
+    })
+    .catch(err => {
+        console.log(err);
+    })
+})
 module.exports = app;

@@ -193,8 +193,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.TicketService.updateFirst(req).subscribe((data) => {
-      this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1);
-      this.ticketList.push(data);
+      this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1,data);
       this.TicketForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.toggleFormUpdate()
@@ -290,11 +289,19 @@ export class SuiviComponent implements OnInit {
       });
   }
   SendComment() {
+    let isrep;
+    if (this.selectedTicket.agent_id!=jwt_decode(localStorage.getItem('token'))['id']) {
+        isrep=true
+    }
+
     let comment = {
+      
       description: this.commentForm.value.description,
       id: jwt_decode(localStorage.getItem('token'))['id'],
       ticket_id: this.selectedTicket._id,
-      file: this.commentForm.value.file
+      file: this.commentForm.value.file,
+      isRep:isrep
+      
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
