@@ -76,7 +76,11 @@
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4" [paginator]="true"
+<<<<<<< HEAD
                 [pageLinks]="5" [responsive]="true">
+=======
+            [pageLinks]="5" [responsive]="true" rowExpandMode="single" [totalRecords]="queueList.length">
+>>>>>>> e4e8c12380c04d9fd5eb8ed9f3e749e6166754d8
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -211,7 +215,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true">
+                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -400,7 +404,12 @@
         <h3 *ngIf="token['role']=='admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
+<<<<<<< HEAD
                 [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true">
+=======
+            [rows]="4" [paginator]="true"
+                [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length">
+>>>>>>> e4e8c12380c04d9fd5eb8ed9f3e749e6166754d8
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>

@@ -19,7 +19,7 @@
             <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" selectionMode="single" dataKey="email"
                
                [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" > 
+                [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"> 
                
                 <ng-template pTemplate="header" let-columns>
               

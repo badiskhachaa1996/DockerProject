@@ -36,8 +36,6 @@ userupdate:any=[User];
     email:new FormControl(this.listUserComponent.selectedUser.email,[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     phone:new FormControl(this.listUserComponent.selectedUser.phone,[Validators.required,Validators.pattern('^[0-9]+$'),Validators.maxLength(10),Validators.minLength(10)]),
     adresse:new FormControl(this.listUserComponent.selectedUser.adresse,[Validators.required]),
-    password:new FormControl('',[Validators.required,Validators.minLength(5)]),
-    verifypassword:new FormControl('',[Validators.required,Validators.minLength(5)]),
     role:new FormControl(this.listUserComponent.selectedUser.role,[Validators.required]),
     service_id:new FormControl(this.listUserComponent.selectedUser.service_id,[Validators.required])
     
@@ -60,7 +58,7 @@ userupdate:any=[User];
 
   UpdateUser(){
     console.log('to'+this.userupdate);
-    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,this.RegisterForm.value.password,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.service_id)
+    let user = new User(this.userupdate._id,this.RegisterForm.value.firstname,this.RegisterForm.value.lastname,this.RegisterForm.value.phone,this.RegisterForm.value.email,null,this.RegisterForm.value.role.value ||"user",null,this.RegisterForm.value.adresse,this.RegisterForm.value.service_id)
     console.log("user : "+user)
     this.AuthService.update(user).subscribe((data)=>{
       
@@ -81,8 +79,6 @@ userupdate:any=[User];
   get email() { return this.RegisterForm.get('email'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get adresse() { return this.RegisterForm.get('adresse'); }
-  get password() { return this.RegisterForm.get('password'); }
-  get verifypassword() { return this.RegisterForm.get('verifypassword'); }
   get role() { return this.RegisterForm.get('role'); }
   get service_id() { return this.RegisterForm.get('service_id'); }
   constructor(private router: Router, private AuthService: AuthService,private messageService: MessageService,private servService:ServService,private listUserComponent:ListUserComponent) { }
