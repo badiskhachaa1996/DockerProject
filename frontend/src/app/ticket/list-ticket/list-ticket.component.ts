@@ -38,6 +38,7 @@ export class ListTicketComponent implements OnInit {
   allTickets: Ticket[] = [];
 
   userList: User[] = [];
+  AllUsers:User[]=[]
   EnvoyeurList: User[] = [];
 
   userDic: any[] = [];
@@ -167,10 +168,11 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="Agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
+          if(user.role=="Agent" && (user.service_id==this.token["service_id"])){
             this.userList.push(user);
           }
         });
+        this.AllUsers=data;
       }
     })
   }
@@ -207,8 +209,16 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  showDropdownUser(rawData) {
+  showDropdownUser(rawData:Ticket) {
     this.showDropDown = (this.showDropDown) ? null : rawData;
+    if(rawData && this.token.role=="Admin"){
+      this.userList=[]
+      this.AllUsers.forEach(user=>{
+        if(user.service_id==this.sujetList[rawData.sujet_id].service_id){
+          this.userList.push(user)
+        }
+      })
+    }
   }
 
   Affected(event) {
