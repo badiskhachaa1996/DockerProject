@@ -10,7 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { ListUserComponent } from 'src/app/authentification/list-user/list-user.component'
-import { HttpClientModule, HttpHeaders ,HttpErrorResponse} from '@angular/common/http';
+import { HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -23,11 +23,11 @@ export class RegisterComponent implements OnInit {
   User_role: String;
   emailExists = false;
   Roles = environment.role;
-  showForm : boolean =true;
+  showForm: boolean = true;
   civiliteList = environment.civilite;
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite : new FormControl(environment.civilite[0], [Validators.required]),
+    civilite: new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -36,12 +36,12 @@ export class RegisterComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
     role: new FormControl('user', Validators.required),
-    service_id :new FormControl(null),
+    service_id: new FormControl(null),
 
   })
 
-  toggleForm(){
-    this.showForm=!this.showForm
+  toggleForm() {
+    this.showForm = !this.showForm
     if (this.listUserComponenet.showForm == "Ajouter") {
       this.listUserComponenet.formtype = "new";
       this.listUserComponenet.showForm = "Fermer";
@@ -54,70 +54,67 @@ export class RegisterComponent implements OnInit {
   }
 
   saveUser() {
-    console.log(localStorage.getItem("token"));
-    //Enregistrement de l'user
-    //environment.listUser.push(JSON.stringify(this.RegisterForm.value))
-   let user = new User(null,
+    let user = new User(null,
       this.RegisterForm.value.firstname,
       this.RegisterForm.value.lastname,
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
       this.RegisterForm.value.password,
-      this.RegisterForm.value.role.value || "user",null,
+      this.RegisterForm.value.role.value || "user", null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value
     )
-    console.log(user)
-    this.AuthService.register(user).subscribe( (data) => {
+    this.AuthService.register(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
-      
+      this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+        data => {
+          let res: any = data;
+          console.log(
+            '   ${user.name} is succefuly ${res.messageId}'
+          );
+        },
+      );
+
+      if (this.router.url == "/register") {
+        this.router.navigateByUrl('/login')
+      } else {
+        this.listUserComponenet.showForm = "Ajouter"
+        if (data.role != "user") {
+          this.listUserComponenet.tabUser.push(data)
+        }
+      }
     }, (error) => {
-      if (error.status == 400) {
+      if (error.status == 400 || error.includes("400")) {
         //Bad Request (Email déjà utilisé)
         this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Email déjà utilisé' });
         this.emailExists = true;
-      }else if(error.status == 500) {
+      } else if (error.status == 500 || error.includes("500")) {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Tous les champs ne sont pas remplis' });
       }
-    }); 
-    this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-      data=> {
-        let res:any = data;
-        console.log(
-         '   ${user.name} is succefuly ${res.messageId}'
-        );
-      },
-
-);
-    this.listUserComponenet.showForm="Ajouter"
-    console.log(   this.listUserComponenet.showForm)
-    if (this.router.url=="/register") {
-      this.router.navigateByUrl('/login')
-      
-    }
+    });
   }
-//   sendEmail(){
-//     //  this.loading = true;
-//     //  this.buttonText = "submiting";
-//      let user = {
-//        name : this.nameFormControl.value,
-//        email: this.emailFormControl.value,
-//      }
-//      this.http.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-//             data=> {
-//               let res:any = data;
-//               console.log(
-//                '   ${user.name} is succefuly ${res.messageId}'
-//               );
-//             },
-//             err=> {
-//               console.log(err);
-              
-//             }
-//      );
-// }
+  //   sendEmail(){
+  //     //  this.loading = true;
+  //     //  this.buttonText = "submiting";
+  //      let user = {
+  //        name : this.nameFormControl.value,
+  //        email: this.emailFormControl.value,
+  //      }
+  //      this.http.sendEmail("http://localhost:3000/sendmail", user).subscribe(
+  //             data=> {
+  //               let res:any = data;
+  //               console.log(
+  //                '   ${user.name} is succefuly ${res.messageId}'
+  //               );
+  //             },
+  //             err=> {
+  //               console.log(err);
+
+  //             }
+  //      );
+  // }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -128,7 +125,7 @@ export class RegisterComponent implements OnInit {
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet:ListUserComponent) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent) { }
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
@@ -139,14 +136,16 @@ export class RegisterComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
     }
-    this.IsAdmin=this.User_role == "Admin" || this.User_role == "Responsable"
-    if(this.User_role == "Responsable"){
-      this.Roles=[this.Roles[0]]
-    }else if(this.IsAdmin){
-      this.Roles=[this.Roles[0],this.Roles[1]]
+    this.IsAdmin = this.User_role == "Admin" || this.User_role == "Responsable"
+    if (this.User_role == "Responsable") {
+      this.Roles = [this.Roles[0]]
+    } else if (this.IsAdmin) {
+      this.Roles = [this.Roles[0], this.Roles[1]]
     }
+
+    console.log(this.RegisterForm.value)
   }
-  
+
 
 
 }

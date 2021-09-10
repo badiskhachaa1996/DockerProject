@@ -38,6 +38,7 @@ export class ListTicketComponent implements OnInit {
   allTickets: Ticket[] = [];
 
   userList: User[] = [];
+  AllUsers: User[] = []
   EnvoyeurList: User[] = [];
 
   userDic: any[] = [];
@@ -113,7 +114,7 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-    if(this.token['role']=="Admin"){
+    if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
@@ -124,7 +125,7 @@ export class ListTicketComponent implements OnInit {
           this.allTickets = data;
         }
       })
-    }else{
+    } else {
       this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
         if (!data.message) {
           this.queueList = data.TicketList;
@@ -167,12 +168,14 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="Agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
+          if (user.role == "Agent" && (user.service_id == this.token["service_id"])) {
             this.userList.push(user);
           }
         });
+        this.AllUsers = data;
       }
     })
+    console.log(this.TicketForm)
   }
 
   //QueueToAccAff
@@ -207,8 +210,16 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  showDropdownUser(rawData) {
+  showDropdownUser(rawData: Ticket) {
     this.showDropDown = (this.showDropDown) ? null : rawData;
+    if (rawData && this.token.role == "Admin") {
+      this.userList = []
+      this.AllUsers.forEach(user => {
+        if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
+          this.userList.push(user)
+        }
+      })
+    }
   }
 
   Affected(event) {
@@ -265,7 +276,7 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
       this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
         this.NotifService.newNotif(notif, data.createur_id)
       }, (error) => {
@@ -379,9 +390,9 @@ export class ListTicketComponent implements OnInit {
         });
 
       } else {
-        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {  
+        this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-          
+
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.selectedTicket = null;
             this.commentForm.reset();

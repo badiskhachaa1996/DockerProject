@@ -142,6 +142,8 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
+
+    console.log(this.TicketForm)
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -358,5 +360,3 @@ export class SuiviComponent implements OnInit {
   get value() { return this.commentForm.get('value'); }
 
 }
-
-

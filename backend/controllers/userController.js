@@ -36,16 +36,19 @@ app.post("/registre", (req, res) => {
         service_id : data?.service_id || null
     })
     user.save().then((userFromDb) => {
-        console.log(userFromDb)
-
         res.status(200).send(userFromDb);
 
-        
+        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><h3 style="color:orange">Felicitation !</h3><p style="color:black"> Votre compte E-Ticketing a été crée avec succés</p><p>Cordialement,</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
             subject: 'Estya-Ticketing',
-            text: '<h1>Felicitation ! Votre compte E-Ticketing a été crée avec succés</h1>'
+            html:htmlmail,
+            attachments: [{
+                filename: 'signature.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
         };
         
         transporter.sendMail(mailOptions, function(error, info){
@@ -57,7 +60,6 @@ app.post("/registre", (req, res) => {
         });
         
     }).catch((error) => {
-        console.error(error)
         res.status(400).send(error);
     })
 });
@@ -108,7 +110,6 @@ app.post("/updateById/:id", (req, res) => {
             lastname:req.body.lastname,
             email:req.body.email,
             phone:req.body.phone,
-            password:req.body.password,
             role:req.body.role,
             adresse:req.body.adresse,
             service_id:req.body.service_id
