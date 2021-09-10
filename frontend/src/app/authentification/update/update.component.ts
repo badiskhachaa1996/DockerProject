@@ -26,13 +26,13 @@ export class UpdateUserComponent implements OnInit {
   emailExists = false;
   Roles = environment.role;
   showForm: boolean = true;
-  iviliteList = environment.civilite;
+  civiliteList = environment.civilite;
 
   userupdate: any = [User];
 
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite: new FormControl(environment.civilite[0], [Validators.required]),
+    civilite: new FormControl(this.listUserComponent.selectedUser.civilite, [Validators.required]),
     lastname: new FormControl([this.listUserComponent.selectedUser.lastname], [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl(this.listUserComponent.selectedUser.email, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
@@ -40,8 +40,6 @@ export class UpdateUserComponent implements OnInit {
     adresse: new FormControl(this.listUserComponent.selectedUser.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
     service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required])
-
-
 
   })
 
@@ -60,7 +58,7 @@ export class UpdateUserComponent implements OnInit {
 
   UpdateUser() {
     console.log('to' + this.userupdate);
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite.value)
+    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite)
     console.log("user : " + user)
     this.AuthService.update(user).subscribe((data) => {
 
@@ -106,14 +104,14 @@ export class UpdateUserComponent implements OnInit {
 
 
     }
-    if (this.User_role == "admin") {
+    if (this.User_role == "Admin") {
       this.IsAdmin = true
       console.log(this.IsAdmin);
     }
     else{this.IsAdmin == false};
     console.log("+"+this.IsAdmin);
 
-    console.log(this.RegisterForm.value)
+    
  
   }
 

@@ -28,8 +28,8 @@ export const environment = {
  
 
 civilite: [
-  { value: 'Monsieur', viewValue: 'Mr' },
-  { value: 'Madame', viewValue: 'Mme' },
+  { id: 1, value: 'Monsieur', viewValue: 'Mr' },
+  { id: 2, value: 'Madame', viewValue: 'Mme' },
 ],
 
 statut: [
