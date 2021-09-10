@@ -32,16 +32,24 @@
 
 }
 #soustitre{
-  font-style: italic; font-size: 11px;
+  font-style: italic; 
+  font-size: 11px;
+  float: left;
+  text-align: right;
+  padding-right: 10px;
 }
-.badyT{
-  min-height:200px;
+
+@media (max-height:200px) {
+  .badyT{
+    overflow-y:none;  
+ 
+    }
 }
 @media (min-height:200px) {
   
   .badyT{
     
-   position: relative; 
+  position: relative; 
   overflow-y:scroll;  
   height: 200px;
   }
