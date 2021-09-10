@@ -26,8 +26,6 @@ export class RegisterComponent implements OnInit {
   showForm : boolean =true;
   civiliteList = environment.civilite;
 
-
-
   RegisterForm: FormGroup = new FormGroup({
     civilite : new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
@@ -141,9 +139,11 @@ export class RegisterComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
     }
-    this.IsAdmin=this.User_role == "admin"
-    if(this.IsAdmin){
-      this.RegisterForm.get('role').setValue(this.Roles[0].value)
+    this.IsAdmin=this.User_role == "Admin" || this.User_role == "Responsable"
+    if(this.User_role == "Responsable"){
+      this.Roles=[this.Roles[0]]
+    }else if(this.IsAdmin){
+      this.Roles=[this.Roles[0],this.Roles[1]]
     }
 
     console.log(this.RegisterForm.value)
