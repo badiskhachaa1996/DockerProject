@@ -34,6 +34,7 @@
     </div>
 </div> -->
 
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Notifications</h3>
@@ -80,6 +81,9 @@
                    
                 </li>
                 </ul>
+                <div *ngIf="notifications.length==0">
+                  <span>Vous n'avez pas de notification</span>
+                </div>
                 <div *ngIf="notifications.length!=0">
                 <i    pTooltip="Vu" tooltipPosition="bottom" class="pi pi-check" 
                                 style="cursor: pointer; margin-left: 97%; font-size: 50px;" (click)="retirertout()"></i>
