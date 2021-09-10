@@ -353,5 +353,3 @@ export class SuiviComponent implements OnInit {
   get value() { return this.commentForm.get('value'); }
 
 }
-
-

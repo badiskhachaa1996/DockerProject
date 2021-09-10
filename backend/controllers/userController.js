@@ -36,11 +36,7 @@ app.post("/registre", (req, res) => {
         service_id : data?.service_id || null
     })
     user.save().then((userFromDb) => {
-        console.log(userFromDb)
-
         res.status(200).send(userFromDb);
-
-        
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
@@ -57,7 +53,6 @@ app.post("/registre", (req, res) => {
         });
         
     }).catch((error) => {
-        console.error(error)
         res.status(400).send(error);
     })
 });
