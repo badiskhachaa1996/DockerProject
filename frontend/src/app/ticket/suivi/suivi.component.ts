@@ -58,7 +58,7 @@ export class SuiviComponent implements OnInit {
   selectedTicket: Ticket;
   showFormAddComment: boolean = false;
   @ViewChild('fileInput') fileInput: ElementRef;
-  comments: any = null;
+  comments: any = [];
 
   toggleFormCancel(){
     this.showFormAddComment=!this.showFormAddComment;
@@ -279,7 +279,7 @@ export class SuiviComponent implements OnInit {
   });
 
   loadMessages(ticket:Ticket){
-    this.comments = null
+    this.comments = []
     this.MsgServ.getAllByTicketID(ticket._id)
     .subscribe(
       data => {
@@ -306,6 +306,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
+      console.log(data)
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       this.selectedTicket = null;

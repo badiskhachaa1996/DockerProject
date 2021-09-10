@@ -230,7 +230,7 @@
                             </p-fieldset>
 
 
-                            <p-fieldset *ngIf="comments" legend="Messages">
+                            <p-fieldset *ngIf="comments.length!=0" legend="Messages">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
