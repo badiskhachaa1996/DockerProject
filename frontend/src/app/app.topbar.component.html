@@ -57,8 +57,8 @@
 
 
 
-
-            <ul class="layout-topbar-menu" role="menu">
+           
+            <ul class="layout-topbar-menu" role="menu" >
                
                 
             
@@ -68,7 +68,11 @@
                             <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
                             <span class="user-profile-role">{{userconnected.role}}</span>
                         </div>
-                        <img src="../assets/images/avatar.PNG" width="40px" height="40px">    
+                       <i  tooltipPosition="bottom" class="pi pi-bell" 
+                        style="cursor: pointer; color: orange; position:absolute;" *ngIf="notif==[]" ></i> 
+                        <img src="../assets/images/avatar.PNG" width="40px" height="40px">   
+                       
+                         
 
                    
                     </a>
