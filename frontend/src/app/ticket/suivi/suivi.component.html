@@ -154,7 +154,7 @@
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
-                [pageLinks]="5" dataKey="_id" rowExpandMode="single">
+                [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length" >
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
