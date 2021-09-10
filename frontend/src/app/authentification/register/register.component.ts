@@ -22,7 +22,7 @@ export class RegisterComponent implements OnInit {
   IsAdmin: boolean = false;
   User_role: String;
   emailExists = false;
-  Roles = environment.role.splice(2,1);
+  Roles = environment.role;
   showForm : boolean =true;
   civiliteList = environment.civilite;
 
@@ -141,7 +141,9 @@ export class RegisterComponent implements OnInit {
     }
     this.IsAdmin=this.User_role == "Admin" || this.User_role == "Responsable"
     if(this.User_role == "Responsable"){
-      this.Roles.splice(1,1)
+      this.Roles=[this.Roles[0]]
+    }else if(this.IsAdmin){
+      this.Roles=[this.Roles[0],this.Roles[1]]
     }
   }
   
