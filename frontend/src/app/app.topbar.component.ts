@@ -26,10 +26,12 @@ export class AppTopBarComponent implements OnInit {
   source = interval(3000);
   keycloak: any;
   isAuth = false;
+  notif = false;
   userInformations: any;
   role: string;
   userconnected: User;
   Notifications: Notification[] = [];
+
 
   socket = io("http://localhost:3000");
 
@@ -52,11 +54,18 @@ export class AppTopBarComponent implements OnInit {
       })
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
+        if(data.length!=0){
+            this.notif = true;
+        } 
+      
       }, error => {
         console.error(error)
       })
       this.socket.on("NewNotif",(data)=>{
         this.Notifications.push(data)
+        this.notif = true;
+    
+        
       })
     }
 

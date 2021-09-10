@@ -422,7 +422,7 @@
                             Désignation
                         </th>
                         <th style="text-decoration: underline;">
-                            Action
+                            Statut
                         </th>
                     </tr>
                 </ng-template>
@@ -455,8 +455,7 @@
                             Accepté
                         </td>
                         <td>
-                            <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
-                            (click)="ListToPreInscrit(rowData)"></i>-->
+                            {{rowData.statut}}
                         </td>
                     </tr>
                 </ng-template>
