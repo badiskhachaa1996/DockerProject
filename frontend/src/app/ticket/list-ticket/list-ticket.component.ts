@@ -168,7 +168,7 @@ export class ListTicketComponent implements OnInit {
         data.forEach(user => {
           this.userDic[user._id] = null;
           this.userDic[user._id] = user;
-          if(user.role=="agent" && user.service_id==this.token["service_id"]){
+          if(user.role=="agent" && (user.service_id==this.token["service_id"] || this.token['role']=="Admin")){
             this.userList.push(user);
           }
         });
@@ -212,7 +212,9 @@ export class ListTicketComponent implements OnInit {
     this.showDropDown = (this.showDropDown) ? null : rawData;
   }
 
-  Affected() {
+  Affected(event) {
+    console.log(event)
+    console.log(event.value)
     let data = {
       id: this.showDropDown._id,
       agent_id: this.selectedUser._id,
