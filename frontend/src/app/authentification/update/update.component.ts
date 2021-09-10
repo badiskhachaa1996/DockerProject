@@ -97,22 +97,18 @@ export class UpdateUserComponent implements OnInit {
     }, (err) => console.log(err))
 
     if (localStorage.getItem("token") != null) {
-      jwt_decode: jwt_decode;
-
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
 
 
     }
-    if (this.User_role == "Admin") {
-      this.IsAdmin = true
-      console.log(this.IsAdmin);
-    }
-    else{this.IsAdmin == false};
-    console.log("+"+this.IsAdmin);
+    this.civiliteList.forEach(civ=>{
+      if(civ.value==this.listUserComponent.selectedUser.civilite){
+        this.RegisterForm.get("civilite").setValue(civ)
+      }
+    })
+    this.IsAdmin = this.User_role == "Admin"
 
-    
- 
   }
 
 }
