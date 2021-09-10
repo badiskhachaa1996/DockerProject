@@ -307,6 +307,8 @@ export class SuiviComponent implements OnInit {
 
     this.MsgServ.create(comment).subscribe((data) => {
       console.log(data)
+      this.comments.push(data.doc);
+
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
