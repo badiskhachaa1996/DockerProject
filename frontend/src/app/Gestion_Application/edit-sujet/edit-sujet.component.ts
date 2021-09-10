@@ -35,6 +35,8 @@ sujetForm: FormGroup = new FormGroup({
     }
     console.log(this.Sujet)
     this.sujetForm.setValue({label:this.Sujet.label})
+
+    console.log(this.sujetForm.value)
   }
 
   

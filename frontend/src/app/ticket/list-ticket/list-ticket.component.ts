@@ -49,7 +49,7 @@ export class ListTicketComponent implements OnInit {
 
   showForm: string = "Ajouter";
   showDropDown: Ticket;
-  isReponsable: boolean = true;
+  isReponsable: boolean = false;
   isModify: Ticket;
   showFormAddComment: boolean = false;
   loading: boolean = false;
@@ -105,7 +105,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"] == "Responsable") {
+    } else if (this.token["role"]=="Responsable" || this.token["role"]=="Admin") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -175,6 +175,7 @@ export class ListTicketComponent implements OnInit {
         this.AllUsers = data;
       }
     })
+    console.log(this.TicketForm)
   }
 
   //QueueToAccAff
@@ -275,7 +276,7 @@ export class ListTicketComponent implements OnInit {
       sujet_id: this.TicketForm.value.sujet._id
     }
     this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Ce ticket a bien été modifié' });
+      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
       this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
         this.NotifService.newNotif(notif, data.createur_id)
       }, (error) => {

@@ -2973,6 +2973,9 @@ body .ui-slidemenu .ui-menuitem-link {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
   border-radius: 0;
+
+  
+
 }
 body .ui-menu .ui-menuitem-link .ui-menuitem-text,
 body .ui-menubar .ui-menuitem-link .ui-menuitem-text,
@@ -2981,6 +2984,7 @@ body .ui-contextmenu .ui-menuitem-link .ui-menuitem-text,
 body .ui-megamenu .ui-menuitem-link .ui-menuitem-text,
 body .ui-slidemenu .ui-menuitem-link .ui-menuitem-text {
   color: #4a4a4a;
+
 }
 body .ui-menu .ui-menuitem-link .ui-menuitem-icon,
 body .ui-menubar .ui-menuitem-link .ui-menuitem-icon,
@@ -2990,6 +2994,7 @@ body .ui-megamenu .ui-menuitem-link .ui-menuitem-icon,
 body .ui-slidemenu .ui-menuitem-link .ui-menuitem-icon {
   color: #4a4a4a;
   margin-right: 0.429em;
+  
 }
 body .ui-menu .ui-menuitem-link:hover,
 body .ui-menubar .ui-menuitem-link:hover,
@@ -3006,6 +3011,7 @@ body .ui-contextmenu .ui-menuitem-link:hover .ui-menuitem-text,
 body .ui-megamenu .ui-menuitem-link:hover .ui-menuitem-text,
 body .ui-slidemenu .ui-menuitem-link:hover .ui-menuitem-text {
   color: #024B4C;
+  
 }
 body .ui-menu .ui-menuitem-link:hover .ui-menuitem-icon,
 body .ui-menubar .ui-menuitem-link:hover .ui-menuitem-icon,
@@ -3019,9 +3025,11 @@ body .ui-menu {
   padding: 0;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
+  min-width: 200px;
 }
 body .ui-menu .ui-menuitem {
   margin: 0;
+
 }
 body .ui-menu.ui-shadow {
   border: 1px solid #e0e0e0;

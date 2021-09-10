@@ -142,6 +142,8 @@ export class RegisterComponent implements OnInit {
     } else if (this.IsAdmin) {
       this.Roles = [this.Roles[0], this.Roles[1]]
     }
+
+    console.log(this.RegisterForm.value)
   }
 
 

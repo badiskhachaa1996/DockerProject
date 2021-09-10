@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
       }
       console.log(error)
     });
+
+    console.log(this.LoginForm.value)
   }
   
 

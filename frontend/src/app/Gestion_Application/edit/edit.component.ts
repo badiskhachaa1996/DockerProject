@@ -44,23 +44,20 @@ export class EditComponent implements OnInit {
       }
     }
 
-  
-  
 
+    modifyService() {
+      let req = {
+        id: this.Service._id,
+        label: this.serviceForm.value.label
+      }
+      this.ServService.update(req).subscribe((data) => {
+        this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
+        this.router.navigate(['/service'])
+      }, (error) => {
+        console.log(error)
+      });
 
-  modifyService() {
-    let req = {
-      id: this.Service._id,
-      label: this.serviceForm.value.label
-    }
-    this.ServService.update(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
-      this.router.navigate(['/service'])
-    }, (error) => {
-      console.log(error)
-    });
-
-
+      console.log(this.serviceForm.value)
   }
 }
 

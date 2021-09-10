@@ -116,26 +116,22 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                    <h3 class="text-center">Envoyer un message</h3>
+                    <h3 class="text-center" style="color: green; font-weight: bold;">Envoyer un message</h3>
                     <div class="text-center">
-                        <textarea formControlName="description" rows="5" cols="100" pInputTextarea autoResize="autoResize"placeholder="Saisir un message"></textarea>
+                        <textarea formControlName="description" rows="5" cols="100" pInputTextarea
+                            autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
                     <div class="text-center">
-                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
-                            customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-                            maxFileSize="20000000" [auto]="true" #fileInput>
+                        <p-fileUpload (uploadHandler)="onFileChange($event)" mode="basic"
+                            chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
+                            accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true" #fileInput>
                         </p-fileUpload>
                     </div>
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div><br>
-                    <!--<p class="text-center" style="color: green; font-weight: bold;">Statut :</p><br>
-                    <div class="text-center">
-                        <span>
-                             <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" placeholder="Veuillez choisir un statut"></p-dropdown>
-                        </span>
-                    </div><br>-->
+                  
                     <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
@@ -147,6 +143,7 @@
 </div>
 
 
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
@@ -154,7 +151,7 @@
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
-                [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length" >
+                [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
@@ -195,9 +192,12 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                           
-                            <i pTooltip="Modifier" *ngIf="rowData.statut == 'Queue d\'entrée'"  tooltipPosition="bottom" style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
-                            <i pTooltip="Répondre" *ngIf="rowData.statut == 'En attente d\'une réponse'" (click)="toggleFormCommentAdd(rowData) "> <img src="../../../assets/images/send.png" width="13px" height="13px"> </i>
+
+                            <i pTooltip="Modifier" *ngIf="rowData.statut == 'Queue d\'entrée'" tooltipPosition="bottom"
+                                style="margin-left: 2%;" class="pi pi-pencil" (click)="modify(rowData)"></i>&nbsp;
+                            <i pTooltip="Répondre" *ngIf="rowData.statut == 'En attente d\'une réponse'"
+                                (click)="toggleFormCommentAdd(rowData) "> <img src="../../../assets/images/send.png"
+                                    width="13px" height="13px"> </i>
                         </td>
                     </tr>
                 </ng-template>
@@ -224,9 +224,9 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                        
 
-                            <p-fieldset *ngIf="comments" legend="Messages">
+
+                            <p-fieldset *ngIf="comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
@@ -234,16 +234,17 @@
                     <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
-                                <div class="ui-g-12 ui-md-12" >
-                                    
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
-                                    (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"></i></button>
+                                <div class="ui-g-12 ui-md-12">
 
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  </span>
-                                
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
+                                        (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
+                                            *ngIf="loadingMessage==message._id"></i></button>
+
+                                    <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+
                                 </div>
-                                <span id="soustitre" class="ui-g-12 ui-md-12" >
+
+                                <span id="soustitre" class="ui-g-11 ui-md-11" >
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
                                     
                                 </span>
@@ -254,18 +255,15 @@
                     <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
-                                <div class="ui-g-12 ui-md-12" >
-                                <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
-                                         id="charger2" (click)="downloadFile(message)">
-                                        <i
-                                        class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"
-                                        > 
+                                <div class="ui-g-12 ui-md-12">
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+                                        id="charger2" (click)="downloadFile(message)">
+                                        <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
-                                </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}  </span>
+                                    </button>
+                                    <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
                                 </div>
-                                <span id="soustitre" class=" ui-g-12 ui-md-12">
+                                <span id="soustitre" class=" ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
                                    
                                 </span>
@@ -282,10 +280,10 @@
 
 
 
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
     </div>
+</div>
 </div>

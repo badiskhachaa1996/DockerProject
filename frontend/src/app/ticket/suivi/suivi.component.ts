@@ -58,7 +58,7 @@ export class SuiviComponent implements OnInit {
   selectedTicket: Ticket;
   showFormAddComment: boolean = false;
   @ViewChild('fileInput') fileInput: ElementRef;
-  comments: any = null;
+  comments: any = [];
 
   toggleFormCancel(){
     this.showFormAddComment=!this.showFormAddComment;
@@ -142,6 +142,8 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
+
+    console.log(this.TicketForm)
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -277,7 +279,7 @@ export class SuiviComponent implements OnInit {
   });
 
   loadMessages(ticket:Ticket){
-    this.comments = null
+    this.comments = []
     this.MsgServ.getAllByTicketID(ticket._id)
     .subscribe(
       data => {
@@ -289,12 +291,12 @@ export class SuiviComponent implements OnInit {
   }
   SendComment() {
     let isrep;
+    console.log(this.selectedTicket)
     if (this.selectedTicket.agent_id!=jwt_decode(localStorage.getItem('token'))['id']) {
         isrep=true
     }
 
     let comment = {
-      
       description: this.commentForm.value.description,
       id: jwt_decode(localStorage.getItem('token'))['id'],
       ticket_id: this.selectedTicket._id,
@@ -304,6 +306,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
+      console.log(data)
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       this.selectedTicket = null;
@@ -325,11 +328,17 @@ export class SuiviComponent implements OnInit {
     })
   }
 
+  onUpload(event) {
+    for (let file of event.files) {
+      this.uplo = file;
+    }
+    this.onFileChange(event);
+  }
   onFileChange(event) {
     let reader = new FileReader();
-    if (event.target.files && event.target.files.length > 0) {
+    if (event.files && event.files.length > 0) {
       this.loading = true
-      let file = event.target.files[0];
+      let file = event.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
         this.commentForm.get('file').setValue({

@@ -49,7 +49,7 @@ app.post("/create", (req, res) => {
     
 
     message.save((err, msg) => {
-       
+        res.send({ message: "Votre message a été crée!", doc: msg });
         let createur_id;
     Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
         createur_id = tickFromDb.createur_id
@@ -58,21 +58,21 @@ app.post("/create", (req, res) => {
         
 
         let UserDB;
-        User.findOne({ _id: msg.user_id }).then((userFromDb) => {
+        User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
             UserDB = userFromDb
             console.log("createur du ticket : "+ createur_id)
-            console.log("createur du msg : "+ UserDB._id)
+            console.log("agent du ticket : "+ UserDB._id)
         
             if (msg.isRep) {
-            let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour '+'M.</p> <p style="color:black"> ' + UserDB.lastname +' '+UserDB.firstname +'  a publier une reponse pour son ticket </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
+            let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black"> Bonjour ' + UserDB.lastname +' '+UserDB.firstname +', </p> </br> <p>  une reponse a été publié pour le ticket' +msg.ticket_id +' </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
             let mailOptions = {
                 from: 'estya-ticketing@estya.com',
-                to:"s.babaci@estya.com",
+                to:userFromDb.email,
                 subject: 'Notification E-Ticketing',
                 html: htmlemail,
                 attachments: [{
                     filename: 'signature.png',
-                    path: 'storage/signature.png',
+                    path: 'assets/signature.png',
                     cid: 'red' //same cid value as in the html img src
                 }]
             };
