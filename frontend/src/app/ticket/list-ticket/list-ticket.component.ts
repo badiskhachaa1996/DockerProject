@@ -105,7 +105,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"]=="Responsable" || this.token["role"]=="Admin") {
+    } else if (this.token["role"] == "Responsable" || this.token["role"] == "Admin") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -275,23 +275,28 @@ export class ListTicketComponent implements OnInit {
       id: this.isModify._id,
       sujet_id: this.TicketForm.value.sujet._id
     }
-    this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
-      this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, data.createur_id)
+    if (req.sujet_id != this.isModify.sujet_id) {
+      this.TicketService.changeService(req).subscribe((data) => {
+        console.log(data)
+        this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
+        this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
+          this.NotifService.newNotif(notif, data.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+        if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
+          this.allTickets.push(data)
+        }
+        this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+        this.isModify = null;
+        this.toggleFormUpdate();
       }, (error) => {
         console.log(error)
       });
-      if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
-        this.allTickets.push(data)
-      }
-      this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+    }else{
       this.isModify = null;
       this.toggleFormUpdate();
-    }, (error) => {
-      console.log(error)
-    });
-
+    }
   }
 
 
