@@ -484,7 +484,7 @@
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom
-                                                    etPrénom:</b></div>
+                                                    et Prénom:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].firstname | titlecase }}
                                                 {{userDic[rowData.createur_id].lastname | titlecase}}</div>
@@ -578,9 +578,8 @@
                                         <ng-template pTemplate="body" let-message>
                     <tr *ngIf="message.user_id!=token['id']">
                         <td>
-                            <span class="ui-g-6 ui-md-6">
-                                <div class="ui-g-12 ui-md-12" >
-                                    
+                            <span class="ui-g-6 ui-md-6" style="float: right;">
+                                <div class="ui-g-12 ui-md-12" >     
                                     <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
                                     (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                         *ngIf="loadingMessage==message._id"></i></button>
