@@ -58,6 +58,8 @@ export class SuiviComponent implements OnInit {
   loadingMessage;
   selectedTicket: Ticket;
   showFormAddComment: boolean = false;
+  retour: boolean = false;
+
   @ViewChild('fileInput') fileInput: ElementRef;
   comments: any = [];
 
@@ -87,6 +89,15 @@ export class SuiviComponent implements OnInit {
   constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService,private NotifService:NotificationService) { }
 
   ngOnInit(): void {
+    
+    this.token = jwt_decode(localStorage.getItem("token"))
+
+    if (this.token["role"].includes("user")) {
+      this.retour= true;
+    }
+
+
+
     this.Ticket = <Ticket>history.state;
 
     let token = localStorage.getItem("token")
