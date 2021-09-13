@@ -10,10 +10,6 @@
         </div>
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline">
-            <div *ngIf="notifications.length!=0">
-                <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom" class="pi pi-times-circle"
-                    style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
-            </div>
             <ul>
                 <li *ngFor="let notif of notifications">
                     <div class="grid">
@@ -29,28 +25,24 @@
                                     Un nouveau ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" vous a été affecté
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
-                                    <div >Vous avez reçu un nouveau message sur le ticket : "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
-                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
-                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
-                                        (click)="retirer(notif)"></i></div>
+                                    <div >
+                                        Vous avez reçu un nouveau message sur le ticket : "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
+                                    </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été redirigé vers un autre service ou un autre sujet par un agent
-                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
-                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
-                                        (click)="retirer(notif)"></i></div>
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été redirigé vers un autre service ou un autre sujet par un agent
+                                    </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été traité
-                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
-                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
-                                        (click)="retirer(notif)"></i></div>
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été traité
+                                    </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
-                                    <i pTooltip="Marqué comme vu" tooltipPosition="bottom" class="pi pi-check"
-                                        style="cursor: pointer; font-size: 20px; color: green; float:right;"
-                                        (click)="retirer(notif)"></i></div>
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
+                                    </div>
                                 </div>
                                 <div class="timeline-event-time">
                                     {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
