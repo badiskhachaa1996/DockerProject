@@ -16,7 +16,8 @@
                 </div>
                 <div *ngIf="userconnected" class="user-profile-info profile-link">
                     <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
-                    <span class="user-profile-role">{{userconnected.role}}</span>  
+                    <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
             </div>
                 <img src="../assets/images/avatar.PNG" style="width: 30px; height: 30px;">
             </a>
@@ -27,7 +28,8 @@
                         <div *ngIf="userconnected" class="profile-info">
                             <span class="user-profile-name">{{userconnected.firstname}}
                                 {{userconnected.lastname}}</span>
-                            <span class="user-profile-role">{{userconnected.role}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
                         </div>
                         <a href="#" class="profile-detail-icon" (click)="onLogout()">
                             <i class="pi pi-sign-out"></i>

@@ -21,7 +21,7 @@ let transporter = nodemailer.createTransport({
 
 
 
-//Création d'un nouveau message TODO
+//Création d'un nouveau message 
 app.post("/create", (req, res) => {
     if (req.body.file && req.body.file != null && req.body.file != '') {
         fs.mkdir("./storage/" + req.body.ticket_id + "/",
