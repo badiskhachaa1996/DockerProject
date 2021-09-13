@@ -39,33 +39,53 @@ socket = io("http://localhost:3000");
       let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if(this.userconnected.role=="Admin"){
+          this.items = [{
+            label: 'Suivre mes tickets',
+            icon: 'pi pi-check-circle',
+            routerLink: '/ticket/suivi'
+          },
+          {
+            label: 'Gestions des tickets',
+            icon: 'pi pi-list',
+            routerLink: '/'
+          },
+          {
+            label :'Gestions des services',
+            icon: 'pi pi-sitemap',
+            routerLink :'/service'
+          },
+          {
+            label: 'Gestions des agents',
+            icon: 'pi pi-users',
+            routerLink: '/listUser'
+          },
+      
+          ]
+        }else{
+          this.items = [{
+            label: 'Suivre mes tickets',
+            icon: 'pi pi-check-circle',
+            routerLink: '/ticket/suivi'
+          },
+          {
+            label: 'Gestions des tickets',
+            icon: 'pi pi-list',
+            routerLink: '/'
+          },
+          {
+            label :'Gestions des services',
+            icon: 'pi pi-sitemap',
+            routerLink :'/service'
+          }
+          ]
+        }
+     
       }, (error) => {
         console.log(error)
       })
     }
     
-    this.items = [{
-      label: 'Suivre mes tickets',
-      icon: 'pi pi-check-circle',
-      routerLink: '/ticket/suivi'
-    },
-    {
-      label: 'Gestions des tickets',
-      icon: 'pi pi-list',
-      routerLink: '/'
-    },
-    {
-      label :'Gestions des services',
-      icon: 'pi pi-sitemap',
-      routerLink :'/service'
-    },
-    {
-      label: 'Gestions des agents',
-      icon: 'pi pi-users',
-      routerLink: '/listUser'
-    },
-
-    ]
 
 
   }

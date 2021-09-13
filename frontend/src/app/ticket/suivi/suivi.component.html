@@ -82,7 +82,6 @@
                             Sujet:
                             <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
                                 class="form-control col-12">
-                                <option [ngValue]="null" disabled>Choissisez un sujet</option>
                                 <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
                                     [ngValue]="sujet">
                                     {{ sujet.label }}
@@ -245,7 +244,7 @@
                                 </div>
 
                                 <span id="soustitre" class="ui-g-11 ui-md-11" >
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}}  {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
                                     
                                 </span>
                             </span>

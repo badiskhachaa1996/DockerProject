@@ -110,7 +110,7 @@ export class ListTicketComponent implements OnInit {
     }
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"]=="Responsable" || this.token["role"]=="Admin") {
+    } else if (this.token["role"] == "Responsable" || this.token["role"] == "Admin") {
       this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
@@ -280,23 +280,30 @@ export class ListTicketComponent implements OnInit {
       id: this.isModify._id,
       sujet_id: this.TicketForm.value.sujet._id
     }
-    this.TicketService.changeService(req).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
-      this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, data.createur_id)
+    if (req.sujet_id != this.isModify.sujet_id) {
+      this.TicketService.changeService(req).subscribe((data) => {
+        console.log(data)
+        this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
+        this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
+          this.NotifService.newNotif(notif, data.createur_id)
+        }, (error) => {
+          console.log(error)
+        });
+        if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
+          this.queueList.splice(this.queueList.indexOf(this.isModify), 1,data)
+          this.allTickets.push(data)
+        }else{
+          this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+        }
+        this.isModify = null;
+        this.toggleFormUpdate();
       }, (error) => {
         console.log(error)
       });
-      if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
-        this.allTickets.push(data)
-      }
-      this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+    } else {
       this.isModify = null;
       this.toggleFormUpdate();
-    }, (error) => {
-      console.log(error)
-    });
-
+    }
   }
 
 
@@ -371,20 +378,20 @@ export class ListTicketComponent implements OnInit {
       id: this.selectedTicket._id,
       statut: this.commentForm.value.statut.value
     }
-
-    this.MsgServ.create(comment).subscribe((message) => {   
-       this.comments.push(message.doc);
-
+    console.log(dataTicket)
+    this.MsgServ.create(comment).subscribe((message) => {
+      this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
 
-      if (this.commentForm.value.statut.value != "Traité") {
+      if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
+            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
@@ -395,10 +402,11 @@ export class ListTicketComponent implements OnInit {
       } else {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
+            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })

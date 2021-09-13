@@ -118,7 +118,7 @@
                         </td>
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="QueueToAccAff(rowData)"></i>
+                                (click)="QueueToAccAff(rowData)" *ngIf="rowData.createur_id!=token['id']"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -193,7 +193,7 @@
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -344,7 +344,7 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -484,7 +484,7 @@
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Nom
-                                                    etPrénom:</b></div>
+                                                    et Prénom:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].firstname | titlecase }}
                                                 {{userDic[rowData.createur_id].lastname | titlecase}}</div>
@@ -574,23 +574,23 @@
                             <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
-                                    <p-table [value]="comments" dataKey="id" >
+                                    <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
                     <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
-                                <div class="ui-g-12 ui-md-12" >
-                                    
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
-                                    (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"></i></button>
+                                <div class="ui-g-12 ui-md-12">
 
-                                <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}}  </span>
-                                
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                        (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
+                                            *ngIf="loadingMessage==message._id"></i></button>
+
+                                    <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+
                                 </div>
-                                <span id="soustitre" class="ui-g-12 ui-md-12" >
+
+                                <span id="soustitre" class="ui-g-11 ui-md-11" >
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-                                    
                                 </span>
                             </span>
                         </td>
@@ -599,18 +599,15 @@
                     <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
-                                <div class="ui-g-12 ui-md-12" >
-                                <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
-                                         id="charger2" (click)="downloadFile(message)">
-                                        <i
-                                        class="fa fa-spinner fa-spin fa-fw"
-                                        *ngIf="loadingMessage==message._id"
-                                        > 
+                                <div class="ui-g-12 ui-md-12">
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+                                        id="charger2" (click)="downloadFile(message)">
+                                        <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
-                                </button>
-                                <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}  </span>
+                                    </button>
+                                    <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
                                 </div>
-                                <span id="soustitre" class=" ui-g-12 ui-md-12">
+                                <span id="soustitre" class=" ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
                                    
                                 </span>

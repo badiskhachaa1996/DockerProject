@@ -21,21 +21,17 @@ export class UpdateUserComponent implements OnInit {
   Services: Service[]
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
-  User_role: String;
-  id_role: any;
-  emailExists = false;
   Roles = environment.role;
   showForm: boolean = true;
   civiliteList = environment.civilite;
 
-  userupdate: any = [User];
+  userupdate: User = null;
 
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite: new FormControl(this.listUserComponent.selectedUser.civilite, [Validators.required]),
-    lastname: new FormControl([this.listUserComponent.selectedUser.lastname], [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    civilite: new FormControl(this.civiliteList[0], [Validators.required]),
+    lastname: new FormControl(this.listUserComponent.selectedUser.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    email: new FormControl(this.listUserComponent.selectedUser.email, [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     phone: new FormControl(this.listUserComponent.selectedUser.phone, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
     adresse: new FormControl(this.listUserComponent.selectedUser.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
@@ -61,22 +57,15 @@ export class UpdateUserComponent implements OnInit {
     let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite)
     console.log("user : " + user)
     this.AuthService.update(user).subscribe((data) => {
-
-      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Votre message a bien été modifié' });
-      console.log(data)
+      this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser),1,data)
+      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
     }, (error) => {
-      if (error.status == 400) {
-        //Bad Request (Email déjà utilisé)
-        this.messageService.add({ severity: 'error', summary: 'Message d\'inscription', detail: 'auth service update ' });
-        this.emailExists = true;
-      }
       console.log(error)
     });
     this.listUserComponent.showForm = "Ajouter"
   }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
-  get email() { return this.RegisterForm.get('email'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get adresse() { return this.RegisterForm.get('adresse'); }
   get role() { return this.RegisterForm.get('role'); }
@@ -88,26 +77,36 @@ export class UpdateUserComponent implements OnInit {
 
     this.servService.getAll().subscribe((data) => {
       this.Services = data;
+      this.Services.forEach(civ=>{
+        if(civ._id==this.listUserComponent.selectedUser.service_id){
+          this.RegisterForm.get("service_id").setValue(civ)
+        }
+      })
     })
-    let idu: any = JSON.parse(localStorage.getItem('updateUser'))._id
-    this.AuthService.getById(idu).subscribe((data) => {
-      console.log(jwt_decode(data['userToken'])['userFromDb'])
-
+    
+    this.AuthService.getById(this.listUserComponent.selectedUser._id).subscribe((data) => {
       this.userupdate = jwt_decode(data['userToken'])['userFromDb']
+
     }, (err) => console.log(err))
 
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
-      this.User_role = decodeToken.role;
-
-
+      this.IsAdmin = decodeToken.role == "Admin"
     }
     this.civiliteList.forEach(civ=>{
       if(civ.value==this.listUserComponent.selectedUser.civilite){
         this.RegisterForm.get("civilite").setValue(civ)
       }
     })
-    this.IsAdmin = this.User_role == "Admin"
+
+    this.Roles.forEach(civ=>{
+      if(civ.value==this.listUserComponent.selectedUser.role){
+        this.RegisterForm.get("role").setValue(civ)
+      }
+    })
+
+
+
 
   }
 

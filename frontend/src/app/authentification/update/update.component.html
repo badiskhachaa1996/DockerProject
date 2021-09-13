@@ -37,19 +37,6 @@
                             </div>
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
-                            <input type="text" formControlName="email" class="form-control col-12"
-                                placeholder="Adresse mail" pInputText>
-
-                            <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
-                                <span class="error" *ngIf="email.errors?.required">*L'adresse mail est
-                                    obligatoire.</span>
-                                <span class="error" *ngIf="email.errors?.pattern">*L'adresse email n'est pas
-                                    correct.</span>
-                                <span class="error" *ngIf="emailExists">*L'adresse email est déjà utilisé.</span>
-
-                            </div>
-                        </div>
-                        <div class="mt-2 mb-2 col-lg-12 col-12">
                             <input id="adresse" type="text" formControlName="adresse" class="form-control col-12"
                                 placeholder="Adresse" pInputText required />
                             <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
@@ -89,7 +76,7 @@
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success"
                                 [disabled]="RegisterForm.invalid"
-                                label="Modifer" (click)="UpdateUser()"></button>
+                                label="Modifer" type="button" (click)="UpdateUser()"></button>
                         </div>
                     </div>
                     </div>
