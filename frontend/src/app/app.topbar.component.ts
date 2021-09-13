@@ -32,6 +32,7 @@ export class AppTopBarComponent implements OnInit {
   userInformations: any;
   role: string;
   userconnected: User;
+  nnotifications = false;
   Notifications: Notification[] = [];
 
 
@@ -60,7 +61,10 @@ export class AppTopBarComponent implements OnInit {
         this.Notifications = data;
         if(data.length!=0){
             this.notif = true;
-        } 
+        }
+        if(data.length==0){
+          this.nnotifications = false;
+        }
       
       }, error => {
         console.error(error)
@@ -72,9 +76,7 @@ export class AppTopBarComponent implements OnInit {
 
       this.socket.on("reloadNotif",()=>{
         this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
-          console.log(this.Notifications)
           this.Notifications = data;
-          console.log(this.Notifications)
           this.notif = data.length!=0;
         
         }, error => {

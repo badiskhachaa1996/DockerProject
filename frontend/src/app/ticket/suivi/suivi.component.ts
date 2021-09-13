@@ -13,7 +13,8 @@ import { MessageService } from 'primeng/api';
 import { MessageService as MsgService } from 'src/app/services/message.service';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { environment } from 'src/environments/environment';
-
+import { NotificationService } from 'src/app/services/notification.service';
+import { Notification } from 'src/app/models/notification';
 
 @Component({
   selector: 'app-suivi',
@@ -85,7 +86,7 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
-  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService) { }
+  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService,private NotifService:NotificationService) { }
 
   ngOnInit(): void {
     
@@ -304,6 +305,7 @@ export class SuiviComponent implements OnInit {
     let isrep;
     if (this.selectedTicket.agent_id!=jwt_decode(localStorage.getItem('token'))['id']) {
         isrep=true
+
     }
 
     let comment = {
@@ -321,8 +323,15 @@ export class SuiviComponent implements OnInit {
 
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
+      let agenttoNotif=this.selectedTicket.agent_id ;
       this.selectedTicket = null;
       this.commentForm.reset();
+      this.NotifService.create(new Notification(null, data._id, false, "Une reponse a ete publier sur le ticket", null, agenttoNotif)).subscribe((notif) => {
+        this.NotifService.newNotif(notif,agenttoNotif)
+        console.log(notif)
+      }, (error) => {
+        console.log(error)
+      });
     }, (error) => {
       console.log(error)
     });
