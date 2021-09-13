@@ -118,7 +118,7 @@
                         </td>
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="QueueToAccAff(rowData)"></i>
+                                (click)="QueueToAccAff(rowData)" *ngIf="rowData.createur_id!=token['id']"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
