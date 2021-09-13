@@ -66,6 +66,10 @@ io.on("connection", (socket) => {
         console.log("Je dois envoyer une notification à "+ data.userid)
         io.to(data.userid).emit('NewNotif', data.notif)
     })
+
+    socket.on('reloadNotif',(data)=>{
+        io.to(data.id).emit('reloadNotif')
+    })
 });
 
 httpServer.listen(3000, () => {
