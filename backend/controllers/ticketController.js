@@ -119,7 +119,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id,statut:{$ne:"Traité"} })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
