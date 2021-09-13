@@ -22,6 +22,10 @@ export class NotificationService {
     this.socket.emit("NewNotif",({notif:Notif,userid:userid}))
   }
 
+  reloadNotif(data){
+    this.socket.emit("reloadNotif",(data))
+  }
+
   create(notif: Notification) {
     let url = this.apiUrl + "create";
     return this.http.post<any>(url, notif, httpOptions);

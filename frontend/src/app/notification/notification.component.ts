@@ -55,6 +55,7 @@ export class NotificationComponent implements OnInit {
       .subscribe(
         response => {
           this.notifications.splice(this.notifications.indexOf(notification), 1);
+          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
         },
         error => {
           console.log(error);
@@ -64,8 +65,8 @@ export class NotificationComponent implements OnInit {
     this.NotificationService.viewNotifs(this.notifications)
       .subscribe(
         response => {
-
           this.notifications = [];
+          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
         },
         error => {
           console.log(error);
