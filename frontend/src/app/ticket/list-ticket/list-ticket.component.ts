@@ -257,6 +257,8 @@ export class ListTicketComponent implements OnInit {
 
   modify(data) {
     console.log(data)
+    this.toggleFormUpdate()
+
     this.listServices.forEach(element => {
       if (element._id == this.sujetList[data.sujet_id].service_id) {
         this.TicketForm.patchValue({ service: element })
@@ -336,12 +338,17 @@ export class ListTicketComponent implements OnInit {
 
   toggleFormUpdate() {
     this.isModify = null;
+    this.showFormAddComment = false;
+    this.showFormUpdate = !this.showFormUpdate;
+
   }
 
 
   toggleFormCommentAdd(ticket) {
     this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
+    this.showFormUpdate = false;
+
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
