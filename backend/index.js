@@ -65,6 +65,7 @@ io.on("connection", (socket) => {
     socket.on('NewNotif', (data) => {
         console.log("Je dois envoyer une notification à "+ data.userid)
         io.to(data.userid).emit('NewNotif', data.notif)
+        io.emit(data.notif,{NewNotif:  data.notif});
     })
 
     socket.on('reloadNotif',(data)=>{

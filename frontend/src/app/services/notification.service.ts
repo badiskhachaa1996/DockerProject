@@ -1,7 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Notification } from '../models/notification';
-
+import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import {tap} from 'rxjs/operators';
 const io = require("socket.io-client");
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
@@ -13,11 +15,15 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
   providedIn: 'root'
 })
 export class NotificationService {
+  public notifs: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   socket = io("http://localhost:3000");
   apiUrl ="http://localhost:3000/notification/"
 
   constructor(private http: HttpClient) { }
-
+// private _refreshNeeded = new Subject<void>();
+// get refreshNeeded(){
+//     return this._refreshNeeded;
+// }
   newNotif(Notif,userid){
     this.socket.emit("NewNotif",({notif:Notif,userid:userid}))
   }
@@ -53,7 +59,13 @@ export class NotificationService {
 
   getAllByUserId(id:string){
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions)
+    // .pipe(
+    //   tap(() => {
+    //     this._refreshNeeded.next();
+    //   })
+    //   )
+    ;
   }
 
   get20ByUserID(id:string){
@@ -62,11 +74,13 @@ export class NotificationService {
   }
   viewNotifByID(id){
     let registreUrl=this.apiUrl+"viewNotifByID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.get<any>(registreUrl,httpOptions1)
+   ;
   }
 
   viewNotifs(notifications:Notification[]){
     let registreUrl=this.apiUrl+"viewNotifs";
-    return this.http.post<any>(registreUrl,{notifications},httpOptions1);
+    return this.http.post<any>(registreUrl,{notifications},httpOptions1)
+ ;
   }
 }

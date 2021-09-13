@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
+import { url } from 'inspector';
 const io = require("socket.io-client");
 
 @Component({
@@ -19,6 +20,7 @@ const io = require("socket.io-client");
 //emit value in sequence every 10 second
 export class AppTopBarComponent implements OnInit {
   data: string;
+  currentRoot= this.router.url;
   profilePicture: any;
   public notifications;
   connected = false;
@@ -30,6 +32,7 @@ export class AppTopBarComponent implements OnInit {
   userInformations: any;
   role: string;
   userconnected: User;
+  nnotifications = false;
   Notifications: Notification[] = [];
 
 
@@ -41,6 +44,8 @@ export class AppTopBarComponent implements OnInit {
   constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
   ngOnInit() {
+    console.log("root :" +this.currentRoot);
+
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
@@ -56,7 +61,10 @@ export class AppTopBarComponent implements OnInit {
         this.Notifications = data;
         if(data.length!=0){
             this.notif = true;
-        } 
+        }
+        if(data.length==0){
+          this.nnotifications = false;
+        }
       
       }, error => {
         console.error(error)
