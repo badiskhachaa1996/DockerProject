@@ -145,10 +145,6 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <div *ngIf="retour" >
-            <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  
-        </div>
-
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
