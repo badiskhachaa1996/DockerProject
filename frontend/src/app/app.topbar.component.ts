@@ -44,8 +44,6 @@ export class AppTopBarComponent implements OnInit {
   constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
   ngOnInit() {
-    console.log("root :" +this.currentRoot);
-
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
@@ -72,16 +70,6 @@ export class AppTopBarComponent implements OnInit {
       this.socket.on("NewNotif",(data)=>{
         this.Notifications.push(data)
         this.notif = true;
-      })
-
-      this.socket.on("reloadNotif",()=>{
-        this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
-          this.Notifications = data;
-          this.notif = data.length!=0;
-        
-        }, error => {
-          console.error(error)
-        })
       })
     }
 

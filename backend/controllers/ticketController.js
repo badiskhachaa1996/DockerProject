@@ -452,7 +452,7 @@ app.post("/changeStatut/:id", (req, res) => {
 });
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" },{statut:"Traité"}] })
     .then(result => {
         res.status(200).send(result.length > 0 ? result : [])
     })

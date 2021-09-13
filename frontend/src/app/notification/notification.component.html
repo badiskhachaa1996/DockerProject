@@ -28,22 +28,23 @@
                                     été affecté
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
-                                    <div>Vous avez reçu un nouveau message sur le ticket :
-                                        "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
+                                    <div >
+                                        Vous avez reçu un nouveau message sur le ticket : "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
                                     </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été
-                                        redirigé vers un autre service ou un autre sujet par un agent
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été redirigé vers un autre service ou un autre sujet par un agent
                                     </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été
-                                        traité
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été traité
                                     </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
-                                    <div>Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
+                                    <div>
+                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
                                     </div>
                                 </div>
                                 <div class="timeline-event-time">
