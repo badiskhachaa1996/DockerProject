@@ -37,8 +37,6 @@ export class UpdateUserComponent implements OnInit {
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
     service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required])
 
-
-
   })
 
   toggleForm() {
@@ -55,9 +53,9 @@ export class UpdateUserComponent implements OnInit {
 
 
   UpdateUser() {
-    console.log(this.listUserComponent.selectedUser.role)
-    console.log(this.RegisterForm.value.role.value)
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, null, null, this.RegisterForm.value.role.value, null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id._id, this.RegisterForm.value.civilite.value)
+    console.log('to' + this.userupdate);
+    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite)
+    console.log("user : " + user)
     this.AuthService.update(user).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser),1,data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });

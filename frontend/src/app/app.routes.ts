@@ -24,7 +24,6 @@ const routes: Routes = [
     { path:'ticket/suivi',component:SuiviComponent},
     { path:'home', component: HomeComponent},
     { path:'listUser', component: ListUserComponent},
-    { path:'listUser/update',component: UpdateUserComponent},
     { path: 'reset', component: ResetMdpComponent},
     { path: 'notification', component: NotificationComponent},
   

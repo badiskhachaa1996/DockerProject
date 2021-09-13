@@ -82,7 +82,6 @@
                             Sujet:
                             <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
                                 class="form-control col-12">
-                                <option [ngValue]="null" disabled>Choissisez un sujet</option>
                                 <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
                                     [ngValue]="sujet">
                                     {{ sujet.label }}
@@ -146,6 +145,10 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
+        <div *ngIf="retour" >
+            <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  
+        </div>
+
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
@@ -236,7 +239,7 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger"
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -245,7 +248,7 @@
                                 </div>
 
                                 <span id="soustitre" class="ui-g-11 ui-md-11" >
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{userDic[message.user_id].role}}  {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
                                     
                                 </span>
                             </span>

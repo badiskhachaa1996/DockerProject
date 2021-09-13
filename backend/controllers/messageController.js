@@ -21,9 +21,9 @@ let transporter = nodemailer.createTransport({
 
 
 
-//Création d'un nouveau message TODO
+//Création d'un nouveau message 
 app.post("/create", (req, res) => {
-    if (req.body.file && req.body.file!=null && req.body.file!=''){
+    if (req.body.file && req.body.file != null && req.body.file != '') {
         fs.mkdir("./storage/" + req.body.ticket_id + "/",
             { recursive: true }, (err) => {
                 if (err) {
@@ -46,63 +46,64 @@ app.post("/create", (req, res) => {
         isRep: req.body.isRep,
 
     });
-    
+
 
     message.save((err, msg) => {
         res.send({ message: "Votre message a été crée!", doc: msg });
         let createur_id;
-    Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
-        createur_id = tickFromDb.createur_id
-        console.log("createur du ticket : "+ createur_id)
-
-        
-
-        let UserDB;
-        User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
-            UserDB = userFromDb
-            console.log("createur du ticket : "+ createur_id)
-            console.log("agent du ticket : "+ UserDB._id)
-        
-            if (msg.isRep) {
-            let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black"> Bonjour ' + UserDB.lastname +' '+UserDB.firstname +', </p> </br> <p>  une reponse a été publié pour le ticket' +msg.ticket_id +' </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
-            let mailOptions = {
-                from: 'estya-ticketing@estya.com',
-                to:userFromDb.email,
-                subject: 'Notification E-Ticketing',
-                html: htmlemail,
-                attachments: [{
-                    filename: 'signature.png',
-                    path: 'assets/signature.png',
-                    cid: 'red' //same cid value as in the html img src
-                }]
-            };
+        Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
+            createur_id = tickFromDb.createur_id
+            console.log("createur du ticket : " + createur_id)
 
 
-            transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    console.log('Email sent: ' + info.response);
+
+            let UserDB;
+            User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
+                UserDB = userFromDb
+                console.log("createur du ticket : " + createur_id)
+                console.log("agent du ticket : " + UserDB._id)
+
+                if (msg.isRep) {
+                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black"> Bonjour ' + UserDB.lastname + ' ' + UserDB.firstname + ', </p> </br> <p>  une reponse a été publié pour le ticket' + msg.ticket_id + ' </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: userFromDb.email,
+                        subject: 'Notification E-Ticketing',
+                        html: htmlemail,
+                        attachments: [{
+                            filename: 'signature.png',
+                            path: 'assets/signature.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                    };
+
+
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.log(error);
+                            res.status(500).send({message:error,doc:msg})
+                        } else {
+                            console.log('Email sent: ' + info.response);
+                            res.send({ message: "Votre message a été crée!", doc: msg });
+                        }
+                    });
+                }
+                else {
                     res.send({ message: "Votre message a été crée!", doc: msg });
                 }
-            });
-        }
-        else{
-            res.send({ message: "Votre message a été crée!", doc: msg });
-        }
+
+            }).catch((error) => {
+                res.status(404).send("erreur :" + error);
+            })
 
         }).catch((error) => {
             res.status(404).send("erreur :" + error);
-        })
-    
-    }).catch((error) => {
-        res.status(404).send("erreur :" + error);
-    });
+        });
 
 
 
-        
-      
+
+
     });
 });
 

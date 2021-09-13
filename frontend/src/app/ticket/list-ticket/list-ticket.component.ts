@@ -257,6 +257,8 @@ export class ListTicketComponent implements OnInit {
 
   modify(data) {
     console.log(data)
+    this.toggleFormUpdate()
+
     this.listServices.forEach(element => {
       if (element._id == this.sujetList[data.sujet_id].service_id) {
         this.TicketForm.patchValue({ service: element })
@@ -290,15 +292,17 @@ export class ListTicketComponent implements OnInit {
           console.log(error)
         });
         if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
+          this.queueList.splice(this.queueList.indexOf(this.isModify), 1,data)
           this.allTickets.push(data)
+        }else{
+          this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
         }
-        this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
         this.isModify = null;
         this.toggleFormUpdate();
       }, (error) => {
         console.log(error)
       });
-    }else{
+    } else {
       this.isModify = null;
       this.toggleFormUpdate();
     }
@@ -336,12 +340,17 @@ export class ListTicketComponent implements OnInit {
 
   toggleFormUpdate() {
     this.isModify = null;
+    this.showFormAddComment = false;
+    this.showFormUpdate = !this.showFormUpdate;
+
   }
 
 
   toggleFormCommentAdd(ticket) {
     this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
+    this.showFormUpdate = false;
+
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
@@ -376,20 +385,20 @@ export class ListTicketComponent implements OnInit {
       id: this.selectedTicket._id,
       statut: this.commentForm.value.statut.value
     }
-
-    this.MsgServ.create(comment).subscribe((message) => {   
-       this.comments.push(message.doc);
-
+    console.log(dataTicket)
+    this.MsgServ.create(comment).subscribe((message) => {
+      this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
 
-      if (this.commentForm.value.statut.value != "Traité") {
+      if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
+            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
@@ -400,10 +409,11 @@ export class ListTicketComponent implements OnInit {
       } else {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
-
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
+            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })

@@ -10,10 +10,11 @@ import { SujetService } from '../services/sujet.service';
 })
 export class NotificationComponent implements OnInit {
 
-
+  token = null;
   notifications: any = [];
   listTicket: any[] = [];
   sujetDic: any[] = [];
+<<<<<<< HEAD
   notif: boolean;
   constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) 
   {
@@ -21,9 +22,20 @@ export class NotificationComponent implements OnInit {
       this.notif = value;
   });
    }
+=======
+  retour: boolean = false;
+  constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) { }
+>>>>>>> c017a3561394c53e58c5e45173c367948edbe633
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
+    
+    this.token = jwt_decode(localStorage.getItem("token"))
+
+    if (this.token["role"].includes("user")) {
+      this.retour= true;
+    }
+
     let token = localStorage.getItem("token")
     // this.NotificationService.refreshNeeded.subscribe(() =>{
     //   this.NotificationService.get20ByUserID(token["id"]);
@@ -71,6 +83,7 @@ export class NotificationComponent implements OnInit {
       .subscribe(
         response => {
           this.notifications.splice(this.notifications.indexOf(notification), 1);
+          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
         },
         
         error => {
@@ -81,9 +94,12 @@ export class NotificationComponent implements OnInit {
     this.NotificationService.viewNotifs(this.notifications)
       .subscribe(
         response => {
-
           this.notifications = [];
+<<<<<<< HEAD
           // this.NotificationService.notifs.next(true);
+=======
+          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
+>>>>>>> c017a3561394c53e58c5e45173c367948edbe633
         },
         error => {
           console.log(error);

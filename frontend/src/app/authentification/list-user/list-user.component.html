@@ -28,8 +28,7 @@
                             <span>
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                             </span>
-                        </th>
-                   
+                        </th>           
                 </ng-template>
                 
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
@@ -38,7 +37,6 @@
                            {{rowData[col.field]}}
                            <i class="pi pi-user-edit" (click)="modify(rowData) " *ngIf='col.field=="action"'></i>
                         </td>
-                
                     </tr>
                 </ng-template>
             </p-table>
