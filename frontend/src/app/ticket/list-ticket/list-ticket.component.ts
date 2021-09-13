@@ -385,7 +385,6 @@ export class ListTicketComponent implements OnInit {
       id: this.selectedTicket._id,
       statut: this.commentForm.value.statut.value
     }
-    console.log(dataTicket)
     this.MsgServ.create(comment).subscribe((message) => {
       this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });

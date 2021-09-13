@@ -13,7 +13,7 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()" *ngIf="showForm=='Ajouter'">  </button>
-             <h3>Liste des utilisateurs</h3>
+             <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
             <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" selectionMode="single" dataKey="email"
