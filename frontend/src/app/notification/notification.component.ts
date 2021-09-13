@@ -10,14 +10,22 @@ import { SujetService } from '../services/sujet.service';
 })
 export class NotificationComponent implements OnInit {
 
-
+  token = null;
   notifications: any = [];
   listTicket: any[] = [];
   sujetDic: any[] = [];
+  retour: boolean = false;
   constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) { }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
+    
+    this.token = jwt_decode(localStorage.getItem("token"))
+
+    if (this.token["role"].includes("user")) {
+      this.retour= true;
+    }
+
     let token = localStorage.getItem("token")
     if (token) {
       token = jwt_decode(token)
