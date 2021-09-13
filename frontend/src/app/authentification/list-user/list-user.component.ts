@@ -52,7 +52,7 @@ export class ListUserComponent implements OnInit {
       this.router.navigate(["/login"])
     } else if (token["role"].includes("admin")) {
       
-    } else if (token["role"].includes("user") || token["role"]=="Agent") {
+    } else if (token["role"]!="Admin") {
       this.router.navigate(["/ticket/suivi"])
     }
 

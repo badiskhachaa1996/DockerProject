@@ -143,15 +143,15 @@ app.post("/updateFirst/:id", (req, res) => {
 
             console.log(user.createur_id)
             res.send( user );
-            let UserDB;
+           
             User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                UserDB = userFromDb
+                
                 
 
 
                 let mailOptions = {
                     from: 'estya-ticketing@estya.com',
-                    to: UserDB.email,
+                    to: userFromDb.email,
                     subject: 'Notification E-Ticketing',
                     html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
                     attachments: [{
@@ -284,16 +284,16 @@ app.post("/AccAff/:id", (req, res) => {
             } else {
                 console.log(user.createur_id)
 
-                let UserDB;
+                
                 res.send(user);
                 User.findOne({ _id: user.agent_id }).then((userFromDb) => {
-                    UserDB = userFromDb
+                   
                     
 
                     let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + UserDB.lastname + '</p> <p style="color:black"> Le ticket ' + user._id + '  vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
-                        to: UserDB.email,
+                        to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
                         html: htmlemail,
                         attachments: [{
@@ -378,15 +378,15 @@ app.post("/changeStatut/:id", (req, res) => {
                 if (user.statut == "En attente d\'une réponse") {
 
 
-                    let UserDB;
+                    
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        UserDB = userFromDb
+                        
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
-                            to: UserDB.email,
+                            to: userFromDb.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre ticket   ' + user._id + '    est en attente d\' une reponse   </p><p>Une réponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
