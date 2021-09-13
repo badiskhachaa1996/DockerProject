@@ -30,6 +30,7 @@ export class AppTopBarComponent implements OnInit {
   userInformations: any;
   role: string;
   userconnected: User;
+  nnotifications = false;
   Notifications: Notification[] = [];
 
 
@@ -56,7 +57,10 @@ export class AppTopBarComponent implements OnInit {
         this.Notifications = data;
         if(data.length!=0){
             this.notif = true;
-        } 
+        }
+        if(data.length==0){
+          this.nnotifications = false;
+        }
       
       }, error => {
         console.error(error)

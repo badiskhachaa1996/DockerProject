@@ -14,18 +14,33 @@ export class NotificationComponent implements OnInit {
   notifications: any = [];
   listTicket: any[] = [];
   sujetDic: any[] = [];
-  constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) { }
+  notif: boolean;
+  constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) 
+  {
+    this.NotificationService.notifs.subscribe( value => {
+      this.notif = value;
+  });
+   }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
     let token = localStorage.getItem("token")
+    // this.NotificationService.refreshNeeded.subscribe(() =>{
+    //   this.NotificationService.get20ByUserID(token["id"]);
+    //  });
+    // }
+    // public get20ByUserID(){
+    
     if (token) {
+     
+
       token = jwt_decode(token)
       this.NotificationService.get20ByUserID(token["id"])
         .subscribe(
           data => {
             this.notifications = data;
             console.log(data)
+          
           },
           error => {
             console.log(error);
@@ -50,12 +65,14 @@ export class NotificationComponent implements OnInit {
 
   }
   retirer(notification): void {
+ 
 
     this.NotificationService.viewNotifByID(notification._id)
       .subscribe(
         response => {
           this.notifications.splice(this.notifications.indexOf(notification), 1);
         },
+        
         error => {
           console.log(error);
         });
@@ -66,6 +83,7 @@ export class NotificationComponent implements OnInit {
         response => {
 
           this.notifications = [];
+          // this.NotificationService.notifs.next(true);
         },
         error => {
           console.log(error);
