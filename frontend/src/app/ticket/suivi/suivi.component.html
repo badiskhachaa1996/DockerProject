@@ -82,7 +82,6 @@
                             Sujet:
                             <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
                                 class="form-control col-12">
-                                <option [ngValue]="null" disabled>Choissisez un sujet</option>
                                 <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
                                     [ngValue]="sujet">
                                     {{ sujet.label }}

@@ -142,8 +142,6 @@ export class SuiviComponent implements OnInit {
     }, (error) => {
       console.log(error)
     })
-
-    console.log(this.TicketForm)
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -204,6 +202,7 @@ export class SuiviComponent implements OnInit {
   }
 
   toggleFormAdd() {
+    console.log(this.TicketForm)
     this.showFormAdd = !this.showFormAdd
     this.showFormUpdate = false;
     this.showFormAddComment=false;
@@ -236,19 +235,20 @@ export class SuiviComponent implements OnInit {
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
-      description: this.TicketForm.value.description,
-
-      //document:this.TicketForm.value//TODO
+      description: this.TicketForm.value.description
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
      
       try{
         this.ticketList.push(data.doc)
-        this.TicketForm.reset();
+        this.TicketForm.reset()
+        this.TicketForm.setValue({description:null,sujet:'',service:''})
 
       }catch (e){
         this.ticketList = [data.doc]
+        this.TicketForm.reset()
+        this.TicketForm.setValue({description:null,sujet:'',service:''})
       }
       this.toggleFormAdd()
 
@@ -259,11 +259,9 @@ export class SuiviComponent implements OnInit {
   }
 
   onChange(event) {
-    console.log(event)
-    console.log(this.TicketForm.get("service"))
-    /*this.TicketForm.patchValue({
-      sujet: this.listSujets[event.value.service._id][0]
-    })*/
+    this.TicketForm.patchValue({
+      sujet: this.listSujets[this.TicketForm.value.service._id][0]
+    })
   }
 
   onChange2() {
@@ -293,7 +291,6 @@ export class SuiviComponent implements OnInit {
   }
   SendComment() {
     let isrep;
-    console.log(this.selectedTicket)
     if (this.selectedTicket.agent_id!=jwt_decode(localStorage.getItem('token'))['id']) {
         isrep=true
     }
