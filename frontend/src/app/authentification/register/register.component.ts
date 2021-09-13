@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
       this.RegisterForm.value.password,
-      this.RegisterForm.value.role.value || "Utilisateur", null,
+      this.RegisterForm.value.role.value || "user", null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value
