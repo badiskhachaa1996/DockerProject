@@ -21,6 +21,10 @@
                                         {{ service.label }}
                                     </option>
                                 </select>
+
+            
+
+
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Sujet:
@@ -145,8 +149,8 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <div *ngIf="retour" >
-            <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  
+        <div *ngIf="retour"   >
+            <a  [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  
         </div>
 
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"

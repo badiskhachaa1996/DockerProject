@@ -1,7 +1,10 @@
 ng-template{
   overflow-y: hidden;
 }
-
+.retour{
+  font-weight: bold;
+  font-size: 20px;
+}
 #messageAgent{
 
   border-radius: 15px;
