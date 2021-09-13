@@ -44,8 +44,6 @@ export class AppTopBarComponent implements OnInit {
   constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
 
   ngOnInit() {
-    console.log("root :" +this.currentRoot);
-
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
