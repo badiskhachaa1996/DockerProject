@@ -37,6 +37,19 @@ const ticket_schema= new mongoose.Schema({
     description:{
         type:String,
         required:true
+    },
+    isReverted:{
+        type:Boolean
+    },
+    justificatif:{
+        type:String,
+        default:""
+    },
+    date_revert:{
+        type:Date
+    },
+    user_revert:{
+        type:String
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

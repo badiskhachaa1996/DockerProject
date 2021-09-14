@@ -21,6 +21,10 @@
                                         {{ service.label }}
                                     </option>
                                 </select>
+
+            
+
+
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 Sujet:
@@ -239,7 +243,7 @@
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
-                                    <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+                                    <span class="ui-g-11 ui-md-11" id="messageAgent"> {{message.description}} </span>
 
                                 </div>
 
@@ -260,7 +264,7 @@
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
                                     </button>
-                                    <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
+                                    <span class="ui-g-12 ui-md-11" id="messageUser"> {{message.description}} </span>
                                 </div>
                                 <span id="soustitre" class=" ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
