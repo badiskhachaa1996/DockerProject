@@ -119,7 +119,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id,statut:{$ne:"Traité"} })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -153,7 +153,7 @@ app.post("/updateFirst/:id", (req, res) => {
                     from: 'estya-ticketing@estya.com',
                     to: userFromDb.email,
                     subject: 'Notification E-Ticketing',
-                    html: '<h3>Notification ! Votre Ticket ' + user._id + 'a été Modifié !</h3><footer> <img  src="red"/></footer>',
+                    html: '<h3>Notification ! Votre Ticket <<' + user.description + ' >> a été Modifié !</h3><footer> <img  src="red"/></footer>',
                     attachments: [{
                         filename: 'signature.png',
                         path: 'assets/signature.png',
@@ -290,7 +290,7 @@ app.post("/AccAff/:id", (req, res) => {
                    
                     
 
-                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + UserDB.lastname + '</p> <p style="color:black"> Le ticket ' + user._id + '  vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
+                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Le Ticket : << ' + user.description + ' >> vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -336,7 +336,7 @@ app.post("/changeService/:id", (req, res) => {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
-                        html: '<h3>Notification ! Le ticket ' + ticket._id + '  a été modifié au niveau du service ou du sujet </h3><img  src="red"/>',
+                        html: '<h3>Notification ! Ticket ' + ticket._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
                         attachments: [{
                             filename: 'signature.png',
                             path: 'assets/signature.png',
@@ -386,7 +386,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre Ticket   ' + user._id + '    est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre Ticket  << ' + user.description + '  >>  est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
@@ -420,7 +420,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             from: 'estya-ticketing@estya.com',
                             to: UserDB.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:green">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre ticket   ' + user._id + '    a été traité   </p><p>Connectez vous sur l\'application afin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html: '<h3 style="color:green">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket  << ' + user.description+ '   >> à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
@@ -443,8 +443,6 @@ app.post("/changeStatut/:id", (req, res) => {
 
 
 
-                }else{
-                    res.status(200).send(user)
                 }
 
 
@@ -452,9 +450,9 @@ app.post("/changeStatut/:id", (req, res) => {
 
         })
 });
-//Get All Tickets Accepted or Affected
+//Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" },{statut:"Traité"}] })
     .then(result => {
         res.status(200).send(result.length > 0 ? result : [])
     })

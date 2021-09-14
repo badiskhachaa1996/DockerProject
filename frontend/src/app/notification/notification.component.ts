@@ -15,16 +15,15 @@ export class NotificationComponent implements OnInit {
   listTicket: any[] = [];
   sujetDic: any[] = [];
   retour: boolean = false;
-  // nnotifications : boolean = false;
-  constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) { }
+  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService) { }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
-    
+
     this.token = jwt_decode(localStorage.getItem("token"))
 
     if (this.token["role"].includes("user")) {
-      this.retour= true;
+      this.retour = true;
     }
 
     let token = localStorage.getItem("token")
@@ -33,19 +32,22 @@ export class NotificationComponent implements OnInit {
     //  });
     // }
     // public get20ByUserID(){
-    
+
     if (token) {
-     
+
 
       token = jwt_decode(token)
       this.NotificationService.get20ByUserID(token["id"])
         .subscribe(
           data => {
             this.notifications = data;
-            console.log(data)
-            // if(data.length==0){
-            //   this.nnotifications = false;
-            // }
+            this.NotificationService.viewNotifs(this.notifications)
+              .subscribe(
+                response => {
+                },
+                error => {
+                  console.log(error);
+                });
           },
           error => {
             console.log(error);
@@ -61,38 +63,12 @@ export class NotificationComponent implements OnInit {
           error => {
             console.log(error);
           });
-          this.SujetService.getAll().subscribe(data=>{
-            data.forEach(sujet => {
-              this.sujetDic[sujet._id]=sujet;
-            });
-          })
+      this.SujetService.getAll().subscribe(data => {
+        data.forEach(sujet => {
+          this.sujetDic[sujet._id] = sujet;
+        });
+      })
     }
 
   }
-  retirer(notification): void {
- 
-
-    this.NotificationService.viewNotifByID(notification._id)
-      .subscribe(
-        response => {
-          this.notifications.splice(this.notifications.indexOf(notification), 1);
-          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
-        },
-        
-        error => {
-          console.log(error);
-        });
-  }
-  retirertout() {
-    this.NotificationService.viewNotifs(this.notifications)
-      .subscribe(
-        response => {
-          this.notifications = [];
-          this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
 }
