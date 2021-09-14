@@ -49,22 +49,19 @@ app.post("/create", (req, res) => {
 
 
     message.save((err, msg) => {
-        res.send({ message: "Votre message a été crée!", doc: msg });
+     
         let createur_id;
         Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
             createur_id = tickFromDb.createur_id
-            console.log("createur du ticket : " + createur_id)
+           
 
-
-
-            let UserDB;
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
-                UserDB = userFromDb
+                
                 console.log("createur du ticket : " + createur_id)
-                console.log("agent du ticket : " + UserDB._id)
+                console.log("agent du ticket : " + userFromDb._id)
 
                 if (msg.isRep) {
-                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black"> Bonjour ' + UserDB.lastname + ' ' + UserDB.firstname + ', </p> </br> <p>  une reponse a été publié pour le ticket' + msg.ticket_id + ' </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<h3 style="color:red">Notification ! </h3><p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p> </br> <p style="color:black">  une réponse a été publié pour le ticket :<< ' + tickFromDb.description + '  >> </p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -83,18 +80,22 @@ app.post("/create", (req, res) => {
                             console.log(error);
                             res.status(500).send({message:error,doc:msg})
                         } else {
+                            
+                           
                             console.log('Email sent: ' + info.response);
-                            res.send({ message: "Votre message a été crée!", doc: msg });
                         }
+                        
+                        
                     });
                 }
-                else {
-                    res.send({ message: "Votre message a été crée!", doc: msg });
+                else {  
+                    console.log('not reponse');
                 }
+                res.send({ message: "Votre message a été crée!", doc: msg });
 
             }).catch((error) => {
                 res.status(404).send("erreur :" + error);
-            })
+            });
 
         }).catch((error) => {
             res.status(404).send("erreur :" + error);

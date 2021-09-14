@@ -38,7 +38,7 @@ app.post("/registre", (req, res) => {
     user.save().then((userFromDb) => {
         res.status(200).send(userFromDb);
 
-        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><h3 style="color:orange">Felicitation !</h3><p style="color:black"> Votre compte E-Ticketing a été crée avec succés</p><p>Cordialement,</p><footer> <img  src="red"/></footer>';
+        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><p style="color:black"> <span style="color:orange">Felicitation ! </span> Votre compte E-Ticketing a été crée avec succés</p><p style="color:black">Cordialement,</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
