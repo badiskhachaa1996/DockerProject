@@ -95,4 +95,9 @@ export class TicketService {
     return this.http.post<any>(registreUrl,data,httpOptions1);
   }
 
+  revert(data){
+    let registreUrl=this.apiUrl+"revertTicket/"+data.id;
+    return this.http.post<any>(registreUrl,data,httpOptions);
+  }
+
 }

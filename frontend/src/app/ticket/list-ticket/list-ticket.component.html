@@ -72,6 +72,25 @@
         </p-card>
     </div>
 </div>
+<div class="p-grid mt-2" *ngIf="showRevert!=null">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
+                <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
+                    <h3 class="text-center" style="color: green; font-weight: bold;">Revert un ticket</h3>
+                    <div class="text-center">
+                        <label style="float:left">Justificatif</label>
+                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
+                            autoResize="autoResize" placeholder="Saisir un message" placeholder="Justificatif"></textarea>
+                    </div><br>
+                        <button [disabled]="RevertForm.invalid" pButton
+                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
@@ -119,7 +138,8 @@
                         </td>
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="QueueToAccAff(rowData)" *ngIf="rowData.createur_id!=token['id']"></i>
+                                (click)="QueueToAccAff(rowData)"></i>
+                                <!--*ngIf="rowData.createur_id!=token['id']"-->
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -199,6 +219,31 @@
                                     </div>
                                 </div>
                             </p-fieldset>
+                            <p-fieldset *ngIf="rowData.isReverted" legend="Informations du renvoie"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Envoyeur:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{userDic[rowData.createur_id].firstname |
+                                                titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
+                                                }} </div>
+                                    </div>
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Justificatif:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.justificatif}}</div>
+                                    </div>
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Date:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.date_revert | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    </div>
+                                </div>
+                            </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>
@@ -212,8 +257,8 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length">
-                <ng-template pTemplate="header" let-columns>
+                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length" [expandedRowKeys]="expandedTraitement">
+                <ng-template pTemplate="header" let-columns >
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;">
@@ -266,7 +311,7 @@
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData) "> </i>
-
+                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -402,7 +447,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
             [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length">
+                [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length" [expandedRowKeys]="expandedAll">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
@@ -426,6 +471,9 @@
                         </th>
                         <th style="text-decoration: underline;">
                             Statut
+                        </th>
+                        <th *ngIf="token['role']!='Agent'">
+                            Action
                         </th>
                     </tr>
                 </ng-template>
@@ -460,11 +508,14 @@
                         <td>
                             {{rowData.statut}}
                         </td>
+                        <td *ngIf="token['role']!='Agent'">
+                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
+                        </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
-                        <td [attr.colspan]="8">
+                        <td [attr.colspan]="(token['role']!='Agent')? 9 : 8">
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
