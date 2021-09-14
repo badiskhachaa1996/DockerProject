@@ -67,10 +67,6 @@ io.on("connection", (socket) => {
         io.to(data.userid).emit('NewNotif', data.notif)
         io.emit(data.notif,{NewNotif:  data.notif});
     })
-
-    socket.on('reloadNotif',(data)=>{
-        io.to(data.id).emit('reloadNotif')
-    })
 });
 
 httpServer.listen(3000, () => {

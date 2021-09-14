@@ -48,5 +48,4 @@ export class ServService {
     let registreUrl=this.apiUrl+"getDic";
     return this.http.get<any>(registreUrl,httpOptions);
   }
-
 }

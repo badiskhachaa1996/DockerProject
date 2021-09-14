@@ -9,8 +9,8 @@
             [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
             <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                 <div class="not" *ngIf="notif">
-                    <i tooltipPosition="bottom" class="pi pi-inbox"style="cursor: pointer; color: red; position:absolute; font-size:20px; margin-left: 160px;"></i>
-                    <div class="number" style="margin-left: 40px; font-weight:bold; color: red; font-size: 12px; margin-left: 180px;">
+                    <i tooltipPosition="bottom" class=" pi pi-circle-on"style="cursor: pointer; color: red; position:absolute; font-size: 37px; margin-left: 180px;"></i>
+                    <div class="number" style="margin-left: 68px; font-weight:bold; color:white; font-size: 13px; margin-left: 195px; position: relative; z-index: 10; padding-top: 10px;">
                         {{Notifications.length}}
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
                             <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
             </div>
-                <img src="../assets/images/avatar.PNG" style="width: 30px; height: 30px;">
+                <img src="../assets/images/avatar.PNG" style="width: 39px; height: 39px;">
             </a>
             <ul class="fadeInDown">
                 <li class="profile-detail">
@@ -37,9 +37,9 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                    <a href="#" (click)="app.onTopbarItemClick($event,profile);editUser(rowData);">
                         <i style="color: #3da827;" class="pi pi-user"></i>
-                        <div class="menu-text">
+                        <div class="menu-text" routerLink="modification" (click)="editUser(rowData);">
                             <span class="menu-title">Profil</span>
                             <span class="menu-subtitle">Modifier votre profil</span>
                         </div>

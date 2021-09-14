@@ -149,10 +149,6 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <div *ngIf="retour"   >
-            <a  [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  
-        </div>
-
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
@@ -247,7 +243,7 @@
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
-                                    <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
+                                    <span class="ui-g-11 ui-md-11" id="messageAgent"> {{message.description}} </span>
 
                                 </div>
 
@@ -268,7 +264,7 @@
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
                                     </button>
-                                    <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
+                                    <span class="ui-g-12 ui-md-11" id="messageUser"> {{message.description}} </span>
                                 </div>
                                 <span id="soustitre" class=" ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 

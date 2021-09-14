@@ -14,6 +14,7 @@ import { RowToggler } from 'primeng/table';
 import { parse } from 'querystring';
 
 import { AccordionModule } from 'primeng/accordion';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -32,14 +33,19 @@ export class ListUserComponent implements OnInit {
   showFormAdd : boolean =false;
   add : boolean =true;
 
+  serviceDic: Service[]= [];
+
  public showForm: string = "Ajouter";
   loading: boolean;
  
   selectedUser: User;
   formtype: string = "edit";
-  constructor(private AuthService: AuthService, private router: Router) { }
+  genderMap: any = {'Monsieur': 'Mr.', 'Madame': 'Mme.', 'other': 'Mel.'};
+  constructor(private AuthService: AuthService, private router: Router, private ServService:ServService) { }
 
   ngOnInit(): void {
+
+    
 
     let token =null
     try{
@@ -56,23 +62,17 @@ export class ListUserComponent implements OnInit {
       this.router.navigate(["/ticket/suivi"])
     }
 
-   
-    this.AuthService.getAllAgent().subscribe((data) => {
-      this.tabUser = data;
-      this.totalRecords = this.tabUser.length;
+    this.AuthService.getAllAgent().subscribe((users) => {
+      this.tabUser = users;
     })
 
-    this.cols = [
-      
-      { field: 'role', header: 'Role' },
-      { field: 'lastname', header: 'Nom' },
-      { field: 'firstname', header: 'Prenom' },
-      { field: 'email', header: 'Email' },
-      { field: 'phone', header: 'Téléphone' },
-      { field: 'adresse', header: 'Adresse' },
-      { field:"civilite",header:"Civilité"},
-      { field: 'action', header: "Action" }
-    ];
+    this.ServService.getAll().subscribe((services)=>{
+      services.forEach(serv => {
+        this.serviceDic[serv._id]=serv;
+      });
+    })
+
+
     this.loading = true;
   }
 

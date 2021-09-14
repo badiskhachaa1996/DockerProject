@@ -38,7 +38,7 @@ app.post("/registre", (req, res) => {
     user.save().then((userFromDb) => {
         res.status(200).send(userFromDb);
 
-        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><h3 style="color:orange">Felicitation !</h3><p style="color:black"> Votre compte E-Ticketing a été crée avec succés</p><p>Cordialement,</p><footer> <img  src="red"/></footer>';
+        let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><p style="color:black"> <span style="color:orange">Felicitation ! </span> Votre compte E-Ticketing a été crée avec succés</p><p style="color:black">Cordialement,</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
@@ -103,7 +103,6 @@ app.get("/getAll",(req,res)=>{
 
 
 app.post("/updateById/:id", (req, res) => {
-    console.log(req.body)
     User.findOneAndUpdate({_id:req.params.id},
         {
             civilite:req.body.civilite,
@@ -118,7 +117,6 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            console.log(user)
             res.send(user)
         })
 })

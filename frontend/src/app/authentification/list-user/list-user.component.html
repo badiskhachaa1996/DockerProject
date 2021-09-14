@@ -1,41 +1,91 @@
-<div *ngIf="showForm=='Fermer'" >
-     <div *ngIf="formtype=='new'">
-    
+<div *ngIf="showForm=='Fermer'">
+    <div *ngIf="formtype=='new'">
+
         <app-register></app-register>
-   
-    </div>    
+
+    </div>
 
     <div *ngIf="formtype=='edit'">
-    <app-upduser></app-upduser>
+        <app-upduser></app-upduser>
     </div>
 </div>
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()" *ngIf="showForm=='Ajouter'">  </button>
-             <h3>Liste des utilisateurs</h3>
+        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"
+            *ngIf="showForm=='Ajouter'"> </button>
+        <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
             <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" selectionMode="single" dataKey="email"
-               
-               [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"> 
-               
+                [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"
+                rowExpandMode="single">
+
                 <ng-template pTemplate="header" let-columns>
-              
-                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" >
-                            {{col.header}}
-                            <span>
-                                <p-sortIcon [field]="col.field"></p-sortIcon>
-                            </span>
-                        </th>           
+                    <th style="width: 3rem"></th>
+                    <th>Nom et Prénom</th>
+                    <th>
+                        Service
+                    </th>
+                    <th>
+                        Role
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Action
+                    </th>
                 </ng-template>
-                
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData"  class="bodytab">
-                        <td *ngFor="let col of columns"> 
-                           {{rowData[col.field]}}
-                           <i class="pi pi-user-edit" (click)="modify(rowData) " *ngIf='col.field=="action"'></i>
+
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
+                    <tr [pSelectableRow]="rowData" class="bodytab">
+                        <td>
+                            <button type="button" pButton [pRowToggler]="rowData" class="expanded"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                ></button>
+                        </td>
+                        <td>
+                            {{rowData.civilite | i18nSelect: genderMap}} {{rowData.lastname | titlecase}} {{rowData.firstname | titlecase}}
+                        </td>
+                        <td *ngIf="rowData.service_id">
+                            {{ serviceDic[rowData.service_id].label }}
+                        </td>
+                        <td *ngIf="!rowData.service_id">
+                            Sans Service
+                        </td>
+                        <td>
+                            {{rowData.role}}
+                        </td>
+                        <td>
+                            {{rowData.email}}
+                        </td>
+                        <td>
+                            <i class="pi pi-user-edit" (click)="modify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr style="text-align: left; margin-left: 2em; background-color:white;">
+                        <td [attr.colspan]="6">
+                            <p-fieldset legend="Informations du ticket"
+                                [style]="{'color':'green','font-weight': 'bold'}">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Téléphone:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.phone}} </div>
+                                    </div>
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Adresse:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.adresse}}</div>
+                                    </div>
+                                </div>
+                            </p-fieldset>
                         </td>
                     </tr>
                 </ng-template>

@@ -11,9 +11,13 @@ export class Ticket {
         public temp_traitement?:string,
         public temp_fin?:string,
         public isAffected?:boolean,
-        public description?:string
+        public description?:string,
+        public isReverted?:boolean,
+        public justificatif?:string,
+        public date_revert?:Date,
+        public user_revert?:string
+
     ){}
 
    
 }
-  
