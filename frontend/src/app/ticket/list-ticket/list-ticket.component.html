@@ -8,7 +8,7 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            Service
+                            <label style="color: #3da827; font-weight: bold;">Service:</label>
 
                             <select formControlName="service" class="form-control col-12" >
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
@@ -18,7 +18,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            Sujet:
+                            <label style="color: #3da827; font-weight: bold;">Sujet:</label>
                             <select [disabled]="!TicketForm.value.service" formControlName="sujet"
                                 class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un sujet</option>
@@ -42,12 +42,12 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                    <h3 class="text-center" style="color: green; font-weight: bold;">Envoyer un message</h3>
+                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Envoyer un message</h3>
                     <div class="text-center">
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-                    <label style="color: green; font-weight: bold; margin-left: 710px;">Statut du ticket :     </label>
+                    <label style="color: #3da827; font-weight: bold; margin-left: 710px;">Statut du ticket :     </label>
                     <div style="margin-left: 130px;">
                         <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
@@ -74,14 +74,14 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
-                    <h3 class="text-center" style="color: green; font-weight: bold;">Revert un ticket</h3>
-                    <div class="text-center">
-                        <label style="float:left">Justificatif</label>
-                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
-                            autoResize="autoResize" placeholder="Saisir un message" placeholder="Justificatif"></textarea>
+                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue d'entrée</h3><br>
+                    <label style="color: #3da827; font-weight: bold;">Justificatif</label>
+                    <div class="text-center"><br>
+                        <textarea formControlName="Justificatif" rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message" placeholder="Expliquer la raison de votre renvoie"></textarea>
                     </div><br>
-                        <button [disabled]="RevertForm.invalid" pButton
-                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                    <div class="text-center">
+                        <button class="col-offset-5 xl:col-offset-5 sm:col-offset-4" [disabled]="RevertForm.invalid" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                    </div>
                 </form>
             </div>
         </p-card>
@@ -102,8 +102,7 @@
             [responsive]="true" 
             rowExpandMode="single" 
             [totalRecords]="queueList.length"
-            [globalFilterFields]="['sujet_id','description','date_ajout']"  
-            >
+            [globalFilterFields]="['sujet_id','description','date_ajout']">
 
             <ng-template pTemplate="caption">
                 <div class="p-d-flex" style="text-align: right">
@@ -289,7 +288,7 @@
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"/>
                         </span>
                     </div>
                 </ng-template>
@@ -360,7 +359,7 @@
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData) "> </i>
-                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -576,7 +575,7 @@
                             {{rowData.statut}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
-                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
