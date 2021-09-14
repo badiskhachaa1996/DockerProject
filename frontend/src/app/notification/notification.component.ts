@@ -22,7 +22,7 @@ export class NotificationComponent implements OnInit {
 
     this.token = jwt_decode(localStorage.getItem("token"))
 
-    if (this.token["role"].includes("user")) {
+    if (this.token["role"].includes("User")) {
       this.retour = true;
     }
 

@@ -127,7 +127,7 @@
                         </th>
                         <th style="text-decoration: underline;" pSortableColumn="date_ajout">  Date de création <p-sortIcon field="date_ajout"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="tempsAt">  Temps d'attente <p-sortIcon field="tempsAt"></p-sortIcon>
+                        <th style="text-decoration: underline;" pSortableColumn="showWaitingTime(rawData)">  Temps d'attente <p-sortIcon field="showWaitingTime(rawData)"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;">
                             Action
@@ -327,7 +327,7 @@
                         
                             <span>
                                 Statut <p-sortIcon field="statut"></p-sortIcon>
-                                <p-dropdown formControlName="statut" [style]="{'width':'60%'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+                                <p-dropdown formControlName="statut" [style]="{'width':'18px'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                             </span>
                         </th>
                         <th style="text-decoration: underline;">

@@ -1,14 +1,22 @@
 <div class="grid">
-    <div *ngIf="notifications.length==0 ">
-        <div >Vous n'avez aucune notifications pour le moment
-        </div>
-    </div>  
     
-    <div class="col-10 col-offset-1" *ngIf="notifications.length!==0">
-        
         <div *ngIf="retour" >
             <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  / <a [routerLink]= "['/notification']"> Page des notifications </a> 
         </div>
+            
+        <div class="col-md-12" *ngIf="notifications.length==0 ">
+            <div class="col-10 col-offset-1" >
+                Vous n'avez aucune notifications pour le moment
+            </div>
+        </div> 
+        
+        
+    <div class="col col-offset-1" *ngIf="notifications.length!==0">
+        
+        
+
+
+    
         <h3>Notifications</h3>
         <div class="card shadow-lg timeline"  >
             <div >
