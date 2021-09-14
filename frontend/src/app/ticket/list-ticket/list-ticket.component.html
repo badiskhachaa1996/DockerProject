@@ -156,7 +156,6 @@
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
                                 (click)="QueueToAccAff(rowData)"></i>
-                                <!--*ngIf="rowData.createur_id!=token['id']"-->
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -175,6 +174,13 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData._id}} </div>
+                                    </div>
+                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
@@ -302,8 +308,8 @@
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;">
-                            Service
+                        <th style="text-decoration: underline;" pSortableColumn="service_id"> 
+                            Service  <p-sortIcon field="service_id"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;"pSortableColumn="sujet_id">  Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
                         </th>
@@ -317,10 +323,10 @@
                         <th style="text-decoration: underline;">
                             Désignation
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;" pSortableColumn="statut">
                         
                             <span>
-                                Statut
+                                Statut <p-sortIcon field="statut"></p-sortIcon>
                                 <p-dropdown formControlName="statut" [style]="{'width':'60%'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                             </span>
                         </th>
@@ -370,10 +376,18 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
-                        <td [attr.colspan]="7">
+                        <td [attr.colspan]="8">
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData._id}} </div>
+                                    </div>
+                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
@@ -590,6 +604,14 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData._id}} </div>
+                                    </div>
+                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>

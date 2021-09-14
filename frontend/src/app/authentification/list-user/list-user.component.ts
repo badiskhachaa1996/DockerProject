@@ -40,7 +40,7 @@ export class ListUserComponent implements OnInit {
  
   selectedUser: User;
   formtype: string = "edit";
-  genderMap: any = {'Monsieur': 'Mr.', 'Madame': 'Mme.', 'other': 'Mel.'};
+  genderMap: any = {'Monsieur': 'Mr.', 'Madame': 'Mme.',undefined:'', 'other': 'Mel.'};
   constructor(private AuthService: AuthService, private router: Router, private ServService:ServService) { }
 
   ngOnInit(): void {

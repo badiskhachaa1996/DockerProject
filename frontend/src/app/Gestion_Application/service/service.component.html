@@ -59,10 +59,7 @@
 
     <!-- tableau -->
     <div class="grid">
-        <div class="ui-table-globalfilter-container">
-            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" 
-            placeholder="Global Search" style="" />
-        </div>
+       
         <div class="col-10 col-offset-1">
 
             <button *ngIf="!showFormAddService" pButton class="ui-button-raised ui-button-success"
@@ -70,15 +67,29 @@
             <h3>Liste des services</h3>
      
             <div class="col-12 card shadow-lg my-5 ">
-                <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
-                    [(selection)]="currentService" (onRowSelect)="onRowSelect($event)"
-                    (onRowUnselect)="onRowUnselect($event)" [rows]="4" [paginator]="true" [pageLinks]="5"
-                    [responsive]="true" [totalRecords]="services.length" [filterDelay]="0" 
-                    [globalFilterFields]="['currentService']">
+                <p-table #dt1 *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
+                    [(selection)]="currentService" 
+                    (onRowSelect)="onRowSelect($event)"
+                    (onRowUnselect)="onRowUnselect($event)" 
+                    [rows]="4" 
+                    [paginator]="true" 
+                    [pageLinks]="5"
+                    [responsive]="true" 
+                    [totalRecords]="services.length" 
+                    [filterDelay]="0" 
+                    [globalFilterFields]="['label']">
+
+                    <ng-template pTemplate="caption">
+                        <div class="p-d-flex" style="text-align: right">
+                            <span class="p-input-icon-left p-ml-auto">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            </span>
+                        </div>
+                    </ng-template>
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th class="col-8 col-offset-4" style="text-decoration: underline;">
-                                Service
+                            <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label"> Service <p-sortIcon field="service_id"></p-sortIcon>
                             </th>
                             <th class="col-4 col-offset-2" style="text-decoration: underline;">
                                 Action
@@ -171,16 +182,36 @@
             label="Ajouter"></button>
         <h3>{{currentService.label}}: Liste des sujets </h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="sujetShow" [columns]="cols" [value]="sujetShow" [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="sujetShow.length">
+            <p-table #dt1
+            *ngIf="sujetShow" 
+            [columns]="cols" 
+            [value]="sujetShow" 
+            [rows]="4" 
+            [paginator]="true"
+            [pageLinks]="5" 
+            [responsive]="true" 
+            [totalRecords]="sujetShow.length"
+            [globalFilterFields]="['label']"
+            >
                 <ng-template pTemplate="header" let-columns>
-                    <th class="col-8 col-offset-4" style="text-decoration: underline;">
-                        Sujet
+                    <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label"> Sujet  
+                        <p-sortIcon field="service_id"></p-sortIcon>
+                    
                     </th>
                     <th class="col-4 col-offset-2" style="text-decoration: underline;">
                         Action
                     </th>
                 </ng-template>
+
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
                         <td *ngFor="let col of columns">
