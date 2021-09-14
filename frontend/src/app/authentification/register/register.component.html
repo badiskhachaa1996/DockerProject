@@ -47,12 +47,10 @@
                                     <label for="email" class="p-sr-only">Adresse mail :</label>
                                     </div>
                                 <input type="text" formControlName="email" class="form-control col-12" placeholder="Adresse mail" pInputText>
-                             
                                 <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
                                     <span class="error" *ngIf="email.errors?.required">*L'adresse mail est obligatoire.</span>
                                     <span class="error" *ngIf="email.errors?.pattern">*L'email n'est pas correct.</span>
-                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span>
-                                    
+                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span> 
                                 </div>
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
