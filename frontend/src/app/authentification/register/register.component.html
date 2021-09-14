@@ -93,22 +93,22 @@
                                     <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
-                                <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12" >
+                                </div>
+                                <div *ngIf=IsAdmin class="mt-2 mb-2 col-lg-12 col-12" >
                                     
-                                    <span  class="mt-2 mb-2 col-lg-12 col-12">
-                                        <div>
-                                            <label for="verifypassword" class="p-sr-only">Vérifier le mot de passe  :</label>
-                                            </div>
+                                    
+                                        
+                                            <label for="role" class="p-sr-only">Role :</label>
+                                            
                                          <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
-                                     </span>
-                                     <span  class="mt-2 mb-2 col-lg-12 col-12"> 
-                                        <div>
-                                            <label for="verifypassword" class="p-sr-only">Vérifier le mot de passe  :</label>
-                                            </div>
+                                       
+                                       
+                                            <label for="service_id" class="p-sr-only">Service:</label>
+                                            
                                          <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
-                                  </span> 
+                                        
                                  </div>
-                            </div>
+                            
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>
                             </div>
