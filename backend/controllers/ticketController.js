@@ -87,7 +87,7 @@ app.get("/getAll", (req, res) => {
 
 //Récupérer tous les tickets d'un User
 app.get("/getAllbyUser/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id })
+    Ticket.find({ createur_id: req.params.id },null,{sort:{date_ajout:1}})
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -107,7 +107,7 @@ app.get("/getFirstMessage/:id", (req, res) => {
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
-    Ticket.find({ statut: "Queue d'entrée" })
+    Ticket.find({ statut: "Queue d'entrée" },null,{sort:{date_ajout:1}})
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -119,7 +119,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id })//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id },null,{sort:{date_affec_accep:1}})//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -143,17 +143,18 @@ app.post("/updateFirst/:id", (req, res) => {
 
             console.log(user.createur_id)
             res.send( user );
-           
+          /*
             User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                
-                
 
 
+
+                let html1 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour  '+userFromDb.firstname+' '+userFromDb.lastname+', '+ ' </P> <p style="color:black"> Votre ticket  << Id : ' + user._id + ' >> a été modifié ! </p><p style="color:black">Cordialement,</p> <footer> <img  src="red"/> </footer>';
+                   
                 let mailOptions = {
                     from: 'estya-ticketing@estya.com',
                     to: userFromDb.email,
                     subject: 'Notification E-Ticketing',
-                    html: '<h3>Notification ! Votre Ticket <<' + user.description + ' >> a été Modifié !</h3><footer> <img  src="red"/></footer>',
+                    html: html1,
                     attachments: [{
                         filename: 'signature.png',
                         path: 'assets/signature.png',
@@ -171,7 +172,7 @@ app.post("/updateFirst/:id", (req, res) => {
                 });
             }).catch((error) => {
                 res.status(404).send("erreur :" + error);
-            })
+            }) */
 
         })
 });
@@ -189,7 +190,7 @@ app.get("/getTicketsByService/:id", (req, res) => {
 
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] },null,{sort:{date_affec_accep:1}})
                 .then(result => {
                     result.forEach(ticket => {
                         if (listSujetofService.includes(ticket.sujet_id.toString())) {
@@ -216,11 +217,11 @@ app.get("/getQueueByService/:id", (req, res) => {
     Sujet.find()
         .then(listSujets => {
             listSujets.forEach(sujet => {
-                if(sujet.service_id==id){
+                if (sujet.service_id == id) {
                     listSujetofService.push(sujet._id.toString())
                 }
             });
-            Ticket.find({ statut: "Queue d'entrée" })
+            Ticket.find({ statut: "Queue d'entrée" },null,{sort:{date_ajout:1}})
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -251,7 +252,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id)
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] },null,{sort:{date_affec_accep:1}})
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -284,18 +285,18 @@ app.post("/AccAff/:id", (req, res) => {
             } else {
                 console.log(user.createur_id)
 
-                
+
                 res.send(user);
                 User.findOne({ _id: user.agent_id }).then((userFromDb) => {
-                   
-                    
 
-                    let htmlemail = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Le Ticket : << ' + user.description + ' >> vous a été  affecter </p></br></br><p style="color:black">Cordialement,</p> <img  src="red"/> ';
+
+
+                    let html2 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Le ticket : << ' + user.description + ' >> vous a été  affecter </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
-                        html: htmlemail,
+                        html: html2,
                         attachments: [{
                             filename: 'signature.png',
                             path: 'assets/signature.png',
@@ -328,15 +329,18 @@ app.post("/changeService/:id", (req, res) => {
                 res.send(err)
             } else {
 
-                console.log(ticket.createur_id)
+                
 
                 res.status(200).send(ticket)
+                console.log(ticket.createur_id)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
+                    let html3 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Nous avons modifié  le service et le sujet de votre ticket <<'+ticket.description+'>></p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
                         subject: 'Notification E-Ticketing',
-                        html: '<h3>Notification ! Ticket ' + ticket._id + ' Modifié au niveau de service et sujet </h3><img  src="red"/>',
+                        html: html3,
                         attachments: [{
                             filename: 'signature.png',
                             path: 'assets/signature.png',
@@ -378,15 +382,16 @@ app.post("/changeStatut/:id", (req, res) => {
                 if (user.statut == "En attente d\'une réponse") {
 
 
-                    
+
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                         
-
+                        let html4 = '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre ticket  << ' + user.description + '  >>  est en attente d\'une réponse  </p><p>Une réponse est attendue de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                    
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre Ticket  << ' + user.description + '  >>  est en Attente d\' une reponse   </p><p>Une reponse est attendu de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html:html4,
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
@@ -410,17 +415,17 @@ app.post("/changeStatut/:id", (req, res) => {
                 }
                 else if (user.statut === "Traité") {
 
-                    let UserDB;
+                   
                     let agentService;
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        UserDB = userFromDb
-
+                        
+                        let html5 ='<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> votre ticket  << ' + user.description+ '   >> à été traité   </p><p>Connectez vous sur l\'application pour consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
-                            to: UserDB.email,
+                            to: userFromDb.email,
                             subject: 'Notification E-Ticketing',
-                            html: '<h3 style="color:green">Notification !<p style="color:black"> Bonjour  M.' + UserDB.lastname + ',</p><p style="color:black"> Votre Ticket  << ' + user.description+ '   >> à été traité   </p><p>Connectez vous sur l\'application a fin de consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ',
+                            html: html5,
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
@@ -452,12 +457,35 @@ app.post("/changeStatut/:id", (req, res) => {
 });
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" },{statut:"Traité"}] })
-    .then(result => {
-        res.status(200).send(result.length > 0 ? result : [])
-    })
-    .catch(err => {
-        console.log(err);
-    })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] },null,{sort:{date_affec_accep:1}})
+        .then(result => {
+            res.status(200).send(result.length > 0 ? result : [])
+        })
+        .catch(err => {
+            console.log(err);
+        })
+})
+
+app.post("/revertTicket/:id", (req, res) => {
+    Ticket.findOneAndUpdate({ _id: req.params.id },
+        {
+                isReverted: true,
+                justificatif: req.body.justificatif,
+                isAffected: null,
+                date_affec_accep: null,
+                agent_id: null,
+                statut: "Queue d'entrée",
+                date_revert: Date.now(),
+                user_revert: req.body.user_revert
+
+        }, {upsert: true, new: true }).then((docs)=>{
+            if(docs) {
+               res.status(200).send(docs)
+            } else {
+              res.status(500).send(docs)
+            }
+        }).catch((err)=>{
+            res.status(500).send(err)
+        });
 })
 module.exports = app;
