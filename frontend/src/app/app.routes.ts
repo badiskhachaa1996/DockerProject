@@ -19,6 +19,7 @@ import {NotificationComponent} from './notification/notification.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
+  
     { path:'login',component:LoginComponent},
     { path:'register',component:RegisterComponent},
     { path:'service',component:ServiceComponent},

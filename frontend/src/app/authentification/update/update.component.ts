@@ -85,7 +85,7 @@ export class UpdateUserComponent implements OnInit {
     this.AuthService.getById(this.listUserComponent.selectedUser._id).subscribe((data) => {
       this.userupdate = jwt_decode(data['userToken'])['userFromDb']
 
-    }, (err) => console.log(err))
+    }, (err) => console.log(err) )
 
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
