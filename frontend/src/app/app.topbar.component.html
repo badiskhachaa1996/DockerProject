@@ -37,9 +37,9 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                    <a href="#" (click)="app.onTopbarItemClick($event,profile);editUser(rowData);">
                         <i style="color: #3da827;" class="pi pi-user"></i>
-                        <div class="menu-text">
+                        <div class="menu-text" routerLink="modification" (click)="editUser(rowData);">
                             <span class="menu-title">Profil</span>
                             <span class="menu-subtitle">Modifier votre profil</span>
                         </div>
@@ -67,6 +67,10 @@
 
 
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 18fe139f1a4a58fa39fd7a6c265635eb983ada6d
 
 
 

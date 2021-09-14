@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
+import { ModifierProfilComponent } from './modifier-profil/modifier-profil.component';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
@@ -26,6 +27,7 @@ const routes: Routes = [
     { path:'listUser', component: ListUserComponent},
     { path: 'reset', component: ResetMdpComponent},
     { path: 'notification', component: NotificationComponent},
+    { path: 'modification', component: ModifierProfilComponent },
   
 
     // { path: '**', redirectTo: '/' }

@@ -93,6 +93,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
+import { ModifierProfilComponent } from './modifier-profil/modifier-profil.component';
 
 
 
@@ -197,6 +198,7 @@ import {MenuItem} from 'primeng/api';
         NavbarComponent,
         ResetMdpComponent,
         NotificationComponent,
+        ModifierProfilComponent,
 
                
     ],

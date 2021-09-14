@@ -1,15 +1,19 @@
 <div class="grid">
-    <div class="col-10 col-offset-1">
-        <div *ngIf="retour">
-            <i class="pi pi-arrow-circle-left" style="font-size: 30px;" pTooltip="Retour"
-                [routerLink]="['/ticket/suivi']"></i>
-            </div>
+    <div *ngIf="notifications.length==0 ">
+        <div >Vous n'avez aucune notifications pour le moment
+        </div>
+    </div>  
+    
+    <div class="col-10 col-offset-1" *ngIf="notifications.length!==0">
+        
+        <div *ngIf="retour" >
+            <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  / <a [routerLink]= "['/notification']"> page des notifications </a> 
+        </div>
         <h3>Notifications</h3>
-        <div class="card shadow-lg timeline">
-            <div *ngIf="notifications.length!=0">
-                <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom"
-                    class="pi pi-times-circle" style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;"
-                    (click)="retirertout()"></i>
+        <div class="card shadow-lg timeline"  >
+            <div >
+                <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom" class="pi pi-times-circle"
+                    style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
             </div>
             <ul>
                 <li *ngFor="let notif of notifications">
@@ -54,9 +58,8 @@
                         </div>
                     </div>
                 </li>
-            </ul>
-            <div *ngIf="notifications.length==0">
-                <div>Vous n'avez aucune notifications pour le moment.</div>
+                </ul>
+                  
             </div>
         </div>
     </div>
