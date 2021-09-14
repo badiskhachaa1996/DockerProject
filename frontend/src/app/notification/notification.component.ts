@@ -15,6 +15,7 @@ export class NotificationComponent implements OnInit {
   listTicket: any[] = [];
   sujetDic: any[] = [];
   retour: boolean = false;
+  // nnotifications : boolean = false;
   constructor(private NotificationService: NotificationService, private TicketService: TicketService,private SujetService:SujetService) { }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
@@ -42,7 +43,9 @@ export class NotificationComponent implements OnInit {
           data => {
             this.notifications = data;
             console.log(data)
-          
+            // if(data.length==0){
+            //   this.nnotifications = false;
+            // }
           },
           error => {
             console.log(error);

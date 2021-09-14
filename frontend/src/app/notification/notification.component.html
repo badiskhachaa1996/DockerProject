@@ -1,16 +1,19 @@
 
 
 <div class="grid">
+    <div *ngIf="notifications.length==0 ">
+        <div >Vous n'avez aucune notifications pour le moment... Revenez plus tard !
+        </div>
+    </div>  
     
-    
-    <div class="col-10 col-offset-1">
+    <div class="col-10 col-offset-1" *ngIf="notifications.length!==0">
         
         <div *ngIf="retour" >
             <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  / <a [routerLink]= "['/notification']"> page des notifications </a> 
         </div>
         <h3>Notifications</h3>
-        <div class="card shadow-lg timeline">
-            <div *ngIf="notifications.length!=0">
+        <div class="card shadow-lg timeline"  >
+            <div >
                 <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom" class="pi pi-times-circle"
                     style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
             </div>
@@ -22,8 +25,8 @@
                                 <i class="pi pi-inbox" style="font-size: 30px;"></i>
                             </div>
                         </div>
-                        <div class="col" >
-                            <div class="time-line-event" *ngIf="notif && sujetDic[listTicket[notif.ticket_id].sujet_id].label">
+                        <div class="col"  >
+                            <div class="time-line-event" *ngIf="notif && sujetDic[listTicket[notif.ticket_id].sujet_id].label ">
                                 <span class="timeline-event-title">{{notif.type}}</span>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
                                     Un nouveau ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" vous a été affecté
@@ -60,11 +63,7 @@
                     </div>
                 </li>
                 </ul>
-                <div *ngIf="notifications.length==0 ">
-                    <div >Vous n'avez aucune notifications pour le moment... Revenez plus tard !
-                        <i class="pi pi-clock" style="font-size: 25px; color: red; float: right;"></i>
-                    </div>
-                </div>      
+                  
             </div>
         </div>
 </div>
