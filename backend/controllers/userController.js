@@ -103,7 +103,6 @@ app.get("/getAll",(req,res)=>{
 
 
 app.post("/updateById/:id", (req, res) => {
-    console.log(req.body)
     User.findOneAndUpdate({_id:req.params.id},
         {
             civilite:req.body.civilite,
@@ -118,7 +117,6 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            console.log(user)
             res.send(user)
         })
 })

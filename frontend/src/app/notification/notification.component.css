@@ -1,4 +1,9 @@
- .timeline {
+.retour{
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.timeline {
     padding-bottom: 6px;
   }
    .timeline ul {
