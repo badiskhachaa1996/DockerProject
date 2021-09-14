@@ -49,7 +49,7 @@
                             {{rowData.civilite | i18nSelect: genderMap}} {{rowData.lastname | titlecase}} {{rowData.firstname | titlecase}}
                         </td>
                         <td *ngIf="rowData.service_id">
-                            {{serviceDic[rowData.service_id].label}}
+                            {{ serviceDic[rowData.service_id].label }}
                         </td>
                         <td *ngIf="!rowData.service_id">
                             Sans Service

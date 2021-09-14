@@ -59,15 +59,22 @@
 
     <!-- tableau -->
     <div class="grid">
+        <div class="ui-table-globalfilter-container">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" 
+            placeholder="Global Search" style="" />
+        </div>
         <div class="col-10 col-offset-1">
+
             <button *ngIf="!showFormAddService" pButton class="ui-button-raised ui-button-success"
                 (click)="toggleFormServiceAdd()" style="float:right;" label="Ajouter"></button>
             <h3>Liste des services</h3>
+     
             <div class="col-12 card shadow-lg my-5 ">
                 <p-table *ngIf="services" [columns]="cols" [value]="services" selectionMode="single"
                     [(selection)]="currentService" (onRowSelect)="onRowSelect($event)"
                     (onRowUnselect)="onRowUnselect($event)" [rows]="4" [paginator]="true" [pageLinks]="5"
-                    [responsive]="true" [totalRecords]="services.length">
+                    [responsive]="true" [totalRecords]="services.length" [filterDelay]="0" 
+                    [globalFilterFields]="['currentService']">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
                             <th class="col-8 col-offset-4" style="text-decoration: underline;">

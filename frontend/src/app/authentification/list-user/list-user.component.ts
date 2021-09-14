@@ -14,6 +14,7 @@ import { RowToggler } from 'primeng/table';
 import { parse } from 'querystring';
 
 import { AccordionModule } from 'primeng/accordion';
+import { Service } from 'src/app/models/Service';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -32,7 +33,7 @@ export class ListUserComponent implements OnInit {
   showFormAdd : boolean =false;
   add : boolean =true;
 
-  serviceDic: any[]= [];
+  serviceDic: Service[]= [];
 
  public showForm: string = "Ajouter";
   loading: boolean;
