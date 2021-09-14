@@ -10,6 +10,7 @@ import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
 import { url } from 'inspector';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ListUserComponent } from './authentification/list-user/list-user.component';
 const io = require("socket.io-client");
 
 @Component({
@@ -36,6 +37,7 @@ export class AppTopBarComponent implements OnInit {
   nnotifications = false;
   Notifications: Notification[] = [];
   User : User;
+  userupdate: User = null;
 
 
   socket = io("http://localhost:3000");
@@ -43,11 +45,15 @@ export class AppTopBarComponent implements OnInit {
   notifMapping:
     { [k: string]: string } = { '=0': '','other':'#' };
   
-  constructor(public app: AppComponent, private AuthService: AuthService, private router: Router, private NotificationService: NotificationService){ }
+  constructor(public app: AppComponent, private AuthService: AuthService, 
+    private router: Router, private NotificationService: NotificationService,
+    private listUserComponent: ListUserComponent){ }
   userForm: FormGroup = new FormGroup({
-    lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    lastname: new FormControl('', Validators.required),//Lettre et espace
   });
   ngOnInit() {
+   
+
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
@@ -78,11 +84,9 @@ export class AppTopBarComponent implements OnInit {
       })
     }
 
+
   }
-  editUser(data) {
-    this.userForm.patchValue({ lastname: data.lastname })
-    this.User = data;
-     }
+ 
 
   onLogout() {
     localStorage.clear();
