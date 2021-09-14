@@ -197,7 +197,6 @@ import {MenuItem} from 'primeng/api';
         NavbarComponent,
         ResetMdpComponent,
         NotificationComponent,
-
                
     ],
         providers: [  MessageService ,ConfirmationService,ServiceComponent,ListUserComponent],

@@ -11,7 +11,7 @@ import { Service } from 'src/app/models/Service';
 import { Sujet } from 'src/app/models/Sujet';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortEvent } from 'primeng/api';
 import { saveAs as importedSaveAs } from "file-saver";
 import { Message } from 'src/app/models/Message';
 import { NotificationService } from 'src/app/services/notification.service';
@@ -183,6 +183,10 @@ export class ListTicketComponent implements OnInit {
     console.log(this.TicketForm)
   }
 
+
+
+  
+
   //QueueToAccAff
   QueueToAccAff(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
@@ -254,6 +258,30 @@ export class ListTicketComponent implements OnInit {
     sujet: new FormControl('', Validators.required),//Il doit forcément selectionner
     service: new FormControl('', Validators.required),
   })
+
+
+
+
+  customSort(event: SortEvent) {
+    event.data.sort((data1, data2) => {
+        let value1 = data1[event.field];
+        let value2 = data2[event.field];
+        let result = null;
+
+        if (value1 == null && value2 != null)
+            result = -1;
+        else if (value1 != null && value2 == null)
+            result = 1;
+        else if (value1 == null && value2 == null)
+            result = 0;
+        else if (typeof value1 === 'string' && typeof value2 === 'string')
+            result = value1.localeCompare(value2);
+        else
+            result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+
+        return (event.order * result);
+    });
+}
 
   modify(data) {
     console.log(data)
@@ -485,4 +513,7 @@ export class ListTicketComponent implements OnInit {
   //         console.log(error);
   //       });
   // }
+  test(event){
+    console.log(event.value.value)
+  }
 }

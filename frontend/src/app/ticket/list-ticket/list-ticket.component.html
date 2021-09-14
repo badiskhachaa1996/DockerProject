@@ -76,22 +76,39 @@
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4" [paginator]="true"
-            [pageLinks]="5" [responsive]="true" rowExpandMode="single" [totalRecords]="queueList.length">
+            <p-table #dt1 
+            *ngIf="queueList" 
+            [columns]="cols" 
+            [value]="queueList" 
+            dataKey="_id" 
+            [rows]="4" 
+            [paginator]="true"
+            [pageLinks]="5" 
+            [responsive]="true" 
+            rowExpandMode="single" 
+            [totalRecords]="queueList.length"
+            [globalFilterFields]="['sujet_id','description','date_ajout']"  
+            >
+
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex" style="text-align: right">
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                    </span>
+                </div>
+            </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;">
-                            Service
+                        <th style="width: 3rem"> </th>
+
+                        <th style="text-decoration: underline;"  pSortableColumn="serviceList[sujetList[sujet_id].service_id]"> Service <p-sortIcon field="serviceList[sujetList[sujet_id].service_id]"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
-                            Sujet
+                        <th style="text-decoration: underline;"  pSortableColumn="sujet_id">  Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
-                            Date de création
+                        <th style="text-decoration: underline;" pSortableColumn="date_ajout">  Date de création <p-sortIcon field="date_ajout"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
-                            Temps d'attente
+                        <th style="text-decoration: underline;" pSortableColumn="tempsAt">  Temps d'attente <p-sortIcon field="tempsAt"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;">
                             Action
@@ -208,22 +225,46 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Mes tickets en cours de traitement</h3>
+        <h3>Mes tickets </h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
-                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length">
+            <p-table 
+            #dt2 
+            *ngIf="AccAffList" 
+            [columns]="cols" 
+            [value]="AccAffList" 
+            pDroppable="QueueToAccAff"
+                (onDrop)="dragQueueToAccAff($event)" 
+                dataKey="_id" 
+                rowExpandMode="single" 
+                [rows]="4" 
+                [paginator]="true"
+                [pageLinks]="5" 
+                [responsive]="true" 
+                [totalRecords]="AccAffList.length" 
+                [globalFilterFields]="['sujet_id','description','date_affec_accep','statut']"  
+                >
+    
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;">
                             Service
                         </th>
-                        <th style="text-decoration: underline;">
-                            Sujet
+                        <th style="text-decoration: underline;"pSortableColumn="sujet_id">  Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
-                            Date d'acceptation
+                        <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation
+                            
+                            <p-sortIcon field="date_affec_accep"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;">
                             Temps de traitement
@@ -232,13 +273,21 @@
                             Désignation
                         </th>
                         <th style="text-decoration: underline;">
+                        
+                            <span>
+                                Statut
+                                <p-dropdown formControlName="statut" [style]="{'width':'60%'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+                            </span>
+                        </th>
+                        <th style="text-decoration: underline;">
                             Action
                         </th>
                     </tr>
+                    
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-                        *ngIf="sujetList[rowData.sujet_id]">
+                        *ngIf="sujetList[rowData.sujet_id]"  [pSelectableRow]="rowData">
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
@@ -256,11 +305,15 @@
                         <td>
                             {{showWorkingTime(rowData)}}
                         </td>
+
                         <td *ngIf="rowData.isAffected">
                             Affecté
                         </td>
                         <td *ngIf="!rowData.isAffected">
                             Accepté
+                        </td>
+                        <td  [pSelectableRow]="rowData">
+                            {{rowData.statut}}
                         </td>
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
@@ -340,7 +393,8 @@
                             <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
-                                    <p-table [value]="comments" dataKey="id">
+                                    <p-table
+                                    [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
                     <tr *ngIf="message.user_id!=token['id']">
                         <td>
@@ -400,20 +454,37 @@
         <h3 *ngIf="token['role']!='Admin'">Les tickets de mon service</h3>
         <h3 *ngIf="token['role']=='Admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
+            <p-table #dt3 *ngIf="AccAffList" 
+            [columns]="cols" 
+            [value]="allTickets" 
+            dataKey="_id" 
+            rowExpandMode="single"
             [rows]="4" [paginator]="true"
-                [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length">
+            [pageLinks]="5" 
+            [responsive]="true" 
+            [totalRecords]="allTickets.length"  
+            [globalFilterFields]="['sujet_id','statut','date_ajout','description','createur_id']"  
+            >
+
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex" style="text-align: right">
+                    <span class="p-input-icon-left p-ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                    </span>
+                </div>
+            </ng-template>
+            
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;">
                             Service
                         </th>
-                        <th style="text-decoration: underline;">
-                            Sujet
+                        <th style="text-decoration: underline;"pSortableColumn="sujet_id">  Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
-                            Date d'acceptation
+                        <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
+
                         </th>
                         <th style="text-decoration: underline;">
                             Temps de traitement
