@@ -67,9 +67,11 @@ export class AppTopBarComponent implements OnInit {
       })
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
+        console.log(this.Notifications)
         if(data.length!=0){
             this.notif = true;
-        }      
+        }
+      
       }, error => {
         console.error(error)
       })

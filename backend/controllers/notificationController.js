@@ -21,8 +21,9 @@ app.post("/create", (req, res) => {
         date_ajout: Date.now(),
         user_id:req.body.user_id
     });
-
+    console.log(notif)
     notif.save((err, user) => {
+        console.log(user)
         res.send({ message: "Votre notif a été crée!", doc: user });
     });
 });
