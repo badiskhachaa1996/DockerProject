@@ -311,7 +311,7 @@ export class SuiviComponent implements OnInit {
       this.selectedTicket = null;
       this.commentForm.reset();
       this.NotifService.create(new Notification(null, data.doc.ticket_id, false, "Nouveau Message", null, agenttoNotif)).subscribe((notif) => {
-        this.NotifService.newNotif(notif,agenttoNotif)
+        this.NotifService.newNotif(notif)
       }, (error) => {
         console.log(error)
       });

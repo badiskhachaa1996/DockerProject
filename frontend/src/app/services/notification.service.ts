@@ -24,8 +24,8 @@ export class NotificationService {
 // get refreshNeeded(){
 //     return this._refreshNeeded;
 // }
-  newNotif(Notif,userid){
-    this.socket.emit("NewNotif",({notif:Notif,userid:userid}))
+  newNotif(Notif){
+    this.socket.emit("NewNotif",({notif:Notif}))
   }
 
   create(notif: Notification) {
