@@ -34,7 +34,6 @@ export class AppTopBarComponent implements OnInit {
   userInformations: any;
   role: string;
   userconnected: User;
-  nnotifications = false;
   Notifications: Notification[] = [];
   User : User;
   userupdate: User = null;
@@ -68,11 +67,9 @@ export class AppTopBarComponent implements OnInit {
       })
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
+        console.log(this.Notifications)
         if(data.length!=0){
             this.notif = true;
-        }
-        if(data.length==0){
-          this.nnotifications = true;
         }
       
       }, error => {
