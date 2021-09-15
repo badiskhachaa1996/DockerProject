@@ -696,7 +696,7 @@
 
                                     <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
-                    <tr *ngIf="message.user_id!=token['id']">
+                    <tr *ngIf="message.user_id==rowData.createur_id">
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
@@ -716,7 +716,7 @@
                         </td>
                     </tr>
 
-                    <tr *ngIf="message.user_id==token['id']">
+                    <tr *ngIf="message.user_id!=rowData.createur_id">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
