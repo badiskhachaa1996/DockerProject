@@ -95,16 +95,16 @@
                                 <div *ngIf=IsAdmin class="mt-2 mb-2 col-lg-12 col-12" >
                                     
                                     
-                                        
+                                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                             <label for="role" class="p-sr-only">Role :</label>
                                             
                                          <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
-                                       
-                                       
+                                       </div>
+                                       <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                             <label for="service_id" class="p-sr-only">Service:</label>
                                             
                                          <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
-                                        
+                                        </div>
                                  </div>
                             
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
