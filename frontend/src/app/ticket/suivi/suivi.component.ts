@@ -310,7 +310,7 @@ export class SuiviComponent implements OnInit {
       let agenttoNotif=this.selectedTicket.agent_id ;
       this.selectedTicket = null;
       this.commentForm.reset();
-      this.NotifService.create(new Notification(null, data._id, false, "Une reponse a ete publier sur le ticket", null, agenttoNotif)).subscribe((notif) => {
+      this.NotifService.create(new Notification(null, data.doc.ticket_id, false, "Une reponse a ete publier sur le ticket", null, agenttoNotif)).subscribe((notif) => {
         this.NotifService.newNotif(notif,agenttoNotif)
         console.log(notif)
       }, (error) => {
