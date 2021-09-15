@@ -79,4 +79,8 @@ export class NotificationService {
     return this.http.post<any>(registreUrl,{notifications},httpOptions1)
  ;
   }
+  reloadNotif(data){
+    this.socket.emit("reloadNotif",(data))
+  }
+
 }

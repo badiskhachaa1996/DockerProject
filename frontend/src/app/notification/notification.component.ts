@@ -47,6 +47,7 @@ export class NotificationComponent implements OnInit {
             this.NotificationService.viewNotifs(this.notifications)
               .subscribe(
                 response => {
+                  this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
                 },
                 error => {
                   console.log(error);

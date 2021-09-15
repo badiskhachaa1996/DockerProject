@@ -78,6 +78,16 @@ export class AppTopBarComponent implements OnInit {
         this.Notifications.push(data)
         this.notif = true;
       })
+      this.socket.on("reloadNotif",()=>{
+        this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
+          this.Notifications = data;
+          this.notif = data.length!=0;
+        
+        }, error => {
+          console.error(error)
+        })
+      })
+
     }
 
 
