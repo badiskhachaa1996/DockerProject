@@ -137,6 +137,7 @@ export class ListTicketComponent implements OnInit {
     } else {
       this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
         if (!data.message) {
+          console.log(data)
           this.queueList = data.TicketList;
         }
       })
@@ -316,7 +317,6 @@ export class ListTicketComponent implements OnInit {
     }
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
-        console.log(data)
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, data.createur_id)
@@ -328,7 +328,11 @@ export class ListTicketComponent implements OnInit {
           this.allTickets.push(data)
         } else {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+          if(this.token.role=="Admin"){
+            this.allTickets.push(data)
+          }
         }
+
         this.isModify = null;
         this.toggleFormUpdate();
       }, (error) => {
@@ -431,6 +435,7 @@ export class ListTicketComponent implements OnInit {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
+            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -445,7 +450,8 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1,data)
+            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -524,7 +530,7 @@ export class ListTicketComponent implements OnInit {
       justificatif: this.RevertForm.value.justificatif,
       user_revert: this.token['id']
     }
-    console.log(this.showRevert)
+    console.log(this.token['id'])
     this.TicketService.revert(data).subscribe(ticket => {
       try {
         this.AccAffList.splice(this.AccAffList.indexOf(this.showRevert), 1)
