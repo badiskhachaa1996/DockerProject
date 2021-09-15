@@ -57,15 +57,15 @@ app.post("/create", (req, res) => {
 
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
                 
-                console.log("createur du ticket : " + createur_id)
-                console.log("agent du ticket : " + userFromDb._id)
+                console.log("Créateur du ticket : " + createur_id)
+                console.log("Agent du ticket : " + userFromDb._id)
 
                 if (msg.isRep) {
-                    let htmlemail = '<h3 style="color:red">Notification ! </h3><p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p> </br> <p style="color:black">  une réponse a été publié pour le ticket :<< ' + tickFromDb.description + '  >> </p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
-                        subject: 'Notification E-Ticketing',
+                        subject: '[ESTYA Ticketing] - Notification ',
                         html: htmlemail,
                         attachments: [{
                             filename: 'signature.png',
