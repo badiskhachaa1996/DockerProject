@@ -24,7 +24,8 @@
                     <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
                 </div>
                 <div class="user-card-status">
-                    <span style="font-weight: bold;">{{userco.role}} </span>
+                    <span class="user-profile-role" *ngIf="userco.role=='user'"  style="font-weight: bold;">Utilisateur</span>
+                    <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
                 </div> 
                 <div class="user-detail" >
                     <ul *ngIf="!toggleUpdate">

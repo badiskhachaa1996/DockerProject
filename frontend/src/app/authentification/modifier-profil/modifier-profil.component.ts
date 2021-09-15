@@ -35,7 +35,7 @@ export class ModifierProfilComponent implements OnInit {
   }
   RegisterForm: FormGroup = new FormGroup({
     civilite: new FormControl(this.civiliteList[0], [Validators.required]),
-    lastname: new FormControl('' , [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
+    lastname: new FormControl(this.userupdate.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
     adresse: new FormControl('', [Validators.required]),
@@ -44,10 +44,11 @@ export class ModifierProfilComponent implements OnInit {
 
 
   UpdateUser() {
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role , this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id,this.RegisterForm.value.civilite.value)
+    let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role , this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id,this.RegisterForm.value.civilite.value)
     this.AuthService.update(user).subscribe((data) => {
-      
+
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
+      console.log(data)
     }, (error) => {
       console.log(error)
     });
