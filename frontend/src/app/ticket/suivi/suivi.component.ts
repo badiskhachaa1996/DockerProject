@@ -24,7 +24,7 @@ import { Notification } from 'src/app/models/notification';
 export class SuiviComponent implements OnInit {
   [x: string]: any;
 
-  ticketList: Ticket[];
+  ticketList: Ticket[] = [];
   token: any;
   tickets: any;
   serviceList = [];
@@ -245,17 +245,9 @@ export class SuiviComponent implements OnInit {
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
-     
-      try{
-        this.ticketList.push(data.doc)
-        this.TicketForm.reset()
-        this.TicketForm.setValue({description:null,sujet:'',service:''})
-
-      }catch (e){
-        this.ticketList = [data.doc]
-        this.TicketForm.reset()
-        this.TicketForm.setValue({description:null,sujet:'',service:''})
-      }
+      this.ticketList.push(data.doc)
+      this.TicketForm.reset()
+      this.TicketForm.setValue({description:null,sujet:'',service:''})
       this.toggleFormAdd()
 
     }, (error) => {
@@ -312,9 +304,7 @@ export class SuiviComponent implements OnInit {
     }
 
     this.MsgServ.create(comment).subscribe((data) => {
-      console.log(data)
       this.comments.push(data.doc);
-
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
       this.showFormAddComment = false;
       let agenttoNotif=this.selectedTicket.agent_id ;

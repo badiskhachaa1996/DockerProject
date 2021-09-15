@@ -317,7 +317,6 @@ export class ListTicketComponent implements OnInit {
     }
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
-        console.log(data)
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif, data.createur_id)
@@ -329,7 +328,11 @@ export class ListTicketComponent implements OnInit {
           this.allTickets.push(data)
         } else {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+          if(this.token.role=="Admin"){
+            this.allTickets.push(data)
+          }
         }
+
         this.isModify = null;
         this.toggleFormUpdate();
       }, (error) => {
