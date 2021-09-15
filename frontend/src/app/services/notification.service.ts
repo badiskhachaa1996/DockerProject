@@ -24,8 +24,8 @@ export class NotificationService {
 // get refreshNeeded(){
 //     return this._refreshNeeded;
 // }
-  newNotif(Notif,userid){
-    this.socket.emit("NewNotif",({notif:Notif,userid:userid}))
+  newNotif(Notif){
+    this.socket.emit("NewNotif",({notif:Notif}))
   }
 
   create(notif: Notification) {
@@ -79,4 +79,8 @@ export class NotificationService {
     return this.http.post<any>(registreUrl,{notifications},httpOptions1)
  ;
   }
+  reloadNotif(data){
+    this.socket.emit("reloadNotif",(data))
+  }
+
 }

@@ -90,20 +90,48 @@ export class ListTicketComponent implements OnInit {
     this.Accepted(this.draggedTicket)
   }
 
-  /*AccAffToAll
-  dragPreInscritToInscrit(event?) {
-    this.AccAffList.splice(this.AccAffList.indexOf(this.draggedTicket), 1)
-    this.allTickets.push(this.draggedTicket)
-  }
-
-  //AllToQueue
-  dragInscritToList(event?) {
-    this.allTickets.splice(this.allTickets.indexOf(this.draggedTicket), 1)
-    this.queueList.push(this.draggedTicket)
-  }*/
-
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
+
+  updateAccAffList(){
+    this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
+      if (!data.message) {
+        this.AccAffList = data;
+      }
+    })
+  }
+
+  updateAllList(){
+    if (this.token['role'] == "Admin") {
+      this.TicketService.getAllAccAff().subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data;
+        }
+      })
+    } else {
+      this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.allTickets = data.TicketList;
+        }
+      })
+    }
+  }
+
+  updateQueue(){
+    if (this.token['role'] == "Admin") {
+      this.TicketService.getQueue().subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data;
+        }
+      })
+    } else {
+      this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
+        if (!data.message) {
+          this.queueList = data.TicketList;
+        }
+      })
+    }
+  }
 
   ngOnInit(): void {
     try {
@@ -123,29 +151,8 @@ export class ListTicketComponent implements OnInit {
     this.ServService.getDic().subscribe((data) => {
       this.serviceDic = data;
     })
-    if (this.token['role'] == "Admin") {
-      this.TicketService.getQueue().subscribe((data) => {
-        if (!data.message) {
-          this.queueList = data;
-        }
-      })
-      this.TicketService.getAllAccAff().subscribe((data) => {
-        if (!data.message) {
-          this.allTickets = data;
-        }
-      })
-    } else {
-      this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
-        if (!data.message) {
-          this.queueList = data.TicketList;
-        }
-      })
-      this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
-        if (!data.message) {
-          this.allTickets = data.TicketList;
-        }
-      })
-    }
+    this.updateQueue()
+    this.updateAllList()
     this.ServService.getAll().subscribe((data) => {
       this.listServices = data;
       if (!data.message) {
@@ -165,12 +172,7 @@ export class ListTicketComponent implements OnInit {
       }
     })
 
-    //getAccAffByUserID
-    this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
-      if (!data.message) {
-        this.AccAffList = data;
-      }
-    })
+    this.updateAccAffList()
 
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
@@ -187,27 +189,11 @@ export class ListTicketComponent implements OnInit {
     console.log(this.TicketForm)
   }
 
-
-
-  
-
   //QueueToAccAff
   QueueToAccAff(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
     this.Accepted(user)
   }
-
-  /*AccAffToAll
-  PreInscritToInscrit(user, event?) {
-    this.AccAffList.splice(this.AccAffList.indexOf(user), 1)
-    this.allTickets.push(user)
-  }
-
-  //AllToQueue
-  InscritToList(user, event?) {
-    this.allTickets.splice(this.allTickets.indexOf(user), 1)
-    this.queueList.push(user)
-  }*/
 
   Accepted(rawData) {
     let data = {
@@ -216,8 +202,8 @@ export class ListTicketComponent implements OnInit {
       isAffected: false
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
-      this.AccAffList.push(res)
-      this.allTickets.push(res)
+      this.updateAccAffList()
+      this.updateAllList()
     }, (error) => {
       console.log(error)
     })
@@ -244,14 +230,14 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
       if (event.value._id == jwt_decode(localStorage.getItem("token"))["id"]) {
-        this.AccAffList.push(data)
+        this.updateAccAffList()
       }
       this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, event.value._id)
+        this.NotifService.newNotif(notif)
       }, (error) => {
         console.log(error)
       });
-      this.allTickets.push(data)
+      this.updateAllList()
       this.showDropDown = null;
     }, (error) => {
       console.error(error)
@@ -316,19 +302,22 @@ export class ListTicketComponent implements OnInit {
     }
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
-        console.log(data)
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, data.createur_id)
+          this.NotifService.newNotif(notif)
         }, (error) => {
           console.log(error)
         });
         if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1, data)
-          this.allTickets.push(data)
+          this.updateAllList()
         } else {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+          if(this.token.role=="Admin"){
+            this.updateAllList()
+          }
         }
+
         this.isModify = null;
         this.toggleFormUpdate();
       }, (error) => {
@@ -359,7 +348,7 @@ export class ListTicketComponent implements OnInit {
     return days.toString()+" j " + Hours + " h " + minutes + " min "
 
   }
-
+  
   showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
     let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j " : " ";
@@ -428,9 +417,10 @@ export class ListTicketComponent implements OnInit {
 
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+          this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
+            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -443,9 +433,10 @@ export class ListTicketComponent implements OnInit {
 
       } else {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+          this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1,data)
+            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -524,19 +515,38 @@ export class ListTicketComponent implements OnInit {
       justificatif: this.RevertForm.value.justificatif,
       user_revert: this.token['id']
     }
-    console.log(this.showRevert)
     this.TicketService.revert(data).subscribe(ticket => {
       try {
         this.AccAffList.splice(this.AccAffList.indexOf(this.showRevert), 1)
       } catch (error) { }
       this.allTickets.splice(this.allTickets.indexOf(this.showRevert), 1)
-      console.log(ticket)
       if (ticket) {
-        this.queueList.push(ticket)
+        this.updateQueue()
         this.messageService.add({ severity: 'success', summary: 'Renvoie d\'un ticket', detail: 'Le ticket a été renvoyer avec succès dans la queue d\'entrée' });
       }
       this.RevertForm.reset()
       this.showRevert = null
+      if(this.showRevert.agent_id==this.token['id']){
+        //L'agent a revert son ticket
+        //Notifié les responsables de son service
+        this.AllUsers.forEach(user=>{
+          if(user._id!=this.token.id && ((user.role=="Responsable" && user.service_id == this.token.service_id)|| user.role=="Admin")){
+            this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket par Agent",null,user._id)).subscribe(Notif=>{
+              this.NotifService.newNotif(Notif)
+            },(error)=>{
+              console.error(error)
+            })
+          }
+        })
+      }else{
+        //Avertir l'agent que son ticket a été revert
+        this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket",null,this.showRevert.agent_id)).subscribe(Notif=>{
+          this.NotifService.newNotif(Notif)
+        },(error)=>{
+          console.error(error)
+        })
+      }
+
     }, (error) => {
       this.messageService.add({ severity: 'error', summary: 'Renvoie d\'un ticket', detail: 'Le renvoie a eu un problème' });
       console.error(error)

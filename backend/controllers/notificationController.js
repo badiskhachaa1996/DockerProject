@@ -7,6 +7,13 @@ const io = require("socket.io");
 
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {
+    if(req.body.type=="Traitement de votre ticket"){
+        Notification.deleteMany({ticket_id:req.body.ticket_id},(err,resultat)=>{
+            if(err){
+                res.send(err)
+            }
+        });
+    }
     const notif = new Notification({
         etat: req.body.etat,
         type: req.body.type,
@@ -14,10 +21,10 @@ app.post("/create", (req, res) => {
         date_ajout: Date.now(),
         user_id:req.body.user_id
     });
-
     notif.save((err, user) => {
         res.send({ message: "Votre notif a été crée!", doc: user });
     });
+
 });
 
 
