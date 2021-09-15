@@ -30,7 +30,7 @@
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
                                     {{sujetDic[listTicket[notif.ticket_id]]}}
                                     <div >
-                                        Vous avez reçu un nouveau message sur le ticket qui a pour numéro :<span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>.
+                                        Vous avez reçu un nouveau message pour le ticket qui a pour numéro :<span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>.
                                     </div>  
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">

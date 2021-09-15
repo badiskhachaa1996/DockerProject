@@ -18,6 +18,7 @@ import { HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/commo
 })
 export class RegisterComponent implements OnInit {
   Services: any[];
+  pass: any ;
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
   User_role: String;
@@ -60,6 +61,7 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
       this.RegisterForm.value.password,
+
       this.RegisterForm.value.role.value || "user", null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,

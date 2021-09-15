@@ -86,6 +86,14 @@ export class SuiviComponent implements OnInit {
     return this.ticketList ? this.first === 0 : true;
   }
 
+  updateList(){
+    this.TicketService.getAllByUser(this.token["id"]).subscribe((data) => {
+      this.ticketList = data;
+    }, (error) => {
+      console.log(error)
+    })
+  }
+
   constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService,private NotifService:NotificationService) { }
 
   ngOnInit(): void {
@@ -99,12 +107,8 @@ export class SuiviComponent implements OnInit {
       this.router.navigate(["/login"])
     }
     this.token = jwt_decode(token);
-    this.TicketService.getAllByUser(this.token["id"]).subscribe((data) => {
-      this.ticketList = data;
-    }, (error) => {
-      console.log(error)
-    })
 
+    this.updateList()
 
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
@@ -245,7 +249,7 @@ export class SuiviComponent implements OnInit {
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
-      this.ticketList.push(data.doc)
+      this.updateList()
       this.TicketForm.reset()
       this.TicketForm.setValue({description:null,sujet:'',service:''})
       this.toggleFormAdd()
@@ -311,7 +315,7 @@ export class SuiviComponent implements OnInit {
       this.selectedTicket = null;
       this.commentForm.reset();
       this.NotifService.create(new Notification(null, data.doc.ticket_id, false, "Nouveau Message", null, agenttoNotif)).subscribe((notif) => {
-        this.NotifService.newNotif(notif,agenttoNotif)
+        this.NotifService.newNotif(notif)
       }, (error) => {
         console.log(error)
       });
