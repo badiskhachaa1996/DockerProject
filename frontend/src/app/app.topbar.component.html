@@ -9,8 +9,8 @@
             [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
             <a href="#" (click)="app.onTopbarItemClick($event,profile)">
                 <div class="not" *ngIf="notif">
-                    <i tooltipPosition="bottom" class=" pi pi-circle-on"style="cursor: pointer; color: red; position:absolute; font-size: 37px; margin-left: 180px;"></i>
-                    <div class="number" style="margin-left: 68px; font-weight:bold; color:white; font-size: 13px; margin-left: 195px; position: relative; z-index: 10; padding-top: 10px;">
+                    <i tooltipPosition="bottom" class=" pi pi-bell"style="cursor: pointer; color: red; position:absolute; font-size: 25px; margin-left: 160px;"></i>
+                    <div class="number" style=" font-weight:bold; color:red; font-size: 13px; margin-left: 185px;">
                         {{Notifications.length}}
                     </div>
                 </div>

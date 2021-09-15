@@ -12,20 +12,19 @@ app.post("/create", (req, res) => {
             if(err){
                 res.send(err)
             }
+            const notif = new Notification({
+                etat: req.body.etat,
+                type: req.body.type,
+                ticket_id: req.body.ticket_id,
+                date_ajout: Date.now(),
+                user_id:req.body.user_id
+            });
+            notif.save((err, user) => {
+                res.send({ message: "Votre notif a été crée!", doc: user });
+            });
         });
     }
-    const notif = new Notification({
-        etat: req.body.etat,
-        type: req.body.type,
-        ticket_id: req.body.ticket_id,
-        date_ajout: Date.now(),
-        user_id:req.body.user_id
-    });
-    console.log(notif)
-    notif.save((err, user) => {
-        console.log(user)
-        res.send({ message: "Votre notif a été crée!", doc: user });
-    });
+
 });
 
 
