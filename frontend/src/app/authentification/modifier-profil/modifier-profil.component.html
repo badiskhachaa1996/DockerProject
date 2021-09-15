@@ -8,10 +8,31 @@
                     <h3 class="text-center"> Modifier mes informations</h3>
                     
                     <div class="grid">
+                            
+<div style="padding-bottom:0"> 
+    <label for="civilite" class="p-sr-only">Modifier la photo de profil </label>
+    <img #img *ngIf="profilePicture" [src]="profilePicture" style="
+-webkit-border-radius:70px;
+-moz-border-radius:70px;
+border-radius:70px;
+width:80px;
+height:80px;position : relative ; " alt="prestige-layout" />
 
+
+
+    
+            <input  type="file" (change)="handleProfilePictureInput($event.target.files)" id="selectedFile"
+             style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+
+       
+     
+            <button pButton type="button" icon="pi pi-image" Onclick="document.getElementById('selectedFile').click();" pTooltip="Modifier votre photo de profil" tooltipPosition="bottom" tooltipEvent="hover" style="color:black;background-color: white;"></button>
+</div>
                        <div class="field col mt-8 mb-2 col-lg-12 col-12">
                             
                         <div>
+                            
+                            
                             <label for="civilite" class="p-sr-only">Civilité :</label>
                             </div>
                         <span>
@@ -104,3 +125,9 @@
         </p-card>
     </div>
 </div>
+
+
+
+
+
+
