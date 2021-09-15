@@ -348,7 +348,7 @@ export class ListTicketComponent implements OnInit {
     return days.toString()+" j " + Hours + " h " + minutes + " min "
 
   }
-
+  
   showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
     let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j " : " ";

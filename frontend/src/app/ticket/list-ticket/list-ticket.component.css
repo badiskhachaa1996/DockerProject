@@ -37,7 +37,9 @@
   text-align: right;
   padding-right: 10px;
 }
-
+.pstatut{
+  width: 20px;
+}
 @media (max-height:200px) {
   .badyT{
     overflow-y:none;  
