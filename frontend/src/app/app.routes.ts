@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './authentification/login/login.component';
 import { RegisterComponent } from './authentification/register/register.component';
 import { HomeComponent } from './home/home.component';
-import { ModifierProfilComponent } from './modifier-profil/modifier-profil.component';
 import { ServiceComponent } from './Gestion_Application/service/service.component';
 import { CreateComponent } from './ticket/create/create.component';
 import { ListTicketComponent } from './ticket/list-ticket/list-ticket.component';
@@ -15,6 +14,7 @@ import { ListUserComponent } from './authentification/list-user/list-user.compon
 import { UpdateUserComponent } from './authentification/update/update.component';
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import {NotificationComponent} from './notification/notification.component';
+import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },

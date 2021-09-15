@@ -8,7 +8,7 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            Service
+                            <label style="color: #3da827; font-weight: bold;">Service:</label>
 
                             <select formControlName="service" class="form-control col-12" >
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
@@ -18,7 +18,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            Sujet:
+                            <label style="color: #3da827; font-weight: bold;">Sujet:</label>
                             <select [disabled]="!TicketForm.value.service" formControlName="sujet"
                                 class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un sujet</option>
@@ -42,30 +42,26 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormCancel()"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="commentForm" enctype="multipart/form-data">
-                    <h3 class="text-center" style="color: green; font-weight: bold;">Envoyer un message</h3>
+                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Envoyer un message</h3>
                     <div class="text-center">
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-                    <div class="text-center">
-                        <p-fileUpload  #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un ficher"
+                    <label style="color: #3da827; font-weight: bold; margin-left: 710px;">Statut du ticket :     </label>
+                    <div style="margin-left: 130px;">
+                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" >
                         </p-fileUpload>
+                        <span style="margin-left: 370px;">
+                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
+                        </span>
                     </div>
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
-                            max).</span>
-                    </div><br>
-                    <p class="text-center" style="color: green; font-weight: bold;">Statut du ticket :</p><br>
-                    <div class=" text-center">
-                        <span>
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value" ></p-dropdown>
-                        </span>
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
                     </div><br>
                     <div class="text-center">
-                        <button [disabled]="commentForm.invalid || loading" pButton
-                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
+                        <button [disabled]="commentForm.invalid || loading" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
                 </form>
             </div>
@@ -78,14 +74,14 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
-                    <h3 class="text-center" style="color: green; font-weight: bold;">Revert un ticket</h3>
-                    <div class="text-center">
-                        <label style="float:left">Justificatif</label>
-                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
-                            autoResize="autoResize" placeholder="Saisir un message" placeholder="Justificatif"></textarea>
+                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue d'entrée</h3><br>
+                    <label style="color: #3da827; font-weight: bold; margin-left: 135px;">Justificatif</label>
+                    <div class="text-center"><br>
+                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message" placeholder="Expliquer la raison de votre renvoie"></textarea>
                     </div><br>
-                        <button [disabled]="RevertForm.invalid" pButton
-                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                    <div class="text-center">
+                        <button class="col-offset-5 xl:col-offset-5 sm:col-offset-4" [disabled]="RevertForm.invalid" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                    </div>
                 </form>
             </div>
         </p-card>
@@ -106,8 +102,7 @@
             [responsive]="true" 
             rowExpandMode="single" 
             [totalRecords]="queueList.length"
-            [globalFilterFields]="['sujet_id','description','date_ajout']"  
-            >
+            [globalFilterFields]="['sujet_id','description','date_ajout']">
 
             <ng-template pTemplate="caption">
                 <div class="p-d-flex" style="text-align: right">
@@ -156,6 +151,7 @@
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
                                 (click)="QueueToAccAff(rowData)"></i>
+                                <!--*ngIf="rowData.createur_id!=token['id']"-->
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -174,13 +170,6 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{rowData._id}} </div>
-                                    </div>
-                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
@@ -249,8 +238,8 @@
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Envoyeur:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].firstname |
-                                                titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
+                                            {{userDic[rowData.user_revert].firstname |
+                                                titlecase }} {{userDic[rowData.user_revert].lastname | titlecase
                                                 }} </div>
                                     </div>
                                     <div class="ui-g-4 ui-md-4">
@@ -299,7 +288,7 @@
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"/>
                         </span>
                     </div>
                 </ng-template>
@@ -308,8 +297,8 @@
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;" pSortableColumn="service_id"> 
-                            Service  <p-sortIcon field="service_id"></p-sortIcon>
+                        <th style="text-decoration: underline;">
+                            Service
                         </th>
                         <th style="text-decoration: underline;"pSortableColumn="sujet_id">  Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
                         </th>
@@ -323,11 +312,11 @@
                         <th style="text-decoration: underline;">
                             Désignation
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="statut">
+                        <th style="text-decoration: underline;">
                         
                             <span>
-                                Statut <p-sortIcon field="statut"></p-sortIcon>
-                                <p-dropdown formControlName="statut" [style]="{'width':'18px'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+                                Statut
+                                <p-dropdown formControlName="statut" [style]="{'width':'60%'}"  filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                             </span>
                         </th>
                         <th style="text-decoration: underline;">
@@ -370,24 +359,16 @@
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData) "> </i>
-                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
-                        <td [attr.colspan]="8">
+                        <td [attr.colspan]="7">
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    
-                                    <div class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{rowData._id}} </div>
-                                    </div>
-                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
@@ -594,7 +575,7 @@
                             {{rowData.statut}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
-                            <i pTooltip="Renvoyer dans la queue d'entrée" class="fas fa-level-up-alt" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -604,14 +585,6 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    
-                                    <div class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{rowData._id}} </div>
-                                    </div>
-                                    
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
