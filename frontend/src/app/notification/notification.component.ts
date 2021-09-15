@@ -3,6 +3,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { TicketService } from '../services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { SujetService } from '../services/sujet.service';
+import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
@@ -14,8 +15,9 @@ export class NotificationComponent implements OnInit {
   notifications: any = [];
   listTicket: any[] = [];
   sujetDic: any[] = [];
+  userDic: any[] = [];
   retour: boolean = false;
-  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService) { }
+  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService:AuthService) { }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
@@ -41,9 +43,11 @@ export class NotificationComponent implements OnInit {
         .subscribe(
           data => {
             this.notifications = data;
+            console.log(data)
             this.NotificationService.viewNotifs(this.notifications)
               .subscribe(
                 response => {
+                  this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
                 },
                 error => {
                   console.log(error);
@@ -66,6 +70,11 @@ export class NotificationComponent implements OnInit {
       this.SujetService.getAll().subscribe(data => {
         data.forEach(sujet => {
           this.sujetDic[sujet._id] = sujet;
+        });
+      })
+      this.AuthService.getAll().subscribe(data=>{
+        data.forEach(element => {
+          this.userDic[element._id]= element;
         });
       })
     }

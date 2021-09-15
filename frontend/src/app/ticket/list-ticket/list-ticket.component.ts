@@ -248,7 +248,7 @@ export class ListTicketComponent implements OnInit {
         this.AccAffList.push(data)
       }
       this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
-        this.NotifService.newNotif(notif, event.value._id)
+        this.NotifService.newNotif(notif)
       }, (error) => {
         console.log(error)
       });
@@ -317,10 +317,9 @@ export class ListTicketComponent implements OnInit {
     }
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
-        console.log(data)
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, data.createur_id)
+          this.NotifService.newNotif(notif)
         }, (error) => {
           console.log(error)
         });
@@ -329,7 +328,11 @@ export class ListTicketComponent implements OnInit {
           this.allTickets.push(data)
         } else {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
+          if(this.token.role=="Admin"){
+            this.allTickets.push(data)
+          }
         }
+
         this.isModify = null;
         this.toggleFormUpdate();
       }, (error) => {
@@ -429,7 +432,7 @@ export class ListTicketComponent implements OnInit {
 
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+          this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
@@ -445,7 +448,7 @@ export class ListTicketComponent implements OnInit {
 
       } else {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
-          this.NotifService.newNotif(notif, this.selectedTicket.createur_id)
+          this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1,data)
             this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
@@ -527,19 +530,38 @@ export class ListTicketComponent implements OnInit {
       justificatif: this.RevertForm.value.justificatif,
       user_revert: this.token['id']
     }
-    console.log(this.token['id'])
     this.TicketService.revert(data).subscribe(ticket => {
       try {
         this.AccAffList.splice(this.AccAffList.indexOf(this.showRevert), 1)
       } catch (error) { }
       this.allTickets.splice(this.allTickets.indexOf(this.showRevert), 1)
-      console.log(ticket)
       if (ticket) {
         this.queueList.push(ticket)
         this.messageService.add({ severity: 'success', summary: 'Renvoie d\'un ticket', detail: 'Le ticket a été renvoyer avec succès dans la queue d\'entrée' });
       }
       this.RevertForm.reset()
       this.showRevert = null
+      if(this.showRevert.agent_id==this.token['id']){
+        //L'agent a revert son ticket
+        //Notifié les responsables de son service
+        this.AllUsers.forEach(user=>{
+          if(user._id!=this.token.id && ((user.role=="Responsable" && user.service_id == this.token.service_id)|| user.role=="Admin")){
+            this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket par Agent",null,user._id)).subscribe(Notif=>{
+              this.NotifService.newNotif(Notif)
+            },(error)=>{
+              console.error(error)
+            })
+          }
+        })
+      }else{
+        //Avertir l'agent que son ticket a été revert
+        this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket",null,this.showRevert.agent_id)).subscribe(Notif=>{
+          this.NotifService.newNotif(Notif)
+        },(error)=>{
+          console.error(error)
+        })
+      }
+
     }, (error) => {
       this.messageService.add({ severity: 'error', summary: 'Renvoie d\'un ticket', detail: 'Le renvoie a eu un problème' });
       console.error(error)
