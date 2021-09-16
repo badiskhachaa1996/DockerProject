@@ -6,7 +6,8 @@ const ticket_schema= new mongoose.Schema({
     },
     sujet_id: {
         type:mongoose.SchemaTypes.ObjectId,
-        required:true
+        required:true,
+        ref:"sujet"
     },
     date_ajout:{
         type: Date,

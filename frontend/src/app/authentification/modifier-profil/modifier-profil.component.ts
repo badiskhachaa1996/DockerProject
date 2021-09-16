@@ -24,7 +24,10 @@ export class ModifierProfilComponent implements OnInit {
   showForm: boolean = true;
   civiliteList = environment.civilite;
   decodeToken: any = jwt_decode(localStorage.getItem("token"))
- 
+  token = null;
+
+  retour: boolean = false;
+
   toggleUpdate:boolean =false
   userupdate: any =  this.decodeToken;
   userco : any=this.userupdate;
@@ -95,6 +98,13 @@ export class ModifierProfilComponent implements OnInit {
 
   
   ngOnInit(): void {
+
+    this.token = jwt_decode(localStorage.getItem("token"))
+
+    if (this.token["role"].includes("User")) {
+      this.retour = true;
+    }
+
 
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;

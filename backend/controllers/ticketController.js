@@ -117,7 +117,7 @@ app.get("/getQueue", (req, res) => {
 
 })
 
-//Récupérer les Tickets Acceptes ou Affectés
+//Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id },null,{sort:{date_affec_accep:1}})//Et "En attente d'une réponse"
         .then(result => {
@@ -282,9 +282,6 @@ app.post("/AccAff/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-                console.log(user.createur_id)
-
-
                 res.send(user);
                 User.findOne({ _id: user.agent_id }).then((userFromDb) => {
 

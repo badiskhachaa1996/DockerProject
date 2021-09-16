@@ -22,7 +22,6 @@ export class AuthService {
   constructor(private http : HttpClient) {  }
 
   register(user: User) {
-    console.log(user)
     let API_URL = this.apiUrl+"registre";
     return this.http.post(API_URL, user)
       .pipe(

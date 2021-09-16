@@ -12,22 +12,15 @@
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 <label style="color: #3da827; font-weight: bold;">Service:</label>
-                                <!--<span>
-                                    <p-dropdown formControlName="service" [options]="filterService" (onChange)="onChange($event)"></p-dropdown>
-                                </span>-->
                                 <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of filterService" [ngValue]="service">
                                         {{ service.label }}
                                     </option>
                                 </select>
-
-            
-
-
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <label style="color:#3da827; font-weight: bold;">Sujet:</label>
+                                <label style="font-weight: bold;">Sujet:</label>
                                 <!--<span>
                                     <p-dropdown formControlName="sujet" [options]="listSujets"></p-dropdown>
                                 </span>-->
@@ -42,7 +35,7 @@
                                 </select>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                                <label style="color: #3da827; font-weight: bold;">Description:</label>
+                                <label style="font-weight: bold;">Description:</label>
                                 <textarea type="text" formControlName="description" class="form-control col-12"
                                     placeholder="Description" pInputTextarea></textarea>
                                 <div *ngIf="description.invalid && (description.touched || description.dirty)">
@@ -74,7 +67,7 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Service</label>
+                            <label style="font-weight: bold;">Service</label>
                             <select formControlName="service" class="form-control col-12" (change)="onChange2()">
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
                                 <option *ngFor="let service of listServices1" [ngValue]="service">
@@ -83,7 +76,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Sujet:</label>
+                            <label style="font-weight: bold;">Sujet:</label>
                             <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
                                 class="form-control col-12">
                                 <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
@@ -93,7 +86,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                            <label style="color: #3da827; font-weight: bold;">Description:</label>
+                            <label style="font-weight: bold;">Description:</label>
                             <textarea pInputTextarea type="text" formControlName="description"
                                 class="form-control col-12" placeholder="Description"></textarea>
                             <div *ngIf="description.invalid && (description.touched || description.dirty)">
@@ -134,7 +127,7 @@
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
                     </div><br>
-                  
+
                     <div class="text-center">
                         <button [disabled]="commentForm.invalid || loading" pButton
                             class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
@@ -153,33 +146,25 @@
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 
-            *ngIf="ticketList" 
-            [value]="ticketList" 
-            [paginator]="true" 
-            [rows]="4" 
-            [paginator]="true"
-            [pageLinks]="5" 
-            dataKey="_id" 
-            rowExpandMode="single" 
-            [totalRecords]="ticketList.length"
-            [globalFilterFields]="['sujet_id','statut']"
-            >
+            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+                [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
+                [globalFilterFields]="['sujet_id','statut']" (sortFunction)="customSort($event)" [customSort]="true">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
 
-                        <th style="text-decoration: underline;" pSortableColumn="sujet_id" >
-                            Service <p-sortIcon field="service_id"></p-sortIcon>
+                        <th style="text-decoration: underline;" pSortableColumn="service">
+                            Service <p-sortIcon field="service"></p-sortIcon>
+                            <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                        </th>
+                        <th style="text-decoration: underline;" pSortableColumn="sujet">
+                            Sujet <p-sortIcon field="sujet"></p-sortIcon>
 
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="sujet_id" >
-                            Sujet <p-sortIcon field="sujet_id"></p-sortIcon>
-
-                        </th>
-                        <th style="text-decoration: underline;" pSortableColumn="statut" >
-                            Statut <p-sortIcon field="statut"></p-sortIcon>
-
+                        <th style="text-decoration: underline;" pSortableColumn="statut">
+                            Statut
+                        <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;">
                             Action
@@ -190,7 +175,8 @@
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
                         </span>
                     </div>
                 </ng-template>
@@ -232,14 +218,15 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    
+
                                     <div class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de ticket:</b>
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro de
+                                                ticket:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData._id}} </div>
                                     </div>
-                                    
+
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Date
                                                 d'ajout:</b> </div>
@@ -256,7 +243,8 @@
                             </p-fieldset>
 
 
-                            <p-fieldset *ngIf="comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments.length!=0" legend="Messages"
+                                [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
@@ -266,17 +254,20 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-                                        (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
+                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+                                        id="charger2" (click)="downloadFile(message)"><i
+                                            class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
                                     <span class="ui-g-11 ui-md-11" id="messageAgent"> {{message.description}} </span>
 
                                 </div>
 
-                                <span id="soustitre" class="ui-g-11 ui-md-11" >
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}  {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
-                                    
+                                <span id="soustitre" class="ui-g-11 ui-md-11">
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
+
                                 </span>
                             </span>
                         </td>
@@ -294,8 +285,10 @@
                                     <span class="ui-g-12 ui-md-11" id="messageUser"> {{message.description}} </span>
                                 </div>
                                 <span id="soustitre" class=" ui-g-11 ui-md-11">
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
-                                   
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
+
                                 </span>
 
                             </span>

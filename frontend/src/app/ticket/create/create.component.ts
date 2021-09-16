@@ -53,7 +53,6 @@ export class CreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.serv.getAll().subscribe((data)=>{
-      console.log(data);
       this.listServices=data;
       data.forEach(service => {
         this.listSujets[service._id]=[];
@@ -62,7 +61,6 @@ export class CreateComponent implements OnInit {
         data.forEach(sujet => {
           this.listSujets[sujet.service_id].push(sujet);
         });
-        console.log(this.listSujets)
       })
     },(error)=>{
       console.log(error)

@@ -8,7 +8,7 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Service:</label>
+                            <label style="font-weight: bold;">Service:</label>
 
                             <select formControlName="service" class="form-control col-12" >
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
@@ -18,7 +18,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Sujet:</label>
+                            <label style="font-weight: bold;">Sujet:</label>
                             <select [disabled]="!TicketForm.value.service" formControlName="sujet"
                                 class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un sujet</option>
@@ -47,7 +47,7 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-                    <label style="color: #3da827; font-weight: bold; margin-left: 710px;">Statut du ticket :     </label>
+                    <label style="font-weight: bold; margin-left: 710px; text-decoration: underline;">Statut du ticket :     </label>
                     <div style="margin-left: 130px;">
                         <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
@@ -75,7 +75,7 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
                     <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue d'entrée</h3><br>
-                    <label style="color: #3da827; font-weight: bold; margin-left: 135px;">Justificatif</label>
+                    <label style="font-weight: bold; margin-left: 135px; text-decoration: underline;">Justificatif : </label>
                     <div class="text-center"><br>
                         <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message" placeholder="Expliquer la raison de votre renvoie"></textarea>
                     </div><br>
@@ -266,7 +266,7 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Mes tickets </h3>
+        <h3>Mes tickets à traiter</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table 
             #dt2 
@@ -299,8 +299,8 @@
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
-                            Service <p-sortIcon field="service"> </p-sortIcon>
-                            <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService" ></p-dropdown>
+                            Service <p-sortIcon field="service"></p-sortIcon>
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;">  Sujet
                         </th>
@@ -318,7 +318,7 @@
                         
                             <span>
                                 Statut
-                                <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="testFilter($event)" ></p-dropdown>
+                                <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt2.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                             </span>
                         </th>
                         <th style="text-decoration: underline;">
@@ -522,8 +522,9 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
-                        <th style="text-decoration: underline;">  Sujet
+                        <th style="text-decoration: underline;">Sujet
                         </th>
                         <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
 
@@ -539,6 +540,7 @@
                         </th>
                         <th style="text-decoration: underline;">
                             Statut
+                            <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                         </th>
                         <th *ngIf="token['role']!='Agent'">
                             Action
@@ -698,7 +700,7 @@
 
                                     <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
-                    <tr *ngIf="message.user_id==rowData.createur_id">
+                    <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
@@ -718,7 +720,7 @@
                         </td>
                     </tr>
 
-                    <tr *ngIf="message.user_id!=rowData.createur_id">
+                    <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
