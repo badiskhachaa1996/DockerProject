@@ -46,22 +46,30 @@
                     <div class="text-center">
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
-                    </div><br>
-                    <label style="font-weight: bold; margin-left: 710px; text-decoration: underline;">Statut du ticket :     </label>
-                    <div style="margin-left: 130px;">
-                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
-                            customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-                            maxFileSize="20000000" [auto]="true" >
-                        </p-fileUpload>
-                        <span style="margin-left: 370px;">
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
-                        </span>
+                    </div>
+                    <!--  -->
+                    <div id="container3" >
+                      
+                        <div  class="mt-8">  
+                            <div style="text-align: center;" >
+                                <label style="font-weight: bold; text-decoration: underline;"  >Statut du ticket : </label>
+                            </div>
+               <span >
+                    <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
+                      customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                     maxFileSize="20000000" [auto]="true" >
+                 </p-fileUpload>
+           <div>
+                    <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown> 
+                 </div>
+            </span>
+             </div>  
                     </div>
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
                     </div><br>
-                    <div class="text-center">
-                        <button [disabled]="commentForm.invalid || loading" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
+                    <div class="text-center mt-8 pt-6" >
+                        <button  [disabled]="commentForm.invalid || loading" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
                 </form>
             </div>

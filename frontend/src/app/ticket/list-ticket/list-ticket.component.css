@@ -1,6 +1,28 @@
+#center{
+  position:absolute;
+  left:10%;
+  /* margin-left:-90px; */
+  /* padding-top: 50px; */
+
+}
+#container3 {
+  position:relative;
+  
+
+}
+
 #container {
   position:relative;
 
+}
+#right4 {
+  position:absolute;
+  right:0px;
+}
+#left4 {
+  position:absolute;
+  left:0px;
+  /* padding-top: 20px; */
 }
 #l{
   margin-left: 20px;
