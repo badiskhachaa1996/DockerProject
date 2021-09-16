@@ -55,6 +55,7 @@ export class AuthService {
     return this.http.post<any>(registreUrl,user,httpOptions);
 
   }
+  
   getAllByService(id){
     let loginUrl=this.apiUrl+"getAllbyService/"+id;
     return this.http.get<any>(loginUrl,httpOptions1) .pipe(

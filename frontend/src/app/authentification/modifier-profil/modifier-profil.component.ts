@@ -67,10 +67,9 @@ export class ModifierProfilComponent implements OnInit {
       
     
 
-    let Userpwd = new User(this.userpw._id, this.userpw.firstname, this.userpw.lastname, this.userpw.phone, this.userpw.email, this.PwdForm.value.password, this.userpw.role , this.userpw.etat, this.userpw.adresse, this.userpw.service_id,this.userpw.civilite)
-    this.AuthService.update(Userpwd).subscribe((data) => {
+   this.AuthService.updatePassword(this.userpw._id, this.PwdForm.value.password).subscribe((data) => {
       
-      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
+      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon mot de passe a bien été modifié' });
       console.log(data)
     }, (error) => {
       console.log(error)
