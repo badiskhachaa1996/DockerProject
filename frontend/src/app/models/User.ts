@@ -10,7 +10,8 @@ export class User {
         public etat?: boolean,
         public adresse?:string,
         public service_id?:string,
-        public civilite?:string
+        public civilite?:string,
+        public pathImageProfil?:string
     ){}
     
 
