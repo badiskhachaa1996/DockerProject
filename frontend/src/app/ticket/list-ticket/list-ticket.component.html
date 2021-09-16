@@ -289,43 +289,46 @@
                 [globalFilterFields]="['sujet_id','description','date_affec_accep','statut']"  
                 (sortFunction)="customSort($event)" [customSort]="true">
     
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex" style="text-align: right">
-                        <span class="p-input-icon-left p-ml-auto">
+                <ng-template pTemplate="caption" id="container2">
+                    <div class="p-d-flex" id="left2"  >
+                       
+                        <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true" [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
+                   </div> 
+                    <div id="right2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"/>
-                        </span>
-                    </div>
+                     </div>
+                
                 </ng-template>
 
                <div id="top">
                 <ng-template pTemplate="header" let-columns >
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;" pSortableColumn="service">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true" [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
+                           
                         </th>
-                        <th style="text-decoration: underline;">  Sujet
+                        <th style="text-decoration: underline;padding-top: 5%;">  Sujet
                         </th>
-                        <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation
+                        <th style="text-decoration: underline;padding-top: 5%;"pSortableColumn="date_affec_accep">  Date d'acceptation
                             
                             <p-sortIcon field="date_affec_accep"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;padding-top: 5%;">
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline; " pSortableColumn="isAffected">
+                        <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;padding-top: 5%;">
                         
                             <span>
                                 Statut
 
                             </span>
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;padding-top: 5%;">
                             Action
                         </th>
                     </tr>
