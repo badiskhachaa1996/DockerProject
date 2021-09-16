@@ -115,12 +115,8 @@
                             </div>
                             <div *ngIf=IsAdmin>
                                 <span>
-<<<<<<< HEAD
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value" class="register"></p-dropdown>
-=======
                                     <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
                                     </p-dropdown>
->>>>>>> df449a64c988e94a8892dda3f4972c2726b662ac
                                 </span>
                             </div>
                         </div>
@@ -129,15 +125,6 @@
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
-<<<<<<< HEAD
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label" class="register"></p-dropdown>
-                            </span>
-                        </div>
-                                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>
-                            </div>
-                        </div>                 
-=======
                                 <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
                                 </p-dropdown>
                             </span>
@@ -149,7 +136,6 @@
                                 label="Enregistrer" (click)="saveUser()"></button>
                         </div>
                     </div>
->>>>>>> df449a64c988e94a8892dda3f4972c2726b662ac
                 </form>
             </div>
         </p-card>
