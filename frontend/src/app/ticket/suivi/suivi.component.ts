@@ -227,7 +227,6 @@ export class SuiviComponent implements OnInit {
   }
 
   toggleFormAdd() {
-    console.log(this.TicketForm)
     this.showFormAdd = !this.showFormAdd
     this.showFormUpdate = false;
     this.showFormAddComment=false;
