@@ -9,7 +9,7 @@ import { TicketService } from 'src/app/services/ticket.service';
 import { SujetService } from 'src/app/services/sujet.service';
 import { ServService } from 'src/app/services/service.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MessageService, SortEvent } from 'primeng/api';
 import { MessageService as MsgService } from 'src/app/services/message.service';
 import { saveAs as importedSaveAs } from 'file-saver';
 import { environment } from 'src/environments/environment';
@@ -33,6 +33,8 @@ export class SuiviComponent implements OnInit {
   filterService;
   filterSujet;
   filterStatut;
+
+  dropdownService: any[]=[{label:"Tous",value:null}];
 
   first = 0;
   rows = 10;
@@ -89,6 +91,14 @@ export class SuiviComponent implements OnInit {
   updateList(){
     this.TicketService.getAllByUser(this.token["id"]).subscribe((data) => {
       this.ticketList = data;
+      this.ticketList.forEach((ticket,index)=>{
+        this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+          (sujet)=>{
+            ticket["service_id"]=sujet.dataSujet.service_id
+            this.ticketList.splice(index,1,ticket)
+          }
+        )
+      })
     }, (error) => {
       console.log(error)
     })
@@ -109,6 +119,10 @@ export class SuiviComponent implements OnInit {
     this.token = jwt_decode(token);
 
     this.updateList()
+
+    this.ServService.getDic().subscribe((data) => {
+      this.serviceDic = data;
+    })
 
     this.AuthService.getAll().subscribe((data) => {
       if (!data.message) {
@@ -134,6 +148,7 @@ export class SuiviComponent implements OnInit {
         //{ label: 'Tous les services', value: null }
         this.filterService = data;
         data.forEach(service => {
+          this.dropdownService.push({label:service.label,value:service._id})
           this.serviceList[service._id] = service.label;
         });
       }
@@ -366,5 +381,42 @@ export class SuiviComponent implements OnInit {
   }
 
   get value() { return this.commentForm.get('value'); }
+
+  customSort(event: SortEvent) {
+    event.data.sort((data1, data2) => {
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      if (event.field == "service") {
+        value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
+        value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
+      } else if (event.field == "agent") {
+        this.AllUsers.forEach(user=>{
+          if(user._id==data1.agent_id){
+            value1 = user.firstname + " " + user.lastname;
+            
+          }
+          if(user._id==data2.agent_id){
+            value2 = user.firstname + " " + user.lastname;
+          }
+        })
+      } else if (event.field=="sujet"){
+        value1 = this.sujetList[data1.sujet_id].label
+        value2 = this.sujetList[data2.sujet_id].label
+      }
+      let result = null;
+
+      if (value1 == null && value2 != null)
+        result = -1;
+      else if (value1 != null && value2 == null)
+        result = 1;
+      else if (value1 == null && value2 == null)
+        result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string')
+        result = value1.localeCompare(value2);
+      else
+        result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+      return (event.order * result);
+    });
+  }
 
 }
