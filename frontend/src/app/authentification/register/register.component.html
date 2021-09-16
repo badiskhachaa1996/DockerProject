@@ -14,7 +14,10 @@
                             <div class="field col mt-2 mb-2 col-lg-8 col-8">
                                 <div>
                                     <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
-                                </div>
+                                </div>    
+                            <span>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                            </span>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                     <div>
