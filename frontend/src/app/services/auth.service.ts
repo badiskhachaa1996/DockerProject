@@ -87,5 +87,9 @@ export class AuthService {
   uploadimageprofile(file:File,Userid:any,filetype:any){
 
   }
+  updatePassword(id:string,password:string){
+    let url=this.apiUrl+"updatePassword/"+id;
+    return this.http.post<any>(url,{password},httpOptions);
+  }
  
 }
