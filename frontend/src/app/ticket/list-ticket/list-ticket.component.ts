@@ -193,6 +193,7 @@ export class ListTicketComponent implements OnInit {
         this.SujetService.getAll().subscribe((data) => {
           this.listSujets = data;
           if (!data.message) {
+      
             data.forEach(sujet => {
               this.listSujetSelected[sujet.service_id].push(sujet);
               this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };

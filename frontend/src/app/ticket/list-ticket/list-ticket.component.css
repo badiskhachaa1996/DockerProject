@@ -1,3 +1,28 @@
+#container {
+  position:relative;
+
+}
+#left {
+  position:absolute;
+  left:0px;
+}
+#right {
+  position:absolute;
+  right:0px;
+}
+#container2 {
+  position:relative;
+
+}
+#left2 {
+  position:absolute;
+  left:0px;
+}
+#right2 {
+  position:absolute;
+  right:0px;
+}
+
 #messageAgent{
 
     border-radius: 15px;
