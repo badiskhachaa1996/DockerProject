@@ -519,12 +519,8 @@
             <ng-template pTemplate="caption"> 
                 <div class="p-input-icon-left p-ml-auto" id="container">
                     <div id="left">
-<<<<<<< HEAD
-                        <p-dropdown [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
-=======
                         <p-dropdown *ngIf="token['role']=='Admin'"  filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
-                        <p-dropdown filter="true" id="l" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
->>>>>>> 4e6b78bc70c2055021df4a50aa0f164512219cd6
+                        <p-dropdown id="l" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                     </div>
                     <div id="right" >
                         <i class="pi pi-search" ></i>
