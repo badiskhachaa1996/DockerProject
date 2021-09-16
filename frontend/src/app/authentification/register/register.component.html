@@ -13,12 +13,16 @@
                         <div class="grid">
 
                             <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                                <div>
-                                <label for="civilite" class="p-sr-only">Civilité :</label>
+                                <!-- <div class="field col mt-0 mb-0 col-lg-4 col-4">  -->
+                                    <div>    
+                                        <label for="civilite" class="p-sr-only">Civilité :</label>
+                                    </div>    
+                                    <span>
+                                        <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                                    </span>
+                                <!-- </div> -->
+                                <div class="field col mt-0 mb-0 col-lg-8">
                                 </div>
-                                <span>
-                                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
-                                </span>
                             </div>
 
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -92,17 +96,18 @@
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
                                 </div>
-                                <div *ngIf=IsAdmin class="mt-2 mb-2 col-lg-12 col-12" >
+                                <div *ngIf=IsAdmin class="p-grid ui-fluid" >
                                     
                                     
-                                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                            <label for="role" class="p-sr-only">Role :</label>
+                                        <div class="p-col-12 p-md-6">
+                                            <h4> Role :  </h4>
                                             
-                                         <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
+                                            <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
                                        </div>
-                                       <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                            <label for="service_id" class="p-sr-only">Service:</label>
-                                            
+
+                                       <div class="p-col-12 p-md-6">
+                                        <h4>Service :</h4>
+                                      
                                          <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
                                         </div>
                                  </div>
