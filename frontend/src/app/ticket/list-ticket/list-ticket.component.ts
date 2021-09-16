@@ -166,7 +166,6 @@ export class ListTicketComponent implements OnInit {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
       this.token = null
-      console.error(e)
     }
     if (this.token == null) {
       this.router.navigate(["/login"])

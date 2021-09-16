@@ -18,13 +18,9 @@
                                         {{ service.label }}
                                     </option>
                                 </select>
-
-
-
-
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <label style="color:#3da827; font-weight: bold;">Sujet:</label>
+                                <label style="font-weight: bold;">Sujet:</label>
                                 <!--<span>
                                     <p-dropdown formControlName="sujet" [options]="listSujets"></p-dropdown>
                                 </span>-->
@@ -39,7 +35,7 @@
                                 </select>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                                <label style="color: #3da827; font-weight: bold;">Description:</label>
+                                <label style="font-weight: bold;">Description:</label>
                                 <textarea type="text" formControlName="description" class="form-control col-12"
                                     placeholder="Description" pInputTextarea></textarea>
                                 <div *ngIf="description.invalid && (description.touched || description.dirty)">
@@ -71,7 +67,7 @@
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Service</label>
+                            <label style="font-weight: bold;">Service</label>
                             <select formControlName="service" class="form-control col-12" (change)="onChange2()">
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
                                 <option *ngFor="let service of listServices1" [ngValue]="service">
@@ -80,7 +76,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <label style="color: #3da827; font-weight: bold;">Sujet:</label>
+                            <label style="font-weight: bold;">Sujet:</label>
                             <select [disabled]="!TicketForm1.value.service" formControlName="sujet"
                                 class="form-control col-12">
                                 <option *ngFor="let sujet of listSujets1[TicketForm1.value.service._id]"
@@ -90,7 +86,7 @@
                             </select>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                            <label style="color: #3da827; font-weight: bold;">Description:</label>
+                            <label style="font-weight: bold;">Description:</label>
                             <textarea pInputTextarea type="text" formControlName="description"
                                 class="form-control col-12" placeholder="Description"></textarea>
                             <div *ngIf="description.invalid && (description.touched || description.dirty)">

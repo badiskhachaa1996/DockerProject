@@ -11,23 +11,17 @@
                    
                     <br>
                         <div class="grid">
-
-                            <div class="field col mt-2 mb-2 col-lg-12 col-12">
-                                <!-- <div class="field col mt-0 mb-0 col-lg-4 col-4">  -->
-                                    <div>    
-                                        <label for="civilite" class="p-sr-only">Civilité :</label>
-                                    </div>    
-                                    <span>
-                                        <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
-                                    </span>
-                                <!-- </div> -->
-                                <div class="field col mt-0 mb-0 col-lg-8">
-                                </div>
+                            <div class="field col mt-2 mb-2 col-lg-8 col-8">
+                                <div>
+                                    <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
+                                </div>    
+                            <span>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                            </span>
                             </div>
-
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                     <div>
-                                    <label for="lastname" class="p-sr-only">Nom :</label>
+                                        <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
                                     </div>
                                 <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom" pInputText>
                                 <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
@@ -36,9 +30,8 @@
                                 </div>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                
                                     <div>
-                                    <label for="firstname" class="p-sr-only">Prénom :</label>
+                                        <label style="font-weight: bold;" for="firstname" class="p-sr-only">Prénom :</label>
                                     </div>
                                 <input type="text" formControlName="firstname" class="form-control col-12" placeholder="Prénom" pInputText>
                                 <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
@@ -48,7 +41,7 @@
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <div>
-                                    <label for="email" class="p-sr-only">Adresse mail :</label>
+                                    <label style="font-weight: bold;" for="email" class="p-sr-only">Adresse mail :</label>
                                     </div>
                                 <input type="text" formControlName="email" class="form-control col-12" placeholder="Adresse mail" pInputText>
                                 <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
@@ -59,7 +52,7 @@
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                     <div>
-                                    <label for="adresse" class="p-sr-only">Adresse :</label>
+                                    <label style="font-weight: bold;" for="adresse" class="p-sr-only">Adresse :</label>
                                     </div>
                               <input id="adresse" type="text" formControlName="adresse" class="form-control col-12" placeholder="Adresse" pInputText required/>
                               <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
@@ -69,7 +62,7 @@
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <div>
-                                    <label for="phone" class="p-sr-only">Téléphone :</label>
+                                    <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
                                     </div>
                                 <input type="text" formControlName="phone" class="form-control col-12" placeholder="Téléphone" pInputText>
                                 <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
@@ -79,7 +72,7 @@
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <div>
-                                    <label for="password" class="p-sr-only">Mot de passe :</label>
+                                    <label style="font-weight: bold;" for="password" class="p-sr-only">Mot de passe :</label>
                                     </div>
                                 <input type="password" formControlName="password" class="form-control col-12" placeholder="Mot de passe" pInputText>
                                 <div *ngIf="password.invalid && (password.touched || password.dirty)">
@@ -88,7 +81,7 @@
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
                                 <div>
-                                    <label for="verifypassword" class="p-sr-only">Vérifier le mot de passe  :</label>
+                                    <label style="font-weight: bold;" for="verifypassword" class="p-sr-only">Vérifier le mot de passe  :</label>
                                     </div>
                                 <input type="password" formControlName="verifypassword" class="form-control col-12" placeholder="Confirmation mot de passe" pInputText>
                                 <div *ngIf="(verifypassword.invalid || verifypassword.value!=password.value) && (verifypassword.touched || verifypassword.dirty)">
@@ -96,21 +89,24 @@
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
                                 </div>
-                                <div *ngIf=IsAdmin class="p-grid ui-fluid" >
-                                    
-                                    
-                                        <div class="p-col-12 p-md-6">
-                                            <h4> Role :  </h4>
-                                            
-                                            <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
-                                       </div>
-
-                                       <div class="p-col-12 p-md-6">
-                                        <h4>Service :</h4>
-                                      
-                                         <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
-                                        </div>
-                                 </div>
+                                <div class=" field col mt-2 mb-2 col-lg-6 col-6">
+                            <div>
+                                <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
+                            </div>
+                            <div *ngIf=IsAdmin>
+                                <span>
+                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value"></p-dropdown>
+                                </span>
+                            </div>   
+                        </div>
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            <div>
+                                <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
+                            </div>
+                            <span>
+                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label"></p-dropdown>
+                            </span>
+                        </div>
                             
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>

@@ -399,7 +399,7 @@ body .ui-dropdown:not(.ui-state-disabled):hover {
   border-color: #256b17;
 }
 body .ui-dropdown .ui-dropdown-label {
-  padding-right: 2em;
+  padding-right: 19em;
 }
 body .ui-dropdown .ui-dropdown-trigger {
   background-color: #ffffff;
@@ -1839,18 +1839,18 @@ body .ui-table .ui-sortable-column .ui-sortable-column-icon {
   color: #4a4a4a;
 }
 body .ui-table .ui-sortable-column:not(.ui-state-highlight):hover {
-  background-color: #caf1ca;
+  background-color: white;
   color: #024B4C;
 }
 body .ui-table .ui-sortable-column:not(.ui-state-highlight):hover .ui-sortable-column-icon {
   color: #024B4C;
 }
 body .ui-table .ui-sortable-column.ui-state-highlight {
-  background-color: #3da827;
-  color: #ffffff;
+  background-color: white;
+  color: black;
 }
 body .ui-table .ui-sortable-column.ui-state-highlight .ui-sortable-column-icon {
-  color: #ffffff;
+  color: black;
 }
 body .ui-table .ui-editable-column input {
   font-size: 15px;
