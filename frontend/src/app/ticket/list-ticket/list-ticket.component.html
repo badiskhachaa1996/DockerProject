@@ -107,9 +107,6 @@
 
             <ng-template pTemplate="caption">
                 <div class="p-d-flex" id="container">
-                    <div id="left">
-                    <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"  ></p-dropdown>
-                    </div>
                     <div id="right" >
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
@@ -122,6 +119,7 @@
 
                         <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service 
                             <p-sortIcon field="service"></p-sortIcon>
+                            <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true" [options]="dropdownService" (onChange)="dt1.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline; padding-top: 5%;">  Sujet
                         </th>
@@ -516,8 +514,7 @@
             <ng-template pTemplate="caption"> 
                 <div class="p-input-icon-left p-ml-auto" id="container">
                     <div id="left">
-                    <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="testFilter($event)" >
-                    </p-dropdown>
+                        <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                     </div>
                     <div id="right" >
                         <i class="pi pi-search" ></i>
@@ -531,7 +528,7 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;">  Sujet
                         </th>
