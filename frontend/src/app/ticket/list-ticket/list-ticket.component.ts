@@ -17,6 +17,7 @@ import { Message } from 'src/app/models/Message';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-list-ticket',
@@ -30,6 +31,7 @@ export class ListTicketComponent implements OnInit {
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
+  dropdownService: any[]=[];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
@@ -93,7 +95,7 @@ export class ListTicketComponent implements OnInit {
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
 
-  updateAccAffList(){
+  updateAccAffList() {
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
@@ -101,7 +103,7 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
-  updateAllList(){
+  updateAllList() {
     if (this.token['role'] == "Admin") {
       this.TicketService.getAllAccAff().subscribe((data) => {
         if (!data.message) {
@@ -117,7 +119,7 @@ export class ListTicketComponent implements OnInit {
     }
   }
 
-  updateQueue(){
+  updateQueue() {
     if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
@@ -157,6 +159,7 @@ export class ListTicketComponent implements OnInit {
       this.listServices = data;
       if (!data.message) {
         data.forEach(element => {
+          this.dropdownService.push({label:element.label,value:element._id})//TODO ICI
           this.listSujetSelected[element._id] = [];
           this.serviceList[element._id] = element.label;
         });
@@ -186,7 +189,6 @@ export class ListTicketComponent implements OnInit {
         this.AllUsers = data;
       }
     })
-    console.log(this.TicketForm)
   }
 
   //QueueToAccAff
@@ -254,24 +256,39 @@ export class ListTicketComponent implements OnInit {
 
   customSort(event: SortEvent) {
     event.data.sort((data1, data2) => {
-        let value1 = data1[event.field];
-        let value2 = data2[event.field];
-        let result = null;
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      if (event.field == "service") {
+        value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
+        value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
+      } else if (event.field == "agent") {
+        this.AllUsers.forEach(user=>{
+          if(user._id==data1.agent_id){
+            value1 = user.firstname + " " + user.lastname;
+            
+          }
+          if(user._id==data2.agent_id){
+            value2 = user.firstname + " " + user.lastname;
+          }
+        })
 
-        if (value1 == null && value2 != null)
-            result = -1;
-        else if (value1 != null && value2 == null)
-            result = 1;
-        else if (value1 == null && value2 == null)
-            result = 0;
-        else if (typeof value1 === 'string' && typeof value2 === 'string')
-            result = value1.localeCompare(value2);
-        else
-            result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
 
-        return (event.order * result);
+      }
+      let result = null;
+
+      if (value1 == null && value2 != null)
+        result = -1;
+      else if (value1 != null && value2 == null)
+        result = 1;
+      else if (value1 == null && value2 == null)
+        result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string')
+        result = value1.localeCompare(value2);
+      else
+        result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+      return (event.order * result);
     });
-}
+  }
 
   modify(data) {
     console.log(data)
@@ -313,7 +330,7 @@ export class ListTicketComponent implements OnInit {
           this.updateAllList()
         } else {
           this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
-          if(this.token.role=="Admin"){
+          if (this.token.role == "Admin") {
             this.updateAllList()
           }
         }
@@ -337,7 +354,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   showWaitingTime(rawData) {
-    
+
     let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
     let days = calc.getUTCDate() - 1
     let Hours = calc.getUTCHours()
@@ -345,10 +362,10 @@ export class ListTicketComponent implements OnInit {
     if (days == 0) {
       return Hours.toString() + " h " + minutes + " min"
     }
-    return days.toString()+" j " + Hours + " h " + minutes + " min "
+    return days.toString() + " j " + Hours + " h " + minutes + " min "
 
   }
-  
+
   showWorkingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_affec_accep).getTime())
     let days = (calc.getUTCDate() - 1 > 0) ? "" + (calc.getUTCDate() - 1) + " j " : " ";
@@ -386,10 +403,10 @@ export class ListTicketComponent implements OnInit {
         error => {
           console.log(error);
         });
-        this.expandedAll={};
-        this.expandedAll[ticket._id]=true;
-        this.expandedTraitement={}
-        this.expandedTraitement[ticket._id]=true;
+    this.expandedAll = {};
+    this.expandedAll[ticket._id] = true;
+    this.expandedTraitement = {}
+    this.expandedTraitement[ticket._id] = true;
   }
   SendComment() {
     let comment = {
@@ -435,7 +452,7 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1,data)
+            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
             this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
             this.selectedTicket = null;
             this.commentForm.reset();
@@ -451,10 +468,6 @@ export class ListTicketComponent implements OnInit {
     }, (error) => {
       console.log(error)
     });
-
-
-
-
   }
 
   downloadFile(message: Message) {
@@ -526,23 +539,23 @@ export class ListTicketComponent implements OnInit {
       }
       this.RevertForm.reset()
       this.showRevert = null
-      if(this.showRevert.agent_id==this.token['id']){
+      if (this.showRevert.agent_id == this.token['id']) {
         //L'agent a revert son ticket
         //Notifié les responsables de son service
-        this.AllUsers.forEach(user=>{
-          if(user._id!=this.token.id && ((user.role=="Responsable" && user.service_id == this.token.service_id)|| user.role=="Admin")){
-            this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket par Agent",null,user._id)).subscribe(Notif=>{
+        this.AllUsers.forEach(user => {
+          if (user._id != this.token.id && ((user.role == "Responsable" && user.service_id == this.token.service_id) || user.role == "Admin")) {
+            this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket par Agent", null, user._id)).subscribe(Notif => {
               this.NotifService.newNotif(Notif)
-            },(error)=>{
+            }, (error) => {
               console.error(error)
             })
           }
         })
-      }else{
+      } else {
         //Avertir l'agent que son ticket a été revert
-        this.NotifService.create(new Notification(null,this.showRevert._id,false,"Revert d\'un ticket",null,this.showRevert.agent_id)).subscribe(Notif=>{
+        this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket", null, this.showRevert.agent_id)).subscribe(Notif => {
           this.NotifService.newNotif(Notif)
-        },(error)=>{
+        }, (error) => {
           console.error(error)
         })
       }
@@ -553,6 +566,9 @@ export class ListTicketComponent implements OnInit {
     })
 
   }
+  @ViewChild('dt2') table: Table;
 
-
+  testFilter(event){
+    this.table.filter(event.value, 'service_id', 'equals')
+  }
 }

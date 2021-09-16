@@ -37,9 +37,9 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                    <a href="#" routerLink="/modification" (click)="app.onTopbarItemClick($event,profile)">
                         <i style="color: #3da827;" class="pi pi-user"></i>
-                        <div class="menu-text" routerLink="/modification" (click)="editUser(rowData);">
+                        <div class="menu-text" (click)="editUser(rowData);">
                             <span class="menu-title">Profil</span>
                             <span class="menu-subtitle">Modifier votre profil</span>
                         </div>
@@ -48,9 +48,9 @@
                     </a>
                 </li>       
                 <li>
-                    <a href="#" (click)="app.onTopbarSubItemClick($event)">
+                    <a href="#" (click)="app.onTopbarSubItemClick($event)" routerLink="/notification">
                         <i style="color: #3da827;" class="pi pi-globe"></i>
-                        <div class="menu-text" routerLink="/notification">
+                        <div class="menu-text">
                             <div class="number"
                                 style="margin-left: 50px; font-weight:bold; color: red; margin-left: 130%;">
                                 {{Notifications.length}}
@@ -65,56 +65,5 @@
         </li>
     </ul>
 
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <ul class="fadeInDown">
-                <li class="profile-detail">
-                    <div class="user-profile-info">
-                        <div class="profile-info">
-                            <span *ngIf="userconnected" class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
-                            <span *ngIf="userconnected" class="user-profile-role">{{userconnected.role}}</span>
-                        </div>
-                        <a href="#" class="profile-detail-icon" (click)="app.onTopbarSubItemClick($event)">
-                            <i pTooltip="Déconnexion"  (click)="onLogout()"  class="pi pi-sign-out"></i>
-                        </a>
-                    </div>
-                </li>
-                <li>
-                    <a href="#" routerLink="../profil">
-                        <span  class="p-overlay-badge p-mr-5">
-                            <i class="pi pi-user" pTooltip="profile" tooltipPosition="bottom" style="
-                            border-radius: 50%; font-size: 1.6em; color: #3cb371;"></i>
-                            <span class="p-badge" style="font-size: 15px;  font-weight: bold;
-                            color: #3cb371"></span>
-                        </span>
-                        <div class="menu-text">
-                            <span class="menu-title">Modifier votre profil</span>
-                        </div>
-
-                        <i class="right-icon pi pi-angle-right"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#"  (click)="app.onTopbarSubItemClick($event)">
-                        <i class="pi pi-bell" style="color:#3cb371"></i>
-                        <div class="menu-text">
-                            <span class="menu-title">Notifications</span>
-                        </div>
-                        <i class="right-icon pi pi-angle-right"></i>
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul> -->
 </div>
 <p-toast></p-toast>
