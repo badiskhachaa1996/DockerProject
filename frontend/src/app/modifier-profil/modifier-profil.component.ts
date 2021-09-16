@@ -40,10 +40,6 @@ export class ModifierProfilComponent implements OnInit {
     //  if (!this.User._id) {
     //    this.router.navigate(["/listUser/modification"])
     //  }
-    
-  
-
-
    }
 
 
