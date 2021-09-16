@@ -33,7 +33,7 @@
                         <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
                     </div>
                     <div class="user-detail">
-                        <ul *ngIf="!toggleUpdate">
+                        <ul *ngIf="!toggleUpdate && !toggleUpdatepwd">
                             <li>
                                 Civilité <div class="value">{{userco.civilite}} <i class="pi pi-arrow-circle-right"></i>
                                 </div>
@@ -52,7 +52,7 @@
                                 </div>
                             </li>
                             <li *ngIf="userco.service_id!=null">
-                                Views <div class="value">{{userco.Service}} <i class="pi pi-arrow-circle-right"></i>
+                                Service <div class="value">{{userco.Service}} <i class="pi pi-arrow-circle-right"></i>
                                 </div>
                             </li>
 
@@ -74,7 +74,7 @@
 
 
         <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
-            <p-card *ngIf="toggleUpdate">
+            <p-card *ngIf="toggleUpdate ">
                 <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
 
 
@@ -187,7 +187,7 @@
     </div>
 </div>
 
-<div class="p-grid mt-2">
+<div class="p-grid mt-2" *ngIf="toggleUpdatepwd ">
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="PwdForm">
         <p-card>
             <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
