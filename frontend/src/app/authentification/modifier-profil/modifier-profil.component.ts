@@ -42,7 +42,31 @@ export class ModifierProfilComponent implements OnInit {
 
   })
 
+  PwdForm: FormGroup = new FormGroup({
+    
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
 
+  })
+  userpw : User;
+  UpdatePwd(){
+    this.AuthService.getById(this.userupdate.id).subscribe((data) => {
+      
+    this.userpw = jwt_decode(data['userToken'])['userFromDb']
+      console.log(this.userpw)
+
+    
+
+    let Userpwd = new User(this.userco._id, this.userpw.firstname, this.userpw.lastname, this.userpw.phone, this.userpw.email, this.RegisterForm.value.password, this.userpw.role , this.userpw.etat, this.userpw.adresse, this.userpw.service_id,this.userpw.civilite)
+    this.AuthService.update(Userpwd).subscribe((data) => {
+
+      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
+      console.log(data)
+    }, (error) => {
+      console.log(error)
+    });
+  }, (err) => console.log(err) )
+  }
   UpdateUser() {
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role , this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id,this.RegisterForm.value.civilite.value)
     this.AuthService.update(user).subscribe((data) => {
