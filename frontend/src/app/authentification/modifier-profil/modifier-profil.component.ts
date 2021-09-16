@@ -29,13 +29,21 @@ export class ModifierProfilComponent implements OnInit {
   retour: boolean = false;
 
   toggleUpdate:boolean =false
+  toggleUpdatepwd:boolean=false
   userupdate: any =  this.decodeToken;
   userco : any=this.userupdate;
 
   public  ToggleUpdate(){
     this.toggleUpdate=!this.toggleUpdate
+    this.toggleUpdatepwd=false
     return this.toggleUpdate
   }
+  public  ToggleUpdatepwd(){
+    this.toggleUpdatepwd=!this.toggleUpdatepwd
+    this.toggleUpdate=false
+    return this.toggleUpdatepwd
+  }
+
   RegisterForm: FormGroup = new FormGroup({
     civilite: new FormControl(this.civiliteList[0], [Validators.required]),
     lastname: new FormControl(this.userupdate.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
@@ -45,13 +53,35 @@ export class ModifierProfilComponent implements OnInit {
 
   })
 
+  PwdForm: FormGroup = new FormGroup({
+    
+    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
 
+  })
+  userpw : User;
+  UpdatePwd(){
+    this.AuthService.getById(this.userupdate.id).subscribe((data) => {
+      
+    this.userpw = jwt_decode(data['userToken'])['userFromDb']
+      
+    
+
+   this.AuthService.updatePassword(this.userpw._id, this.PwdForm.value.password).subscribe((data) => {
+      
+      this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon mot de passe a bien été modifié' });
+      console.log(data)
+    }, (error) => {
+      console.log(error)
+    });
+  }, (err) => console.log(err) )
+  }
   UpdateUser() {
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role , this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id,this.RegisterForm.value.civilite.value)
     this.AuthService.update(user).subscribe((data) => {
 
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
-      console.log(data)
+     
     }, (error) => {
       console.log(error)
     });
@@ -120,11 +150,13 @@ export class ModifierProfilComponent implements OnInit {
     this.items = [
       { label: 'Modifier mes informations', icon: 'pi pi-fw pi-refresh', command: (event) => {
        this.ToggleUpdate();
-        console.log(this.toggleUpdate)
+       
         //event.item: menuitem metadata
     }},
       { label: 'Changer ma photo de profil', icon: 'pi pi-fw pi-image' },
-      { label: 'Modifier mon mot de passe ', icon: 'pi pi-fw pi-lock' }
+      { label: 'Modifier mon mot de passe ', icon: 'pi pi-fw pi-lock', command: (event) => {
+        this.ToggleUpdatepwd();
+        } }
   ];
 
   }

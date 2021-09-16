@@ -56,6 +56,8 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = false;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+  showFormRevertForm: boolean = false;
+
   loading: boolean = false;
   loadingMessage;
   uplo: File;
@@ -401,10 +403,19 @@ export class ListTicketComponent implements OnInit {
 
 
 
+  toggleRevertForm(ticket) {
+    this.showFormRevertForm = !this.showFormRevertForm;
+    this.showRevert = ticket;
+    this.showFormAddComment = false;
+    this.showFormUpdate = false;
+
+  }
+
   toggleFormUpdate() {
     this.isModify = null;
-    this.showFormAddComment = false;
     this.showFormUpdate = !this.showFormUpdate;
+    this.showFormRevertForm = false;
+    this.showFormAddComment = false;
 
   }
 
@@ -412,6 +423,7 @@ export class ListTicketComponent implements OnInit {
   toggleFormCommentAdd(ticket) {
     this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
+    this.showFormRevertForm =false;
     this.showFormUpdate = false;
 
     // this.showFormUpdateService=false;
@@ -543,9 +555,6 @@ export class ListTicketComponent implements OnInit {
     justificatif: new FormControl('', Validators.required)
   })
 
-  toggleRevertForm(ticket) {
-    this.showRevert = ticket;
-  }
 
   revert() {
     let data = {

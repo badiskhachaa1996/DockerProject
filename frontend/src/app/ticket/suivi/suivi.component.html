@@ -11,7 +11,7 @@
 
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <label style="color: #3da827; font-weight: bold;">Service:</label>
+                                <label style=" font-weight: bold;">Service:</label>
                                 <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of filterService" [ngValue]="service">
@@ -60,7 +60,7 @@
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdate=false"> </i>
 
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm1">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->

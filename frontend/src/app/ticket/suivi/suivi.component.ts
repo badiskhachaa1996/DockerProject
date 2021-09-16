@@ -220,7 +220,7 @@ export class SuiviComponent implements OnInit {
       this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1,data);
       this.TicketForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
-      this.toggleFormUpdate()
+      this.showFormUpdate=false
     }, (error) => {
       console.log(error)
     });
@@ -230,11 +230,9 @@ export class SuiviComponent implements OnInit {
     this.showFormAdd = !this.showFormAdd
     this.showFormUpdate = false;
     this.showFormAddComment=false;
-
-
   }
  toggleFormUpdate() {
-    this.showFormUpdate = !this.showFormUpdate
+    this.showFormUpdate = true
     this.showFormAdd = false
    this.showFormAddComment=false;
   }
