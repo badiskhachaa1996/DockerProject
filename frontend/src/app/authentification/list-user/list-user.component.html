@@ -1,19 +1,17 @@
-<div *ngIf="showForm=='Fermer'">
-    <div *ngIf="formtype=='new'">
+<div *ngIf="showFormAdd">
 
-        <app-register></app-register>
+    <app-register></app-register>
 
-    </div>
+</div>
 
-    <div *ngIf="formtype=='edit'">
-        <app-upduser></app-upduser>
-    </div>
+<div *ngIf="showFormModify">
+    <app-upduser></app-upduser>
 </div>
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button pButton type="button" [label]="showForm" style="float:right;" (click)="toggleForm()"
-            *ngIf="showForm=='Ajouter'"> </button>
+        <button pButton type="button" label="Ajouter" style="float:right;" (click)="showFormAdd=true"
+            *ngIf="!showFormAdd"> </button>
         <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
@@ -85,7 +83,7 @@
                             {{rowData.email}}
                         </td>
                         <td>
-                            <i class="pi pi-user-edit" (click)="modify(rowData)"></i>
+                            <i class="pi pi-user-edit" (click)="modify(rowData);"></i>
                         </td>
                     </tr>
                 </ng-template>

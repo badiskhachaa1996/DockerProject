@@ -56,6 +56,8 @@ export class ListTicketComponent implements OnInit {
   isReponsable: boolean = false;
   isModify: Ticket;
   showFormAddComment: boolean = false;
+  showFormRevertForm: boolean = false;
+
   loading: boolean = false;
   loadingMessage;
   uplo: File;
@@ -191,6 +193,7 @@ export class ListTicketComponent implements OnInit {
         this.SujetService.getAll().subscribe((data) => {
           this.listSujets = data;
           if (!data.message) {
+      
             data.forEach(sujet => {
               this.listSujetSelected[sujet.service_id].push(sujet);
               this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
@@ -401,10 +404,19 @@ export class ListTicketComponent implements OnInit {
 
 
 
+  toggleRevertForm(ticket) {
+    this.showFormRevertForm = !this.showFormRevertForm;
+    this.showRevert = ticket;
+    this.showFormAddComment = false;
+    this.showFormUpdate = false;
+
+  }
+
   toggleFormUpdate() {
     this.isModify = null;
-    this.showFormAddComment = false;
     this.showFormUpdate = !this.showFormUpdate;
+    this.showFormRevertForm = false;
+    this.showFormAddComment = false;
 
   }
 
@@ -412,6 +424,7 @@ export class ListTicketComponent implements OnInit {
   toggleFormCommentAdd(ticket) {
     this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
+    this.showFormRevertForm =false;
     this.showFormUpdate = false;
 
     // this.showFormUpdateService=false;
@@ -461,8 +474,8 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
-            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
+            this.updateAccAffList()
+            this.updateAllList()
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -477,8 +490,8 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
-            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
+            this.updateAccAffList()
+            this.updateAllList()
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -543,9 +556,6 @@ export class ListTicketComponent implements OnInit {
     justificatif: new FormControl('', Validators.required)
   })
 
-  toggleRevertForm(ticket) {
-    this.showRevert = ticket;
-  }
 
   revert() {
     let data = {

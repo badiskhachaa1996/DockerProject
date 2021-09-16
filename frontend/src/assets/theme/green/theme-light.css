@@ -398,9 +398,7 @@ body .ui-dropdown {
 body .ui-dropdown:not(.ui-state-disabled):hover {
   border-color: #256b17;
 }
-body .ui-dropdown .ui-dropdown-label {
-  padding-right: 19em;
-}
+
 body .ui-dropdown .ui-dropdown-trigger {
   background-color: #ffffff;
   width: 2em;
@@ -3489,4 +3487,6 @@ input,select,textarea{
   color:#256b17!important;
   outline:none!important;
 }
-/* Add your customizations of the theme here */
+.register>div>div>label{
+ min-width: 390px;
+}

@@ -1,21 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { ServService } from 'src/app/services/service.service';
-import { environment } from 'src/environments/environment';
-import { CardModule } from 'primeng/card';
-import { LazyLoadEvent, MessageService, SortEvent } from 'primeng/api';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { User } from 'src/app/models/User';
-import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
 import jwt_decode from "jwt-decode";
 import { MenuItem } from 'primeng/api';
-import { Router, RouterLink } from '@angular/router';
-import { RowToggler } from 'primeng/table';
-import { parse } from 'querystring';
+import { Router } from '@angular/router';
 
-import { AccordionModule } from 'primeng/accordion';
 import { Service } from 'src/app/models/Service';
-import { SujetService } from 'src/app/services/sujet.service';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -31,13 +23,12 @@ export class ListUserComponent implements OnInit {
   cols: any[];
 
   totalRecords: number;
-  showFormAdd: boolean = false;
+  public showFormAdd: boolean = false;
+  public showFormModify: boolean = false;
   add: boolean = true;
 
   serviceDic: Service[] = [];
   dropdownService: any[]=[{label:"Tous",value:null}];
-
-  public showForm: string = "Ajouter";
   loading: boolean;
 
   selectedUser: User;
@@ -70,32 +61,13 @@ export class ListUserComponent implements OnInit {
     this.loading = true;
   }
 
-  toggleForm() {
-    if (this.showForm == "Ajouter") {
-      this.formtype = "new";
-      this.showForm = "Fermer";
-      this.add = !this.add;
-    } else {
-      this.formtype = "new";
-      this.showForm = "Ajouter";
-      this.add = this.add;
-    }
+  toggleFormAdd() {
+    this.showFormAdd = true;
+    this.showFormModify = false;
   }
-
-  toggleType() {
-    if (this.formtype == "new") {
-      this.formtype = "edit";
-      this.showForm = "Fermer";
-    } else {
-      this.formtype = "edit";
-      this.formtype = "edit";
-
-      this.showForm = "Fermer";
-    }
-  }
-
-  toggleAdd() {
-    this.showFormAdd = !this.showFormAdd;
+ toggleFormUpdate() {
+    this.showFormModify = true
+    this.showFormAdd = false
   }
 
   loadUsersLazy(event: LazyLoadEvent) {
@@ -110,7 +82,8 @@ export class ListUserComponent implements OnInit {
 
   modify(rowData: User) {
     this.selectedUser = rowData;
-    this.toggleType()
+    this.showFormModify=false;
+    setTimeout(()=>{this.toggleFormUpdate()},1)
   }
 
   customSort(event: SortEvent) {

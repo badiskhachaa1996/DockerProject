@@ -3,7 +3,7 @@
         <p-card>
             <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
                 <i *ngIf="currentRoot=='/listUser'" class="pi pi-times" style="float:right; font-size: 20px;"
-                    (click)="toggleForm()"> </i>
+                    (click)="listUserComponenet.showFormAdd=false"> </i>
 
                 <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
                     <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png"
@@ -18,8 +18,7 @@
                                 <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
-                                </p-dropdown>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"  class="register"></p-dropdown>
                             </span>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -116,8 +115,7 @@
                             </div>
                             <div *ngIf=IsAdmin>
                                 <span>
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
-                                    </p-dropdown>
+                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value" class="register"></p-dropdown>
                                 </span>
                             </div>
                         </div>
@@ -126,8 +124,7 @@
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
-                                </p-dropdown>
+                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label" class="register"></p-dropdown>
                             </span>
                         </div>
 

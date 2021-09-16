@@ -11,7 +11,7 @@
 
                         <div class="grid">
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                <label style="color: #3da827; font-weight: bold;">Service:</label>
+                                <label style=" font-weight: bold;">Service:</label>
                                 <select formControlName="service" class="form-control col-12" (change)="onChange()">
                                     <option [ngValue]="null" disabled>Choissisez un service</option>
                                     <option *ngFor="let service of filterService" [ngValue]="service">
@@ -140,46 +140,51 @@
 
 
 
-<div class="grid">
+<div class="grid" >
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
-        <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+        <div class="col-12 card shadow-lg my-5" >
+            <p-table  #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
                 [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
                 [globalFilterFields]="['sujet_id','statut']" (sortFunction)="customSort($event)" [customSort]="true">
                 <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem"></th>
+                    <tr >
+                        <th style="width: 3rem" ></th>
 
-                        <th style="text-decoration: underline;" pSortableColumn="service">
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
-                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                      
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="sujet">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet">
                             Sujet <p-sortIcon field="sujet"></p-sortIcon>
-
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="statut">
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="statut">
                             Statut
-                        <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline; padding-top: 5%;">
                             Action
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex" style="text-align: right">
-                        <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                                placeholder="Recherche" />
-                        </span>
-                    </div>
-                </ng-template>
+                <ng-template pTemplate="caption"> 
+                    <div class="p-input-icon-left p-ml-auto" id="container">
+                        <div id="left">
+                          
+                       <p-dropdown  id="c" filter="true" placeholder="Tous" [options]="dropdownService"
+                                        (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                                        <span style="margin-left: 20px;">
+             <p-dropdown [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+             </span>
+            </div> 
+             <div id="right" >
+                            <i class="pi pi-search" ></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </div>
+                        </div>  
+                      
+                    </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
