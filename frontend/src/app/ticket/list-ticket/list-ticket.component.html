@@ -516,7 +516,7 @@
             <ng-template pTemplate="caption"> 
                 <div class="p-input-icon-left p-ml-auto" id="container">
                     <div id="left">
-                        <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+                        <p-dropdown [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                     </div>
                     <div id="right" >
                         <i class="pi pi-search" ></i>
