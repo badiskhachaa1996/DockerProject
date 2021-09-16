@@ -66,7 +66,7 @@ app.post("/login", (req, res) => {
         email: data.email,
     }).then((userFromDb) => {
         comparer = bcrypt.compareSync(data.password, userFromDb.password);
-        if (!userFromDb && !comparer) {
+        if (!userFromDb || !comparer) {
             res.status(404).send({ message: data });
         }
         else {
