@@ -9,7 +9,10 @@
   <app-menu [reset]="resetMenu"></app-menu>
 
   <div [ngClass]="connected? 'layout-content':''">
-    <router-outlet></router-outlet>
+    <router-outlet>
+
+
+    </router-outlet>
 
     <!--<form [formGroup]="form">
             <div class="form-group">
@@ -19,10 +22,11 @@
             </div>
             <button type="submit" (click)="onSubmit()" [disabled]="form.invalid" class="btn btn-success">Submit </button>
           </form>-->
-  </div>
+          <app-footer></app-footer>
+
+        </div>
 
   <div class="layout-mask"></div>
   <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
 </div>
 
-<app-footer></app-footer>

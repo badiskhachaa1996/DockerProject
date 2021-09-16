@@ -15,9 +15,6 @@
                                 <div>
                                     <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
                                 </div>
-                                <span>
-                                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
-                                </span>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                     <div>
@@ -89,6 +86,7 @@
                                     <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
                                 </div>
                                 </div>
+<<<<<<< HEAD
                                 <div class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
@@ -107,6 +105,23 @@
                                 <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label"></p-dropdown>
                             </span>
                         </div>
+=======
+                                <div *ngIf=IsAdmin class="p-grid ui-fluid" >
+                                    
+                                    
+                                        <div class="p-col-12 p-md-6">
+                                            <h4> Role :  </h4>
+                                            
+                                            <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
+                                       </div>
+
+                                       <div class="p-col-12 p-md-6">
+                                        <h4>Service :</h4>
+                                      
+                                         <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
+                                        </div>
+                                 </div>
+>>>>>>> a68239a83095445cdc5c9366f6e78ab0dc42f78f
                             
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>

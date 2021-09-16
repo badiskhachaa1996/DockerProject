@@ -36,7 +36,7 @@ app.post("/registre", (req, res) => {
         email: data.email,
         password: bcrypt.hashSync(data.password,8),
       
-        role : data.role || "user",
+        role : data.role || "User",
         service_id : data?.service_id || null
     })
         
@@ -151,4 +151,6 @@ app.get("/getAllAgent/",(req,res)=>{
         console.log(err);
     })
 })
+
+
 module.exports = app;
