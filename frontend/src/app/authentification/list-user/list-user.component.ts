@@ -4,7 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ServService } from 'src/app/services/service.service';
 import { environment } from 'src/environments/environment';
 import { CardModule } from 'primeng/card';
-import { LazyLoadEvent, MessageService } from 'primeng/api';
+import { LazyLoadEvent, MessageService, SortEvent } from 'primeng/api';
 import { User } from 'src/app/models/User';
 import { UpdateUserComponent } from 'src/app/authentification/update/update.component';
 import jwt_decode from "jwt-decode";
@@ -15,6 +15,7 @@ import { parse } from 'querystring';
 
 import { AccordionModule } from 'primeng/accordion';
 import { Service } from 'src/app/models/Service';
+import { SujetService } from 'src/app/services/sujet.service';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -22,7 +23,7 @@ import { Service } from 'src/app/models/Service';
 })
 export class ListUserComponent implements OnInit {
 
-  userupdate:any=[]; 
+  userupdate: any = [];
   items: MenuItem[];
   tabUser = [];
 
@@ -30,67 +31,57 @@ export class ListUserComponent implements OnInit {
   cols: any[];
 
   totalRecords: number;
-  showFormAdd : boolean =false;
-  add : boolean =true;
+  showFormAdd: boolean = false;
+  add: boolean = true;
 
-  serviceDic: Service[]= [];
+  serviceDic: Service[] = [];
+  dropdownService: any[]=[{label:"Tous",value:null}];
 
- public showForm: string = "Ajouter";
+  public showForm: string = "Ajouter";
   loading: boolean;
- 
+
   selectedUser: User;
   formtype: string = "edit";
-  genderMap: any = {'Monsieur': 'Mr.', 'Madame': 'Mme.',undefined:'', 'other': 'Mel.'};
-  constructor(private AuthService: AuthService, private router: Router, private ServService:ServService) { }
+  genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+  constructor(private AuthService: AuthService, private router: Router, private ServService: ServService) { }
 
   ngOnInit(): void {
-
-    
-
-    let token =null
-    try{
+    let token = null
+    try {
       token = jwt_decode(localStorage.getItem("token"))
-    }catch(e){
-      token =null
+    } catch (e) {
+      token = null
       console.error(e)
     }
     if (token == null) {
       this.router.navigate(["/login"])
-    } else if (token["role"].includes("admin")) {
-      
-    } else if (token["role"]!="Admin") {
+    }else if (token["role"] != "Admin") {
       this.router.navigate(["/ticket/suivi"])
     }
-
     this.AuthService.getAllAgent().subscribe((users) => {
       this.tabUser = users;
     })
-
-    this.ServService.getAll().subscribe((services)=>{
+    this.ServService.getAll().subscribe((services) => {
       services.forEach(serv => {
-        this.serviceDic[serv._id]=serv;
+        this.dropdownService.push({label:serv.label,value:serv._id})
+        this.serviceDic[serv._id] = serv;
       });
     })
-
-
     this.loading = true;
   }
-
-
 
   toggleForm() {
     if (this.showForm == "Ajouter") {
       this.formtype = "new";
       this.showForm = "Fermer";
-      this.add=!this.add;
+      this.add = !this.add;
     } else {
       this.formtype = "new";
       this.showForm = "Ajouter";
-      this.add=this.add;
-
+      this.add = this.add;
     }
-
   }
+
   toggleType() {
     if (this.formtype == "new") {
       this.formtype = "edit";
@@ -101,17 +92,14 @@ export class ListUserComponent implements OnInit {
 
       this.showForm = "Fermer";
     }
-
   }
 
-  toggleAdd(){
-    this.showFormAdd=!this.showFormAdd;
+  toggleAdd() {
+    this.showFormAdd = !this.showFormAdd;
   }
 
   loadUsersLazy(event: LazyLoadEvent) {
     this.loading = true;
-
-
     setTimeout(() => {
       if (this.tabUser) {
         this.tabUser = this.tabUser.slice(event.first, (event.first + event.rows));
@@ -119,10 +107,34 @@ export class ListUserComponent implements OnInit {
       }
     }, 1000);
   }
+
   modify(rowData: User) {
-    console.log(rowData)
     this.selectedUser = rowData;
     this.toggleType()
+  }
+
+  customSort(event: SortEvent) {
+    event.data.sort((data1, data2) => {
+      let value1 = data1[event.field];
+      let value2 = data2[event.field];
+      if (event.field == "service") {
+        value1 = (this.serviceDic[data1.service_id]==undefined)?null:this.serviceDic[data1.service_id].label
+        value2 = (this.serviceDic[data2.service_id]==undefined)?null:this.serviceDic[data2.service_id].label
+      }
+      let result = null;
+
+      if (value1 == null && value2 != null)
+        result = -1;
+      else if (value1 != null && value2 == null)
+        result = 1;
+      else if (value1 == null && value2 == null)
+        result = 0;
+      else if (typeof value1 === 'string' && typeof value2 === 'string')
+        result = value1.localeCompare(value2);
+      else
+        result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
+      return (event.order * result);
+    });
   }
 }
 

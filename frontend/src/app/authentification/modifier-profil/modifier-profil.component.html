@@ -12,51 +12,55 @@
 
     <div class="p-grid mt-2">
 
+      
 
-
-    <div class="p-col-12 p-md-6  p-lg-4">
-        <div class="user-card card">
-            <div class="user-card-header">
-                <img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout"/>
-            </div>
-            <div class="user-card-content">
-                <img src="assets/layout/images/avatar/avatar-igor.jpg" alt="prestige-layout" />
-                <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)" ></p-menu>
-                <button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>
-
-                <div class="user-card-name">
-                    <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
+        <div class="p-col-12 p-md-6  p-lg-4">
+            <div class="user-card card">
+                <div class="user-card-header">
+                    <img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout" />
                 </div>
-                <div class="user-card-status">
-                    <span class="user-profile-role" *ngIf="userco.role=='user'"  style="font-weight: bold;">Utilisateur</span>
-                    <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
-                </div> 
-                <div class="user-detail" >
-                    <ul *ngIf="!toggleUpdate">
-                        <li>
-                            Civilité <div class="value">{{userco.civilite}} <i class="pi pi-arrow-circle-right"></i>
-                        </div>
-                        </li>
-                        <li>
-                            Telephone <div class="value">{{userco.phone}} <i class="pi pi-arrow-circle-right"></i>
-                        </div>
-                        </li>
-                        <li>
-                            Adresse email <div class="value">{{userco.email}} <i class="pi pi-arrow-circle-right"></i>
-                        </div>
-                        </li>
-                        <li>
-                            Adresse <div class="value">{{userco.adresse}} <i class="pi pi-arrow-circle-right"></i></div>
-                        </li>
-                        <li *ngIf="userco.service_id!=null">
-                            Views <div class="value">{{userco.Service}}  <i class="pi pi-arrow-circle-right"></i></div>
-                        </li>
+                <div class="user-card-content">
+                    <img src="assets/layout/images/avatar/avatar-igor.jpg" alt="prestige-layout" />
+                    <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
+                    <button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>
 
-                    </ul>
+                    <div class="user-card-name">
+                        <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
+                    </div>
+                    <div class="user-card-status">
+                        <span class="user-profile-role" *ngIf="userco.role=='user'"
+                            style="font-weight: bold;">Utilisateur</span>
+                        <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
+                    </div>
+                    <div class="user-detail">
+                        <ul *ngIf="!toggleUpdate && !toggleUpdatepwd">
+                            <li>
+                                Civilité <div class="value">{{userco.civilite}} <i class="pi pi-arrow-circle-right"></i>
+                                </div>
+                            </li>
+                            <li>
+                                Telephone <div class="value">{{userco.phone}} <i class="pi pi-arrow-circle-right"></i>
+                                </div>
+                            </li>
+                            <li>
+                                Adresse email <div class="value">{{userco.email}} <i
+                                        class="pi pi-arrow-circle-right"></i>
+                                </div>
+                            </li>
+                            <li>
+                                Adresse <div class="value">{{userco.adresse}} <i class="pi pi-arrow-circle-right"></i>
+                                </div>
+                            </li>
+                            <li *ngIf="userco.service_id!=null">
+                                Service <div class="value">{{userco.Service}} <i class="pi pi-arrow-circle-right"></i>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
 
@@ -69,115 +73,151 @@
 
 
 
-            <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
-        <p-card *ngIf="toggleUpdate">
-            <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
+        <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
+            <p-card *ngIf="toggleUpdate ">
+                <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
 
 
-                <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm" >
-                    <h3 class="text-center"> Modifier mes informations</h3>
+                    <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
+                        <h3 class="text-center"> Modifier mes informations</h3>
 
-                    <div class="grid">
-
-                        
-                        <div class="field col mt-8 mb-2 col-lg-12 col-12">
-
-                            <div>
+                        <div class="grid">
 
 
-                                <label for="civilite" class="p-sr-only">Civilité :</label>
-                            </div>
-                            <span>
-                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"
-                                    placeholder="Veuillez choisir une civilité"></p-dropdown>
-                            </span>
-                        </div>
+                            <div class="field col mt-8 mb-2 col-lg-12 col-12">
 
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <div>
-                                <label for="lastname" class="p-sr-only">Nom :</label>
-                            </div>
-                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="nom"
-                                pInputText>
-                            <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                                <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont
-                                    acceptés</span>
-                            </div>
-                        </div>
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <div>
-                                <label for="firstname" class="p-sr-only">Prénom :</label>
-                            </div>
-                            <input type="text" formControlName="firstname" class="form-control col-12"
-                                placeholder="Prénom" pInputText>
-                            <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                <span class="error" *ngIf="firstname.errors?.required">*Le prénom est
-                                    obligatoire.</span>
-                                <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont
-                                    acceptés.</span>
-                            </div>
-                        </div>
-                        <div class="mt-2 mb-2 col-lg-12 col-12">
-                            <div>
-                                <label for="adresse" class="p-sr-only">Adresse :</label>
-                            </div>
-                            <input id="adresse" type="text" formControlName="adresse" class="form-control col-12"
-                                placeholder="Adresse" pInputText required />
-                            <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
-                                <span class="error" *ngIf="adresse.errors?.required">*L'adresse est obligatoire.</span>
-                                <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse n'est pas correct.</span>
-                            </div>
-                        </div>
-
-                        <div class="mt-2 mb-2 col-lg-12 col-12">
-                            <div>
-                                <label for="phone" class="p-sr-only">Téléphone :</label>
-                            </div>
-                            <input type="text" formControlName="phone" class="form-control col-12"
-                                placeholder="Téléphone" pInputText>
-                            <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                                <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
-                                <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
-                                    téléphone doit être composé de 10 chiffres.</span>
-                            </div>
-                        </div>
-
-                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <div>
 
 
-
-                            <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12">
+                                    <label for="civilite" class="p-sr-only">Civilité :</label>
+                                </div>
                                 <span>
-                                    <label for="role" class="p-sr-only">Role :</label>
-
-
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
-                                    </p-dropdown>
+                                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"
+                                        placeholder="Veuillez choisir une civilité"></p-dropdown>
                                 </span>
-
-                                <label for="service_id" class="p-sr-only">Service:</label>
-
-
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
-                                </p-dropdown>
-
                             </div>
 
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <div>
+                                    <label for="lastname" class="p-sr-only">Nom :</label>
+                                </div>
+                                <input type="text" formControlName="lastname" class="form-control col-12"
+                                    placeholder="nom" pInputText>
+                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                    <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
+                                    <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont
+                                        acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <div>
+                                    <label for="firstname" class="p-sr-only">Prénom :</label>
+                                </div>
+                                <input type="text" formControlName="firstname" class="form-control col-12"
+                                    placeholder="Prénom" pInputText>
+                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                    <span class="error" *ngIf="firstname.errors?.required">*Le prénom est
+                                        obligatoire.</span>
+                                    <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont
+                                        acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <div>
+                                    <label for="adresse" class="p-sr-only">Adresse :</label>
+                                </div>
+                                <input id="adresse" type="text" formControlName="adresse" class="form-control col-12"
+                                    placeholder="Adresse" pInputText required />
+                                <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
+                                    <span class="error" *ngIf="adresse.errors?.required">*L'adresse est
+                                        obligatoire.</span>
+                                    <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse n'est pas
+                                        correct.</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <div>
+                                    <label for="phone" class="p-sr-only">Téléphone :</label>
+                                </div>
+                                <input type="text" formControlName="phone" class="form-control col-12"
+                                    placeholder="Téléphone" pInputText>
+                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                    <span class="error" *ngIf="phone.errors?.required">*Le téléphone est
+                                        obligatoire.</span>
+                                    <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
+                                        téléphone doit être composé de 10 chiffres.</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
 
 
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="RegisterForm.invalid" label="Modifer" type="button"
-                                    (click)="UpdateUser()"></button>
+
+                                <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12">
+                                    <span>
+                                        <label for="role" class="p-sr-only">Role :</label>
+
+
+                                        <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
+                                        </p-dropdown>
+                                    </span>
+
+                                    <label for="service_id" class="p-sr-only">Service:</label>
+
+
+                                    <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
+                                    </p-dropdown>
+
+                                </div>
+
+
+
+                                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                                    <button pButton class="ui-button-raised ui-button-success"
+                                        [disabled]="RegisterForm.invalid" label="Modifer" type="button"
+                                        (click)="UpdateUser()"></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
-            </div>
-        </p-card>
+                    </form>
+                </div>
+            </p-card>
+        </div>
     </div>
 </div>
-</div>
+
+<div class="p-grid mt-2" *ngIf="toggleUpdatepwd ">
+    <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="PwdForm">
+        <p-card>
+            <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
+<form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="PwdForm">
+    <h3 class="text-center"> Modifier mon mot de passe</h3>
+
+    <div class="grid">
+
+        <div class="mt-2 mb-2 col-lg-12 col-12">
+            <div>
+                <label for="password" class="p-sr-only">Mot de passe :</label>
+            </div>
+            <input type="password" formControlName="password" class="form-control col-12" placeholder="Mot de passe"
+                pInputText>
+          
+        </div>
+        <div class="mt-2 mb-2 col-lg-12 col-12">
+            <div>
+                <label for="verifypassword" class="p-sr-only">Vérifier le mot de passe :</label>
+            </div>
+            <input type="password" formControlName="verifypassword" class="form-control col-12"
+                placeholder="Confirmation mot de passe" pInputText>
+            
+        </div>
 
 
+        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+            <button pButton class="ui-button-raised ui-button-success" [disabled]="PwdForm.invalid" label="Modifer"
+                type="button" (click)="UpdatePwd()"></button>
+        </div>
+    </div>
+</form>
+</div></p-card></div></div>

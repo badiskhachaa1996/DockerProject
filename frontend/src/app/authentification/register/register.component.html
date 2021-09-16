@@ -2,118 +2,143 @@
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
         <p-card>
             <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
-            <i *ngIf="currentRoot=='/listUser'"  class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleForm()"> </i>
-           
+                <i *ngIf="currentRoot=='/listUser'" class="pi pi-times" style="float:right; font-size: 20px;"
+                    (click)="toggleForm()"> </i>
+
                 <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
-                  <div class="text-center" *ngIf="currentRoot=='/register'" ><img src="assets/layout/images/logo.png" class="logo" ></div>
+                    <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png"
+                            class="logo"></div>
                     <h3 class="text-center" *ngIf="currentRoot=='/register'">Inscription</h3>
                     <h3 class="text-center" *ngIf="currentRoot=='/listUser'">Ajouter un utilisateur</h3>
-                   
+
                     <br>
-                        <div class="grid">
-                            <div class="field col mt-2 mb-2 col-lg-8 col-8">
-                                <div>
-                                    <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
-                                </div>    
+                    <div class="grid">
+                        <div class="field col mt-2 mb-2 col-lg-8 col-8">
+                            <div>
+                                <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
+                            </div>
                             <span>
-                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
+                                </p-dropdown>
                             </span>
+                        </div>
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            <div>
+                                <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
                             </div>
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                    <div>
-                                        <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
-                                    </div>
-                                <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom" pInputText>
-                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                    <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                                    <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
-                                </div>
+                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom"
+                                pInputText>
+                            <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
+                                <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont
+                                    acceptés</span>
                             </div>
-                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                                    <div>
-                                        <label style="font-weight: bold;" for="firstname" class="p-sr-only">Prénom :</label>
-                                    </div>
-                                <input type="text" formControlName="firstname" class="form-control col-12" placeholder="Prénom" pInputText>
-                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                    <span class="error" *ngIf="firstname.errors?.required">*Le prénom est obligatoire.</span>
-                                    <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont acceptés.</span>
-                                </div>
+                        </div>
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            <div>
+                                <label style="font-weight: bold;" for="firstname" class="p-sr-only">Prénom :</label>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <div>
-                                    <label style="font-weight: bold;" for="email" class="p-sr-only">Adresse mail :</label>
-                                    </div>
-                                <input type="text" formControlName="email" class="form-control col-12" placeholder="Adresse mail" pInputText>
-                                <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
-                                    <span class="error" *ngIf="email.errors?.required">*L'adresse mail est obligatoire.</span>
-                                    <span class="error" *ngIf="email.errors?.pattern">*L'email n'est pas correct.</span>
-                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span> 
-                                </div>
+                            <input type="text" formControlName="firstname" class="form-control col-12"
+                                placeholder="Prénom" pInputText>
+                            <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                <span class="error" *ngIf="firstname.errors?.required">*Le prénom est
+                                    obligatoire.</span>
+                                <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont
+                                    acceptés.</span>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                    <div>
-                                    <label style="font-weight: bold;" for="adresse" class="p-sr-only">Adresse :</label>
-                                    </div>
-                              <input id="adresse" type="text" formControlName="adresse" class="form-control col-12" placeholder="Adresse" pInputText required/>
-                              <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <div>
+                                <label style="font-weight: bold;" for="email" class="p-sr-only">Adresse mail :</label>
+                            </div>
+                            <input type="text" formControlName="email" class="form-control col-12"
+                                placeholder="Adresse mail" pInputText>
+                            <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
+                                <span class="error" *ngIf="email.errors?.required">*L'adresse mail est
+                                    obligatoire.</span>
+                                <span class="error" *ngIf="email.errors?.pattern">*L'email n'est pas correct.</span>
+                                <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <div>
+                                <label style="font-weight: bold;" for="adresse" class="p-sr-only">Adresse :</label>
+                            </div>
+                            <input id="adresse" type="text" formControlName="adresse" class="form-control col-12"
+                                placeholder="Adresse" pInputText required />
+                            <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
                                 <span class="error" *ngIf="adresse.errors?.required">*L'adresse est obligatoire.</span>
                                 <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse n'est pas correct.</span>
                             </div>
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <div>
+                                <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <div>
-                                    <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
-                                    </div>
-                                <input type="text" formControlName="phone" class="form-control col-12" placeholder="Téléphone" pInputText>
-                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                                    <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
-                                    <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le téléphone doit être composé de 10 chiffres.</span>
-                                </div>
+                            <input type="text" formControlName="phone" class="form-control col-12"
+                                placeholder="Téléphone" pInputText>
+                            <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
+                                <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
+                                    téléphone doit être composé de 10 chiffres.</span>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <div>
-                                    <label style="font-weight: bold;" for="password" class="p-sr-only">Mot de passe :</label>
-                                    </div>
-                                <input type="password" formControlName="password" class="form-control col-12" placeholder="Mot de passe" pInputText>
-                                <div *ngIf="password.invalid && (password.touched || password.dirty)">
-                                    <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
-                                </div>
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <div>
+                                <label style="font-weight: bold;" for="password" class="p-sr-only">Mot de passe
+                                    :</label>
                             </div>
-                            <div class="mt-2 mb-2 col-lg-12 col-12">
-                                <div>
-                                    <label style="font-weight: bold;" for="verifypassword" class="p-sr-only">Vérifier le mot de passe  :</label>
-                                    </div>
-                                <input type="password" formControlName="verifypassword" class="form-control col-12" placeholder="Confirmation mot de passe" pInputText>
-                                <div *ngIf="(verifypassword.invalid || verifypassword.value!=password.value) && (verifypassword.touched || verifypassword.dirty)">
-                                    <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire.</span>
-                                    <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne correspondent pas.</span>
-                                </div>
-                                </div>
-                                <div class=" field col mt-2 mb-2 col-lg-6 col-6">
+                            <input type="password" formControlName="password" class="form-control col-12"
+                                placeholder="Mot de passe" pInputText>
+                            <div *ngIf="password.invalid && (password.touched || password.dirty)">
+                                <span class="error" *ngIf="password.errors?.required">*Le mot de passe est
+                                    obligatoire.</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 mb-2 col-lg-12 col-12">
+                            <div>
+                                <label style="font-weight: bold;" for="verifypassword" class="p-sr-only">Vérifier le mot
+                                    de passe :</label>
+                            </div>
+                            <input type="password" formControlName="verifypassword" class="form-control col-12"
+                                placeholder="Confirmation mot de passe" pInputText>
+                            <div
+                                *ngIf="(verifypassword.invalid || verifypassword.value!=password.value) && (verifypassword.touched || verifypassword.dirty)">
+                                <span class="error" *ngIf="password.errors?.required">*Le mot de passe est
+                                    obligatoire.</span>
+                                <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne
+                                    correspondent pas.</span>
+                            </div>
+                        </div>
+                        <div class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
                             </div>
                             <div *ngIf=IsAdmin>
                                 <span>
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value"></p-dropdown>
+                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
+                                    </p-dropdown>
                                 </span>
-                            </div>   
+                            </div>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label"></p-dropdown>
+                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
+                                </p-dropdown>
                             </span>
                         </div>
-                            
-                                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>
-                            </div>
-                        </div>                 
+
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success"
+                                [disabled]="RegisterForm.invalid || verifypassword.value!=password.value"
+                                label="Enregistrer" (click)="saveUser()"></button>
+                        </div>
+                    </div>
                 </form>
-         </div> 
+            </div>
         </p-card>
     </div>
-  </div>
+</div>
