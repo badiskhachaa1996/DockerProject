@@ -99,6 +99,14 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
+        this.AccAffList.forEach((ticket,index)=>{
+          this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+            (sujet)=>{
+              ticket["service_id"]=sujet.dataSujet.service_id
+              this.AccAffList.splice(index,1,ticket)
+            }
+          )
+        })
       }
     })
   }
@@ -569,6 +577,8 @@ export class ListTicketComponent implements OnInit {
   @ViewChild('dt2') table: Table;
 
   testFilter(event){
-    this.table.filter(event.value, 'service_id', 'equals')
+    console.log(this.table)
+    this.table.filter(event.value, 'sujet_id', 'equals')
+    console.log(this.table)
   }
 }
