@@ -573,7 +573,6 @@ export class ListTicketComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Renvoie d\'un ticket', detail: 'Le ticket a été renvoyer avec succès dans la queue d\'entrée' });
       }
       this.RevertForm.reset()
-      this.showRevert = null
       if (this.showRevert.agent_id == this.token['id']) {
         //L'agent a revert son ticket
         //Notifié les responsables de son service
@@ -581,6 +580,7 @@ export class ListTicketComponent implements OnInit {
           if (user._id != this.token.id && ((user.role == "Responsable" && user.service_id == this.token.service_id) || user.role == "Admin")) {
             this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket par Agent", null, user._id)).subscribe(Notif => {
               this.NotifService.newNotif(Notif)
+              this.showRevert = null
             }, (error) => {
               console.error(error)
             })
@@ -590,6 +590,7 @@ export class ListTicketComponent implements OnInit {
         //Avertir l'agent que son ticket a été revert
         this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket", null, this.showRevert.agent_id)).subscribe(Notif => {
           this.NotifService.newNotif(Notif)
+          this.showRevert = null
         }, (error) => {
           console.error(error)
         })

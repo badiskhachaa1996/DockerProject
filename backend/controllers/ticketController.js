@@ -287,7 +287,7 @@ app.post("/AccAff/:id", (req, res) => {
 
 
 
-                    let html2 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' et qui a pour sujet <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let html2 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour sujet <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -308,6 +308,7 @@ app.post("/AccAff/:id", (req, res) => {
                         }
                     });
                 }).catch((error) => {
+                    console.log(error)
                     res.status(404).send("erreur :" + error);
                 })
             }
