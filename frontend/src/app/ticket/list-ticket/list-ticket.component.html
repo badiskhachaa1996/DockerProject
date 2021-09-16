@@ -153,8 +153,7 @@
                         </td>
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="QueueToAccAff(rowData)"></i>
-                                <!--*ngIf="rowData.createur_id!=token['id']"-->
+                                (click)="QueueToAccAff(rowData)" *ngIf="rowData.createur_id!=token['id']"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData)"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -373,7 +372,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
-                        <td [attr.colspan]="7">
+                        <td [attr.colspan]="8">
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
@@ -449,7 +448,7 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -468,7 +467,7 @@
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
                                         id="charger2" (click)="downloadFile(message)">
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
@@ -541,9 +540,6 @@
                         <th style="text-decoration: underline;padding-top: 5%;">
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
-                            Agent <p-sortIcon field="agent"></p-sortIcon>
-                        </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
@@ -552,6 +548,9 @@
                         </th>
                         <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
                             Action
+                        </th>
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
+                            Agent <p-sortIcon field="agent"></p-sortIcon>
                         </th>
                     </tr>
                 </ng-template>
@@ -574,9 +573,6 @@
                         <td>
                             {{showWorkingTime(rowData)}}
                         </td>
-                        <td *ngIf="userDic[rowData.agent_id]">
-                            {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
-                        </td>
                         <td *ngIf="rowData.isAffected">
                             Affecté
                         </td>
@@ -585,6 +581,9 @@
                         </td>
                         <td>
                             {{rowData.statut}}
+                        </td>
+                        <td *ngIf="userDic[rowData.agent_id]">
+                            {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
                             <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
@@ -714,7 +713,7 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -733,7 +732,7 @@
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
-                                    <button *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
+                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
                                         id="charger2" (click)="downloadFile(message)">
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>

@@ -175,7 +175,7 @@
                        <p-dropdown  id="c" filter="true" placeholder="Tous" [options]="dropdownService"
                                         (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
                                         <span style="margin-left: 20px;">
-             <p-dropdown filter="true" [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+             <p-dropdown [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
              </span>
             </div> 
              <div id="right" >

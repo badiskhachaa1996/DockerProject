@@ -474,8 +474,8 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
-            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
+            this.updateAccAffList()
+            this.updateAllList()
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
@@ -490,8 +490,8 @@ export class ListTicketComponent implements OnInit {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Traitement de votre ticket", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
-            this.AccAffList.splice(this.AccAffList.indexOf(this.selectedTicket), 1, data)
-            this.allTickets.splice(this.allTickets.indexOf(this.selectedTicket), 1, data)
+            this.updateAccAffList()
+            this.updateAllList()
             this.selectedTicket = null;
             this.commentForm.reset();
             this.commentForm.get("statut").setValue(this.statutList[0])
