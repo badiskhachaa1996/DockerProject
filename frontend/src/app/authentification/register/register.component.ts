@@ -46,12 +46,10 @@ export class RegisterComponent implements OnInit {
     if (this.listUserComponenet.showForm == "Ajouter") {
       this.listUserComponenet.formtype = "new";
       this.listUserComponenet.showForm = "Fermer";
-
     } else {
       this.listUserComponenet.formtype = "new";
       this.listUserComponenet.showForm = "Ajouter";
     }
-
   }
 
   saveUser() {
@@ -61,22 +59,15 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
       this.RegisterForm.value.password,
-
-      this.RegisterForm.value.role.value || "user", null,
+      this.RegisterForm.value.role.value || "user",
+      null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value
     )
     this.AuthService.register(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
-      this.AuthService.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-        data => {
-          let res: any = data;
-          console.log(
-            '   ${user.name} is succefuly ${res.messageId}'
-          );
-        },
-      );
+      this.AuthService.sendEmail("http://localhost:3000/sendmail", user)
 
       if (this.router.url == "/register") {
         this.router.navigateByUrl('/login')
@@ -97,26 +88,6 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
-  //   sendEmail(){
-  //     //  this.loading = true;
-  //     //  this.buttonText = "submiting";
-  //      let user = {
-  //        name : this.nameFormControl.value,
-  //        email: this.emailFormControl.value,
-  //      }
-  //      this.http.sendEmail("http://localhost:3000/sendmail", user).subscribe(
-  //             data=> {
-  //               let res:any = data;
-  //               console.log(
-  //                '   ${user.name} is succefuly ${res.messageId}'
-  //               );
-  //             },
-  //             err=> {
-  //               console.log(err);
-
-  //             }
-  //      );
-  // }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -130,7 +101,6 @@ export class RegisterComponent implements OnInit {
   constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent) { }
 
   ngOnInit(): void {
-    console.log("root :" + this.currentRoot)
     this.servService.getAll().subscribe((data) => {
       this.Services = data;
     })
@@ -145,8 +115,6 @@ export class RegisterComponent implements OnInit {
     } else if (this.IsAdmin) {
       this.Roles = [this.Roles[0], this.Roles[1]]
     }
-
-    console.log(this.RegisterForm.value)
   }
 
 
