@@ -16,7 +16,7 @@
                                     <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
                                 </div>    
                             <span>
-                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"  class="register"></p-dropdown>
                             </span>
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -95,7 +95,7 @@
                             </div>
                             <div *ngIf=IsAdmin>
                                 <span>
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value"></p-dropdown>
+                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value" class="register"></p-dropdown>
                                 </span>
                             </div>   
                         </div>
@@ -104,10 +104,9 @@
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label"></p-dropdown>
+                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label" class="register"></p-dropdown>
                             </span>
                         </div>
-                            
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid || verifypassword.value!=password.value" label="Enregistrer" (click)="saveUser()"></button>
                             </div>
