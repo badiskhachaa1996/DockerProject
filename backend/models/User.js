@@ -44,6 +44,10 @@ const user_schema= new mongoose.Schema({
         type: String,
         required: true
 },
+pathImageProfil:{
+    type: String,
+},
+
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
