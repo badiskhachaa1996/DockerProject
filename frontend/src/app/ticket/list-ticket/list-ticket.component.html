@@ -266,7 +266,7 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Mes tickets </h3>
+        <h3>Mes tickets à traiter</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table 
             #dt2 
@@ -300,7 +300,7 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;">  Sujet
                         </th>
@@ -522,8 +522,9 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
-                        <th style="text-decoration: underline;">  Sujet
+                        <th style="text-decoration: underline;">Sujet
                         </th>
                         <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
 
@@ -539,6 +540,7 @@
                         </th>
                         <th style="text-decoration: underline;">
                             Statut
+                            <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
                         </th>
                         <th *ngIf="token['role']!='Agent'">
                             Action
