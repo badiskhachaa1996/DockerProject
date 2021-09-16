@@ -294,8 +294,8 @@
                     </div>
                 </ng-template>
 
-                
-                <ng-template pTemplate="header" let-columns>
+               <div id="top">
+                <ng-template pTemplate="header" let-columns >
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
@@ -318,7 +318,7 @@
                         
                             <span>
                                 Statut
-                                <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="testFilter($event)" ></p-dropdown>
+
                             </span>
                         </th>
                         <th style="text-decoration: underline;">
@@ -327,6 +327,7 @@
                     </tr>
                     
                 </ng-template>
+            </div>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
                         *ngIf="sujetList[rowData.sujet_id]"  [pSelectableRow]="rowData">
@@ -508,13 +509,16 @@
             [globalFilterFields]="['sujet_id','statut','date_ajout','description','createur_id']"  
             (sortFunction)="customSort($event)" [customSort]="true">
 
-            <ng-template pTemplate="caption">
-                <div class="p-d-flex" style="text-align: right">
-                    <span class="p-input-icon-left p-ml-auto">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                    </span>
+            <ng-template pTemplate="caption"> 
+            <div class="p-input-icon-left p-ml-auto" id="container">
+                <p-dropdown filter="true" [options]="statutList" id="left" optionLabel="value" (onChange)="testFilter($event)" >
+                </p-dropdown>
+                <div id="right" >
+                    <i class="pi pi-search" ></i>
+                    <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                 </div>
+                </div>  
+              
             </ng-template>
             
                 <ng-template pTemplate="header" let-columns>
@@ -522,6 +526,7 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
+                            
                         </th>
                         <th style="text-decoration: underline;">  Sujet
                         </th>

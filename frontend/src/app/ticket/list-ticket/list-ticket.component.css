@@ -1,3 +1,19 @@
+/* #container {
+  position:relative;
+
+}
+#left {
+  position:absolute;
+  left:0px;
+ 
+}
+#right {
+  position:absolute;
+  right:0px;
+
+} */
+
+
 #messageAgent{
 
     border-radius: 15px;
