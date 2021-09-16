@@ -17,21 +17,44 @@
         <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
-            <p-table *ngIf="tabUser" [columns]="cols" [value]="tabUser" selectionMode="single" dataKey="email"
-                [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"
-                rowExpandMode="single">
+            <p-table #dt1 
+            *ngIf="tabUser" 
+            [columns]="cols" 
+            [value]="tabUser" 
+            selectionMode="single" 
+            dataKey="email"
+            [rows]="4" 
+            [paginator]="true" 
+            [pageLinks]="5" 
+            [responsive]="true" 
+            [totalRecords]="tabUser.length"
+            rowExpandMode="single"
+            [globalFilterFields]=
+            "['civilite','lastname','firstname','service_id','role','email','phone','adresse']"  
+            >
+
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
 
                 <ng-template pTemplate="header" let-columns>
                     <th style="width: 3rem"></th>
-                    <th>Nom et Prénom</th>
-                    <th>
-                        Service
+                    <th style="text-decoration: underline;" pSortableColumn="lastname" > Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
+                        
                     </th>
-                    <th>
-                        Role
+                    <th style="text-decoration: underline;"pSortableColumn="service_id">  Service <p-sortIcon field="service_id"></p-sortIcon>
+                        
                     </th>
-                    <th>
-                        Email
+                    <th style="text-decoration: underline;" pSortableColumn="role">  Role <p-sortIcon field="role"></p-sortIcon>
+                        
+                    </th>
+                    <th style="text-decoration: underline;" pSortableColumn="email">  Email <p-sortIcon field="email"></p-sortIcon>
+                       
                     </th>
                     <th>
                         Action

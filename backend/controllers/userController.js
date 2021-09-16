@@ -3,6 +3,8 @@ const app = express(); //à travers ça je peux faire la creation des services
 const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
+const bcrypt = require("bcryptjs");
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
 
 
 let transporter = nodemailer.createTransport({
@@ -21,21 +23,25 @@ let transporter = nodemailer.createTransport({
 
 //service registre
 app.post("/registre", (req, res) => {
-    
-    let data = req.body;
+   
+    let data = req.body;        
+   
     console.log(data)
-    let user = new User({
+        let user = new User({
         civilite: data.civilite,
         firstname: data.firstname,
         lastname: data.lastname,
         phone: data.phone,
         adresse:data.adresse,
         email: data.email,
-        password: data.password,
+        password: bcrypt.hashSync(data.password,8),
+      
         role : data.role || "user",
         service_id : data?.service_id || null
     })
+        
     user.save().then((userFromDb) => {
+        
         res.status(200).send(userFromDb);
 
         let htmlmail='<p>Bonjour '+userFromDb.lastname+' '+userFromDb.firstname+', </p><p style="color:black"> <span style="color:orange">Felicitation ! </span> Votre compte E-Ticketing a été crée avec succés</p><p style="color:black">Cordialement,</p><footer> <img  src="red"/></footer>';
@@ -66,8 +72,12 @@ app.post("/registre", (req, res) => {
 //service login
 app.post("/login", (req, res) => {
     let data = req.body;
-    User.findOne({ email: data.email, password: data.password }).then((userFromDb) => {
-        if (!userFromDb) {
+    User.findOne({ 
+        email: data.email, 
+        }).then((userFromDb) => {
+        comparer =  bcrypt.compareSync(data.password, userFromDb.password); 
+           console.log(userFromDb.password);
+            if (!userFromDb && !comparer) {
             res.status(404).send({ message: data });
         }
         else {
@@ -141,4 +151,6 @@ app.get("/getAllAgent/",(req,res)=>{
         console.log(err);
     })
 })
+
+
 module.exports = app;

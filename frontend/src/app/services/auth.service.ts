@@ -81,11 +81,12 @@ export class AuthService {
     console.log(errorMessage);
     return throwError(errorMessage);
   }
-  httpPost(url,{}){
-    return this.httpPost(url,{name:"Farah"});
-  }
+ 
   sendEmail(url,data){
     return this.http.post(url,data)
+  }
+  uploadimageprofile(file:File,Userid:any,filetype:any){
+
   }
  
 }

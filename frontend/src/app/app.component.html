@@ -9,7 +9,11 @@
   <app-menu [reset]="resetMenu"></app-menu>
 
   <div [ngClass]="connected? 'layout-content':''">
-    <router-outlet></router-outlet>
+    <router-outlet>
+
+
+    </router-outlet>
+      <app-footer></app-footer>
 
     <!--<form [formGroup]="form">
             <div class="form-group">
@@ -24,3 +28,4 @@
   <div class="layout-mask"></div>
   <div class="layout-config-mask" *ngIf="configDialogActive" [@mask-anim]="'visible'"></div>
 </div>
+

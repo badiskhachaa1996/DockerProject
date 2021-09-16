@@ -211,7 +211,6 @@ app.get("/getTicketsByService/:id", (req, res) => {
 //Get All Tickets de la queue d'entrée by Service ID
 app.get("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
-    console.log(id)
     let listSujetofService = []
     let TicketList = []
     Sujet.find()
@@ -291,11 +290,11 @@ app.post("/AccAff/:id", (req, res) => {
 
 
 
-                    let html2 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Le ticket : << ' + user.description + ' >> vous a été  affecter </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let html2 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' et qui a pour sujet <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
-                        subject: 'Notification E-Ticketing',
+                        subject: '[ESTYA Ticketing] - Notification',
                         html: html2,
                         attachments: [{
                             filename: 'signature.png',
@@ -334,12 +333,12 @@ app.post("/changeService/:id", (req, res) => {
                 res.status(200).send(ticket)
                 console.log(ticket.createur_id)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
-                    let html3 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p> <p style="color:black"> Nous avons modifié  le service et le sujet de votre ticket <<'+ticket.description+'>></p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let html3 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> '+tickFromDb.id+'</b> et qui a pour sujet : <b> ' + user.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                     
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
-                        subject: 'Notification E-Ticketing',
+                        subject: '[ESTYA Ticketing] - Notification ',
                         html: html3,
                         attachments: [{
                             filename: 'signature.png',
@@ -385,12 +384,12 @@ app.post("/changeStatut/:id", (req, res) => {
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                         
-                        let html4 = '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre ticket  << ' + user.description + '  >>  est en attente d\'une réponse  </p><p>Une réponse est attendue de votre part</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' +tickFromDb.id+ '  </b> et qui a pour sujet : <b> ' +  user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
                     
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
-                            subject: 'Notification E-Ticketing',
+                            subject: '[ESTYA Ticketing] - Notification',
                             html:html4,
                             attachments: [{
                                 filename: 'signature.png',
@@ -419,12 +418,12 @@ app.post("/changeStatut/:id", (req, res) => {
                     let agentService;
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
                         
-                        let html5 ='<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> votre ticket  << ' + user.description+ '   >> à été traité   </p><p>Connectez vous sur l\'application pour consulter la réponse </p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html5 ='<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + tickFromDb.id+ ' </b> et qui a pour sujet : <b>  '+  user.description +'</b> à été traité.</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
-                            subject: 'Notification E-Ticketing',
+                            subject: '[ESTYA Ticketing] - Notification',
                             html: html5,
                             attachments: [{
                                 filename: 'signature.png',

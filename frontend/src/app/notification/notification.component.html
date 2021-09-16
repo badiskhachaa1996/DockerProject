@@ -1,16 +1,15 @@
-<div class="grid">
-    <div *ngIf="notifications.length==0 ">
-        <div >Vous n'avez aucune notifications pour le moment
+<div class="grid"> 
+    <div class="col-10 col-offset-1" *ngIf="notifications.length==0 ">
+        <div class="col-10 col-offset-1">
+            Vous n'avez aucune notifications pour le moment
         </div>
-    </div>  
-    
-    <div class="col-10 col-offset-1" *ngIf="notifications.length!==0">
-        
-        <div *ngIf="retour" >
-            <a [routerLink]= "['/ticket/suivi']"> Suivre mes tickets </a>  / <a [routerLink]= "['/notification']"> Page des notifications </a> 
-        </div>
+    </div> 
+    <div class="col-10 col-offset-1" *ngIf="notifications.length!==0">  
+            <div *ngIf="retour">
+                <i class="pi pi-arrow-circle-left" style="font-size: 30px;" pTooltip="Retour" [routerLink]="['/ticket/suivi']"></i>
+                </div>  
         <h3>Notifications</h3>
-        <div class="card shadow-lg timeline"  >
+        <div class="card shadow-lg timeline">
             <div >
                 <i pTooltip="Marqué comme vu pour toutes les notifications" tooltipPosition="bottom" class="pi pi-times-circle"
                     style="cursor: pointer; font-size: 27px; margin-left: 98%; color: red;" (click)="retirertout()"></i>
@@ -19,36 +18,29 @@
                 <li *ngFor="let notif of notifications">
                     <div class="grid">
                         <div class="col-fixed">
-                            <div class="timeline-icon">
-                                <i class="pi pi-inbox" style="font-size: 30px;"></i>
-                            </div>
                         </div>
                         <div class="col">
                             <div class="time-line-event"
                                 *ngIf="notif && sujetDic[listTicket[notif.ticket_id].sujet_id].label">
                                 <span class="timeline-event-title">{{notif.type}}</span>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
-                                    Un nouveau ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" vous a
-                                    été affecté
+                                    Un nouveau ticket qui a pour numéro : <span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : {{sujetDic[listTicket[notif.ticket_id].sujet_id].label}} crée par : <span style="font-weight: bold;"> {{userDic[listTicket[notif.ticket_id].createur_id].lastname | titlecase}} {{userDic[listTicket[notif.ticket_id].createur_id].firstname | titlecase}} </span> vous a
+                                    été affecté.
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
+                                    {{sujetDic[listTicket[notif.ticket_id]]}}
                                     <div >
-                                        Vous avez reçu un nouveau message sur le ticket : "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}"
-                                    </div>
+                                        Vous avez reçu un nouveau message pour le ticket qui a pour numéro :<span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>.
+                                    </div>  
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
                                     <div>
-                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été redirigé vers un autre service ou un autre sujet par un agent
+                                        Votre ticket qui a pour numéro : <span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span> a été redirigé vers un autre service ou un autre sujet par un agent.
                                     </div>
                                 </div>
                                 <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
                                     <div>
-                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été traité
-                                    </div>
-                                </div>
-                                <div class="timeline-event-message" *ngIf="notif.type==='Revert d\'un ticket'">
-                                    <div>
-                                        Votre ticket "{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}" a été renvoyé dans la queue d'entrée
+                                        Votre ticket qui a pour numéro : <span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet :  <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span> a été traité.
                                     </div>
                                 </div>
                                 <div class="timeline-event-time">
@@ -58,8 +50,6 @@
                         </div>
                     </div>
                 </li>
-                </ul>
-                  
+                </ul>     
             </div>
-       
     </div>

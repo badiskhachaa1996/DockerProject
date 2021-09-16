@@ -93,7 +93,8 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
-import { ModifierProfilComponent } from './modifier-profil/modifier-profil.component';
+import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 
@@ -199,6 +200,7 @@ import { ModifierProfilComponent } from './modifier-profil/modifier-profil.compo
         ResetMdpComponent,
         NotificationComponent,
         ModifierProfilComponent,
+        FooterComponent,
 
                
     ],

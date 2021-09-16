@@ -47,12 +47,10 @@
                                     <label for="email" class="p-sr-only">Adresse mail :</label>
                                     </div>
                                 <input type="text" formControlName="email" class="form-control col-12" placeholder="Adresse mail" pInputText>
-                             
                                 <div *ngIf="(email.invalid || emailExists) && (email.touched || email.dirty)">
                                     <span class="error" *ngIf="email.errors?.required">*L'adresse mail est obligatoire.</span>
                                     <span class="error" *ngIf="email.errors?.pattern">*L'email n'est pas correct.</span>
-                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span>
-                                    
+                                    <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span> 
                                 </div>
                             </div>
                             <div class="mt-2 mb-2 col-lg-12 col-12">
@@ -97,16 +95,16 @@
                                 <div *ngIf=IsAdmin class="mt-2 mb-2 col-lg-12 col-12" >
                                     
                                     
-                                        
+                                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                             <label for="role" class="p-sr-only">Role :</label>
                                             
                                          <p-dropdown  formControlName="role"  [options]="Roles"  optionLabel="value" placeholder="Veuillez choisir un rôle"></p-dropdown>
-                                       
-                                       
+                                       </div>
+                                       <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                             <label for="service_id" class="p-sr-only">Service:</label>
                                             
                                          <p-dropdown  formControlName="service_id"  [options]="Services"  optionLabel="label" placeholder="Veuillez choisir un service"></p-dropdown>
-                                        
+                                        </div>
                                  </div>
                             
                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">

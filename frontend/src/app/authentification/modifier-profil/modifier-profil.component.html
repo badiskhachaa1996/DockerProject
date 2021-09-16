@@ -1,18 +1,86 @@
-<div class="p-grid mt-2" *ngIf="showForm">
-    <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
-        <p-card>
-            <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
-                <i *ngIf="currentRoot=='/listUser'" class="pi pi-times" style="float:right; font-size: 20px;"
-                    (click)="toggleForm()"> </i>
+<div class="layout-dashboard">
 
-                <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
-                    <h3 class="text-center"> Modifier un utilisateur</h3>
+
+
+
+
+
+
+    <div class="p-grid mt-2">
+
+
+
+    <div class="p-col-12 p-md-6  p-lg-4">
+        <div class="user-card card">
+            <div class="user-card-header">
+                <img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout"/>
+            </div>
+            <div class="user-card-content">
+                <img src="assets/layout/images/avatar/avatar-igor.jpg" alt="prestige-layout" />
+                <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)" ></p-menu>
+                <button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>
+
+                <div class="user-card-name">
+                    <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
+                </div>
+                <div class="user-card-status">
+                    <span class="user-profile-role" *ngIf="userco.role=='user'"  style="font-weight: bold;">Utilisateur</span>
+                    <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
+                </div> 
+                <div class="user-detail" >
+                    <ul *ngIf="!toggleUpdate">
+                        <li>
+                            Civilité <div class="value">{{userco.civilite}} <i class="pi pi-arrow-circle-right"></i>
+                        </div>
+                        </li>
+                        <li>
+                            Telephone <div class="value">{{userco.phone}} <i class="pi pi-arrow-circle-right"></i>
+                        </div>
+                        </li>
+                        <li>
+                            Adresse email <div class="value">{{userco.email}} <i class="pi pi-arrow-circle-right"></i>
+                        </div>
+                        </li>
+                        <li>
+                            Adresse <div class="value">{{userco.adresse}} <i class="pi pi-arrow-circle-right"></i></div>
+                        </li>
+                        <li *ngIf="userco.service_id!=null">
+                            Views <div class="value">{{userco.Service}}  <i class="pi pi-arrow-circle-right"></i></div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+            <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
+        <p-card *ngIf="toggleUpdate">
+            <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
+
+
+                <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm" >
+                    <h3 class="text-center"> Modifier mes informations</h3>
 
                     <div class="grid">
 
+                        
                         <div class="field col mt-8 mb-2 col-lg-12 col-12">
 
                             <div>
+
+
                                 <label for="civilite" class="p-sr-only">Civilité :</label>
                             </div>
                             <span>
@@ -106,3 +174,6 @@
         </p-card>
     </div>
 </div>
+</div>
+
+
