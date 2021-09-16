@@ -106,26 +106,30 @@
             (sortFunction)="customSort($event)" [customSort]="true">
 
             <ng-template pTemplate="caption">
-                <div class="p-d-flex" style="text-align: right">
-                    <span class="p-input-icon-left p-ml-auto">
+                <div class="p-d-flex" id="container">
+                    <div id="left">
+                    <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"  ></p-dropdown>
+                    </div>
+                    <div id="right" >
                         <i class="pi pi-search"></i>
                         <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                    </span>
+                    </div>
                 </div>
             </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"> </th>
 
-                        <th style="text-decoration: underline;" pSortableColumn="service"> Service <p-sortIcon field="service"></p-sortIcon>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service 
+                            <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">  Sujet
+                        <th style="text-decoration: underline; padding-top: 5%;">  Sujet
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="date_ajout">  Date de création <p-sortIcon field="date_ajout"></p-sortIcon>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout">  Date de création <p-sortIcon field="date_ajout"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">  Temps d'attente
+                        <th style="text-decoration: underline; padding-top: 5%;">  Temps d'attente
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;padding-top: 5%;">
                             Action
                         </th>
                     </tr>
@@ -300,7 +304,7 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"  ></p-dropdown>
+                           
                         </th>
                         <th style="text-decoration: underline;">  Sujet
                         </th>
@@ -311,7 +315,7 @@
                         <th style="text-decoration: underline;">
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="isAffected">
+                        <th style="text-decoration: underline; " pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;">
@@ -512,7 +516,7 @@
             <ng-template pTemplate="caption"> 
                 <div class="p-input-icon-left p-ml-auto" id="container">
                     <div id="left">
-                    <p-dropdown filter="true" [options]="statutList"  optionLabel="value" (onChange)="testFilter($event)" >
+                    <p-dropdown filter="true" [options]="statutList" optionLabel="value" (onChange)="testFilter($event)" >
                     </p-dropdown>
                     </div>
                     <div id="right" >
@@ -525,28 +529,28 @@
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;" pSortableColumn="service">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
                             
                         </th>
-                        <th style="text-decoration: underline;">  Sujet
+                        <th style="text-decoration: underline;padding-top: 5%;">  Sujet
                         </th>
-                        <th style="text-decoration: underline;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
+                        <th style="text-decoration: underline;padding-top: 5%;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
 
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline;padding-top: 5%;">
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="agent">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
                             Agent <p-sortIcon field="agent"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;" pSortableColumn="isAffected">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;">
+                        <th style="text-decoration: underline ; padding-top: 5%;">
                             Statut
                         </th>
-                        <th *ngIf="token['role']!='Agent'">
+                        <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
                             Action
                         </th>
                     </tr>
