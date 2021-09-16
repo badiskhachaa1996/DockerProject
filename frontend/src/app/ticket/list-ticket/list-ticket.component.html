@@ -510,16 +510,16 @@
             (sortFunction)="customSort($event)" [customSort]="true">
 
             <ng-template pTemplate="caption"> 
-            <div class="p-input-icon-left p-ml-auto" id="container">
-                <p-dropdown filter="true" [options]="statutList" id="left" optionLabel="value" (onChange)="testFilter($event)" >
-                </p-dropdown>
-                <div id="right" >
-                    <i class="pi pi-search" ></i>
-                    <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                </div>
-                </div>  
-              
-            </ng-template>
+                <div class="p-input-icon-left p-ml-auto" id="container">
+                    <p-dropdown filter="true" [options]="statutList" id="left" optionLabel="value" (onChange)="testFilter($event)" >
+                    </p-dropdown>
+                    <div id="right" >
+                        <i class="pi pi-search" ></i>
+                        <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                    </div>
+                    </div>  
+                  
+                </ng-template>
             
                 <ng-template pTemplate="header" let-columns>
                     <tr>

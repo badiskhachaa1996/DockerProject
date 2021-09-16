@@ -31,7 +31,7 @@ export class ListTicketComponent implements OnInit {
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
-  dropdownService: any[]=[];
+  dropdownService: any[]=[{label:"Tous",value:null}];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
@@ -99,6 +99,14 @@ export class ListTicketComponent implements OnInit {
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
+        this.AccAffList.forEach((ticket,index)=>{
+          this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+            (sujet)=>{
+              ticket["service_id"]=sujet.dataSujet.service_id
+              this.AccAffList.splice(index,1,ticket)
+            }
+          )
+        })
       }
     })
   }
@@ -108,6 +116,14 @@ export class ListTicketComponent implements OnInit {
       this.TicketService.getAllAccAff().subscribe((data) => {
         if (!data.message) {
           this.allTickets = data;
+          this.allTickets.forEach((ticket,index)=>{
+            this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+              (sujet)=>{
+                ticket["service_id"]=sujet.dataSujet.service_id
+                this.allTickets.splice(index,1,ticket)
+              }
+            )
+          })
         }
       })
     } else {
@@ -117,6 +133,7 @@ export class ListTicketComponent implements OnInit {
         }
       })
     }
+
   }
 
   updateQueue() {
@@ -124,6 +141,14 @@ export class ListTicketComponent implements OnInit {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
+          this.queueList.forEach((ticket,index)=>{
+            this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+              (sujet)=>{
+                ticket["service_id"]=sujet.dataSujet.service_id
+                this.queueList.splice(index,1,ticket)
+              }
+            )
+          })
         }
       })
     } else {
@@ -133,6 +158,7 @@ export class ListTicketComponent implements OnInit {
         }
       })
     }
+
   }
 
   ngOnInit(): void {
@@ -159,7 +185,7 @@ export class ListTicketComponent implements OnInit {
       this.listServices = data;
       if (!data.message) {
         data.forEach(element => {
-          this.dropdownService.push({label:element.label,value:element._id})//TODO ICI
+          this.dropdownService.push({label:element.label,value:element._id})
           this.listSujetSelected[element._id] = [];
           this.serviceList[element._id] = element.label;
         });
@@ -569,6 +595,8 @@ export class ListTicketComponent implements OnInit {
   @ViewChild('dt2') table: Table;
 
   testFilter(event){
-    this.table.filter(event.value, 'service_id', 'equals')
+    console.log(this.table)
+    this.table.filter(event.value, 'sujet_id', 'equals')
+    console.log(this.table)
   }
 }
