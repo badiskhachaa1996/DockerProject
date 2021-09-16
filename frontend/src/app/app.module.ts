@@ -94,6 +94,7 @@ import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.compon
 import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 
@@ -199,6 +200,7 @@ import { ModifierProfilComponent } from './authentification/modifier-profil/modi
         ResetMdpComponent,
         NotificationComponent,
         ModifierProfilComponent,
+        FooterComponent,
 
                
     ],
