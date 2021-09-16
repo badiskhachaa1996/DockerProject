@@ -3488,5 +3488,5 @@ input,select,textarea{
   outline:none!important;
 }
 .register>div>div>label{
-  padding-right: 290px!important;
+ min-width: 390px;
 }
