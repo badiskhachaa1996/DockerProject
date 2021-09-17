@@ -57,13 +57,15 @@ app.use('/notification', notifController)
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
+        console.log(user._id+" connecté")
         socket.join(user._id)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
     socket.on('NewNotif', (data) => {
-        io.to(data.notif.user_id).emit('NewNotif', data.notif)
-        io.emit(data.notif,{NewNotif:  data.notif});
+        console.log("Nouvelle notif pour: "+data.user_id)
+        io.to(data.user_id).emit('NewNotif', data)
+        io.emit(data,{NewNotif:  data});
     })
 
     socket.on('reloadNotif',(data)=>{
