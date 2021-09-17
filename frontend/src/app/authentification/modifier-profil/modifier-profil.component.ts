@@ -153,7 +153,9 @@ export class ModifierProfilComponent implements OnInit {
        
         //event.item: menuitem metadata
     }},
-      { label: 'Changer ma photo de profil', icon: 'pi pi-fw pi-image' },
+      { label: 'Changer ma photo de profil', icon: 'pi pi-fw pi-image', command: (event) => {
+        document.getElementById('selectedFile').click();
+      } } ,
       { label: 'Modifier mon mot de passe ', icon: 'pi pi-fw pi-lock', command: (event) => {
         this.ToggleUpdatepwd();
         } }

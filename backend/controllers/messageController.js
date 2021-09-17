@@ -56,10 +56,6 @@ app.post("/create", (req, res) => {
            
 
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
-                
-                console.log("Créateur du ticket : " + createur_id)
-                console.log("Agent du ticket : " + userFromDb._id)
-
                 if (msg.isRep) {
                     let htmlemail = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {

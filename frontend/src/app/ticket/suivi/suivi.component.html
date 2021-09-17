@@ -122,6 +122,7 @@
                             chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
                             accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true" #fileInput>
                         </p-fileUpload>
+                        <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
                     </div>
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
@@ -175,7 +176,7 @@
                        <p-dropdown  id="c" filter="true" placeholder="Tous" [options]="dropdownService"
                                         (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
                                         <span style="margin-left: 20px;">
-             <p-dropdown filter="true" [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+             <p-dropdown [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
              </span>
             </div> 
              <div id="right" >

@@ -55,7 +55,9 @@ export class SuiviComponent implements OnInit {
   listServices1;
   listSujetSelected = [];
   listSujets1: any = [];
-  statutList = environment.statut;
+  statutList =[{value:"Queue d'entrée"},  { value: 'En cours de traitement'},
+  { value: 'En attente d\'une réponse'},
+  { value: 'Traité'},];
 
   loadingMessage;
   selectedTicket: Ticket;

@@ -2,6 +2,9 @@
   position:relative;
 
 }
+#l{
+  margin-left: 20px;
+}
 #left {
   position:absolute;
   left:0px;
@@ -15,6 +18,10 @@
 
 }
 #left2 {
+  position:absolute;
+  left:0px;
+}
+#left3 {
   position:absolute;
   left:0px;
 }
