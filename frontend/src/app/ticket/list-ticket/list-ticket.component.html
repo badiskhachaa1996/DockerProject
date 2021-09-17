@@ -90,8 +90,9 @@
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
                     <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue
                         d'entrée</h3><br>
-                    <label style="font-weight: bold; margin-left: 135px; text-decoration: underline;">Justificatif :
-                    </label>
+                        <div class="text-center">
+                    <label style="font-weight: bold; ; text-decoration: underline;">Justificatif :
+                    </label></div>
                     <div class="text-center"><br>
                         <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"
