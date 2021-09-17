@@ -41,7 +41,7 @@ export class ListTicketComponent implements OnInit {
   AccAffList: Ticket[] = [];
   allTickets: Ticket[] = [];
 
-  userList: User[] = [];
+  userList: any[] = [];
   AllUsers: User[] = []
   EnvoyeurList: User[] = [];
 
@@ -279,7 +279,7 @@ export class ListTicketComponent implements OnInit {
       this.userList = []
       this.AllUsers.forEach(user => {
         if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
-          this.userList.push(user)
+          this.userList.push({label:user.lastname+" "+user.firstname,value:user})
         }
       })
     }
@@ -323,6 +323,9 @@ export class ListTicketComponent implements OnInit {
       if (event.field == "service") {
         value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
         value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
+      }else if(event.field =="sujet"){
+        value1 = this.sujetList[data1.sujet_id].label
+        value2 = this.sujetList[data2.sujet_id].label
       } else if (event.field == "agent") {
         this.AllUsers.forEach(user => {
           if (user._id == data1.agent_id) {

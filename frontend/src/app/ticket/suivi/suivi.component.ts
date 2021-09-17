@@ -393,7 +393,10 @@ export class SuiviComponent implements OnInit {
       if (event.field == "service") {
         value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
         value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
-      } else if (event.field == "agent") {
+      }else if(event.field =="sujet"){
+        value1 = this.sujetList[data1.sujet_id].label
+        value2 = this.sujetList[data2.sujet_id].label
+      }  else if (event.field == "agent") {
         this.AllUsers.forEach(user=>{
           if(user._id==data1.agent_id){
             value1 = user.firstname + " " + user.lastname;

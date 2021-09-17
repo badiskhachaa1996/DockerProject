@@ -127,7 +127,8 @@
                         <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
                             <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;"> Sujet
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                            <p-sortIcon field="sujet"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
                             création <p-sortIcon field="date_ajout"></p-sortIcon>
@@ -166,7 +167,7 @@
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-                                optionLabel="firstname" (onChange)="Affected($event)" placeholder="Choissisez un agent">
+                                (onChange)="Affected($event)" placeholder="Choissisez un agent">
                             </p-dropdown>
                         </td>
                     </tr>
@@ -274,7 +275,7 @@
 </div>
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <h3>Mes tickets </h3>
+        <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
@@ -304,7 +305,8 @@
                                 Service <p-sortIcon field="service"></p-sortIcon>
 
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;"> Sujet
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                                <p-sortIcon field="sujet"></p-sortIcon>
                             </th>
                             <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep">
                                 Date d'acceptation
@@ -317,12 +319,8 @@
                             <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected">
                                 Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;">
-
-                                <span>
-                                    Statut
-
-                                </span>
+                            <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
+                                Statut <p-sortIcon field="statut"></p-sortIcon>
                             </th>
                             <th style="text-decoration: underline;padding-top: 5%;">
                                 Action
@@ -533,7 +531,8 @@
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;"> Sujet
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                            <p-sortIcon field="sujet"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep"> Date
                             d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
@@ -545,14 +544,14 @@
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline ; padding-top: 5%;">
-                            Statut
-                        </th>
-                        <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
-                            Action
+                        <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
+                            Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
                             Agent <p-sortIcon field="agent"></p-sortIcon>
+                        </th>
+                        <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
+                            Action
                         </th>
                     </tr>
                 </ng-template>
