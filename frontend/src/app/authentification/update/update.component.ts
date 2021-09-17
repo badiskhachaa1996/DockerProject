@@ -36,31 +36,17 @@ export class UpdateUserComponent implements OnInit {
     adresse: new FormControl(this.listUserComponent.selectedUser.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
     service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required])
-
   })
 
-  toggleForm() {
-    this.showForm = !this.showForm
-    if (this.listUserComponent.showForm == "Ajouter") {
-      this.listUserComponent.formtype = "new";
-      this.listUserComponent.showForm = "Fermer";
-
-    } else {
-      this.listUserComponent.formtype = "new";
-      this.listUserComponent.showForm = "Ajouter";
-    }
-  }
-
-
   UpdateUser() {
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id,this.RegisterForm.value.civilite.value)
+    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id, this.RegisterForm.value.civilite.value)
     this.AuthService.update(user).subscribe((data) => {
-      this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser),1,data)
+      this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
     }, (error) => {
       console.log(error)
     });
-    this.listUserComponent.showForm = "Ajouter"
+    this.listUserComponent.showFormModify = false
   }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
@@ -75,30 +61,31 @@ export class UpdateUserComponent implements OnInit {
 
     this.servService.getAll().subscribe((data) => {
       this.Services = data;
-      this.Services.forEach(civ=>{
-        if(civ._id==this.listUserComponent.selectedUser.service_id){
+      this.Services.forEach(civ => {
+        if (civ._id == this.listUserComponent.selectedUser.service_id) {
           this.RegisterForm.get("service_id").setValue(civ)
         }
       })
     })
-    
+
     this.AuthService.getById(this.listUserComponent.selectedUser._id).subscribe((data) => {
       this.userupdate = jwt_decode(data['userToken'])['userFromDb']
-
-    }, (err) => console.log(err) )
+    }, (err) =>{
+      console.log(err)
+    })
 
     if (localStorage.getItem("token") != null) {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.IsAdmin = decodeToken.role == "Admin"
     }
-    this.civiliteList.forEach(civ=>{
-      if(civ.value==this.listUserComponent.selectedUser.civilite){
+    this.civiliteList.forEach(civ => {
+      if (civ.value == this.listUserComponent.selectedUser.civilite) {
         this.RegisterForm.get("civilite").setValue(civ)
       }
     })
 
-    this.Roles.forEach(civ=>{
-      if(civ.value==this.listUserComponent.selectedUser.role){
+    this.Roles.forEach(civ => {
+      if (civ.value == this.listUserComponent.selectedUser.role) {
         this.RegisterForm.get("role").setValue(civ)
       }
     })

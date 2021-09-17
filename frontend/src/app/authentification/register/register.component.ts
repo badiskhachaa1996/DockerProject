@@ -41,17 +41,6 @@ export class RegisterComponent implements OnInit {
 
   })
 
-  toggleForm() {
-    this.showForm = !this.showForm
-    if (this.listUserComponenet.showForm == "Ajouter") {
-      this.listUserComponenet.formtype = "new";
-      this.listUserComponenet.showForm = "Fermer";
-    } else {
-      this.listUserComponenet.formtype = "new";
-      this.listUserComponenet.showForm = "Ajouter";
-    }
-  }
-
   saveUser() {
     let user = new User(null,
       this.RegisterForm.value.firstname,
@@ -73,7 +62,7 @@ export class RegisterComponent implements OnInit {
       if (this.router.url == "/register") {
         this.router.navigateByUrl('/login')
       } else {
-        this.listUserComponenet.showForm = "Ajouter"
+        this.listUserComponenet.showFormAdd = false
         if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }
@@ -118,7 +107,6 @@ export class RegisterComponent implements OnInit {
       this.Roles = [this.Roles[0], this.Roles[1]]
     }
   }
-
 
 
 }
