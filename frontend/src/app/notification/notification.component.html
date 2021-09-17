@@ -31,37 +31,6 @@
                                 <div class="timeline-event-message" style="font-size: small;">
                                     Numéro du ticket : <span style="font-weight: bold;">{{notif.ticket_id}} </span>, Sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
                                 </div>
-                                <!--<div class="timeline-event-message" *ngIf="notif.type==='Nouveau Ticket Affecté'">
-                                    Un nouveau ticket qui a pour numéro : <span style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet : {{sujetDic[listTicket[notif.ticket_id].sujet_id].label}} crée par : <span style="font-weight: bold;"> {{userDic[listTicket[notif.ticket_id].createur_id].lastname | titlecase}} {{userDic[listTicket[notif.ticket_id].createur_id].firstname | titlecase}} </span> vous a
-                                    été affecté.
-                                </div>
-                                <div class="timeline-event-message" *ngIf="notif.type==='Nouveau Message'">
-                                    {{sujetDic[listTicket[notif.ticket_id]]}}
-                                    <div>
-                                        Vous avez reçu un nouveau message pour le ticket qui a pour numéro :<span
-                                            style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet :
-                                        <span
-                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>.
-                                    </div>
-                                </div>
-                                <div class="timeline-event-message" *ngIf="notif.type==='Modification d\'un ticket'">
-                                    <div>
-                                        Votre ticket qui a pour numéro : <span
-                                            style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet :
-                                        <span
-                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
-                                        a été redirigé vers un autre service ou un autre sujet par un agent.
-                                    </div>
-                                </div>
-                                <div class="timeline-event-message" *ngIf="notif.type==='Traitement de votre ticket'">
-                                    <div>
-                                        Votre ticket qui a pour numéro : <span
-                                            style="font-weight: bold;">{{notif.ticket_id}}</span> et qui a pour sujet :
-                                        <span
-                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
-                                        a été traité.
-                                    </div>
-                                </div>-->
                                 <div class="timeline-event-time">
                                     {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                 </div>
@@ -74,4 +43,4 @@
         </li>
         </ul>
     </div>
-</div>
+</div> </div>
