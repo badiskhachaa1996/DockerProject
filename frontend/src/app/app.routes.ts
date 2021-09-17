@@ -15,11 +15,13 @@ import { UpdateUserComponent } from './authentification/update/update.component'
 import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import {NotificationComponent} from './notification/notification.component';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
+import { InitialiserMdpComponent } from './authentification/initialiser-mdp/initialiser-mdp.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
-  
+    { path:'initialmdp',component:InitialiserMdpComponent},
+
     { path:'login',component:LoginComponent},
     { path:'register',component:RegisterComponent},
     { path:'service',component:ServiceComponent},

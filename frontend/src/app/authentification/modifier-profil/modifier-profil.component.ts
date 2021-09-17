@@ -132,8 +132,6 @@ export class ModifierProfilComponent implements OnInit {
       })
     })
     
-   
-    
     this.civiliteList.forEach(civ=>{
       if(civ.value==this.userupdate.civilite){
         this.RegisterForm.get("civilite").setValue(civ)
@@ -142,19 +140,28 @@ export class ModifierProfilComponent implements OnInit {
 
 
     this.items = [
-      { label: 'Modifier mes informations', icon: 'pi pi-fw pi-refresh', command: (event) => {
-       this.ToggleUpdate();
+      { label: 'Modifier mes informations', 
+        icon: 'pi pi-fw pi-refresh', 
+        command: (event) => {
+        this.ToggleUpdate();
        
         //event.item: menuitem metadata
     }},
-      { label: 'Changer ma photo de profil', icon: 'pi pi-fw pi-image', command: (event) => {
+      { label: 'Changer ma photo de profil', 
+        icon: 'pi pi-fw pi-image', 
+        command: (event) => {
         document.getElementById('selectedFile').click();
       } } ,
-      { label: 'Modifier mon mot de passe ', icon: 'pi pi-fw pi-lock', command: (event) => {
+      { label: 'Modifier mon mot de passe ', 
+        icon: 'pi pi-fw pi-lock', 
+        command: (event) => {
         this.ToggleUpdatepwd();
         } }
   ];
 
+  }
+  clickFile() {
+    document.getElementById('selectedFile').click();
   }
 
 }
