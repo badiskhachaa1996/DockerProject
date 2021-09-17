@@ -140,12 +140,6 @@ export class ModifierProfilComponent implements OnInit {
       }
     })
 
-    this.Roles.forEach(civ=>{
-      if(civ.value==this.userupdate.role){
-        this.RegisterForm.get("role").setValue(civ)
-      }
-    })
-
 
     this.items = [
       { label: 'Modifier mes informations', icon: 'pi pi-fw pi-refresh', command: (event) => {
