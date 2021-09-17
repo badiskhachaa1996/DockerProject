@@ -482,9 +482,9 @@ export class ListTicketComponent implements OnInit {
     this.expandedAll = {};
     this.expandedTraitement = {}
     if (type === "AccAff") {
-      this.expandedTraitement[ticket._id] = !this.expandedTraitement[ticket._id];
+      this.expandedTraitement[ticket._id] = true;
     } else {
-      this.expandedAll[ticket._id] = !this.expandedAll[ticket._id];
+      this.expandedAll[ticket._id] = true;
     }
   }
   SendComment() {
