@@ -1,7 +1,9 @@
-<div class="layout-dashboard">
-
-
-    <div style="margin: auto;">
+<div class="p-grid mt-2" >
+    <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png"
+        class="logo"></div>
+    <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
+        
+           
  
         <img #img *ngIf="profilePicture" [src]="profilePicture" style="
 -webkit-border-radius:70px;
@@ -11,13 +13,13 @@ width:80px;
 height:80px;position : relative ; " alt="prestige-layout" />
 
 
-<div style="margin-top: 0;">
+<div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
         
                 <input  type="file" (change)="handleProfilePictureInput($event.target.files)" id="selectedFile"
                  style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
 
         </div>
-        <div class="col-10 col-offset-1 mb-4">
+        <div class="col-6 col-offset-1 mb-4">
             <div *ngIf="retour">
                 <i class="pi pi-arrow-circle-left" style="font-size: 30px;" pTooltip="Retour"
                     [routerLink]="['/ticket/suivi']"></i>
@@ -30,51 +32,50 @@ height:80px;position : relative ; " alt="prestige-layout" />
 
 
 
-            <div class="p-col-12 p-md-6  p-lg-4">
-                <div class="user-card card">
-                    <div class="user-card-header">
-                        <img src="assets/layout/images/dashboard/bg-head.jpg" alt="prestige-layout" />
-                    </div>
-                    <div class="user-card-content">
+            <div class="p-col-6 p-md-6  p-lg-4">
+                <div class="user-card card" style="text-align: center;">
+                    <div style="text-align: center;">
                         <img src={{userco.pathImageProfil}} alt="prestige-layout" *ngIf="userco.pathImageProfil" />
-                        <img src="assets\layout\images\avatar\avatar-ava.jpg " alt="prestige-layout"
-                            *ngIf="!userco.pathImageProfil" />
                         <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)">
                         </p-menu>
                         <button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>
-
-                        <div class="user-card-name">
+                        
+                        <div class="user-card-name" style="text-align: center;">
                             <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
                         </div>
-                        <div class="user-card-status">
+                   
+                    </div>
+                    <div class="user-card-content" style="text-align: center;">
+              
+                        <div class="user-card-status" style="text-align: center;">
                             <span class="user-profile-role" *ngIf="userco.role=='user'"
-                                style="font-weight: bold;">Utilisateur</span>
-                            <span style="font-weight: bold;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
+                                style="font-weight: bold;text-align: center;">Utilisateur</span>
+                            <span style="font-weight: bold; text-align: center;" *ngIf="userco.role!=='user'">{{userco.role}} </span>
                         </div>
                         <div class="user-detail">
-                            <ul *ngIf="!toggleUpdate && !toggleUpdatepwd">
-                                <li>
-                                    Civilité <div class="value">{{userco.civilite}}
+                            <div  class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd">
+                                <div class="field col mt-12 mb-12 col-lg-8 col-8" style="font-weight: bold;">
+                                    Civilité : <div class="value">{{userco.civilite}}
                                     </div>
-                                </li>
-                                <li>
+                                </div>
+                                <div class="field col mt-12 mb-12 col-lg-8 col-8" style="font-weight: bold;">
                                     Telephone <div class="value">{{userco.phone}}
                                     </div>
-                                </li>
-                                <li>
+                                </div>
+                                <div class="field col mt-12 mb-12 col-lg-8 col-8" style="font-weight: bold;">
                                     Adresse email <div class="value">{{userco.email}}
                                     </div>
-                                </li>
-                                <li>
+                                </div>
+                                <div class="field col mt-12 mb-12 col-lg-8 col-8" style="font-weight: bold;">
                                     Adresse <div class="value">{{userco.adresse}}
                                     </div>
-                                </li>
-                                <li *ngIf="userco.service_id!=null">
-                                    Service <div class="value">{{userco.Service}}
+                                
+                                    <div class="field col mt-12 mb-12 col-lg-4 col-4" style="font-weight: bold;" *ngIf="userco.Service_id">
+                                    Service <div class="value">{{userco.Service_id}}
                                     </div>
-                                </li>
+                                
 
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -104,11 +105,9 @@ height:80px;position : relative ; " alt="prestige-layout" />
 
                                 <div class="field col mt-8 mb-2 col-lg-12 col-12">
 
-                                    <div>
-
-
+                                   
                                         <label for="civilite" class="p-sr-only">Civilité :</label>
-                                    </div>
+                                    
                                     <span>
                                         <p-dropdown formControlName="civilite" [options]="civiliteList"
                                             optionLabel="value" placeholder="Veuillez choisir une civilité">
@@ -206,7 +205,7 @@ height:80px;position : relative ; " alt="prestige-layout" />
                     </div>
                 </p-card>
             </div>
-        </div>
+        
     </div>
 
     <div class="p-grid mt-2" *ngIf="toggleUpdatepwd ">
@@ -245,4 +244,7 @@ height:80px;position : relative ; " alt="prestige-layout" />
                 </div>
             </p-card>
         </div>
+    </div>
+
+
     </div>

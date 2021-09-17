@@ -34,7 +34,7 @@ export class SuiviComponent implements OnInit {
   filterSujet;
   filterStatut;
 
-  dropdownService: any[]=[{label:"Tous",value:null}];
+  
 
   first = 0;
   rows = 10;
@@ -55,9 +55,15 @@ export class SuiviComponent implements OnInit {
   listServices1;
   listSujetSelected = [];
   listSujets1: any = [];
-  statutList =[{value:"Queue d'entrée"},  { value: 'En cours de traitement'},
-  { value: 'En attente d\'une réponse'},
-  { value: 'Traité'},];
+
+  dropdownService: any[]=[{label:"Tous les services",value:null}];
+  showStatut = [
+    { label: "Tous les statuts", value: null },
+    { label: "File d'attente", value: "Queue d'entrée" },
+    { label: 'En cours de traitement', value: 'En cours de traitement' },
+    { label: 'En attente d\'une réponse', value: 'En attente d\'une réponse' },
+    { label: 'Traité', value: 'Traité' }
+  ]
 
   loadingMessage;
   selectedTicket: Ticket;
@@ -147,7 +153,6 @@ export class SuiviComponent implements OnInit {
 
     this.ServService.getAll().subscribe((data) => {
       if (!data.message) {
-        //{ label: 'Tous les services', value: null }
         this.filterService = data;
         data.forEach(service => {
           this.dropdownService.push({label:service.label,value:service._id})

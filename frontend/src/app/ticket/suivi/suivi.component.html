@@ -141,22 +141,22 @@
 
 
 
-<div class="grid" >
+<div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
-        <div class="col-12 card shadow-lg my-5" >
-            <p-table  #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+        <div class="col-12 card shadow-lg my-5">
+            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
                 [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
                 [globalFilterFields]="['sujet_id','statut']" (sortFunction)="customSort($event)" [customSort]="true">
                 <ng-template pTemplate="header">
-                    <tr >
-                        <th style="width: 3rem" ></th>
+                    <tr>
+                        <th style="width: 3rem"></th>
 
                         <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                      
+
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet">
                             Sujet <p-sortIcon field="sujet"></p-sortIcon>
@@ -169,23 +169,23 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="caption"> 
+                <ng-template pTemplate="caption">
                     <div class="p-input-icon-left p-ml-auto" id="container">
                         <div id="left">
-                          
-                       <p-dropdown  id="c" filter="true" placeholder="Tous" [options]="dropdownService"
-                                        (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                                        <span style="margin-left: 20px;">
-             <p-dropdown [options]="statutList"   optionLabel="value" (onChange)="dt1.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
-             </span>
-            </div> 
-             <div id="right" >
-                            <i class="pi pi-search" ></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+
+                            <p-dropdown id="c" filter="true" placeholder="Tous" [options]="dropdownService"
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                            <span style="margin-left: 20px;">
+
+                            </span>
                         </div>
-                        </div>  
-                      
-                    </ng-template>
+                        <div id="right">
+                            <p-dropdown [options]="showStatut"
+                                (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>
+                        </div>
+                    </div>
+
+                </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
@@ -203,7 +203,7 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
-                            {{rowData.statut}}
+                            {{(rowData.statut=='Queue d\'entrée')?'File d\'attente':rowData.statut}}
                         </td>
                         <td>
 
