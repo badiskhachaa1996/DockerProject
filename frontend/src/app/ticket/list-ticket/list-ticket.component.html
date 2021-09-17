@@ -47,15 +47,15 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-                    <label style="font-weight: bold; margin-left: 710px; text-decoration: underline;">Statut du ticket :     </label>
-                    <div style="margin-left: 130px;">
-                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
+                      <div style="text-decoration: underline;" class="col-12">
+                          <label class="col-4" style="font-weight: bold;  text-decoration: underline;">Statut du ticket :     </label>
+                            <p-dropdown class="col-4" formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
+                  
+                        <p-fileUpload class="col-4"  #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" >
                         </p-fileUpload>
-                        <span style="margin-left: 370px;">
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
-                        </span>
+                        
                     </div>
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
