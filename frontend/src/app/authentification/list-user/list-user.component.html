@@ -26,15 +26,13 @@
             [responsive]="true" 
             [totalRecords]="tabUser.length"
             rowExpandMode="single"
-            [globalFilterFields]=
-            "['civilite','lastname','firstname','service_id','role','email','phone','adresse']"  
             (sortFunction)="customSort($event)" [customSort]="true">
 
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            <p-dropdown [options]="filterRole"
+                        (onChange)="dt1.filter($event.value, 'role', 'equals')"></p-dropdown>
                         </span>
                     </div>
                 </ng-template>

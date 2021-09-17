@@ -10,7 +10,7 @@
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <label style="font-weight: bold;">Service:</label>
 
-                            <select formControlName="service" class="form-control col-12" >
+                            <select formControlName="service" class="form-control col-12">
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
                                 <option *ngFor="let service of listServices" [ngValue]="service">
                                     {{ service.label }}
@@ -47,22 +47,26 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-                    <label style="font-weight: bold; margin-left: 710px; text-decoration: underline;">Statut du ticket :     </label>
+                    <label style="font-weight: bold; margin-left: 710px; text-decoration: underline;">Statut du ticket :
+                    </label>
                     <div style="margin-left: 130px;">
-                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
-                            customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
-                            maxFileSize="20000000" [auto]="true" >
+                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic"
+                            chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
+                            accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true">
                         </p-fileUpload>
                         <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
                         <span style="margin-left: 370px;">
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
+                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value">
+                            </p-dropdown>
                         </span>
                     </div>
                     <div *ngIf="value.invalid">
-                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB max).</span>
+                        <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
+                            max).</span>
                     </div><br>
                     <div class="text-center">
-                        <button [disabled]="commentForm.invalid || loading" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
+                        <button [disabled]="commentForm.invalid || loading" pButton
+                            class="ui-button-raised ui-button-success" label="Envoyer" (click)="SendComment()"></button>
                     </div>
                 </form>
             </div>
@@ -75,13 +79,19 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
-                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue d'entrée</h3><br>
-                    <label style="font-weight: bold; margin-left: 135px; text-decoration: underline;">Justificatif : </label>
+                    <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue
+                        d'entrée</h3><br>
+                    <label style="font-weight: bold; margin-left: 135px; text-decoration: underline;">Justificatif :
+                    </label>
                     <div class="text-center"><br>
-                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea autoResize="autoResize" placeholder="Saisir un message" placeholder="Expliquer la raison de votre renvoie"></textarea>
+                        <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
+                            autoResize="autoResize" placeholder="Saisir un message"
+                            placeholder="Expliquer la raison de votre renvoie"></textarea>
                     </div><br>
                     <div class="text-center">
-                        <button class="col-offset-5 xl:col-offset-5 sm:col-offset-4" [disabled]="RevertForm.invalid" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="revert()"></button>
+                        <button class="col-offset-5 xl:col-offset-5 sm:col-offset-4" [disabled]="RevertForm.invalid"
+                            pButton class="ui-button-raised ui-button-success" label="Envoyer"
+                            (click)="revert()"></button>
                     </div>
                 </form>
             </div>
@@ -92,43 +102,37 @@
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 
-            *ngIf="queueList" 
-            [columns]="cols" 
-            [value]="queueList" 
-            dataKey="_id" 
-            [rows]="4" 
-            [paginator]="true"
-            [pageLinks]="5" 
-            [responsive]="true" 
-            rowExpandMode="single" 
-            [totalRecords]="queueList.length"
-            [globalFilterFields]="['sujet_id','description','date_ajout']"
-            (sortFunction)="customSort($event)" [customSort]="true">
+            <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"
+                [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
+                (sortFunction)="customSort($event)" [customSort]="true">
 
-            <ng-template pTemplate="caption">
-                <div class="p-d-flex" id="container">
-                    <div id="left3">
-                    <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true" [options]="dropdownService" (onChange)="dt1.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
-                  </div>  
-                  <div id="right" >
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" id="container">
+                        <div id="left3">
+                            <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
+                                [options]="dropdownService"
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+
+                        </div>
+                        <div id="right">
+                            <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
+                                (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                        </div>
                     </div>
-                </div>
-            </ng-template>
+                </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"> </th>
 
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service 
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
                             <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;">  Sujet
+                        <th style="text-decoration: underline; padding-top: 5%;"> Sujet
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout">  Date de création <p-sortIcon field="date_ajout"></p-sortIcon>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
+                            création <p-sortIcon field="date_ajout"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;">  Temps d'attente
+                        <th style="text-decoration: underline; padding-top: 5%;"> Temps d'attente
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;">
                             Action
@@ -162,8 +166,7 @@
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-                                optionLabel="firstname" (onChange)="Affected($event)"
-                                placeholder="Choissisez un agent">
+                                optionLabel="firstname" (onChange)="Affected($event)" placeholder="Choissisez un agent">
                             </p-dropdown>
                         </td>
                     </tr>
@@ -225,7 +228,8 @@
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}</div>
+                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}
+                                            </div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
@@ -244,8 +248,8 @@
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{userDic[rowData.user_revert].firstname |
-                                                titlecase }} {{userDic[rowData.user_revert].lastname | titlecase
-                                                }} </div>
+                                            titlecase }} {{userDic[rowData.user_revert].lastname | titlecase
+                                            }} </div>
                                     </div>
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6"><b
@@ -254,8 +258,8 @@
                                             {{rowData.justificatif}}</div>
                                     </div>
                                     <div class="ui-g-4 ui-md-4">
-                                        <div class="ui-g-6 ui-md-6"><b
-                                                style="text-align:left !important;">Date:</b> </div>
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Date:</b>
+                                        </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.date_revert | date:'dd/MM/yyyy HH:mm'}}</div>
                                     </div>
@@ -272,73 +276,64 @@
     <div class="col-10 col-offset-1">
         <h3>Mes tickets </h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table 
-            #dt2 
-            *ngIf="AccAffList" 
-            [columns]="cols" 
-            [value]="AccAffList" 
-            pDroppable="QueueToAccAff"
-                (onDrop)="dragQueueToAccAff($event)" 
-                dataKey="_id" 
-                rowExpandMode="single" 
-                [rows]="4" 
-                [paginator]="true"
-                [pageLinks]="5" 
-                [responsive]="true" 
-                [totalRecords]="AccAffList.length" 
-                [globalFilterFields]="['sujet_id','description','date_affec_accep','statut']"  
+            <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
+                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
+                [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
                 (sortFunction)="customSort($event)" [customSort]="true">
-    
+
                 <ng-template pTemplate="caption" id="container2">
-                    <div class="p-d-flex" id="left2"  >
-                       
-                        <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true" [options]="dropdownService" 
-                        (onChange)="dt2.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
-                   </div> 
+                    <div class="p-d-flex" id="left2">
+                        <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
+                            [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')">
+                        </p-dropdown>
+                        <p-dropdown id="l" [options]="showStatut"
+                        (onChange)="dt2.filter($event.value, 'statut', 'equals')"></p-dropdown>
+                    </div>
                     <div id="right2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"/>
-                     </div>
-                
+                        <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
+                            (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                    </div>
+
                 </ng-template>
 
-               <div id="top">
-                <ng-template pTemplate="header" let-columns >
-                    <tr>
-                        <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
-                            Service <p-sortIcon field="service"></p-sortIcon>
-                           
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">  Sujet
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;"pSortableColumn="date_affec_accep">  Date d'acceptation
-                            
-                            <p-sortIcon field="date_affec_accep"></p-sortIcon>
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
-                            Temps de traitement
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected">
-                            Désignation <p-sortIcon field="isAffected"></p-sortIcon>
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
-                        
-                            <span>
-                                Statut
+                <div id="top">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th style="width: 3rem"></th>
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
+                                Service <p-sortIcon field="service"></p-sortIcon>
 
-                            </span>
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
-                            Action
-                        </th>
-                    </tr>
-                    
-                </ng-template>
-            </div>
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%;"> Sujet
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep">
+                                Date d'acceptation
+
+                                <p-sortIcon field="date_affec_accep"></p-sortIcon>
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%;">
+                                Temps de traitement
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected">
+                                Désignation <p-sortIcon field="isAffected"></p-sortIcon>
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%;">
+
+                                <span>
+                                    Statut
+
+                                </span>
+                            </th>
+                            <th style="text-decoration: underline;padding-top: 5%;">
+                                Action
+                            </th>
+                        </tr>
+
+                    </ng-template>
+                </div>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-                        *ngIf="sujetList[rowData.sujet_id]"  [pSelectableRow]="rowData">
+                        *ngIf="sujetList[rowData.sujet_id]" [pSelectableRow]="rowData">
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
@@ -363,14 +358,15 @@
                         <td *ngIf="!rowData.isAffected">
                             Accepté
                         </td>
-                        <td  [pSelectableRow]="rowData">
+                        <td [pSelectableRow]="rowData">
                             {{rowData.statut}}
                         </td>
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData) "> </i>
-                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay"
+                                (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -428,12 +424,12 @@
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}</div>
+                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}
+                                            </div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b
-                                                    style="text-align:left !important;">Service:</b> 
+                                                <b style="text-align:left !important;">Service:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
@@ -441,18 +437,19 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages"
+                                [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
-                                    <p-table
-                                    [value]="comments" dataKey="id">
+                                    <p-table [value]="comments" dataKey="id">
                                         <ng-template pTemplate="body" let-message>
                     <tr *ngIf="message.user_id!=token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                    <button style="cursor: pointer;" *ngIf="message.document"
+                                        class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -460,8 +457,10 @@
 
                                 </div>
 
-                                <span id="soustitre" class="ui-g-11 ui-md-11" >
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                <span id="soustitre" class="ui-g-11 ui-md-11">
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                 </span>
                             </span>
                         </td>
@@ -471,16 +470,19 @@
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
-                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
-                                        id="charger2" (click)="downloadFile(message)">
+                                    <button style="cursor: pointer;" *ngIf="message.document"
+                                        class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                        (click)="downloadFile(message)">
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
                                     </button>
                                     <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
                                 </div>
                                 <span id="soustitre" class=" ui-g-11 ui-md-11">
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
-                                   
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
+
                                 </span>
 
                             </span>
@@ -505,40 +507,36 @@
         <h3 *ngIf="token['role']!='Admin'">Les tickets de mon service</h3>
         <h3 *ngIf="token['role']=='Admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt3 *ngIf="AccAffList" 
-            [columns]="cols" 
-            [value]="allTickets" 
-            dataKey="_id" 
-            rowExpandMode="single"
-            [rows]="4" [paginator]="true"
-            [pageLinks]="5" 
-            [responsive]="true" 
-            [totalRecords]="allTickets.length"  
-            [globalFilterFields]="['sujet_id','statut','date_ajout','description','createur_id']"  
-            (sortFunction)="customSort($event)" [customSort]="true">
+            <p-table #dt3 *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
+                [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
+                (sortFunction)="customSort($event)" [customSort]="true">
 
-            <ng-template pTemplate="caption"> 
-                <div class="p-input-icon-left p-ml-auto" id="container">
-                    <div id="left">
-                        <p-dropdown *ngIf="token['role']=='Admin'"  filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
-                        <p-dropdown id="l" [options]="statutList" optionLabel="value" (onChange)="dt3.filter($event.value.value, 'statut', 'equals')" ></p-dropdown>
+                <ng-template pTemplate="caption">
+                    <div class="p-input-icon-left p-ml-auto" id="container">
+                        <div id="left">
+                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous"
+                                [options]="dropdownService"
+                                (onChange)="dt3.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                            <p-dropdown id="l" [options]="showStatut"
+                                (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown>
+                        </div>
+                        <div id="right">
+                            <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
+                                (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                        </div>
                     </div>
-                    <div id="right" >
-                        <i class="pi pi-search" ></i>
-                        <input pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                    </div>
-                    </div>  
                 </ng-template>
-            
+
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">  Sujet
+                        <th style="text-decoration: underline;padding-top: 5%;"> Sujet
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;"pSortableColumn="date_affec_accep">  Date d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep"> Date
+                            d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
 
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;">
@@ -590,7 +588,8 @@
                             {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
-                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay" (click)="toggleRevertForm(rowData)"></i>
+                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay"
+                                (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -611,7 +610,7 @@
                                                 style="text-align:left !important;">Description:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.description}}</div>
-                                      
+
                                     </div>
                                 </div>
                             </p-fieldset>
@@ -649,7 +648,8 @@
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}</div>
+                                                {{(userDic[rowData.createur_id].role=='user')?'Utilisateur':userDic[rowData.createur_id].role}}
+                                            </div>
                                         </div>
                                         <div *ngIf="userDic[rowData.createur_id].service_id" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
@@ -707,7 +707,8 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-                            <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages" [style]="{'color':'green','font-weight': 'bold'}">
+                            <p-fieldset *ngIf="comments && comments.length!=0" legend="Messages"
+                                [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="badyT">
 
                                     <p-table [value]="comments" dataKey="id">
@@ -717,7 +718,8 @@
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
 
-                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                    <button style="cursor: pointer;" *ngIf="message.document"
+                                        class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
@@ -725,8 +727,10 @@
 
                                 </div>
 
-                                <span id="soustitre" class="ui-g-11 ui-md-11" >
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} : {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}} {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}                      
+                                <span id="soustitre" class="ui-g-11 ui-md-11">
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                 </span>
                             </span>
                         </td>
@@ -736,16 +740,19 @@
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
                                 <div class="ui-g-12 ui-md-12">
-                                    <button style="cursor: pointer;" *ngIf="message.document" class="pi pi-paperclip ui-g-1 ui-md-1"
-                                        id="charger2" (click)="downloadFile(message)">
+                                    <button style="cursor: pointer;" *ngIf="message.document"
+                                        class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
+                                        (click)="downloadFile(message)">
                                         <i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id">
                                         </i>
                                     </button>
                                     <span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}} </span>
                                 </div>
                                 <span id="soustitre" class=" ui-g-11 ui-md-11">
-                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :  {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}   {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}} 
-                                   
+                                    {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
+                                    {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
+                                    {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
+
                                 </span>
 
                             </span>
@@ -757,10 +764,10 @@
             </p-table>
         </div>
         </p-fieldset>
-            </td>
-            </tr>
-            </ng-template>
-            </p-table>
-        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
     </div>
+</div>
 </div>
