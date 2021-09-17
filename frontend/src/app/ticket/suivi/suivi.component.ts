@@ -15,6 +15,7 @@ import { saveAs as importedSaveAs } from 'file-saver';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-suivi',
@@ -70,7 +71,7 @@ export class SuiviComponent implements OnInit {
   showFormAddComment: boolean = false;
 
 
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput') fileInput: FileUpload;
   comments: any = [];
 
   toggleFormCancel(){
@@ -355,12 +356,6 @@ export class SuiviComponent implements OnInit {
     })
   }
 
-  onUpload(event) {
-    for (let file of event.files) {
-      this.uplo = file;
-    }
-    this.onFileChange(event);
-  }
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
@@ -377,11 +372,7 @@ export class SuiviComponent implements OnInit {
         this.loading = false;
       };
     }
-  }
-  clearFile() {
-    this.commentForm.get('file').setValue(null);
-    this.commentForm.get('value').setValue(null);
-    this.fileInput.nativeElement.value = '';
+    this.fileInput.clear();
   }
 
   get value() { return this.commentForm.get('value'); }

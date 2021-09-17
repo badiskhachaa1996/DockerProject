@@ -18,6 +18,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { Table } from 'primeng/table';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-list-ticket',
@@ -79,7 +80,7 @@ export class ListTicketComponent implements OnInit {
 
   token = null;
 
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput') fileInput: FileUpload;
   comments: any = [];
 
   commentForm: FormGroup = new FormGroup({
@@ -279,7 +280,7 @@ export class ListTicketComponent implements OnInit {
       this.userList = []
       this.AllUsers.forEach(user => {
         if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
-          this.userList.push({label:user.lastname+" "+user.firstname,value:user})
+          this.userList.push({ label: user.lastname + " " + user.firstname, value: user })
         }
       })
     }
@@ -323,7 +324,7 @@ export class ListTicketComponent implements OnInit {
       if (event.field == "service") {
         value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
         value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
-      }else if(event.field =="sujet"){
+      } else if (event.field == "sujet") {
         value1 = this.sujetList[data1.sujet_id].label
         value2 = this.sujetList[data2.sujet_id].label
       } else if (event.field == "agent") {
@@ -468,7 +469,7 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
 
-  loadMessages(ticket: Ticket) {
+  loadMessages(ticket: Ticket, type: string) {
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
       .subscribe(
@@ -479,9 +480,12 @@ export class ListTicketComponent implements OnInit {
           console.log(error);
         });
     this.expandedAll = {};
-    this.expandedAll[ticket._id] = true;
     this.expandedTraitement = {}
-    this.expandedTraitement[ticket._id] = true;
+    if (type === "AccAff") {
+      this.expandedTraitement[ticket._id] = true;
+    } else {
+      this.expandedAll[ticket._id] = true;
+    }
   }
   SendComment() {
     let comment = {
@@ -555,12 +559,7 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
   }
-  onUpload(event) {
-    for (let file of event.files) {
-      this.uplo = file;
-    }
-    this.onFileChange(event);
-  }
+
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
@@ -577,11 +576,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-  }
-  clearFile() {
-    this.commentForm.get('file').setValue(null);
-    this.commentForm.get('value').setValue(null);
-    this.fileInput.nativeElement.value = '';
+    this.fileInput.clear()
   }
 
   toggleFormCancel() {
