@@ -170,18 +170,15 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="caption">
-                    <div class="p-input-icon-left p-ml-auto" id="container">
-                        <div id="left">
+                    <div class="p-input-icon-left p-ml-auto" >
+                        <div style="display: flex;">
 
                             <p-dropdown id="c" filter="true" placeholder="Tous" [options]="dropdownService"
                                 (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                            <span style="margin-left: 20px;">
-
-                            </span>
-                        </div>
-                        <div id="right">
-                            <p-dropdown [options]="showStatut"
+                                <span style="margin-left: 2%;">
+                                <p-dropdown [options]="showStatut"
                                 (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>
+                       </span>
                         </div>
                     </div>
 
