@@ -116,16 +116,17 @@
                 (sortFunction)="customSort($event)" [customSort]="true">
 
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex" id="container">
-                        <div id="left3">
+                    <div class="p-d-flex" >
+                        <div style="display: flex;" >
                             <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
                                 [options]="dropdownService"
                                 (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-
+                                <span style="margin-left:2%;">
+                                <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
+                                (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown></span>
                         </div>
-                        <div id="right">
-                            <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
-                                (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                        <div >
+                          
                         </div>
                     </div>
                 </ng-template>
@@ -290,19 +291,22 @@
                 [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
                 (sortFunction)="customSort($event)" [customSort]="true">
 
-                <ng-template pTemplate="caption" id="container2">
-                    <div class="p-d-flex" id="left2">
+                <ng-template pTemplate="caption" >
+                    <div class="p-d-flex" style="display: flex;" >
                         <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
                             [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')">
                         </p-dropdown>
-                        <p-dropdown id="l" [options]="showStatut"
-                        (onChange)="dt2.filter($event.value, 'statut', 'equals')"></p-dropdown>
-                    </div>
-                    <div id="right2">
+                        <span style="margin-left:2% ;">
+                            
+                        <p-dropdown  [options]="showStatut"
+                        (onChange)="dt2.filter($event.value, 'statut', 'equals')">
+                    </p-dropdown>
+                </span>
+                <span style="margin-left:2% ;">
                         <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
                             (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                            </span>
                     </div>
-
                 </ng-template>
 
                 <div id="top">
@@ -521,17 +525,17 @@
                 (sortFunction)="customSort($event)" [customSort]="true">
 
                 <ng-template pTemplate="caption">
-                    <div class="p-input-icon-left p-ml-auto" id="container">
-                        <div id="left">
+                    <div class="p-input-icon-left p-ml-auto">
+                        <div style="display: flex;" >
                             <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous"
                                 [options]="dropdownService"
                                 (onChange)="dt3.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                            <p-dropdown id="l" [options]="showStatut"
-                                (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown>
-                        </div>
-                        <div id="right">
-                            <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
-                                (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                                <span style="margin-left: 2%;">
+                            <p-dropdown  [options]="showStatut"
+                                (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown></span>
+                                <span style="margin-left: 2%;">
+                                <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
+                                (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown> </span>
                         </div>
                     </div>
                 </ng-template>
