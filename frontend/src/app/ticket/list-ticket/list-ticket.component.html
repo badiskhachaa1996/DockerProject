@@ -53,6 +53,7 @@
                             customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                             maxFileSize="20000000" [auto]="true" >
                         </p-fileUpload>
+                        <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
                         <span style="margin-left: 370px;">
                             <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown>
                         </span>
