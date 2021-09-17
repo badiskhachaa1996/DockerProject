@@ -34,7 +34,7 @@ export class SuiviComponent implements OnInit {
   filterSujet;
   filterStatut;
 
-  dropdownService: any[]=[{label:"Tous",value:null}];
+  
 
   first = 0;
   rows = 10;
@@ -55,9 +55,15 @@ export class SuiviComponent implements OnInit {
   listServices1;
   listSujetSelected = [];
   listSujets1: any = [];
-  statutList =[{value:"Queue d'entrée"},  { value: 'En cours de traitement'},
-  { value: 'En attente d\'une réponse'},
-  { value: 'Traité'},];
+
+  dropdownService: any[]=[{label:"Tous les services",value:null}];
+  showStatut = [
+    { label: "Tous les statuts", value: null },
+    { label: "File d'attente", value: "Queue d'entrée" },
+    { label: 'En cours de traitement', value: 'En cours de traitement' },
+    { label: 'En attente d\'une réponse', value: 'En attente d\'une réponse' },
+    { label: 'Traité', value: 'Traité' }
+  ]
 
   loadingMessage;
   selectedTicket: Ticket;
@@ -147,7 +153,6 @@ export class SuiviComponent implements OnInit {
 
     this.ServService.getAll().subscribe((data) => {
       if (!data.message) {
-        //{ label: 'Tous les services', value: null }
         this.filterService = data;
         data.forEach(service => {
           this.dropdownService.push({label:service.label,value:service._id})
@@ -388,7 +393,10 @@ export class SuiviComponent implements OnInit {
       if (event.field == "service") {
         value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
         value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
-      } else if (event.field == "agent") {
+      }else if(event.field =="sujet"){
+        value1 = this.sujetList[data1.sujet_id].label
+        value2 = this.sujetList[data2.sujet_id].label
+      }  else if (event.field == "agent") {
         this.AllUsers.forEach(user=>{
           if(user._id==data1.agent_id){
             value1 = user.firstname + " " + user.lastname;

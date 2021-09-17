@@ -28,7 +28,13 @@ export class ListUserComponent implements OnInit {
   add: boolean = true;
 
   serviceDic: Service[] = [];
-  dropdownService: any[]=[{label:"Tous",value:null}];
+  dropdownService: any[]=[{label:"Tous les services",value:null}];
+  filterRole: any []=[
+    {label:"Tous les roles",value:null},
+    {label:"Admin",value:"Admin"},
+    {label:"Reponsable",value:"Responsable"},
+    {label:"Agent",value:"Agent"}
+  ]
   loading: boolean;
 
   selectedUser: User;
