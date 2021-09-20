@@ -1,8 +1,8 @@
-<div class="p-grid mt-2" *ngIf="showFormUpdate">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="isModify">
+<div class="p-grid mt-2" *ngIf="isModify!=null">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"></i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="isModify=null"></i>
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
@@ -79,7 +79,7 @@
         </p-card>
     </div>
 </div>
-<div class="p-grid mt-2" *ngIf="showRevert!=null && showFormRevertForm">
+<div class="p-grid mt-2" *ngIf="showRevert!=null">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -175,7 +175,7 @@
                                 (click)="QueueToAccAff(rowData)"></i>
                             <!--*ngIf="rowData.createur_id!=token['id']"-->
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
-                                class="pi pi-pencil" (click)="modify(rowData)"></i>
+                                class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
@@ -378,7 +378,7 @@
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData);showFormAddComment=true"> </i>
-                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay"
+                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class="pi pi-replay"
                                 (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
