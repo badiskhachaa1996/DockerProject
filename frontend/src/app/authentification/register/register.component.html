@@ -109,17 +109,17 @@
                                     correspondent pas.</span>
                             </div>
                         </div>
-                        <div class=" field col mt-2 mb-2 col-lg-6 col-6">
+                        <div *ngIf=IsAdmin class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
                             </div>
-                            <div *ngIf=IsAdmin>
+                            <div >
                                 <span>
                                     <p-dropdown formControlName="role" [options]="Roles" optionLabel="value" class="register"></p-dropdown>
                                 </span>
                             </div>
                         </div>
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                        <div *ngIf=IsAdmin class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>

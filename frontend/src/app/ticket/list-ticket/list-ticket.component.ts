@@ -469,7 +469,7 @@ export class ListTicketComponent implements OnInit {
     // this.serviceForm.reset();
   }
 
-  loadMessages(ticket: Ticket, type: string) {
+  loadMessages(ticket: Ticket, type: string, expanded) {
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
       .subscribe(
@@ -482,9 +482,10 @@ export class ListTicketComponent implements OnInit {
     this.expandedAll = {};
     this.expandedTraitement = {}
     if (type === "AccAff") {
-      this.expandedTraitement[ticket._id] = true;
+      this.expandedTraitement[ticket._id] = !expanded;
     } else {
-      this.expandedAll[ticket._id] = true;
+
+      this.expandedAll[ticket._id] = !expanded;
     }
   }
   SendComment() {
