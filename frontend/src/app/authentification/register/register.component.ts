@@ -54,8 +54,11 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value
     )
+
+    if (this.router.url == "/register") {
+      user.role="user"
+    }
     this.AuthService.register(user).subscribe((data: any) => {
-      console.log(user)
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
       this.AuthService.sendEmail("http://localhost:3000/sendmail", user)
 
@@ -100,7 +103,6 @@ export class RegisterComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
     }
-    console.log(this.User_role)
     this.IsAdmin = this.User_role == "Admin" || this.User_role == "Responsable"
     if (this.User_role == "Responsable") {
       this.Roles = [this.Roles[0]]

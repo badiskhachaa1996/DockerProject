@@ -3,7 +3,7 @@
                 'layout-menu-horizontal': isHorizontal(),
                 'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
   <app-topbar></app-topbar>
-  <app-navbar *ngIf="isAuth"></app-navbar>
+  <app-navbar *ngIf="isStaff"></app-navbar>
 
 
   <app-menu [reset]="resetMenu"></app-menu>
