@@ -106,18 +106,18 @@
                                 <span class="error" *ngIf="verifypassword.value!=password.value">*Les mots de passe ne
                                     correspondent pas.</span>
                             </div>
-                        </div> 
-                        <div *ngIf=IsAdmin>
-                        <div class=" field col mt-2 mb-2 col-lg-6 col-6">
+                        </div>
+                        <div *ngIf=IsAdmin class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label for="role" class="p-sr-only">Role :</label>
                             </div>
-                           
+                            <div >
                                 <span>
                                     <p-dropdown formControlName="role" [options]="Roles" optionLabel="value" class="register"></p-dropdown>
                                 </span>
-                        </div> 
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            </div>
+                        </div>
+                        <div *ngIf=IsAdmin class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label for="service_id" class="p-sr-only">Service:</label>
                             </div>
@@ -126,7 +126,6 @@
                             </span>
                         </div>
                     
-                </div>
 
                         <div class="mt-2 mb-2 col-lg-12 col-12" id="btn">
                             <button pButton class="ui-button-raised ui-button-success"

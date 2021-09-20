@@ -1,7 +1,7 @@
 import { Component, Renderer2 , OnInit} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AuthConfig } from 'angular-oauth2-oidc';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import jwt_decode from "jwt-decode";
 import { TicketService } from './services/ticket.service';
 @Component({
     selector: 'app-root',
@@ -23,11 +23,15 @@ export class AppComponent implements OnInit{
     
     title = 'app';
     isAuth: boolean = false;
+    isStaff:boolean =false;
+    token;
     
     ngOnInit(): void {
 
         if (localStorage.getItem("token") != null) {
             this.isAuth = true;
+            this.token=jwt_decode(localStorage.getItem("token"))
+            this.isStaff=this.token.role!="user"
     }
 }
 

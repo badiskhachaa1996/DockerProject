@@ -330,7 +330,7 @@
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)='loadMessages(rowData,"AccAff")'></button>
+                                (click)='loadMessages(rowData,"AccAff",expanded)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -365,7 +365,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
-                        <td [attr.colspan]="7">
+                        <td [attr.colspan]="8">
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
@@ -548,9 +548,6 @@
                         <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
-                            Agent <p-sortIcon field="agent"></p-sortIcon>
-                        </th>
                         <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
                             Action
                         </th>
@@ -561,7 +558,7 @@
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)='loadMessages(rowData,"All")'></button>
+                                (click)='loadMessages(rowData,"All",expanded)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}

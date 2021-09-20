@@ -17,29 +17,19 @@ export class NotificationComponent implements OnInit {
   sujetDic: any[] = [];
   userDic: any[] = [];
   retour: boolean = false;
-  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService:AuthService) { }
+  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService: AuthService) { }
   // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
 
-    if (this.token["role"].includes("User")) {
+    if (this.token["role"] == "user") {
       this.retour = true;
     }
 
-    let token = localStorage.getItem("token")
-    // this.NotificationService.refreshNeeded.subscribe(() =>{
-    //   this.NotificationService.get20ByUserID(token["id"]);
-    //  });
-    // }
-    // public get20ByUserID(){
-
-    if (token) {
-
-
-      token = jwt_decode(token)
-      this.NotificationService.get20ByUserID(token["id"])
+    if (this.token) {
+      this.NotificationService.get20ByUserID(this.token.id)
         .subscribe(
           data => {
             this.notifications = data;
@@ -47,7 +37,7 @@ export class NotificationComponent implements OnInit {
             this.NotificationService.viewNotifs(this.notifications)
               .subscribe(
                 response => {
-                  this.NotificationService.reloadNotif({id:jwt_decode(localStorage.getItem("token"))["id"]})
+                  this.NotificationService.reloadNotif({ id: this.token.id })
                 },
                 error => {
                   console.log(error);
@@ -72,9 +62,9 @@ export class NotificationComponent implements OnInit {
           this.sujetDic[sujet._id] = sujet;
         });
       })
-      this.AuthService.getAll().subscribe(data=>{
+      this.AuthService.getAll().subscribe(data => {
         data.forEach(element => {
-          this.userDic[element._id]= element;
+          this.userDic[element._id] = element;
         });
       })
     }
