@@ -95,6 +95,7 @@ import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 import { FooterComponent } from './footer/footer.component';
+import { InitialiserMdpComponent } from './authentification/initialiser-mdp/initialiser-mdp.component';
 
 
 
@@ -201,6 +202,7 @@ import { FooterComponent } from './footer/footer.component';
         NotificationComponent,
         ModifierProfilComponent,
         FooterComponent,
+        InitialiserMdpComponent,
 
                
     ],

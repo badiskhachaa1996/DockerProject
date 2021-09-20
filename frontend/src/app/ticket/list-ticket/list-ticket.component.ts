@@ -18,6 +18,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { Table } from 'primeng/table';
+import { FileUpload } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-list-ticket',
@@ -31,7 +32,7 @@ export class ListTicketComponent implements OnInit {
   serviceList: any[] = [];
   sujetList: any[] = [];
   listServices: Service[];
-  dropdownService: any[]=[{label:"Tous",value:null}];
+  dropdownService: any[] = [{ label: "Tous les services", value: null }];
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
@@ -41,12 +42,24 @@ export class ListTicketComponent implements OnInit {
   AccAffList: Ticket[] = [];
   allTickets: Ticket[] = [];
 
-  userList: User[] = [];
+  userList: any[] = [];
   AllUsers: User[] = []
   EnvoyeurList: User[] = [];
 
   userDic: any[] = [];
   serviceDic: any[] = []
+
+  showSujetQ: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showSujetAccAff: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showStatut = [
+    { label: "Tous les statuts", value: null },
+    { label: "File d'attente", value: "Queue d'entrée" },
+    { label: 'En cours de traitement', value: 'En cours de traitement' },
+    { label: 'En attente d\'une réponse', value: 'En attente d\'une réponse' },
+    { label: 'Traité', value: 'Traité' }
+  ]
+
 
   draggedTicket: Ticket;
   selectedTicket: Ticket;
@@ -67,7 +80,7 @@ export class ListTicketComponent implements OnInit {
 
   token = null;
 
-  @ViewChild('fileInput') fileInput: ElementRef;
+  @ViewChild('fileInput') fileInput: FileUpload;
   comments: any = [];
 
   commentForm: FormGroup = new FormGroup({
@@ -98,14 +111,16 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService) { }
 
   updateAccAffList() {
+    this.showSujetAccAff = [{ label: "Tous les sujets", _id: null }]
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
-        this.AccAffList.forEach((ticket,index)=>{
+        this.AccAffList.forEach((ticket, index) => {
           this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
-            (sujet)=>{
-              ticket["service_id"]=sujet.dataSujet.service_id
-              this.AccAffList.splice(index,1,ticket)
+            (sujet) => {
+              ticket["service_id"] = sujet.dataSujet.service_id
+              this.AccAffList.splice(index, 1, ticket)
+              this.showSujetAccAff.push(sujet.dataSujet)
             }
           )
         })
@@ -114,15 +129,17 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateAllList() {
+    this.showSujetAll = [{ label: "Tous les sujets", _id: null }]
     if (this.token['role'] == "Admin") {
       this.TicketService.getAllAccAff().subscribe((data) => {
         if (!data.message) {
           this.allTickets = data;
-          this.allTickets.forEach((ticket,index)=>{
+          this.allTickets.forEach((ticket, index) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
-              (sujet)=>{
-                ticket["service_id"]=sujet.dataSujet.service_id
-                this.allTickets.splice(index,1,ticket)
+              (sujet) => {
+                ticket["service_id"] = sujet.dataSujet.service_id
+                this.allTickets.splice(index, 1, ticket)
+                this.showSujetAll.push(sujet.dataSujet)
               }
             )
           })
@@ -132,6 +149,13 @@ export class ListTicketComponent implements OnInit {
       this.TicketService.getTicketsByService(this.token['service_id']).subscribe((data) => {
         if (!data.message) {
           this.allTickets = data.TicketList;
+          this.allTickets.forEach((ticket) => {
+            this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+              (sujet) => {
+                this.showSujetAll.push(sujet.dataSujet)
+              }
+            )
+          })
         }
       })
     }
@@ -139,17 +163,21 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateQueue() {
+    this.showSujetQ = [{ label: "Tous les sujets", _id: null }]
     if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
           this.queueList = data;
-          this.queueList.forEach((ticket,index)=>{
+          this.queueList.forEach((ticket, index) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
-              (sujet)=>{
-                ticket["service_id"]=sujet.dataSujet.service_id
-                this.queueList.splice(index,1,ticket)
+              (sujet) => {
+                ticket["service_id"] = sujet.dataSujet.service_id
+                this.queueList.splice(index, 1, ticket)
+                this.showSujetQ.push(sujet.dataSujet)
+
               }
             )
+
           })
         }
       })
@@ -157,6 +185,13 @@ export class ListTicketComponent implements OnInit {
       this.TicketService.getQueueByService(this.token['service_id']).subscribe((data) => {
         if (!data.message) {
           this.queueList = data.TicketList;
+          this.queueList.forEach((ticket) => {
+            this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
+              (sujet) => {
+                this.showSujetQ.push(sujet.dataSujet)
+              }
+            )
+          })
         }
       })
     }
@@ -186,14 +221,14 @@ export class ListTicketComponent implements OnInit {
       this.listServices = data;
       if (!data.message) {
         data.forEach(element => {
-          this.dropdownService.push({label:element.label,value:element._id})
+          this.dropdownService.push({ label: element.label, value: element._id })
           this.listSujetSelected[element._id] = [];
           this.serviceList[element._id] = element.label;
         });
         this.SujetService.getAll().subscribe((data) => {
           this.listSujets = data;
           if (!data.message) {
-      
+
             data.forEach(sujet => {
               this.listSujetSelected[sujet.service_id].push(sujet);
               this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
@@ -245,7 +280,7 @@ export class ListTicketComponent implements OnInit {
       this.userList = []
       this.AllUsers.forEach(user => {
         if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
-          this.userList.push(user)
+          this.userList.push({ label: user.lastname + " " + user.firstname, value: user })
         }
       })
     }
@@ -289,13 +324,16 @@ export class ListTicketComponent implements OnInit {
       if (event.field == "service") {
         value1 = this.serviceDic[this.sujetList[data1.sujet_id].service_id].label
         value2 = this.serviceDic[this.sujetList[data2.sujet_id].service_id].label
+      } else if (event.field == "sujet") {
+        value1 = this.sujetList[data1.sujet_id].label
+        value2 = this.sujetList[data2.sujet_id].label
       } else if (event.field == "agent") {
-        this.AllUsers.forEach(user=>{
-          if(user._id==data1.agent_id){
+        this.AllUsers.forEach(user => {
+          if (user._id == data1.agent_id) {
             value1 = user.firstname + " " + user.lastname;
-            
+
           }
-          if(user._id==data2.agent_id){
+          if (user._id == data2.agent_id) {
             value2 = user.firstname + " " + user.lastname;
           }
         })
@@ -424,14 +462,14 @@ export class ListTicketComponent implements OnInit {
   toggleFormCommentAdd(ticket) {
     this.selectedTicket = ticket;
     this.showFormAddComment = !this.showFormAddComment;
-    this.showFormRevertForm =false;
+    this.showFormRevertForm = false;
     this.showFormUpdate = false;
 
     // this.showFormUpdateService=false;
     // this.serviceForm.reset();
   }
 
-  loadMessages(ticket: Ticket) {
+  loadMessages(ticket: Ticket, type: string, expanded) {
     this.comments = null
     this.MsgServ.getAllByTicketID(ticket._id)
       .subscribe(
@@ -442,9 +480,13 @@ export class ListTicketComponent implements OnInit {
           console.log(error);
         });
     this.expandedAll = {};
-    this.expandedAll[ticket._id] = true;
     this.expandedTraitement = {}
-    this.expandedTraitement[ticket._id] = true;
+    if (type === "AccAff") {
+      this.expandedTraitement[ticket._id] = !expanded;
+    } else {
+
+      this.expandedAll[ticket._id] = !expanded;
+    }
   }
   SendComment() {
     let comment = {
@@ -518,12 +560,7 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
   }
-  onUpload(event) {
-    for (let file of event.files) {
-      this.uplo = file;
-    }
-    this.onFileChange(event);
-  }
+
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
@@ -540,11 +577,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-  }
-  clearFile() {
-    this.commentForm.get('file').setValue(null);
-    this.commentForm.get('value').setValue(null);
-    this.fileInput.nativeElement.value = '';
+    this.fileInput.clear()
   }
 
   toggleFormCancel() {
@@ -604,7 +637,7 @@ export class ListTicketComponent implements OnInit {
   }
   @ViewChild('dt2') table: Table;
 
-  testFilter(event){
+  testFilter(event) {
     console.log(this.table)
     this.table.filter(event.value, 'sujet_id', 'equals')
     console.log(this.table)

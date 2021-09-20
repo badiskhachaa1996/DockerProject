@@ -26,18 +26,20 @@
             [responsive]="true" 
             [totalRecords]="tabUser.length"
             rowExpandMode="single"
-            [globalFilterFields]=
-            "['civilite','lastname','firstname','service_id','role','email','phone','adresse']"  
             (sortFunction)="customSort($event)" [customSort]="true">
 
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex" style="text-align: right">
-                        <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                        </span>
+                    <div class="p-d-flex" >
+                        <div class="p-input-icon-left p-ml-auto" style="display: flex;">
+                            <p-dropdown [options]="filterRole"
+                        (onChange)="dt1.filter($event.value, 'role', 'equals')"></p-dropdown>
+                        <span style="margin-left: 2%;">
+                        <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
+                        (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown></span>
+                        </div>
                     </div>
                 </ng-template>
+
 
                 <ng-template pTemplate="header" let-columns>
                     <th style="width: 3rem"></th>
@@ -45,8 +47,7 @@
                         
                     </th>
                     <th style="text-decoration: underline;"pSortableColumn="service">  Service <p-sortIcon field="service"></p-sortIcon>
-                        <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
-                        (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                        
                         
                     </th>
                     <th style="text-decoration: underline;" pSortableColumn="role">  Role <p-sortIcon field="role"></p-sortIcon>

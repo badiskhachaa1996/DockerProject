@@ -100,6 +100,7 @@ export class RegisterComponent implements OnInit {
       let decodeToken: any = jwt_decode(localStorage.getItem("token"))
       this.User_role = decodeToken.role;
     }
+    console.log(this.User_role)
     this.IsAdmin = this.User_role == "Admin" || this.User_role == "Responsable"
     if (this.User_role == "Responsable") {
       this.Roles = [this.Roles[0]]

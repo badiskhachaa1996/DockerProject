@@ -59,6 +59,35 @@ app.post("/registre", (req, res) => {
         res.status(400).send(error);
     })
 });
+
+
+
+
+//service registre
+app.post("/sendemail", (req, res) => {
+    let data = req.body;
+        let htmlmail = '<p>Bonjour ' + ', </p><p style="color:black">  Voila le lien pour modifier votre mot de passe.</p> <p>http://localhost:4200/initialmdp</p> <p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+        let mailOptions = {
+            from: 'estya-ticketing@estya.com',
+            to: data.email,
+            subject: 'Estya-Ticketing',
+            html: htmlmail,
+            attachments: [{
+                filename: 'signature.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                res.status(500).send(error)
+            }else{
+                res.status(200).send(info)
+            }
+        });
+   
+});
+
 //service login
 app.post("/login", (req, res) => {
     let data = req.body;
@@ -99,7 +128,9 @@ app.get("/getAll", (req, res) => {
         })
 });
 
-
+app.get("/sendmail",(req,res) => {
+    
+})
 app.post("/updateById/:id", (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id },
         {
