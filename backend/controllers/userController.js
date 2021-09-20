@@ -32,7 +32,7 @@ app.post("/registre", (req, res) => {
         adresse: data.adresse,
         email: data.email,
         password: bcrypt.hashSync(data.password, 8),
-        role: data.role || "user",
+        role: data.role || "User",
         service_id: data?.service_id || null
     })
     user.save().then((userFromDb) => {

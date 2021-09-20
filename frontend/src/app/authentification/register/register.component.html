@@ -15,7 +15,7 @@
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-8 col-8">
                             <div>
-                                <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
+                                <label for="civilite" class="p-sr-only">Civilité :</label>
                             </div>
                             <span>
                                 <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"  class="register"></p-dropdown>
@@ -23,7 +23,7 @@
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
+                                <label for="lastname" class="p-sr-only">Nom :</label>
                             </div>
                             <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom"
                                 pInputText>
@@ -35,7 +35,7 @@
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label style="font-weight: bold;" for="firstname" class="p-sr-only">Prénom :</label>
+                                <label for="firstname" class="p-sr-only">Prénom :</label>
                             </div>
                             <input type="text" formControlName="firstname" class="form-control col-12"
                                 placeholder="Prénom" pInputText>
@@ -48,7 +48,7 @@
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
                             <div>
-                                <label style="font-weight: bold;" for="email" class="p-sr-only">Adresse mail :</label>
+                                <label for="email" class="p-sr-only">Adresse mail :</label>
                             </div>
                             <input type="text" formControlName="email" class="form-control col-12"
                                 placeholder="Adresse mail" pInputText>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
                             <div>
-                                <label style="font-weight: bold;" for="adresse" class="p-sr-only">Adresse :</label>
+                                <label for="adresse" class="p-sr-only">Adresse :</label>
                             </div>
                             <input id="adresse" type="text" formControlName="adresse" class="form-control col-12"
                                 placeholder="Adresse" pInputText required />
@@ -72,7 +72,7 @@
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
                             <div>
-                                <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
+                                <label for="phone" class="p-sr-only">Téléphone :</label>
                             </div>
                             <input type="text" formControlName="phone" class="form-control col-12"
                                 placeholder="Téléphone" pInputText>
@@ -84,8 +84,7 @@
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
                             <div>
-                                <label style="font-weight: bold;" for="password" class="p-sr-only">Mot de passe
-                                    :</label>
+                                <label for="password" class="p-sr-only">Mot de passe :</label>
                             </div>
                             <input type="password" formControlName="password" class="form-control col-12"
                                 placeholder="Mot de passe" pInputText>
@@ -96,8 +95,7 @@
                         </div>
                         <div class="mt-2 mb-2 col-lg-12 col-12">
                             <div>
-                                <label style="font-weight: bold;" for="verifypassword" class="p-sr-only">Vérifier le mot
-                                    de passe :</label>
+                                <label for="verifypassword" class="p-sr-only">Vérifier le mot de passe :</label>
                             </div>
                             <input type="password" formControlName="verifypassword" class="form-control col-12"
                                 placeholder="Confirmation mot de passe" pInputText>
@@ -111,7 +109,7 @@
                         </div>
                         <div *ngIf=IsAdmin class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
+                                <label for="role" class="p-sr-only">Role :</label>
                             </div>
                             <div >
                                 <span>
@@ -121,14 +119,15 @@
                         </div>
                         <div *ngIf=IsAdmin class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
+                                <label for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
                                 <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label" class="register"></p-dropdown>
                             </span>
                         </div>
+                    
 
-                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                        <div class="mt-2 mb-2 col-lg-12 col-12" id="btn">
                             <button pButton class="ui-button-raised ui-button-success"
                                 [disabled]="RegisterForm.invalid || verifypassword.value!=password.value"
                                 label="Enregistrer" (click)="saveUser()"></button>
