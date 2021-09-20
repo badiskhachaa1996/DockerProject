@@ -156,4 +156,22 @@ app.post("/updatePassword/:id",(req,res)=>{
 })
 
 
+
+app.post("/uploadPhoto/:id",(req,res)=>{
+if (req.body.file && req.body.file != null && req.body.file != '') {
+    fs.mkdir("./storage/" + "avatar" + "/",
+        { recursive: true }, (err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
+    fs.writeFile("storage/" + "avatar"+ "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
+        if (err) {
+            console.log(err);
+        }
+    });
+}
+})
+
+
 module.exports = app;

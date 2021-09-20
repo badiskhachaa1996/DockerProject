@@ -11,7 +11,9 @@ export class User {
         public adresse?:string,
         public service_id?:string,
         public civilite?:string,
-        public pathImageProfil?:string
+        public pathImageProfil?:string,
+        public document?:string,
+        public documentType?:string,
     ){}
     
 

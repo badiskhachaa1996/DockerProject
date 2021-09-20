@@ -47,6 +47,12 @@ const user_schema= new mongoose.Schema({
 pathImageProfil:{
     type: String,
 },
+document: {
+    type:String
+},
+documentType:{
+    type:String
+},
 
 
 });
