@@ -283,7 +283,7 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(err)
             } else {
                 res.send(user);
-                if (isAffected) {
+                if (user.isAffected) {
                     User.findOne({ _id: user.agent_id }).then((userFromDb) => {
 
 
@@ -359,7 +359,7 @@ app.post("/changeService/:id", (req, res) => {
 
 
                 }).catch((error) => {
-                    res.status(404).send("erreur :" + error);
+                   console.log(error)
                 })
 
             }
@@ -382,7 +382,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
 
-                        let html4 = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour sujet : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
@@ -406,7 +406,7 @@ app.post("/changeStatut/:id", (req, res) => {
                         });
 
                     }).catch((error) => {
-                        res.status(404).send("erreur :" + error);
+                        console.log(error)
                     })
 
                 }
@@ -437,7 +437,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             }
                         });
                     }).catch((error) => {
-                        res.status(404).send("erreur :" + error);
+                        console.log(error)
                     })
 
 

@@ -83,7 +83,7 @@
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:rigght; font-size: 20px;" (click)="showRevert=null"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showRevert=null"> </i>
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
                     <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue
                         d'entrée</h3><br>
@@ -110,8 +110,10 @@
     <div class="col-10 col-offset-1">
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-        <p-table [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
-                (sortFunction)="customSort($event)" [customSort]="true">
+            <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"
+            [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
+            (sortFunction)="customSort($event)" [customSort]="true">
+
 
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex">
@@ -124,12 +126,27 @@
                                     (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
                             </span>
                         </div>
-                        <div>
-
-                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 3rem"> </th>
+
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
+                            <p-sortIcon field="service"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                            <p-sortIcon field="sujet"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
+                            création <p-sortIcon field="date_ajout"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;"> Temps d'attente
+                        </th>
+                        <th style="text-decoration: underline;padding-top: 5%;">
+                            Action
+                        </th>
+                    </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"

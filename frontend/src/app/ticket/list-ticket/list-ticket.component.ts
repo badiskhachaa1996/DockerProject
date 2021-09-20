@@ -585,12 +585,12 @@ export class ListTicketComponent implements OnInit {
           if (user._id != this.token.id && ((user.role == "Responsable" && user.service_id == this.token.service_id) || user.role == "Admin")) {
             this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket par Agent", null, user._id)).subscribe(Notif => {
               this.NotifService.newNotif(Notif)
-              this.showRevert = null
             }, (error) => {
               console.error(error)
             })
           }
         })
+        this.showRevert = null
       } else {
         //Avertir l'agent que son ticket a été revert
         this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket", null, this.showRevert.agent_id)).subscribe(Notif => {
