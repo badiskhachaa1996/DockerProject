@@ -460,8 +460,9 @@ export class ListTicketComponent implements OnInit {
 
 
   toggleFormCommentAdd(ticket) {
+    this.commentForm.reset()
+    this.commentForm.setValue({description:"",statut:this.statutList[0],file:'',value:null})
     this.selectedTicket = ticket;
-    this.showFormAddComment = !this.showFormAddComment;
     this.showFormRevertForm = false;
     this.showFormUpdate = false;
 
@@ -511,16 +512,13 @@ export class ListTicketComponent implements OnInit {
       this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-
+      console.log(dataTicket)
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
-            this.selectedTicket = null;
-            this.commentForm.reset();
-            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
@@ -534,9 +532,6 @@ export class ListTicketComponent implements OnInit {
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
-            this.selectedTicket = null;
-            this.commentForm.reset();
-            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
