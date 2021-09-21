@@ -16,7 +16,7 @@
             <div class="p-col-6 p-md-6  p-lg-4">
                 <!--<div class="user-card card" style="text-align: center;">-->
                     <div style="text-align: center;">
-                        <img src={{userco.pathImageProfil}} alt="prestige-layout" *ngIf="userco.pathImageProfil"/>
+                        <img [src]="getImage()" alt="Imagedeprofile" *ngIf="userco.pathImageProfil"/>
                         <!--<p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
                     <div class="user-card-content" style="text-align: center;">
                         <div class="user-card-status" style="text-align: center;">

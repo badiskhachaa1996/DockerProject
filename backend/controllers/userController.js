@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
-const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const fs = require("fs")
 
 
 let transporter = nodemailer.createTransport({
@@ -193,10 +193,10 @@ app.post("/updatePassword/:id",(req,res)=>{
 
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
-        callBack(null, 'storage')
+        callBack(null, 'storage/profile/')
     },
     filename: (req, file, callBack) => {
-        callBack(null, `Profil_avatar_${file.originalname}`)
+        callBack(null, `${file.originalname}`)
     }
   })
   
@@ -205,15 +205,36 @@ const upload = multer({ storage: storage })
 
 app.post('/file', upload.single('file'), (req, res, next) => {
     const file = req.file;
-    console.log(file.filename);
     if (!file) {
       const error = new Error('No File')
       error.httpStatusCode = 400
       return next(error)
     }
-      res.send(file);
+    User.findOneAndUpdate({ _id: req.body.id },{
+        pathImageProfil:file.filename,
+        typeImageProfil:file.mimetype
+    },(err,user)=>{
+        console.log(user)
+        let fileToSend = fs.readFileSync("storage/profile/" + file.filename, { encoding: 'base64' }, (err) => {
+            if (err) {
+                return console.error(err);
+            }
+        });
+        res.send({file:fileToSend,documentType:file.mimetype});
+       
+    })
+
   })
 
-
+app.get('/getProfilePicture/:id',(req,res)=>{
+    User.findById(req.params.id,(err,user)=>{
+        let file = fs.readFileSync("storage/profile/" + user.pathImageProfil, { encoding: 'base64' }, (err) => {
+            if (err) {
+                return console.error(err);
+            }
+        });
+        res.send({ file: file, documentType: user.typeImageProfil })
+    })
+})
 
 module.exports = app;
