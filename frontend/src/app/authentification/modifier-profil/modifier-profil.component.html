@@ -15,7 +15,7 @@
         <div class="p-grid mt-2">
             <div class="p-col-6 p-md-6  p-lg-4">
                 <!--<div class="user-card card" style="text-align: center;">-->
-                    <div style="text-align: center;">
+                    <div>
                         <img src={{userco.pathImageProfil}} alt="prestige-layout" *ngIf="userco.pathImageProfil"/>
                         <!--<p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
                     <div class="user-card-content" style="text-align: center;">
@@ -25,39 +25,37 @@
                             <span style="font-weight: bold; text-align: center;"
                                 *ngIf="userco.role!=='user'">{{userco.role}} </span>
                         </div>-->
-                        <div class="user-detail">
+                        <div class="user-detail" >
                             <p-card>
-                                <h3 style="font-weight: bold;">Mes informations</h3>
-                                <div class="col-8 col-offset-2 col-xl-8 col-lg-12 col-md-12">
+                                <div style="padding-left: 90%;">
                                     <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate($event)" style="font-size: 25px;"></i>
                                     <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image" (click)="clickFile()" style="font-size: 25px;"></i>
-                                    <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock" (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"> </i>
+                                    <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock" (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"></i>
                                 </div>
-                                <div  class="mt-2 mb-2 col-lg-12 col-12">
-                                    <img src="../assets/images/avatar.PNG" style="width: 70px; height: 70px;">
-                                </div>
-                              <div class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd" class="mt-2 mb-2 col-lg-12 col-12">
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Civilité : </p>  {{userco.civilite}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Nom : </p> {{userco.lastname}} </div> 
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}} </div> 
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}} </div>
-                             </div>
+                                <div class=" col-xl-8 col-lg-12 col-md-12">
+                                    <h3 style="font-weight: bold; padding-left: 1%;">Mes informations</h3>
+                                    <img src="../assets/images/avatar.PNG" style="width: 160px; height: 150px;">
+                                    <div class="user-card-name" style="padding-left: 1%;">
+                                        <span> {{userco.civilite}}</span> <span style="font-weight: bold;"> {{userco.lastname}} </span> <span style="font-weight: bold;"> {{userco.firstname}} </span> <br>
+                                        <span style="padding-left: 4%;" *ngIf="userco.role!=='user'"> {{userco.role}} </span>
+                                    </div> 
+                                     <div style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Civilité : </p>  {{userco.civilite}} </div>
+                                     <div class=" mt-1 mb-1 col-lg-12 col-12" style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Nom : </p> {{userco.lastname}} </div> 
+                                     <div class=" mt-1 mb-1 col-lg-12 col-12" style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Prénom : </p> {{userco.firstname}} </div> 
+                                     <div class=" mt-1 mb-1 col-lg-12 col-12" style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Adresse mail : </p> {{userco.email}} </div>
+                                     <div class=" mt-1 mb-1 col-lg-12 col-12" style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Téléphone : </p> {{userco.phone}} </div>
+                                     <div class=" mt-1 mb-1 col-lg-12 col-12" style="text-align: center;"> <p style="font-weight: bold; text-align: center;"> Adresse : </p> {{userco.adresse}} </div>
                              <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
                                 <div *ngIf="toggleUpdate">
                                     <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
                                         <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
-                                            <div style="text-align: center;">
+                                            <div class="text-center">
                                                 <img src={{userco.pathImageProfil}} alt="prestige-layout" *ngIf="userco.pathImageProfil" />
-                                                <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)">
-                                                </p-menu>
-                                                <!--<button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>-->
-                                                <div class="user-card-name" style="text-align: center; font-weight: bold;">
-                                                    <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
+                                                <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
+                                                <div class="user-card-name" style="font-weight: bold; text-align: center;">
+                                                    <span> {{userco.lastname}} </span> <span> {{userco.firstname}} </span>
                                                 </div>
-                                                <span class="user-profile-role" *ngIf="userco.role=='user'"style="font-weight: bold;text-align: center;">Utilisateur</span>
-                                                    <span style=" text-align: center;"*ngIf="userco.role!=='user'"> {{userco.role}} </span>
+                                                    <span *ngIf="userco.role!=='user'" style="text-align:center;"> {{userco.role}} </span>
                                             </div>
                                             <div class="grid">
                                                 <div class="field col mt-8 mb-2 col-lg-12 col-12">
@@ -177,6 +175,5 @@
                                     </div>
                             </div>
                         </div>
-                            </p-card>
                         </div>
                         

@@ -47,22 +47,20 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
-               
-                    <!--  -->
+
                     <div class="mt-2 col-8 col-offset-1" style="display: flex;">
-                        <div class="mt-6">
+                        <div class="col-8 mt-6">
                         <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
                       maxFileSize="20000000" [auto]="true" >
                          </p-fileUpload>
                          </div>
-                         <label style="font-weight: bold; text-decoration: underline; position: relative; left: 50%;"  >Statut du ticket : </label> 
-               
-                         <div class="mt-6" style=" position: relative; left: 20%;">
+                            <label style="font-weight: bold; text-decoration: underline; position: relative; left: 50%;">Statut du ticket : </label> 
+                         <div class="field col col-1 mt-4" style=" position: relative; left: 20%;">
                          <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown> </div>
      
                       </div>
-                      <div class="col-4 col-offset-1 "  >
+                      <div class="col-4 col-offset-1">
                       <p *ngIf="commentForm.value.file" >{{commentForm.value.file.filename | slice:0:15}}</p></div>
                   <!-- <div class=" col-12 col-offset-8" > -->
             
