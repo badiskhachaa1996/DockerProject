@@ -4,7 +4,7 @@
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
         <img #img *ngIf="profilePicture" [src]="profilePicture" style="-webkit-border-radius:70px; -moz-border-radius:70px; border-radius:70px; width:80px;height:80px;position : relative ; " alt="prestige-layout" />
         <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
-            <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile"
+            <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
                 style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
         </div>
         <div class="col-6 col-offset-1 mb-4">
@@ -16,7 +16,6 @@
             <div class="p-col-6 p-md-6  p-lg-4">
                 <!--<div class="user-card card" style="text-align: center;">-->
                     <div style="text-align: center;">
-                        <img [src]="getImage()" alt="Imagedeprofile" *ngIf="userco.pathImageProfil"/>
                         <!--<p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
                     <div class="user-card-content" style="text-align: center;">
                         <div class="user-card-status" style="text-align: center;">
@@ -34,7 +33,7 @@
                                     <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock" (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"> </i>
                                 </div>
                                 <div  class="mt-2 mb-2 col-lg-12 col-12">
-                                    <img src="../assets/images/avatar.PNG" style="width: 70px; height: 70px;">
+                                    <img [src]="getImage()" alt="Imagedeprofile" style="width: 70px; height: 70px;">
                                 </div>
                               <div class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd" class="mt-2 mb-2 col-lg-12 col-12">
                                      <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Civilité : </p>  {{userco.civilite}} </div>

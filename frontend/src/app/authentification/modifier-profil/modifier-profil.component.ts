@@ -1,16 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
-import { DropdownModule } from 'primeng/dropdown';
 import { AuthService } from 'src/app/services/auth.service';
-import { CoreEnvironment } from '@angular/compiler/src/compiler_facade_interface';
 import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
-import { SelectableRow } from 'primeng/table';
 
 @Component({
   selector: 'app-modifier-profil',
@@ -29,7 +26,6 @@ export class ModifierProfilComponent implements OnInit {
   reader:FileReader = new FileReader();
 
   retour: boolean = false;
-
   toggleUpdate: boolean = false
   toggleUpdatepwd: boolean = false
   userupdate: any = this.decodeToken;
@@ -183,7 +179,8 @@ export class ModifierProfilComponent implements OnInit {
         if (blob) {
           this.imageToShow="../assets/images/avatar.PNG"
           this.reader.readAsDataURL(blob);
-          document.getElementById('selectedFile').value="" //Y'a pas d'erreur ça marche jte jure
+          let avoidError : any = document.getElementById('selectedFile')
+          avoidError.value="" //Y'a pas d'erreur ça marche jte jure
         }
       }, (error) => {
         console.log(error)
