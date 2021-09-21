@@ -87,7 +87,7 @@ app.get("/getAll", (req, res) => {
 
 //Récupérer tous les tickets d'un User
 app.get("/getAllbyUser/:id", (req, res) => {
-    Ticket.find({ createur_id: req.params.id },null,{sort:{date_ajout:1}})
+    Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -107,7 +107,7 @@ app.get("/getFirstMessage/:id", (req, res) => {
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
-    Ticket.find({ statut: "Queue d'entrée" },null,{sort:{date_ajout:1}})
+    Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -119,7 +119,7 @@ app.get("/getQueue", (req, res) => {
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
 app.get("/getAccAff/:id", (req, res) => {
-    Ticket.find({ agent_id: req.params.id },null,{sort:{date_affec_accep:1}})//Et "En attente d'une réponse"
+    Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -139,41 +139,7 @@ app.post("/updateFirst/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-
-
-            console.log(user.createur_id)
-            res.send( user );
-          /*
-            User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-
-
-
-                let html1 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour  '+userFromDb.firstname+' '+userFromDb.lastname+', '+ ' </P> <p style="color:black"> Votre ticket  << Id : ' + user._id + ' >> a été modifié ! </p><p style="color:black">Cordialement,</p> <footer> <img  src="red"/> </footer>';
-                   
-                let mailOptions = {
-                    from: 'estya-ticketing@estya.com',
-                    to: userFromDb.email,
-                    subject: 'Notification E-Ticketing',
-                    html: html1,
-                    attachments: [{
-                        filename: 'signature.png',
-                        path: 'assets/signature.png',
-                        cid: 'red' //same cid value as in the html img src
-                    }]
-
-                };
-
-                transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
-                });
-            }).catch((error) => {
-                res.status(404).send("erreur :" + error);
-            }) */
-
+            res.send(user);
         })
 });
 
@@ -190,7 +156,7 @@ app.get("/getTicketsByService/:id", (req, res) => {
 
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] },null,{sort:{date_affec_accep:1}})
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] }, null, { sort: { date_affec_accep: 1 } })
                 .then(result => {
                     result.forEach(ticket => {
                         if (listSujetofService.includes(ticket.sujet_id.toString())) {
@@ -220,7 +186,7 @@ app.get("/getQueueByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id.toString())
                 }
             });
-            Ticket.find({ statut: "Queue d'entrée" },null,{sort:{date_ajout:1}})
+            Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -251,7 +217,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     listSujetofService.push(sujet._id)
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] },null,{sort:{date_affec_accep:1}})
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] }, null, { sort: { date_affec_accep: 1 } })
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
@@ -283,34 +249,34 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(err)
             } else {
                 res.send(user);
-                User.findOne({ _id: user.agent_id }).then((userFromDb) => {
+                if (user.isAffected) {
+                    User.findOne({ _id: user.agent_id }).then((userFromDb) => {
+                        let html2 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour description <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                        let mailOptions = {
+                            from: 'estya-ticketing@estya.com',
+                            to: userFromDb.email,
+                            subject: '[ESTYA Ticketing] - Notification',
+                            html: html2,
+                            attachments: [{
+                                filename: 'signature.png',
+                                path: 'assets/signature.png',
+                                cid: 'red' //same cid value as in the html img src
+                            }]
+                        };
 
+                        transporter.sendMail(mailOptions, function (error, info) {
+                            if (error) {
+                                console.log(error);
+                            } else {
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Affectation")
+                            }
+                        });
+                    }).catch((error) => {
+                        console.log(error)
+                        res.status(404).send(error);
+                    })
+                }
 
-
-                    let html2 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour sujet <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
-                    let mailOptions = {
-                        from: 'estya-ticketing@estya.com',
-                        to: userFromDb.email,
-                        subject: '[ESTYA Ticketing] - Notification',
-                        html: html2,
-                        attachments: [{
-                            filename: 'signature.png',
-                            path: 'assets/signature.png',
-                            cid: 'red' //same cid value as in the html img src
-                        }]
-                    };
-
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
-                }).catch((error) => {
-                    console.log(error)
-                    res.status(404).send("erreur :" + error);
-                })
             }
 
         })
@@ -325,14 +291,10 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-
-                
-
                 res.status(200).send(ticket)
-                console.log(ticket.createur_id)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
-                    let html3 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> '+ticket._id+'</b> et qui a pour sujet : <b> ' + user.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
-                    
+                    let html3 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour sujet : <b> ' + userFromDb.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -350,13 +312,13 @@ app.post("/changeService/:id", (req, res) => {
                         if (error) {
                             console.log(error);
                         } else {
-                            console.log('Email sent: ' + info.response);
+                            console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Redirection d'un ticket vers un autre service")
                         }
                     });
 
 
                 }).catch((error) => {
-                    res.status(404).send("erreur :" + error);
+                    console.log(error)
                 })
 
             }
@@ -373,20 +335,19 @@ app.post("/changeStatut/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-
                 if (user.statut == "En attente d\'une réponse") {
 
 
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        
-                        let html4 = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' +user._id+ '  </b> et qui a pour sujet : <b> ' +  user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
-                    
+
+                        let html4 = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
                             subject: '[ESTYA Ticketing] - Notification',
-                            html:html4,
+                            html: html4,
                             attachments: [{
                                 filename: 'signature.png',
                                 path: 'assets/signature.png',
@@ -399,20 +360,20 @@ app.post("/changeStatut/:id", (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log('Email sent: ' + info.response);
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:En attente d'un réponse d'un de vos tickets")
                             }
                         });
-                        res.status(200).send(user)
+
                     }).catch((error) => {
-                        res.status(404).send("erreur :" + error);
+                        console.log(error)
                     })
 
                 }
                 else if (user.statut === "Traité") {
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        
-                        let html5 ='<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + user._id+ ' </b> et qui a pour sujet : <b>  '+  user.description +'</b> à été traité.</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
+
+                        let html5 = '<p style="color:black"> Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
@@ -424,33 +385,26 @@ app.post("/changeStatut/:id", (req, res) => {
                                 path: 'assets/signature.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
-
                         };
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log('Email sent: ' + info.response);
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Traitement d'un de vos ticket")
                             }
                         });
-                        res.status(200).send(user)
                     }).catch((error) => {
-                        res.status(404).send("erreur :" + error);
+                        console.log(error)
                     })
-
-
-
                 }
-
-
             }
-
+            res.status(200).send(user)
         })
 });
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] },null,{sort:{date_affec_accep:1}})
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { date_affec_accep: 1 } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])
         })
@@ -460,25 +414,56 @@ app.get("/getAllAccAff", (req, res) => {
 })
 
 app.post("/revertTicket/:id", (req, res) => {
+    Ticket.findById(req.params.id).then((ticket) => {
+        User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
+            if (req.body.revertedByAdmin) {
+                let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + req.params.id + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: userFromDb.email,
+                    subject: '[ESTYA Ticketing] - Notification ',
+                    html: htmlemail,
+                    attachments: [{
+                        filename: 'signature.png',
+                        path: 'assets/signature.png',
+                        cid: 'red' //same cid value as in the html img src
+                    }]
+                };
+
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Revert d'un ticket par un reponsable")
+                    }
+                });
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
+    }).catch((error) => {
+        console.log(error)
+    })
     Ticket.findOneAndUpdate({ _id: req.params.id },
         {
-                isReverted: true,
-                justificatif: req.body.justificatif,
-                isAffected: null,
-                date_affec_accep: null,
-                agent_id: null,
-                statut: "Queue d'entrée",
-                date_revert: Date.now(),
-                user_revert: req.body.user_revert
+            isReverted: true,
+            justificatif: req.body.justificatif,
+            isAffected: null,
+            date_affec_accep: null,
+            agent_id: null,
+            statut: "Queue d'entrée",
+            date_revert: Date.now(),
+            user_revert: req.body.user_revert
 
-        }, {upsert: true, new: true }).then((docs)=>{
-            if(docs) {
-               res.status(200).send(docs)
+        }, { upsert: true, new: true }).then((docs) => {
+            if (docs) {
+                res.status(200).send(docs)
             } else {
-              res.status(500).send(docs)
+                res.status(500).send(docs)
             }
-        }).catch((err)=>{
-            res.status(500).send(err)
+        }).catch((err) => {
+            console.log(err)
         });
 })
 module.exports = app;

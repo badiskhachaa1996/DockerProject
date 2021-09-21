@@ -19,18 +19,13 @@
                                     <span class="error" *ngIf="password.errors?.required">*Le mot de passe est obligatoire</span>
                                 </div>
                             </div>
-                            <div class="mt-2 mb-2 col-12">
-                                <a routerLink="/reset">Mot de passe oublié ?</a>
-                            </div>
+                         
                             <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success" [disabled]="LoginForm.invalid" (click)="login()" label="Se connecter"></button>
                             </div>
                         </div>
                             <div class="mt-2 mb-2 col-12">
 
-                            <div class="col-offset-4 xl:col-offset-4 sm:col-offset-4 pl-4">
-                                <a [routerLink]="['/register']"> Créer un nouveau compte</a>
-                            </div>
                          
                         </div>
                 </form>

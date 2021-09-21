@@ -68,15 +68,11 @@ export class SuiviComponent implements OnInit {
 
   loadingMessage;
   selectedTicket: Ticket;
-  showFormAddComment: boolean = false;
 
 
   @ViewChild('fileInput') fileInput: FileUpload;
   comments: any = [];
 
-  toggleFormCancel(){
-    this.showFormAddComment=!this.showFormAddComment;
-  }
   next() {
     this.first = this.first + this.rows;
   }
@@ -235,20 +231,20 @@ export class SuiviComponent implements OnInit {
   }
 
   toggleFormAdd() {
-    this.showFormAdd = !this.showFormAdd
+    this.showFormAdd = true
     this.showFormUpdate = false;
-    this.showFormAddComment=false;
+    this.selectedTicket=null;
   }
  toggleFormUpdate() {
     this.showFormUpdate = true
     this.showFormAdd = false
-   this.showFormAddComment=false;
+   this.selectedTicket=null;
   }
    
 
   toggleFormCommentAdd(ticket) {
+    this.commentForm.reset()
     this.selectedTicket = ticket;
-    this.showFormAddComment = !this.showFormAddComment;
     this.showFormAdd=false;
     this.showFormUpdate = false;
     // this.showFormUpdateService=false;
@@ -330,7 +326,6 @@ export class SuiviComponent implements OnInit {
     this.MsgServ.create(comment).subscribe((data) => {
       this.comments.push(data.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Votre message a bien été envoyé' });
-      this.showFormAddComment = false;
       let agenttoNotif=this.selectedTicket.agent_id ;
       this.selectedTicket = null;
       this.commentForm.reset();
