@@ -57,7 +57,7 @@ app.post("/create", (req, res) => {
 
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
                 if (msg.isRep) {
-                    let htmlemail = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -74,18 +74,10 @@ app.post("/create", (req, res) => {
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
-                            res.status(500).send({message:error,doc:msg})
-                        } else {
-                            
-                           
-                            console.log('Email sent: ' + info.response);
+                        }else{
+                            console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
                         }
-                        
-                        
                     });
-                }
-                else {  
-                    console.log('not reponse');
                 }
                 res.send({ message: "Votre message a été crée!", doc: msg });
 

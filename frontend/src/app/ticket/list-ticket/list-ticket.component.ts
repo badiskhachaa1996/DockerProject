@@ -17,7 +17,6 @@ import { Message } from 'src/app/models/Message';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
-import { Table } from 'primeng/table';
 import { FileUpload } from 'primeng/fileupload';
 
 @Component({
@@ -27,7 +26,6 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class ListTicketComponent implements OnInit {
   showRevert = null;
-  showFormUpdate: boolean = false;
   currentComment = null;
   serviceList: any[] = [];
   sujetList: any[] = [];
@@ -67,9 +65,8 @@ export class ListTicketComponent implements OnInit {
   showForm: string = "Ajouter";
   showDropDown: Ticket;
   isReponsable: boolean = false;
-  isModify: Ticket;
+  isModify: Ticket=null;
   showFormAddComment: boolean = false;
-  showFormRevertForm: boolean = false;
 
   loading: boolean = false;
   loadingMessage;
@@ -357,9 +354,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   modify(data) {
-    console.log(data)
     this.toggleFormUpdate()
-
     this.listServices.forEach(element => {
       if (element._id == this.sujetList[data.sujet_id].service_id) {
         this.TicketForm.patchValue({ service: element })
@@ -368,11 +363,9 @@ export class ListTicketComponent implements OnInit {
     this.listSujets.forEach(element => {
       if (element._id == data.sujet_id) {
         this.TicketForm.patchValue({ sujet: element })
-        console.log(this.TicketForm.value)
       }
     });
-
-    this.isModify = (this.isModify) ? null : data;
+    this.isModify = data;
   }
 
 
@@ -388,28 +381,17 @@ export class ListTicketComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
+          
         }, (error) => {
           console.log(error)
         });
-        if (this.sujetList[data.sujet_id].service_id == this.token.service_id) {
-          this.queueList.splice(this.queueList.indexOf(this.isModify), 1, data)
-          this.updateAllList()
-        } else {
-          this.queueList.splice(this.queueList.indexOf(this.isModify), 1)
-          if (this.token.role == "Admin") {
-            this.updateAllList()
-          }
-        }
-
-        this.isModify = null;
-        this.toggleFormUpdate();
+        this.updateQueue()
+        this.updateAllList()
       }, (error) => {
         console.log(error)
       });
-    } else {
-      this.isModify = null;
-      this.toggleFormUpdate();
     }
+    this.toggleFormUpdate();
   }
 
 
@@ -443,30 +425,26 @@ export class ListTicketComponent implements OnInit {
 
 
   toggleRevertForm(ticket) {
-    this.showFormRevertForm = !this.showFormRevertForm;
     this.showRevert = ticket;
     this.showFormAddComment = false;
-    this.showFormUpdate = false;
+    this.isModify = null;
 
   }
 
   toggleFormUpdate() {
     this.isModify = null;
-    this.showFormUpdate = !this.showFormUpdate;
-    this.showFormRevertForm = false;
+    this.showRevert = null;
     this.showFormAddComment = false;
 
   }
 
 
   toggleFormCommentAdd(ticket) {
+    this.commentForm.reset()
+    this.commentForm.setValue({description:"",statut:this.statutList[0],file:'',value:null})
     this.selectedTicket = ticket;
-    this.showFormAddComment = !this.showFormAddComment;
-    this.showFormRevertForm = false;
-    this.showFormUpdate = false;
-
-    // this.showFormUpdateService=false;
-    // this.serviceForm.reset();
+    this.showRevert = null;
+    this.isModify = null;
   }
 
   loadMessages(ticket: Ticket, type: string, expanded) {
@@ -511,16 +489,13 @@ export class ListTicketComponent implements OnInit {
       this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-
+      console.log(dataTicket)
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
-            this.selectedTicket = null;
-            this.commentForm.reset();
-            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
@@ -534,9 +509,6 @@ export class ListTicketComponent implements OnInit {
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
-            this.selectedTicket = null;
-            this.commentForm.reset();
-            this.commentForm.get("statut").setValue(this.statutList[0])
           }, (error) => {
             console.log(error)
           })
@@ -594,7 +566,8 @@ export class ListTicketComponent implements OnInit {
     let data = {
       id: this.showRevert._id,
       justificatif: this.RevertForm.value.justificatif,
-      user_revert: this.token['id']
+      user_revert: this.token['id'],
+      revertedByAdmin:this.token.id != this.showRevert.agent_id
     }
     this.TicketService.revert(data).subscribe(ticket => {
       try {
@@ -613,12 +586,12 @@ export class ListTicketComponent implements OnInit {
           if (user._id != this.token.id && ((user.role == "Responsable" && user.service_id == this.token.service_id) || user.role == "Admin")) {
             this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket par Agent", null, user._id)).subscribe(Notif => {
               this.NotifService.newNotif(Notif)
-              this.showRevert = null
             }, (error) => {
               console.error(error)
             })
           }
         })
+        this.showRevert = null
       } else {
         //Avertir l'agent que son ticket a été revert
         this.NotifService.create(new Notification(null, this.showRevert._id, false, "Revert d\'un ticket", null, this.showRevert.agent_id)).subscribe(Notif => {
@@ -634,12 +607,5 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
 
-  }
-  @ViewChild('dt2') table: Table;
-
-  testFilter(event) {
-    console.log(this.table)
-    this.table.filter(event.value, 'sujet_id', 'equals')
-    console.log(this.table)
   }
 }

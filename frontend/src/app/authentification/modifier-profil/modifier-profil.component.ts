@@ -36,6 +36,13 @@ export class ModifierProfilComponent implements OnInit {
   public  ToggleUpdate(){
     this.toggleUpdate=!this.toggleUpdate
     this.toggleUpdatepwd=false
+
+    this.civiliteList.forEach((civ)=>{
+      if(civ.value==this.userco.civilite){
+        this.RegisterForm.setValue({lastname:this.userco.lastname,firstname:this.userco.firstname,phone:this.userco.phone,adresse:this.userco.adresse,civilite:civ})
+      }
+    })
+
     return this.toggleUpdate
   }
   public  ToggleUpdatepwd(){

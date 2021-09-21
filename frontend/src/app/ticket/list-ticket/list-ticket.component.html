@@ -1,8 +1,8 @@
-<div class="p-grid mt-2" *ngIf="showFormUpdate">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="isModify">
+<div class="p-grid mt-2" *ngIf="isModify!=null">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="toggleFormUpdate()"></i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="isModify=null"></i>
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
                     <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
@@ -47,25 +47,28 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
+               
+                    <!--  -->
                     <div class="mt-2 col-8 col-offset-1" style="display: flex;">
                         <div class="mt-6">
-                            <p-fileUpload #fileInput (uploadHandler)="onFileChange($event)" mode="basic"
-                                chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
-                                accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true">
-                            </p-fileUpload>
-                        </div>
-                        <label
-                            style="font-weight: bold; text-decoration: underline; position: relative; left: 50%;">Statut
-                            du ticket : </label>
-
-                        <div class="mt-6" style=" position: relative; left: 20%;">
-                            <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value">
-                            </p-dropdown>
-                        </div>
-                    </div>
-                    <div class="col-4 col-offset-1 ">
-                        <p *ngIf="commentForm.value.file">{{commentForm.value.file.filename | slice:0:15}}</p>
-                    </div>
+                        <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
+                       customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                      maxFileSize="20000000" [auto]="true" >
+                         </p-fileUpload>
+                         </div>
+                         <label style="font-weight: bold; text-decoration: underline; position: relative; left: 50%;"  >Statut du ticket : </label> 
+               
+                         <div class="mt-6" style=" position: relative; left: 20%;">
+                         <p-dropdown formControlName="statut" [options]="statutList" optionLabel="value"></p-dropdown> </div>
+     
+                      </div>
+                      <div class="col-4 col-offset-1 "  >
+                      <p *ngIf="commentForm.value.file" >{{commentForm.value.file.filename | slice:0:15}}</p></div>
+                  <!-- <div class=" col-12 col-offset-8" > -->
+            
+                  <!-- </div>
+              -->
+             
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
                             max).</span>
@@ -79,7 +82,7 @@
         </p-card>
     </div>
 </div>
-<div class="p-grid mt-2" *ngIf="showRevert!=null && showFormRevertForm">
+<div class="p-grid mt-2" *ngIf="showRevert!=null">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
@@ -87,10 +90,9 @@
                 <form class="col-10 col-offset-1" [formGroup]="RevertForm" enctype="multipart/form-data">
                     <h3 class="text-center" style="color: #3da827; font-weight: bold;">Renvoyer un ticket à la queue
                         d'entrée</h3><br>
-                    <div class="text-center">
-                        <label style="font-weight: bold; ; text-decoration: underline;">Justificatif :
-                        </label>
-                    </div>
+                        <div class="text-center">
+                    <label style="font-weight: bold; ; text-decoration: underline;">Justificatif :
+                    </label></div>
                     <div class="text-center"><br>
                         <textarea formControlName="justificatif" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"
@@ -111,45 +113,21 @@
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"
-                [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
-                (sortFunction)="customSort($event)" [customSort]="true">
-
-
+            [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
+            (sortFunction)="customSort($event)" [customSort]="true">
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex">
-                        <div style="display: flex;">
+                    <div class="p-d-flex" >
+                        <div style="display: flex;" >
                             <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
                                 [options]="dropdownService"
                                 (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                            <span style="margin-left:2%;">
+                                <span style="margin-left:2%;">
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
-                                    (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
-                            </span>
-                        </div>
-                        <div>
-
+                                (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown></span>
                         </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th style="width: 3rem"> </th>
-
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
-                            <p-sortIcon field="service"></p-sortIcon>
-                        </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet"> Sujet
-                            <p-sortIcon field="sujet"></p-sortIcon>
-                        </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
-                            création <p-sortIcon field="date_ajout"></p-sortIcon>
-                        </th>
-                        <th style="text-decoration: underline; padding-top: 5%;"> Temps d'attente
-                        </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
-                            Action
-                        </th>
-                    </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
@@ -173,9 +151,9 @@
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
                                 (click)="QueueToAccAff(rowData)"></i>
-                            <!--*ngIf="rowData.createur_id!=token['id']"-->
+                                <!--*ngIf="rowData.createur_id!=token['id']"-->
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
-                                class="pi pi-pencil" (click)="modify(rowData)"></i>
+                                class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>
                             <p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
@@ -184,7 +162,6 @@
                         </td>
                     </tr>
                 </ng-template>
-
                 <ng-template pTemplate="rowexpansion" let-rowData>
                     <tr style="text-align: left; margin-left: 2em; background-color:white;">
                         <td [attr.colspan]="6">
@@ -205,7 +182,6 @@
                                     </div>
                                 </div>
                             </p-fieldset>
-
                             <p-fieldset legend="Créateur du ticket" [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                                     <div class="ui-g-12 ui-md-12">
@@ -281,7 +257,7 @@
                         </td>
                     </tr>
                 </ng-template>
-            </p-table>
+                </p-table>
         </div>
     </div>
 </div>
@@ -292,23 +268,23 @@
             <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
-                (sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedTraitement">
+                (sortFunction)="customSort($event)" [customSort]="true">
 
-                <ng-template pTemplate="caption">
-                    <div class="p-d-flex" style="display: flex;">
+                <ng-template pTemplate="caption" >
+                    <div class="p-d-flex" style="display: flex;" >
                         <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
                             [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')">
                         </p-dropdown>
                         <span style="margin-left:2% ;">
-
-                            <p-dropdown [options]="showStatut"
-                                (onChange)="dt2.filter($event.value, 'statut', 'equals')">
-                            </p-dropdown>
-                        </span>
-                        <span style="margin-left:2% ;">
-                            <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
-                                (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
-                        </span>
+                            
+                        <p-dropdown  [options]="showStatut"
+                        (onChange)="dt2.filter($event.value, 'statut', 'equals')">
+                    </p-dropdown>
+                </span>
+                <span style="margin-left:2% ;">
+                        <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
+                            (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                            </span>
                     </div>
                 </ng-template>
 
@@ -350,7 +326,7 @@
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)='loadMessages(rowData,"AccAff",expanded)'></button>
+                                (click)='loadMessages(rowData)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -377,8 +353,8 @@
                         <td>
                             <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
                                 (click)="ListToPreInscrit(rowData)"></i>-->
-                            <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData) "> </i>
-                            <i pTooltip="Renvoyer le ticket  dans la queue d'entrée" class="pi pi-replay"
+                            <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData);showFormAddComment=true"> </i>
+                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class="pi pi-replay"
                                 (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
@@ -460,16 +436,12 @@
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
-
                                     <button style="cursor: pointer;" *ngIf="message.document"
                                         class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
-
                                     <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
-
                                 </div>
-
                                 <span id="soustitre" class="ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
                                     {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
@@ -478,7 +450,6 @@
                             </span>
                         </td>
                     </tr>
-
                     <tr *ngIf="message.user_id==token['id']">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
@@ -501,9 +472,7 @@
                             </span>
                         </td>
                     </tr>
-
                 </ng-template>
-
             </p-table>
         </div>
         </p-fieldset>
@@ -514,7 +483,6 @@
     </div>
 </div>
 </div>
-
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3 *ngIf="token['role']!='Admin'">Les tickets de mon service</h3>
@@ -522,22 +490,20 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt3 *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
                 [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
-                (sortFunction)="customSort($event)" [customSort]="true" [expandedRowKeys]="expandedAll">
+                (sortFunction)="customSort($event)" [customSort]="true">
 
                 <ng-template pTemplate="caption">
                     <div class="p-input-icon-left p-ml-auto">
-                        <div style="display: flex;">
+                        <div style="display: flex;" >
                             <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous"
                                 [options]="dropdownService"
                                 (onChange)="dt3.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                            <span style="margin-left: 2%;">
-                                <p-dropdown [options]="showStatut"
-                                    (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown>
-                            </span>
-                            <span style="margin-left: 2%;">
+                                <span style="margin-left: 2%;">
+                            <p-dropdown  [options]="showStatut"
+                                (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown></span>
+                                <span style="margin-left: 2%;">
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
-                                    (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
-                            </span>
+                                (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown> </span>
                         </div>
                     </div>
                 </ng-template>
@@ -547,9 +513,6 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous"
-                                [options]="dropdownService"
-                                (onChange)="dt3.filter($event.value, 'service_id', 'equals')"></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
                             <p-sortIcon field="sujet"></p-sortIcon>
@@ -561,14 +524,14 @@
                         <th style="text-decoration: underline;padding-top: 5%;">
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
-                            Agent <p-sortIcon field="agent"></p-sortIcon>
-                        </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
                         <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
+                            Agent <p-sortIcon field="agent"></p-sortIcon>
                         </th>
                         <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
                             Action
@@ -594,9 +557,6 @@
                         <td>
                             {{showWorkingTime(rowData)}}
                         </td>
-                        <td *ngIf="userDic[rowData.agent_id]">
-                            {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
-                        </td>
                         <td *ngIf="rowData.isAffected">
                             Affecté
                         </td>
@@ -605,6 +565,9 @@
                         </td>
                         <td>
                             {{rowData.statut}}
+                        </td>
+                        <td *ngIf="userDic[rowData.agent_id]">
+                            {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
                             <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay"
@@ -629,7 +592,6 @@
                                                 style="text-align:left !important;">Description:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.description}}</div>
-
                                     </div>
                                 </div>
                             </p-fieldset>
@@ -736,16 +698,13 @@
                         <td>
                             <span class="ui-g-6 ui-md-6">
                                 <div class="ui-g-12 ui-md-12">
-
                                     <button style="cursor: pointer;" *ngIf="message.document"
                                         class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
                                         (click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
                                             *ngIf="loadingMessage==message._id"></i></button>
 
                                     <span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
-
                                 </div>
-
                                 <span id="soustitre" class="ui-g-11 ui-md-11">
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
                                     {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
@@ -754,7 +713,6 @@
                             </span>
                         </td>
                     </tr>
-
                     <tr *ngIf="message.user_id!=rowData.createur_id">
                         <td>
                             <span class="ui-g-6 ui-md-6" style="float: right;">
@@ -771,13 +729,10 @@
                                     {{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}} :
                                     {{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}
                                     {{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}
-
                                 </span>
-
                             </span>
                         </td>
                     </tr>
-
                 </ng-template>
 
             </p-table>
@@ -786,7 +741,7 @@
         </td>
         </tr>
         </ng-template>
-        </p-table>
+    </p-table>
     </div>
 </div>
 </div>
