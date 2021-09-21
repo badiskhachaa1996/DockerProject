@@ -95,12 +95,20 @@ export class AuthService {
     return this.http.post(url,data)
   }
  
-  uploadimageprofile(file:File,Userid:any,filetype:any){
+  uploadimageprofile(data){
+    let url = this.apiUrl+"file";
+    return this.http.post<any>(url,data,httpOptions1)
+  }
 
+  getProfilePicture(id){
+    let url = this.apiUrl+"getProfilePicture/"+id;
+    return this.http.get<any>(url,httpOptions1)
   }
   updatePassword(id:string,password:string){
     let url=this.apiUrl+"updatePassword/"+id;
     return this.http.post<any>(url,{password},httpOptions);
   }
+
+
  
 }

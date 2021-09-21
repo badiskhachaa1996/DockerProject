@@ -4,7 +4,7 @@
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
         <img #img *ngIf="profilePicture" [src]="profilePicture" style="-webkit-border-radius:70px; -moz-border-radius:70px; border-radius:70px; width:80px;height:80px;position : relative ; " alt="prestige-layout" />
         <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
-            <input type="file" (change)="handleProfilePictureInput($event.target.files)" id="selectedFile"
+            <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
                 style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
         </div>
         <div class="col-6 col-offset-1 mb-4">
