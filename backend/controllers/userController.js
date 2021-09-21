@@ -228,12 +228,17 @@ app.post('/file', upload.single('file'), (req, res, next) => {
 
 app.get('/getProfilePicture/:id',(req,res)=>{
     User.findById(req.params.id,(err,user)=>{
-        let file = fs.readFileSync("storage/profile/" + user.pathImageProfil, { encoding: 'base64' }, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-        });
-        res.send({ file: file, documentType: user.typeImageProfil })
+        if(user.pathImageProfil){
+            let file = fs.readFileSync("storage/profile/" + user.pathImageProfil, { encoding: 'base64' }, (err) => {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+            res.send({ file: file, documentType: user.typeImageProfil })
+        }else{
+            res.send({ error:"Image non défini" })
+        }
+
     })
 })
 

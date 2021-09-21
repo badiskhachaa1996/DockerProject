@@ -19,12 +19,12 @@
                     <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
                             <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
             </div>
-                <img src="../assets/images/avatar.PNG" style="width: 39px; height: 39px;">
+                <img [src]="imageToShow" style="width: 39px; height: 39px;">
             </a>
             <ul class="fadeInDown">
                 <li class="profile-detail">
                     <div class="user-profile-info">
-                        <img src="../assets/images/avatar.PNG">
+                        <img [src]="imageToShow" style="width: 39px; height: 39px;">
                         <div *ngIf="userconnected" class="profile-info">
                             <span class="user-profile-name">{{userconnected.firstname}}
                                 {{userconnected.lastname}}</span>

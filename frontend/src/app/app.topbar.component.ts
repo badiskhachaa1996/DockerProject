@@ -37,7 +37,7 @@ export class AppTopBarComponent implements OnInit {
   Notifications: Notification[] = [];
   User : User;
   userupdate: User = null;
-
+  imageToShow: any ="../assets/images/avatar.PNG"
 
   socket = io("http://localhost:3000");
 
@@ -64,6 +64,25 @@ export class AppTopBarComponent implements OnInit {
       }, (error) => {
         console.log(error)
       })
+
+      this.AuthService.getProfilePicture(temp.id).subscribe((data)=>{
+        if(data.error){
+          this.imageToShow="../assets/images/avatar.PNG"
+        }else{
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob:Blob = new Blob([byteArray], { type: data.documentType })
+          let reader:FileReader = new FileReader();
+          reader.addEventListener("load", () => {
+            this.imageToShow = reader.result;
+          }, false);
+          if (blob) { 
+            this.imageToShow="../assets/images/avatar.PNG"
+            reader.readAsDataURL(blob);
+          }
+        }
+
+      })
+
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
         if(data.length!=0){
