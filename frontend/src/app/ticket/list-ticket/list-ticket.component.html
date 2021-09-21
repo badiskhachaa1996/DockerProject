@@ -513,7 +513,6 @@
                         <th style="width: 3rem"></th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
                             Service <p-sortIcon field="service"></p-sortIcon>
-                            <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous" [options]="dropdownService" (onChange)="dt3.filter($event.value, 'service_id', 'equals')" ></p-dropdown>
                         </th>
                         <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
                             <p-sortIcon field="sujet"></p-sortIcon>
