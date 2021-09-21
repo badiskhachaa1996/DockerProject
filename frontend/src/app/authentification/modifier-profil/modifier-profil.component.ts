@@ -120,15 +120,20 @@ export class ModifierProfilComponent implements OnInit {
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
     this.AuthService.getProfilePicture(decodeToken.id).subscribe((data)=>{
-      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      let blob:Blob = new Blob([byteArray], { type: data.documentType })
-      this.reader.addEventListener("load", () => {
-        this.imageToShow = this.reader.result;
-      }, false);
-      if (blob) { 
+      if(data.error){
         this.imageToShow="../assets/images/avatar.PNG"
-        this.reader.readAsDataURL(blob);
+      }else{
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob:Blob = new Blob([byteArray], { type: data.documentType })
+        this.reader.addEventListener("load", () => {
+          this.imageToShow = this.reader.result;
+        }, false);
+        if (blob) { 
+          this.imageToShow="../assets/images/avatar.PNG"
+          this.reader.readAsDataURL(blob);
+        }
       }
+
     })
 
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {

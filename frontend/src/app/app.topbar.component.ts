@@ -66,16 +66,21 @@ export class AppTopBarComponent implements OnInit {
       })
 
       this.AuthService.getProfilePicture(temp.id).subscribe((data)=>{
-        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-        let blob:Blob = new Blob([byteArray], { type: data.documentType })
-        let reader:FileReader = new FileReader();
-        reader.addEventListener("load", () => {
-          this.imageToShow = reader.result;
-        }, false);
-        if (blob) { 
+        if(data.error){
           this.imageToShow="../assets/images/avatar.PNG"
-          reader.readAsDataURL(blob);
+        }else{
+          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+          let blob:Blob = new Blob([byteArray], { type: data.documentType })
+          let reader:FileReader = new FileReader();
+          reader.addEventListener("load", () => {
+            this.imageToShow = reader.result;
+          }, false);
+          if (blob) { 
+            this.imageToShow="../assets/images/avatar.PNG"
+            reader.readAsDataURL(blob);
+          }
         }
+
       })
 
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
