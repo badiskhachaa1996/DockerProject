@@ -139,41 +139,7 @@ app.post("/updateFirst/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-
-
-            console.log(user.createur_id)
             res.send(user);
-            /*
-              User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-  
-  
-  
-                  let html1 = '<h3 style="color:red"> Notification ! </3> <p style="color:black">Bonjour  '+userFromDb.firstname+' '+userFromDb.lastname+', '+ ' </P> <p style="color:black"> Votre ticket  << Id : ' + user._id + ' >> a été modifié ! </p><p style="color:black">Cordialement,</p> <footer> <img  src="red"/> </footer>';
-                     
-                  let mailOptions = {
-                      from: 'estya-ticketing@estya.com',
-                      to: userFromDb.email,
-                      subject: 'Notification E-Ticketing',
-                      html: html1,
-                      attachments: [{
-                          filename: 'signature.png',
-                          path: 'assets/signature.png',
-                          cid: 'red' //same cid value as in the html img src
-                      }]
-  
-                  };
-  
-                  transporter.sendMail(mailOptions, function (error, info) {
-                      if (error) {
-                          console.log(error);
-                      } else {
-                          console.log('Email sent: ' + info.response);
-                      }
-                  });
-              }).catch((error) => {
-                  res.status(404).send("erreur :" + error);
-              }) */
-
         })
 });
 
@@ -285,10 +251,7 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(user);
                 if (user.isAffected) {
                     User.findOne({ _id: user.agent_id }).then((userFromDb) => {
-
-
-
-                        let html2 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour description <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                        let html2 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour description <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -305,12 +268,12 @@ app.post("/AccAff/:id", (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log('Email sent: ' + info.response);
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Affectation")
                             }
                         });
                     }).catch((error) => {
                         console.log(error)
-                        res.status(404).send("erreur :" + error);
+                        res.status(404).send(error);
                     })
                 }
 
@@ -328,13 +291,9 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-
-
-
                 res.status(200).send(ticket)
-                console.log(ticket.createur_id)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
-                    let html3 = '<p style="color:black">Bonjour ' + 'M.' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour sujet : <b> ' + user.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let html3 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour sujet : <b> ' + userFromDb.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
 
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
@@ -353,13 +312,13 @@ app.post("/changeService/:id", (req, res) => {
                         if (error) {
                             console.log(error);
                         } else {
-                            console.log('Email sent: ' + info.response);
+                            console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Redirection d'un ticket vers un autre service")
                         }
                     });
 
 
                 }).catch((error) => {
-                   console.log(error)
+                    console.log(error)
                 })
 
             }
@@ -382,7 +341,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
 
-                        let html4 = '<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
@@ -401,7 +360,7 @@ app.post("/changeStatut/:id", (req, res) => {
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log('Email sent: ' + info.response);
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:En attente d'un réponse d'un de vos tickets")
                             }
                         });
 
@@ -414,7 +373,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
 
-                        let html5 = '<h3 style="color:red">Notification !<p style="color:black"> Bonjour  M.' + userFromDb.lastname + ',</p><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + user._id + ' </b> et qui a pour sujet : <b>  ' + user.description + '</b> à été traité.</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html5 = '<p style="color:black"> Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
 
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
@@ -426,25 +385,19 @@ app.post("/changeStatut/:id", (req, res) => {
                                 path: 'assets/signature.png',
                                 cid: 'red' //same cid value as in the html img src
                             }]
-
                         };
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
                                 console.log(error);
                             } else {
-                                console.log('Email sent: ' + info.response);
+                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Traitement d'un de vos ticket")
                             }
                         });
                     }).catch((error) => {
                         console.log(error)
                     })
-
-
-
                 }
-
-
             }
             res.status(200).send(user)
         })
@@ -461,6 +414,37 @@ app.get("/getAllAccAff", (req, res) => {
 })
 
 app.post("/revertTicket/:id", (req, res) => {
+    Ticket.findById(req.params.id).then((ticket) => {
+        User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
+            if (req.body.revertedByAdmin) {
+                let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + req.params.id + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: userFromDb.email,
+                    subject: '[ESTYA Ticketing] - Notification ',
+                    html: htmlemail,
+                    attachments: [{
+                        filename: 'signature.png',
+                        path: 'assets/signature.png',
+                        cid: 'red' //same cid value as in the html img src
+                    }]
+                };
+
+
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Revert d'un ticket par un reponsable")
+                    }
+                });
+            }
+        }).catch((error) => {
+            console.log(error)
+        })
+    }).catch((error) => {
+        console.log(error)
+    })
     Ticket.findOneAndUpdate({ _id: req.params.id },
         {
             isReverted: true,
@@ -479,7 +463,7 @@ app.post("/revertTicket/:id", (req, res) => {
                 res.status(500).send(docs)
             }
         }).catch((err) => {
-            res.status(500).send(err)
+            console.log(err)
         });
 })
 module.exports = app;

@@ -566,7 +566,8 @@ export class ListTicketComponent implements OnInit {
     let data = {
       id: this.showRevert._id,
       justificatif: this.RevertForm.value.justificatif,
-      user_revert: this.token['id']
+      user_revert: this.token['id'],
+      revertedByAdmin:this.token.id != this.showRevert.agent_id
     }
     this.TicketService.revert(data).subscribe(ticket => {
       try {

@@ -37,7 +37,7 @@ app.post("/registre", (req, res) => {
     })
     user.save().then((userFromDb) => {
         res.status(200).send(userFromDb);
-        let htmlmail = '<p>Bonjour ' + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+        let htmlmail = '<p>Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: data.email,
@@ -52,6 +52,8 @@ app.post("/registre", (req, res) => {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.log(error);
+            }else{
+                console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Création de compte")
             }
         });
     }).catch((error) => {
@@ -80,9 +82,9 @@ app.post("/sendemail", (req, res) => {
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                res.status(500).send(error)
+                console.log(error)
             }else{
-                res.status(200).send(info)
+                console.log("Email envoyé\nà "+data.email+"\nRaison:Réinitialisation de mot de passe")
             }
         });
    
