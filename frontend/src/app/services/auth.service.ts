@@ -109,6 +109,10 @@ export class AuthService {
     return this.http.post<any>(url,{password},httpOptions);
   }
 
+  reloadImage(data){
+    this.socket.emit("reloadImage",(data))
+  }
+
 
  
 }

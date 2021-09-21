@@ -72,6 +72,10 @@ io.on("connection", (socket) => {
         io.to(data.id).emit('reloadNotif')
     })
 
+    socket.on('reloadImage',(data)=>{
+        io.to(data).emit('reloadImage')
+    })
+
 });
 
 httpServer.listen(3000, () => {

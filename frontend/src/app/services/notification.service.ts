@@ -20,10 +20,7 @@ export class NotificationService {
   apiUrl ="http://localhost:3000/notification/"
 
   constructor(private http: HttpClient) { }
-// private _refreshNeeded = new Subject<void>();
-// get refreshNeeded(){
-//     return this._refreshNeeded;
-// }
+
   newNotif(Notif){
     this.socket.emit("NewNotif",(Notif.doc))
   }

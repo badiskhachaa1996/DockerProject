@@ -185,7 +185,8 @@ export class ModifierProfilComponent implements OnInit {
           this.imageToShow="../assets/images/avatar.PNG"
           this.reader.readAsDataURL(blob);
           let avoidError : any = document.getElementById('selectedFile')
-          avoidError.value="" //Y'a pas d'erreur ça marche jte jure
+          avoidError.value=""
+          this.AuthService.reloadImage(this.token.id)
         }
       }, (error) => {
         console.log(error)
