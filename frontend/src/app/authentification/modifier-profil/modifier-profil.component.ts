@@ -130,22 +130,6 @@ export class ModifierProfilComponent implements OnInit {
 
     }, (err) => console.log(err) )
 
-    this.servService.getAll().subscribe((data) => {
-      this.Services = data;
-      this.Services.forEach(civ=>{
-        if(civ._id==this.userupdate.service_id){
-          this.RegisterForm.get("service_id").setValue(civ)
-        }
-      })
-    })
-    
-    this.civiliteList.forEach(civ=>{
-      if(civ.value==this.userupdate.civilite){
-        this.RegisterForm.get("civilite").setValue(civ)
-      }
-    })
-
-
     this.items = [
       { label: 'Modifier mes informations', 
         icon: 'pi pi-fw pi-refresh', 
@@ -169,6 +153,21 @@ export class ModifierProfilComponent implements OnInit {
   }
   clickFile() {
     document.getElementById('selectedFile').click();
+  }
+
+  FileUpload(event){
+   
+    console.log(event)
+    let reader = new FileReader();
+    if (event && event > 0) {
+      let file = event[0]
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        console.log(file.name)
+        console.log(file.type)
+        console.log(reader.result.toString().split(',')[1])
+      };
+    }
   }
 
 }
