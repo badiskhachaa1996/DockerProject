@@ -4,6 +4,7 @@ const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
+const multer = require('multer');
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
 
 
@@ -187,6 +188,32 @@ app.post("/updatePassword/:id",(req,res)=>{
         }
     })
 })
+
+// upload files 
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'storage')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `Profil_avatar_${file.originalname}`)
+    }
+  })
+  
+const upload = multer({ storage: storage })
+
+
+app.post('/file', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    console.log(file.filename);
+    if (!file) {
+      const error = new Error('No File')
+      error.httpStatusCode = 400
+      return next(error)
+    }
+      res.send(file);
+  })
+
 
 
 module.exports = app;
