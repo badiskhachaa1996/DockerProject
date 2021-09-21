@@ -4,6 +4,7 @@ const { User } = require("./../models/User");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
+const multer = require('multer');
 const myPlaintextPassword = 's0/\/\P4$$w0rD';
 
 
@@ -188,23 +189,31 @@ app.post("/updatePassword/:id",(req,res)=>{
     })
 })
 
+// upload files 
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'storage')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `Profil_avatar_${file.originalname}`)
+    }
+  })
+  
+const upload = multer({ storage: storage })
 
 
-app.post("/uploadPhoto/:id",(req,res)=>{
-if (req.body.file && req.body.file != null && req.body.file != '') {
-    fs.mkdir("./storage/" + "avatar" + "/",
-        { recursive: true }, (err) => {
-            if (err) {
-                console.error(err);
-            }
-        });
-    fs.writeFile("storage/" + "avatar"+ "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
-        if (err) {
-            console.log(err);
-        }
-    });
-}
-})
+app.post('/file', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    console.log(file.filename);
+    if (!file) {
+      const error = new Error('No File')
+      error.httpStatusCode = 400
+      return next(error)
+    }
+      res.send(file);
+  })
+
 
 
 module.exports = app;

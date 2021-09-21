@@ -12,15 +12,13 @@ import { EditComponent } from './Gestion_Application/edit/edit.component';
 import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.component';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
-import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import {NotificationComponent} from './notification/notification.component';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
-import { InitialiserMdpComponent } from './authentification/initialiser-mdp/initialiser-mdp.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
-    { path:'initialmdp',component:InitialiserMdpComponent},
+    
 
     { path:'login',component:LoginComponent},
     { path:'register',component:RegisterComponent},
@@ -28,7 +26,7 @@ const routes: Routes = [
     { path:'ticket/suivi',component:SuiviComponent},
     { path:'home', component: HomeComponent},
     { path:'listUser', component: ListUserComponent},
-    { path: 'reset', component: ResetMdpComponent},
+    
     { path: 'notification', component: NotificationComponent},
     { path: 'modification', component: ModifierProfilComponent },
   

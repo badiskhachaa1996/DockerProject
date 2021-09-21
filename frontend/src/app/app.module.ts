@@ -90,12 +90,11 @@ import { EditSujetComponent } from './Gestion_Application/edit-sujet/edit-sujet.
 import { ListUserComponent } from './authentification/list-user/list-user.component';
 import { UpdateUserComponent } from './authentification/update/update.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { ResetMdpComponent } from './authentification/reset-mdp/reset-mdp.component';
 import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 import { FooterComponent } from './footer/footer.component';
-import { InitialiserMdpComponent } from './authentification/initialiser-mdp/initialiser-mdp.component';
+
 
 
 
@@ -198,11 +197,11 @@ import { InitialiserMdpComponent } from './authentification/initialiser-mdp/init
         ListUserComponent,
         UpdateUserComponent,
         NavbarComponent,
-        ResetMdpComponent,
+      
         NotificationComponent,
         ModifierProfilComponent,
         FooterComponent,
-        InitialiserMdpComponent,
+    
 
                
     ],
