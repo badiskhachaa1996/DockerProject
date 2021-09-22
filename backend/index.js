@@ -62,6 +62,7 @@ io.on("connection", (socket) => {
         if(user.service_id){
             socket.join(user.service_id)
         }else{
+            //User ou Admin
             socket.join(user.role)
         }
         
@@ -82,12 +83,24 @@ io.on("connection", (socket) => {
         io.to(data).emit('reloadImage')
     })
 
-    socket.on('refreshServiceTicket',(service_id)=>{
-        io.to(service_id).emit('refreshServiceTicket')
+    //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
+    socket.on('AddNewTicket',(service_id)=>{
+        io.to(service_id).emit('refreshQueue')
     })
 
-    socket.on('refreshServiceTicket',(service_id)=>{
-        io.to(service_id).emit('refreshServiceTicket')
+    //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut)
+    socket.on('NewMessageByAgent',(user_id)=>{
+        io.to(user_id).emit('refreshMessage')
+    })
+
+    //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
+    socket.on('NewMessageByUser',(agent_id)=>{
+        io.to(agent_id).emit('refreshMessage')
+    })
+
+    //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents
+    socket.on('AccepteTicket',(agent_id)=>{
+        io.to(agent_id).emit('refreshAllTickets')
     })
 
 });
