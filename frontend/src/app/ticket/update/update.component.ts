@@ -40,7 +40,7 @@ export class UpdateComponent implements OnInit {
       description:this.TicketForm.value.description,
       //document:this.TicketForm.value//TODO
     }
-    this.TicketService.updateFirst(req).subscribe((data)=>{
+    this.TicketService.update(req).subscribe((data)=>{
       this.messageService.add({severity:'success', summary:'Modification du ticket', detail:'Votre ticket a bien été modifié'});
       this.router.navigate(['/ticket/suivi'])
     },(error)=>{
@@ -88,12 +88,7 @@ export class UpdateComponent implements OnInit {
       console.log(error)
     })
 
-    this.TicketService.getFirstMessage(this.Ticket._id).subscribe((data)=>{
-      this.firstMessage=data.dataMessage;
-      this.TicketForm.patchValue({description:this.firstMessage.description})
-    },(error)=>{
-      console.log(error)
-    })
+    this.TicketForm.patchValue({description:this.Ticket.description})
 
   }
 

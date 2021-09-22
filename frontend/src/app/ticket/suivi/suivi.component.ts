@@ -220,7 +220,7 @@ export class SuiviComponent implements OnInit {
       description: this.TicketForm1.value.description,
     }
 
-    this.TicketService.updateFirst(req).subscribe((data) => {
+    this.TicketService.update(req).subscribe((data) => {
       this.ticketList.splice(this.ticketList.indexOf(this.Ticket), 1,data);
       this.TicketForm.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });

@@ -19,14 +19,14 @@ export class TicketService {
     return this.http.post<any>(registreUrl,ticket,httpOptions);
   }
 
-  update(ticket :any){
+  updateAll(ticket :any){
     let registreUrl=this.apiUrl+"updateById/"+ticket.id;
     return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
   //Update le ticket et son premier Message
-  updateFirst(newTicket){
-    let registreUrl=this.apiUrl+"updateFirst/"+newTicket.id;
+  update(newTicket){
+    let registreUrl=this.apiUrl+"update/"+newTicket.id;
     return this.http.post<any>(registreUrl,newTicket,httpOptions1);
   }
 
@@ -43,11 +43,6 @@ export class TicketService {
   getAll(){
     let registreUrl=this.apiUrl+"getAll";
     return this.http.get<any>(registreUrl,httpOptions1);
-  }
-
-  getFirstMessage(id:string){
-    let registreUrl=this.apiUrl+"getFirstMessage/"+id;
-    return this.http.get<any>(registreUrl);
   }
 
   getQueue(){

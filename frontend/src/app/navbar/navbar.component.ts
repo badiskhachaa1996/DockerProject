@@ -72,11 +72,6 @@ socket = io("http://localhost:3000");
             label: 'Gestions des tickets',
             icon: 'pi pi-list',
             routerLink: '/'
-          },
-          {
-            label :'Gestions des services',
-            icon: 'pi pi-sitemap',
-            routerLink :'/service'
           }
           ]
         }

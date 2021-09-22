@@ -32,10 +32,8 @@
                                     <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image" (click)="clickFile()" style="font-size: 25px;"></i>
                                     <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock" (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"> </i>
                                 </div>
-                                <div  class="mt-2 mb-2 col-lg-12 col-12">
-                                    <img [src]="getImage()" alt="Imagedeprofile" style="width: 70px; height: 70px;">
-                                </div>
                               <div class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd" class="mt-2 mb-2 col-lg-12 col-12">
+                                    <img [src]="getImage()" alt="Imagedeprofile" style="width: 70px; height: 70px;">
                                      <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Civilité : </p>  {{userco.civilite}} </div>
                                      <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Nom : </p> {{userco.lastname}} </div> 
                                      <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}} </div> 

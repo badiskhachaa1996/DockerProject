@@ -4,6 +4,7 @@ const { Service } = require("./../models/Service");
 
 
 app.post("/addService", (req, res) => {
+    //Crée un nouveau service
     let data = req.body;
     let service = new Service({
         label: data.label
@@ -17,6 +18,7 @@ app.post("/addService", (req, res) => {
 
 
 app.get("/getAll",(req,res)=>{
+    //Récupérer tous les services
     Service.find()
     .then(result=>{
         res.send(result.length>0?result:[]);
@@ -29,6 +31,7 @@ app.get("/getAll",(req,res)=>{
 
 
 app.get("/getById/:id", (req, res) => {
+    //Récupérer un service par id
     Service.findOne({ _id: req.params.id }).then((dataService) => {
         res.status(200).send({ dataService });
     }).catch((error) => {
@@ -37,6 +40,7 @@ app.get("/getById/:id", (req, res) => {
 });
 
 app.post("/updateById/:id", (req, res) => {
+    //Mettre à jour un service par id
     Service.findByIdAndUpdate(req.params.id,
         {
             label:req.body.label,
@@ -48,27 +52,9 @@ app.post("/updateById/:id", (req, res) => {
             res.send(service)
         })
 });
-app.post("/updateFirst/:id", (req, res) => {
-    Service.findByIdAndUpdate(req.params.id,
-        {
-            service_id: req.body.service_id
-        }, { new: true }, (err, user) => {
-            if (err) {
-                res.send(err)
-            }
-        })
-    Message.findByIdAndUpdate(req.body.id_message, {
-    }, { new: true }, (err, user) => {
-        if (err) {
-            res.send(err)
-        }
-        res.send(user)
-    })
-});
-
-
 
 app.get("/deleteById/:id",(req, res) => {
+    //Supprimer un service par ID
     Service.findByIdAndRemove(req.params.id, (err, service) => {
         if (err) {
             res.send(err)
@@ -78,6 +64,7 @@ app.get("/deleteById/:id",(req, res) => {
 });
 
 app.get("/getDic",(req,res)=>{
+    //Récupérer un dictionnaire de tous les services: dic[service_id]=service
     let dic = {};
     Service.find()
     .then(result=>{
