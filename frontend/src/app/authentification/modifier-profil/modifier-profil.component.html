@@ -28,8 +28,8 @@
                                 <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock"
                                     (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"></i>
                             </div>
-                            <div class="col-xl-8 col-lg-12 col-md-12 grid row">
-                                <div class="col-xl-4 col-lg-4 col-md-4">
+                            <div class="grid row">
+                                <div class="sm:col-12 md:col-4">
                                     <h3 style="font-weight: bold;">Mes informations</h3>
                                     <img [src]="imageToShow" style="width: 160px; height: 150px;">
                                     <div class="user-card-name">
@@ -47,7 +47,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="col-xl-8 col-lg-8 col-md-8 col-8">
+                                <div class="sm:col-12 md:col-8">
                                     <!--<div class="col-xl-8 col-lg-12 col-md-12" style="padding-left: 30%;">
                                         <p style="font-weight: bold;"> Civilité : </p> {{userco.civilite}}
                                     </div>
@@ -57,35 +57,26 @@
                                     <div class="col-xl-8 col-lg-12 col-md-12" style="padding-left: 10%;">
                                         <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}}
                                     </div>-->
-                                    <div class="grid my-8 ml-8">
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                    <div class="grid my-8 ml-4">
+                                        <div class="sm:col-12 md:col-4">
                                             <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}}
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                        <div class="sm:col-12 md:col-4">
                                             <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}}
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-4">
+                                        <div class="sm:col-12 md:col-4">
                                             <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
+                            <div class="col-8 col-offset-2">
                                 <div *ngIf="toggleUpdate">
-                                    <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
-                                        <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8"
+                                    <div class="grid">
+                                        <form class="col-8 col-offset-2"
                                             [formGroup]="RegisterForm">
-                                            <div class="text-center">
-                                                <div class="user-card-name"
-                                                    style="font-weight: bold; text-align: center;">
-                                                    <span> {{userco.lastname}} </span> <span> {{userco.firstname}}
-                                                    </span>
-                                                </div>
-                                                <span *ngIf="userco.role!=='user'" style="text-align:center;">
-                                                    {{userco.role}} </span>
-                                            </div>
                                             <div class="grid">
-                                                <div class="field col mt-8 mb-2 col-lg-12 col-12">
+                                                <div class="field col mt-1 mb-2 col-12">
                                                     <div>
                                                         <label style="font-weight: bold;" for="civilite"
                                                             class="p-sr-only">Civilité :</label>
@@ -97,7 +88,7 @@
                                                         </p-dropdown>
                                                     </span>
                                                 </div>
-                                                <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                                <div class="field col mt-2 mb-2 col-6">
                                                     <div>
                                                         <label style="font-weight: bold;" for="lastname"
                                                             class="p-sr-only">Nom

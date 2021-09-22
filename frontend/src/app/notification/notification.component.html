@@ -26,7 +26,7 @@
                         </div>
                         <div class="col">
                             <div class="time-line-event"
-                                *ngIf="notif && sujetDic[listTicket[notif.ticket_id].sujet_id].label">
+                                *ngIf="notif && listTicket[notif.ticket_id] && sujetDic[listTicket[notif.ticket_id].sujet_id]">
                                 <span class="timeline-event-title" style="font-weight: bold; font-size: 120%;">{{notif.type}}</span>
                                 <div class="timeline-event-message" style="font-size: small;">
                                     Numéro du ticket : <span style="font-weight: bold;">{{notif.ticket_id}} </span>, Sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>

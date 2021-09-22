@@ -30,7 +30,7 @@ export class ModifierProfilComponent implements OnInit {
   toggleUpdatepwd: boolean = false
   userupdate: any = this.decodeToken;
   userco: any = this.userupdate;
-  imageToShow;
+  imageToShow: any ="../assets/images/avatar.PNG";
 
   public ToggleUpdate() {
     this.toggleUpdate = !this.toggleUpdate
