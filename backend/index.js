@@ -88,9 +88,10 @@ io.on("connection", (socket) => {
         io.to(service_id).emit('refreshQueue')
     })
 
-    //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut)
-    socket.on('NewMessageByAgent',(user_id)=>{
+    //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
+    socket.on('NewMessageByAgent',(user_id,service_id)=>{
         io.to(user_id).emit('refreshMessage')
+        io.to(service_id).emit('refresh3emeTableau')
     })
 
     //Si un user répond à un ticket --> refresh les messages du ticket de l'agent

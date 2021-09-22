@@ -20,7 +20,7 @@
                 <div>
                     <div class="user-detail">
                         <p-card>
-                            <div style="float:right">
+                            <div style="float:right;padding-top: 3%;">
                                 <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate($event)"
                                     style="font-size: 25px;"></i>
                                 <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image"
@@ -30,7 +30,7 @@
                             </div>
                             <div class="grid row">
                                 <div class="sm:col-12 md:col-4">
-                                    <h3 style="font-weight: bold;">Mes informations</h3>
+                                    <h3 style="font-weight: bold;">Mes informations</h3><!--à centrer-->
                                     <img [src]="imageToShow" style="width: 160px; height: 150px;">
                                     <div class="user-card-name">
                                         <span>
@@ -42,7 +42,7 @@
                                         <span style="font-weight: bold;">
                                             {{userco.firstname}}
                                         </span> <br>
-                                        <span *ngIf="userco.role!=='user'">
+                                        <span *ngIf="userco.role!=='user'"><!--à centrer-->
                                             {{userco.role}}
                                         </span>
                                     </div>
@@ -58,13 +58,13 @@
                                         <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}}
                                     </div>-->
                                     <div class="grid my-8 ml-4">
-                                        <div class="sm:col-12 md:col-4">
+                                        <div class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}}
                                         </div>
-                                        <div class="sm:col-12 md:col-4">
+                                        <div class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}}
                                         </div>
-                                        <div class="sm:col-12 md:col-4">
+                                        <div class="sm:col-12 md:col-12">
                                             <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}}
                                         </div>
                                     </div>
