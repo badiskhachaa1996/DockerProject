@@ -25,7 +25,7 @@ export class ServiceComponent implements OnInit {
   sujetForm: FormGroup = new FormGroup({
     label: new FormControl('', [Validators.required])
   });
-  // test: Test;
+  
   currentService = null;
   message = '';
   label = '';
@@ -69,14 +69,10 @@ export class ServiceComponent implements OnInit {
       }
       this.showFormAddService=false;
       this.serviceForm.reset();
-      // if(msg.trim() !==''){
-      //   Socket.emit("send-notification",msg);
-      //   document.getElementById('msg').value = '';
-      // }
+     
     }, (error) => {
       if (error.status == 400) {
-        //Bad Request (service deja existant)
-        // this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom de service est deja existant'});
+       
       }
       console.log(error)
     });
@@ -93,8 +89,7 @@ export class ServiceComponent implements OnInit {
       this.sujetForm.reset();
     }, (error) => {
       if (error.status == 400) {
-        //Bad Request (service deja existant)
-        //  this.messageService.add({severity:'error', summary:'Message d\'inscription', detail:'Le nom du sujet est deja existant'});
+       
       }
       console.log(error)
     });
@@ -128,10 +123,6 @@ export class ServiceComponent implements OnInit {
     private SujetService: SujetService) { }
 
   ngOnInit(): void {
-//     const socket = io();
-//  socket.on('new-notification',(resp) => {
-//   toastr.success(resp,'New-notification')
-// });
     this.cols = [
       { field: 'label', header: 'Sujet' },
     ];

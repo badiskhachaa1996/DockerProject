@@ -247,8 +247,6 @@ export class SuiviComponent implements OnInit {
     this.selectedTicket = ticket;
     this.showFormAdd=false;
     this.showFormUpdate = false;
-    // this.showFormUpdateService=false;
-    // this.serviceForm.reset();
   }
 
  

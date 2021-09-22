@@ -4,7 +4,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddService=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="serviceForm">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+
                     <h3 class="text-center">Ajouter un service</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-12">
@@ -28,7 +28,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateService=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="serviceForm">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+
                     <h3 class="text-center">Modifier le service</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-12">
@@ -46,7 +46,7 @@
     </div>
 </div>
 
-<!-- tableau -->
+
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddService" pButton class="ui-button-raised ui-button-success"
@@ -84,7 +84,7 @@
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="editService(rowData);toggleFormServiceUpdate();"></i>
-                            <!-- <i class="pi pi-trash" (click)="deleteService(rowData)"></i> -->
+
                         </td>
                     </tr>
                 </ng-template>
@@ -100,7 +100,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddSujet=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="sujetForm">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+
                     <h3 class="text-center">Ajouter un sujet</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-12">
@@ -128,7 +128,7 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateSujet=false"> </i>
 
                 <form class="col-8 col-offset-2" [formGroup]="sujetForm" *ngIf="showFormUpdateSujet">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+
                     <h3 class="text-center">Modifier le sujet</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-12">
@@ -180,7 +180,7 @@
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="editSujet(rowData);toggleFormSujetUpdate()" style="cursor: pointer;"></i>
-                            <!-- <i class="pi pi-trash" (click)="deleteSujet(rowData)"></i> -->
+                      
                         </td>
                     </tr>
                 </ng-template>

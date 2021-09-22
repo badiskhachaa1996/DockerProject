@@ -11,43 +11,43 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router,private AuthService:AuthService,private messageService: MessageService) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
-  errorLogin=false;
+  errorLogin = false;
 
-  LoginForm: FormGroup= new FormGroup({
-    email:new FormControl('',[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
-    password:new FormControl('',[Validators.required,Validators.minLength(5)])
+  LoginForm: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5)])
   })
 
-  login(){
+  login() {
     //Connexion
     let user = {
-      email:this.LoginForm.value.email,
-      password:this.LoginForm.value.password
+      email: this.LoginForm.value.email,
+      password: this.LoginForm.value.password
     }
-    this.AuthService.login(user).subscribe((data)=>{
-      if(data.token!=null){
-        localStorage.setItem("token",data.token);
+    this.AuthService.login(user).subscribe((data) => {
+      if (data.token != null) {
+        localStorage.setItem("token", data.token);
         window.location.reload();
-       
+
       }
-    },(error)=>{
-      if(error.status==404 || error.includes("404")){
+    }, (error) => {
+      if (error.status == 404 || error.includes("404")) {
         //Not Found (Pas de correspondance pour le duo email/passwd)
-        this.messageService.add({severity:'error', summary:'Erreur de connexion', detail:'Email ou mot de passe incorrect'});
-        this.errorLogin=true;
+        this.messageService.add({ severity: 'error', summary: 'Erreur de connexion', detail: 'Email ou mot de passe incorrect' });
+        this.errorLogin = true;
       }
       console.log(error)
     });
   }
-  
+
 
   get email() { return this.LoginForm.get('email'); }
   get password() { return this.LoginForm.get('password'); }
 
   ngOnInit(): void {
-    if(localStorage.getItem("token")!=null){
+    if (localStorage.getItem("token") != null) {
       this.router.navigate(['/ticket/suivi'])
     }
   }
