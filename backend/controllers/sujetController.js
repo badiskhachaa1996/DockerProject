@@ -5,6 +5,7 @@ const { Sujet } = require("./../models/sujet");
 
 
 app.post("/addsujet", (req, res) => {
+    //Crée un sujet
     let data = req.body;
     let sujet = new Sujet({
         label: data.label,
@@ -17,10 +18,8 @@ app.post("/addsujet", (req, res) => {
     })
 });
 
-
-
-
 app.get("/getAll",(req,res)=>{
+    //Récupérer tous les sujets
     Sujet.find()
     .then(result=>{
         res.send(result.length>0?result:[]);
@@ -31,8 +30,8 @@ app.get("/getAll",(req,res)=>{
     
 })
 
-
 app.get("/getById/:id", (req, res) => {
+    //Récupérer un sujet via ID
     Sujet.findOne({ _id: req.params.id }).then((dataSujet) => {
         res.status(200).send({ dataSujet });
     }).catch((error) => {
@@ -41,6 +40,7 @@ app.get("/getById/:id", (req, res) => {
 });
 
 app.post("/updateById/:id", (req, res) => {
+    //Mettre à jour un sujet via ID
     Sujet.findByIdAndUpdate(req.params.id,
         {
             label:req.body.label,
@@ -53,47 +53,8 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-/*app.get("/createDefault",(req,res)=>{
-    let service = new Service({
-        label:"Pedagogique"
-    })
-    service.save().then((serviceData)=>{
-        let sujet = new Sujet({
-            label: "Récupérer mes notes",
-            service_id:serviceData._id
-        })
-        sujet.save()
-        sujet = new Sujet({
-            label: "Récupérer mon emploi du temps",
-            service_id:serviceData._id
-        })
-        sujet.save()
-    })
-
-    service = new Service({
-        label:"Financier"
-    })
-    service.save().then((serviceData)=>{
-        sujet = new Sujet({
-            label: "Récupérer ma fiche de paie",
-            service_id:serviceData._id
-        })
-        sujet.save()
-        sujet = new Sujet({
-            label: "Récupérer l'avancement de mon payement",
-            service_id:serviceData._id
-        })
-        sujet.save().then(()=>{
-            res.status(200).send("Default loaded")
-        })
-    })
-
-})*/
-
-
-
-
 app.get("/deleteById/:id",(req, res) => {
+    //Supprimer un sujet via ID
     Sujet.findByIdAndRemove(req.params.id, (err, sujet) => {
         if (err) {
             res.send(err)

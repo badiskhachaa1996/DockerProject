@@ -21,10 +21,6 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  newNotif(Notif){
-    this.socket.emit("NewNotif",(Notif.doc))
-  }
-
   create(notif: Notification) {
     let url = this.apiUrl + "create";
     return this.http.post<any>(url, notif, httpOptions);
@@ -52,23 +48,16 @@ export class NotificationService {
 
   getAllByUserId(id:string){
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions)
-    // .pipe(
-    //   tap(() => {
-    //     this._refreshNeeded.next();
-    //   })
-    //   )
-    ;
+    return this.http.get<any>(registreUrl,httpOptions);
   }
 
   get20ByUserID(id:string){
     let registreUrl=this.apiUrl+"get20ByUserID/"+id;
     return this.http.get<any>(registreUrl,httpOptions);
   }
-  viewNotifByID(id){
-    let registreUrl=this.apiUrl+"viewNotifByID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1)
-   ;
+
+  newNotif(Notif){
+    this.socket.emit("NewNotif",(Notif.doc))
   }
 
   viewNotifs(notifications:Notification[]){

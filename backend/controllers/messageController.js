@@ -10,7 +10,7 @@ const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
-    secure: false, // true for 587, false for other ports
+    secure: false,
     requireTLS: true,
     auth: {
         user: 'estya-ticketing@estya.com',
@@ -23,6 +23,7 @@ let transporter = nodemailer.createTransport({
 
 //Création d'un nouveau message 
 app.post("/create", (req, res) => {
+    //Sauvegarde du fichier si il y en a un
     if (req.body.file && req.body.file != null && req.body.file != '') {
         fs.mkdir("./storage/" + req.body.ticket_id + "/",
             { recursive: true }, (err) => {
@@ -36,6 +37,7 @@ app.post("/create", (req, res) => {
             }
         });
     }
+    //Sauvegarde du message
     const message = new Message({
         user_id: req.body.id,
         description: req.body.description,
@@ -47,16 +49,12 @@ app.post("/create", (req, res) => {
 
     });
 
-
     message.save((err, msg) => {
-     
-        let createur_id;
+        res.send({ message: "Votre message a été crée!", doc: msg });
         Ticket.findOne({ _id: msg.ticket_id }).then((tickFromDb) => {
-            createur_id = tickFromDb.createur_id
-           
-
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
                 if (msg.isRep) {
+                    //Envoie du mail, pour avertir d'un nouveau message sur son ticket
                     let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
@@ -66,33 +64,23 @@ app.post("/create", (req, res) => {
                         attachments: [{
                             filename: 'signature.png',
                             path: 'assets/signature.png',
-                            cid: 'red' //same cid value as in the html img src
+                            cid: 'red'
                         }]
                     };
-
-
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
                             console.log(error);
                         }else{
-                            console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
+                            //console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
                         }
                     });
                 }
-                res.send({ message: "Votre message a été crée!", doc: msg });
-
             }).catch((error) => {
                 res.status(404).send("erreur :" + error);
             });
-
         }).catch((error) => {
             res.status(404).send("erreur :" + error);
         });
-
-
-
-
-
     });
 });
 
@@ -121,7 +109,7 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-//Récuperer un message
+//Récuperer un message par ID
 
 app.get("/getById/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
@@ -152,7 +140,7 @@ app.get("/getAllByTicketID/:id", (req, res) => {
         })
 });
 
-//Récupérer tous les messages par TicketID
+//Récupérer un dictionnaire en format dic[ticket_id]=[messages]
 app.get("/getAllDic", (req, res) => {
     let dic = {}
     Message.find()
@@ -170,7 +158,7 @@ app.get("/getAllDic", (req, res) => {
         })
 });
 
-//Récupérer en base 64 le fichier TOD0
+//Récupérer en base 64 le fichier d'une message
 app.get("/downloadFile/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         let filename = data.document

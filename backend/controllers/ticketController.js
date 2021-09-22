@@ -44,7 +44,7 @@ app.get("/deleteById/:id", (req, res) => {
 });
 
 //Modification d'un ticket
-app.post("/updateById/:id", (req, res) => {
+app.post("/updateAllById/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             sujet_id: req.body?.sujet_id,
@@ -95,15 +95,6 @@ app.get("/getAllbyUser/:id", (req, res) => {
             console.log(err);
         })
 });
-//Récupérer le premier message d'un Ticket
-app.get("/getFirstMessage/:id", (req, res) => {
-    Ticket.findOne({ _id: req.params.id }).sort({ date_ajout: 1 }).then((dataMessage) => {
-        res.status(200).send({ dataMessage });
-    }).catch((error) => {
-        res.status(404).send("erreur :" + error);
-    })
-
-})
 
 //Récupérer la queue d'entrée
 app.get("/getQueue", (req, res) => {
@@ -129,8 +120,8 @@ app.get("/getAccAff/:id", (req, res) => {
 
 })
 
-//Update d'un ticket et de son premier Message
-app.post("/updateFirst/:id", (req, res) => {
+//Update d'un ticket
+app.post("/update/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
             sujet_id: req.body.sujet_id,
@@ -236,6 +227,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
         })
 })
 
+//Change l'état d'un ticket en Accepté ou Affecté
 app.post("/AccAff/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
@@ -282,6 +274,7 @@ app.post("/AccAff/:id", (req, res) => {
         })
 });
 
+//Change le service d'un ticket
 app.post("/changeService/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
@@ -326,6 +319,7 @@ app.post("/changeService/:id", (req, res) => {
         })
 });
 
+//Change lestatut d'un ticket
 app.post("/changeStatut/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
@@ -336,13 +330,8 @@ app.post("/changeStatut/:id", (req, res) => {
                 res.send(err)
             } else {
                 if (user.statut == "En attente d\'une réponse") {
-
-
-
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-
                         let html4 = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
-
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -370,11 +359,8 @@ app.post("/changeStatut/:id", (req, res) => {
 
                 }
                 else if (user.statut === "Traité") {
-
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-
                         let html5 = '<p style="color:black"> Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
-
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -402,6 +388,7 @@ app.post("/changeStatut/:id", (req, res) => {
             res.status(200).send(user)
         })
 });
+
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
     Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { date_affec_accep: 1 } })
@@ -413,6 +400,7 @@ app.get("/getAllAccAff", (req, res) => {
         })
 })
 
+//Renvoie un ticket dans la queue d'entrée
 app.post("/revertTicket/:id", (req, res) => {
     Ticket.findById(req.params.id).then((ticket) => {
         User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
