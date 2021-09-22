@@ -2,118 +2,152 @@
     <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png" class="logo">
     </div>
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
-        <img #img *ngIf="profilePicture" [src]="profilePicture" style="-webkit-border-radius:70px; -moz-border-radius:70px; border-radius:70px; width:80px;height:80px;position : relative ; " alt="prestige-layout" />
+        <img #img *ngIf="profilePicture" [src]="profilePicture"
+            style="-webkit-border-radius:70px; -moz-border-radius:70px; border-radius:70px; width:80px;height:80px;position : relative ; "
+            alt="prestige-layout" />
         <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
             <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
                 style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
         </div>
         <div class="col-6 col-offset-1 mb-4">
             <div *ngIf="retour">
-                <i class="pi pi-arrow-circle-left" style="font-size: 30px;" pTooltip="Retour" [routerLink]="['/ticket/suivi']"></i>
+                <i class="pi pi-arrow-circle-left" style="font-size: 30px;" pTooltip="Retour"
+                    [routerLink]="['/ticket/suivi']"></i>
             </div>
         </div>
         <div class="p-grid mt-2">
             <div class="p-col-6 p-md-6  p-lg-4">
-                <!--<div class="user-card card" style="text-align: center;">-->
-                    <div style="text-align: center;">
-                        <!--<p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)"></p-menu>
-                    <div class="user-card-content" style="text-align: center;">
-                        <div class="user-card-status" style="text-align: center;">
-                            <<span class="user-profile-role" *ngIf="userco.role=='user'"
-                                style="font-weight: bold;text-align: center;">Utilisateur</span>
-                            <span style="font-weight: bold; text-align: center;"
-                                *ngIf="userco.role!=='user'">{{userco.role}} </span>
-                        </div>-->
-                        <div class="user-detail">
-                            <p-card>
-                                <h3 style="font-weight: bold;">Mes informations</h3>
-                                <div class="col-8 col-offset-2 col-xl-8 col-lg-12 col-md-12">
-                                    <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate($event)" style="font-size: 25px;"></i>
-                                    <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image" (click)="clickFile()" style="font-size: 25px;"></i>
-                                    <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock" (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"> </i>
+
+                <div style="text-align: center;">
+
+                    <div class="user-detail">
+                        <p-card>
+                            <h3 style="font-weight: bold;">Mes informations</h3>
+                            <div class="col-8 col-offset-2 col-xl-8 col-lg-12 col-md-12">
+                                <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate($event)"
+                                    style="font-size: 25px;"></i>
+                                <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image"
+                                    (click)="clickFile()" style="font-size: 25px;"></i>
+                                <i pTooltip="Modifier mon mot de passe" class="pi pi-fw pi-lock"
+                                    (click)="ToggleUpdatepwd($event)" style="font-size: 25px;"> </i>
+                            </div>
+                            <div class="mt-2 mb-2 col-lg-12 col-12">
+                                <img [src]="getImage()" alt="Imagedeprofile" style="width: 70px; height: 70px;">
+                            </div>
+                            <div class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd"
+                                class="mt-2 mb-2 col-lg-12 col-12">
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Civilité : </p> {{userco.civilite}}
                                 </div>
-                                <div  class="mt-2 mb-2 col-lg-12 col-12">
-                                    <img [src]="getImage()" alt="Imagedeprofile" style="width: 70px; height: 70px;">
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Nom : </p> {{userco.lastname}}
                                 </div>
-                              <div class="grid" *ngIf="!toggleUpdate && !toggleUpdatepwd" class="mt-2 mb-2 col-lg-12 col-12">
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Civilité : </p>  {{userco.civilite}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Nom : </p> {{userco.lastname}} </div> 
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}} </div> 
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}} </div>
-                                     <div class=" mt-2 mb-2 col-lg-12 col-12"> <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}} </div>
-                             </div>
-                             <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}}
+                                </div>
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}}
+                                </div>
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}}
+                                </div>
+                                <div class=" mt-2 mb-2 col-lg-12 col-12">
+                                    <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}}
+                                </div>
+                            </div>
+                            <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
                                 <div *ngIf="toggleUpdate">
                                     <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
-                                        <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="RegisterForm">
+                                        <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8"
+                                            [formGroup]="RegisterForm">
                                             <div style="text-align: center;">
-                                                <p-menu #menu popup="popup" [model]="items" appendTo="body" (click)="onClickMenu(item)">
+                                                <p-menu #menu popup="popup" [model]="items" appendTo="body"
+                                                    (click)="onClickMenu(item)">
                                                 </p-menu>
                                                 <!--<button pButton type="button" icon="pi pi-cog" (click)="menu.toggle($event)"> </button>-->
-                                                <div class="user-card-name" style="text-align: center; font-weight: bold;">
+                                                <div class="user-card-name"
+                                                    style="text-align: center; font-weight: bold;">
                                                     <span>{{userco.lastname}} </span> <span>{{userco.firstname}} </span>
                                                 </div>
-                                                <span class="user-profile-role" *ngIf="userco.role=='user'"style="font-weight: bold;text-align: center;">Utilisateur</span>
-                                                    <span style=" text-align: center;"*ngIf="userco.role!=='user'"> {{userco.role}} </span>
+                                                <span class="user-profile-role" *ngIf="userco.role=='user'"
+                                                    style="font-weight: bold;text-align: center;">Utilisateur</span>
+                                                <span style=" text-align: center;" *ngIf="userco.role!=='user'">
+                                                    {{userco.role}} </span>
                                             </div>
                                             <div class="grid">
                                                 <div class="field col mt-8 mb-2 col-lg-12 col-12">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
+                                                        <label style="font-weight: bold;" for="civilite"
+                                                            class="p-sr-only">Civilité :</label>
                                                     </div>
                                                     <span>
-                                                        <p-dropdown formControlName="civilite" [options]="civiliteList"optionLabel="value" placeholder="Veuillez choisir une civilité">
+                                                        <p-dropdown formControlName="civilite" [options]="civiliteList"
+                                                            optionLabel="value"
+                                                            placeholder="Veuillez choisir une civilité">
                                                         </p-dropdown>
                                                     </span>
                                                 </div>
                                                 <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
+                                                        <label style="font-weight: bold;" for="lastname"
+                                                            class="p-sr-only">Nom :</label>
                                                     </div>
-                                                    <input type="text" formControlName="lastname" class="form-control col-12"
-                                                        placeholder="Nom" pInputText>
-                                                    <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                                        <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                                                        <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
+                                                    <input type="text" formControlName="lastname"
+                                                        class="form-control col-12" placeholder="Nom" pInputText>
+                                                    <div
+                                                        *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                                        <span class="error" *ngIf="lastname.errors?.required">*Le nom
+                                                            est obligatoire</span>
+                                                        <span class="error" *ngIf="lastname.errors?.pattern">*Seul les
+                                                            lettres sont acceptés</span>
                                                     </div>
                                                 </div>
                                                 <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="firstname" class="p-sr-only">Prénom :</label>
+                                                        <label style="font-weight: bold;" for="firstname"
+                                                            class="p-sr-only">Prénom :</label>
                                                     </div>
-                                                    <input type="text" formControlName="firstname" class="form-control col-12"
-                                                        placeholder="Prénom" pInputText>
-                                                    <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                                        <span class="error" *ngIf="firstname.errors?.required">*Le prénom est
+                                                    <input type="text" formControlName="firstname"
+                                                        class="form-control col-12" placeholder="Prénom" pInputText>
+                                                    <div
+                                                        *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                                        <span class="error" *ngIf="firstname.errors?.required">*Le
+                                                            prénom est
                                                             obligatoire.</span>
-                                                        <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres
+                                                        <span class="error" *ngIf="firstname.errors?.pattern">*Seul les
+                                                            lettres
                                                             sont
                                                             acceptés.</span>
                                                     </div>
                                                 </div>
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="adresse" class="p-sr-only">Adresse :</label>
+                                                        <label style="font-weight: bold;" for="adresse"
+                                                            class="p-sr-only">Adresse :</label>
                                                     </div>
                                                     <input id="adresse" type="text" formControlName="adresse"
-                                                        class="form-control col-12" placeholder="Adresse" pInputText required />
+                                                        class="form-control col-12" placeholder="Adresse" pInputText
+                                                        required />
                                                     <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)">
-                                                        <span class="error" *ngIf="adresse.errors?.required">*L'adresse est
+                                                        <span class="error" *ngIf="adresse.errors?.required">*L'adresse
+                                                            est
                                                             obligatoire.</span>
-                                                        <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse n'est pas
+                                                        <span class="error" *ngIf="adresse.errors?.pattern">*L'adresse
+                                                            n'est pas
                                                             correct.</span>
                                                     </div>
                                                 </div>
-        
+
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
+                                                        <label style="font-weight: bold;" for="phone"
+                                                            class="p-sr-only">Téléphone :</label>
                                                     </div>
-                                                    <input type="text" formControlName="phone" class="form-control col-12"
-                                                        placeholder="Téléphone" pInputText>
+                                                    <input type="text" formControlName="phone"
+                                                        class="form-control col-12" placeholder="Téléphone" pInputText>
                                                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                                                        <span class="error" *ngIf="phone.errors?.required">*Le téléphone est
+                                                        <span class="error" *ngIf="phone.errors?.required">*Le téléphone
+                                                            est
                                                             obligatoire.</span>
                                                         <span class="error"
                                                             *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
@@ -123,20 +157,22 @@
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12">
                                                         <span>
-                                                            <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>
+                                                            <label style="font-weight: bold;" for="role"
+                                                                class="p-sr-only">Role :</label>
                                                             <p-dropdown formControlName="role" [options]="Roles"
                                                                 optionLabel="value">
                                                             </p-dropdown>
                                                         </span>
-                                                        <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
+                                                        <label style="font-weight: bold;" for="service_id"
+                                                            class="p-sr-only">Service:</label>
                                                         <p-dropdown formControlName="service_id" [options]="Services"
                                                             optionLabel="label">
                                                         </p-dropdown>
                                                     </div>
                                                     <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                                         <button pButton class="ui-button-raised ui-button-success"
-                                                            [disabled]="RegisterForm.invalid" label="Enregistrer" type="button"
-                                                            (click)="UpdateUser()"></button>
+                                                            [disabled]="RegisterForm.invalid" label="Enregistrer"
+                                                            type="button" (click)="UpdateUser()"></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -144,26 +180,31 @@
                                     </div>
                                 </div>
                             </div>
-                        <!--</div>-->
-                        <div class="p-grid mt-2" *ngIf="toggleUpdatepwd ">
-                            <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="PwdForm">
+                        
+                            <div class="p-grid mt-2" *ngIf="toggleUpdatepwd ">
+                                <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="PwdForm">
                                     <div class="p-col-xl-12 col-lg-12 col-md-12 p-grid">
-                                        <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" [formGroup]="PwdForm">
+                                        <form class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8"
+                                            [formGroup]="PwdForm">
                                             <h3 class="text-center"> Modifier mon mot de passe</h3>
                                             <div class="grid">
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="password" class="p-sr-only">Mot de passe :</label>
+                                                        <label style="font-weight: bold;" for="password"
+                                                            class="p-sr-only">Mot de passe :</label>
                                                     </div>
                                                     <input type="password" formControlName="password"
-                                                        class="form-control col-12" placeholder="Mot de passe" pInputText>
+                                                        class="form-control col-12" placeholder="Mot de passe"
+                                                        pInputText>
                                                 </div>
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div>
-                                                        <label style="font-weight: bold;" for="verifypassword" class="p-sr-only">Confirmer votre mot de passe :</label>
+                                                        <label style="font-weight: bold;" for="verifypassword"
+                                                            class="p-sr-only">Confirmer votre mot de passe :</label>
                                                     </div>
                                                     <input type="password" formControlName="verifypassword"
-                                                        class="form-control col-12" placeholder="Confirmation votre mot de passe"pInputText>
+                                                        class="form-control col-12"
+                                                        placeholder="Confirmation votre mot de passe" pInputText>
                                                 </div>
                                                 <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                                     <button pButton class="ui-button-raised ui-button-success"
@@ -173,8 +214,7 @@
                                             </div>
                                         </form>
                                     </div>
+                                </div>
                             </div>
-                        </div>
-                            </p-card>
-                        </div>
-                        
+                        </p-card>
+                    </div>

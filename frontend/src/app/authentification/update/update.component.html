@@ -13,17 +13,20 @@
                                 <label style="font-weight: bold;" for="civilite" class="p-sr-only">Civilité :</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value" placeholder="Veuillez choisir une civilité"></p-dropdown>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"
+                                    placeholder="Veuillez choisir une civilité"></p-dropdown>
                             </span>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label  style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
+                                <label style="font-weight: bold;" for="lastname" class="p-sr-only">Nom :</label>
                             </div>
-                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="nom"pInputText>
+                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="nom"
+                                pInputText>
                             <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                                 <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                                <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont acceptés</span>
+                                <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont
+                                    acceptés</span>
                             </div>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -55,7 +58,8 @@
                             <div>
                                 <label style="font-weight: bold;" for="phone" class="p-sr-only">Téléphone :</label>
                             </div>
-                            <input type="text" formControlName="phone" class="form-control col-12" placeholder="Téléphone" pInputText>
+                            <input type="text" formControlName="phone" class="form-control col-12"
+                                placeholder="Téléphone" pInputText>
                             <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
                                 <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
                                 <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
@@ -69,24 +73,25 @@
                             </div>
                             <div *ngIf=IsAdmin>
                                 <span>
-                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value"></p-dropdown>
+                                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
+                                    </p-dropdown>
                                 </span>
-                            </div>   
+                            </div>
                         </div>
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="service_id" class="p-sr-only">Service:</label>
                             </div>
                             <span>
-                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label"></p-dropdown>
+                                <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
+                                </p-dropdown>
                             </span>
                         </div>
-                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="RegisterForm.invalid" label="Modifer" type="button"
-                                    (click)="UpdateUser()"></button>
-                            </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="RegisterForm.invalid"
+                                label="Modifer" type="button" (click)="UpdateUser()"></button>
                         </div>
+                    </div>
                 </form>
             </div>
         </p-card>

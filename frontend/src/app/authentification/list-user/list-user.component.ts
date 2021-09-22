@@ -28,12 +28,12 @@ export class ListUserComponent implements OnInit {
   add: boolean = true;
 
   serviceDic: Service[] = [];
-  dropdownService: any[]=[{label:"Tous les services",value:null}];
-  filterRole: any []=[
-    {label:"Tous les roles",value:null},
-    {label:"Admin",value:"Admin"},
-    {label:"Reponsable",value:"Responsable"},
-    {label:"Agent",value:"Agent"}
+  dropdownService: any[] = [{ label: "Tous les services", value: null }];
+  filterRole: any[] = [
+    { label: "Tous les roles", value: null },
+    { label: "Admin", value: "Admin" },
+    { label: "Reponsable", value: "Responsable" },
+    { label: "Agent", value: "Agent" }
   ]
   loading: boolean;
 
@@ -52,7 +52,7 @@ export class ListUserComponent implements OnInit {
     }
     if (token == null) {
       this.router.navigate(["/login"])
-    }else if (token["role"] != "Admin") {
+    } else if (token["role"] != "Admin") {
       this.router.navigate(["/ticket/suivi"])
     }
     this.AuthService.getAllAgent().subscribe((users) => {
@@ -60,7 +60,7 @@ export class ListUserComponent implements OnInit {
     })
     this.ServService.getAll().subscribe((services) => {
       services.forEach(serv => {
-        this.dropdownService.push({label:serv.label,value:serv._id})
+        this.dropdownService.push({ label: serv.label, value: serv._id })
         this.serviceDic[serv._id] = serv;
       });
     })
@@ -71,7 +71,7 @@ export class ListUserComponent implements OnInit {
     this.showFormAdd = true;
     this.showFormModify = false;
   }
- toggleFormUpdate() {
+  toggleFormUpdate() {
     this.showFormModify = true
     this.showFormAdd = false
   }
@@ -88,8 +88,8 @@ export class ListUserComponent implements OnInit {
 
   modify(rowData: User) {
     this.selectedUser = rowData;
-    this.showFormModify=false;
-    setTimeout(()=>{this.toggleFormUpdate()},1)
+    this.showFormModify = false;
+    setTimeout(() => { this.toggleFormUpdate() }, 1)
   }
 
   customSort(event: SortEvent) {
@@ -97,8 +97,8 @@ export class ListUserComponent implements OnInit {
       let value1 = data1[event.field];
       let value2 = data2[event.field];
       if (event.field == "service") {
-        value1 = (this.serviceDic[data1.service_id]==undefined)?null:this.serviceDic[data1.service_id].label
-        value2 = (this.serviceDic[data2.service_id]==undefined)?null:this.serviceDic[data2.service_id].label
+        value1 = (this.serviceDic[data1.service_id] == undefined) ? null : this.serviceDic[data1.service_id].label
+        value2 = (this.serviceDic[data2.service_id] == undefined) ? null : this.serviceDic[data2.service_id].label
       }
       let result = null;
 
