@@ -4,7 +4,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="isModify=null"></i>
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+               
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -47,7 +47,12 @@
                         <textarea formControlName="description" rows="5" cols="100" pInputTextarea
                             autoResize="autoResize" placeholder="Saisir un message"></textarea>
                     </div><br>
+<<<<<<< HEAD
 
+=======
+               
+                    
+>>>>>>> d5419b0f276d65c7c7bae250931c03b03560b1b3
                     <div class="mt-2 col-8 col-offset-1" style="display: flex;">
                         <div class="col-8 mt-6">
                         <p-fileUpload #fubauto (uploadHandler)="onFileChange($event)" mode="basic" chooseLabel="Joindre un fichier"
@@ -62,10 +67,7 @@
                       </div>
                       <div class="col-4 col-offset-1">
                       <p *ngIf="commentForm.value.file" >{{commentForm.value.file.filename | slice:0:15}}</p></div>
-                  <!-- <div class=" col-12 col-offset-8" > -->
-            
-                  <!-- </div>
-              -->
+                 
              
                     <div *ngIf="value.invalid">
                         <span class="error" *ngIf="value.errors?.maxlength">*Le fichier est trop volumineux (20MB
@@ -149,7 +151,7 @@
                         <td>
                             <i pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
                                 (click)="QueueToAccAff(rowData)"></i>
-                                <!--*ngIf="rowData.createur_id!=token['id']"-->
+                             
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
@@ -349,8 +351,6 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <!--<i style="margin-left: 30%;" class="pi pi-arrow-right"
-                                (click)="ListToPreInscrit(rowData)"></i>-->
                             <i pTooltip="Traiter" class="pi pi-cog" (click)="toggleFormCommentAdd(rowData);showFormAddComment=true"> </i>
                             <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class="pi pi-replay"
                                 (click)="toggleRevertForm(rowData)"></i>

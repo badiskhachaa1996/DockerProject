@@ -22,7 +22,7 @@ let transporter = nodemailer.createTransport({
 
 
 
-//service registre
+//Enregsitrement d'un nouvel user
 app.post("/registre", (req, res) => {
     let data = req.body;
     let user = new User({
@@ -63,35 +63,7 @@ app.post("/registre", (req, res) => {
     })
 });
 
-
-
-
-//service registre
-app.post("/sendemail", (req, res) => {
-    let data = req.body;
-        let htmlmail = '<p>Bonjour ' + ', </p><p style="color:black">  Voila le lien pour modifier votre mot de passe.</p> <p>http://localhost:4200/initialmdp</p> <p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
-        let mailOptions = {
-            from: 'estya-ticketing@estya.com',
-            to: data.email,
-            subject: 'Estya-Ticketing',
-            html: htmlmail,
-            attachments: [{
-                filename: 'signature.png',
-                path: 'assets/signature.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error)
-            }else{
-                console.log("Email envoyé\nà "+data.email+"\nRaison:Réinitialisation de mot de passe")
-            }
-        });
-   
-});
-
-//service login
+//Connexion d'un user
 app.post("/login", (req, res) => {
     let data = req.body;
     User.findOne({
@@ -110,6 +82,8 @@ app.post("/login", (req, res) => {
         res.status(404).send(error);
     })
 });
+
+//Récupération d'un user via ID
 app.get("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
@@ -120,6 +94,8 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send(error);
     })
 });
+
+//Récupération de tous les users
 app.get("/getAll", (req, res) => {
     User.find()
         .then(result => {
@@ -131,9 +107,7 @@ app.get("/getAll", (req, res) => {
         })
 });
 
-app.get("/sendmail",(req,res) => {
-    
-})
+//Mise à jour d'un user
 app.post("/updateById/:id", (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id },
         {
@@ -154,6 +128,8 @@ app.post("/updateById/:id", (req, res) => {
             }
         })
 })
+
+//Récupérer tous les users via Service ID
 app.get("/getAllbyService/:id", (req, res) => {
     User.find({ service: req.params.id })
         .then(result => {
@@ -164,6 +140,8 @@ app.get("/getAllbyService/:id", (req, res) => {
             console.log(err);
         })
 });
+
+//Récupérer tous les non-users
 app.get("/getAllAgent/", (req, res) => {
     User.find({ role: ["Responsable", "Agent", "Admin"] })
 
@@ -176,6 +154,7 @@ app.get("/getAllAgent/", (req, res) => {
         })
 })
 
+//Mise à jour du mot de passe
 app.post("/updatePassword/:id",(req,res)=>{
     User.findOneAndUpdate({ _id: req.params.id },{
         password:bcrypt.hashSync(req.body.password, 8)
@@ -189,8 +168,7 @@ app.post("/updatePassword/:id",(req,res)=>{
     })
 })
 
-// upload files 
-
+//Sauvegarde de la photo de profile
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
         callBack(null, 'storage/profile/')
@@ -202,7 +180,7 @@ const storage = multer.diskStorage({
   
 const upload = multer({ storage: storage })
 
-
+//Sauvegarde de la photo de profile
 app.post('/file', upload.single('file'), (req, res, next) => {
     const file = req.file;
     if (!file) {
@@ -214,7 +192,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
         pathImageProfil:file.filename,
         typeImageProfil:file.mimetype
     },(err,user)=>{
-        console.log(user)
+        //Renvoie de la photo de profile au Front pour pouvoir l'afficher
         let fileToSend = fs.readFileSync("storage/profile/" + file.filename, { encoding: 'base64' }, (err) => {
             if (err) {
                 return console.error(err);
@@ -226,6 +204,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
 
   })
 
+  //Envoie de la photo de profile
 app.get('/getProfilePicture/:id',(req,res)=>{
     User.findById(req.params.id,(err,user)=>{
         if(user.pathImageProfil){

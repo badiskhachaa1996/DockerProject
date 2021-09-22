@@ -29,15 +29,6 @@ export class AuthService {
       )
   }
  
-  sendemail(user) {
-    console.log(user)
-    let API_URL = this.apiUrl+"sendemail";
-    return this.http.post(API_URL, user)
-      .pipe(
-        catchError(this.handleError)
-      )
-  }
- 
   login(user){
     let loginUrl=this.apiUrl+"login";
     return this.http.post<any>(loginUrl,user,httpOptions) .pipe(
@@ -107,6 +98,10 @@ export class AuthService {
   updatePassword(id:string,password:string){
     let url=this.apiUrl+"updatePassword/"+id;
     return this.http.post<any>(url,{password},httpOptions);
+  }
+
+  reloadImage(data){
+    this.socket.emit("reloadImage",(data))
   }
 
 

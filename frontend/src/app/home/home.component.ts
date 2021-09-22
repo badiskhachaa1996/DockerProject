@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 
 import { AuthService } from '../services/auth.service';
-// import { User1 } from '../user1';
+
 
 @Component({
   selector: 'app-home',
@@ -13,7 +13,7 @@ import { AuthService } from '../services/auth.service';
 export class HomeComponent implements OnInit {
 
   User = JSON.parse(environment.User);
-  //  user:User1;
+
   tabUser: any[] = [];
   UserPreInscrit: any[] = [];
   UserInscrit: any[] = [];
@@ -56,7 +56,6 @@ export class HomeComponent implements OnInit {
 
     })
 
-    // this.user = new User1(1,"mal","derf","@gmzail"),
     this.cols = [
       { field: 'lastname', header: 'Nom' },
       { field: 'firstname', header: 'Prenom' },
@@ -101,7 +100,7 @@ export class HomeComponent implements OnInit {
   })
 
   saveUser() {
-    //Enregistrement de l'user
+    
     this.tabUser.push(this.RegisterForm.value)
     this.RegisterForm.reset()
     this.toggleForm()

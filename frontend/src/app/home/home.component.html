@@ -1,9 +1,8 @@
 <div *ngIf="showForm=='Fermer'">
-<app-register></app-register>
+    <app-register></app-register>
 </div>
 
-<button pButton type="button" [label]="showForm" style="margin-left: 90%;"
-    (click)="toggleForm()"></button>
+<button pButton type="button" [label]="showForm" style="margin-left: 90%;" (click)="toggleForm()"></button>
 <div class="grid">
     <div class="col-10 col-offset-1">
         <h3>Tableau des Utilisateurs</h3>
@@ -21,7 +20,8 @@
                     <tr>
                         <td style="background-color: white;" *ngFor="let col of columns" pDraggable="ListToPreInscrit"
                             (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)">
-                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)" *ngIf="!col.field"></i>
+                            <i style="margin-left: 30%;" class="pi pi-arrow-right" (click)="ListToPreInscrit(rowData)"
+                                *ngIf="!col.field"></i>
                             {{rowData[col.field]}}
                         </td>
                     </tr>
@@ -48,7 +48,8 @@
                         <td style="background-color: white;" *ngFor="let col of columns"
                             pDraggable="PreInscritToInscrit" (onDragStart)="dragStart($event, rowData)"
                             (onDragEnd)="dragEnd($event)">
-                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="PreInscritToInscrit(rowData)" *ngIf="!col.field"></i>
+                            <i style="margin-left: 25%;" class="pi pi-arrow-right"
+                                (click)="PreInscritToInscrit(rowData)" *ngIf="!col.field"></i>
                             {{rowData[col.field]}}
                         </td>
                     </tr>
@@ -74,7 +75,8 @@
                     <tr>
                         <td style="background-color: white;" *ngFor="let col of columns" pDraggable="InscritToList"
                             (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)">
-                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="InscritToList(rowData)" *ngIf="!col.field"></i>
+                            <i style="margin-left: 25%;" class="pi pi-arrow-right" (click)="InscritToList(rowData)"
+                                *ngIf="!col.field"></i>
                             {{rowData[col.field]}}
                         </td>
                     </tr>

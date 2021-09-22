@@ -8,6 +8,7 @@ const io = require("socket.io");
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {
     if(req.body.type=="Traitement de votre ticket"){
+        //Si le ticket est traité alors on supprime tout les notifications lié à ce ticket
         Notification.deleteMany({ticket_id:req.body.ticket_id},(err,resultat)=>{
             if(err){
                 res.send(err)
@@ -85,20 +86,8 @@ app.get("/get20ByUserID/:id", (req, res) => {
     })
 });
 
-app.get("/viewNotifByID/:id", (req, res) => {
-    Notification.findByIdAndUpdate(req.params.id,
-        {
-            etat:true,
-         
-        }, {new: true}, (err, notif) => {
-            if (err) {
-                res.send(err)
-            }
-            res.send(notif)
-        })
-});
-
 app.post("/viewNotifs", (req, res) => {
+    //Passe en vue une liste de notifications
     let notifications=req.body.notifications;
     let returnTick=[];
     notifications.forEach(element => {

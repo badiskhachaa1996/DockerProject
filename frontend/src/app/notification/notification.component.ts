@@ -18,7 +18,6 @@ export class NotificationComponent implements OnInit {
   userDic: any[] = [];
   retour: boolean = false;
   constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService: AuthService) { }
-  // "Nouveau Ticket Affecté" "Modification d'un ticket" "Nouveau Message" "Traitement de votre ticket" "Revert d'un ticket"
 
   ngOnInit(): void {
 

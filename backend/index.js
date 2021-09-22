@@ -59,6 +59,12 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         console.log(user._id+" connecté")
         socket.join(user._id)
+        if(user.service_id){
+            socket.join(user.service_id)
+        }else{
+            socket.join(user.role)
+        }
+        
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
@@ -70,6 +76,18 @@ io.on("connection", (socket) => {
 
     socket.on('reloadNotif',(data)=>{
         io.to(data.id).emit('reloadNotif')
+    })
+
+    socket.on('reloadImage',(data)=>{
+        io.to(data).emit('reloadImage')
+    })
+
+    socket.on('refreshServiceTicket',(service_id)=>{
+        io.to(service_id).emit('refreshServiceTicket')
+    })
+
+    socket.on('refreshServiceTicket',(service_id)=>{
+        io.to(service_id).emit('refreshServiceTicket')
     })
 
 });

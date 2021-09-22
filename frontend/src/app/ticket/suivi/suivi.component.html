@@ -6,7 +6,7 @@
                     <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAdd=false"> </i>
 
                     <form class="col-8 col-offset-2" [formGroup]="TicketForm">
-                        <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
+                      
                         <h3 class="text-center">Création d'un ticket</h3>
 
                         <div class="grid">
@@ -21,9 +21,7 @@
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 <label style="font-weight: bold;">Sujet:</label>
-                                <!--<span>
-                                    <p-dropdown formControlName="sujet" [options]="listSujets"></p-dropdown>
-                                </span>-->
+                               
                                 <select [disabled]="selectedService" formControlName="sujet"
                                     class="form-control col-12">
                                     <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet
@@ -63,7 +61,6 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdate=false"> </i>
 
                 <form class="col-8 col-offset-2" [formGroup]="TicketForm1">
-                    <!--<div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>-->
                     <h3 class="text-center">Modification d'un ticket</h3>
                     <div class="grid">
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
@@ -186,7 +183,6 @@
 
                 <ng-template pTemplate="body" let-rowData let-expanded="expanded">
                     <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
-                        <!--Si le ticket s'affiche pas c'est que le sujet ou le service a été supprimer-->
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
