@@ -57,6 +57,12 @@ export class ListTicketComponent implements OnInit {
     { label: 'En attente d\'une réponse', value: 'En attente d\'une réponse' },
     { label: 'Traité', value: 'Traité' }
   ]
+  showStatutTab2 = [
+    { label: "Tous les statuts", value: null },
+    { label: 'En cours de traitement', value: 'En cours de traitement' },
+    { label: 'En attente d\'une réponse', value: 'En attente d\'une réponse' },
+    { label: 'Traité', value: 'Traité' }
+  ]
 
 
   draggedTicket: Ticket;
