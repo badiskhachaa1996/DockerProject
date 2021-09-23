@@ -232,7 +232,7 @@ import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfig
             // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
             authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
             redirectUri: '/',
-            postLogoutRedirectUri: '/'
+            postLogoutRedirectUri: '/login'
           },
           cache: {
             cacheLocation: BrowserCacheLocation.LocalStorage,

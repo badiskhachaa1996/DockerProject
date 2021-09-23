@@ -33,7 +33,7 @@ app.post("/registre", (req, res) => {
         adresse: data.adresse,
         email: data.email,
         password: bcrypt.hashSync(data.password, 8),
-        role: data.role || "User",
+        role: data.role || "user",
         service_id: data?.service_id || null
     })
     user.save().then((userFromDb) => {
@@ -215,7 +215,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
   //Envoie de la photo de profile
 app.get('/getProfilePicture/:id',(req,res)=>{
     User.findById(req.params.id,(err,user)=>{
-        if(user.pathImageProfil){
+        if(user && user.pathImageProfil){
             let file = fs.readFileSync("storage/profile/" + user.pathImageProfil, { encoding: 'base64' }, (err) => {
                 if (err) {
                     return console.error(err);
@@ -226,6 +226,29 @@ app.get('/getProfilePicture/:id',(req,res)=>{
             res.send({ error:"Image non défini" })
         }
 
+    })
+})
+
+app.post('/AuthMicrosoft',(req,res)=>{
+    User.findOne({email:req.body.email},(err,user)=>{
+        if(user){
+            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
+            res.status(200).send({ token });
+        }else{
+            let lastname = req.body.name.substring(req.body.name.indexOf(" ")+1); //Morgan HUE
+            let firstname = req.body.name.replace(" "+lastname,'')
+            let user = new User({
+                firstname: firstname,
+                lastname: lastname,
+                email: req.body.email,
+                role: "user",
+                service_id: null
+            })
+            user.save().then((userFromDb) => {
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                res.status(200).send({ token ,message:"Nouveau compte crée"});
+            })
+        }
     })
 })
 

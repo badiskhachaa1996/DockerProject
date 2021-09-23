@@ -11,8 +11,7 @@ const user_schema= new mongoose.Schema({
         required:true
     },
     phone:{
-         type: String,
-         required : true
+         type: String
         },
     email:{
         type: String,
@@ -21,10 +20,10 @@ const user_schema= new mongoose.Schema({
     },
     password:{
         type: String,
-        required : true
     },
     role:{
         type: String,
+        default:"user",
         required:true
     },
     etat: {
@@ -32,8 +31,7 @@ const user_schema= new mongoose.Schema({
         default: false
     },
     adresse:{
-        type: String,
-        required:true
+        type: String
     },
     service_id:{
         type: mongoose.Schema.Types.ObjectId,
@@ -42,7 +40,7 @@ const user_schema= new mongoose.Schema({
     },
     civilite:{
         type: String,
-        required: true
+        default:"Monsieur"
 },
 pathImageProfil:{
     type: String,

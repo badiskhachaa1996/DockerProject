@@ -138,7 +138,7 @@ export class AppTopBarComponent implements OnInit {
   onLogout() {
     localStorage.clear();
     this.isAuth = false;
-    this.msalService.logoutPopup();
+    this.msalService.logoutRedirect();
     this.router.navigate(['/login'])
   }
 }

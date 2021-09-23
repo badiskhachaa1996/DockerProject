@@ -5,10 +5,10 @@
                 <form class="col-8 col-offset-2" [formGroup]="LoginForm">
                     <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Connexion</h3>
-                        <div class="p-grid">
+                        <div class="p-grid" style="text-align: center;">
                          
-                            <div class="col-offset-5 xl:col-offset-5 sm:col-offset-4">
-                                <button pButton class="ui-button-raised ui-button-success" [disabled]="LoginForm.invalid" (click)="toLogin()" label="Se connecter via Microsoft"></button>
+                            <div class="col-12">
+                                <button pButton class="ui-button-raised ui-button-success" (click)="toLogin()" label="Se connecter via Microsoft"></button>
                             </div>
                         </div>
                             <div class="mt-2 mb-2 col-12">
