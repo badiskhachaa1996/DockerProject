@@ -118,7 +118,7 @@ export class ModifierProfilComponent implements OnInit {
 
     this.token = jwt_decode(localStorage.getItem("token"))
 
-    if (this.token["role"].includes("User")) {
+    if (this.token["role"].includes("user")) {
       this.retour = true;
     }
 

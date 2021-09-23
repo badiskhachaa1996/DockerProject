@@ -96,6 +96,7 @@ export class SuiviComponent implements OnInit {
   updateList(){
     this.TicketService.getAllByUser(this.token["id"]).subscribe((data) => {
       this.ticketList = data;
+      console.log(data)
       this.ticketList.forEach((ticket,index)=>{
         this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
           (sujet)=>{
@@ -114,63 +115,60 @@ export class SuiviComponent implements OnInit {
   ngOnInit(): void {
     
     this.token = jwt_decode(localStorage.getItem("token"))
-
-    this.Ticket = <Ticket>history.state;
-
-    let token = localStorage.getItem("token")
-    if (token == null) {
+    if (this.token == null) {
       this.router.navigate(["/login"])
-    }
-    this.token = jwt_decode(token);
+    }else{
+      this.updateList()
 
-    this.updateList()
-
-    this.ServService.getDic().subscribe((data) => {
-      this.serviceDic = data;
-    })
-
-    this.AuthService.getAll().subscribe((data) => {
-      if (!data.message) {
-        data.forEach(user => {
-          this.userDic[user._id] = user;
-        });
-        this.userList = data;
-      }
-    })
-
-    this.SujetService.getAll().subscribe((data) => {
-      if (!data.message) {
-        this.filterSujet = data;
-        data.forEach(sujet => {
-          this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id };
-        });
-      }
-    })
-
-
-    this.ServService.getAll().subscribe((data) => {
-      if (!data.message) {
-        this.filterService = data;
-        data.forEach(service => {
-          this.dropdownService.push({label:service.label,value:service._id})
-          this.serviceList[service._id] = service.label;
-        });
-      }
-    })
-
-    this.ServService.getAll().subscribe((data) => {
-      this.listServices = data;
-      data.forEach(service => {
-        this.listSujets[service._id] = [];
-      });
-      this.SujetService.getAll().subscribe((data) => {
-        data.forEach(sujet => {
-          this.listSujets[sujet.service_id].push(sujet);
-        });
+      this.ServService.getDic().subscribe((data) => {
+        this.serviceDic = data;
       })
-    }, (error) => {
-      console.log(error)
-    })
+  
+      this.AuthService.getAll().subscribe((data) => {
+        if (!data.message) {
+          data.forEach(user => {
+            this.userDic[user._id] = user;
+          });
+          this.userList = data;
+        }
+      })
+  
+      this.SujetService.getAll().subscribe((data) => {
+        if (!data.message) {
+          this.filterSujet = data;
+          data.forEach(sujet => {
+            this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id };
+          });
+        }
+      })
+  
+  
+      this.ServService.getAll().subscribe((data) => {
+        if (!data.message) {
+          this.filterService = data;
+          data.forEach(service => {
+            this.dropdownService.push({label:service.label,value:service._id})
+            this.serviceList[service._id] = service.label;
+          });
+        }
+      })
+  
+      this.ServService.getAll().subscribe((data) => {
+        this.listServices = data;
+        data.forEach(service => {
+          this.listSujets[service._id] = [];
+        });
+        this.SujetService.getAll().subscribe((data) => {
+          data.forEach(sujet => {
+            this.listSujets[sujet.service_id].push(sujet);
+          });
+        })
+      }, (error) => {
+        console.log(error)
+      })
+    }
+
+
   }
 
   TicketForm: FormGroup = new FormGroup({

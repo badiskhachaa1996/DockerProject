@@ -167,6 +167,7 @@ export class ListTicketComponent implements OnInit {
 
   updateQueue() {
     this.showSujetQ = [{ label: "Tous les sujets", _id: null }]
+    console.log(this.token)
     if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
@@ -207,54 +208,54 @@ export class ListTicketComponent implements OnInit {
     } catch (e) {
       this.token = null
     }
+    console.log(this.token)
     if (this.token == null) {
       this.router.navigate(["/login"])
-    } else if (this.token["role"] == "Responsable" || this.token["role"] == "Admin") {
-      this.isReponsable = true;
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
-    }
-
-    this.ServService.getDic().subscribe((data) => {
-      this.serviceDic = data;
-    })
-    this.updateQueue()
-    this.updateAllList()
-    this.ServService.getAll().subscribe((data) => {
-      this.listServices = data;
-      if (!data.message) {
-        data.forEach(element => {
-          this.dropdownService.push({ label: element.label, value: element._id })
-          this.listSujetSelected[element._id] = [];
-          this.serviceList[element._id] = element.label;
-        });
-        this.SujetService.getAll().subscribe((data) => {
-          this.listSujets = data;
+    } else{
+        this.isReponsable = (this.token["role"] == "Responsable" || this.token["role"] == "Admin");
+        this.ServService.getDic().subscribe((data) => {
+          this.serviceDic = data;
+        })
+        this.updateQueue()
+        this.updateAllList()
+        this.ServService.getAll().subscribe((data) => {
+          this.listServices = data;
           if (!data.message) {
-
-            data.forEach(sujet => {
-              this.listSujetSelected[sujet.service_id].push(sujet);
-              this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
+            data.forEach(element => {
+              this.dropdownService.push({ label: element.label, value: element._id })
+              this.listSujetSelected[element._id] = [];
+              this.serviceList[element._id] = element.label;
             });
+            this.SujetService.getAll().subscribe((data) => {
+              this.listSujets = data;
+              if (!data.message) {
+    
+                data.forEach(sujet => {
+                  this.listSujetSelected[sujet.service_id].push(sujet);
+                  this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
+                });
+              }
+            })
           }
         })
-      }
-    })
-
-    this.updateAccAffList()
-
-    this.AuthService.getAll().subscribe((data) => {
-      if (!data.message) {
-        data.forEach(user => {
-          this.userDic[user._id] = null;
-          this.userDic[user._id] = user;
-          if (user.role == "Agent" && (user.service_id == this.token["service_id"])) {
-            this.userList.push(user);
+    
+        this.updateAccAffList()
+    
+        this.AuthService.getAll().subscribe((data) => {
+          if (!data.message) {
+            data.forEach(user => {
+              this.userDic[user._id] = null;
+              this.userDic[user._id] = user;
+              if (user.role == "Agent" && (user.service_id == this.token["service_id"])) {
+                this.userList.push(user);
+              }
+            });
+            this.AllUsers = data;
           }
-        });
-        this.AllUsers = data;
-      }
-    })
+        })
+    }
   }
 
   //QueueToAccAff

@@ -24,30 +24,21 @@ export class AuthService {
   register(user: User) {
     let API_URL = this.apiUrl+"registre";
     return this.http.post(API_URL, user)
-      .pipe(
-        catchError(this.handleError)
-      )
   }
  
   login(user){
     let loginUrl=this.apiUrl+"login";
-    return this.http.post<any>(loginUrl,user,httpOptions) .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<any>(loginUrl,user,httpOptions);
   }
 
   getAll(){
     let loginUrl=this.apiUrl+"getAll";
-    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(loginUrl,httpOptions1);
   }
 
   getById(id){
     let loginUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(loginUrl,httpOptions) .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(loginUrl,httpOptions);
   }
 
   update(user :User){
@@ -58,15 +49,12 @@ export class AuthService {
   
   getAllByService(id){
     let loginUrl=this.apiUrl+"getAllbyService/"+id;
-    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(loginUrl,httpOptions1) 
+    ;
   }
   getAllAgent(){
     let loginUrl=this.apiUrl+"getAllAgent/";
-    return this.http.get<any>(loginUrl,httpOptions1) .pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<any>(loginUrl,httpOptions1)
   }
  
   handleError(error: HttpErrorResponse) {
@@ -104,6 +92,9 @@ export class AuthService {
     this.socket.emit("reloadImage",(data))
   }
 
-
+  AuthMicrosoft(email,name){
+    let url=this.apiUrl+"AuthMicrosoft";
+    return this.http.post<any>(url,{email,name},httpOptions);
+  }
  
 }
