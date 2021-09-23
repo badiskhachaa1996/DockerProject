@@ -65,10 +65,10 @@
                                         <div class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}}
                                         </div>
-                                        <div class="sm:col-12 md:col-6">
+                                        <div *ngIf="userco.phone" class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Téléphone : </p> {{userco.phone}}
                                         </div>
-                                        <div class="sm:col-12 md:col-12">
+                                        <div *ngIf="userco.adresse" class="sm:col-12 md:col-12">
                                             <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}}
                                         </div>
                                     </div>

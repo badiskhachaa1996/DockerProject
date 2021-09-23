@@ -187,7 +187,7 @@
                                                 titlecase }} {{userDic[rowData.createur_id].lastname | titlecase
                                                 }}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].phone" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
@@ -200,7 +200,7 @@
                                                 {{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12">
+                                    <div *ngIf="userDic[rowData.createur_id].adresse" class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     postale:</b> </div>
@@ -381,20 +381,20 @@
                                                 {{userDic[rowData.createur_id].firstname | titlecase }}
                                                 {{userDic[rowData.createur_id].lastname | titlecase}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].phone" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].phone}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].email" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;"> Adresse
                                                     mail:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12">
+                                    <div *ngIf="userDic[rowData.createur_id].adresse" class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     postale:</b> </div>
@@ -597,20 +597,20 @@
                                                 {{userDic[rowData.createur_id].firstname | titlecase }}
                                                 {{userDic[rowData.createur_id].lastname | titlecase}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].phone" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].phone}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.createur_id].email" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     mail:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12">
+                                    <div *ngIf="userDic[rowData.createur_id].adresse" class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     postale:</b></div>
@@ -644,7 +644,7 @@
                                                 {{userDic[rowData.agent_id].lastname | titlecase}}
                                             </div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div *ngIf="userDic[rowData.agent_id].phone" class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b
                                                     style="text-align:left !important;">Téléphone:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
@@ -657,7 +657,7 @@
                                                 {{userDic[rowData.agent_id].email}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12">
+                                    <div *ngIf="userDic[rowData.agent_id].adresse" class="ui-g-12 ui-md-12">
                                         <div class="ui-g-12 ui-md-4">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     postale:</b> </div>

@@ -68,7 +68,7 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 ></button>
                         </td>
-                        <td>
+                        <td *ngIf="rowData.civilite">
                             {{rowData.civilite | i18nSelect: genderMap}} {{rowData.lastname | titlecase}} {{rowData.firstname | titlecase}}
                         </td>
                         <td *ngIf="rowData.service_id && serviceDic[rowData.service_id]!=undefined">
@@ -95,13 +95,13 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-6 ui-md-6">
+                                    <div *ngIf="rowData.phone" class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Téléphone:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.phone}} </div>
                                     </div>
-                                    <div class="ui-g-6 ui-md-6">
+                                    <div *ngIf="rowData.adresse" class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b
                                                 style="text-align:left !important;">Adresse:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { AppComponent } from './app.component';
 import { interval, Subscription } from 'rxjs';
 import jwt_decode from "jwt-decode";
@@ -11,6 +11,8 @@ import { Notification } from './models/notification';
 import { url } from 'inspector';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ListUserComponent } from './authentification/list-user/list-user.component';
+import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
+import { RedirectRequest } from '@azure/msal-browser';
 const io = require("socket.io-client");
 
 @Component({
@@ -46,13 +48,13 @@ export class AppTopBarComponent implements OnInit {
   
   constructor(public app: AppComponent, private AuthService: AuthService, 
     private router: Router, private NotificationService: NotificationService,
-    private listUserComponent: ListUserComponent){ }
+    private listUserComponent: ListUserComponent,@Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
+    private msalService: MsalService){ }
+
   userForm: FormGroup = new FormGroup({
     lastname: new FormControl('', Validators.required),//Lettre et espace
   });
   ngOnInit() {
-   
-
     this.connected = true;
     this.profilePicture = '../assets/layout/images/pages/avatar.png';
     if (localStorage.getItem("token") != null) {
@@ -136,6 +138,14 @@ export class AppTopBarComponent implements OnInit {
     localStorage.clear();
     this.isAuth = false;
     this.router.navigate(['/login'])
+  }
+
+  loginRedirect() {
+    if (this.msalGuardConfig.authRequest){
+      this.msalService.loginRedirect({...this.msalGuardConfig.authRequest} as RedirectRequest);
+    } else {
+      this.msalService.loginRedirect();
+    }
   }
 }
 

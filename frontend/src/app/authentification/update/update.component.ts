@@ -32,8 +32,8 @@ export class UpdateUserComponent implements OnInit {
     civilite: new FormControl(this.civiliteList[0], [Validators.required]),
     lastname: new FormControl(this.listUserComponent.selectedUser.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
-    phone: new FormControl(this.listUserComponent.selectedUser.phone, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
-    adresse: new FormControl(this.listUserComponent.selectedUser.adresse, [Validators.required]),
+    phone: new FormControl(this.listUserComponent.selectedUser?.phone, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.maxLength(10), Validators.minLength(10)]),
+    adresse: new FormControl(this.listUserComponent.selectedUser?.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
     service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required])
   })

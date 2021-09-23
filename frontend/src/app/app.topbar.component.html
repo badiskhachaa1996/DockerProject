@@ -31,7 +31,7 @@
                             <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
                             <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
                         </div>
-                        <a href="#" class="profile-detail-icon" (click)="onLogout()">
+                        <a href="#" class="profile-detail-icon" (click)="loginRedirect()"><!--onLogout()-->
                             <i class="pi pi-sign-out"></i>
                         </a>
                     </div>

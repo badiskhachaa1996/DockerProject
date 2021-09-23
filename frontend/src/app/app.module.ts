@@ -94,6 +94,8 @@ import { NotificationComponent } from './notification/notification.component'
 import {MenuItem} from 'primeng/api';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 import { FooterComponent } from './footer/footer.component';
+import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
+import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 
 
 
@@ -205,9 +207,54 @@ import { FooterComponent } from './footer/footer.component';
 
                
     ],
-        providers: [  MessageService ,ConfirmationService,ServiceComponent,ListUserComponent],
+        providers: [  MessageService ,ConfirmationService,ServiceComponent,ListUserComponent,
+              {
+                provide: MSAL_INSTANCE,
+                useFactory: MSALInstanceFactory
+              },
+              {
+                provide: MSAL_GUARD_CONFIG,
+                useFactory: MSALGuardConfigFactory
+              },
+              MsalService,
+              MsalGuard,
+              MsalBroadcastService],
         bootstrap: [AppComponent]
         })
       export class AppModule { }
        
 
+      export function MSALInstanceFactory(): IPublicClientApplication {
+        return new PublicClientApplication({
+          auth: {
+            // clientId: '6226576d-37e9-49eb-b201-ec1eeb0029b6', // Prod enviroment. Uncomment to use.
+            clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // PPE testing environment
+            // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
+            authority: 'https://login.microsoftonline.com/common', // PPE testing environment.
+            redirectUri: '/',
+            postLogoutRedirectUri: '/'
+          },
+          cache: {
+            cacheLocation: BrowserCacheLocation.LocalStorage,
+            storeAuthStateInCookie:  window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1, // set to true for IE 11
+          },
+          system: {
+            loggerOptions: {
+              loggerCallback,
+              logLevel: LogLevel.Info,
+              piiLoggingEnabled: false
+            }
+          }
+        });
+      }
+      export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+        return {
+          interactionType: InteractionType.Redirect,
+          authRequest: {
+            scopes: ['user.read']
+          }
+        };
+      }
+      export function loggerCallback(logLevel: LogLevel, message: string) {
+        console.log(message);
+      }
