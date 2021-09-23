@@ -122,6 +122,25 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 3rem"> </th>
+
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
+                            <p-sortIcon field="service"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                            <p-sortIcon field="sujet"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
+                            création <p-sortIcon field="date_ajout"></p-sortIcon>
+                        </th>
+                        <th style="text-decoration: underline; padding-top: 5%;"> Temps d'attente
+                        </th>
+                        <th style="text-decoration: underline;padding-top: 5%;">
+                            Action
+                        </th>
+                    </tr>
+
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
