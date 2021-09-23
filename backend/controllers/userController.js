@@ -156,16 +156,24 @@ app.get("/getAllAgent/", (req, res) => {
 
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id",(req,res)=>{
-    User.findOneAndUpdate({ _id: req.params.id },{
-        password:bcrypt.hashSync(req.body.password, 8)
-    }, { new: true }, (err, user) => {
-        if (err) {
-            console.log(err);
-            res.send(err)
+    User.findById(req.params.id,(err,user)=>{
+        comparer = bcrypt.compareSync(req.body.actualpassword, user.password)
+        if(comparer){
+            User.findOneAndUpdate({ _id: req.params.id },{
+                password:bcrypt.hashSync(req.body.password, 8)
+            }, { new: true }, (err, user) => {
+                if (err) {
+                    console.log(err);
+                    res.send(err)
+                }else{
+                    res.send(user)
+                }
+            })
         }else{
-            res.send(user)
+            res.send({error:"Pas le bon mot de passe actuel"})
         }
     })
+
 })
 
 //Sauvegarde de la photo de profile

@@ -95,9 +95,9 @@ export class AuthService {
     let url = this.apiUrl+"getProfilePicture/"+id;
     return this.http.get<any>(url,httpOptions1)
   }
-  updatePassword(id:string,password:string){
+  updatePassword(id:string,data){
     let url=this.apiUrl+"updatePassword/"+id;
-    return this.http.post<any>(url,{password},httpOptions);
+    return this.http.post<any>(url,data,httpOptions);
   }
 
   reloadImage(data){

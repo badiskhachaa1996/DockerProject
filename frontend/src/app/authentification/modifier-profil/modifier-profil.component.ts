@@ -60,22 +60,27 @@ export class ModifierProfilComponent implements OnInit {
   })
 
   PwdForm: FormGroup = new FormGroup({
-
+    passwordactual: new FormControl('', [Validators.required, Validators.minLength(5)]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
-
   })
+
+  get passwordactual() { return this.PwdForm.get('passwordactual'); }
+  get password() { return this.PwdForm.get('password'); }
+  get verifypassword() { return this.PwdForm.get('verifypassword'); }
+
   userpw: User;
+
   UpdatePwd() {
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
-
       this.userpw = jwt_decode(data['userToken'])['userFromDb']
-
-
-
-      this.AuthService.updatePassword(this.userpw._id, this.PwdForm.value.password).subscribe((data) => {
-
-        this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon mot de passe a bien été modifié' });
+      this.AuthService.updatePassword(this.userpw._id, {password:this.PwdForm.value.password,actualpassword:this.PwdForm.value.passwordactual}).subscribe((data) => {
+        if(data.error){
+          this.messageService.add({ severity: 'error', summary: 'Message de modification', detail: 'Le mot de passe actuel ne correspond pas' });
+        }else{
+          this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon mot de passe a bien été modifié' });
+          this.toggleUpdatepwd=false;
+        }
       }, (error) => {
         console.log(error)
       });
@@ -83,8 +88,9 @@ export class ModifierProfilComponent implements OnInit {
   }
   UpdateUser() {
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value)
-    this.AuthService.update(user).subscribe((data) => {
-
+    this.AuthService.update(user).subscribe((data) => { 
+      this.userco=data;
+      this.toggleUpdate=false;
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
 
     }, (error) => {
@@ -199,6 +205,16 @@ export class ModifierProfilComponent implements OnInit {
       return this.imageToShow
     }else{
       return "../assets/images/avatar.PNG"
+    }
+  }
+
+  showTitle(){
+    if(this.toggleUpdate){
+      return "Modifier mes informations"
+    }else if (this.toggleUpdatepwd){
+      return "Modifier mon mot de passe"
+    }else{
+      return "Mes informations"
     }
   }
 
