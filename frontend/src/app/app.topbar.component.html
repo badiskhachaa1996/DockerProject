@@ -1,4 +1,4 @@
-<div *ngIf="isAuth" class="layout-topbar">
+<div *ngIf="isAuth && this.router.url != '/profil/creation'" class="layout-topbar">
     <div class="layout-topbar-logo">
         <a href="#">
             <img src="../assets/layout/images/logo.png" Style="width: 15em;">

@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
   get password() { return this.LoginForm.get('password'); }
 
   ngOnInit(): void {
-    console.log(localStorage.getItem("token"))//localStorage.getItem('modify')=="true"
     if (localStorage.getItem('modify') == "true") {
       localStorage.removeItem('modify')
       this.router.navigate(['/profil/creation'])

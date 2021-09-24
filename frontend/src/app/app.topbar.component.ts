@@ -31,7 +31,6 @@ export class AppTopBarComponent implements OnInit {
   public notifications;
   connected = false;
   subscription: Subscription;
-  source = interval(3000);
   keycloak: any;
   isAuth = false;
   notif = false;
@@ -50,8 +49,7 @@ export class AppTopBarComponent implements OnInit {
 
   constructor(public app: AppComponent, private AuthService: AuthService,
     private router: Router, private NotificationService: NotificationService,
-    private msalBroadcastService: MsalBroadcastService,
-    private listUserComponent: ListUserComponent, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
+ @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private msalService: MsalService) { }
 
   userForm: FormGroup = new FormGroup({
@@ -65,7 +63,14 @@ export class AppTopBarComponent implements OnInit {
       let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
-        this.socket.emit("userLog", this.userconnected)
+        if(this.userconnected){
+          this.socket.emit("userLog", this.userconnected)
+        }else if(this.userconnected.adresse==null || !this.userconnected.phone==null || !this.userconnected.civilite==null){
+          this.router.navigateByUrl('/profil/creation')
+        }else{
+          console.log(this.userconnected)
+        }
+        
       }, (error) => {
         console.log(error)
       })
@@ -130,7 +135,8 @@ export class AppTopBarComponent implements OnInit {
 
         })
       })
-
+    }else if (localStorage.getItem("token") == null){
+      this.router.navigateByUrl('/login')
     }
   }
 
@@ -139,7 +145,6 @@ export class AppTopBarComponent implements OnInit {
     localStorage.clear();
     this.isAuth = false;
     this.msalService.logoutRedirect();
-    this.router.navigate(['/login'])
   }
 }
 

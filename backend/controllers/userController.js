@@ -201,12 +201,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
         typeImageProfil:file.mimetype
     },(err,user)=>{
         //Renvoie de la photo de profile au Front pour pouvoir l'afficher
-        let fileToSend = fs.readFileSync("storage/profile/" + file.filename, { encoding: 'base64' }, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-        });
-        res.send({file:fileToSend,documentType:file.mimetype});
+        res.send({message:"Photo mise à jour"});
        
     })
 

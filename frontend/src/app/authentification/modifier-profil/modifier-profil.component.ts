@@ -115,6 +115,9 @@ export class ModifierProfilComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.reader.addEventListener("load", () => {
+      this.imageToShow = this.reader.result;
+    }, false);
 
     this.token = jwt_decode(localStorage.getItem("token"))
 
@@ -131,9 +134,6 @@ export class ModifierProfilComponent implements OnInit {
       }else{
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         let blob:Blob = new Blob([byteArray], { type: data.documentType })
-        this.reader.addEventListener("load", () => {
-          this.imageToShow = this.reader.result;
-        }, false);
         if (blob) { 
           this.imageToShow="../assets/images/avatar.PNG"
           this.reader.readAsDataURL(blob);
@@ -184,16 +184,13 @@ export class ModifierProfilComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', event[0])
       formData.append('id', this.token.id)
-      this.AuthService.uploadimageprofile(formData).subscribe((data) => {
-        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-        let blob:Blob = new Blob([byteArray], { type: data.documentType })
-        if (blob) {
+      this.AuthService.uploadimageprofile(formData).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de votre photo de profil avec succès' });
           this.imageToShow="../assets/images/avatar.PNG"
-          this.reader.readAsDataURL(blob);
+          this.reader.readAsDataURL(event[0]);
           let avoidError : any = document.getElementById('selectedFile')
           avoidError.value=""
           this.AuthService.reloadImage(this.token.id)
-        }
       }, (error) => {
         console.log(error)
       })
