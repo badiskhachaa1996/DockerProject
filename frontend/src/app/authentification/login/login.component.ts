@@ -52,6 +52,7 @@ export class LoginComponent implements OnInit {
           if (response.account) {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
               this.auth(data)
+              
             })
           }
         });

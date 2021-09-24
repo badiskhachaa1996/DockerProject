@@ -16,6 +16,8 @@ import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Notification } from 'src/app/models/notification';
 import { FileUpload } from 'primeng/fileupload';
+import { SocketService } from 'src/app/services/socket.service';
+const io = require("socket.io-client");
 
 @Component({
   selector: 'app-suivi',
@@ -23,6 +25,7 @@ import { FileUpload } from 'primeng/fileupload';
   styleUrls: ['./suivi.component.css']
 })
 export class SuiviComponent implements OnInit {
+  socket = io("http://localhost:3000");
   [x: string]: any;
 
   ticketList: Ticket[] = [];
@@ -110,7 +113,7 @@ export class SuiviComponent implements OnInit {
     })
   }
 
-  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService,private NotifService:NotificationService) { }
+  constructor( private AuthService: AuthService, private router: Router, private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private messageService: MessageService,private MsgServ:MsgService,private NotifService:NotificationService,private Socket:SocketService) { }
 
   ngOnInit(): void {
     
@@ -167,8 +170,23 @@ export class SuiviComponent implements OnInit {
         console.log(error)
       })
     }
+    this.socket.on("refreshSuivi", () => {
+      this.updateList()
+    })
 
-
+    this.socket.on("refreshMessage", () => {
+      if (this.comments && this.comments.length > 0) {
+        this.MsgServ.getAllByTicketID(this.comments[0].ticket_id)
+        .subscribe(
+          data => {
+            this.comments = data;
+          },
+          error => {
+            console.log(error);
+          });
+      }
+    })
+    this.updateList()
   }
 
   TicketForm: FormGroup = new FormGroup({
@@ -263,6 +281,7 @@ export class SuiviComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateList()
       this.TicketForm.reset()
+      this.Socket.AddNewTicket(this.TicketForm.value.sujet.service_id)
       this.TicketForm.setValue({description:null,sujet:'',service:''})
 
     }, (error) => {
