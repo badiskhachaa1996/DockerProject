@@ -264,7 +264,6 @@ export class SuiviComponent implements OnInit {
       this.updateList()
       this.TicketForm.reset()
       this.TicketForm.setValue({description:null,sujet:'',service:''})
-      this.toggleFormAdd()
 
     }, (error) => {
       console.log(error)

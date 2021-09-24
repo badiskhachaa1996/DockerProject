@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
     console.log(localStorage.getItem("token"))//localStorage.getItem('modify')=="true"
     if (localStorage.getItem('modify') == "true") {
       localStorage.removeItem('modify')
-      this.router.navigate(['/modification'])
+      this.router.navigate(['/profil/creation'])
     } else if (localStorage.getItem("token") != null) {
       this.router.navigate(['/ticket/suivi'])
     }
@@ -66,10 +66,8 @@ export class LoginComponent implements OnInit {
     if (data.message) {
       localStorage.setItem("modify", "true")
       window.location.reload();
-      //this.router.navigate(['/modification'])
     } else {
       window.location.reload();
-      //this.router.navigate(['/ticket/suivi'])
     }
   }
 }

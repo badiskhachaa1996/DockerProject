@@ -19,12 +19,12 @@
                     <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
                             <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
             </div>
-                <img [src]="imageToShow" style="width: 39px; height: 39px;">
+                <img [src]="imageToShow" style="max-width: 39px; max-height: 39px;">
             </a>
             <ul class="fadeInDown">
                 <li class="profile-detail">
                     <div class="user-profile-info">
-                        <img [src]="imageToShow" style="width: 39px; height: 39px;">
+                        <img [src]="imageToShow" style="max-width: 39px; max-height: 39px;">
                         <div *ngIf="userconnected" class="profile-info">
                             <span class="user-profile-name">{{userconnected.firstname}}
                                 {{userconnected.lastname}}</span>
@@ -37,7 +37,7 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#" routerLink="/modification" (click)="app.onTopbarItemClick($event,profile)">
+                    <a href="#" routerLink="/profil" (click)="app.onTopbarItemClick($event,profile)">
                         <i style="color: #3da827;" class="pi pi-user"></i>
                         <div class="menu-text">
                             <span class="menu-title">Profil</span>

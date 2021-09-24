@@ -43,7 +43,7 @@
                             </div>
                             <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="TicketForm.invalid" label="Enregistrer" (click)="addTicket()"></button>
+                                    [disabled]="TicketForm.invalid" label="Enregistrer" (click)="addTicket();showFormAdd=false"></button>
                             </div>
                         </div>
                     </form>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm1.invalid"
-                                [routerLink]="['/ticket/suivi']" label="Enregistrer" (click)="modifyTicket()">
+                                [routerLink]="['/ticket/suivi']" label="Enregistrer" (click)="modifyTicket();showFormUpdate=false">
                             </button>
                         </div>
                     </div>
