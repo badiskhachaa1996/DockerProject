@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { User } from 'src/app/models/User';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
-import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 
 @Component({
@@ -16,21 +14,20 @@ import { Service } from 'src/app/models/Service';
 })
 export class ModifierProfilComponent implements OnInit {
   Services: Service[]
-  items: MenuItem[]
   Roles = environment.role;
   showForm: boolean = true;
   civiliteList = environment.civilite;
   decodeToken: any = jwt_decode(localStorage.getItem("token"))
   token = null;
 
-  reader:FileReader = new FileReader();
+  reader: FileReader = new FileReader();
 
   retour: boolean = false;
   toggleUpdate: boolean = false
   toggleUpdatepwd: boolean = false
   userupdate: any = this.decodeToken;
   userco: any = this.userupdate;
-  imageToShow: any ="../assets/images/avatar.PNG";
+  imageToShow: any = "../assets/images/avatar.PNG";
 
   public ToggleUpdate() {
     this.toggleUpdate = !this.toggleUpdate
@@ -74,12 +71,12 @@ export class ModifierProfilComponent implements OnInit {
   UpdatePwd() {
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
       this.userpw = jwt_decode(data['userToken'])['userFromDb']
-      this.AuthService.updatePassword(this.userpw._id, {password:this.PwdForm.value.password,actualpassword:this.PwdForm.value.passwordactual}).subscribe((data) => {
-        if(data.error){
+      this.AuthService.updatePassword(this.userpw._id, { password: this.PwdForm.value.password, actualpassword: this.PwdForm.value.passwordactual }).subscribe((data) => {
+        if (data.error) {
           this.messageService.add({ severity: 'error', summary: 'Message de modification', detail: 'Le mot de passe actuel ne correspond pas' });
-        }else{
+        } else {
           this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon mot de passe a bien été modifié' });
-          this.toggleUpdatepwd=false;
+          this.toggleUpdatepwd = false;
         }
       }, (error) => {
         console.log(error)
@@ -88,9 +85,9 @@ export class ModifierProfilComponent implements OnInit {
   }
   UpdateUser() {
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value)
-    this.AuthService.update(user).subscribe((data) => { 
-      this.userco=data;
-      this.toggleUpdate=false;
+    this.AuthService.update(user).subscribe((data) => {
+      this.userco = data;
+      this.toggleUpdate = false;
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
 
     }, (error) => {
@@ -106,12 +103,7 @@ export class ModifierProfilComponent implements OnInit {
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
 
-
-  onClickMenu(item: any) {
-    console.log("option Modifier profil")
-
-  }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService,) { }
+  constructor(private AuthService: AuthService, private messageService: MessageService,) { }
 
 
   ngOnInit(): void {
@@ -128,14 +120,14 @@ export class ModifierProfilComponent implements OnInit {
 
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
-    this.AuthService.getProfilePicture(decodeToken.id).subscribe((data)=>{
-      if(data.error){
-        this.imageToShow="../assets/images/avatar.PNG"
-      }else{
+    this.AuthService.getProfilePicture(decodeToken.id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-        let blob:Blob = new Blob([byteArray], { type: data.documentType })
-        if (blob) { 
-          this.imageToShow="../assets/images/avatar.PNG"
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
           this.reader.readAsDataURL(blob);
         }
       }
@@ -147,32 +139,6 @@ export class ModifierProfilComponent implements OnInit {
       this.userco = jwt_decode(data['userToken'])['userFromDb']
 
     }, (err) => console.log(err))
-
-    this.items = [
-      {
-        label: 'Modifier mes informations',
-        icon: 'pi pi-fw pi-refresh',
-        command: (event) => {
-          this.ToggleUpdate();
-
-          //event.item: menuitem metadata
-        }
-      },
-      {
-        label: 'Changer ma photo de profil',
-        icon: 'pi pi-fw pi-image',
-        command: (event) => {
-          document.getElementById('selectedFile').click();
-        }
-      },
-      {
-        label: 'Modifier mon mot de passe ',
-        icon: 'pi pi-fw pi-lock',
-        command: (event) => {
-          this.ToggleUpdatepwd();
-        }
-      }
-    ];
 
   }
   clickFile() {
@@ -186,31 +152,31 @@ export class ModifierProfilComponent implements OnInit {
       formData.append('id', this.token.id)
       this.AuthService.uploadimageprofile(formData).subscribe(() => {
         this.messageService.add({ severity: 'success', summary: 'Photo de profil', detail: 'Mise à jour de votre photo de profil avec succès' });
-          this.imageToShow="../assets/images/avatar.PNG"
-          this.reader.readAsDataURL(event[0]);
-          let avoidError : any = document.getElementById('selectedFile')
-          avoidError.value=""
-          this.AuthService.reloadImage(this.token.id)
+        this.imageToShow = "../assets/images/avatar.PNG"
+        this.reader.readAsDataURL(event[0]);
+        let avoidError: any = document.getElementById('selectedFile')
+        avoidError.value = ""
+        this.AuthService.reloadImage(this.token.id)
       }, (error) => {
         console.log(error)
       })
     }
   }
 
-  getImage(){
-    if(this.imageToShow){
+  getImage() {
+    if (this.imageToShow) {
       return this.imageToShow
-    }else{
+    } else {
       return "../assets/images/avatar.PNG"
     }
   }
 
-  showTitle(){
-    if(this.toggleUpdate){
+  showTitle() {
+    if (this.toggleUpdate) {
       return "Modifier mes informations"
-    }else if (this.toggleUpdatepwd){
+    } else if (this.toggleUpdatepwd) {
       return "Modifier mon mot de passe"
-    }else{
+    } else {
       return "Mes informations"
     }
   }
