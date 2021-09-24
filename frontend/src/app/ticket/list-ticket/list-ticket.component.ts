@@ -270,16 +270,19 @@ export class ListTicketComponent implements OnInit {
     })
 
     this.socket.on("refresh3emeTableau", () => {
+      console.log("REFRESH 3")
       this.updateAllList()
     })
 
     this.socket.on("refreshAllTickets", () => {
+      console.log("REFRESH ALL")
       this.updateQueue()
       this.updateAccAffList()
       this.updateAllList()
     })
 
     this.socket.on("refreshQueue", () => {
+      console.log("REFRESH Q")
       this.updateQueue()
     })
   }
@@ -298,8 +301,10 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.SujetService.getASujetByid(res.sujet_id).subscribe((sujet) => {
+        console.log({ service_id: sujet.dataSujet.service_id, user_id: res.createur_id })
         this.Socket.AccepteTicket({ service_id: sujet.dataSujet.service_id, user_id: res.createur_id })
       })
+      this.updateQueue()
       this.updateAccAffList()
       this.updateAllList()
     }, (error) => {
@@ -339,6 +344,7 @@ export class ListTicketComponent implements OnInit {
       }, (error) => {
         console.log(error)
       });
+      this.updateQueue()
       this.updateAllList()
       this.showDropDown = null;
     }, (error) => {

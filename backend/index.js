@@ -57,53 +57,58 @@ app.use('/notification', notifController)
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
-        console.log(user._id+" connecté")
         socket.join(user._id)
-        if(user.service_id){
+        console.log("Connexion de :"+user._id)
+        /*if (user.service_id) {
             socket.join(user.service_id)
-        }else{
+        } else {
             //User ou Admin
             socket.join(user.role)
-        }
-        
+        }*/
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
     socket.on('NewNotif', (data) => {
-        console.log("Nouvelle notif pour: "+data.user_id)
         io.to(data.user_id).emit('NewNotif', data)
-        io.emit(data,{NewNotif:  data});
+        console.log("New notif à: "+data.user_id)
+        io.emit(data, { NewNotif: data });
     })
 
-    socket.on('reloadNotif',(data)=>{
+    socket.on('reloadNotif', (data) => {
         io.to(data.id).emit('reloadNotif')
     })
 
-    socket.on('reloadImage',(data)=>{
+    socket.on('reloadImage', (data) => {
         io.to(data).emit('reloadImage')
     })
 
     //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
-    socket.on('AddNewTicket',(service_id)=>{
-        io.to(service_id).emit('refreshQueue')
+    socket.on('AddNewTicket', (service_id) => {
+        console.log("Refresh de la queue du service:" + service_id)
+        io.to("Admin").to(service_id).emit('refreshQueue')
     })
 
     //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
-    socket.on('NewMessageByAgent',(user_id,service_id)=>{
-        io.to(user_id).emit('refreshMessage')
-        io.to(service_id).emit('refresh3emeTableau')
+    socket.on('NewMessageByAgent', (data) => {
+        //Refresh du message de l'user et des tickets (à cause du statut)
+        io.to(data.user_id).emit('refreshMessage')
+        //Refresh du 3ème tableau du service (à cause du Tableau)
+        io.to("Admin").to(data.service_id).emit('refresh3emeTableau')
     })
 
     //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
-    socket.on('NewMessageByUser',(agent_id)=>{
+    socket.on('NewMessageByUser', (agent_id) => { 
         io.to(agent_id).emit('refreshMessage')
     })
 
-    //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents
-    socket.on('AccepteTicket',(agent_id)=>{
-        io.to(agent_id).emit('refreshAllTickets')
+    //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents et du créateur
+    socket.on('AccepteTicket', (data) => {
+        //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents
+        console.log("Refresh du suivi de: " + data.user_id)
+        io.to("Admin").to(data.service_id).emit('refreshAllTickets')
+        //Refresh les tickets suivi de l'user
+        io.to(data.user_id).emit('refreshSuivi')
     })
-
 });
 
 httpServer.listen(3000, () => {

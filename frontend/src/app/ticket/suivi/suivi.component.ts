@@ -171,6 +171,7 @@ export class SuiviComponent implements OnInit {
       })
     }
     this.socket.on("refreshSuivi", () => {
+      console.log("REFRESH SUIVI")
       this.updateList()
     })
 
@@ -280,8 +281,9 @@ export class SuiviComponent implements OnInit {
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateList()
-      this.TicketForm.reset()
+      console.log("AddNewTicket "+this.TicketForm.value.sujet.service_id)
       this.Socket.AddNewTicket(this.TicketForm.value.sujet.service_id)
+      this.TicketForm.reset()
       this.TicketForm.setValue({description:null,sujet:'',service:''})
 
     }, (error) => {
