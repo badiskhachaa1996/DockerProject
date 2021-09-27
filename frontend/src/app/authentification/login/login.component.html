@@ -1,14 +1,15 @@
-<div class="p-grid">
+<div class="p-grid" style="padding-top: 12%;">
     <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
                 <form class="col-8 col-offset-2" [formGroup]="LoginForm">
                     <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
                     <h3 class="text-center">Connexion</h3>
-                    <div class="p-grid" style="text-align: center;">
-                        <div class="col-12">
-                            <button pButton class="ui-button-raised ui-button-success" icon="pi pi-microsoft"
-                                iconPos="left" (click)="toLogin()" label="Se connecter via Microsoft"></button>
+                    <div class="grid row">
+                        <div class="col-6 col-offset-3 btnBW2 flex justify-content-center" (click)="toLogin()">
+                            <img class="micro flex align-items-center justify-content-center mr-2"
+                                src="../../../assets/images/microsoft.svg" alt="Microsoft">
+                            <p class="flex align-items-center justify-content-center">Se connecter via Microsoft</p>
                         </div>
                     </div>
                 </form>

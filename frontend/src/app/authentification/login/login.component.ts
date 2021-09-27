@@ -60,14 +60,10 @@ export class LoginComponent implements OnInit {
   }
 
   auth(data) {
-    console.log(data)
     localStorage.setItem("token", data.token)
-    console.log(localStorage.getItem("token"))
     if (data.message) {
       localStorage.setItem("modify", "true")
-      window.location.reload();
-    } else {
-      window.location.reload();
     }
+    window.location.reload();
   }
 }

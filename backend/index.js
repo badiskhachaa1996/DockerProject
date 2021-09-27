@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         socket.join(user._id)
         console.log("Connexion de :"+user._id)
-        /*if (user.service_id) {
+        /*if (user.service_id) {//TODO Ne rejoins qu'une salle
             socket.join(user.service_id)
         } else {
             //User ou Admin

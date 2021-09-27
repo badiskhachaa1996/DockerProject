@@ -31,8 +31,8 @@ app.post("/registre", (req, res) => {
         lastname: data.lastname,
         phone: data.phone,
         adresse: data.adresse,
-        email: data.email,
-        password: bcrypt.hashSync(data.password, 8),
+        email: data?.email,
+        /*password: bcrypt.hashSync(data.password, 8),*/
         role: data.role || "user",
         service_id: data?.service_id || null
     })

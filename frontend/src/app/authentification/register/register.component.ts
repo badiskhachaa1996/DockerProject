@@ -34,8 +34,8 @@ export class RegisterComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
     adresse: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    /*password: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),*/
     role: new FormControl('user', Validators.required),
     service_id: new FormControl(null),
 
@@ -47,7 +47,8 @@ export class RegisterComponent implements OnInit {
       this.RegisterForm.value.lastname,
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
-      this.RegisterForm.value.password,
+      null,
+      //this.RegisterForm.value.password,
       this.RegisterForm.value.role.value || this.Roles[0].value,
       null,
       this.RegisterForm.value.adresse,
@@ -86,8 +87,8 @@ export class RegisterComponent implements OnInit {
   get email() { return this.RegisterForm.get('email'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get adresse() { return this.RegisterForm.get('adresse'); }
-  get password() { return this.RegisterForm.get('password'); }
-  get verifypassword() { return this.RegisterForm.get('verifypassword'); }
+  /*get password() { return this.RegisterForm.get('password'); }
+  get verifypassword() { return this.RegisterForm.get('verifypassword'); }*/
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
