@@ -142,7 +142,7 @@ export class AppTopBarComponent implements OnInit {
 
 
   onLogout() {
-    localStorage.clear();
+    localStorage.removeItem("token");
     this.isAuth = false;
     this.msalService.logoutRedirect();
   }

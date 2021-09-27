@@ -60,7 +60,8 @@ export class FirstconnectionComponent implements OnInit {
     )
     this.AuthService.update(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil réussie' });
-      this.router.navigateByUrl('/ticket/suivi')
+      localStorage.removeItem('modify')
+      window.location.reload();
     }, (error) => {
       if (error.status == 500 || error.includes("500")) {
         //Bad Request (Champ non fourni)

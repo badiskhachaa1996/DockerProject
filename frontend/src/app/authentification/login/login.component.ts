@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     if (localStorage.getItem('modify') == "true") {
-      localStorage.removeItem('modify')
       this.router.navigate(['/profil/creation'])
     } else if (localStorage.getItem("token") != null) {
       this.router.navigate(['/ticket/suivi'])
@@ -52,7 +51,6 @@ export class LoginComponent implements OnInit {
           if (response.account) {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
               this.auth(data)
-              
             })
           }
         });

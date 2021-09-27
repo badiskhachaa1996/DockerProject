@@ -55,7 +55,8 @@ app.post("/create", (req, res) => {
             User.findOne({ _id: tickFromDb.agent_id }).then((userFromDb) => {
                 if (msg.isRep) {
                     //Envoie du mail, pour avertir d'un nouveau message sur son ticket
-                    let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour sujet <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,

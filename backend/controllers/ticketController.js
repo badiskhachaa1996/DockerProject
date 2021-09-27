@@ -243,7 +243,8 @@ app.post("/AccAff/:id", (req, res) => {
                 res.send(user);
                 if (user.isAffected) {
                     User.findOne({ _id: user.agent_id }).then((userFromDb) => {
-                        let html2 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour description <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                        let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                        let html2 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + ' et qui a pour description <b> ' + user.description + ' </b> vous a été  affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -286,7 +287,8 @@ app.post("/changeService/:id", (req, res) => {
             } else {
                 res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
-                    let html3 = '<p style="color:black">Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour sujet : <b> ' + userFromDb.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                    let html3 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour sujet : <b> ' + userFromDb.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
 
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
@@ -331,7 +333,8 @@ app.post("/changeStatut/:id", (req, res) => {
             } else {
                 if (user.statut == "En attente d\'une réponse") {
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        let html4 = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                        let html4 = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -360,7 +363,8 @@ app.post("/changeStatut/:id", (req, res) => {
                 }
                 else if (user.statut === "Traité") {
                     User.findOne({ _id: user.createur_id }).then((userFromDb) => {
-                        let html5 = '<p style="color:black"> Bonjour '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                        let html5 = '<p style="color:black"> Bonjour '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -405,7 +409,8 @@ app.post("/revertTicket/:id", (req, res) => {
     Ticket.findById(req.params.id).then((ticket) => {
         User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
             if (req.body.revertedByAdmin) {
-                let htmlemail = '<p style="color:black"> Bonjour  '+(user.civilite=='Monsieur')?'M. ':'Mme ' + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + req.params.id + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                let gender = (user.civilite=='Monsieur')?'M. ':'Mme ';
+                let htmlemail = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + req.params.id + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                 let mailOptions = {
                     from: 'estya-ticketing@estya.com',
                     to: userFromDb.email,

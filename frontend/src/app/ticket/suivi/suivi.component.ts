@@ -121,6 +121,9 @@ export class SuiviComponent implements OnInit {
     if (this.token == null) {
       this.router.navigate(["/login"])
     }else{
+      if (localStorage.getItem('modify') == "true" || this.token.phone == null || this.token.adresse == null) {
+        this.router.navigate(['/profil/creation'])
+      }
       this.updateList()
 
       this.ServService.getDic().subscribe((data) => {
