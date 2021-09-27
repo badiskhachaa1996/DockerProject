@@ -49,6 +49,7 @@ export class SuiviComponent implements OnInit {
   selectedService;
   listServices;
   listSujets: any[] = [];
+  serviceDic: any[] = []
 
   userDic: any[] = [];
 
