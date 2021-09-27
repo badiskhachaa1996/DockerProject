@@ -24,7 +24,7 @@
                                
                                 <select [disabled]="selectedService" formControlName="sujet"
                                     class="form-control col-12">
-                                    <option *ngIf="TicketForm.value.service" [ngValue]="null">Choissisez un sujet
+                                    <option *ngIf="TicketForm.value.service" [ngValue]="null" disabled>Choissisez un sujet
                                     </option>
                                     <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]"
                                         [ngValue]="sujet">
