@@ -97,7 +97,7 @@ export class ListTicketComponent implements OnInit {
   expandedAll = {};
 
   dragStart(event, ticket: Ticket) {
-    this.draggedTicket = ticket;
+      this.draggedTicket = ticket;
   }
 
   dragEnd(event) {
@@ -106,8 +106,10 @@ export class ListTicketComponent implements OnInit {
 
   //QueueToAccAff
   dragQueueToAccAff(event?) {
-    this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
-    this.Accepted(this.draggedTicket)
+    if(this.draggedTicket.createur_id!=this.token.id){
+      this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
+      this.Accepted(this.draggedTicket)
+    }
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
@@ -247,7 +249,7 @@ export class ListTicketComponent implements OnInit {
           data.forEach(user => {
             this.userDic[user._id] = null;
             this.userDic[user._id] = user;
-            if (user.role == "Agent" && (user.service_id == this.token["service_id"])) {
+            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
               this.userList.push(user);
             }
           });
