@@ -10,7 +10,7 @@
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <label style="font-weight: bold;">Service:</label>
 
-                            <select formControlName="service" class="form-control col-12">
+                            <select formControlName="service" class="form-control col-12" (change)="changeServiceDropDown($event)">
                                 <option [ngValue]="null" disabled>Choissisez un service</option>
                                 <option *ngFor="let service of listServices" [ngValue]="service">
                                     {{ service.label }}
@@ -169,8 +169,8 @@
                             {{showWaitingTime(rowData)}}
                         </td>
                         <td>
-                            <i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="QueueToAccAff(rowData)"></i>
+                            <i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
+                                class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
 
                             <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"></i>

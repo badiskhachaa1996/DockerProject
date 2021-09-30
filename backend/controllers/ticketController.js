@@ -285,6 +285,7 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
+                console.log(ticket)
                 res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';

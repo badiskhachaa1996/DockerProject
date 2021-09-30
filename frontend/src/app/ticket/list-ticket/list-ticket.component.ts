@@ -50,8 +50,8 @@ export class ListTicketComponent implements OnInit {
   userDic: any[] = [];
   serviceDic: any[] = []
 
-  showSujetQ: Sujet[] = [{ label: "Tous les sujets", _id: null }];
-  showSujetAccAff: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showSujetQ = [{ label: "Tous les sujets", _id: null , value:null}];
+  showSujetAccAff = [{ label: "Tous les sujets", _id: null, value:null }];
   showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
   showStatut = [
     { label: "Tous les statuts", value: null },
@@ -114,7 +114,7 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService) { }
 
   updateAccAffList() {
-    this.showSujetAccAff = [{ label: "Tous les sujets", _id: null }]
+    this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value:null}]
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
@@ -123,7 +123,7 @@ export class ListTicketComponent implements OnInit {
             (sujet) => {
               ticket["service_id"] = sujet.dataSujet.service_id
               this.AccAffList.splice(index, 1, ticket)
-              this.showSujetAccAff.push(sujet.dataSujet)
+              this.showSujetAccAff.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
             }
           )
         })
@@ -166,8 +166,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateQueue() {
-    this.showSujetQ = [{ label: "Tous les sujets", _id: null }]
-    console.log(this.token)
+    this.showSujetQ = [{ label: "Tous les sujets", _id: null, value:null}]
     if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
@@ -177,7 +176,7 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 ticket["service_id"] = sujet.dataSujet.service_id
                 this.queueList.splice(index, 1, ticket)
-                this.showSujetQ.push(sujet.dataSujet)
+                this.showSujetQ.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
 
               }
             )
@@ -192,7 +191,7 @@ export class ListTicketComponent implements OnInit {
           this.queueList.forEach((ticket) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
               (sujet) => {
-                this.showSujetQ.push(sujet.dataSujet)
+                this.showSujetQ.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
               }
             )
           })
@@ -203,12 +202,12 @@ export class ListTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.showStatutTab2)
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
       this.token = null
     }
-    console.log(this.token)
     if (this.token == null) {
       this.router.navigate(["/login"])
     } else if (this.token["role"].includes("user")) {
@@ -301,7 +300,6 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.SujetService.getASujetByid(res.sujet_id).subscribe((sujet) => {
-        console.log({ service_id: sujet.dataSujet.service_id, user_id: res.createur_id })
         this.Socket.AccepteTicket({ service_id: sujet.dataSujet.service_id, user_id: res.createur_id })
       })
       this.updateQueue()
@@ -406,6 +404,8 @@ export class ListTicketComponent implements OnInit {
         this.TicketForm.patchValue({ service: element })
       }
     });
+    console.log(data.sujet_id)
+    console.log(this.listSujets)
     this.listSujets.forEach(element => {
       if (element._id == data.sujet_id) {
         this.TicketForm.patchValue({ sujet: element })
@@ -414,6 +414,9 @@ export class ListTicketComponent implements OnInit {
     this.isModify = data;
   }
 
+  changeServiceDropDown(){
+    this.TicketForm.patchValue({sujet:this.listSujetSelected[this.TicketForm.value.service._id][0]})
+  }
 
 
   modifyTicket() {
@@ -422,6 +425,7 @@ export class ListTicketComponent implements OnInit {
       id: this.isModify._id,
       sujet_id: this.TicketForm.value.sujet._id
     }
+    console.log(req.sujet_id)
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
@@ -534,7 +538,6 @@ export class ListTicketComponent implements OnInit {
       this.comments.push(message.doc);
       this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Creation de message réussie' });
       this.showFormAddComment = false;
-      console.log(dataTicket)
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
@@ -653,6 +656,9 @@ export class ListTicketComponent implements OnInit {
       console.error(error)
     })
 
+  }
+  test(value){
+    console.log(value)
   }
 }
 
