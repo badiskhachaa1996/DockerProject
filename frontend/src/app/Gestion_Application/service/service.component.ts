@@ -95,22 +95,25 @@ export class ServiceComponent implements OnInit {
     });
   }
 
-  Services() {
+  loadServiceSujet(){
     this.ServService.getAll()
-      .subscribe(
-        data => {
-          this.services = data;
-        },
-        error => {
-          console.log(error);
-        });
-  }
-
-  Sujets() {
+    .subscribe(
+      data => {
+        this.services = data;
+      },
+      error => {
+        console.log(error);
+      });
     this.SujetService.getAll()
       .subscribe(
         data => {
           this.sujets = data;
+          this.sujetList=[];
+          if (!data.message) {
+            data.forEach(sujet => {
+              this.sujetList.push(sujet);
+            });
+          }
         },
         error => {
           console.log(error);
@@ -126,14 +129,7 @@ export class ServiceComponent implements OnInit {
     this.cols = [
       { field: 'label', header: 'Sujet' },
     ];
-    this.SujetService.getAll().subscribe((data) => {
-      if (!data.message) {
-        data.forEach(sujet => {
-          this.sujetList.push(sujet);
-        });
-      }
-    })
-    this.Services();
+    this.loadServiceSujet()
   }
 
   editSujet(data) {
@@ -149,6 +145,7 @@ export class ServiceComponent implements OnInit {
   }
 
   onRowSelect($event) {
+    this.loadServiceSujet()
     this.sujetShow = []
     this.sujetList.forEach(sujet => {
       if (sujet.service_id == this.currentService._id) {
@@ -192,6 +189,7 @@ export class ServiceComponent implements OnInit {
       this.services.splice(this.services.indexOf(this.Service), 1, data)
       this.serviceForm.reset();
       this.showFormUpdateService=false;
+      this.loadServiceSujet()
       this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
     }, (error) => {
       console.log(error)
@@ -207,6 +205,8 @@ export class ServiceComponent implements OnInit {
       this.sujetShow.splice(this.sujetShow.indexOf(this.Sujet), 1, data)
       this.showFormUpdateSujet=false;
       this.sujetForm.reset();
+      this.messageService.add({ severity: 'success', summary: 'Modification du sujet', detail: 'Le sujet a bien été modifié' });
+      this.loadServiceSujet()
     }, (error) => {
       console.log(error)
     });
