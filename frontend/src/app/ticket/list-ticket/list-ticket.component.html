@@ -371,9 +371,9 @@
                             {{rowData.statut}}
                         </td>
                         <td>
-                            <i pTooltip="Traiter" class="pi pi-cog"
+                            <i *ngIf="rowData.statut!='Traité'" pTooltip="Traiter" class="pi pi-cog"
                                 (click)="toggleFormCommentAdd(rowData);showFormAddComment=true"> </i>
-                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class="pi pi-replay"
+                            <i *ngIf="rowData.statut!='Traité'" pTooltip="Renvoyer le ticket dans la queue d'entrée" class="pi pi-replay"
                                 (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>
@@ -597,7 +597,7 @@
                             {{userDic[rowData.agent_id].firstname}} {{userDic[rowData.agent_id].lastname}}
                         </td>
                         <td *ngIf="token['role']!='Agent'">
-                            <i pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay"
+                            <i *ngIf="rowData.statut!='Traité'" pTooltip="Renvoyer le ticket dans la queue d'entrée" class=" pi pi-replay"
                                 (click)="toggleRevertForm(rowData)"></i>
                         </td>
                     </tr>

@@ -147,7 +147,7 @@ app.get("/getTicketsByService/:id", (req, res) => {
 
                 }
             });
-            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }] }, null, { sort: { date_affec_accep: 1 } })
+            Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
                 .then(result => {
                     result.forEach(ticket => {
                         if (listSujetofService.includes(ticket.sujet_id.toString())) {
@@ -396,7 +396,7 @@ app.post("/changeStatut/:id", (req, res) => {
 
 //Get All Tickets Accepted or Affected by Service ID
 app.get("/getAllAccAff", (req, res) => {
-    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { date_affec_accep: 1 } })
+    Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])
         })
