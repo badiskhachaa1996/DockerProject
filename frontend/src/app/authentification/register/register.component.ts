@@ -61,12 +61,12 @@ export class RegisterComponent implements OnInit {
     }
     this.AuthService.register(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
-      this.AuthService.sendEmail("http://localhost:3000/sendmail", user)
 
       if (this.router.url == "/register") {
         this.router.navigateByUrl('/login')
       } else {
         this.listUserComponenet.showFormAdd = false
+        console.log(data)
         if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }

@@ -25,42 +25,63 @@ let transporter = nodemailer.createTransport({
 //Enregsitrement d'un nouvel user
 app.post("/registre", (req, res) => {
     let data = req.body;
-    let user = new User({
-        civilite: data.civilite,
-        firstname: data.firstname,
-        lastname: data.lastname,
-        phone: data.phone,
-        adresse: data.adresse,
-        email: data?.email,
-        /*password: bcrypt.hashSync(data.password, 8),*/
-        role: data.role || "user",
-        service_id: data?.service_id || null
-    })
-    user.save().then((userFromDb) => {
-        res.status(200).send(userFromDb);
-        let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
-        let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
-        let mailOptions = {
-            from: 'estya-ticketing@estya.com',
-            to: data.email,
-            subject: 'Estya-Ticketing',
-            html: htmlmail,
-            attachments: [{
-                filename: 'signature.png',
-                path: 'assets/signature.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Création de compte")
-            }
-        });
-    }).catch((error) => {
-        console.log(error)
-        res.status(400).send(error);
+    User.findOne({ email: data?.email,role:"user" }, (err, user) => {
+        if (user) {
+            User.findOneAndUpdate({_id:user._id},
+                {
+                    civilite: data.civilite,
+                    firstname: data.firstname,
+                    lastname: data.lastname,
+                    phone: data.phone,
+                    adresse: data.adresse,
+                    role: data.role,
+                    service_id: data?.service_id || null
+                }, { new: true }, (err, userModified) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        res.send(userModified)
+                    }
+                })
+        } else {
+            let user = new User({
+                civilite: data.civilite,
+                firstname: data.firstname,
+                lastname: data.lastname,
+                phone: data.phone,
+                adresse: data.adresse,
+                email: data?.email,
+                /*password: bcrypt.hashSync(data.password, 8),*/
+                role: data.role || "user",
+                service_id: data?.service_id || null
+            })
+            user.save().then((userFromDb) => {
+                res.status(200).send(userFromDb);
+                let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
+                let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+                let mailOptions = {
+                    from: 'estya-ticketing@estya.com',
+                    to: data.email,
+                    subject: 'Estya-Ticketing',
+                    html: htmlmail,
+                    attachments: [{
+                        filename: 'signature.png',
+                        path: 'assets/signature.png',
+                        cid: 'red' //same cid value as in the html img src
+                    }]
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Création de compte")
+                    }
+                });
+            }).catch((error) => {
+                console.log(error)
+                res.status(400).send(error);
+            })
+        }
     })
 });
 
@@ -227,7 +248,7 @@ app.get('/getProfilePicture/:id', (req, res) => {
                     }
                 });
                 res.send({ file: file, documentType: user.typeImageProfil })
-            }catch (e){
+            } catch (e) {
                 res.send({ error: "Image non trouvé" })
             }
         } else {
