@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
-const { Service } = require("./../models/Service");
+const { Service } = require("./../models/service");
 
 
 app.post("/addService", (req, res) => {

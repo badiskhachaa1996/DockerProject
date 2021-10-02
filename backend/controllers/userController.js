@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
-const { User } = require("./../models/User");
+const { User } = require("./../models/user");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");

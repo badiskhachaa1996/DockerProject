@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
-const { Notification} = require("./../models/Notification");
+const { Notification} = require("./../models/notification");
 const fs = require("fs");
-const { Ticket } = require("../models/Ticket");
+const { Ticket } = require("../models/ticket");
 const io = require("socket.io");
 
 //Création d'une nouvelle notification

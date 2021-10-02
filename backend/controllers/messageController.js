@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
-const { Message } = require("./../models/Message");
+const { Message } = require("./../models/message");
 const fs = require("fs")
-const { User } = require("./../models/User");
-const { Ticket } = require("./../models/Ticket");
+const { User } = require("./../models/user");
+const { Ticket } = require("./../models/ticket");
 const nodemailer = require('nodemailer');
 
 //creation d'un transporter smtp

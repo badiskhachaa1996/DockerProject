@@ -2,8 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose")
 const Sujet = mongoose.model('sujet')
 const app = express(); //à travers ça je peux faire la creation des services
-const { Ticket } = require("./../models/Ticket");
-const { User } = require("./../models/User");
+const { Ticket } = require("../models/ticket");
+const { User } = require("../models/user");
 const nodemailer = require('nodemailer');
 
 //creation d'un transporter smtp
