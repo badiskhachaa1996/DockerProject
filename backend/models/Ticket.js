@@ -25,12 +25,6 @@ const ticket_schema= new mongoose.Schema({
     date_affec_accep: {
         type: Date
     },
-    temp_traitement:{
-        type: String
-    },
-    temp_fin:{
-        type: String
-    },
     isAffected:{
         type:Boolean,
         default:null

@@ -51,8 +51,6 @@ app.post("/updateAllById/:id", (req, res) => {
             agent_id: req.body?.agent_id,
             statut: req.body?.statut,
             date_affec_accep: req.body?.date_affec_accep,
-            temp_traitement: req.body?.temp_traitement,
-            temp_fin: req.body?.temp_fin,
             isAffected: req.body?.isAffected,
             description: req.body?.description
 

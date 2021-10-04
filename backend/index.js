@@ -5,12 +5,15 @@ const cors = require("cors");
 const app = express();
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-app.use(cors({ origin: "http://localhost:4200" }));
+
+import { origin } from "./config";
+
+app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
 const options = {
     cors: {
-        origin: "http://localhost:4200",
+        origin: origin,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
@@ -57,8 +60,10 @@ app.use('/notification', notifController)
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
-        socket.join(user._id)
-        console.log("Connexion de :"+user._id)
+        LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
+        socket.join(LISTTOJOIN)
+        console.log("Connexion de :"+LISTTOJOIN)
+        
         /*if (user.service_id) {//TODO Ne rejoins qu'une salle
             socket.join(user.service_id)
         } else {
