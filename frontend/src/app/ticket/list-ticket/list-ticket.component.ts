@@ -51,8 +51,8 @@ export class ListTicketComponent implements OnInit {
   userDic: any[] = [];
   serviceDic: any[] = []
 
-  showSujetQ = [{ label: "Tous les sujets", _id: null , value:null}];
-  showSujetAccAff = [{ label: "Tous les sujets", _id: null, value:null }];
+  showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
+  showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
   showStatut = [
     { label: "Tous les statuts", value: null },
@@ -98,7 +98,7 @@ export class ListTicketComponent implements OnInit {
   expandedAll = {};
 
   dragStart(event, ticket: Ticket) {
-      this.draggedTicket = ticket;
+    this.draggedTicket = ticket;
   }
 
   dragEnd(event) {
@@ -107,7 +107,7 @@ export class ListTicketComponent implements OnInit {
 
   //QueueToAccAff
   dragQueueToAccAff(event?) {
-    if(this.draggedTicket.createur_id!=this.token.id){
+    if (this.draggedTicket.createur_id != this.token.id) {
       this.queueList.splice(this.queueList.indexOf(this.draggedTicket), 1)
       this.Accepted(this.draggedTicket)
     }
@@ -117,7 +117,7 @@ export class ListTicketComponent implements OnInit {
     private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService) { }
 
   updateAccAffList() {
-    this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value:null}]
+    this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
     this.TicketService.getAccAff(this.token["id"]).subscribe((data) => {
       if (!data.message) {
         this.AccAffList = data;
@@ -126,7 +126,16 @@ export class ListTicketComponent implements OnInit {
             (sujet) => {
               ticket["service_id"] = sujet.dataSujet.service_id
               this.AccAffList.splice(index, 1, ticket)
-              this.showSujetAccAff.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
+              var found = false;
+              for (var i = 0; i < this.showSujetAccAff.length; i++) {
+                if (this.showSujetAccAff[i].value == sujet.dataSujet._id) {
+                  found = true;
+                  break;
+                }
+              }
+              if (!found) {
+                this.showSujetAccAff.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+              }
             }
           )
         })
@@ -145,7 +154,18 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 ticket["service_id"] = sujet.dataSujet.service_id
                 this.allTickets.splice(index, 1, ticket)
-                this.showSujetAll.push(sujet.dataSujet)
+                var found = false;
+                for (var i = 0; i < this.showSujetAll.length; i++) {
+                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                  
+                }
+                if (!found) {
+                  this.showSujetAll.push(sujet.dataSujet)
+                }
+
               }
             )
           })
@@ -158,7 +178,16 @@ export class ListTicketComponent implements OnInit {
           this.allTickets.forEach((ticket) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
               (sujet) => {
-                this.showSujetAll.push(sujet.dataSujet)
+                var found = false;
+                for (var i = 0; i < this.showSujetAll.length; i++) {
+                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.showSujetAll.push(sujet.dataSujet)
+                }
               }
             )
           })
@@ -169,7 +198,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateQueue() {
-    this.showSujetQ = [{ label: "Tous les sujets", _id: null, value:null}]
+    this.showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }]
     if (this.token['role'] == "Admin") {
       this.TicketService.getQueue().subscribe((data) => {
         if (!data.message) {
@@ -179,7 +208,7 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 ticket["service_id"] = sujet.dataSujet.service_id
                 this.queueList.splice(index, 1, ticket)
-                this.showSujetQ.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
+                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
 
               }
             )
@@ -194,7 +223,7 @@ export class ListTicketComponent implements OnInit {
           this.queueList.forEach((ticket) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
               (sujet) => {
-                this.showSujetQ.push({label:sujet.dataSujet.label,_id:sujet.dataSujet.service_id,value:sujet.dataSujet._id})
+                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
               }
             )
           })
@@ -218,6 +247,14 @@ export class ListTicketComponent implements OnInit {
       this.isReponsable = (this.token["role"] == "Responsable" || this.token["role"] == "Admin");
       this.ServService.getDic().subscribe((data) => {
         this.serviceDic = data;
+      })
+      this.AuthService.getById(this.token.id).subscribe((data) => {
+        let userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if (userconnected) {
+          this.socket.emit("userLog", userconnected)
+        }
+      }, (error) => {
+        console.log(error)
       })
       this.updateQueue()
       this.updateAllList()
@@ -260,30 +297,27 @@ export class ListTicketComponent implements OnInit {
     this.socket.on("refreshMessage", () => {
       if (this.comments && this.comments.length > 0) {
         this.MsgServ.getAllByTicketID(this.comments[0].ticket_id)
-        .subscribe(
-          data => {
-            this.comments = data;
-          },
-          error => {
-            console.log(error);
-          });
+          .subscribe(
+            data => {
+              this.comments = data;
+            },
+            error => {
+              console.log(error);
+            });
       }
     })
 
     this.socket.on("refresh3emeTableau", () => {
-      console.log("REFRESH 3")
       this.updateAllList()
     })
 
     this.socket.on("refreshAllTickets", () => {
-      console.log("REFRESH ALL")
       this.updateQueue()
       this.updateAccAffList()
       this.updateAllList()
     })
 
     this.socket.on("refreshQueue", () => {
-      console.log("REFRESH Q")
       this.updateQueue()
     })
   }
@@ -302,7 +336,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((res) => {
       this.SujetService.getASujetByid(res.sujet_id).subscribe((sujet) => {
-        this.Socket.AccepteTicket({ service_id: sujet.dataSujet.service_id, user_id: res.createur_id })
+        this.Socket.refreshAll(sujet.dataSujet.service_id, res.createur_id)
       })
       this.updateQueue()
       this.updateAccAffList()
@@ -332,7 +366,7 @@ export class ListTicketComponent implements OnInit {
     }
     this.TicketService.setAccAff(data).subscribe((data) => {
       this.SujetService.getASujetByid(data.sujet_id).subscribe((sujet) => {
-        this.Socket.AccepteTicket({ service_id: sujet.dataSujet.service_id, user_id: data.createur_id })
+        this.Socket.refreshAll(sujet.dataSujet.service_id, data.createur_id)
       })
 
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
@@ -416,8 +450,8 @@ export class ListTicketComponent implements OnInit {
     this.isModify = data;
   }
 
-  changeServiceDropDown(){
-    this.TicketForm.patchValue({sujet:this.listSujetSelected[this.TicketForm.value.service._id][0]})
+  changeServiceDropDown() {
+    this.TicketForm.patchValue({ sujet: this.listSujetSelected[this.TicketForm.value.service._id][0] })
   }
 
 
@@ -427,10 +461,12 @@ export class ListTicketComponent implements OnInit {
       id: this.isModify._id,
       sujet_id: this.TicketForm.value.sujet._id
     }
-    console.log(req.sujet_id)
     if (req.sujet_id != this.isModify.sujet_id) {
       this.TicketService.changeService(req).subscribe((data) => {
         this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Le ticket a bien été modifié' });
+        this.SujetService.getASujetByid(data.sujet_id).subscribe((sujet) => {
+          this.Socket.refreshAll(sujet.dataSujet.service_id, data.createur_id)
+        })
         this.NotifService.create(new Notification(null, data._id, false, "Modification d'un ticket", null, data.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
 
@@ -627,6 +663,9 @@ export class ListTicketComponent implements OnInit {
       this.allTickets.splice(this.allTickets.indexOf(this.showRevert), 1)
       if (ticket) {
         this.updateQueue()
+        this.SujetService.getASujetByid(ticket.sujet_id).subscribe((sujet) => {
+          this.Socket.refreshAll(sujet.dataSujet.service_id, ticket.createur_id)
+        })
         this.messageService.add({ severity: 'success', summary: 'Renvoie d\'un ticket', detail: 'Le ticket a été renvoyer avec succès dans la queue d\'entrée' });
       }
       this.RevertForm.reset()
@@ -659,7 +698,7 @@ export class ListTicketComponent implements OnInit {
     })
 
   }
-  test(value){
+  test(value) {
     console.log(value)
   }
 }

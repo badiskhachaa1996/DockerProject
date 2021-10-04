@@ -62,21 +62,11 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
         socket.join(LISTTOJOIN)
-        console.log(socket.rooms)
-        console.log("Connexion de :"+user._id)
-        
-        /*if (user.service_id) {//TODO Ne rejoins qu'une salle
-            socket.join(user.service_id)
-        } else {
-            //User ou Admin
-            socket.join(user.role)
-        }*/
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
     socket.on('NewNotif', (data) => {
         io.to(data.user_id).emit('NewNotif', data)
-        console.log("New notif à: "+data.user_id)
         io.emit(data, { NewNotif: data });
     })
 
@@ -108,11 +98,9 @@ io.on("connection", (socket) => {
     })
 
     //Si un agent affecte ou accepte un ticket --> refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents et du créateur
-    socket.on('AccepteTicket', (data) => {
-        //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents
-        console.log("Refresh du suivi de: " + data.user_id)
-        console.log(data)
-        io.to('Admin').emit('refreshAllTickets')
+    socket.on('refreshAll', (data) => {
+        //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents)
+        io.to('Admin').to(data.service_id).emit('refreshAllTickets')
         //Refresh les tickets suivi de l'user
         io.to(data.user_id).emit('refreshSuivi')
     })

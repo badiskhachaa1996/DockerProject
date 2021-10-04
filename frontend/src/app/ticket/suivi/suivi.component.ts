@@ -100,7 +100,6 @@ export class SuiviComponent implements OnInit {
   updateList(){
     this.TicketService.getAllByUser(this.token["id"]).subscribe((data) => {
       this.ticketList = data;
-      console.log(data)
       this.ticketList.forEach((ticket,index)=>{
         this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
           (sujet)=>{
@@ -125,6 +124,14 @@ export class SuiviComponent implements OnInit {
       if (localStorage.getItem('modify') == "true") {
         this.router.navigate(['/profil/creation'])
       }
+      this.AuthService.getById(this.token.id).subscribe((data) => {
+        let userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if (userconnected) {
+          this.socket.emit("userLog", userconnected)
+        }
+      }, (error) => {
+        console.log(error)
+      })
       this.updateList()
 
       this.ServService.getDic().subscribe((data) => {
@@ -175,7 +182,6 @@ export class SuiviComponent implements OnInit {
       })
     }
     this.socket.on("refreshSuivi", () => {
-      console.log("REFRESH SUIVI")
       this.updateList()
     })
 
@@ -242,6 +248,9 @@ export class SuiviComponent implements OnInit {
     }
 
     this.TicketService.update(req).subscribe((data) => {
+      this.SujetService.getASujetByid(data.sujet_id).subscribe((sujet)=>{
+        this.Socket.refreshAll(sujet.dataSujet.service_id,data.createur_id)
+      })
       this.updateList()
       this.TicketForm1.reset();
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
