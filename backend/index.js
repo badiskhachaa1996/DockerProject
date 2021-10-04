@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 
-import { origin } from "./config";
+const origin = require("./config")
 
 app.use(cors({ origin: origin }));
 
