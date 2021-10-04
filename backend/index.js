@@ -61,7 +61,8 @@ io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
-        socket.join(user._id)
+        socket.join(LISTTOJOIN)
+        console.log(socket.rooms)
         console.log("Connexion de :"+user._id)
         
         /*if (user.service_id) {//TODO Ne rejoins qu'une salle
@@ -110,7 +111,8 @@ io.on("connection", (socket) => {
     socket.on('AccepteTicket', (data) => {
         //refresh les tickets d'un admin et les tickets de queue d'entrée et de mon service des agents
         console.log("Refresh du suivi de: " + data.user_id)
-        io.to("Admin").to(data.service_id).emit('refreshAllTickets')
+        console.log(data)
+        io.to('Admin').emit('refreshAllTickets')
         //Refresh les tickets suivi de l'user
         io.to(data.user_id).emit('refreshSuivi')
     })
