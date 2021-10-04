@@ -61,8 +61,8 @@ io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
-        socket.join(LISTTOJOIN)
-        console.log("Connexion de :"+LISTTOJOIN)
+        socket.join(user._id)
+        console.log("Connexion de :"+user._id)
         
         /*if (user.service_id) {//TODO Ne rejoins qu'une salle
             socket.join(user.service_id)
