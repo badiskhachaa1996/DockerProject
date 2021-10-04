@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import {Ticket} from "../models/Ticket"
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
@@ -10,7 +11,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 })
 export class TicketService {
 
-  apiUrl ="http://localhost:3000/ticket/"
+  apiUrl =environment.origin+ "ticket/"
 
   constructor(private http : HttpClient) {  }
 

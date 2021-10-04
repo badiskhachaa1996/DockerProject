@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
 const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
@@ -9,7 +10,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 })
 export class MessageService {
 
-  apiUrl ="http://localhost:3000/message/"
+  apiUrl =environment.origin+ "message/"
 
   constructor(private http : HttpClient) { }
 

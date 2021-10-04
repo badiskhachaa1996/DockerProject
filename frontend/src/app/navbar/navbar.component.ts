@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 
 import { interval, Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -27,7 +28,7 @@ export class NavbarComponent implements OnInit {
   role: string;
   userconnected: User = null ;
 
-socket = io("http://localhost:3000");
+socket = io(environment.origin);
 
   constructor(public app: AppComponent, private messageService: MessageService ,private AuthService: AuthService, private router: Router, ) { }
 

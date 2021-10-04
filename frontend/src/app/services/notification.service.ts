@@ -5,6 +5,7 @@ import { Observable, Subject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import {tap} from 'rxjs/operators';
 const io = require("socket.io-client");
+import { environment } from 'src/environments/environment';
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.getItem('token')) };
@@ -16,8 +17,8 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 })
 export class NotificationService {
   public notifs: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  socket = io("http://localhost:3000");
-  apiUrl ="http://localhost:3000/notification/"
+  socket = io(environment.origin);
+  apiUrl =environment.origin+ "notification/"
 
   constructor(private http: HttpClient) { }
 

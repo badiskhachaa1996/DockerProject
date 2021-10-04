@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 const io = require("socket.io-client");
 
 @Injectable({
@@ -6,7 +7,7 @@ const io = require("socket.io-client");
 })
 export class SocketService {
 
-  socket = io("http://localhost:3000");
+  socket = io(environment.origin);
 
   constructor() { }
 

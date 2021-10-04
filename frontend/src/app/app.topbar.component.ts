@@ -1,20 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { AppComponent } from './app.component';
-import { interval, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import jwt_decode from "jwt-decode";
 import { User } from './models/User';
 import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
 import { NotificationService } from './services/notification.service';
 import { Notification } from './models/notification';
-import { url } from 'inspector';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ListUserComponent } from './authentification/list-user/list-user.component';
-import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService, MsalBroadcastService } from '@azure/msal-angular';
-import { AuthenticationResult, InteractionStatus, PopupRequest, RedirectRequest } from '@azure/msal-browser';
-import { filter, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
+import { environment } from 'src/environments/environment';
 const io = require("socket.io-client");
 
 @Component({
@@ -42,13 +37,13 @@ export class AppTopBarComponent implements OnInit {
   userupdate: User = null;
   imageToShow: any = "../assets/images/avatar.PNG"
 
-  socket = io("http://localhost:3000");
+  socket = io(environment.origin);
 
   notifMapping:
     { [k: string]: string } = { '=0': '', 'other': '#' };
 
   constructor(public app: AppComponent, private AuthService: AuthService,
-    private router: Router, private NotificationService: NotificationService,
+    public router: Router, private NotificationService: NotificationService,
  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration,
     private msalService: MsalService) { }
 

@@ -1,10 +1,7 @@
 <div class="p-grid">
-    <div class="text-center" *ngIf="currentRoot=='/register'"><img src="assets/layout/images/logo.png" class="logo">
+    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo">
     </div>
     <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8" id="register">
-        <img #img *ngIf="profilePicture" [src]="profilePicture"
-            style="-webkit-border-radius:70px; -moz-border-radius:70px; border-radius:70px; width:80px;height:80px;position : relative ; "
-            alt="prestige-layout" />
         <div class="col-8 col-offset-2 col-xl-8 col-lg-8 col-md-8">
             <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
                 style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
@@ -21,7 +18,7 @@
                     <div class="user-detail">
                         <p-card>
                             <div style="float:right;padding-top: 3%;">
-                                <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate($event)"
+                                <i pTooltip="Modifier mes informations" class="pi pi-cog" (click)="ToggleUpdate()"
                                     style="font-size: 25px;"></i>
                                 <i pTooltip="Modifier ma photo de profil" class="pi pi-fw pi-image"
                                     (click)="clickFile()" style="font-size: 25px;"></i>

@@ -27,7 +27,8 @@ const io = require("socket.io-client");
 })
 
 export class ListTicketComponent implements OnInit {
-  socket = io("http://localhost:3000");
+  socket = io(environment.origin);
+
   showRevert = null;
   currentComment = null;
   serviceList: any[] = [];
@@ -204,7 +205,6 @@ export class ListTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.showStatutTab2)
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {

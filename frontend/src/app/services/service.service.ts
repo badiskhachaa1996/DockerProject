@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Service } from '../models/Service';
 import { Sujet } from '../models/Sujet';
 
@@ -14,7 +15,7 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 
 export class ServService {
 
-  apiUrl ="http://localhost:3000/service/"
+  apiUrl = environment.origin+"service/"
 
   constructor(private http: HttpClient) { }
 
