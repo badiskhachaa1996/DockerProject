@@ -87,6 +87,7 @@ export class ListUserComponent implements OnInit {
   }
 
   modify(rowData: User) {
+    window.scrollTo(0, 20);
     this.selectedUser = rowData;
     this.showFormModify = false;
     setTimeout(() => { this.toggleFormUpdate() }, 1)

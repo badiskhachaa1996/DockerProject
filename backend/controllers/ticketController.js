@@ -24,7 +24,8 @@ app.post("/create", (req, res) => {
         createur_id: req.body.id,
         sujet_id: req.body.sujet_id,
         description: req.body.description,
-        date_ajout: Date.now()
+        date_ajout: Date.now(),
+        customid:req.body.customid
     });
 
     ticket.save((err, doc) => {
@@ -35,11 +36,11 @@ app.post("/create", (req, res) => {
 
 //Suppression d'un ticket
 app.get("/deleteById/:id", (req, res) => {
-    Ticket.findByIdAndRemove(req.params.id, (err, user) => {
+    Ticket.findByIdAndRemove(req.params.id, (err, ticket) => {
         if (err) {
             res.send(err)
         }
-        res.send(user)
+        res.send(ticket)
     })
 });
 
@@ -54,11 +55,11 @@ app.post("/updateAllById/:id", (req, res) => {
             isAffected: req.body?.isAffected,
             description: req.body?.description
 
-        }, { new: true }, (err, user) => {
+        }, { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user)
+            res.send(ticket)
 
 
         })
@@ -124,11 +125,11 @@ app.post("/update/:id", (req, res) => {
         {
             sujet_id: req.body.sujet_id,
             description: req.body.description
-        }, { new: true }, (err, user) => {
+        }, { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user);
+            res.send(ticket);
         })
 });
 
@@ -234,15 +235,15 @@ app.post("/AccAff/:id", (req, res) => {
             date_affec_accep: Date.now(),
             isAffected: req.body?.isAffected || false
         },
-        { new: true }, (err, user) => {
+        { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             } else {
-                res.send(user);
-                if (user.isAffected) {
-                    User.findOne({ _id: user.agent_id }).then((userFromDb) => {
+                res.send(ticket);
+                if (ticket.isAffected) {
+                    User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
                         let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                        let html2 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + user._id + '</b> et qui a pour description <b> ' + user.description + ' </b> vous a été affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                        let html2 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + '</b> et qui a pour description <b> ' + ticket.description + ' </b> vous a été affecter. </p></br><p style="color:black">Cordialement,</p> <img src="red"/> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -287,7 +288,7 @@ app.post("/changeService/:id", (req, res) => {
                 res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                    let html3 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket._id + '</b> et qui a pour description : <b> ' + ticket.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
+                    let html3 = '<p style="color:black">Bonjour '+ gender + userFromDb.lastname + '</p><br><p style="color:black"> Votre ticket qui a pour numéro : <b> ' + ticket.customid + '</b> et qui a pour description : <b> ' + ticket.description + ' </b> a été redirigé vers un autre service ou un autre sujet par un agent. </br><p style="color:black">Cordialement,</p> <img src="red"/> ';
 
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
@@ -326,14 +327,14 @@ app.post("/changeStatut/:id", (req, res) => {
         {
             statut: req.body.statut
         },
-        { new: true }, (err, user) => {
+        { new: true }, (err, ticket) => {
             if (err) {
                 res.send(err)
             } else {
-                if (user.statut == "En attente d\'une réponse") {
-                    User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                if (ticket.statut == "En attente d\'une réponse") {
+                    User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                         let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                        let html4 = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html4 = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + ticket.customid + '  </b> et qui a pour description : <b> ' + ticket.description + '</b>.</p><p>Une réponse est attendue de votre part.</p> <p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -360,10 +361,10 @@ app.post("/changeStatut/:id", (req, res) => {
                     })
 
                 }
-                else if (user.statut === "Traité") {
-                    User.findOne({ _id: user.createur_id }).then((userFromDb) => {
+                else if (ticket.statut === "Traité") {
+                    User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                         let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                        let html5 = '<p style="color:black"> Bonjour '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + user._id + '  </b> et qui a pour description : <b> ' + user.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
+                        let html5 = '<p style="color:black"> Bonjour '+gender + userFromDb.lastname + ',</p><br><p style="color:black">  Votre ticket qui a pour numéro : <b> ' + ticket.customid + '  </b> et qui a pour description : <b> ' + ticket.description + '</b> a été traité</p><p style="color:black"> Cordialement,</p> <img src="red"> ';
                         let mailOptions = {
                             from: 'estya-ticketing@estya.com',
                             to: userFromDb.email,
@@ -388,7 +389,7 @@ app.post("/changeStatut/:id", (req, res) => {
                     })
                 }
             }
-            res.status(200).send(user)
+            res.status(200).send(ticket)
         })
 });
 
@@ -409,7 +410,7 @@ app.post("/revertTicket/:id", (req, res) => {
         User.findOne({ _id: ticket.agent_id }).then((userFromDb) => {
             if (req.body.revertedByAdmin) {
                 let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                let htmlemail = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + req.params.id + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                let htmlemail = '<p style="color:black"> Bonjour  '+gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + ticket.customid + ' </b> que vous gériez et qui a pour description <b>' + ticket.description + ' </b>à été renvoyé dans la queue d\'entrée par un responsable</p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                 let mailOptions = {
                     from: 'estya-ticketing@estya.com',
                     to: userFromDb.email,

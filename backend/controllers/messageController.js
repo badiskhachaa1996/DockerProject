@@ -56,7 +56,7 @@ app.post("/create", (req, res) => {
                 if (msg.isRep) {
                     //Envoie du mail, pour avertir d'un nouveau message sur son ticket
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour description <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.customid + ' </b> et qui a pour description <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,

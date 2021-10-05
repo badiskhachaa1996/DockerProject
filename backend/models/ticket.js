@@ -45,6 +45,10 @@ const ticket_schema= new mongoose.Schema({
     },
     user_revert:{
         type:String
+    },
+    customid:{
+        type:String,
+        default:"ESTYANOPEPE10120000001"
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

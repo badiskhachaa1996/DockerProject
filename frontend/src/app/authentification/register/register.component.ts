@@ -26,6 +26,11 @@ export class RegisterComponent implements OnInit {
   Roles = environment.role;
   showForm: boolean = true;
   civiliteList = environment.civilite;
+  statutList = environment.typeUser
+  campusList = environment.campus
+  formationList = environment.formations
+  entreprisesList =environment.entreprisesList
+
 
   RegisterForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
@@ -38,6 +43,10 @@ export class RegisterComponent implements OnInit {
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),*/
     role: new FormControl('user', Validators.required),
     service_id: new FormControl(null),
+    entreprise : new FormControl(this.entreprisesList[0]),
+    type: new FormControl(this.statutList[0], [Validators.required]),
+    campus: new FormControl(this.campusList[0]),
+    formation : new FormControl(this.formationList[0])
 
   })
 
@@ -53,7 +62,13 @@ export class RegisterComponent implements OnInit {
       null,
       this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
-      this.RegisterForm.value.civilite.value
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      this.RegisterForm.value.campus.value,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.formation.value,
+      this.RegisterForm.value.entreprise.value
     )
 
     if (this.router.url == "/register") {
@@ -92,6 +107,11 @@ export class RegisterComponent implements OnInit {
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
+
+  get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
+  get type() { return this.RegisterForm.get('type').value.value; }
+  get campus() { return this.RegisterForm.get('campus').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value.value; }
   constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent) { }
 
   ngOnInit(): void {

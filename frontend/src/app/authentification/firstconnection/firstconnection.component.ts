@@ -14,10 +14,18 @@ import { MessageService } from 'primeng/api';
 })
 export class FirstconnectionComponent implements OnInit {
 
-  constructor(private router: Router,private AuthService:AuthService, private messageService: MessageService) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
 
   civiliteList = environment.civilite;
-  userConnected : User;
+  userConnected: User;
+
+  statutList = environment.typeUser
+
+  campusList = environment.campus
+
+  formationList = environment.formations
+
+  entreprisesList =environment.entreprisesList
 
   RegisterForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
@@ -25,24 +33,28 @@ export class FirstconnectionComponent implements OnInit {
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
     adresse: new FormControl('', [Validators.required]),
+    entreprise : new FormControl(this.entreprisesList[0]),
+    type: new FormControl(this.statutList[0], [Validators.required]),
+    campus: new FormControl(this.campusList[0]),
+    formation : new FormControl(this.formationList[0])
   })
 
   ngOnInit(): void {
     let token = jwt_decode(localStorage.getItem("token"))
-    if(token){
-      this.AuthService.getById(token['id']).subscribe((data)=>{
-        this.userConnected= jwt_decode(data.userToken)['userFromDb']
+    if (token) {
+      this.AuthService.getById(token['id']).subscribe((data) => {
+        this.userConnected = jwt_decode(data.userToken)['userFromDb']
         console.log(this.userConnected)
-        if(this.userConnected.adresse==null || !this.userConnected.phone==null || !this.userConnected.civilite==null){
-          this.RegisterForm.patchValue({lastname:this.userConnected.lastname,firstname:this.userConnected.firstname})
-        }else{
+        if (this.userConnected.adresse == null || !this.userConnected.phone == null || !this.userConnected.civilite == null) {
+          this.RegisterForm.patchValue({ lastname: this.userConnected.lastname, firstname: this.userConnected.firstname })
+        } else {
           this.router.navigateByUrl('/ticket/suivi')
         }
       })
-    }else{
+    } else {
       this.router.navigateByUrl('/login')
     }
-    
+
   }
 
   saveUser() {
@@ -56,7 +68,13 @@ export class FirstconnectionComponent implements OnInit {
       null,
       this.RegisterForm.value.adresse,
       null,
-      this.RegisterForm.value.civilite.value
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      this.RegisterForm.value.campus.value,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.formation.value,
+      this.RegisterForm.value.entreprise.value
     )
     this.AuthService.update(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil réussie' });
@@ -66,11 +84,11 @@ export class FirstconnectionComponent implements OnInit {
       if (error.status == 500 || error.includes("500")) {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
-      }else{
+      } else {
         console.log(error)
         this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
       }
-     
+
     });
   }
 
@@ -79,5 +97,10 @@ export class FirstconnectionComponent implements OnInit {
   get phone() { return this.RegisterForm.get('phone'); }
   get adresse() { return this.RegisterForm.get('adresse'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
+
+  get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
+  get type() { return this.RegisterForm.get('type').value.value; }
+  get campus() { return this.RegisterForm.get('campus').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value.value; }
 
 }

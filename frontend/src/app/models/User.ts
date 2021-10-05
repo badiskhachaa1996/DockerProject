@@ -11,7 +11,12 @@ export class User {
         public adresse?:string,
         public service_id?:string,
         public civilite?:string,
-        public pathImageProfil?:string
+        public pathImageProfil?:string,
+        public typeImageProfil?:string,
+        public campus?:string,
+        public type?:string,
+        public formation?:string,
+        public entreprise?:string
     ){}
     
 

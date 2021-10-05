@@ -698,8 +698,6 @@ export class ListTicketComponent implements OnInit {
     })
 
   }
-  test(value) {
-    console.log(value)
-  }
+
 }
 

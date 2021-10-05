@@ -15,8 +15,8 @@ export class Ticket {
         public isReverted?:boolean,
         public justificatif?:string,
         public date_revert?:Date,
-        public user_revert?:string
-
+        public user_revert?:string,
+        public customid?:string
     ){}
 
    

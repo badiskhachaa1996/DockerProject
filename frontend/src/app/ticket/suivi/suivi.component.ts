@@ -38,7 +38,7 @@ export class SuiviComponent implements OnInit {
   filterSujet;
   filterStatut;
 
-  
+  userconnected:User;
 
   first = 0;
   rows = 10;
@@ -125,9 +125,9 @@ export class SuiviComponent implements OnInit {
         this.router.navigate(['/profil/creation'])
       }
       this.AuthService.getById(this.token.id).subscribe((data) => {
-        let userconnected = jwt_decode(data.userToken)["userFromDb"];
-        if (userconnected) {
-          this.socket.emit("userLog", userconnected)
+        this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if (this.userconnected) {
+          this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
         }
       }, (error) => {
         console.log(error)
@@ -286,11 +286,14 @@ export class SuiviComponent implements OnInit {
 
   addTicket() {
     //Enregistrement du Ticket
+    console.log(this.userconnected)
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
-      description: this.TicketForm.value.description
+      description: this.TicketForm.value.description,
+      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type)
     }
+    console.log(req.customid)
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateList()
@@ -440,5 +443,26 @@ export class SuiviComponent implements OnInit {
       return (event.order * result);
     });
   }
+  
+  generateCustomID(firstname,lastname,campus:string,statut:string){
+    let reeldate = new Date();
 
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(8).toUpperCase();
+
+    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let campusCustom = campus.toUpperCase()[0]
+
+    if(campus=="Montréal"){
+      campusCustom="C"
+    }else if(campus=="En Ligne(365)"){
+      campusCustom="O"
+    }
+
+    return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
+  }
 }

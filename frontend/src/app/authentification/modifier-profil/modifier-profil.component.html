@@ -56,7 +56,7 @@
                                     <div class="col-xl-8 col-lg-12 col-md-12" style="padding-left: 10%;">
                                         <p style="font-weight: bold;"> Prénom : </p> {{userco.firstname}}
                                     </div>-->
-                                    <div class="grid my-8 ml-4">
+                                    <div class="grid mt-8 ml-4">
                                         <div class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Adresse mail : </p> {{userco.email}}
                                         </div>
@@ -65,6 +65,20 @@
                                         </div>
                                         <div *ngIf="userco.adresse" class="sm:col-12 md:col-12">
                                             <p style="font-weight: bold;"> Adresse : </p> {{userco.adresse}}
+                                        </div>
+                                    </div>
+                                    <div class="grid mb-8 mt-6 ml-4">
+                                        <div class="sm:col-12 md:col-6">
+                                            <p style="font-weight: bold;"> Statut : </p> {{userco.type}}
+                                        </div>
+                                        <div *ngIf="userco.entreprise && (userco.type=='Salarié' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
+                                            <p style="font-weight: bold;"> Entreprise : </p> {{userco.entreprise}}
+                                        </div>
+                                        <div *ngIf="userco.campus && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
+                                            <p style="font-weight: bold;"> Campus : </p> {{userco.campus}}
+                                        </div>
+                                        <div *ngIf="userco.formation && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
+                                            <p style="font-weight: bold;"> Formation : </p> {{userco.formation}}
                                         </div>
                                     </div>
                                 </div>
@@ -154,6 +168,48 @@
                                                             téléphone doit être composé de 10 chiffres.</span>
                                                     </div>
                                                 </div>
+
+                                                <div class="field col mt-2 mb-2 col-4">
+                                                    <div>
+                                                        <label for="type" class="p-sr-only">Statut :</label>
+                                                    </div>
+                                                    <span>
+                                                        <p-dropdown formControlName="type" [options]="statutList" optionLabel="value"
+                                                            class="register"></p-dropdown>
+                                                    </span>
+                                                </div>
+
+                                                <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                                                    <div>
+                                                        <label for="campus" class="p-sr-only">Campus :</label>
+                                                    </div>
+                                                    <span>
+                                                        <p-dropdown formControlName="campus" [options]="campusList" optionLabel="value"
+                                                            class="register"></p-dropdown>
+                                                    </span>
+                                                </div>
+                        
+                                                <div class="field col mt-2 mb-2 col-4"  *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                                                    <div>
+                                                        <label for="formation" class="p-sr-only">Formation :</label>
+                                                    </div>
+                                                    <span>
+                                                        <p-dropdown formControlName="formation" [options]="formationList" optionLabel="value"
+                                                            class="register"></p-dropdown>
+                                                    </span>
+                                                </div>
+                                                
+                                                <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
+                                                    <div>
+                                                        <label for="entreprise" class="p-sr-only">Entreprise :</label>
+                                                    </div>
+                                                    <span>
+                                                        <p-dropdown formControlName="entreprise" [options]="entreprisesList" optionLabel="value"
+                                                            class="register"></p-dropdown>
+                                                    </span>
+                                                </div>
+
+
                                                 <div class="mt-2 mb-2 col-lg-12 col-12">
                                                     <div *ngIf=IsAdmin class="mt-4 mb-2 col-lg-12 col-12">
                                                         <span>

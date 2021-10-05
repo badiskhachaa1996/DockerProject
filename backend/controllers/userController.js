@@ -35,7 +35,11 @@ app.post("/registre", (req, res) => {
                     phone: data.phone,
                     adresse: data.adresse,
                     role: data.role,
-                    service_id: data?.service_id || null
+                    service_id: data?.service_id || null,
+                    entreprise:req.body?.entreprise,
+                    type:req.body?.type,
+                    formation:req.body?.formation,
+                    entreprise:req.body?.campus
                 }, { new: true }, (err, userModified) => {
                     if (err) {
                         console.log(err)
@@ -53,7 +57,11 @@ app.post("/registre", (req, res) => {
                 email: data?.email,
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
-                service_id: data?.service_id || null
+                service_id: data?.service_id || null,
+                entreprise:req.body?.entreprise,
+                type:req.body?.type,
+                formation:req.body?.formation,
+                entreprise:req.body?.campus
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -139,7 +147,11 @@ app.post("/updateById/:id", (req, res) => {
             phone: req.body.phone,
             role: req.body.role,
             adresse: req.body.adresse,
-            service_id: req.body.service_id
+            service_id: req.body.service_id,
+            entreprise:req.body?.entreprise,
+            type:req.body?.type,
+            formation:req.body?.formation,
+            entreprise:req.body?.campus
 
         }, { new: true }, (err, user) => {
             if (err) {

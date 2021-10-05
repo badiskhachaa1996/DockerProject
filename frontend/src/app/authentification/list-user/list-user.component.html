@@ -108,6 +108,40 @@
                                             {{rowData.adresse}}</div>
                                     </div>
                                 </div>
+                                <div class="ui-g-12 ui-md-12" *ngIf="rowData.type" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
+                                    </div>
+                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                        {{rowData.type}}</div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12"
+                                    *ngIf="rowData.type && (rowData.type=='Salarié' || rowData.type=='Alternant/Stagiaire') && rowData.entreprise" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-6 ui-md-6"><b
+                                            style="text-align:left !important;">Entreprise:</b>
+                                    </div>
+                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                        {{rowData.entreprise}}
+                                    </div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12"
+                                    *ngIf="rowData.type && (rowData.type=='Etudiant' || rowData.type=='Alternant/Stagiaire')" style="color: black;font-weight:normal;">
+                                    <div *ngIf="rowData.campus" class="ui-g-12 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <b style="text-align:left !important;">Campus:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.campus}}</div>
+                                    </div>
+                                    <div *ngIf="rowData.formation" class="ui-g-12 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <b style="text-align:left !important;">Formation:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.formation}}</div>
+                                    </div>
+                                </div>
                             </p-fieldset>
                         </td>
                     </tr>
