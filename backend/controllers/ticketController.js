@@ -284,7 +284,6 @@ app.post("/changeService/:id", (req, res) => {
             if (err) {
                 res.send(err)
             } else {
-                console.log(ticket)
                 res.status(200).send(ticket)
                 User.findOne({ _id: ticket.createur_id }).then((userFromDb) => {
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
@@ -462,7 +461,6 @@ app.post("/revertTicket/:id", (req, res) => {
 
 //Création d'un nouveau ticket
 app.post("/createForUser", (req, res) => {
-    console.log(req.body)
     User.findOne({email:req.body.email}).then((user)=>{
         if(user){
             const ticket = new Ticket({
@@ -474,7 +472,6 @@ app.post("/createForUser", (req, res) => {
             });
             
             ticket.save((err, doc) => {
-                console.log(doc)
                 res.send({ message: "Votre ticket a été crée!", doc });
             });
         }else{
@@ -487,7 +484,6 @@ app.post("/createForUser", (req, res) => {
             })
             
             user.save().then((userFromDb) => {
-                console.log(userFromDb)
                 const ticket = new Ticket({
                     createur_id: userFromDb._id,
                     sujet_id: req.body.sujet_id,
@@ -497,7 +493,6 @@ app.post("/createForUser", (req, res) => {
                 });
                 
                 ticket.save((err, doc) => {
-                    console.log(doc)
                     res.send({ message: "Votre ticket a été crée!", doc });
                 });
             })

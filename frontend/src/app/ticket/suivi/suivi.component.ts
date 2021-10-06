@@ -25,7 +25,7 @@ const io = require("socket.io-client");
   styleUrls: ['./suivi.component.css']
 })
 export class SuiviComponent implements OnInit {
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('soc/',''));
   [x: string]: any;
 
   ticketList: Ticket[] = [];

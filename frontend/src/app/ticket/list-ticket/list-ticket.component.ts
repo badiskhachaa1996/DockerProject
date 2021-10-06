@@ -28,7 +28,7 @@ const io = require("socket.io-client");
 })
 
 export class ListTicketComponent implements OnInit {
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('soc/',''));
 
   showRevert = null;
   currentComment = null;

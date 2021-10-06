@@ -37,7 +37,7 @@ export class AppTopBarComponent implements OnInit {
   userupdate: User = null;
   imageToShow: any = "../assets/images/avatar.PNG"
 
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('soc/',''));
 
   notifMapping:
     { [k: string]: string } = { '=0': '', 'other': '#' };
@@ -60,6 +60,7 @@ export class AppTopBarComponent implements OnInit {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
         if(this.userconnected){
           this.socket.emit("userLog", this.userconnected)
+          console.log(this.userconnected)
         }else if(this.userconnected.adresse==null || !this.userconnected.phone==null || !this.userconnected.civilite==null){
           this.router.navigateByUrl('/profil/creation')
         }else{

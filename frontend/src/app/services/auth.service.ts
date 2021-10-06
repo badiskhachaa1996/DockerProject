@@ -17,7 +17,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 export class AuthService {
   apiUrl = environment.origin+ "user/"
 
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('soc/',''));
 
   constructor(private http : HttpClient) {  }
 

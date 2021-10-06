@@ -80,7 +80,6 @@ io.on("connection", (socket) => {
 
     //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
     socket.on('AddNewTicket', (service_id) => {
-        console.log("Refresh de la queue du service:" + service_id)
         io.to("Admin").to(service_id).emit('refreshQueue')
     })
 

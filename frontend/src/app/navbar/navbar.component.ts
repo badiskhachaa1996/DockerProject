@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
   role: string;
   userconnected: User = null ;
 
-socket = io(environment.origin);
+  socket = io(environment.origin.replace('soc/',''));
 
   constructor(public app: AppComponent, private messageService: MessageService ,private AuthService: AuthService, private router: Router, ) { }
 
