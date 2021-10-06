@@ -45,17 +45,17 @@ const notifController = require('./controllers/notificationController')
 
 const { defaultMaxListeners } = require("events");
 
-app.use("/user", UserController);
+app.use("/soc/user", UserController);
 
-app.use("/service", ServiceController);
+app.use("/soc/service", ServiceController);
 
-app.use("/sujet", SujetController);
+app.use("/soc/sujet", SujetController);
 
-app.use("/message", messageController);
+app.use("/soc/message", messageController);
 
-app.use('/ticket', ticketController)
+app.use('/soc/ticket', ticketController)
 
-app.use('/notification', notifController)
+app.use('/soc/notification', notifController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

@@ -3,7 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  origin: "http://localhost:3000/",
+  origin: "http://localhost:3000/soc/",
   key: "JESUISUNECLESECRETE",
   User: null,
 
