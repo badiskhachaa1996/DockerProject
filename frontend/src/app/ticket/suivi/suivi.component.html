@@ -149,7 +149,8 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
                 [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
-                [globalFilterFields]="['customid','description']" (sortFunction)="customSort($event)" [customSort]="true">
+                [globalFilterFields]="['customid','description']" (sortFunction)="customSort($event)"
+                [customSort]="true">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
@@ -179,7 +180,8 @@
                                 <p-dropdown [options]="showStatut"
                                     (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>
                             </span>
-                            <input style="margin-left:2%;" pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                            <input style="margin-left:2%;" pInputText type="text"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                     </div>
 
@@ -303,9 +305,6 @@
             </p-table>
         </div>
         </p-fieldset>
-
-
-
         </td>
         </tr>
         </ng-template>
