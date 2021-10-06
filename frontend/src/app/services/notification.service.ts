@@ -17,7 +17,7 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 })
 export class NotificationService {
   public notifs: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('/soc',''));
   apiUrl =environment.origin+ "notification/"
 
   constructor(private http: HttpClient) { }
