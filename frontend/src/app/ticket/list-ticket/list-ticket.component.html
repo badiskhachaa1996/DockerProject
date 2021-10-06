@@ -178,7 +178,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
-                (sortFunction)="customSort($event)" [customSort]="true">
+                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex">
                         <div style="display: flex;">
@@ -189,7 +189,9 @@
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
                                     (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
                             </span>
+                            <input style="margin-left:2%;" pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
+                        
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
@@ -252,17 +254,23 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-6 ui-md-6">
+                                    <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.statut}} </div>
                                     </div>
-                                    <div class="ui-g-6 ui-md-6">
+                                    <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6"><b
                                                 style="text-align:left !important;">Description:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.description}}</div>
+                                    </div>
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Numéro:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.customid}}</div>
                                     </div>
                                 </div>
                             </p-fieldset>
@@ -386,7 +394,7 @@
             <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
-                (sortFunction)="customSort($event)" [customSort]="true">
+                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
 
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="display: flex;">
@@ -403,6 +411,7 @@
                             <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
                                 (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
                         </span>
+                        <input style="margin-left:2%;" pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                     </div>
                 </ng-template>
 
@@ -482,23 +491,28 @@
                             <p-fieldset legend="Informations du ticket"
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-4 ui-md-4">
+                                    <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-4 ui-md-4"><b style="text-align:left !important;">Statut:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.statut}} </div>
                                     </div>
-                                    <div class="ui-g-4 ui-md-4">
+                                    <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b
                                                 style="text-align:left !important;">Description:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.description}}</div>
                                     </div>
-                                    <div class="ui-g-4 ui-md-4">
+                                    <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Date de
                                                 création:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    </div>
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.customid}}</div>
                                     </div>
                                 </div>
                             </p-fieldset>
@@ -648,7 +662,7 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt3 *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
                 [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
-                (sortFunction)="customSort($event)" [customSort]="true">
+                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
 
                 <ng-template pTemplate="caption">
                     <div class="p-input-icon-left p-ml-auto">
@@ -664,6 +678,7 @@
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
                                     (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
                             </span>
+                            <input style="margin-left:2%;" pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                     </div>
                 </ng-template>
@@ -753,11 +768,16 @@
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.description}}</div>
                                     </div>
-                                    <div class="ui-g-4 ui-md-4">
+                                    <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Date de
                                                 création:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
+                                    </div>
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Numéro:</b> </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            {{rowData.customid}}</div>
                                     </div>
                                 </div>
                             </p-fieldset>
