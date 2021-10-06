@@ -20,6 +20,11 @@ export class TicketService {
     return this.http.post<any>(registreUrl,ticket,httpOptions);
   }
 
+  createForUser(ticket){
+    let registreUrl=this.apiUrl+"createForUser";
+    return this.http.post<any>(registreUrl,ticket,httpOptions);
+  }
+
   updateAll(ticket :any){
     let registreUrl=this.apiUrl+"updateById/"+ticket.id;
     return this.http.post<any>(registreUrl,ticket,httpOptions1);

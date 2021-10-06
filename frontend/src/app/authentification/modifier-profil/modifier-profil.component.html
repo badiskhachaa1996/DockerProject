@@ -68,7 +68,7 @@
                                         </div>
                                     </div>
                                     <div class="grid mb-8 mt-6 ml-4">
-                                        <div class="sm:col-12 md:col-6">
+                                        <div class="sm:col-12 md:col-6" *ngIf="userco.type">
                                             <p style="font-weight: bold;"> Statut : </p> {{userco.type}}
                                         </div>
                                         <div *ngIf="userco.entreprise && (userco.type=='Salarié' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">

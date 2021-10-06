@@ -49,20 +49,16 @@ const user_schema = new mongoose.Schema({
         type: String
     },
     campus:{
-        type: String,
-        default:"Paris"
+        type: String
     },
     type:{
-        type: String,
-        default:"Etudiant"
+        type: String
     },
     formation:{
-        type: String,
-        default:"MPI"
+        type: String
     },
     entreprise:{
-        type: String,
-        default:"Elitelabs"
+        type: String
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

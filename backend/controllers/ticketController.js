@@ -459,4 +459,49 @@ app.post("/revertTicket/:id", (req, res) => {
             console.log(err)
         });
 })
+
+//Création d'un nouveau ticket
+app.post("/createForUser", (req, res) => {
+    console.log(req.body)
+    User.findOne({email:req.body.email}).then((user)=>{
+        if(user){
+            const ticket = new Ticket({
+                createur_id: user._id,
+                sujet_id: req.body.sujet_id,
+                description: req.body.description,
+                date_ajout: Date.now(),
+                customid:req.body.customid
+            });
+            
+            ticket.save((err, doc) => {
+                console.log(doc)
+                res.send({ message: "Votre ticket a été crée!", doc });
+            });
+        }else{
+            let user = new User({
+                firstname: req.body.email[0],
+                lastname: req.body.email.substring(req.body.email.indexOf('.')+1,req.body.email.indexOf('@')),
+                email: req.body.email,
+                role: "user",
+                service_id: null
+            })
+            
+            user.save().then((userFromDb) => {
+                console.log(userFromDb)
+                const ticket = new Ticket({
+                    createur_id: userFromDb._id,
+                    sujet_id: req.body.sujet_id,
+                    description: req.body.description,
+                    date_ajout: Date.now(),
+                    customid:req.body.customid
+                });
+                
+                ticket.save((err, doc) => {
+                    console.log(doc)
+                    res.send({ message: "Votre ticket a été crée!", doc });
+                });
+            })
+        }
+    })
+});
 module.exports = app;

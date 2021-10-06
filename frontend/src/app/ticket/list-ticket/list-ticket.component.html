@@ -109,8 +109,71 @@
         </p-card>
     </div>
 </div>
+<div *ngIf="showFormAdd">
+    <div class="p-grid mt-2">
+        <div class="xl:col-8 xl:col-offset-2 col-12">
+            <p-card>
+                <div class="p-grid">
+                    <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAdd=false"> </i>
+
+                    <form class="col-8 col-offset-2" [formGroup]="TicketFormAdd">
+                      
+                        <h3 class="text-center">Création d'un ticket</h3>
+
+                        <div class="grid">
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <label style=" font-weight: bold;">Service:</label>
+                                <select formControlName="service" class="form-control col-12" (change)="onChangeAdd()">
+                                    <option [ngValue]="null" disabled>Choissisez un service</option>
+                                    <option *ngFor="let service of listServices" [ngValue]="service">
+                                        {{ service.label }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                                <label style="font-weight: bold;">Sujet:</label>
+                               
+                                <select [disabled]="selectedService" formControlName="sujet"
+                                    class="form-control col-12">
+                                    <option *ngIf="TicketFormAdd.value.service" [ngValue]="null" disabled>Choissisez un sujet
+                                    </option>
+                                    <option *ngFor="let sujet of listSujetSelected[TicketFormAdd.value.service._id]"
+                                        [ngValue]="sujet">
+                                        {{ sujet.label }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-12 col-12">
+                                <label style="font-weight: bold;">Description:</label>
+                                <textarea type="text" formControlName="description" class="form-control col-12"
+                                    placeholder="Description" pInputTextarea></textarea>
+                            </div>
+                            <div class="field col mt-2 mb-2 col-lg-12 col-12">
+                                <label style="font-weight: bold;">Email de l'utilisateur:</label>
+                                <input type="email" formControlName="email" class="form-control col-12"
+                                placeholder="Email de l'utilisateur" pInputText>
+                                <div *ngIf="(email.invalid) && (email.touched || email.dirty)">
+                                    <span class="error" *ngIf="email.errors?.required">*L'adresse mail est
+                                        obligatoire.</span>
+                                    <span class="error" *ngIf="email.errors?.pattern && email.value.endsWith('@estya.com')">*L'email n'est pas correct.</span>
+                                    <span class="error" *ngIf="email.errors?.pattern && !email.value.endsWith('@estya.com')">*L'email doit être un mail estya.com.</span>
+                                </div>
+                            </div>
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                                <button pButton class="ui-button-raised ui-button-success"
+                                    [disabled]="TicketFormAdd.invalid" label="Enregistrer" (click)="addTicket();showFormAdd=false"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</div>
 <div class="grid">
     <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAdd" pButton type="button" label="Ajouter" style="float:right;"
+            (click)="toggleFormAdd()"></button>
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"

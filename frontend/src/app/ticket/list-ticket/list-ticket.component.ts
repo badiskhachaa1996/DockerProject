@@ -51,6 +51,8 @@ export class ListTicketComponent implements OnInit {
   userDic: any[] = [];
   serviceDic: any[] = []
 
+  userconnected:User;
+
   showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
@@ -83,6 +85,8 @@ export class ListTicketComponent implements OnInit {
   uplo: File;
 
   token = null;
+
+  showFormAdd=false;
 
   @ViewChild('fileInput') fileInput: FileUpload;
   comments: any = [];
@@ -249,9 +253,9 @@ export class ListTicketComponent implements OnInit {
         this.serviceDic = data;
       })
       this.AuthService.getById(this.token.id).subscribe((data) => {
-        let userconnected = jwt_decode(data.userToken)["userFromDb"];
-        if (userconnected) {
-          this.socket.emit("userLog", userconnected)
+        this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if (this.userconnected) {
+          this.socket.emit("userLog", this.userconnected)
         }
       }, (error) => {
         console.log(error)
@@ -391,6 +395,52 @@ export class ListTicketComponent implements OnInit {
     service: new FormControl('', Validators.required),
   })
 
+  
+  TicketFormAdd: FormGroup = new FormGroup({
+    description: new FormControl('', Validators.required),
+    sujet: new FormControl('', Validators.required),
+    service: new FormControl('', Validators.required),
+    email: new FormControl('',[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")])
+  })
+
+  get email() { return this.TicketFormAdd.get('email'); }
+
+  
+  addTicket() {
+    //Enregistrement du Ticket
+    let req = {
+      id: jwt_decode(localStorage.getItem("token"))["id"],
+      sujet_id: this.TicketFormAdd.value.sujet._id,
+      description: this.TicketFormAdd.value.description,
+      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type),
+      email:this.TicketFormAdd.value.email
+    }
+    console.log(req)
+    this.TicketService.createForUser(req).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
+      this.updateQueue()
+      this.Socket.AddNewTicket(this.TicketFormAdd.value.sujet.service_id)
+      this.TicketFormAdd.reset()
+      this.TicketFormAdd.setValue({email:'',description:null,sujet:'',service:''})
+      this.AuthService.getAll().subscribe((data) => {
+        if (!data.message) {
+          this.userDic= [];
+          data.forEach(user => {
+            this.userDic[user._id] = null;
+            this.userDic[user._id] = user;
+            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
+              this.userList.push(user);
+            }
+          });
+          this.AllUsers = data;
+        }
+      })
+    }, (error) => {
+      console.log(error)
+    });
+
+  }
+
 
 
 
@@ -455,6 +505,8 @@ export class ListTicketComponent implements OnInit {
   }
 
 
+
+
   modifyTicket() {
     //Modification du Ticket
     let req = {
@@ -489,6 +541,12 @@ export class ListTicketComponent implements OnInit {
     })
   }
 
+  onChangeAdd(){
+    this.TicketFormAdd.patchValue({
+      sujet: this.listSujetSelected[this.TicketFormAdd.value.service._id][0]
+    })
+  }
+
   showWaitingTime(rawData) {
     let calc = new Date(new Date().getTime() - new Date(rawData.date_ajout).getTime())
     let days = calc.getUTCDate() - 1
@@ -509,20 +567,26 @@ export class ListTicketComponent implements OnInit {
     return days.toString() + Hours + " h " + minutes + " min "
   }
 
+  toggleFormAdd(){
+    this.showRevert = null;
+    this.showFormAddComment = false;
+    this.isModify = null;
+    this.showFormAdd = true;
+  }
 
 
   toggleRevertForm(ticket) {
     this.showRevert = ticket;
     this.showFormAddComment = false;
     this.isModify = null;
-
+    this.showFormAdd = false;
   }
 
   toggleFormUpdate() {
     this.isModify = null;
     this.showRevert = null;
     this.showFormAddComment = false;
-
+    this.showFormAdd = false;
   }
 
 
@@ -532,6 +596,7 @@ export class ListTicketComponent implements OnInit {
     this.selectedTicket = ticket;
     this.showRevert = null;
     this.isModify = null;
+    this.showFormAdd = false;
   }
 
   loadMessages(ticket: Ticket, type: string, expanded) {
@@ -698,6 +763,26 @@ export class ListTicketComponent implements OnInit {
     })
 
   }
+  generateCustomID(firstname,lastname,campus:string,statut:string){
+    let reeldate = new Date();
 
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(8).toUpperCase();
+
+    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let campusCustom = campus.toUpperCase()[0]
+
+    if(campus=="Montréal"){
+      campusCustom="C"
+    }else if(campus=="En Ligne(365)"){
+      campusCustom="O"
+    }
+
+    return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
+  }
 }
 
