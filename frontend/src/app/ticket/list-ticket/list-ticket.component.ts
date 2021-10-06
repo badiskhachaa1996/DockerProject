@@ -19,6 +19,7 @@ import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { FileUpload } from 'primeng/fileupload';
 import { SocketService } from 'src/app/services/socket.service';
+
 const io = require("socket.io-client");
 @Component({
   selector: 'app-list-ticket',
@@ -490,8 +491,7 @@ export class ListTicketComponent implements OnInit {
         this.TicketForm.patchValue({ service: element })
       }
     });
-    console.log(data.sujet_id)
-    console.log(this.listSujets)
+    this.scrollToTop()
     this.listSujets.forEach(element => {
       if (element._id == data.sujet_id) {
         this.TicketForm.patchValue({ sujet: element })
@@ -572,6 +572,7 @@ export class ListTicketComponent implements OnInit {
     this.showFormAddComment = false;
     this.isModify = null;
     this.showFormAdd = true;
+    this.scrollToTop()
   }
 
 
@@ -580,6 +581,7 @@ export class ListTicketComponent implements OnInit {
     this.showFormAddComment = false;
     this.isModify = null;
     this.showFormAdd = false;
+    this.scrollToTop()
   }
 
   toggleFormUpdate() {
@@ -587,6 +589,7 @@ export class ListTicketComponent implements OnInit {
     this.showRevert = null;
     this.showFormAddComment = false;
     this.showFormAdd = false;
+    this.scrollToTop()
   }
 
 
@@ -597,6 +600,7 @@ export class ListTicketComponent implements OnInit {
     this.showRevert = null;
     this.isModify = null;
     this.showFormAdd = false;
+    this.scrollToTop()
   }
 
   loadMessages(ticket: Ticket, type: string, expanded) {
@@ -783,6 +787,19 @@ export class ListTicketComponent implements OnInit {
     }
 
     return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
+  }
+
+  scrollToTop(){
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+        
+    var scrollInterval = setInterval(function(){  
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval); 
+      }
+    },15);	
   }
 }
 

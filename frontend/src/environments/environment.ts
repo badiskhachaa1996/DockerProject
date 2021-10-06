@@ -43,8 +43,20 @@ export const environment = {
   ],
 
   formations:[
-    {value:"MPI"},
-    {value:"CDA"}
+    {value:"BTS MCO"},
+    {value:"BTS NDR"},
+    {value:"BTS SIO"},
+    {value:"MPI Big Data"},
+    {value:"MPI CyberSecurité"},
+    {value:"BTS Assurance"},
+    {value:"BTS Banque"},
+    {value:"BTS CG"},
+    {value:"BTS PME"},
+    {value:"BTS Notariat"},
+    {value:"DCG"},
+    {value:"DCGS"},
+    {value:"BTS MEC"},
+    {value:"BTS Notariat"}
   ],
 
   

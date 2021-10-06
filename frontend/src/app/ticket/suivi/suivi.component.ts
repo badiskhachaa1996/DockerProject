@@ -264,11 +264,13 @@ export class SuiviComponent implements OnInit {
     this.showFormAdd = true
     this.showFormUpdate = false;
     this.selectedTicket=null;
+    this.scrollToTop()
   }
  toggleFormUpdate() {
     this.showFormUpdate = true
     this.showFormAdd = false
    this.selectedTicket=null;
+   this.scrollToTop()
   }
    
 
@@ -277,6 +279,7 @@ export class SuiviComponent implements OnInit {
     this.selectedTicket = ticket;
     this.showFormAdd=false;
     this.showFormUpdate = false;
+    this.scrollToTop()
   }
 
  
@@ -465,4 +468,18 @@ export class SuiviComponent implements OnInit {
 
     return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
   }
+
+  scrollToTop(){
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+        
+    var scrollInterval = setInterval(function(){  
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval); 
+      }
+    },15);	
+  }
+
 }
