@@ -274,7 +274,11 @@ app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (user) {
             let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
-            res.status(200).send({ token });
+            if(user.type==null ||user.adresse==null || user.phone==null){
+                res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
+            }else{
+                res.status(200).send({ token });
+            }
         } else {
             let lastname = req.body.name.substring(req.body.name.indexOf(" ") + 1); //Morgan HUE
             let firstname = req.body.name.replace(" " + lastname, '')
