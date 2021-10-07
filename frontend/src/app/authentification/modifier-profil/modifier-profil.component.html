@@ -169,7 +169,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="field col mt-2 mb-2 col-4">
+                                                <div class="field col mt-2 mb-2 col-12">
                                                     <div>
                                                         <label for="type" class="p-sr-only">Statut :</label>
                                                     </div>
@@ -179,7 +179,7 @@
                                                     </span>
                                                 </div>
 
-                                                <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                                                <div class="field col mt-2 mb-2 col-6" *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
                                                     <div>
                                                         <label for="campus" class="p-sr-only">Campus :</label>
                                                     </div>
@@ -189,17 +189,17 @@
                                                     </span>
                                                 </div>
                         
-                                                <div class="field col mt-2 mb-2 col-4"  *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                                                <div class="field col mt-2 mb-2 col-6"  *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
                                                     <div>
                                                         <label for="formation" class="p-sr-only">Formation :</label>
                                                     </div>
                                                     <span>
                                                         <p-dropdown formControlName="formation" [options]="formationList" optionLabel="value"
-                                                            class="register"></p-dropdown>
+                                                            class="register" filter="true"></p-dropdown>
                                                     </span>
                                                 </div>
                                                 
-                                                <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
+                                                <div class="field col mt-2 mb-2 col-12" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
                                                     <div>
                                                         <label for="entreprise" class="p-sr-only">Entreprise :</label>
                                                     </div>
