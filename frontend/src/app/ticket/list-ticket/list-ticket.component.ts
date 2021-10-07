@@ -56,7 +56,7 @@ export class ListTicketComponent implements OnInit {
 
   showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
-  showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showSujetAll= [{ label: "Tous les sujets", _id: null, value: null }];
   showStatut = [
     { label: "Tous les statuts", value: null },
     { label: "File d'attente", value: "Queue d'entrée" },
@@ -149,7 +149,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateAllList() {
-    this.showSujetAll = [{ label: "Tous les sujets", _id: null }]
+    this.showSujetAll = [{ label: "Tous les sujets", _id: null, value: null }]
     if (this.token['role'] == "Admin") {
       this.TicketService.getAllAccAff().subscribe((data) => {
         if (!data.message) {
@@ -161,14 +161,14 @@ export class ListTicketComponent implements OnInit {
                 this.allTickets.splice(index, 1, ticket)
                 var found = false;
                 for (var i = 0; i < this.showSujetAll.length; i++) {
-                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                  if (this.showSujetAll[i].value == sujet.dataSujet._id) {
                     found = true;
                     break;
                   }
                   
                 }
                 if (!found) {
-                  this.showSujetAll.push(sujet.dataSujet)
+                  this.showSujetAll.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
                 }
 
               }
@@ -185,13 +185,13 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 var found = false;
                 for (var i = 0; i < this.showSujetAll.length; i++) {
-                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                  if (this.showSujetAll[i].value == sujet.dataSujet._id) {
                     found = true;
                     break;
                   }
                 }
                 if (!found) {
-                  this.showSujetAll.push(sujet.dataSujet)
+                  this.showSujetAll.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
                 }
               }
             )

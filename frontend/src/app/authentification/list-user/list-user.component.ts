@@ -70,10 +70,12 @@ export class ListUserComponent implements OnInit {
   toggleFormAdd() {
     this.showFormAdd = true;
     this.showFormModify = false;
+    this.scrollToTop();
   }
   toggleFormUpdate() {
     this.showFormModify = true
     this.showFormAdd = false
+    this.scrollToTop();
   }
 
   loadUsersLazy(event: LazyLoadEvent) {
@@ -87,7 +89,6 @@ export class ListUserComponent implements OnInit {
   }
 
   modify(rowData: User) {
-    window.scrollTo(0, 20);
     this.selectedUser = rowData;
     this.showFormModify = false;
     setTimeout(() => { this.toggleFormUpdate() }, 1)
@@ -115,6 +116,19 @@ export class ListUserComponent implements OnInit {
         result = (value1 < value2) ? -1 : (value1 > value2) ? 1 : 0;
       return (event.order * result);
     });
+  }
+
+  scrollToTop(){
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+        
+    var scrollInterval = setInterval(function(){  
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval); 
+      }
+    },15);	
   }
 }
 

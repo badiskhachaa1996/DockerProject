@@ -26,7 +26,8 @@
             [responsive]="true" 
             [totalRecords]="tabUser.length"
             rowExpandMode="single"
-            (sortFunction)="customSort($event)" [customSort]="true">
+            (sortFunction)="customSort($event)" [customSort]="true"
+            [globalFilterFields]="['firstname','lastname','email','phone','Adresse']">
 
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" >
@@ -36,6 +37,8 @@
                         <span style="margin-left: 2%;">
                         <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
                         (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown></span>
+                        <input style="margin-left:2%;" pInputText type="text"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                     </div>
                 </ng-template>
