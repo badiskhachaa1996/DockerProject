@@ -39,7 +39,7 @@ app.post("/registre", (req, res) => {
                     entreprise:req.body?.entreprise,
                     type:req.body?.type,
                     formation:req.body?.formation,
-                    entreprise:req.body?.campus
+                    campus:req.body?.campus
                 }, { new: true }, (err, userModified) => {
                     if (err) {
                         console.log(err)
@@ -61,7 +61,7 @@ app.post("/registre", (req, res) => {
                 entreprise:req.body?.entreprise,
                 type:req.body?.type,
                 formation:req.body?.formation,
-                entreprise:req.body?.campus
+                campus:req.body?.campus
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -151,7 +151,7 @@ app.post("/updateById/:id", (req, res) => {
             entreprise:req.body?.entreprise,
             type:req.body?.type,
             formation:req.body?.formation,
-            entreprise:req.body?.campus
+            campus:req.body?.campus
 
         }, { new: true }, (err, user) => {
             if (err) {
