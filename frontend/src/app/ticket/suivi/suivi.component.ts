@@ -25,7 +25,7 @@ const io = require("socket.io-client");
   styleUrls: ['./suivi.component.css']
 })
 export class SuiviComponent implements OnInit {
-  socket = io(environment.origin.replace('soc/',''));
+  socket = io(environment.origin.replace('/soc',''));
   [x: string]: any;
 
   ticketList: Ticket[] = [];
@@ -458,7 +458,7 @@ export class SuiviComponent implements OnInit {
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
 
-    let campusCustom = campus.toUpperCase()[0]
+    let campusCustom = campus[0].toUpperCase()
 
     if(campus=="Montréal"){
       campusCustom="C"
@@ -466,7 +466,7 @@ export class SuiviComponent implements OnInit {
       campusCustom="O"
     }
 
-    return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
+    return 'ESTYA' + prenom + nom +''+ campusCustom+statut[0].toUpperCase()+'' + date + '' + random;
   }
 
   scrollToTop(){

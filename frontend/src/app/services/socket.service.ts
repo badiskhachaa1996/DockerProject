@@ -7,7 +7,7 @@ const io = require("socket.io-client");
 })
 export class SocketService {
 
-  socket = io(environment.origin.replace('soc/',''));
+  socket = io(environment.origin.replace('/soc',''));
 
   constructor() { }
 

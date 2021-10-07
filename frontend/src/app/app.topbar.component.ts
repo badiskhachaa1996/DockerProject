@@ -37,7 +37,7 @@ export class AppTopBarComponent implements OnInit {
   userupdate: User = null;
   imageToShow: any = "../assets/images/avatar.PNG"
 
-  socket = io(environment.origin.replace('soc/',''));
+  socket = io(environment.origin.replace('/soc',''));
 
   notifMapping:
     { [k: string]: string } = { '=0': '', 'other': '#' };
