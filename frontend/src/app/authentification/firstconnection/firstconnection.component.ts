@@ -45,7 +45,7 @@ export class FirstconnectionComponent implements OnInit {
       this.AuthService.getById(token['id']).subscribe((data) => {
         this.userConnected = jwt_decode(data.userToken)['userFromDb']
         console.log(this.userConnected)
-        if (this.userConnected.adresse == null || !this.userConnected.phone == null || !this.userConnected.civilite == null) {
+        if (this.userConnected.adresse == null || this.userConnected.phone == null || this.userConnected.civilite == null ||this.userConnected.type == null) {
           this.RegisterForm.patchValue({ lastname: this.userConnected.lastname, firstname: this.userConnected.firstname })
         } else {
           this.router.navigateByUrl('/ticket/suivi')
