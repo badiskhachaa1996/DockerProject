@@ -42,6 +42,7 @@ const SujetController = require('./controllers/sujetController');
 const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
+const classeController = require('./controllers/classeController')
 
 const { defaultMaxListeners } = require("events");
 
@@ -56,6 +57,8 @@ app.use("/soc/message", messageController);
 app.use('/soc/ticket', ticketController)
 
 app.use('/soc/notification', notifController)
+
+app.use('/soc/classe', classeController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
