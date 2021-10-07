@@ -778,7 +778,7 @@ export class ListTicketComponent implements OnInit {
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
 
-    let campusCustom = campus.toUpperCase()[0]
+    let campusCustom = campus[0].toUpperCase()
 
     if(campus=="Montréal"){
       campusCustom="C"
@@ -786,7 +786,7 @@ export class ListTicketComponent implements OnInit {
       campusCustom="O"
     }
 
-    return 'ESTYA' + prenom + nom +''+ campusCustom+statut.toUpperCase()[0]+'' + date + '' + random;
+    return 'ESTYA' + prenom + nom +''+ campusCustom+statut[0].toUpperCase()+'' + date + '' + random;
   }
 
   scrollToTop(){
