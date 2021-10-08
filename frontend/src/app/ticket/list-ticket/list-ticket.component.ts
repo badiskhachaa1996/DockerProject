@@ -216,7 +216,17 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 ticket["service_id"] = sujet.dataSujet.service_id
                 this.queueList.splice(index, 1, ticket)
-                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                var found = false;
+                for (var i = 0; i < this.showSujetQ.length; i++) {
+                  if (this.showSujetQ[i].value == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                }
+                
 
               }
             )
@@ -231,7 +241,16 @@ export class ListTicketComponent implements OnInit {
           this.queueList.forEach((ticket) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
               (sujet) => {
-                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                var found = false;
+                for (var i = 0; i < this.showSujetQ.length; i++) {
+                  if (this.showSujetQ[i].value == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                }
               }
             )
           })
@@ -327,6 +346,19 @@ export class ListTicketComponent implements OnInit {
 
     this.socket.on("refreshQueue", () => {
       this.updateQueue()
+      this.AuthService.getAll().subscribe((data) => {
+        this.userDic = [];
+        if (!data.message) {
+          data.forEach(user => {
+            this.userDic[user._id] = null;
+            this.userDic[user._id] = user;
+            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
+              this.userList.push(user);
+            }
+          });
+          this.AllUsers = data;
+        }
+      })
     })
     this.ClasseService.getAll().subscribe((data)=>{
       data.forEach(element => {
