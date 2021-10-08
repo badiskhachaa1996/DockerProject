@@ -53,8 +53,15 @@ export class ClasseComponent implements OnInit {
     });
   }
 
+  showModify(rowData:Classe){
+    this.showFormUpdateClasse=rowData;
+    this.showFormAddClasse=false
+    this.classeFormUpdate.setValue({description:rowData.description,nom:rowData.nom,nom_court:rowData.nom_court})
+  }
+
   modifyClasse(){
-    let classe = this.showFormUpdateClasse
+    let classe = this.classeFormUpdate.value
+    classe._id=this.showFormUpdateClasse._id
 
     this.ClasseService.update(classe).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Votre classe a bien été modifié' });
@@ -66,18 +73,18 @@ export class ClasseComponent implements OnInit {
     });
   }
 
-  hide(classe){
+  hide(classe :Classe){
     this.ClasseService.hide(classe._id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Cette classe ne s\'affichera plus dans la liste' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' ne s\'affichera plus dans la liste' });
       this.classes.splice(this.classes.indexOf(classe),1,data)
     }, (error) => {
       console.log(error)
     });
   }
 
-  show(classe){
+  show(classe :Classe){
     this.ClasseService.show(classe._id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Cette classe s\'affichera de nouveau dans la liste' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' s\'affichera de nouveau dans la liste' });
       this.classes.splice(this.classes.indexOf(classe),1,data)
     }, (error) => {
       console.log(error)

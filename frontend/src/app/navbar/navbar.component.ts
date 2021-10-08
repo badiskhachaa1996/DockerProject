@@ -61,6 +61,11 @@ socket = io(environment.origin.replace('/soc',''));
             icon: 'pi pi-users',
             routerLink: '/listUser'
           },
+          {
+            label: 'Gestions des classes',
+            icon: 'pi pi-desktop',
+            routerLink: '/classe'
+          },
       
           ]
         }else{

@@ -12,6 +12,7 @@ import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { SelectableRow } from 'primeng/table';
 import { ListUserComponent } from '../list-user/list-user.component';
+import { ClasseService } from 'src/app/services/classe.service';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
@@ -43,11 +44,28 @@ export class UpdateUserComponent implements OnInit {
     entreprise : new FormControl({value:this.listUserComponent.selectedUser.entreprise}),
     type: new FormControl({value:this.listUserComponent.selectedUser.type}, [Validators.required]),
     campus: new FormControl({value:this.listUserComponent.selectedUser.campus}),
-    formation : new FormControl({value:this.listUserComponent.selectedUser.formation})
+    formation : new FormControl('')
   })
 
   UpdateUser() {
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id, this.RegisterForm.value.civilite.value, null,null,this.RegisterForm.value.campus.value,this.RegisterForm.value.type.value,this.RegisterForm.value.formation.value,this.RegisterForm.value.entreprise.value)
+    let user = new User(
+      this.userupdate._id,
+      this.RegisterForm.value.firstname,
+      this.RegisterForm.value.lastname,
+      this.RegisterForm.value.phone,
+      this.RegisterForm.value.email,
+      null,
+      this.RegisterForm.value.role.value || "user",
+      null,
+      this.RegisterForm.value.adresse,
+      this.RegisterForm.value.service_id,
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      this.RegisterForm.value.campus.value,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.formation._id,
+      this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
@@ -67,7 +85,7 @@ export class UpdateUserComponent implements OnInit {
   get type() { return this.RegisterForm.get('type').value.value; }
   get campus() { return this.RegisterForm.get('campus').value.value; }
   get formation() { return this.RegisterForm.get('formation').value.value; }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponent: ListUserComponent) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponent: ListUserComponent,private ClasseService:ClasseService) { }
 
   ngOnInit(): void {
 
@@ -105,8 +123,19 @@ export class UpdateUserComponent implements OnInit {
       }
     })
 
+    this.ClasseService.seeAll().subscribe((data)=>{
+      this.formationList = data;
+    })
 
-
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        if(element._id==this.listUserComponent.selectedUser.formation){
+          this.RegisterForm.patchValue({
+            formation: element
+          })
+        }
+      });
+    })
 
   }
 

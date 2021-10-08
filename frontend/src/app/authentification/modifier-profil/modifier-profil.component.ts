@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { Service } from 'src/app/models/Service';
+import { ClasseService } from 'src/app/services/classe.service';
 
 @Component({
   selector: 'app-modifier-profil',
@@ -21,7 +22,8 @@ export class ModifierProfilComponent implements OnInit {
   statutList = environment.typeUser
   campusList = environment.campus
   formationList = environment.formations
-  entreprisesList =environment.entreprisesList
+  formationDic = []
+  entreprisesList = environment.entreprisesList
 
   decodeToken: any = jwt_decode(localStorage.getItem("token"))
   token = null;
@@ -41,7 +43,18 @@ export class ModifierProfilComponent implements OnInit {
 
     this.civiliteList.forEach((civ) => {
       if (civ.value == this.userco.civilite) {
-        this.RegisterForm.setValue({ lastname: this.userco.lastname, firstname: this.userco.firstname, phone: this.userco?.phone, adresse: this.userco?.adresse, civilite: civ,entreprise:{value:this.userco?.entreprise},type:{value:this.userco?.type},campus:{value:this.userco?.campus},formation:{value:this.userco?.formation}  })      }
+        this.RegisterForm.setValue({
+          lastname: this.userco.lastname,
+          firstname: this.userco.firstname,
+          phone: this.userco?.phone,
+          adresse: this.userco?.adresse,
+          civilite: civ,
+          entreprise: { value: this.userco?.entreprise },
+          type: { value: this.userco?.type },
+          campus: { value: this.userco?.campus },
+          formation: this.formationDic[this.userco.formation]
+        })
+      }
     })
 
     return this.toggleUpdate
@@ -58,19 +71,20 @@ export class ModifierProfilComponent implements OnInit {
     firstname: new FormControl(this.userco.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl(this.userco.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
     adresse: new FormControl(this.userco.adresse, [Validators.required]),
-    entreprise : new FormControl({value:this.userco.entreprise}),
-    type: new FormControl({value:this.userco.type}, [Validators.required]),
-    campus: new FormControl({value:this.userco.campus}),
-    formation : new FormControl({value:this.userco.formation})
+    entreprise: new FormControl({ value: this.userco.entreprise }),
+    type: new FormControl({ value: this.userco.type }, [Validators.required]),
+    campus: new FormControl({ value: this.userco.campus }),
+    formation: new FormControl('')
   })
 
   UpdateUser() {
-    let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value,null,null,this.RegisterForm.value.campus.value,this.RegisterForm.value.type.value,this.RegisterForm.value.formation.value,this.RegisterForm.value.entreprise.value)
+    console.log(this.RegisterForm.value.formation)
+    let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value, null, null, this.RegisterForm.value.campus.value, this.RegisterForm.value.type.value, this.RegisterForm.value.formation._id, this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.userco = data;
       this.toggleUpdate = false;
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
-
+      this.RegisterForm.patchValue({ formation: this.formationDic[data.formation] })
     }, (error) => {
       console.log(error)
     });
@@ -85,9 +99,9 @@ export class ModifierProfilComponent implements OnInit {
   get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
   get type() { return this.RegisterForm.get('type').value.value; }
   get campus() { return this.RegisterForm.get('campus').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value; }
 
-  constructor(private AuthService: AuthService, private messageService: MessageService,) { }
+  constructor(private AuthService: AuthService, private messageService: MessageService, private ClasseService: ClasseService) { }
 
 
   ngOnInit(): void {
@@ -118,12 +132,32 @@ export class ModifierProfilComponent implements OnInit {
 
     })
 
+    this.ClasseService.seeAll().subscribe((data) => {
+      this.formationList = data;
+      this.RegisterForm.patchValue({ formation: this.formationDic[this.userco.formation] })
+    })
+
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        this.formationDic[element._id]=element
+      });
+    })
+
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
 
       this.userco = jwt_decode(data['userToken'])['userFromDb']
       this.civiliteList.forEach((civ) => {
         if (civ.value == this.userco.civilite) {
-          this.RegisterForm.setValue({ lastname: this.userco.lastname, firstname: this.userco.firstname, phone: this.userco?.phone, adresse: this.userco?.adresse, civilite: civ,entreprise:{value:this.userco?.entreprise},type:{value:this.userco?.type},campus:{value:this.userco?.campus},formation:{value:this.userco?.formation}  })
+          this.RegisterForm.patchValue({
+            lastname: this.userco.lastname,
+            firstname: this.userco.firstname,
+            phone: this.userco?.phone,
+            adresse: this.userco?.adresse,
+            civilite: civ,
+            entreprise: { value: this.userco?.entreprise },
+            type: { value: this.userco?.type },
+            campus: { value: this.userco?.campus }
+          })
         }
       })
 

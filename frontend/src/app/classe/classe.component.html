@@ -4,7 +4,7 @@
             <div class="p-grid">
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddClasse=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="classeForm">
-
+                   
                     <h3 class="text-center">Ajouter une classe</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
@@ -20,7 +20,7 @@
                         <div class="mt-2 mb-2 col-12">
                             <label>Description:</label>
                             <textarea type="text" formControlName="description" class="form-control col-12"
-                                placeholder="Description de la classe" pInputTextArea>
+                                placeholder="Description de la classe" pInputTextArea></textarea>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success" [disabled]="classeForm.invalid"
@@ -32,7 +32,6 @@
         </p-card>
     </div>
 </div>
-
 <div class="p-grid">
     <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateClasse">
         <p-card>
@@ -55,10 +54,10 @@
                         <div class="mt-2 mb-2 col-12">
                             <label>Description:</label>
                             <textarea type="text" formControlName="description" class="form-control col-12"
-                                placeholder="Description de la classe" pInputTextArea>
+                                placeholder="Description de la classe" pInputTextArea></textarea>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="classeForm.invalid"
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="classeFormUpdate.invalid"
                                 label="Enregistrer" (click)="modifyClasse();"></button>
                         </div>
                     </div>
@@ -102,19 +101,19 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr>
-                        <td *ngFor="let col of columns">
+                        <td>
                             {{rowData.nom}}
                         </td>
-                        <td *ngFor="let col of columns">
+                        <td>
                             {{rowData.nom_court}}
                         </td>
                         <td>
-                            <i *ngIf="rowData.activate" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-pencil"
-                            (click)="hide(rowData"></i>
-                            <i *ngIf="!rowData.activate" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-pencil"
+                            <i *ngIf="rowData.active" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye"
+                            (click)="hide(rowData)"></i>
+                            <i *ngIf="!rowData.active" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye-slash"
                             (click)="show(rowData)"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                                (click)="showFormUpdateClasse=rowData;showFormAddClasse=false"></i>
+                                (click)="showModify(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>

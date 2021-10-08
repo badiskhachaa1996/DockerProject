@@ -78,7 +78,7 @@
                                             <p style="font-weight: bold;"> Campus : </p> {{userco.campus}}
                                         </div>
                                         <div *ngIf="userco.formation && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
-                                            <p style="font-weight: bold;"> Formation : </p> {{userco.formation}}
+                                            <p style="font-weight: bold;"> Formation : </p> {{formationDic[userco.formation].nom_court}}
                                         </div>
                                     </div>
                                 </div>
@@ -194,8 +194,8 @@
                                                         <label for="formation" class="p-sr-only">Formation :</label>
                                                     </div>
                                                     <span>
-                                                        <p-dropdown formControlName="formation" [options]="formationList" optionLabel="value"
-                                                            class="register" filter="true"></p-dropdown>
+                                                        <p-dropdown formControlName="formation" [options]="formationList" optionLabel="nom_court"
+                                                        class="register" filterPlaceholder="Pas de classe trouvé"  filterBy="nom,nom_court" filter="true"></p-dropdown>
                                                     </span>
                                                 </div>
                                                 

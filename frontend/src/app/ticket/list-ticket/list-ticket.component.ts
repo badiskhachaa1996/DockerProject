@@ -19,6 +19,7 @@ import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { FileUpload } from 'primeng/fileupload';
 import { SocketService } from 'src/app/services/socket.service';
+import { ClasseService } from 'src/app/services/classe.service';
 
 const io = require("socket.io-client");
 @Component({
@@ -39,6 +40,8 @@ export class ListTicketComponent implements OnInit {
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
+
+  formationDic = [];
 
   queueList: Ticket[] = [];
 
@@ -119,7 +122,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService, private ClasseService:ClasseService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -324,6 +327,11 @@ export class ListTicketComponent implements OnInit {
 
     this.socket.on("refreshQueue", () => {
       this.updateQueue()
+    })
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        this.formationDic[element._id]=element
+      });
     })
   }
 

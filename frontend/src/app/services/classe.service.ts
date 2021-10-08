@@ -39,13 +39,18 @@ export class ClasseService {
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
-  hide(classe :any){
-    let registreUrl=this.apiUrl+"hideById/"+classe.id;
-    return this.http.post<any>(registreUrl,classe,httpOptions1);
+  hide(id :any){
+    let registreUrl=this.apiUrl+"hideById/"+id;
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
-  show(classe :any){
-    let registreUrl=this.apiUrl+"showById/"+classe.id;
-    return this.http.post<any>(registreUrl,classe,httpOptions1);
+  show(id :any){
+    let registreUrl=this.apiUrl+"showById/"+id;
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
+
+  seeAll(){
+    let registreUrl=this.apiUrl+"seeAll";
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 }

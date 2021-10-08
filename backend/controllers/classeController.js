@@ -52,7 +52,7 @@ app.get("/getById/:id", (req, res) => {
     })
 });
 
-//Récuperer tous les messages
+//Récuperer tous les classes
 app.get("/getAll", (req, res) => {
     Classe.find()
         .then(result => {
@@ -62,7 +62,7 @@ app.get("/getAll", (req, res) => {
             console.log(err);
         })
 });
-app.post("/hideById/:id", (req, res) => {
+app.get("/hideById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
             active:false
@@ -74,7 +74,7 @@ app.post("/hideById/:id", (req, res) => {
         })
 });
 
-app.post("/showById/:id", (req, res) => {
+app.get("/showById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
             active:true
@@ -83,6 +83,17 @@ app.post("/showById/:id", (req, res) => {
                 res.send(err)
             }
             res.send(user)
+        })
+});
+
+//Récuperer tous les classes active
+app.get("/seeAll", (req, res) => {
+    Classe.find({active:true})
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            console.log(err);
         })
 });
 
