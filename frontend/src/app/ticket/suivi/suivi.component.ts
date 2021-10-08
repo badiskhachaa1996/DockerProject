@@ -186,6 +186,7 @@ export class SuiviComponent implements OnInit {
     })
 
     this.socket.on("refreshMessage", () => {
+      console.log("SOC RM")
       if (this.comments && this.comments.length > 0) {
         this.MsgServ.getAllByTicketID(this.comments[0].ticket_id)
         .subscribe(
@@ -196,6 +197,7 @@ export class SuiviComponent implements OnInit {
             console.log(error);
           });
       }
+      this.updateList()
     })
     this.updateList()
   }
