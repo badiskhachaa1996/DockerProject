@@ -648,7 +648,7 @@ export class ListTicketComponent implements OnInit {
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
-          this.Socket.NewMessageByUser(this.selectedTicket.agent_id)
+          this.Socket.NewMessageByAgent(this.selectedTicket.createur_id,this.selectedTicket["service_id"])
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
