@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const schema= new mongoose.Schema({
-    description:{
-        type: String
-    },
     nom:{
         type:String,
         required:true

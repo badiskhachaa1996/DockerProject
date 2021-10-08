@@ -6,7 +6,6 @@ const { Classe } = require("./../models/classe");
 app.post("/create", (req, res) => {
     //Sauvegarde du classe
     const classe = new Classe({
-        description: req.body.description,
         nom: req.body.nom,
         nom_court: req.body.nom_court
     });
@@ -31,7 +30,6 @@ app.get("/deleteById/:id", (req, res) => {
 app.post("/updateById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
-            description: req.body?.description,
             nom: req.body?.nom,
             nom_court: req.body?.nom_court
         }, { new: true }, (err, user) => {

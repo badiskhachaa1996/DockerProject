@@ -132,11 +132,11 @@
 
                         <div class="field col mt-2 mb-2 col-4"  *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
                             <div>
-                                <label for="formation" class="p-sr-only">Formation :</label>
+                                <label for="formation" class="p-sr-only">Classe :</label>
                             </div>
                             <span>
                                 <p-dropdown formControlName="formation" [options]="formationList" optionLabel="nom_court"
-                                    class="register" filterBy="nom,nom_court" filterPlaceholder="Pas de classe trouvé" filter="true"></p-dropdown>
+                                    class="register" filterPlaceholder="Pas de classe trouvé" filter="true"></p-dropdown>
                             </span>
                         </div>
                         

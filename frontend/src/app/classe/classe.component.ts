@@ -17,13 +17,11 @@ export class ClasseComponent implements OnInit {
   classes:Classe[]=[];
 
   classeForm:FormGroup = new FormGroup({
-    description : new FormControl(''),
     nom : new FormControl('',Validators.required),
     nom_court : new FormControl('',Validators.required),
   })
 
   classeFormUpdate:FormGroup = new FormGroup({
-    description : new FormControl(''),
     nom : new FormControl('',Validators.required),
     nom_court : new FormControl('',Validators.required),
   })
@@ -41,7 +39,7 @@ export class ClasseComponent implements OnInit {
   }
 
   saveClasse(){
-    let classe= new Classe(this.classeForm.value.description,this.classeForm.value.nom,this.classeForm.value.nom_court)
+    let classe= new Classe(this.classeForm.value.nom,this.classeForm.value.nom_court)
 
     this.ClasseService.create(classe).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Votre classe a bien été ajouté' });
@@ -56,7 +54,7 @@ export class ClasseComponent implements OnInit {
   showModify(rowData:Classe){
     this.showFormUpdateClasse=rowData;
     this.showFormAddClasse=false
-    this.classeFormUpdate.setValue({description:rowData.description,nom:rowData.nom,nom_court:rowData.nom_court})
+    this.classeFormUpdate.setValue({nom:rowData.nom,nom_court:rowData.nom_court})
   }
 
   modifyClasse(){
