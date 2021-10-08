@@ -196,6 +196,7 @@ export class SuiviComponent implements OnInit {
             console.log(error);
           });
       }
+      this.updateList()
     })
     this.updateList()
   }

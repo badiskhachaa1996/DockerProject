@@ -110,9 +110,9 @@
                         </td>
                         <td>
                             <i *ngIf="rowData.activate" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-pencil"
-                            (click)="hide(rowData._id)"></i>
+                            (click)="hide(rowData"></i>
                             <i *ngIf="!rowData.activate" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-pencil"
-                            (click)="show(rowData._id)"></i>
+                            (click)="show(rowData)"></i>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showFormUpdateClasse=rowData;showFormAddClasse=false"></i>
                         </td>

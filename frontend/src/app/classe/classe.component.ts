@@ -66,12 +66,19 @@ export class ClasseComponent implements OnInit {
     });
   }
 
-  hide(id){
-    this.ClasseService.hide(id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Votre classe a bien été modifié' });
+  hide(classe){
+    this.ClasseService.hide(classe._id).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Cette classe ne s\'affichera plus dans la liste' });
       this.classes.splice(this.classes.indexOf(classe),1,data)
-      this.showFormUpdateClasse=null;
-      this.classeFormUpdate.reset();
+    }, (error) => {
+      console.log(error)
+    });
+  }
+
+  show(classe){
+    this.ClasseService.show(classe._id).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Cette classe s\'affichera de nouveau dans la liste' });
+      this.classes.splice(this.classes.indexOf(classe),1,data)
     }, (error) => {
       console.log(error)
     });
