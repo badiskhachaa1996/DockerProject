@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
         socket.join(LISTTOJOIN)
-        console.log("User Join: "+LISTTOJOIN)
+        //console.log("User Join: "+LISTTOJOIN)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté

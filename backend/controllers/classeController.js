@@ -103,7 +103,7 @@ app.get("/seeAll", (req, res) => {
 
 function haveAccess(lvl, user_id,headers, callback) {
     User.findOne({_id:user_id},(err,user)=>{
-        if(user && headers.origin=="https://ticket.estya.com" || headers.origin=="http://localhost:4200"){
+        if(user && (headers.origin=="https://ticket.estya.com" || headers.origin=="http://localhost:4200")){
             console.log(user)
             if (lvl == "Admin") {
                 console.log(user.role == "Admin")
