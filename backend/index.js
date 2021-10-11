@@ -46,6 +46,8 @@ const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
 app.use('/soc/', function (req, res, next) {
+    console.log(req.headers)
+    console.log(res.getHeaders())
     if(req.headers.origin == "https://ticket.estya.com" || req.headers.origin == "http://localhost:4200"){
         next()
     }else{
