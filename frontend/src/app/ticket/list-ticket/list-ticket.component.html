@@ -238,7 +238,7 @@
                             <i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
                                 class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
 
-                            <i pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
+                            <i *ngIf="rowData.createur_id!=token.id" pTooltip="Modifier" tooltipPosition="bottom" style="margin-left: 5%;"
                                 class="pi pi-pencil" (click)="modify(rowData);showFormUpdate=true"></i>
                             <i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
                                 *ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"></i>

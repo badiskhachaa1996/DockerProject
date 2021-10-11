@@ -60,9 +60,9 @@ export class AuthService {
     return this.http.post<any>(loginUrl,{secret:environment.key},httpOptions1)
   }
  
-  uploadimageprofile(data){
+  uploadimageprofile(data:FormData){
     let url = this.apiUrl+"file";
-    data.secret=environment.key
+    data.append("secret",environment.key)
     return this.http.post<any>(url,data,httpOptions1)
   }
 
