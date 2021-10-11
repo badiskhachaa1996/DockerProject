@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 
@@ -44,7 +45,13 @@ const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
-const { defaultMaxListeners } = require("events");
+app.use('/soc/', function (req, res, next) {
+    if(origin.startsWith(req.headers.origin) || req.headers.origin == "http://localhost:4200"){
+        next()
+    }else{
+        console.log("Access refusé pour:"+req.headers.origin)
+    }
+});
 
 app.use("/soc/user", UserController);
 
@@ -63,7 +70,7 @@ app.use('/soc/classe', classeController)
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
-        LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
+        LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
         //console.log("User Join: "+LISTTOJOIN)
     })
@@ -97,7 +104,7 @@ io.on("connection", (socket) => {
     })
 
     //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
-    socket.on('NewMessageByUser', (agent_id) => { 
+    socket.on('NewMessageByUser', (agent_id) => {
         io.to(agent_id).emit('refreshMessage')
     })
 

@@ -1,12 +1,9 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { Classe } = require("./../models/classe");
-const jwt = require("jsonwebtoken");
-const { User } = require("../models/user");
 
 //Création d'un nouveau classe 
 app.post("/create", (req, res) => {
-    haveAccess('Admin', jwt.decode(req.headers.token).id,req.headers, function(rep){
         //Sauvegarde du classe
         const classe = new Classe({
             nom: req.body.nom,
@@ -16,7 +13,6 @@ app.post("/create", (req, res) => {
         classe.save((err, doc) => {
             res.send(doc);
         });
-    })
 });
 
 
@@ -56,7 +52,6 @@ app.get("/getById/:id", (req, res) => {
 
 //Récuperer tous les classes
 app.get("/getAll", (req, res) => {
-    haveAccess('Admin', jwt.decode(req.headers.token).id,req.headers, function(rep){
     Classe.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -64,7 +59,6 @@ app.get("/getAll", (req, res) => {
         .catch(err => {
             console.log(err);
         })
-    })
 });
 app.get("/hideById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
@@ -100,25 +94,5 @@ app.get("/seeAll", (req, res) => {
             console.log(err);
         })
 });
-
-function haveAccess(lvl, user_id,headers, callback) {
-    User.findOne({_id:user_id},(err,user)=>{
-        if(user && (headers.origin=="https://ticket.estya.com" || headers.origin=="http://localhost:4200")){
-            console.log(user)
-            if (lvl == "Admin") {
-                console.log(user.role == "Admin")
-                callback(user.role == "Admin")
-            } else if (lvl == "Responsable") {
-                callback(user.role == "Responsable" || user.role == "Admin")
-            } else if (lvl == "Agent") {
-                callback(user.role == "Agent" || user.role == "Responsable" || user.role == "Admin")
-            } else {
-                callback(lvl == user_id)
-            }
-        }else{
-            callback(false)
-        }
-    })
-}
 
 module.exports = app;
