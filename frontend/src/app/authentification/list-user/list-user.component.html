@@ -15,29 +15,23 @@
         <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
-            <p-table #dt1 
-            *ngIf="tabUser" 
-            [columns]="cols" 
-            [value]="tabUser" 
-            dataKey="email"
-            [rows]="4" 
-            [paginator]="true" 
-            [pageLinks]="5" 
-            [responsive]="true" 
-            [totalRecords]="tabUser.length"
-            rowExpandMode="single"
-            (sortFunction)="customSort($event)" [customSort]="true"
-            [globalFilterFields]="['firstname','lastname','email','phone','Adresse']">
+            <p-table #dt1 *ngIf="tabUser" [columns]="cols" [value]="tabUser" dataKey="email" [rows]="4"
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"
+                rowExpandMode="single" (sortFunction)="customSort($event)" [customSort]="true"
+                [globalFilterFields]="['firstname','lastname','email','phone','Adresse']">
 
                 <ng-template pTemplate="caption">
-                    <div class="p-d-flex" >
+                    <div class="p-d-flex">
                         <div class="p-input-icon-left p-ml-auto" style="display: flex;">
-                            <p-dropdown [options]="filterRole"
-                        (onChange)="dt1.filter($event.value, 'role', 'equals')"></p-dropdown>
-                        <span style="margin-left: 2%;">
-                        <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
-                        (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown></span>
-                        <input style="margin-left:2%;" pInputText type="text"
+                            <p-dropdown [options]="filterRole" (onChange)="dt1.filter($event.value, 'role', 'equals')">
+                            </p-dropdown>
+                            <span style="margin-left: 2%;">
+                                <p-dropdown filter="true" placeholder="Tous" [options]="dropdownService"
+                                    (onChange)="dt1.filter($event.value, 'service_id', 'equals')"
+                                    emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
+                                </p-dropdown>
+                            </span>
+                            <input style="margin-left:2%;" pInputText type="text"
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                     </div>
@@ -46,18 +40,22 @@
 
                 <ng-template pTemplate="header" let-columns>
                     <th style="width: 3rem"></th>
-                    <th style="text-decoration: underline;" pSortableColumn="lastname" > Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
-                        
+                    <th style="text-decoration: underline;" pSortableColumn="lastname"> Nom & Prénom <p-sortIcon
+                            field="lastname"></p-sortIcon>
+
                     </th>
-                    <th style="text-decoration: underline;"pSortableColumn="service">  Service <p-sortIcon field="service"></p-sortIcon>
-                        
-                        
+                    <th style="text-decoration: underline;" pSortableColumn="service"> Service <p-sortIcon
+                            field="service"></p-sortIcon>
+
+
                     </th>
-                    <th style="text-decoration: underline;" pSortableColumn="role">  Role <p-sortIcon field="role"></p-sortIcon>
-                        
+                    <th style="text-decoration: underline;" pSortableColumn="role"> Role <p-sortIcon field="role">
+                        </p-sortIcon>
+
                     </th>
-                    <th style="text-decoration: underline;" pSortableColumn="email">  Email <p-sortIcon field="email"></p-sortIcon>
-                       
+                    <th style="text-decoration: underline;" pSortableColumn="email"> Email <p-sortIcon field="email">
+                        </p-sortIcon>
+
                     </th>
                     <th>
                         Action
@@ -68,11 +66,11 @@
                     <tr [pSelectableRow]="rowData" class="bodytab">
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                ></button>
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td *ngIf="rowData.civilite">
-                            {{rowData.civilite | i18nSelect: genderMap}} {{rowData.lastname | titlecase}} {{rowData.firstname | titlecase}}
+                            {{rowData.civilite | i18nSelect: genderMap}} {{rowData.lastname | titlecase}}
+                            {{rowData.firstname | titlecase}}
                         </td>
                         <td *ngIf="rowData.service_id && serviceDic[rowData.service_id]!=undefined">
                             {{ serviceDic[rowData.service_id].label }}
@@ -87,7 +85,8 @@
                             {{rowData.email}}
                         </td>
                         <td>
-                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-user-edit" (click)="modify(rowData);"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-user-edit"
+                                (click)="modify(rowData);"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -99,50 +98,57 @@
                                 [style]="{'color':'green','font-weight': 'bold'}">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
                                     <div *ngIf="rowData.phone" class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Téléphone:</b>
+                                        <div class="ui-g-6 ui-md-6"><b
+                                                style="text-align:left !important;">Téléphone:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.phone}} </div>
                                     </div>
                                     <div *ngIf="rowData.adresse" class="ui-g-6 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6"><b
-                                                style="text-align:left !important;">Adresse:</b> </div>
+                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse:</b>
+                                        </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.adresse}}</div>
                                     </div>
                                 </div>
-                                <div class="ui-g-12 ui-md-12" *ngIf="rowData.type" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
-                                    </div>
-                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                        {{rowData.type}}</div>
-                                </div>
-
-                                <div class="ui-g-12 ui-md-12"
-                                    *ngIf="rowData.type && (rowData.type=='Salarié' || rowData.type=='Alternant/Stagiaire') && rowData.entreprise" style="color: black;font-weight:normal;">
-                                    <div class="ui-g-6 ui-md-6"><b
-                                            style="text-align:left !important;">Entreprise:</b>
-                                    </div>
-                                    <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                        {{rowData.entreprise}}
-                                    </div>
-                                </div>
-
-                                <div class="ui-g-12 ui-md-12"
-                                    *ngIf="rowData.type && (rowData.type=='Etudiant' || rowData.type=='Alternant/Stagiaire')" style="color: black;font-weight:normal;">
-                                    <div *ngIf="rowData.campus" class="ui-g-12 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <b style="text-align:left !important;">Campus:</b>
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-6 ui-md-6" *ngIf="rowData.type"
+                                        style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Statut:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{rowData.campus}}</div>
+                                            {{rowData.type}}</div>
                                     </div>
-                                    <div *ngIf="rowData.formation" class="ui-g-12 ui-md-6">
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <b style="text-align:left !important;">Classe :</b>
+
+                                    <div class="ui-g-6 ui-md-6"
+                                        *ngIf="rowData.type && (rowData.type=='Salarié' || rowData.type=='Alternant/Stagiaire') && rowData.entreprise"
+                                        style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Entreprise:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{formationDic[rowData.formation].nom_court}}</div>
+                                            {{rowData.entreprise}}
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div *ngIf="rowData.campus && rowData.type && (rowData.type=='Etudiant' || rowData.type=='Alternant/Stagiaire')"
+                                            class="ui-g-6 ui-md-6">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Campus:</b>
+                                            </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                {{rowData.campus}}</div>
+                                        </div>
+
+                                        <div *ngIf="rowData.formation && rowData.type && (rowData.type=='Etudiant' || rowData.type=='Alternant/Stagiaire')"
+                                            class="ui-g-6 ui-md-6">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Classe :</b>
+                                            </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                {{formationDic[rowData.formation].nom_court}}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </p-fieldset>

@@ -184,10 +184,10 @@
                         <div style="display: flex;">
                             <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
                                 [options]="dropdownService"
-                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')" emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service"></p-dropdown>
                             <span style="margin-left:2%;">
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetQ"
-                                    (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                                    (onChange)="dt1.filter($event.value, 'sujet_id', 'equals')" emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet"></p-dropdown>
                             </span>
                             <input style="margin-left:2%;" pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
@@ -314,38 +314,44 @@
                                                 {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12" *ngIf="userDic[rowData.createur_id].type">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].type}}</div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise">
-                                        <div class="ui-g-6 ui-md-6"><b
-                                                style="text-align:left !important;">Entreprise:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].entreprise}}
-                                        </div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
-                                        <div *ngIf="userDic[rowData.createur_id].campus" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Campus:</b>
+                                    <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.createur_id].type"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Statut:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].campus}}</div>
+                                                {{userDic[rowData.createur_id].type}}</div>
                                         </div>
-                                        <div *ngIf="formationDic[userDic[rowData.createur_id].formation].nom_court" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Classe :</b>
+    
+                                        <div class="ui-g-6 ui-md-6"
+                                            *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Entreprise:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                                {{userDic[rowData.createur_id].entreprise}}
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div *ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Campus:</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{userDic[rowData.createur_id].campus}}</div>
+                                            </div>
+    
+                                            <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Classe :</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -389,12 +395,14 @@
             <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
                 (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
-                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
+                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']"
+                [expandedRowKeys]="expandedTraitement">
 
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="display: flex;">
                         <p-dropdown *ngIf="token['role']=='Admin'" placeholder="Choissisez un service" filter="true"
-                            [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')">
+                            [options]="dropdownService" (onChange)="dt2.filter($event.value, 'service_id', 'equals')"
+                            emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service">
                         </p-dropdown>
                         <span style="margin-left:2% ;">
 
@@ -404,7 +412,8 @@
                         </span>
                         <span style="margin-left:2% ;">
                             <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAccAff"
-                                (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                                (onChange)="dt2.filter($event.value, 'sujet_id', 'equals')"
+                                emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet"></p-dropdown>
                         </span>
                         <input style="margin-left:2%;" pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                     </div>
@@ -448,7 +457,7 @@
                         <td>
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)='loadMessages(rowData)'></button>
+                                (click)='loadMessages(rowData,"AccAff",expanded)'></button>
                         </td>
                         <td>
                             {{serviceList[sujetList[rowData.sujet_id].service_id]}}
@@ -555,42 +564,48 @@
                                                 <b style="text-align:left !important;">Service:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{serviceDic[userDic[rowData.createur_id]?.service_id]?.label}}</div>
+                                                {{serviceDic[userDic[rowData.createur_id].service_id]?.label}}</div>
                                         </div>
                                     </div>
 
-                                    <div class="ui-g-12 ui-md-12" *ngIf="userDic[rowData.createur_id].type">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].type}}</div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise">
-                                        <div class="ui-g-6 ui-md-6"><b
-                                                style="text-align:left !important;">Entreprise:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].entreprise}}
-                                        </div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
-                                        <div *ngIf="userDic[rowData.createur_id].campus" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Campus:</b>
+                                    <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.createur_id].type"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Statut:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].campus}}</div>
+                                                {{userDic[rowData.createur_id].type}}</div>
                                         </div>
-                                        <div *ngIf="formationDic[userDic[rowData.createur_id].formation].nom_court" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Classe :</b>
+    
+                                        <div class="ui-g-6 ui-md-6"
+                                            *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Entreprise:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                                {{userDic[rowData.createur_id].entreprise}}
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div *ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Campus:</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{userDic[rowData.createur_id].campus}}</div>
+                                            </div>
+    
+                                            <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Classe :</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -659,21 +674,23 @@
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt3 *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
                 [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
-                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
+                (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']" [expandedRowKeys]="expandedAll">
 
                 <ng-template pTemplate="caption">
                     <div class="p-input-icon-left p-ml-auto">
                         <div style="display: flex;">
                             <p-dropdown *ngIf="token['role']=='Admin'" filter="true" placeholder="Tous"
                                 [options]="dropdownService"
-                                (onChange)="dt3.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                                (onChange)="dt3.filter($event.value, 'service_id', 'equals')"
+                                emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service"></p-dropdown>
                             <span style="margin-left: 2%;">
                                 <p-dropdown [options]="showStatut"
                                     (onChange)="dt3.filter($event.value, 'statut', 'equals')"></p-dropdown>
                             </span>
                             <span style="margin-left: 2%;">
                                 <p-dropdown placeholder="Choissisez un sujet" filter="true" [options]="showSujetAll"
-                                    (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"></p-dropdown>
+                                    (onChange)="dt3.filter($event.value, 'sujet_id', 'equals')"
+                                    emptyFilterMessage="Pas de sujet trouvé" filterPlaceholder="Nom du sujet"></p-dropdown>
                             </span>
                             <input style="margin-left:2%;" pInputText type="text" (input)="dt3.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
@@ -803,14 +820,14 @@
                                                 {{userDic[rowData.createur_id].email}}</div>
                                         </div>
                                     </div>
-                                    <div *ngIf="userDic[rowData.createur_id].adresse" class="ui-g-12 ui-md-12">
-                                        <div class="ui-g-12 ui-md-4">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-12 ui-md-4" *ngIf="userDic[rowData.createur_id].adresse">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Adresse
                                                     postale:</b></div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{userDic[rowData.createur_id].adresse}}</div>
                                         </div>
-                                        <div class="ui-g-12 ui-md-4">
+                                        <div class="ui-g-12 ui-md-4" *ngIf="userDic[rowData.createur_id].role">
                                             <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Rôle:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
@@ -822,6 +839,46 @@
                                                     style="text-align:left !important;">Service:</b> </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                                 {{serviceDic[userDic[rowData.createur_id]?.service_id].label}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.createur_id].type"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Statut:</b>
+                                            </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                {{userDic[rowData.createur_id].type}}</div>
+                                        </div>
+    
+                                        <div class="ui-g-6 ui-md-6"
+                                            *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Entreprise:</b>
+                                            </div>
+                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                {{userDic[rowData.createur_id].entreprise}}
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div *ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Campus:</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{userDic[rowData.createur_id].campus}}</div>
+                                            </div>
+    
+                                            <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Classe :</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -871,38 +928,44 @@
                                                 {{serviceDic[userDic[rowData.agent_id]?.service_id].label}}</div>
                                         </div>
                                     </div>
-                                    <div class="ui-g-12 ui-md-12" *ngIf="userDic[rowData.createur_id].type">
-                                        <div class="ui-g-6 ui-md-6"><b style="text-align:left !important;">Statut:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].type}}</div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise">
-                                        <div class="ui-g-6 ui-md-6"><b
-                                                style="text-align:left !important;">Entreprise:</b>
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{userDic[rowData.createur_id].entreprise}}
-                                        </div>
-                                    </div>
-
-                                    <div class="ui-g-12 ui-md-12"
-                                        *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
-                                        <div *ngIf="userDic[rowData.createur_id].campus" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Campus:</b>
+                                    <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.createur_id].type"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Statut:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].campus}}</div>
+                                                {{userDic[rowData.createur_id].type}}</div>
                                         </div>
-                                        <div *ngIf="formationDic[userDic[rowData.createur_id].formation].nom_court" class="ui-g-12 ui-md-6">
-                                            <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                <b style="text-align:left !important;">Classe :</b>
+    
+                                        <div class="ui-g-6 ui-md-6"
+                                            *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise"
+                                            style="color: black;font-weight:normal;">
+                                            <div class="ui-g-6 ui-md-6">
+                                                <b style="text-align:left !important;">Entreprise:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                                {{userDic[rowData.createur_id].entreprise}}
+                                            </div>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div *ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Campus:</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{userDic[rowData.createur_id].campus}}</div>
+                                            </div>
+    
+                                            <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                                class="ui-g-6 ui-md-6">
+                                                <div class="ui-g-6 ui-md-6">
+                                                    <b style="text-align:left !important;">Classe :</b>
+                                                </div>
+                                                <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                                    {{formationDic[userDic[rowData.createur_id].formation].nom_court}}</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

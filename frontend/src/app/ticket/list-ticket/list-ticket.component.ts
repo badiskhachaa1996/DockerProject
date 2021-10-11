@@ -659,6 +659,8 @@ export class ListTicketComponent implements OnInit {
     } else {
       this.expandedAll[ticket._id] = !expanded;
     }
+    console.log(this.expandedAll)
+    console.log(this.expandedTraitement)
   }
 
   SendComment() {

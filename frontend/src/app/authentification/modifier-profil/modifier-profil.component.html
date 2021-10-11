@@ -77,7 +77,7 @@
                                         <div *ngIf="userco.campus && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Campus : </p> {{userco.campus}}
                                         </div>
-                                        <div *ngIf="userco.formation && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
+                                        <div *ngIf="userco.formation && formationDic[userco.formation] && (userco.type=='Etudiant' || userco.type=='Alternant/Stagiaire')" class="sm:col-12 md:col-6">
                                             <p style="font-weight: bold;"> Classe : </p> {{formationDic[userco.formation].nom_court}}
                                         </div>
                                     </div>
@@ -195,7 +195,7 @@
                                                     </div>
                                                     <span>
                                                         <p-dropdown formControlName="formation" [options]="formationList" optionLabel="nom_court"
-                                                        class="register" filterPlaceholder="Pas de classe trouvé" filter="true"></p-dropdown>
+                                                        class="register" emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true"></p-dropdown>
                                                     </span>
                                                 </div>
                                                 
