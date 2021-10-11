@@ -46,9 +46,11 @@ const classeController = require('./controllers/classeController')
 
 app.use('/', function (req, res, next) {
     if(req.headers.origin == origin || req.headers.host == "ticket.estya.com"){
+        console.log(req.headers.origin,req.headers.host)
         next();
     }else{
-        res.status(401).send("Accès non authorisé")
+        res.status(401).send("Accès non autorisé")
+        console.log("Accès non autorisé: ",req.headers.origin,req.headers.host)
     }
     
   });
