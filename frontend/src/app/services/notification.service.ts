@@ -24,12 +24,12 @@ export class NotificationService {
 
   create(notif: Notification) {
     let url = this.apiUrl + "create";
-    return this.http.post<any>(url, notif, httpOptions);
+    return this.http.post<any>(url, notif, httpOptions1);
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions);
+    return this.http.get<any>(loginUrl, httpOptions1);
   }
 
   update(notif :any){
@@ -44,17 +44,17 @@ export class NotificationService {
 
   getById(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAllByUserId(id:string){
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   get20ByUserID(id:string){
     let registreUrl=this.apiUrl+"get20ByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   newNotif(Notif){

@@ -21,12 +21,12 @@ export class ServService {
 
   public addService(service: Service) {
     let add_serv = this.apiUrl + "addService";
-    return this.http.post<any>(add_serv, service, httpOptions);
+    return this.http.post<any>(add_serv, service, httpOptions1);
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions);
+    return this.http.get<any>(loginUrl, httpOptions1);
   }
 
 
@@ -42,11 +42,11 @@ export class ServService {
 
   getAServiceByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getDic(){
     let registreUrl=this.apiUrl+"getDic";
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 }

@@ -19,7 +19,7 @@ export class SujetService {
 
   public addSujet(sujet: Sujet){
     let add_sujet=this.apiUrl+"addsujet";
-    return this.http.post<any>(add_sujet,sujet,httpOptions);
+    return this.http.post<any>(add_sujet,sujet,httpOptions1);
   }
 
 
@@ -40,7 +40,7 @@ export class SujetService {
 
   getASujetByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
 

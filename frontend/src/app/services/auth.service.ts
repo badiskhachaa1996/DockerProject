@@ -28,7 +28,7 @@ export class AuthService {
  
   login(user){
     let loginUrl=this.apiUrl+"login";
-    return this.http.post<any>(loginUrl,user,httpOptions);
+    return this.http.post<any>(loginUrl,user,httpOptions1);
   }
 
   getAll(){
@@ -38,12 +38,12 @@ export class AuthService {
 
   getById(id){
     let loginUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(loginUrl,httpOptions);
+    return this.http.get<any>(loginUrl,httpOptions1);
   }
 
   update(user :User){
     let registreUrl=this.apiUrl+"updateById/"+user._id;
-    return this.http.post<any>(registreUrl,user,httpOptions);
+    return this.http.post<any>(registreUrl,user,httpOptions1);
 
   }
   
@@ -57,23 +57,6 @@ export class AuthService {
     return this.http.get<any>(loginUrl,httpOptions1)
   }
  
-  handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Handle client error
-      errorMessage = error.error.message;
-    } else {
-      // Handle server error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
- 
-  sendEmail(url,data){
-    return this.http.post(url,data)
-  }
- 
   uploadimageprofile(data){
     let url = this.apiUrl+"file";
     return this.http.post<any>(url,data,httpOptions1)
@@ -85,7 +68,7 @@ export class AuthService {
   }
   updatePassword(id:string,data){
     let url=this.apiUrl+"updatePassword/"+id;
-    return this.http.post<any>(url,data,httpOptions);
+    return this.http.post<any>(url,data,httpOptions1);
   }
 
   reloadImage(data){

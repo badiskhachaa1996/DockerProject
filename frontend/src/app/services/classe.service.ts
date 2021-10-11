@@ -16,7 +16,7 @@ export class ClasseService {
 
   create(classe:Classe){
     let registreUrl=this.apiUrl+"create";
-    return this.http.post<any>(registreUrl,classe,httpOptions);
+    return this.http.post<any>(registreUrl,classe,httpOptions1);
   }
 
   update(classe :Classe){

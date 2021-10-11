@@ -33,6 +33,10 @@ export class ClasseComponent implements OnInit {
   constructor(private ClasseService:ClasseService,private messageService:MessageService) { }
 
   ngOnInit(): void {
+    this.updateList()
+  }
+
+  updateList(){
     this.ClasseService.getAll().subscribe((data)=>{
       this.classes=data;
     })
@@ -63,7 +67,7 @@ export class ClasseComponent implements OnInit {
 
     this.ClasseService.update(classe).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Votre classe a bien été modifié' });
-      this.classes.splice(this.classes.indexOf(classe),1,data)
+      this.updateList()
       this.showFormUpdateClasse=null;
       this.classeFormUpdate.reset();
     }, (error) => {
@@ -74,7 +78,7 @@ export class ClasseComponent implements OnInit {
   hide(classe :Classe){
     this.ClasseService.hide(classe._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' ne s\'affichera plus dans la liste' });
-      this.classes.splice(this.classes.indexOf(classe),1,data)
+      this.updateList()
     }, (error) => {
       console.log(error)
     });
@@ -83,7 +87,7 @@ export class ClasseComponent implements OnInit {
   show(classe :Classe){
     this.ClasseService.show(classe._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' s\'affichera de nouveau dans la liste' });
-      this.classes.splice(this.classes.indexOf(classe),1,data)
+      this.updateList()
     }, (error) => {
       console.log(error)
     });

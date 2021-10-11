@@ -17,12 +17,12 @@ export class TicketService {
 
   create(ticket){
     let registreUrl=this.apiUrl+"create";
-    return this.http.post<any>(registreUrl,ticket,httpOptions);
+    return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
   createForUser(ticket){
     let registreUrl=this.apiUrl+"createForUser";
-    return this.http.post<any>(registreUrl,ticket,httpOptions);
+    return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
   updateAll(ticket :any){
@@ -58,27 +58,27 @@ export class TicketService {
 
   getAccAff(id){
     let registreUrl=this.apiUrl+"getAccAff/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getTicketsByService(id){
     let registreUrl=this.apiUrl+"getTicketsByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getQueueByService(id){
     let registreUrl=this.apiUrl+"getQueueByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAccAffByService(id){
     let registreUrl=this.apiUrl+"getAccAffByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAllAccAff(){
     let registreUrl=this.apiUrl+"getAllAccAff";
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   setAccAff(info:any){
