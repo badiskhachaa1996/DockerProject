@@ -4,7 +4,7 @@
 
 export const environment = {
   origin: "http://localhost:3000/soc/",
-  key: "JESUISUNECLESECRETE",
+  key: "6abdfb04243e096a4a51b46c8f3d4b32",
   User: null,
 
   fr: {

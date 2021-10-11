@@ -30,7 +30,7 @@ app.post("/create", (req, res) => {
 
 
 //Suppression d'une notification
-app.get("/deleteById/:id", (req, res) => {
+app.post("/deleteById/:id", (req, res) => {
     Notification.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
@@ -54,7 +54,7 @@ app.post("/updateById/:id", (req, res) => {
 });
 
 //Récuperer une notification
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     Notification.findOne({ _id: req.params.id }).then((data) => {
         res.status(200).send({ data });
     }).catch((error) => {
@@ -63,7 +63,7 @@ app.get("/getById/:id", (req, res) => {
 });
 
 //Récuperer tous les notifications
-app.get("/getAll", (req, res) => {
+app.post("/getAll", (req, res) => {
     Notification.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -73,14 +73,14 @@ app.get("/getAll", (req, res) => {
         })
 });
 //Récuperer tous les notifications d'un user
-app.get("/getAllByUserID/:id", (req, res) => {
+app.post("/getAllByUserID/:id", (req, res) => {
     Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
         res.status(200).send(Notifications)
     })
 });
 
 //Récuperer les 20 notifications dernières d'un user
-app.get("/get20ByUserID/:id", (req, res) => {
+app.post("/get20ByUserID/:id", (req, res) => {
     Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
         res.status(200).send(Notifications.slice(0,20))
     })

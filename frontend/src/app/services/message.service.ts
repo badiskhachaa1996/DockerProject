@@ -16,41 +16,43 @@ export class MessageService {
 
   create(message){
     let registreUrl=this.apiUrl+"create";
+    message.secret=environment.key
     return this.http.post<any>(registreUrl,message,httpOptions1);
   }
 
   update(message :any){
     let registreUrl=this.apiUrl+"updateById/"+message.id;
+    message.secret=environment.key
     return this.http.post<any>(registreUrl,message,httpOptions1);
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   get(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getAll(){
     let registreUrl=this.apiUrl+"getAll";
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getAllByTicketID(id){
     let registreUrl=this.apiUrl+"getAllByTicketID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getAllDic(){
     let registreUrl=this.apiUrl+"getAllDic";
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   downloadFile(id){
     let registreUrl=this.apiUrl+"downloadFile/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 }

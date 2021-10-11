@@ -17,30 +17,32 @@ export class SujetService {
   constructor(private http : HttpClient, private _router: Router) { }
 
 
-  public addSujet(sujet: Sujet){
+  public addSujet(sujet: any){
     let add_sujet=this.apiUrl+"addsujet";
+    sujet.secret=environment.key
     return this.http.post<any>(add_sujet,sujet,httpOptions1);
   }
 
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions1);
+    return this.http.post<any>(loginUrl,{secret:environment.key}, httpOptions1);
   }
 
   update(sujet :any){
     let registreUrl=this.apiUrl+"updateById/"+sujet.id;
+    sujet.secret=environment.key
     return this.http.post<any>(registreUrl,sujet,httpOptions1);
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getASujetByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
 

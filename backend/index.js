@@ -45,14 +45,12 @@ const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
 app.use('/', function (req, res, next) {
-    if(req.headers.origin == origin || req.headers.host == "ticket.estya.com"){
-        console.log(req.headers.origin,req.headers.host)
+    if(req.body.secret=="6abdfb04243e096a4a51b46c8f3d4b32"){
         next();
     }else{
+        console.log("Requete bloqué:",req.body)
         res.status(401).send("Accès non autorisé")
-        console.log("Accès non autorisé: ",req.headers.origin,req.headers.host)
     }
-    
   });
 
 app.use("/soc/user", UserController);

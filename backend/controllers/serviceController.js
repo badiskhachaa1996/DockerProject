@@ -17,7 +17,7 @@ app.post("/addService", (req, res) => {
 });
 
 
-app.get("/getAll",(req,res)=>{
+app.post("/getAll",(req,res)=>{
     //Récupérer tous les services
     Service.find()
     .then(result=>{
@@ -30,7 +30,7 @@ app.get("/getAll",(req,res)=>{
 })
 
 
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     //Récupérer un service par id
     Service.findOne({ _id: req.params.id }).then((dataService) => {
         res.status(200).send({ dataService });
@@ -53,7 +53,7 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-app.get("/deleteById/:id",(req, res) => {
+app.post("/deleteById/:id",(req, res) => {
     //Supprimer un service par ID
     Service.findByIdAndRemove(req.params.id, (err, service) => {
         if (err) {
@@ -63,7 +63,7 @@ app.get("/deleteById/:id",(req, res) => {
     })
 });
 
-app.get("/getDic",(req,res)=>{
+app.post("/getDic",(req,res)=>{
     //Récupérer un dictionnaire de tous les services: dic[service_id]=service
     let dic = {};
     Service.find()

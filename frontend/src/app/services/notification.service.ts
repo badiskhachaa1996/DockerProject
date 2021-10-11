@@ -22,39 +22,41 @@ export class NotificationService {
 
   constructor(private http: HttpClient) { }
 
-  create(notif: Notification) {
+  create(notif: any) {
     let url = this.apiUrl + "create";
+    notif.secret=environment.key
     return this.http.post<any>(url, notif, httpOptions1);
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions1);
+    return this.http.post<any>(loginUrl,{secret:environment.key}, httpOptions1);
   }
 
   update(notif :any){
     let registreUrl=this.apiUrl+"updateById/"+notif._id;
+    notif.secret=environment.key
     return this.http.post<any>(registreUrl,notif,httpOptions1);
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getById(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getAllByUserId(id:string){
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   get20ByUserID(id:string){
     let registreUrl=this.apiUrl+"get20ByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   newNotif(Notif){
@@ -63,7 +65,7 @@ export class NotificationService {
 
   viewNotifs(notifications:Notification[]){
     let registreUrl=this.apiUrl+"viewNotifs";
-    return this.http.post<any>(registreUrl,{notifications},httpOptions1)
+    return this.http.post<any>(registreUrl,{notifications,secret:environment.key},httpOptions1)
  ;
   }
   reloadNotif(data){

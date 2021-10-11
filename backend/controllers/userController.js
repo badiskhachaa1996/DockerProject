@@ -114,7 +114,7 @@ app.post("/login", (req, res) => {
 });
 
 //Récupération d'un user via ID
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
         let userToken = jwt.sign({ userFromDb }, "userData")
@@ -126,7 +126,7 @@ app.get("/getById/:id", (req, res) => {
 });
 
 //Récupération de tous les users
-app.get("/getAll", (req, res) => {
+app.post("/getAll", (req, res) => {
     User.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -164,7 +164,7 @@ app.post("/updateById/:id", (req, res) => {
 })
 
 //Récupérer tous les users via Service ID
-app.get("/getAllbyService/:id", (req, res) => {
+app.post("/getAllbyService/:id", (req, res) => {
     User.find({ service: req.params.id })
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -176,7 +176,7 @@ app.get("/getAllbyService/:id", (req, res) => {
 });
 
 //Récupérer tous les non-users
-app.get("/getAllAgent/", (req, res) => {
+app.post("/getAllAgent/", (req, res) => {
     User.find({ role: ["Responsable", "Agent", "Admin"] })
 
         .then(result => {
@@ -250,7 +250,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
 })
 
 //Envoie de la photo de profile
-app.get('/getProfilePicture/:id', (req, res) => {
+app.post('/getProfilePicture/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
         if (user && user.pathImageProfil) {
             try {
