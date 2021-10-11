@@ -230,6 +230,9 @@ app.post('/file', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         return next(error)
     }
+    if(req.body.secret!="6abdfb04243e096a4a51b46c8f3d4b32"){
+        res.status(401).send('Fichier non autorisé')
+    }
     User.findById(req.body.id, (err, photo) => {
         try {
             fs.unlinkSync('storage/profile/' + photo.pathImageProfil)
