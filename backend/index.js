@@ -44,6 +44,15 @@ const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
+app.use('/', function (req, res, next) {
+    if(req.headers.origin == origin || req.headers.host == "ticket.estya.com"){
+        next();
+    }else{
+        res.status(401).send("Accès non authorisé")
+    }
+    
+  });
+
 app.use("/soc/user", UserController);
 
 app.use("/soc/service", ServiceController);
