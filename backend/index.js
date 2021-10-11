@@ -8,7 +8,6 @@ app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 
 const origin = require("./config")
-console.log(origin)
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
@@ -44,16 +43,6 @@ const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
-
-app.use('/soc/', function (req, res, next) {
-    console.log(req.headers)
-    console.log(res.getHeaders())
-    if(req.headers.origin == "https://ticket.estya.com" || req.headers.origin == "http://localhost:4200"){
-        next()
-    }else{
-        console.log("Access refusé pour:"+req.headers.origin)
-    }
-});
 
 app.use("/soc/user", UserController);
 
