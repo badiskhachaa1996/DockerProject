@@ -51,7 +51,7 @@ export class ClasseComponent implements OnInit {
       this.showFormAddClasse=false;
       this.classeForm.reset();
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -71,7 +71,7 @@ export class ClasseComponent implements OnInit {
       this.showFormUpdateClasse=null;
       this.classeFormUpdate.reset();
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -80,7 +80,7 @@ export class ClasseComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' ne s\'affichera plus dans la liste' });
       this.updateList()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -89,7 +89,7 @@ export class ClasseComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' s\'affichera de nouveau dans la liste' });
       this.updateList()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 

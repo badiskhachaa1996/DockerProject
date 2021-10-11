@@ -78,7 +78,6 @@ export class ModifierProfilComponent implements OnInit {
   })
 
   UpdateUser() {
-    console.log(this.RegisterForm.value.formation)
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value, null, null, this.RegisterForm.value.campus.value, this.RegisterForm.value.type.value, this.RegisterForm.value.formation._id, this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.userco = data;
@@ -86,7 +85,7 @@ export class ModifierProfilComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
       this.RegisterForm.patchValue({ formation: this.formationDic[data.formation] })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
@@ -161,7 +160,7 @@ export class ModifierProfilComponent implements OnInit {
         }
       })
 
-    }, (err) => console.log(err))
+    }, (err) => console.error(err))
 
   }
   clickFile() {
@@ -181,7 +180,7 @@ export class ModifierProfilComponent implements OnInit {
         avoidError.value = ""
         this.AuthService.reloadImage(this.token.id)
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }
   }

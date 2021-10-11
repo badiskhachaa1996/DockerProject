@@ -24,7 +24,7 @@ app.post("/getAll",(req,res)=>{
         res.send(result.length>0?result:[]);
     })
     .catch(err=>{   
-        console.log(err);
+        console.error(err);
     })
     
 })
@@ -74,7 +74,7 @@ app.post("/getDic",(req,res)=>{
         res.status(200).send(dic)
     })
     .catch(err=>{   
-        console.log(err);
+        console.error(err);
     })
     
 })

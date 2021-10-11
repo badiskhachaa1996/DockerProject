@@ -33,7 +33,7 @@ app.post("/create", (req, res) => {
             });
         fs.writeFile("storage/" + req.body.ticket_id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         });
     }
@@ -70,17 +70,15 @@ app.post("/create", (req, res) => {
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
-                        }else{
-                            console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
+                            console.error(error);
                         }
                     });
                 }
             }).catch((error) => {
-                console.log("erreur :" + error)
+                console.error(error)
             });
         }).catch((error) => {
-            console.log("erreur :" + error)
+            console.error(error)
         });
     });
 });
@@ -127,7 +125,7 @@ app.post("/getAll", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 //Récuperer tous les messages d'un ticket
@@ -137,7 +135,7 @@ app.post("/getAllByTicketID/:id", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -155,7 +153,7 @@ app.post("/getAllDic", (req, res) => {
             res.status(200).send(dic)
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 

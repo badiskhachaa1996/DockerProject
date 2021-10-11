@@ -83,7 +83,7 @@ socket = io(environment.origin.replace('/soc',''));
         }
      
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }
     

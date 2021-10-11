@@ -82,7 +82,6 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('/login')
       } else {
         this.listUserComponenet.showFormAdd = false
-        console.log(data)
         if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }

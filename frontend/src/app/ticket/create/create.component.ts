@@ -36,7 +36,7 @@ export class CreateComponent implements OnInit {
       this.messageService.add({severity:'success', summary:'Création du ticket', detail:'Votre ticket a bien été crée'});
       this.router.navigate(['/'])
     },(error)=>{
-      console.log(error)
+      console.error(error)
     });
     
   }
@@ -63,7 +63,7 @@ export class CreateComponent implements OnInit {
         });
       })
     },(error)=>{
-      console.log(error)
+      console.error(error)
     })
 
   }

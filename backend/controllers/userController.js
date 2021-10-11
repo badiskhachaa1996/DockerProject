@@ -42,7 +42,7 @@ app.post("/registre", (req, res) => {
                     campus:req.body?.campus
                 }, { new: true }, (err, userModified) => {
                     if (err) {
-                        console.log(err)
+                        console.error(err)
                     } else {
                         res.send(userModified)
                     }
@@ -80,13 +80,11 @@ app.post("/registre", (req, res) => {
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Création de compte")
+                        console.error(error);
                     }
                 });
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
                 res.status(400).send(error);
             })
         }
@@ -108,7 +106,7 @@ app.post("/login", (req, res) => {
             res.status(200).send({ token });
         }
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
@@ -120,7 +118,7 @@ app.post("/getById/:id", (req, res) => {
         let userToken = jwt.sign({ userFromDb }, "userData")
         res.status(200).send({ userToken });
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
@@ -132,7 +130,7 @@ app.post("/getAll", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
             res.status(404).send(error);
         })
 });
@@ -155,7 +153,7 @@ app.post("/updateById/:id", (req, res) => {
 
         }, { new: true }, (err, user) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 res.send(err)
             } else {
                 res.send(user)
@@ -171,7 +169,7 @@ app.post("/getAllbyService/:id", (req, res) => {
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -184,7 +182,7 @@ app.post("/getAllAgent/", (req, res) => {
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -197,7 +195,7 @@ app.post("/updatePassword/:id", (req, res) => {
                 password: bcrypt.hashSync(req.body.password, 8)
             }, { new: true }, (err, user) => {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     res.send(err)
                 } else {
                     res.send(user)

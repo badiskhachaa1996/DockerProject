@@ -281,7 +281,7 @@ export class ListTicketComponent implements OnInit {
           this.socket.emit("userLog", this.userconnected)
         }
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
       this.updateQueue()
       this.updateAllList()
@@ -329,7 +329,7 @@ export class ListTicketComponent implements OnInit {
               this.comments = data;
             },
             error => {
-              console.log(error);
+              console.error(error);
             });
       }
     })
@@ -387,7 +387,7 @@ export class ListTicketComponent implements OnInit {
       this.updateAccAffList()
       this.updateAllList()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -421,7 +421,7 @@ export class ListTicketComponent implements OnInit {
       this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
       this.updateQueue()
       this.updateAllList()
@@ -456,7 +456,6 @@ export class ListTicketComponent implements OnInit {
       customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type),
       email:this.TicketFormAdd.value.email
     }
-    console.log(req)
     this.TicketService.createForUser(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateQueue()
@@ -477,7 +476,7 @@ export class ListTicketComponent implements OnInit {
         }
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
@@ -563,12 +562,12 @@ export class ListTicketComponent implements OnInit {
           this.NotifService.newNotif(notif)
 
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
         this.updateQueue()
         this.updateAllList()
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     this.toggleFormUpdate();
@@ -651,7 +650,7 @@ export class ListTicketComponent implements OnInit {
           this.comments = data;
         },
         error => {
-          console.log(error);
+          console.error(error);
         });
     this.expandedAll = {};
     this.expandedTraitement = {}
@@ -693,10 +692,10 @@ export class ListTicketComponent implements OnInit {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
 
       } else {
@@ -706,15 +705,15 @@ export class ListTicketComponent implements OnInit {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
       }
 
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 

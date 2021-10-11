@@ -80,7 +80,7 @@ app.post("/getAll", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -91,7 +91,7 @@ app.post("/getAllbyUser/:id", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -102,7 +102,7 @@ app.post("/getQueue", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 
 })
@@ -114,7 +114,7 @@ app.post("/getAccAff/:id", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 
 })
@@ -156,11 +156,11 @@ app.post("/getTicketsByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -187,11 +187,11 @@ app.post("/getQueueByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -218,11 +218,11 @@ app.post("/getAccAffByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -258,13 +258,11 @@ app.post("/AccAff/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Affectation")
+                                console.error(error);
                             }
                         });
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                         res.status(404).send(error);
                     })
                 }
@@ -304,15 +302,13 @@ app.post("/changeService/:id", (req, res) => {
 
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
-                        } else {
-                            console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Redirection d'un ticket vers un autre service")
+                            console.error(error);
                         }
                     });
 
 
                 }).catch((error) => {
-                    console.log(error)
+                    console.error(error)
                 })
 
             }
@@ -349,14 +345,12 @@ app.post("/changeStatut/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:En attente d'un réponse d'un de vos tickets")
+                                console.error(error);
                             }
                         });
 
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     })
 
                 }
@@ -378,13 +372,11 @@ app.post("/changeStatut/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Traitement d'un de vos ticket")
+                                console.error(error);
                             }
                         });
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     })
                 }
             }
@@ -399,7 +391,7 @@ app.post("/getAllAccAff", (req, res) => {
             res.status(200).send(result.length > 0 ? result : [])
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -425,17 +417,15 @@ app.post("/revertTicket/:id", (req, res) => {
 
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Revert d'un ticket par un reponsable")
+                        console.error(error);
                     }
                 });
             }
         }).catch((error) => {
-            console.log(error)
+            console.error(error)
         })
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
     })
     Ticket.findOneAndUpdate({ _id: req.params.id },
         {
@@ -455,7 +445,7 @@ app.post("/revertTicket/:id", (req, res) => {
                 res.status(500).send(docs)
             }
         }).catch((err) => {
-            console.log(err)
+            console.error(err)
         });
 })
 

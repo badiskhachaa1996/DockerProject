@@ -45,7 +45,6 @@ export class FirstconnectionComponent implements OnInit {
     if (token) {
       this.AuthService.getById(token['id']).subscribe((data) => {
         this.userConnected = jwt_decode(data.userToken)['userFromDb']
-        console.log(this.userConnected)
         if (this.userConnected.adresse == null || this.userConnected.phone == null || this.userConnected.civilite == null ||this.userConnected.type == null) {
           this.RegisterForm.patchValue({
             lastname: this.userConnected.lastname,
@@ -95,7 +94,7 @@ export class FirstconnectionComponent implements OnInit {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
       } else {
-        console.log(error)
+        console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
       }
 

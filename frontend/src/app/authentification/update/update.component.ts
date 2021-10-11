@@ -70,7 +70,7 @@ export class UpdateUserComponent implements OnInit {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
     this.listUserComponent.showFormModify = false
   }
@@ -104,7 +104,7 @@ export class UpdateUserComponent implements OnInit {
     this.AuthService.getById(this.listUserComponent.selectedUser._id).subscribe((data) => {
       this.userupdate = jwt_decode(data['userToken'])['userFromDb']
     }, (err) =>{
-      console.log(err)
+      console.error(err)
     })
 
     if (localStorage.getItem("token") != null) {
