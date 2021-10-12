@@ -55,7 +55,8 @@ const user_schema = new mongoose.Schema({
         type: String
     },
     formation:{
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Classe"
     },
     entreprise:{
         type: String

@@ -175,7 +175,8 @@
                         <div style="display: flex;">
 
                             <p-dropdown id="c" filter="true" placeholder="Tous" [options]="dropdownService"
-                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"
+                                emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service"></p-dropdown>
                             <span style="margin-left: 2%;">
                                 <p-dropdown [options]="showStatut"
                                     (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>

@@ -44,7 +44,7 @@ export class UpdateComponent implements OnInit {
       this.messageService.add({severity:'success', summary:'Modification du ticket', detail:'Votre ticket a bien été modifié'});
       this.router.navigate(['/ticket/suivi'])
     },(error)=>{
-      console.log(error)
+      console.error(error)
     });
     
   }
@@ -82,10 +82,10 @@ export class UpdateComponent implements OnInit {
           }
         });
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
 
     this.TicketForm.patchValue({description:this.Ticket.description})

@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
               this.auth(data)
             },(error)=>{
-              console.log(error)
+              console.error(error)
             })
           }
         });
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
               this.auth(data)
             },(error)=>{
-              console.log(error)
+              console.error(error)
             })
           }
         });

@@ -35,7 +35,7 @@ app.post("/create", (req, res) => {
 
 
 //Suppression d'un ticket
-app.get("/deleteById/:id", (req, res) => {
+app.post("/deleteById/:id", (req, res) => {
     Ticket.findByIdAndRemove(req.params.id, (err, ticket) => {
         if (err) {
             res.send(err)
@@ -66,7 +66,7 @@ app.post("/updateAllById/:id", (req, res) => {
 });
 
 //Récuperer un ticket
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     Ticket.findOne({ _id: req.params.id }).then((dataTicket) => {
         res.status(200).send({ dataTicket });
     }).catch((error) => {
@@ -74,47 +74,47 @@ app.get("/getById/:id", (req, res) => {
     })
 });
 //Récuperer tous les tickets
-app.get("/getAll", (req, res) => {
+app.post("/getAll", (req, res) => {
     Ticket.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
 //Récupérer tous les tickets d'un User
-app.get("/getAllbyUser/:id", (req, res) => {
+app.post("/getAllbyUser/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
 //Récupérer la queue d'entrée
-app.get("/getQueue", (req, res) => {
+app.post("/getQueue", (req, res) => {
     Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 
 })
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
-app.get("/getAccAff/:id", (req, res) => {
+app.post("/getAccAff/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 
 })
@@ -134,7 +134,7 @@ app.post("/update/:id", (req, res) => {
 });
 
 //Get All Tickets by Service ID
-app.get("/getTicketsByService/:id", (req, res) => {
+app.post("/getTicketsByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -156,16 +156,16 @@ app.get("/getTicketsByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
 //Get All Tickets de la queue d'entrée by Service ID
-app.get("/getQueueByService/:id", (req, res) => {
+app.post("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -187,16 +187,16 @@ app.get("/getQueueByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
 //Get All Tickets Accepted or Affected by Service ID
-app.get("/getAccAffByService/:id", (req, res) => {
+app.post("/getAccAffByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -218,11 +218,11 @@ app.get("/getAccAffByService/:id", (req, res) => {
                     res.status(200).send({ TicketList })
                 })
                 .catch(err => {
-                    console.log(err);
+                    console.error(err);
                 })
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -258,13 +258,11 @@ app.post("/AccAff/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Affectation")
+                                console.error(error);
                             }
                         });
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                         res.status(404).send(error);
                     })
                 }
@@ -304,15 +302,13 @@ app.post("/changeService/:id", (req, res) => {
 
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
-                        } else {
-                            console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Redirection d'un ticket vers un autre service")
+                            console.error(error);
                         }
                     });
 
 
                 }).catch((error) => {
-                    console.log(error)
+                    console.error(error)
                 })
 
             }
@@ -349,14 +345,12 @@ app.post("/changeStatut/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:En attente d'un réponse d'un de vos tickets")
+                                console.error(error);
                             }
                         });
 
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     })
 
                 }
@@ -378,13 +372,11 @@ app.post("/changeStatut/:id", (req, res) => {
 
                         transporter.sendMail(mailOptions, function (error, info) {
                             if (error) {
-                                console.log(error);
-                            } else {
-                                console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Traitement d'un de vos ticket")
+                                console.error(error);
                             }
                         });
                     }).catch((error) => {
-                        console.log(error)
+                        console.error(error)
                     })
                 }
             }
@@ -393,13 +385,13 @@ app.post("/changeStatut/:id", (req, res) => {
 });
 
 //Get All Tickets Accepted or Affected by Service ID
-app.get("/getAllAccAff", (req, res) => {
+app.post("/getAllAccAff", (req, res) => {
     Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -425,17 +417,15 @@ app.post("/revertTicket/:id", (req, res) => {
 
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Revert d'un ticket par un reponsable")
+                        console.error(error);
                     }
                 });
             }
         }).catch((error) => {
-            console.log(error)
+            console.error(error)
         })
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
     })
     Ticket.findOneAndUpdate({ _id: req.params.id },
         {
@@ -455,7 +445,7 @@ app.post("/revertTicket/:id", (req, res) => {
                 res.status(500).send(docs)
             }
         }).catch((err) => {
-            console.log(err)
+            console.error(err)
         });
 })
 

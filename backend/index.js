@@ -3,11 +3,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 
 const origin = require("./config")
-
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
@@ -42,8 +42,16 @@ const SujetController = require('./controllers/sujetController');
 const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
+const classeController = require('./controllers/classeController')
 
-const { defaultMaxListeners } = require("events");
+app.use('/', function (req, res, next) {
+    if(req.body.secret=="6abdfb04243e096a4a51b46c8f3d4b32" || req.url=='/soc/user/file'){
+        next();
+    }else{
+        console.log("Requete bloqué:",req.url)
+        res.status(401).send("Accès non autorisé")
+    }
+  });
 
 app.use("/soc/user", UserController);
 
@@ -57,10 +65,12 @@ app.use('/soc/ticket', ticketController)
 
 app.use('/soc/notification', notifController)
 
+app.use('/soc/classe', classeController)
+
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
-        LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
+        LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
         console.log("User join: "+LISTTOJOIN)
     })
@@ -94,8 +104,7 @@ io.on("connection", (socket) => {
     })
 
     //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
-    socket.on('NewMessageByUser', (agent_id) => { 
-        console.log("SOC NMBU")
+    socket.on('NewMessageByUser', (agent_id) => {
         io.to(agent_id).emit('refreshMessage')
     })
 

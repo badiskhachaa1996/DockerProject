@@ -19,6 +19,7 @@ import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { FileUpload } from 'primeng/fileupload';
 import { SocketService } from 'src/app/services/socket.service';
+import { ClasseService } from 'src/app/services/classe.service';
 
 const io = require("socket.io-client");
 @Component({
@@ -39,6 +40,8 @@ export class ListTicketComponent implements OnInit {
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
+
+  formationDic = [];
 
   queueList: Ticket[] = [];
 
@@ -89,7 +92,7 @@ export class ListTicketComponent implements OnInit {
 
   showFormAdd=false;
 
-  @ViewChild('fileInput') fileInput: FileUpload;
+  @ViewChild('fubauto') fileInput: FileUpload;
   comments: any = [];
 
   commentForm: FormGroup = new FormGroup({
@@ -119,7 +122,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService, private ClasseService:ClasseService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -277,7 +280,7 @@ export class ListTicketComponent implements OnInit {
           this.socket.emit("userLog", this.userconnected)
         }
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
       this.updateQueue()
       this.updateAllList()
@@ -325,7 +328,7 @@ export class ListTicketComponent implements OnInit {
               this.comments = data;
             },
             error => {
-              console.log(error);
+              console.error(error);
             });
       }
     })
@@ -356,6 +359,11 @@ export class ListTicketComponent implements OnInit {
         }
       })
     })
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        this.formationDic[element._id]=element
+      });
+    })
   }
 
   //QueueToAccAff
@@ -378,7 +386,7 @@ export class ListTicketComponent implements OnInit {
       this.updateAccAffList()
       this.updateAllList()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -412,7 +420,7 @@ export class ListTicketComponent implements OnInit {
       this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
       this.updateQueue()
       this.updateAllList()
@@ -447,7 +455,6 @@ export class ListTicketComponent implements OnInit {
       customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type),
       email:this.TicketFormAdd.value.email
     }
-    console.log(req)
     this.TicketService.createForUser(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateQueue()
@@ -468,7 +475,7 @@ export class ListTicketComponent implements OnInit {
         }
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
@@ -554,12 +561,12 @@ export class ListTicketComponent implements OnInit {
           this.NotifService.newNotif(notif)
 
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
         this.updateQueue()
         this.updateAllList()
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     this.toggleFormUpdate();
@@ -642,7 +649,7 @@ export class ListTicketComponent implements OnInit {
           this.comments = data;
         },
         error => {
-          console.log(error);
+          console.error(error);
         });
     this.expandedAll = {};
     this.expandedTraitement = {}
@@ -684,10 +691,10 @@ export class ListTicketComponent implements OnInit {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
 
       } else {
@@ -697,15 +704,15 @@ export class ListTicketComponent implements OnInit {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
       }
 
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -736,7 +743,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-    this.fileInput.clear()
+    this.fileInput.clear() //TODO .clear()
   }
 
   toggleFormCancel() {

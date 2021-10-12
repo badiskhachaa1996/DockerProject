@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { ClasseService } from 'src/app/services/classe.service';
 
 @Component({
   selector: 'app-firstconnection',
@@ -14,7 +15,7 @@ import { MessageService } from 'primeng/api';
 })
 export class FirstconnectionComponent implements OnInit {
 
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private ClasseService:ClasseService) { }
 
   civiliteList = environment.civilite;
   userConnected: User;
@@ -36,7 +37,7 @@ export class FirstconnectionComponent implements OnInit {
     entreprise : new FormControl(this.entreprisesList[0]),
     type: new FormControl(this.statutList[0], [Validators.required]),
     campus: new FormControl(this.campusList[0]),
-    formation : new FormControl(this.formationList[0])
+    formation : new FormControl('')
   })
 
   ngOnInit(): void {
@@ -44,9 +45,10 @@ export class FirstconnectionComponent implements OnInit {
     if (token) {
       this.AuthService.getById(token['id']).subscribe((data) => {
         this.userConnected = jwt_decode(data.userToken)['userFromDb']
-        console.log(this.userConnected)
         if (this.userConnected.adresse == null || this.userConnected.phone == null || this.userConnected.civilite == null ||this.userConnected.type == null) {
-          this.RegisterForm.patchValue({ lastname: this.userConnected.lastname, firstname: this.userConnected.firstname })
+          this.RegisterForm.patchValue({
+            lastname: this.userConnected.lastname,
+            firstname: this.userConnected.firstname })
         } else {
           this.router.navigateByUrl('/ticket/suivi')
         }
@@ -54,6 +56,13 @@ export class FirstconnectionComponent implements OnInit {
     } else {
       this.router.navigateByUrl('/login')
     }
+
+    this.ClasseService.seeAll().subscribe((data)=>{
+      this.formationList = data;
+      this.RegisterForm.patchValue({
+        formation: data[0]
+      })
+    })
 
   }
 
@@ -73,7 +82,7 @@ export class FirstconnectionComponent implements OnInit {
       null,
       this.RegisterForm.value.campus.value,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.formation.value,
+      this.RegisterForm.value.formation._id,
       this.RegisterForm.value.entreprise.value
     )
     this.AuthService.update(user).subscribe((data: any) => {
@@ -85,7 +94,7 @@ export class FirstconnectionComponent implements OnInit {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
       } else {
-        console.log(error)
+        console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: error });
       }
 
@@ -101,6 +110,6 @@ export class FirstconnectionComponent implements OnInit {
   get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
   get type() { return this.RegisterForm.get('type').value.value; }
   get campus() { return this.RegisterForm.get('campus').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value; }
 
 }

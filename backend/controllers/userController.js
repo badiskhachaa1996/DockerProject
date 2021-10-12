@@ -42,7 +42,7 @@ app.post("/registre", (req, res) => {
                     campus:req.body?.campus
                 }, { new: true }, (err, userModified) => {
                     if (err) {
-                        console.log(err)
+                        console.error(err)
                     } else {
                         res.send(userModified)
                     }
@@ -80,13 +80,11 @@ app.post("/registre", (req, res) => {
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Création de compte")
+                        console.error(error);
                     }
                 });
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
                 res.status(400).send(error);
             })
         }
@@ -108,31 +106,31 @@ app.post("/login", (req, res) => {
             res.status(200).send({ token });
         }
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
 
 //Récupération d'un user via ID
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
         let userToken = jwt.sign({ userFromDb }, "userData")
         res.status(200).send({ userToken });
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
 
 //Récupération de tous les users
-app.get("/getAll", (req, res) => {
+app.post("/getAll", (req, res) => {
     User.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
             res.status(404).send(error);
         })
 });
@@ -155,7 +153,7 @@ app.post("/updateById/:id", (req, res) => {
 
         }, { new: true }, (err, user) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 res.send(err)
             } else {
                 res.send(user)
@@ -164,19 +162,19 @@ app.post("/updateById/:id", (req, res) => {
 })
 
 //Récupérer tous les users via Service ID
-app.get("/getAllbyService/:id", (req, res) => {
+app.post("/getAllbyService/:id", (req, res) => {
     User.find({ service: req.params.id })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 });
 
 //Récupérer tous les non-users
-app.get("/getAllAgent/", (req, res) => {
+app.post("/getAllAgent/", (req, res) => {
     User.find({ role: ["Responsable", "Agent", "Admin"] })
 
         .then(result => {
@@ -184,7 +182,7 @@ app.get("/getAllAgent/", (req, res) => {
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -197,7 +195,7 @@ app.post("/updatePassword/:id", (req, res) => {
                 password: bcrypt.hashSync(req.body.password, 8)
             }, { new: true }, (err, user) => {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     res.send(err)
                 } else {
                     res.send(user)
@@ -230,6 +228,9 @@ app.post('/file', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         return next(error)
     }
+    if(req.body.secret!="6abdfb04243e096a4a51b46c8f3d4b32"){
+        res.status(401).send('Fichier non autorisé')
+    }
     User.findById(req.body.id, (err, photo) => {
         try {
             fs.unlinkSync('storage/profile/' + photo.pathImageProfil)
@@ -250,7 +251,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
 })
 
 //Envoie de la photo de profile
-app.get('/getProfilePicture/:id', (req, res) => {
+app.post('/getProfilePicture/:id', (req, res) => {
     User.findById(req.params.id, (err, user) => {
         if (user && user.pathImageProfil) {
             try {

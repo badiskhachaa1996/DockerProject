@@ -74,7 +74,7 @@ export class ServiceComponent implements OnInit {
       if (error.status == 400) {
        
       }
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -91,7 +91,7 @@ export class ServiceComponent implements OnInit {
       if (error.status == 400) {
        
       }
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -102,7 +102,7 @@ export class ServiceComponent implements OnInit {
         this.services = data;
       },
       error => {
-        console.log(error);
+        console.error(error);
       });
     this.SujetService.getAll()
       .subscribe(
@@ -116,7 +116,7 @@ export class ServiceComponent implements OnInit {
           }
         },
         error => {
-          console.log(error);
+          console.error(error);
         });
   }
 
@@ -192,7 +192,7 @@ export class ServiceComponent implements OnInit {
       this.loadServiceSujet()
       this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
   modifySujet() {
@@ -208,7 +208,7 @@ export class ServiceComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Modification du sujet', detail: 'Le sujet a bien été modifié' });
       this.loadServiceSujet()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 

@@ -33,7 +33,7 @@ app.post("/create", (req, res) => {
             });
         fs.writeFile("storage/" + req.body.ticket_id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         });
     }
@@ -70,24 +70,22 @@ app.post("/create", (req, res) => {
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
-                        }else{
-                            console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
+                            console.error(error);
                         }
                     });
                 }
             }).catch((error) => {
-                console.log("erreur :" + error)
+                console.error(error)
             });
         }).catch((error) => {
-            console.log("erreur :" + error)
+            console.error(error)
         });
     });
 });
 
 
 //Suppression d'un message
-app.get("/deleteById/:id", (req, res) => {
+app.post("/deleteById/:id", (req, res) => {
     Message.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
@@ -112,7 +110,7 @@ app.post("/updateById/:id", (req, res) => {
 
 //Récuperer un message par ID
 
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         res.status(200).send({ data });
     }).catch((error) => {
@@ -121,28 +119,28 @@ app.get("/getById/:id", (req, res) => {
 });
 
 //Récuperer tous les messages
-app.get("/getAll", (req, res) => {
+app.post("/getAll", (req, res) => {
     Message.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 //Récuperer tous les messages d'un ticket
-app.get("/getAllByTicketID/:id", (req, res) => {
+app.post("/getAllByTicketID/:id", (req, res) => {
     Message.find({ ticket_id: req.params.id })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
 //Récupérer un dictionnaire en format dic[ticket_id]=[messages]
-app.get("/getAllDic", (req, res) => {
+app.post("/getAllDic", (req, res) => {
     let dic = {}
     Message.find()
         .then(result => {
@@ -155,12 +153,12 @@ app.get("/getAllDic", (req, res) => {
             res.status(200).send(dic)
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
 //Récupérer en base 64 le fichier d'une message
-app.get("/downloadFile/:id", (req, res) => {
+app.post("/downloadFile/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         let filename = data.document
         let file = fs.readFileSync("storage/" + data.ticket_id + "/" + filename, { encoding: 'base64' }, (err) => {

@@ -39,11 +39,11 @@ export class NotificationComponent implements OnInit {
                   this.NotificationService.reloadNotif({ id: this.token.id })
                 },
                 error => {
-                  console.log(error);
+                  console.error(error);
                 });
           },
           error => {
-            console.log(error);
+            console.error(error);
           });
 
       this.TicketService.getAll()
@@ -54,7 +54,7 @@ export class NotificationComponent implements OnInit {
             });
           },
           error => {
-            console.log(error);
+            console.error(error);
           });
       this.SujetService.getAll().subscribe(data => {
         data.forEach(sujet => {

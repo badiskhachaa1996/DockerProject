@@ -11,6 +11,7 @@ import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { ListUserComponent } from 'src/app/authentification/list-user/list-user.component'
 import { HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { ClasseService } from 'src/app/services/classe.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -46,7 +47,7 @@ export class RegisterComponent implements OnInit {
     entreprise : new FormControl(this.entreprisesList[0]),
     type: new FormControl(this.statutList[0], [Validators.required]),
     campus: new FormControl(this.campusList[0]),
-    formation : new FormControl(this.formationList[0])
+    formation : new FormControl('')
 
   })
 
@@ -67,7 +68,7 @@ export class RegisterComponent implements OnInit {
       null,
       this.RegisterForm.value.campus.value,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.formation.value,
+      this.RegisterForm.value.formation._id,
       this.RegisterForm.value.entreprise.value
     )
 
@@ -81,7 +82,6 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('/login')
       } else {
         this.listUserComponenet.showFormAdd = false
-        console.log(data)
         if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }
@@ -112,7 +112,7 @@ export class RegisterComponent implements OnInit {
   get type() { return this.RegisterForm.get('type').value.value; }
   get campus() { return this.RegisterForm.get('campus').value.value; }
   get formation() { return this.RegisterForm.get('formation').value.value; }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent) { }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent, private ClasseService:ClasseService) { }
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
@@ -130,6 +130,12 @@ export class RegisterComponent implements OnInit {
     } else if (this.IsAdmin) {
       this.Roles = [this.Roles[0], this.Roles[1]]
     }
+    this.ClasseService.seeAll().subscribe((data)=>{
+      this.formationList = data;
+      this.RegisterForm.patchValue({
+        formation: data[0]
+      })
+    })
   }
 
 

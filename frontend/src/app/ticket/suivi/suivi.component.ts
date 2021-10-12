@@ -109,7 +109,7 @@ export class SuiviComponent implements OnInit {
         )
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -130,7 +130,7 @@ export class SuiviComponent implements OnInit {
           this.socket.emit("userLog", jwt_decode(data.userToken)["userFromDb"])
         }
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
       this.updateList()
 
@@ -178,7 +178,7 @@ export class SuiviComponent implements OnInit {
           });
         })
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }
     this.socket.on("refreshSuivi", () => {
@@ -194,7 +194,7 @@ export class SuiviComponent implements OnInit {
             this.comments = data;
           },
           error => {
-            console.log(error);
+            console.error(error);
           });
       }
       this.updateList()
@@ -234,10 +234,10 @@ export class SuiviComponent implements OnInit {
           }
         });
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -258,7 +258,7 @@ export class SuiviComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Modification du ticket', detail: 'Votre ticket a bien été modifié' });
       this.showFormUpdate=false
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -291,24 +291,21 @@ export class SuiviComponent implements OnInit {
 
   addTicket() {
     //Enregistrement du Ticket
-    console.log(this.userconnected)
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
       description: this.TicketForm.value.description,
       customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type)
     }
-    console.log(req.customid)
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateList()
-      console.log("AddNewTicket "+this.TicketForm.value.sujet.service_id)
       this.Socket.AddNewTicket(this.TicketForm.value.sujet.service_id)
       this.TicketForm.reset()
       this.TicketForm.setValue({description:null,sujet:'',service:''})
 
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
@@ -341,7 +338,7 @@ export class SuiviComponent implements OnInit {
         this.comments = data;
       },
       error => {
-        console.log(error);
+        console.error(error);
       });
   }
   SendComment() {
@@ -370,10 +367,10 @@ export class SuiviComponent implements OnInit {
       this.NotifService.create(new Notification(null, data.doc.ticket_id, false, "Nouveau Message", null, agenttoNotif)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }

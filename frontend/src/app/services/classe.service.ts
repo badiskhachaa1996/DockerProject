@@ -1,29 +1,29 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Classe } from '../models/Classe';
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
 const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class MessageService {
-
-  apiUrl =environment.origin+ "message/"
-
+export class ClasseService {
+  apiUrl =environment.origin+ "classe/"
   constructor(private http : HttpClient) { }
 
-  create(message){
+  create(classe:any){
+    classe.secret=environment.key
     let registreUrl=this.apiUrl+"create";
-    message.secret=environment.key
-    return this.http.post<any>(registreUrl,message,httpOptions1);
+    return this.http.post<any>(registreUrl,classe,httpOptions1);
   }
 
-  update(message :any){
-    let registreUrl=this.apiUrl+"updateById/"+message.id;
-    message.secret=environment.key
-    return this.http.post<any>(registreUrl,message,httpOptions1);
+  update(classe :any){
+    classe.secret=environment.key
+    let registreUrl=this.apiUrl+"updateById/"+classe._id;
+    return this.http.post<any>(registreUrl,classe,httpOptions1);
   }
 
   delete(id:string){
@@ -41,18 +41,18 @@ export class MessageService {
     return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
-  getAllByTicketID(id){
-    let registreUrl=this.apiUrl+"getAllByTicketID/"+id;
+  hide(id :any){
+    let registreUrl=this.apiUrl+"hideById/"+id;
     return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
-  getAllDic(){
-    let registreUrl=this.apiUrl+"getAllDic";
+  show(id :any){
+    let registreUrl=this.apiUrl+"showById/"+id;
     return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
-  downloadFile(id){
-    let registreUrl=this.apiUrl+"downloadFile/"+id;
+  seeAll(){
+    let registreUrl=this.apiUrl+"seeAll";
     return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 }

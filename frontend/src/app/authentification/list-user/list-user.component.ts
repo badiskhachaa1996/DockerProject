@@ -8,6 +8,7 @@ import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
 
 import { Service } from 'src/app/models/Service';
+import { ClasseService } from 'src/app/services/classe.service';
 @Component({
   selector: 'app-list-user',
   templateUrl: './list-user.component.html',
@@ -37,10 +38,12 @@ export class ListUserComponent implements OnInit {
   ]
   loading: boolean;
 
+  formationDic = []
+
   selectedUser: User;
   formtype: string = "edit";
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
-  constructor(private AuthService: AuthService, private router: Router, private ServService: ServService) { }
+  constructor(private AuthService: AuthService, private router: Router, private ServService: ServService, private ClasseService:ClasseService) { }
 
   ngOnInit(): void {
     let token = null
@@ -65,6 +68,13 @@ export class ListUserComponent implements OnInit {
       });
     })
     this.loading = true;
+
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        this.formationDic[element._id]=element
+      });
+    })
+    
   }
 
   toggleFormAdd() {

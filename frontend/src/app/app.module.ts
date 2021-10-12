@@ -97,6 +97,7 @@ import { FooterComponent } from './footer/footer.component';
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
+import { ClasseComponent } from './classe/classe.component';
 
 
 
@@ -205,6 +206,7 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
         ModifierProfilComponent,
         FooterComponent,
         FirstconnectionComponent,
+        ClasseComponent,
     
 
                

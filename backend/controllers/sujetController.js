@@ -18,19 +18,19 @@ app.post("/addsujet", (req, res) => {
     })
 });
 
-app.get("/getAll",(req,res)=>{
+app.post("/getAll",(req,res)=>{
     //Récupérer tous les sujets
     Sujet.find()
     .then(result=>{
         res.send(result.length>0?result:[]);
     })
     .catch(err=>{   
-        console.log(err);
+        console.error(err);
     })
     
 })
 
-app.get("/getById/:id", (req, res) => {
+app.post("/getById/:id", (req, res) => {
     //Récupérer un sujet via ID
     Sujet.findOne({ _id: req.params.id }).then((dataSujet) => {
         res.status(200).send({ dataSujet });
@@ -53,7 +53,7 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-app.get("/deleteById/:id",(req, res) => {
+app.post("/deleteById/:id",(req, res) => {
     //Supprimer un sujet via ID
     Sujet.findByIdAndRemove(req.params.id, (err, sujet) => {
         if (err) {

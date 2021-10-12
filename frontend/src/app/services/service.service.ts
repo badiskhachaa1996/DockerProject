@@ -1,11 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Service } from '../models/Service';
-import { Sujet } from '../models/Sujet';
+
 
 const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.getItem('token')) };
@@ -19,34 +15,36 @@ export class ServService {
 
   constructor(private http: HttpClient) { }
 
-  public addService(service: Service) {
+  public addService(service: any) {
+    service.secret=environment.key
     let add_serv = this.apiUrl + "addService";
-    return this.http.post<any>(add_serv, service, httpOptions);
+    return this.http.post<any>(add_serv, service, httpOptions1);
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions);
+    return this.http.post<any>(loginUrl,{secret:environment.key}, httpOptions1);
   }
 
 
   update(service :any){
+    service.secret=environment.key
     let registreUrl=this.apiUrl+"updateById/"+service.id;
     return this.http.post<any>(registreUrl,service,httpOptions1);
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getAServiceByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 
   getDic(){
     let registreUrl=this.apiUrl+"getDic";
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.post<any>(registreUrl,{secret:environment.key},httpOptions1);
   }
 }
