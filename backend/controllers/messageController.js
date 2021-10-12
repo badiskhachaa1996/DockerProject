@@ -85,7 +85,7 @@ app.post("/create", (req, res) => {
 
 
 //Suppression d'un message
-app.post("/deleteById/:id", (req, res) => {
+app.get("/deleteById/:id", (req, res) => {
     Message.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
@@ -110,7 +110,7 @@ app.post("/updateById/:id", (req, res) => {
 
 //Récuperer un message par ID
 
-app.post("/getById/:id", (req, res) => {
+app.get("/getById/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         res.status(200).send({ data });
     }).catch((error) => {
@@ -119,7 +119,7 @@ app.post("/getById/:id", (req, res) => {
 });
 
 //Récuperer tous les messages
-app.post("/getAll", (req, res) => {
+app.get("/getAll", (req, res) => {
     Message.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -129,7 +129,7 @@ app.post("/getAll", (req, res) => {
         })
 });
 //Récuperer tous les messages d'un ticket
-app.post("/getAllByTicketID/:id", (req, res) => {
+app.get("/getAllByTicketID/:id", (req, res) => {
     Message.find({ ticket_id: req.params.id })
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -140,7 +140,7 @@ app.post("/getAllByTicketID/:id", (req, res) => {
 });
 
 //Récupérer un dictionnaire en format dic[ticket_id]=[messages]
-app.post("/getAllDic", (req, res) => {
+app.get("/getAllDic", (req, res) => {
     let dic = {}
     Message.find()
         .then(result => {
@@ -158,7 +158,7 @@ app.post("/getAllDic", (req, res) => {
 });
 
 //Récupérer en base 64 le fichier d'une message
-app.post("/downloadFile/:id", (req, res) => {
+app.get("/downloadFile/:id", (req, res) => {
     Message.findOne({ _id: req.params.id }).then((data) => {
         let filename = data.document
         let file = fs.readFileSync("storage/" + data.ticket_id + "/" + filename, { encoding: 'base64' }, (err) => {

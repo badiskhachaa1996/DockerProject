@@ -35,7 +35,7 @@ app.post("/create", (req, res) => {
 
 
 //Suppression d'un ticket
-app.post("/deleteById/:id", (req, res) => {
+app.get("/deleteById/:id", (req, res) => {
     Ticket.findByIdAndRemove(req.params.id, (err, ticket) => {
         if (err) {
             res.send(err)
@@ -74,7 +74,7 @@ app.post("/getById/:id", (req, res) => {
     })
 });
 //Récuperer tous les tickets
-app.post("/getAll", (req, res) => {
+app.get("/getAll", (req, res) => {
     Ticket.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -85,7 +85,7 @@ app.post("/getAll", (req, res) => {
 });
 
 //Récupérer tous les tickets d'un User
-app.post("/getAllbyUser/:id", (req, res) => {
+app.get("/getAllbyUser/:id", (req, res) => {
     Ticket.find({ createur_id: req.params.id }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -96,7 +96,7 @@ app.post("/getAllbyUser/:id", (req, res) => {
 });
 
 //Récupérer la queue d'entrée
-app.post("/getQueue", (req, res) => {
+app.get("/getQueue", (req, res) => {
     Ticket.find({ statut: "Queue d'entrée" }, null, { sort: { date_ajout: 1 } })
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -108,7 +108,7 @@ app.post("/getQueue", (req, res) => {
 })
 
 //Récupérer les Tickets Acceptes ou Affectés d'un agent
-app.post("/getAccAff/:id", (req, res) => {
+app.get("/getAccAff/:id", (req, res) => {
     Ticket.find({ agent_id: req.params.id }, null, { sort: { date_affec_accep: 1 } })//Et "En attente d'une réponse"
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -134,7 +134,7 @@ app.post("/update/:id", (req, res) => {
 });
 
 //Get All Tickets by Service ID
-app.post("/getTicketsByService/:id", (req, res) => {
+app.get("/getTicketsByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -165,7 +165,7 @@ app.post("/getTicketsByService/:id", (req, res) => {
 })
 
 //Get All Tickets de la queue d'entrée by Service ID
-app.post("/getQueueByService/:id", (req, res) => {
+app.get("/getQueueByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -196,7 +196,7 @@ app.post("/getQueueByService/:id", (req, res) => {
 })
 
 //Get All Tickets Accepted or Affected by Service ID
-app.post("/getAccAffByService/:id", (req, res) => {
+app.get("/getAccAffByService/:id", (req, res) => {
     let id = req.params.id
     let listSujetofService = []
     let TicketList = []
@@ -385,7 +385,7 @@ app.post("/changeStatut/:id", (req, res) => {
 });
 
 //Get All Tickets Accepted or Affected by Service ID
-app.post("/getAllAccAff", (req, res) => {
+app.get("/getAllAccAff", (req, res) => {
     Ticket.find({ $or: [{ statut: "En cours de traitement" }, { statut: "En attente d'une réponse" }, { statut: "Traité" }] }, null, { sort: { statut: 1 } })
         .then(result => {
             res.status(200).send(result.length > 0 ? result : [])

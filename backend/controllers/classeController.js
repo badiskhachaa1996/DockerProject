@@ -17,7 +17,7 @@ app.post("/create", (req, res) => {
 
 
 //Suppression d'un classe
-app.post("/deleteById/:id", (req, res) => {
+app.get("/deleteById/:id", (req, res) => {
     Classe.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
@@ -42,7 +42,7 @@ app.post("/updateById/:id", (req, res) => {
 
 //Récuperer un classe par ID
 
-app.post("/getById/:id", (req, res) => {
+app.get("/getById/:id", (req, res) => {
     Classe.findOne({ _id: req.params.id }).then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
@@ -51,7 +51,7 @@ app.post("/getById/:id", (req, res) => {
 });
 
 //Récuperer tous les classes
-app.post("/getAll", (req, res) => {
+app.get("/getAll", (req, res) => {
     Classe.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
@@ -60,7 +60,7 @@ app.post("/getAll", (req, res) => {
             console.error(err);
         })
 });
-app.post("/hideById/:id", (req, res) => {
+app.get("/hideById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
             active: false
@@ -72,7 +72,7 @@ app.post("/hideById/:id", (req, res) => {
         })
 });
 
-app.post("/showById/:id", (req, res) => {
+app.get("/showById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
             active: true
@@ -85,7 +85,7 @@ app.post("/showById/:id", (req, res) => {
 });
 
 //Récuperer tous les classes active
-app.post("/seeAll", (req, res) => {
+app.get("/seeAll", (req, res) => {
     Classe.find({ active: true })
         .then(result => {
             res.send(result.length > 0 ? result : []);

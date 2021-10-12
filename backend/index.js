@@ -45,12 +45,11 @@ const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
 app.use('/', function (req, res, next) {
-    console.log(req.headers.origin)
-    if(req.body.secret=="6abdfb04243e096a4a51b46c8f3d4b32" || req.url=='/soc/user/file'){
+    if(req.headers.origin==origin){
         next();
     }else{
-        console.log("Requete bloqué:",req.url)
-        res.status(401).send("Accès non autorisé")
+        console.log("Requete bloqué:",req.headers.origin)
+        res.status(403).send("Accès non autorisé")
     }
   });
 
