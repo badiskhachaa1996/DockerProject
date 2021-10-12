@@ -15,7 +15,7 @@
         <h3>Liste des agents</h3>
         <div class="card card-w-title table col-12  shadow-lg my-5">
 
-            <p-table #dt1 *ngIf="tabUser" [columns]="cols" [value]="tabUser" dataKey="email" [rows]="4"
+            <p-table #dt1 *ngIf="tabUser" [columns]="cols" [value]="tabUser" dataKey="email" [rows]="5"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="tabUser.length"
                 rowExpandMode="single" (sortFunction)="customSort($event)" [customSort]="true"
                 [globalFilterFields]="['firstname','lastname','email','phone','Adresse']">

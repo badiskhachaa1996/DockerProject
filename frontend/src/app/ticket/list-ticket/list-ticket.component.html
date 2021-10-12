@@ -176,7 +176,7 @@
             (click)="toggleFormAdd()"></button>
         <h3>Queue d'entrée</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="4"
+            <p-table #dt1 *ngIf="queueList" [columns]="cols" [value]="queueList" dataKey="_id" [rows]="5"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" rowExpandMode="single"
                 (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']">
                 <ng-template pTemplate="caption">
@@ -393,7 +393,7 @@
         <h3>Mes tickets en cours de traitement</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt2 *ngIf="AccAffList" [columns]="cols" [value]="AccAffList" pDroppable="QueueToAccAff"
-                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="4" [paginator]="true"
+                (onDrop)="dragQueueToAccAff($event)" dataKey="_id" rowExpandMode="single" [rows]="5" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="AccAffList.length"
                 (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']"
                 [expandedRowKeys]="expandedTraitement">
@@ -673,7 +673,7 @@
         <h3 *ngIf="token['role']=='Admin'">Les tickets de tous les services</h3>
         <div class="col-12 card shadow-lg my-5">
             <p-table #dt3 *ngIf="AccAffList" [columns]="cols" [value]="allTickets" dataKey="_id" rowExpandMode="single"
-                [rows]="4" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
+                [rows]="5" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allTickets.length"
                 (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['customid','description']" [expandedRowKeys]="expandedAll">
 
                 <ng-template pTemplate="caption">

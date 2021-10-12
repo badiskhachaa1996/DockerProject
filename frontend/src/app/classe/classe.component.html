@@ -65,7 +65,7 @@
         <h3>Liste des classes</h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="classes" [columns]="cols" [value]="classes" selectionMode="single"
-             [rows]="4" [paginator]="true" [pageLinks]="5"
+             [rows]="5" [paginator]="true" [pageLinks]="5"
                 [responsive]="true" [totalRecords]="classes.length" [filterDelay]="0" [globalFilterFields]="['nom','nom_court','description']">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">

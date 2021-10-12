@@ -147,7 +147,7 @@
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5" [paginator]="true"
                 [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
                 [globalFilterFields]="['customid','description']" (sortFunction)="customSort($event)"
                 [customSort]="true">
