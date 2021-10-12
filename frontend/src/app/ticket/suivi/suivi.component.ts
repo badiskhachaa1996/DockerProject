@@ -186,6 +186,7 @@ export class SuiviComponent implements OnInit {
     })
 
     this.socket.on("refreshMessage", () => {
+      console.log("SOC RM")
       if (this.comments && this.comments.length > 0) {
         this.MsgServ.getAllByTicketID(this.comments[0].ticket_id)
         .subscribe(
@@ -362,6 +363,7 @@ export class SuiviComponent implements OnInit {
       let agenttoNotif=this.selectedTicket.agent_id ;
       this.selectedTicket = null;
       this.commentForm.reset();
+      this.Socket.NewMessageByUser(agenttoNotif)
       this.NotifService.create(new Notification(null, data.doc.ticket_id, false, "Nouveau Message", null, agenttoNotif)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {

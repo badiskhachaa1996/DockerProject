@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
-        console.log("User Join: "+LISTTOJOIN)
+        console.log("User join: "+LISTTOJOIN)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
@@ -96,6 +96,7 @@ io.on("connection", (socket) => {
 
     //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
     socket.on('NewMessageByAgent', (data) => {
+        console.log("SOC NMBA")
         //Refresh du message de l'user et des tickets (à cause du statut)
         io.to(data.user_id).emit('refreshMessage')
         //Refresh du 3ème tableau du service (à cause du Tableau)

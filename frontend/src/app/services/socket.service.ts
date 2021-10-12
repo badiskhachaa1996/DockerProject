@@ -16,11 +16,12 @@ export class SocketService {
   }
 
   NewMessageByAgent(user_id,service_id){
-
+    console.log("SOC NMBA")
     this.socket.emit("NewMessageByAgent",{user_id,service_id})
   }
 
   NewMessageByUser(agent_id){
+    console.log("SOC NMBU")
     this.socket.emit("NewMessageByUser",agent_id)
   }
 
