@@ -92,7 +92,7 @@ export class ListTicketComponent implements OnInit {
 
   showFormAdd=false;
 
-  @ViewChild('fileInput') fileInput: FileUpload;
+  @ViewChild('fubauto') fileInput: FileUpload;
   comments: any = [];
 
   commentForm: FormGroup = new FormGroup({
@@ -659,8 +659,6 @@ export class ListTicketComponent implements OnInit {
     } else {
       this.expandedAll[ticket._id] = !expanded;
     }
-    console.log(this.expandedAll)
-    console.log(this.expandedTraitement)
   }
 
   SendComment() {
@@ -746,7 +744,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-    this.fileInput.clear()
+    this.fileInput.clear() //TODO .clear()
   }
 
   toggleFormCancel() {
