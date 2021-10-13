@@ -45,10 +45,9 @@ const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
 app.use('/', function (req, res, next) {
-    if(req.headers.origin==null && req.header("Sec-Fetch-Site")=="same-origin"){
+    if(AuthorizeAccess(req)){
         next();
     }else{
-        console.log("Requete bloqué:",req.headers.origin,req.header("Sec-Fetch-Site"))
         res.status(403).send("Accès non autorisé")
     }
   });
@@ -120,3 +119,7 @@ io.on("connection", (socket) => {
 httpServer.listen(3000, () => {
     console.log("SERVEUR START")
 });
+
+function AuthorizeAccess(req){
+    return (req.headers.origin===undefined && req.header(Sec-Fetch-Site)=="same-origin" && !req.header("User-Agent").startWith('Postman')) || req.headers.origin == "http://localhost:4200"
+}
