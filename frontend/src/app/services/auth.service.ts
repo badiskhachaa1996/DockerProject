@@ -7,8 +7,8 @@ const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 
 
-const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept","Origin":"*"}​​​​​​​​)}​​​​​​​​;
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept","Origin":"*"}).append('token', localStorage.getItem('token')) }​​​​​​​​;
+const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}​​​​​​​​)}​​​​​​​​;
+const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 
 @Injectable({
   providedIn: 'root'
