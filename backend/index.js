@@ -45,10 +45,10 @@ const notifController = require('./controllers/notificationController')
 const classeController = require('./controllers/classeController')
 
 app.use('/', function (req, res, next) {
-    if(req.headers.origin==origin){
+    if(req.headers.origin==null && req.header("Sec-Fetch-Site")=="same-origin"){
         next();
     }else{
-        console.log("Requete bloqué:",req.headers.origin)
+        console.log("Requete bloqué:",req.headers.origin,req.header("Sec-Fetch-Site"))
         res.status(403).send("Accès non autorisé")
     }
   });
