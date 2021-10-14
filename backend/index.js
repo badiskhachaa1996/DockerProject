@@ -121,5 +121,5 @@ httpServer.listen(3000, () => {
 });
 
 function AuthorizeAccess(req){
-    return ((req.headers.origin===undefined || req.headers.origin=="https://ticket.estya.com") && req.header(Sec-Fetch-Site)=="same-origin" && !req.header("User-Agent").startWith('Postman')) || req.headers.origin == "http://localhost:4200"
+    return ((req.headers.origin===undefined || req.headers.origin=="https://ticket.estya.com") && req.header("Sec-Fetch-Site")=="same-origin" && !req.header("User-Agent").startWith('Postman')) || req.headers.origin == "http://localhost:4200"
 }
