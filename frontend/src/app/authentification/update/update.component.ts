@@ -38,13 +38,15 @@ export class UpdateUserComponent implements OnInit {
     lastname: new FormControl(this.listUserComponent.selectedUser.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl(this.listUserComponent.selectedUser?.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl(this.listUserComponent.selectedUser?.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
     service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required]),
     entreprise : new FormControl({value:this.listUserComponent.selectedUser.entreprise}),
     type: new FormControl({value:this.listUserComponent.selectedUser.type}, [Validators.required]),
-    campus: new FormControl({value:this.listUserComponent.selectedUser.campus}),
-    formation : new FormControl('')
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
   })
 
   UpdateUser() {
@@ -57,14 +59,11 @@ export class UpdateUserComponent implements OnInit {
       null,
       this.RegisterForm.value.role.value || "user",
       null,
-      this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value,
       null,
       null,
-      this.RegisterForm.value.campus.value,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.formation._id,
       this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
@@ -77,7 +76,6 @@ export class UpdateUserComponent implements OnInit {
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   get role() { return this.RegisterForm.get('role'); }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
@@ -125,16 +123,6 @@ export class UpdateUserComponent implements OnInit {
 
     this.ClasseService.seeAll().subscribe((data)=>{
       this.formationList = data;
-    })
-
-    this.ClasseService.getAll().subscribe((data)=>{
-      data.forEach(element => {
-        if(element._id==this.listUserComponent.selectedUser.formation){
-          this.RegisterForm.patchValue({
-            formation: element
-          })
-        }
-      });
     })
 
   }

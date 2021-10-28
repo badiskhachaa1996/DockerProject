@@ -47,7 +47,6 @@ export class ModifierProfilComponent implements OnInit {
           lastname: this.userco.lastname,
           firstname: this.userco.firstname,
           phone: this.userco?.phone,
-          adresse: this.userco?.adresse,
           civilite: civ,
           entreprise: { value: this.userco?.entreprise },
           type: { value: this.userco?.type },
@@ -70,15 +69,17 @@ export class ModifierProfilComponent implements OnInit {
     lastname: new FormControl(this.userco.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.userco.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl(this.userco.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl(this.userco.adresse, [Validators.required]),
     entreprise: new FormControl({ value: this.userco.entreprise }),
     type: new FormControl({ value: this.userco.type }, [Validators.required]),
-    campus: new FormControl({ value: this.userco.campus }),
-    formation: new FormControl('')
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
   })
 
   UpdateUser() {
-    let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.RegisterForm.value.adresse, this.userupdate.service_id, this.RegisterForm.value.civilite.value, null, null, this.RegisterForm.value.campus.value, this.RegisterForm.value.type.value, this.RegisterForm.value.formation._id, this.RegisterForm.value.entreprise.value)
+    let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.userupdate.service_id, this.RegisterForm.value.civilite.value, null, null, this.RegisterForm.value.type.value, this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.userco = data;
       this.toggleUpdate = false;
@@ -92,13 +93,10 @@ export class ModifierProfilComponent implements OnInit {
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   get role() { return this.RegisterForm.get('role'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
   get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
   get type() { return this.RegisterForm.get('type').value.value; }
-  get campus() { return this.RegisterForm.get('campus').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value; }
 
   constructor(private AuthService: AuthService, private messageService: MessageService, private ClasseService: ClasseService) { }
 
@@ -151,7 +149,6 @@ export class ModifierProfilComponent implements OnInit {
             lastname: this.userco.lastname,
             firstname: this.userco.firstname,
             phone: this.userco?.phone,
-            adresse: this.userco?.adresse,
             civilite: civ,
             entreprise: { value: this.userco?.entreprise },
             type: { value: this.userco?.type },

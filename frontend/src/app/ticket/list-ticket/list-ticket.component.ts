@@ -452,7 +452,7 @@ export class ListTicketComponent implements OnInit {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketFormAdd.value.sujet._id,
       description: this.TicketFormAdd.value.description,
-      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type),
+      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,"Paris",this.userconnected.type),
       email:this.TicketFormAdd.value.email
     }
     this.TicketService.createForUser(req).subscribe((data) => {

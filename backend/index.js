@@ -47,12 +47,6 @@ const classeController = require('./controllers/classeController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    /*if(AuthorizeAccess(req)){
-        next();
-    }else{
-        res.status(403).send("Accès non autorisé")
-    }*/
-
     let token = jwt.decode(req.header("token"))
     if(token && token.id && token.role){
         User.findOne({_id:token.id,role:token.role},(err,user)=>{
@@ -67,7 +61,6 @@ app.use('/', function (req, res, next) {
             }
         })
     }else{
-        console.log(req.originalUrl)
         if(req.originalUrl=="/soc/user/AuthMicrosoft"){
             next()
         }else{
