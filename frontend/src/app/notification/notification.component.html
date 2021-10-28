@@ -29,7 +29,7 @@
                                 >
                                 <span class="timeline-event-title" style="font-weight: bold; font-size: 120%;">{{notif.type}}</span>
                                 <div class="timeline-event-message" style="font-size: small;">
-                                    Numéro du ticket : <span style="font-weight: bold;">{{notif.ticket_id}} </span>, Sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
+                                    Numéro du ticket : <span style="font-weight: bold;">{{(listTicket[notif.ticket_id].customid)?listTicket[notif.ticket_id].customid:notif.ticket_id}} </span>, Sujet : <span style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
                                 </div>
                                 <div class="timeline-event-time">
                                     {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}

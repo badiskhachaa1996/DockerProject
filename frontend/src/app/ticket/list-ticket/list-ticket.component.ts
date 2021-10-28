@@ -19,6 +19,8 @@ import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { FileUpload } from 'primeng/fileupload';
 import { SocketService } from 'src/app/services/socket.service';
+import { ClasseService } from 'src/app/services/classe.service';
+
 const io = require("socket.io-client");
 @Component({
   selector: 'app-list-ticket',
@@ -27,7 +29,7 @@ const io = require("socket.io-client");
 })
 
 export class ListTicketComponent implements OnInit {
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('/soc',''));
 
   showRevert = null;
   currentComment = null;
@@ -38,6 +40,8 @@ export class ListTicketComponent implements OnInit {
   listSujets: Sujet[] = [];
   listSujetSelected: any[] = [];
   statutList = environment.statut;
+
+  formationDic = [];
 
   queueList: Ticket[] = [];
 
@@ -51,9 +55,11 @@ export class ListTicketComponent implements OnInit {
   userDic: any[] = [];
   serviceDic: any[] = []
 
+  userconnected:User;
+
   showSujetQ = [{ label: "Tous les sujets", _id: null, value: null }];
   showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }];
-  showSujetAll: Sujet[] = [{ label: "Tous les sujets", _id: null }];
+  showSujetAll= [{ label: "Tous les sujets", _id: null, value: null }];
   showStatut = [
     { label: "Tous les statuts", value: null },
     { label: "File d'attente", value: "Queue d'entrée" },
@@ -84,7 +90,9 @@ export class ListTicketComponent implements OnInit {
 
   token = null;
 
-  @ViewChild('fileInput') fileInput: FileUpload;
+  showFormAdd=false;
+
+  @ViewChild('fubauto') fileInput: FileUpload;
   comments: any = [];
 
   commentForm: FormGroup = new FormGroup({
@@ -114,7 +122,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   constructor(private TicketService: TicketService, private SujetService: SujetService, private ServService: ServService, private router: Router,
-    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService) { }
+    private AuthService: AuthService, private messageService: MessageService, private MsgServ: MsgServ, private NotifService: NotificationService, private Socket: SocketService, private ClasseService:ClasseService) { }
 
   updateAccAffList() {
     this.showSujetAccAff = [{ label: "Tous les sujets", _id: null, value: null }]
@@ -144,7 +152,7 @@ export class ListTicketComponent implements OnInit {
   }
 
   updateAllList() {
-    this.showSujetAll = [{ label: "Tous les sujets", _id: null }]
+    this.showSujetAll = [{ label: "Tous les sujets", _id: null, value: null }]
     if (this.token['role'] == "Admin") {
       this.TicketService.getAllAccAff().subscribe((data) => {
         if (!data.message) {
@@ -156,14 +164,14 @@ export class ListTicketComponent implements OnInit {
                 this.allTickets.splice(index, 1, ticket)
                 var found = false;
                 for (var i = 0; i < this.showSujetAll.length; i++) {
-                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                  if (this.showSujetAll[i].value == sujet.dataSujet._id) {
                     found = true;
                     break;
                   }
                   
                 }
                 if (!found) {
-                  this.showSujetAll.push(sujet.dataSujet)
+                  this.showSujetAll.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
                 }
 
               }
@@ -180,13 +188,13 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 var found = false;
                 for (var i = 0; i < this.showSujetAll.length; i++) {
-                  if (this.showSujetAll[i]._id == sujet.dataSujet._id) {
+                  if (this.showSujetAll[i].value == sujet.dataSujet._id) {
                     found = true;
                     break;
                   }
                 }
                 if (!found) {
-                  this.showSujetAll.push(sujet.dataSujet)
+                  this.showSujetAll.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
                 }
               }
             )
@@ -208,7 +216,16 @@ export class ListTicketComponent implements OnInit {
               (sujet) => {
                 ticket["service_id"] = sujet.dataSujet.service_id
                 this.queueList.splice(index, 1, ticket)
-                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                var found = false;
+                for (var i = 0; i < this.showSujetQ.length; i++) {
+                  if (this.showSujetQ[i].value == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                }
 
               }
             )
@@ -223,7 +240,16 @@ export class ListTicketComponent implements OnInit {
           this.queueList.forEach((ticket) => {
             this.SujetService.getASujetByid(ticket.sujet_id).subscribe(
               (sujet) => {
-                this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                var found = false;
+                for (var i = 0; i < this.showSujetQ.length; i++) {
+                  if (this.showSujetQ[i].value == sujet.dataSujet._id) {
+                    found = true;
+                    break;
+                  }
+                }
+                if (!found) {
+                  this.showSujetQ.push({ label: sujet.dataSujet.label, _id: sujet.dataSujet.service_id, value: sujet.dataSujet._id })
+                }
               }
             )
           })
@@ -249,12 +275,12 @@ export class ListTicketComponent implements OnInit {
         this.serviceDic = data;
       })
       this.AuthService.getById(this.token.id).subscribe((data) => {
-        let userconnected = jwt_decode(data.userToken)["userFromDb"];
-        if (userconnected) {
-          this.socket.emit("userLog", userconnected)
+        this.userconnected = jwt_decode(data.userToken)["userFromDb"];
+        if (this.userconnected) {
+          this.socket.emit("userLog", this.userconnected)
         }
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
       this.updateQueue()
       this.updateAllList()
@@ -302,7 +328,7 @@ export class ListTicketComponent implements OnInit {
               this.comments = data;
             },
             error => {
-              console.log(error);
+              console.error(error);
             });
       }
     })
@@ -319,6 +345,24 @@ export class ListTicketComponent implements OnInit {
 
     this.socket.on("refreshQueue", () => {
       this.updateQueue()
+      this.AuthService.getAll().subscribe((data) => {
+        this.userDic = [];
+        if (!data.message) {
+          data.forEach(user => {
+            this.userDic[user._id] = null;
+            this.userDic[user._id] = user;
+            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
+              this.userList.push(user);
+            }
+          });
+          this.AllUsers = data;
+        }
+      })
+    })
+    this.ClasseService.getAll().subscribe((data)=>{
+      data.forEach(element => {
+        this.formationDic[element._id]=element
+      });
     })
   }
 
@@ -342,7 +386,7 @@ export class ListTicketComponent implements OnInit {
       this.updateAccAffList()
       this.updateAllList()
     }, (error) => {
-      console.log(error)
+      console.error(error)
     })
   }
 
@@ -376,7 +420,7 @@ export class ListTicketComponent implements OnInit {
       this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
       this.updateQueue()
       this.updateAllList()
@@ -390,6 +434,51 @@ export class ListTicketComponent implements OnInit {
     sujet: new FormControl('', Validators.required),//Il doit forcément selectionner
     service: new FormControl('', Validators.required),
   })
+
+  
+  TicketFormAdd: FormGroup = new FormGroup({
+    description: new FormControl('', Validators.required),
+    sujet: new FormControl('', Validators.required),
+    service: new FormControl('', Validators.required),
+    email: new FormControl('',[Validators.required,Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")])
+  })
+
+  get email() { return this.TicketFormAdd.get('email'); }
+
+  
+  addTicket() {
+    //Enregistrement du Ticket
+    let req = {
+      id: jwt_decode(localStorage.getItem("token"))["id"],
+      sujet_id: this.TicketFormAdd.value.sujet._id,
+      description: this.TicketFormAdd.value.description,
+      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,"Paris",this.userconnected.type),
+      email:this.TicketFormAdd.value.email
+    }
+    this.TicketService.createForUser(req).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
+      this.updateQueue()
+      this.Socket.AddNewTicket(this.TicketFormAdd.value.sujet.service_id)
+      this.TicketFormAdd.reset()
+      this.TicketFormAdd.setValue({email:'',description:null,sujet:'',service:''})
+      this.AuthService.getAll().subscribe((data) => {
+        if (!data.message) {
+          this.userDic= [];
+          data.forEach(user => {
+            this.userDic[user._id] = null;
+            this.userDic[user._id] = user;
+            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
+              this.userList.push(user);
+            }
+          });
+          this.AllUsers = data;
+        }
+      })
+    }, (error) => {
+      console.error(error)
+    });
+
+  }
 
 
 
@@ -440,8 +529,7 @@ export class ListTicketComponent implements OnInit {
         this.TicketForm.patchValue({ service: element })
       }
     });
-    console.log(data.sujet_id)
-    console.log(this.listSujets)
+    this.scrollToTop()
     this.listSujets.forEach(element => {
       if (element._id == data.sujet_id) {
         this.TicketForm.patchValue({ sujet: element })
@@ -453,6 +541,8 @@ export class ListTicketComponent implements OnInit {
   changeServiceDropDown() {
     this.TicketForm.patchValue({ sujet: this.listSujetSelected[this.TicketForm.value.service._id][0] })
   }
+
+
 
 
   modifyTicket() {
@@ -471,12 +561,12 @@ export class ListTicketComponent implements OnInit {
           this.NotifService.newNotif(notif)
 
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
         this.updateQueue()
         this.updateAllList()
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
     }
     this.toggleFormUpdate();
@@ -486,6 +576,12 @@ export class ListTicketComponent implements OnInit {
   onChange() {
     this.TicketForm.patchValue({
       sujet: this.listSujetSelected[this.TicketForm.value.service._id][0]
+    })
+  }
+
+  onChangeAdd(){
+    this.TicketFormAdd.patchValue({
+      sujet: this.listSujetSelected[this.TicketFormAdd.value.service._id][0]
     })
   }
 
@@ -509,20 +605,29 @@ export class ListTicketComponent implements OnInit {
     return days.toString() + Hours + " h " + minutes + " min "
   }
 
+  toggleFormAdd(){
+    this.showRevert = null;
+    this.showFormAddComment = false;
+    this.isModify = null;
+    this.showFormAdd = true;
+    this.scrollToTop()
+  }
 
 
   toggleRevertForm(ticket) {
     this.showRevert = ticket;
     this.showFormAddComment = false;
     this.isModify = null;
-
+    this.showFormAdd = false;
+    this.scrollToTop()
   }
 
   toggleFormUpdate() {
     this.isModify = null;
     this.showRevert = null;
     this.showFormAddComment = false;
-
+    this.showFormAdd = false;
+    this.scrollToTop()
   }
 
 
@@ -532,6 +637,8 @@ export class ListTicketComponent implements OnInit {
     this.selectedTicket = ticket;
     this.showRevert = null;
     this.isModify = null;
+    this.showFormAdd = false;
+    this.scrollToTop()
   }
 
   loadMessages(ticket: Ticket, type: string, expanded) {
@@ -542,7 +649,7 @@ export class ListTicketComponent implements OnInit {
           this.comments = data;
         },
         error => {
-          console.log(error);
+          console.error(error);
         });
     this.expandedAll = {};
     this.expandedTraitement = {}
@@ -579,15 +686,15 @@ export class ListTicketComponent implements OnInit {
       if (dataTicket.statut != "Traité") {
         this.NotifService.create(new Notification(null, this.selectedTicket._id, false, "Nouveau Message", null, this.selectedTicket.createur_id)).subscribe((notif) => {
           this.NotifService.newNotif(notif)
-          this.Socket.NewMessageByUser(this.selectedTicket.agent_id)
+          this.Socket.NewMessageByAgent(this.selectedTicket.createur_id,this.selectedTicket["service_id"])
           this.TicketService.changeStatut(dataTicket).subscribe((data) => {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
 
       } else {
@@ -597,15 +704,15 @@ export class ListTicketComponent implements OnInit {
             this.updateAccAffList()
             this.updateAllList()
           }, (error) => {
-            console.log(error)
+            console.error(error)
           })
         }, (error) => {
-          console.log(error)
+          console.error(error)
         });
       }
 
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
   }
 
@@ -636,7 +743,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-    this.fileInput.clear()
+    this.fileInput.clear() //TODO .clear()
   }
 
   toggleFormCancel() {
@@ -698,8 +805,39 @@ export class ListTicketComponent implements OnInit {
     })
 
   }
-  test(value) {
-    console.log(value)
+  generateCustomID(firstname,lastname,campus:string,statut:string){
+    let reeldate = new Date();
+
+    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
+
+    let random = Math.random().toString(36).substring(8).toUpperCase();
+
+    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
+
+    let campusCustom = campus[0].toUpperCase()
+
+    if(campus=="Montréal"){
+      campusCustom="C"
+    }else if(campus=="En Ligne(365)"){
+      campusCustom="O"
+    }
+
+    return 'ESTYA' + prenom + nom +''+ campusCustom+statut[0].toUpperCase()+'' + date + '' + random;
+  }
+
+  scrollToTop(){
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+        
+    var scrollInterval = setInterval(function(){  
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval); 
+      }
+    },15);	
   }
 }
 

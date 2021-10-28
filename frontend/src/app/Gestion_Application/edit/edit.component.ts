@@ -31,11 +31,9 @@ export class EditComponent implements OnInit {
   ngOnInit(): void {
 
     this.Service = new Service(history.state);
-    console.log(this.Service)
     if (!this.Service._id) {
       this.router.navigate(["/service/edit"])
     }
-    console.log(this.Service)
     this.serviceForm.setValue({label:this.Service.label})
 
       this.Sujet = new Sujet(history.state); //TODO Verifier
@@ -54,10 +52,8 @@ export class EditComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Modification du service', detail: 'Le service a bien été modifié' });
         this.router.navigate(['/service'])
       }, (error) => {
-        console.log(error)
+        console.error(error)
       });
-
-      console.log(this.serviceForm.value)
   }
 }
 

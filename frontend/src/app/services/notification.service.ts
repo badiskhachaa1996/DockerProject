@@ -7,8 +7,8 @@ import {tap} from 'rxjs/operators';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 
-const httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
-const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.getItem('token')) };
+const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*'}​​​​​​​​)}​​​​​​​​;
+const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 
 
 
@@ -17,19 +17,19 @@ const httpOptions1 = { headers: new HttpHeaders().append('token', localStorage.g
 })
 export class NotificationService {
   public notifs: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('/soc',''));
   apiUrl =environment.origin+ "notification/"
 
   constructor(private http: HttpClient) { }
 
-  create(notif: Notification) {
+  create(notif: any) {
     let url = this.apiUrl + "create";
-    return this.http.post<any>(url, notif, httpOptions);
+    return this.http.post<any>(url, notif, httpOptions1);
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions);
+    return this.http.post<any>(loginUrl, httpOptions1);
   }
 
   update(notif :any){
@@ -44,17 +44,17 @@ export class NotificationService {
 
   getById(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAllByUserId(id:string){
     let registreUrl=this.apiUrl+"getAllByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   get20ByUserID(id:string){
     let registreUrl=this.apiUrl+"get20ByUserID/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   newNotif(Notif){

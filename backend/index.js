@@ -3,11 +3,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const jwt = require("jsonwebtoken");
+
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 
 const origin = require("./config")
-
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
@@ -42,26 +43,53 @@ const SujetController = require('./controllers/sujetController');
 const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
+const classeController = require('./controllers/classeController');
+const { User } = require("./models/user");
 
-const { defaultMaxListeners } = require("events");
+app.use('/', function (req, res, next) {
+    let token = jwt.decode(req.header("token"))
+    if(token && token.id && token.role){
+        User.findOne({_id:token.id,role:token.role},(err,user)=>{
+            if(err){
+                console.log(err)
+                res.status(403).send("Accès non autorisé")
+            }
+            else if(user){
+                next()
+            }else{
+                res.status(403).send("Accès non autorisé")
+            }
+        })
+    }else{
+        if(req.originalUrl=="/soc/user/AuthMicrosoft"){
+            next()
+        }else{
+            res.status(403).send("Accès non autorisé")
+        }
+    }
+    
+  });
 
-app.use("/user", UserController);
+app.use("/soc/user", UserController);
 
-app.use("/service", ServiceController);
+app.use("/soc/service", ServiceController);
 
-app.use("/sujet", SujetController);
+app.use("/soc/sujet", SujetController);
 
-app.use("/message", messageController);
+app.use("/soc/message", messageController);
 
-app.use('/ticket', ticketController)
+app.use('/soc/ticket', ticketController)
 
-app.use('/notification', notifController)
+app.use('/soc/notification', notifController)
+
+app.use('/soc/classe', classeController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
-        LISTTOJOIN = [user._id,(user.service_id)?user.service_id:user.role]
+        LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
+        console.log("User join: "+LISTTOJOIN)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
@@ -80,12 +108,12 @@ io.on("connection", (socket) => {
 
     //Si un user ajoute un nouveau ticket --> refresh les tickets queue d'entrée du service du ticket des Agents et de l'admin
     socket.on('AddNewTicket', (service_id) => {
-        console.log("Refresh de la queue du service:" + service_id)
         io.to("Admin").to(service_id).emit('refreshQueue')
     })
 
     //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
     socket.on('NewMessageByAgent', (data) => {
+        console.log("SOC NMBA")
         //Refresh du message de l'user et des tickets (à cause du statut)
         io.to(data.user_id).emit('refreshMessage')
         //Refresh du 3ème tableau du service (à cause du Tableau)
@@ -93,7 +121,7 @@ io.on("connection", (socket) => {
     })
 
     //Si un user répond à un ticket --> refresh les messages du ticket de l'agent
-    socket.on('NewMessageByUser', (agent_id) => { 
+    socket.on('NewMessageByUser', (agent_id) => {
         io.to(agent_id).emit('refreshMessage')
     })
 

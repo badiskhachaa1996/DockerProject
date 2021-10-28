@@ -67,6 +67,47 @@
                             </div>
                         </div>
 
+                        
+                        <div class="field col mt-2 mb-2 col-4">
+                            <div>
+                                <label for="type" class="p-sr-only">Statut :</label>
+                            </div>
+                            <span>
+                                <p-dropdown formControlName="type" [options]="statutList" optionLabel="value"
+                                    class="register"></p-dropdown>
+                            </span>
+                        </div>
+
+                        <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                            <div>
+                                <label for="campus" class="p-sr-only">Campus :</label>
+                            </div>
+                            <span>
+                                <p-dropdown formControlName="campus" [options]="campusList" optionLabel="value"
+                                    class="register"></p-dropdown>
+                            </span>
+                        </div>
+
+                        <div class="field col mt-2 mb-2 col-4"  *ngIf="type=='Etudiant' || type=='Alternant/Stagiaire'">
+                            <div>
+                                <label for="formation" class="p-sr-only">Classe :</label>
+                            </div>
+                            <span>
+                                <p-dropdown formControlName="formation" [options]="formationList" optionLabel="nom_court"
+                                    class="register" emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true"></p-dropdown>
+                            </span>
+                        </div>
+                        
+                        <div class="field col mt-2 mb-2 col-4" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
+                            <div>
+                                <label for="entreprise" class="p-sr-only">Entreprise :</label>
+                            </div>
+                            <span>
+                                <p-dropdown formControlName="entreprise" [options]="entreprisesList" optionLabel="value"
+                                    class="register"></p-dropdown>
+                            </span>
+                        </div>
+
                         <div class=" field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
                                 <label style="font-weight: bold;" for="role" class="p-sr-only">Role :</label>

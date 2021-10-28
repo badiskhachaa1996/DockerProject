@@ -24,7 +24,7 @@ app.get("/getAll",(req,res)=>{
         res.send(result.length>0?result:[]);
     })
     .catch(err=>{   
-        console.log(err);
+        console.error(err);
     })
     
 })
@@ -53,7 +53,7 @@ app.post("/updateById/:id", (req, res) => {
         })
 });
 
-app.get("/deleteById/:id",(req, res) => {
+app.post("/deleteById/:id",(req, res) => {
     //Supprimer un service par ID
     Service.findByIdAndRemove(req.params.id, (err, service) => {
         if (err) {
@@ -74,7 +74,7 @@ app.get("/getDic",(req,res)=>{
         res.status(200).send(dic)
     })
     .catch(err=>{   
-        console.log(err);
+        console.error(err);
     })
     
 })

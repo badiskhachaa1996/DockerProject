@@ -11,6 +11,7 @@ import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { ListUserComponent } from 'src/app/authentification/list-user/list-user.component'
 import { HttpClientModule, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { ClasseService } from 'src/app/services/classe.service';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
@@ -26,6 +27,11 @@ export class RegisterComponent implements OnInit {
   Roles = environment.role;
   showForm: boolean = true;
   civiliteList = environment.civilite;
+  statutList = environment.typeUser
+  campusList = environment.campus
+  formationList = environment.formations
+  entreprisesList =environment.entreprisesList
+
 
   RegisterForm: FormGroup = new FormGroup({
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
@@ -33,11 +39,17 @@ export class RegisterComponent implements OnInit {
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]),
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl('', [Validators.required]),
     /*password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),*/
     role: new FormControl('user', Validators.required),
     service_id: new FormControl(null),
+    entreprise : new FormControl(this.entreprisesList[0]),
+    type: new FormControl(this.statutList[0], [Validators.required]),
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
 
   })
 
@@ -51,9 +63,12 @@ export class RegisterComponent implements OnInit {
       //this.RegisterForm.value.password,
       this.RegisterForm.value.role.value || this.Roles[0].value,
       null,
-      this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
-      this.RegisterForm.value.civilite.value
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.entreprise.value
     )
 
     if (this.router.url == "/register") {
@@ -66,7 +81,6 @@ export class RegisterComponent implements OnInit {
         this.router.navigateByUrl('/login')
       } else {
         this.listUserComponenet.showFormAdd = false
-        console.log(data)
         if (data.role != "user") {
           this.listUserComponenet.tabUser.push(data)
         }
@@ -86,13 +100,17 @@ export class RegisterComponent implements OnInit {
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   /*get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }*/
   get role() { return this.RegisterForm.get('role').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent) { }
+
+  get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
+  get type() { return this.RegisterForm.get('type').value.value; }
+  get campus() { return this.RegisterForm.get('campus').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value.value; }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponenet: ListUserComponent, private ClasseService:ClasseService) { }
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
@@ -110,6 +128,12 @@ export class RegisterComponent implements OnInit {
     } else if (this.IsAdmin) {
       this.Roles = [this.Roles[0], this.Roles[1]]
     }
+    this.ClasseService.seeAll().subscribe((data)=>{
+      this.formationList = data;
+      this.RegisterForm.patchValue({
+        formation: data[0]
+      })
+    })
   }
 
 

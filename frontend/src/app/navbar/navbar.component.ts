@@ -28,7 +28,7 @@ export class NavbarComponent implements OnInit {
   role: string;
   userconnected: User = null ;
 
-socket = io(environment.origin);
+socket = io(environment.origin.replace('/soc',''));
 
   constructor(public app: AppComponent, private messageService: MessageService ,private AuthService: AuthService, private router: Router, ) { }
 
@@ -61,6 +61,11 @@ socket = io(environment.origin);
             icon: 'pi pi-users',
             routerLink: '/listUser'
           },
+          {
+            label: 'Gestions des classes',
+            icon: 'pi pi-desktop',
+            routerLink: '/classe'
+          },
       
           ]
         }else{
@@ -78,7 +83,7 @@ socket = io(environment.origin);
         }
      
       }, (error) => {
-        console.log(error)
+        console.error(error)
       })
     }
     

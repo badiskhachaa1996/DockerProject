@@ -7,8 +7,8 @@ const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 
 
-const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
+const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}​​​​​​​​)}​​​​​​​​;
+const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 
 @Injectable({
   providedIn: 'root'
@@ -17,11 +17,11 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('
 export class AuthService {
   apiUrl = environment.origin+ "user/"
 
-  socket = io(environment.origin);
+  socket = io(environment.origin.replace('/soc',''));
 
   constructor(private http : HttpClient) {  }
 
-  register(user: User) {
+  register(user: any) {
     let API_URL = this.apiUrl+"registre";
     return this.http.post(API_URL, user)
   }
@@ -38,12 +38,12 @@ export class AuthService {
 
   getById(id){
     let loginUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(loginUrl,httpOptions);
+    return this.http.get<any>(loginUrl,httpOptions1);
   }
 
-  update(user :User){
+  update(user :any){
     let registreUrl=this.apiUrl+"updateById/"+user._id;
-    return this.http.post<any>(registreUrl,user,httpOptions);
+    return this.http.post<any>(registreUrl,user,httpOptions1);
 
   }
   
@@ -57,24 +57,7 @@ export class AuthService {
     return this.http.get<any>(loginUrl,httpOptions1)
   }
  
-  handleError(error: HttpErrorResponse) {
-    let errorMessage = '';
-    if (error.error instanceof ErrorEvent) {
-      // Handle client error
-      errorMessage = error.error.message;
-    } else {
-      // Handle server error
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    console.log(errorMessage);
-    return throwError(errorMessage);
-  }
- 
-  sendEmail(url,data){
-    return this.http.post(url,data)
-  }
- 
-  uploadimageprofile(data){
+  uploadimageprofile(data:FormData){
     let url = this.apiUrl+"file";
     return this.http.post<any>(url,data,httpOptions1)
   }
@@ -85,7 +68,7 @@ export class AuthService {
   }
   updatePassword(id:string,data){
     let url=this.apiUrl+"updatePassword/"+id;
-    return this.http.post<any>(url,data,httpOptions);
+    return this.http.post<any>(url,data,httpOptions1);
   }
 
   reloadImage(data){

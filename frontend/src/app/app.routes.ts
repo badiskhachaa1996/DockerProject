@@ -15,6 +15,7 @@ import { UpdateUserComponent } from './authentification/update/update.component'
 import {NotificationComponent} from './notification/notification.component';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
+import { ClasseComponent } from './classe/classe.component';
 
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
@@ -30,10 +31,9 @@ const routes: Routes = [
     
     { path: 'notification', component: NotificationComponent},
     { path: 'profil', component: ModifierProfilComponent },
-    { path: 'profil/creation',component:FirstconnectionComponent}
-  
-
-    // { path: '**', redirectTo: '/' }
+    { path: 'profil/creation',component:FirstconnectionComponent},
+    { path: 'classe',component:ClasseComponent},
+    { path: '**', redirectTo: '/' }
   ];
 
   

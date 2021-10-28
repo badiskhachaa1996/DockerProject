@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { Sujet } from '../models/Sujet';
-const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
+const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*'}​​​​​​​​)}​​​​​​​​;
+const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 @Injectable({
   providedIn: 'root'
 })
@@ -17,9 +17,9 @@ export class SujetService {
   constructor(private http : HttpClient, private _router: Router) { }
 
 
-  public addSujet(sujet: Sujet){
+  public addSujet(sujet: any){
     let add_sujet=this.apiUrl+"addsujet";
-    return this.http.post<any>(add_sujet,sujet,httpOptions);
+    return this.http.post<any>(add_sujet,sujet,httpOptions1);
   }
 
 
@@ -40,7 +40,7 @@ export class SujetService {
 
   getASujetByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
 

@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import {Ticket} from "../models/Ticket"
 
-const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json'}​​​​​​​​)}​​​​​​​​;
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders().append('token', localStorage.getItem('token')) }​​​​​​​​;
+const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*'}​​​​​​​​)}​​​​​​​​;
+const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,12 @@ export class TicketService {
 
   create(ticket){
     let registreUrl=this.apiUrl+"create";
-    return this.http.post<any>(registreUrl,ticket,httpOptions);
+    return this.http.post<any>(registreUrl,ticket,httpOptions1);
+  }
+
+  createForUser(ticket){
+    let registreUrl=this.apiUrl+"createForUser";
+    return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
   updateAll(ticket :any){
@@ -26,9 +31,9 @@ export class TicketService {
   }
 
   //Update le ticket et son premier Message
-  update(newTicket){
-    let registreUrl=this.apiUrl+"update/"+newTicket.id;
-    return this.http.post<any>(registreUrl,newTicket,httpOptions1);
+  update(ticket){
+    let registreUrl=this.apiUrl+"update/"+ticket.id;
+    return this.http.post<any>(registreUrl,ticket,httpOptions1);
   }
 
   delete(id:string){
@@ -48,32 +53,32 @@ export class TicketService {
 
   getQueue(){
     let registreUrl=this.apiUrl+"getQueue";
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAccAff(id){
     let registreUrl=this.apiUrl+"getAccAff/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getTicketsByService(id){
     let registreUrl=this.apiUrl+"getTicketsByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getQueueByService(id){
     let registreUrl=this.apiUrl+"getQueueByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAccAffByService(id){
     let registreUrl=this.apiUrl+"getAccAffByService/"+id;
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   getAllAccAff(){
     let registreUrl=this.apiUrl+"getAllAccAff";
-    return this.http.get<any>(registreUrl);
+    return this.http.get<any>(registreUrl,httpOptions1);
   }
 
   setAccAff(info:any){

@@ -33,7 +33,7 @@ app.post("/create", (req, res) => {
             });
         fs.writeFile("storage/" + req.body.ticket_id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         });
     }
@@ -56,7 +56,7 @@ app.post("/create", (req, res) => {
                 if (msg.isRep) {
                     //Envoie du mail, pour avertir d'un nouveau message sur son ticket
                     let gender = (userFromDb.civilite=='Monsieur')?'M. ':'Mme ';
-                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.id + ' </b> et qui a pour description <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let htmlemail = '<p style="color:black"> Bonjour  '+ gender + userFromDb.lastname + ',</p> </br> <p style="color:black"> Vous avez reçu un nouveau message pour le ticket qui a pour numéro : <b> ' + tickFromDb.customid + ' </b> et qui a pour description <b>' + tickFromDb.description + ' </b></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
                     let mailOptions = {
                         from: 'estya-ticketing@estya.com',
                         to: userFromDb.email,
@@ -70,17 +70,15 @@ app.post("/create", (req, res) => {
                     };
                     transporter.sendMail(mailOptions, function (error, info) {
                         if (error) {
-                            console.log(error);
-                        }else{
-                            console.log("Email envoyé\nà "+userFromDb.email+"\nRaison:Nouveau Message")
+                            console.error(error);
                         }
                     });
                 }
             }).catch((error) => {
-                console.log("erreur :" + error)
+                console.error(error)
             });
         }).catch((error) => {
-            console.log("erreur :" + error)
+            console.error(error)
         });
     });
 });
@@ -127,7 +125,7 @@ app.get("/getAll", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 //Récuperer tous les messages d'un ticket
@@ -137,7 +135,7 @@ app.get("/getAllByTicketID/:id", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -155,7 +153,7 @@ app.get("/getAllDic", (req, res) => {
             res.status(200).send(dic)
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
         })
 });
 

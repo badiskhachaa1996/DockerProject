@@ -12,6 +12,7 @@ import { ServService } from 'src/app/services/service.service';
 import { Service } from 'src/app/models/Service';
 import { SelectableRow } from 'primeng/table';
 import { ListUserComponent } from '../list-user/list-user.component';
+import { ClasseService } from 'src/app/services/classe.service';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
@@ -24,6 +25,10 @@ export class UpdateUserComponent implements OnInit {
   Roles = environment.role;
   showForm: boolean = true;
   civiliteList = environment.civilite;
+  statutList = environment.typeUser
+  campusList = environment.campus
+  formationList = environment.formations
+  entreprisesList =environment.entreprisesList
 
   userupdate: User = null;
 
@@ -33,29 +38,52 @@ export class UpdateUserComponent implements OnInit {
     lastname: new FormControl(this.listUserComponent.selectedUser.lastname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Lettre et espace
     firstname: new FormControl(this.listUserComponent.selectedUser.firstname, [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ-]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl(this.listUserComponent.selectedUser?.phone, [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl(this.listUserComponent.selectedUser?.adresse, [Validators.required]),
     role: new FormControl(this.listUserComponent.selectedUser.role, [Validators.required]),
-    service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required])
+    service_id: new FormControl(this.listUserComponent.selectedUser.service_id, [Validators.required]),
+    entreprise : new FormControl({value:this.listUserComponent.selectedUser.entreprise}),
+    type: new FormControl({value:this.listUserComponent.selectedUser.type}, [Validators.required]),
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
   })
 
   UpdateUser() {
-    let user = new User(this.userupdate._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.RegisterForm.value.email, null, this.RegisterForm.value.role.value || "user", null, this.RegisterForm.value.adresse, this.RegisterForm.value.service_id, this.RegisterForm.value.civilite.value)
+    let user = new User(
+      this.userupdate._id,
+      this.RegisterForm.value.firstname,
+      this.RegisterForm.value.lastname,
+      this.RegisterForm.value.phone,
+      this.RegisterForm.value.email,
+      null,
+      this.RegisterForm.value.role.value || "user",
+      null,
+      this.RegisterForm.value.service_id,
+      this.RegisterForm.value.civilite.value,
+      null,
+      null,
+      this.RegisterForm.value.type.value,
+      this.RegisterForm.value.entreprise.value)
     this.AuthService.update(user).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
     this.listUserComponent.showFormModify = false
   }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   get role() { return this.RegisterForm.get('role'); }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
-  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponent: ListUserComponent) { }
+  get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
+  get type() { return this.RegisterForm.get('type').value.value; }
+  get campus() { return this.RegisterForm.get('campus').value.value; }
+  get formation() { return this.RegisterForm.get('formation').value.value; }
+  constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService, private listUserComponent: ListUserComponent,private ClasseService:ClasseService) { }
 
   ngOnInit(): void {
 
@@ -74,7 +102,7 @@ export class UpdateUserComponent implements OnInit {
     this.AuthService.getById(this.listUserComponent.selectedUser._id).subscribe((data) => {
       this.userupdate = jwt_decode(data['userToken'])['userFromDb']
     }, (err) =>{
-      console.log(err)
+      console.error(err)
     })
 
     if (localStorage.getItem("token") != null) {
@@ -93,8 +121,9 @@ export class UpdateUserComponent implements OnInit {
       }
     })
 
-
-
+    this.ClasseService.seeAll().subscribe((data)=>{
+      this.formationList = data;
+    })
 
   }
 

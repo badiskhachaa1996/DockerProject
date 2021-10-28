@@ -6,7 +6,7 @@
                     <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAdd=false"> </i>
 
                     <form class="col-8 col-offset-2" [formGroup]="TicketForm">
-                      
+
                         <h3 class="text-center">Création d'un ticket</h3>
 
                         <div class="grid">
@@ -21,10 +21,11 @@
                             </div>
                             <div class="field col mt-2 mb-2 col-lg-6 col-6">
                                 <label style="font-weight: bold;">Sujet:</label>
-                               
+
                                 <select [disabled]="selectedService" formControlName="sujet"
                                     class="form-control col-12">
-                                    <option *ngIf="TicketForm.value.service" [ngValue]="null" disabled>Choissisez un sujet
+                                    <option *ngIf="TicketForm.value.service" [ngValue]="null" disabled>Choissisez un
+                                        sujet
                                     </option>
                                     <option *ngFor="let sujet of listSujets[TicketForm.value.service._id]"
                                         [ngValue]="sujet">
@@ -43,7 +44,8 @@
                             </div>
                             <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                                 <button pButton class="ui-button-raised ui-button-success"
-                                    [disabled]="TicketForm.invalid" label="Enregistrer" (click)="addTicket();showFormAdd=false"></button>
+                                    [disabled]="TicketForm.invalid" label="Enregistrer"
+                                    (click)="addTicket();showFormAdd=false"></button>
                             </div>
                         </div>
                     </form>
@@ -93,7 +95,8 @@
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success" [disabled]="TicketForm1.invalid"
-                                [routerLink]="['/ticket/suivi']" label="Enregistrer" (click)="modifyTicket();showFormUpdate=false">
+                                [routerLink]="['/ticket/suivi']" label="Enregistrer"
+                                (click)="modifyTicket();showFormUpdate=false">
                             </button>
                         </div>
                     </div>
@@ -144,9 +147,10 @@
             (click)="toggleFormAdd()"></button>
         <h3>Liste de mes tickets</h3>
         <div class="col-12 card shadow-lg my-5">
-            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="4" [paginator]="true"
+            <p-table #dt1 *ngIf="ticketList" [value]="ticketList" [paginator]="true" [rows]="5" [paginator]="true"
                 [pageLinks]="5" dataKey="_id" rowExpandMode="single" [totalRecords]="ticketList.length"
-                [globalFilterFields]="['sujet_id','statut']" (sortFunction)="customSort($event)" [customSort]="true">
+                [globalFilterFields]="['customid','description']" (sortFunction)="customSort($event)"
+                [customSort]="true">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
@@ -167,15 +171,18 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="caption">
-                    <div class="p-input-icon-left p-ml-auto" >
+                    <div class="p-input-icon-left p-ml-auto">
                         <div style="display: flex;">
 
                             <p-dropdown id="c" filter="true" placeholder="Tous" [options]="dropdownService"
-                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"></p-dropdown>
-                                <span style="margin-left: 2%;">
+                                (onChange)="dt1.filter($event.value, 'service_id', 'equals')"
+                                emptyFilterMessage="Pas de service trouvé" filterPlaceholder="Nom du service"></p-dropdown>
+                            <span style="margin-left: 2%;">
                                 <p-dropdown [options]="showStatut"
-                                (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>
-                       </span>
+                                    (onChange)="dt1.filter($event.value, 'statut', 'equals')"></p-dropdown>
+                            </span>
+                            <input style="margin-left:2%;" pInputText type="text"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </div>
                     </div>
 
@@ -223,7 +230,7 @@
                                                 ticket:</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            {{rowData._id}} </div>
+                                            {{rowData.customid}} </div>
                                     </div>
 
                                     <div class="ui-g-6 ui-md-6">
@@ -232,7 +239,7 @@
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             {{rowData.date_ajout | date:'dd/MM/yyyy HH:mm'}}</div>
                                     </div>
-                                    <div class="ui-g-6 ui-md-6">
+                                    <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-6 ui-md-6"><b
                                                 style="text-align:left !important;">Description:</b> </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
@@ -299,9 +306,6 @@
             </p-table>
         </div>
         </p-fieldset>
-
-
-
         </td>
         </tr>
         </ng-template>

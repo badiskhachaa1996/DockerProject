@@ -36,15 +36,22 @@ app.post("/registre", (req, res) => {
                     adresse: data.adresse,
                     role: data.role,
                     service_id: data?.service_id || null,
+<<<<<<< HEAD
                     entreprise: data.entreprise,
                     pays_adresse: data.pays_adresse,
                     ville_adresse: data.ville_adresse,
                     rue_adresse: data.rue_adresse,
                     numero_adresse: data.numero_adresse,
                     postal_adresse: data.postal_adresse 
+=======
+                    entreprise:req.body?.entreprise,
+                    type:req.body?.type,
+                    formation:req.body?.formation,
+                    campus:req.body?.campus
+>>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
                 }, { new: true }, (err, userModified) => {
                     if (err) {
-                        console.log(err)
+                        console.error(err)
                     } else {
                         res.send(userModified)
                     }
@@ -60,12 +67,19 @@ app.post("/registre", (req, res) => {
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
                 service_id: data?.service_id || null,
+<<<<<<< HEAD
                 entreprise: data.entreprise,
                 pays_adresse: data.pays_adresse,
                 ville_adresse: data.ville_adresse,
                 rue_adresse: data.rue_adresse,
                 numero_adresse: data.numero_adresse,
                 postal_adresse: data.postal_adresse 
+=======
+                entreprise:req.body?.entreprise,
+                type:req.body?.type,
+                formation:req.body?.formation,
+                campus:req.body?.campus
+>>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -84,13 +98,11 @@ app.post("/registre", (req, res) => {
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
-                        console.log(error);
-                    } else {
-                        console.log("Email envoyé\nà " + userFromDb.email + "\nRaison:Création de compte")
+                        console.error(error);
                     }
                 });
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
                 res.status(400).send(error);
             })
         }
@@ -112,7 +124,7 @@ app.post("/login", (req, res) => {
             res.status(200).send({ token });
         }
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
@@ -124,7 +136,7 @@ app.get("/getById/:id", (req, res) => {
         let userToken = jwt.sign({ userFromDb }, "userData")
         res.status(200).send({ userToken });
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });
@@ -136,7 +148,7 @@ app.get("/getAll", (req, res) => {
             res.send(result.length > 0 ? result : []);
         })
         .catch(err => {
-            console.log(err);
+            console.error(err);
             res.status(404).send(error);
         })
 });
@@ -152,16 +164,23 @@ app.post("/updateById/:id", (req, res) => {
             role: req.body.role,
             adresse: req.body.adresse,
             service_id: req.body.service_id,
+<<<<<<< HEAD
             entreprise: req.entreprise,
             pays_adresse: req.pays_adresse,
             ville_adresse: req.ville_adresse,
             rue_adresse: req.rue_adresse,
             numero_adresse: req.numero_adresse,
             postal_adresse: req.postal_adresse 
+=======
+            entreprise:req.body?.entreprise,
+            type:req.body?.type,
+            formation:req.body?.formation,
+            campus:req.body?.campus
+>>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
 
         }, { new: true }, (err, user) => {
             if (err) {
-                console.log(err);
+                console.error(err);
                 res.send(err)
             } else {
                 res.send(user)
@@ -177,7 +196,7 @@ app.get("/getAllbyService/:id", (req, res) => {
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 });
 
@@ -190,7 +209,7 @@ app.get("/getAllAgent/", (req, res) => {
         })
         .catch(err => {
             res.status(404).send(error);
-            console.log(err);
+            console.error(err);
         })
 })
 
@@ -203,7 +222,7 @@ app.post("/updatePassword/:id", (req, res) => {
                 password: bcrypt.hashSync(req.body.password, 8)
             }, { new: true }, (err, user) => {
                 if (err) {
-                    console.log(err);
+                    console.error(err);
                     res.send(err)
                 } else {
                     res.send(user)
@@ -235,6 +254,9 @@ app.post('/file', upload.single('file'), (req, res, next) => {
         const error = new Error('No File')
         error.httpStatusCode = 400
         return next(error)
+    }
+    if(req.body.secret!="6abdfb04243e096a4a51b46c8f3d4b32"){
+        res.status(401).send('Fichier non autorisé')
     }
     User.findById(req.body.id, (err, photo) => {
         try {
@@ -280,7 +302,11 @@ app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (user) {
             let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
-            res.status(200).send({ token });
+            if(user.type==null ||user.adresse==null || user.phone==null){
+                res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
+            }else{
+                res.status(200).send({ token });
+            }
         } else {
             let lastname = req.body.name.substring(req.body.name.indexOf(" ") + 1); //Morgan HUE
             let firstname = req.body.name.replace(" " + lastname, '')
