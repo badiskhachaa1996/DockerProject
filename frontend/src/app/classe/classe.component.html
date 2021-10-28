@@ -1,0 +1,113 @@
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddClasse">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddClasse=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="classeForm">
+                   
+                    <h3 class="text-center">Ajouter une classe</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom:</label>
+                            <input type="text" formControlName="nom" class="form-control col-12"
+                                placeholder="Nom de la classe" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-6">
+                            <label>Nom raccourci:</label>
+                            <input type="text" formControlName="nom_court" class="form-control col-12"
+                                placeholder="Nom raccourci de la classe" pInputText>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="classeForm.invalid"
+                                label="Enregistrer" (click)="saveClasse()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateClasse">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateClasse=null"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="classeFormUpdate">
+
+                    <h3 class="text-center">Modifier la classe</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom:</label>
+                            <input type="text" formControlName="nom" class="form-control col-12"
+                                placeholder="Nom de la formation" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-6">
+                            <label>Nom raccourci:</label>
+                            <input type="text" formControlName="nom_court" class="form-control col-12"
+                                placeholder="Nom raccourci de la classe" pInputText>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="classeFormUpdate.invalid"
+                                label="Enregistrer" (click)="modifyClasse();"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddClasse" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormUpdateClasse=null;showFormAddClasse=true" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des classes</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="classes" [columns]="cols" [value]="classes" selectionMode="single"
+             [rows]="5" [paginator]="true" [pageLinks]="5"
+                [responsive]="true" [totalRecords]="classes.length" [filterDelay]="0" [globalFilterFields]="['nom','nom_court','description']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="nom">
+                            Nom <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="nom_court">
+                            Nom Raccourci <p-sortIcon field="nom_court"></p-sortIcon>
+                        </th>
+                        <th class="col-2" style="text-decoration: underline;">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            {{rowData.nom}}
+                        </td>
+                        <td>
+                            {{rowData.nom_court}}
+                        </td>
+                        <td>
+                            <i *ngIf="rowData.active" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye"
+                            (click)="hide(rowData)"></i>
+                            <i *ngIf="!rowData.active" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye-slash"
+                            (click)="show(rowData)"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

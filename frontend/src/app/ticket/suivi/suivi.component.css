@@ -1,0 +1,102 @@
+#container {
+  position:relative;
+
+}
+#left {
+  position:absolute;
+  left:0px;
+ 
+}
+ #right {
+  position:absolute;
+  right:0px;
+
+}
+
+ng-template{
+  overflow-y: hidden;
+}
+.retour{
+  font-weight: bold;
+  font-size: 20px;
+}
+#messageAgent{
+
+  border-radius: 15px;
+  background-color: #92cf80;
+  text-align:left !important;
+  margin:  0px !important;
+}
+#charger{ 
+color: #3da827; 
+background-color: transparent; 
+border-color: transparent;
+float : left !important;
+margin:  0px !important;
+
+
+}
+#charger2{ 
+color: #3da827; 
+background-color: transparent; 
+border-color: transparent;
+float: right !important;
+margin:  0px !important;
+
+
+}
+#messageUser{
+text-align:left !important;
+border-radius: 15px;
+background-color: #ccd3c9e3;
+margin:  0px !important;
+
+}
+#soustitre{
+font-style: italic; 
+font-size: 11px;
+float: left;
+text-align: right;
+padding-right: 10px;
+}
+
+@media (max-height:200px) {
+.badyT{
+  overflow-y:none;  
+
+  }
+}
+@media (min-height:200px) {
+
+.badyT{
+  
+position: relative; 
+overflow-y:scroll;  
+height: 200px;
+}
+
+}
+
+.content{
+    max-width: 500px;
+    margin:auto;
+    background-color: #fff;
+    padding: 2% 2%;
+  }
+  button{
+    color: #fff;
+  }
+  button:hover{
+    color: #fff;
+  }
+  .error
+  {
+      color: red;
+  }
+  .logo {
+    max-width: 50%;
+  }
+.bodytab {
+ padding-left: 20%;
+ text-align: center;
+}

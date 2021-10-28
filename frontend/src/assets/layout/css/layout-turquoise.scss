@@ -1,0 +1,53 @@
+$primaryColor: #b1bdef;
+$primaryHiglightColor: #3cb371;
+$primaryTextColor:#3cb371;
+
+
+
+/* background */
+$backgroundColor: #ffffff;
+
+/* horizontal menu */
+$horizontalMenuItemBgColor:rgb(71, 78, 82) ;
+$horizontalMenuItemTextColor: rgba(255, 255, 255, 0.89);
+$horizontalMenuItemHoverBgColor: rgb(35, 39, 41);
+$horizontalMenuItemHoverTextColor: #e6dede;
+
+/* topbar */
+$topbarItemBgColor:rgb(68, 91, 113);
+$topbarItemHoverBgColor:rgba(255,255,255,0.4);
+$topbarItemIconColor:#f2fbff;
+$topbarItemTextColor:#445b71;
+$topbarChildItemHoverColor:#FFD312;
+$topbarSearchInputTextColor:#dddee1;
+$topbarSearchPlaceholderTextColor:#dddee1;
+
+/* user profile */
+$userProfileTextColor:rgb(68, 91, 113);
+
+/* overlay menu */
+$overlayMenuItemHoverBgColor:rgb(207, 216, 220);
+$overlayMenuItemActiveTextColor:#3cb371;
+
+/* overlay menu button */
+$overlayMenuButtonColor: #3cb371;
+$overlayMenuButtonHoverBgColor:#A8E6FF;
+
+/* mobile menu button */
+$mobileMenuIconColor:rgb(179, 184, 187);
+
+/* actionbar */
+$actionItemBgColor: #ffffff;
+$actionItemIconColor: rgb(17, 0, 255);
+$actionItemHoverBgColor: #2302e7;
+$actionItemActiveBgColor:#302677;
+$actionItemActiveIconColor:#616060;
+
+//footer
+$footerTextColor:rgba(255, 255, 255, 0.7);
+$footerTextHoverColor:#ffffff;
+
+/* spinner color */
+$spinnerColor:#185cd2;
+
+@import '../../sass/layout/_layout';

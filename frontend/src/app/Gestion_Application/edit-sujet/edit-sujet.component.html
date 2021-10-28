@@ -1,0 +1,26 @@
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <form class="col-8 col-offset-2" [formGroup]="sujetForm">
+                    <div class="text-center"><img src="assets/layout/images/logo.png" class="logo"></div>
+                    <h3 class="text-center">Modifier le sujet</h3>
+                    <div class="p-grid">
+                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                            Sujet
+                            <input type="text" formControlName="label" name="label" pInputText />
+                        </div>
+
+
+
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="sujetForm.invalid"
+                                label="Valider" (click)="modifySujet()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+
+    </div>
+</div>

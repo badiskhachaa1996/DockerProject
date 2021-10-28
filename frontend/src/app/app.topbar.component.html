@@ -1,0 +1,69 @@
+<div *ngIf="isAuth && this.router.url != '/profil/creation'" class="layout-topbar">
+    <div class="layout-topbar-logo">
+        <a href="#">
+            <img src="../assets/layout/images/logo.png" Style="width: 15em;">
+        </a>
+    </div>
+    <ul class="layout-topbar-menu" role="menu">
+        <li #profile class="user-profile" role="menuitem"
+            [ngClass]="{'active-topmenuitem':app.activeTopbarItem === profile}">
+            <a href="#" (click)="app.onTopbarItemClick($event,profile)">
+                <div class="not" *ngIf="notif">
+                    <i tooltipPosition="bottom" class=" pi pi-bell"style="cursor: pointer; color: red; position:absolute; font-size: 25px; margin-left: 160px;"></i>
+                    <div class="number" style=" font-weight:bold; color:red; font-size: 13px; margin-left: 185px;">
+                        {{Notifications.length}}
+                    </div>
+                </div>
+                <div *ngIf="userconnected" class="user-profile-info profile-link">
+                    <span class="user-profile-name">{{userconnected.firstname}} {{userconnected.lastname}}</span>
+                    <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
+            </div>
+                <img [src]="imageToShow" style="max-width: 39px; max-height: 39px;">
+            </a>
+            <ul class="fadeInDown">
+                <li class="profile-detail">
+                    <div class="user-profile-info">
+                        <img [src]="imageToShow" style="max-width: 39px; max-height: 39px;">
+                        <div *ngIf="userconnected" class="profile-info">
+                            <span class="user-profile-name">{{userconnected.firstname}}
+                                {{userconnected.lastname}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role!='user'">{{userconnected.role}}</span>
+                            <span class="user-profile-role" *ngIf="userconnected.role=='user'">Utilisateur</span>
+                        </div>
+                        <a href="#" class="profile-detail-icon" (click)="onLogout()"><!--onLogout()-->
+                            <i class="pi pi-sign-out"></i>
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <a href="#" routerLink="/profil" (click)="app.onTopbarItemClick($event,profile)">
+                        <i style="color: #3da827;" class="pi pi-user"></i>
+                        <div class="menu-text">
+                            <span class="menu-title">Profil</span>
+                            <span class="menu-subtitle">Modifier votre profil</span>
+                        </div>
+
+                        <i class="right-icon pi pi-angle-right"></i>
+                    </a>
+                </li>       
+                <li>
+                    <a href="#" (click)="app.onTopbarSubItemClick($event)" routerLink="/notification">
+                        <i style="color: #3da827;" class="pi pi-globe"></i>
+                        <div class="menu-text">
+                            <div class="number"
+                                style="margin-left: 50px; font-weight:bold; color: red; margin-left: 130%;">
+                                {{Notifications.length}}
+                            </div>
+                            <span class="menu-title">Notifications</span>
+                            <span class="menu-subtitle">Nouvelles notifications</span>
+                        </div>
+                        <i class="right-icon pi pi-angle-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+<p-toast></p-toast>
