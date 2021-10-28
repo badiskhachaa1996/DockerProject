@@ -36,19 +36,12 @@ app.post("/registre", (req, res) => {
                     adresse: data.adresse,
                     role: data.role,
                     service_id: data?.service_id || null,
-<<<<<<< HEAD
                     entreprise: data.entreprise,
                     pays_adresse: data.pays_adresse,
                     ville_adresse: data.ville_adresse,
                     rue_adresse: data.rue_adresse,
                     numero_adresse: data.numero_adresse,
                     postal_adresse: data.postal_adresse 
-=======
-                    entreprise:req.body?.entreprise,
-                    type:req.body?.type,
-                    formation:req.body?.formation,
-                    campus:req.body?.campus
->>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
                 }, { new: true }, (err, userModified) => {
                     if (err) {
                         console.error(err)
@@ -67,19 +60,12 @@ app.post("/registre", (req, res) => {
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
                 service_id: data?.service_id || null,
-<<<<<<< HEAD
                 entreprise: data.entreprise,
                 pays_adresse: data.pays_adresse,
                 ville_adresse: data.ville_adresse,
                 rue_adresse: data.rue_adresse,
                 numero_adresse: data.numero_adresse,
                 postal_adresse: data.postal_adresse 
-=======
-                entreprise:req.body?.entreprise,
-                type:req.body?.type,
-                formation:req.body?.formation,
-                campus:req.body?.campus
->>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -164,19 +150,12 @@ app.post("/updateById/:id", (req, res) => {
             role: req.body.role,
             adresse: req.body.adresse,
             service_id: req.body.service_id,
-<<<<<<< HEAD
             entreprise: req.entreprise,
             pays_adresse: req.pays_adresse,
             ville_adresse: req.ville_adresse,
             rue_adresse: req.rue_adresse,
             numero_adresse: req.numero_adresse,
             postal_adresse: req.postal_adresse 
-=======
-            entreprise:req.body?.entreprise,
-            type:req.body?.type,
-            formation:req.body?.formation,
-            campus:req.body?.campus
->>>>>>> 4ccb94475e83094e1d63ee88a8ec86cf430b5e0a
 
         }, { new: true }, (err, user) => {
             if (err) {
