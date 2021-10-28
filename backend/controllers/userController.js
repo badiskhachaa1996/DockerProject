@@ -35,7 +35,13 @@ app.post("/registre", (req, res) => {
                     phone: data.phone,
                     adresse: data.adresse,
                     role: data.role,
-                    service_id: data?.service_id || null
+                    service_id: data?.service_id || null,
+                    entreprise: data.entreprise,
+                    pays_adresse: data.pays_adresse,
+                    ville_adresse: data.ville_adresse,
+                    rue_adresse: data.rue_adresse,
+                    numero_adresse: data.numero_adresse,
+                    postal_adresse: data.postal_adresse 
                 }, { new: true }, (err, userModified) => {
                     if (err) {
                         console.log(err)
@@ -53,7 +59,13 @@ app.post("/registre", (req, res) => {
                 email: data?.email,
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
-                service_id: data?.service_id || null
+                service_id: data?.service_id || null,
+                entreprise: data.entreprise,
+                pays_adresse: data.pays_adresse,
+                ville_adresse: data.ville_adresse,
+                rue_adresse: data.rue_adresse,
+                numero_adresse: data.numero_adresse,
+                postal_adresse: data.postal_adresse 
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -139,7 +151,13 @@ app.post("/updateById/:id", (req, res) => {
             phone: req.body.phone,
             role: req.body.role,
             adresse: req.body.adresse,
-            service_id: req.body.service_id
+            service_id: req.body.service_id,
+            entreprise: req.entreprise,
+            pays_adresse: req.pays_adresse,
+            ville_adresse: req.ville_adresse,
+            rue_adresse: req.rue_adresse,
+            numero_adresse: req.numero_adresse,
+            postal_adresse: req.postal_adresse 
 
         }, { new: true }, (err, user) => {
             if (err) {
