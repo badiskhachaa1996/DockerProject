@@ -28,7 +28,7 @@ export class AuthService {
  
   login(user){
     let loginUrl=this.apiUrl+"login";
-    return this.http.post<any>(loginUrl,user,httpOptions1);
+    return this.http.post<any>(loginUrl,user,httpOptions);
   }
 
   getAll(){

@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
+const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
@@ -42,14 +43,33 @@ const SujetController = require('./controllers/sujetController');
 const messageController = require('./controllers/messageController')
 const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController')
-const classeController = require('./controllers/classeController')
+const classeController = require('./controllers/classeController');
+const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    if(AuthorizeAccess(req)){
+    /*if(AuthorizeAccess(req)){
         next();
     }else{
         res.status(403).send("Accès non autorisé")
+    }*/
+
+    let token = jwt.decode(req.header("token"))
+    if(token && token.id && token.role){
+        User.findOne({_id:token.id,role:token.role},(err,user)=>{
+            if(err){
+                console.log(err)
+                res.status(403).send("Accès non autorisé")
+            }
+            else if(user){
+                next()
+            }else{
+                res.status(403).send("Accès non autorisé")
+            }
+        })
+    }else{
+        res.status(403).send("Accès non autorisé")
     }
+    
   });
 
 app.use("/soc/user", UserController);
@@ -119,7 +139,3 @@ io.on("connection", (socket) => {
 httpServer.listen(3000, () => {
     console.log("SERVEUR START")
 });
-
-function AuthorizeAccess(req){
-    return ((req.headers.origin===undefined || req.headers.origin=="https://ticket.estya.com") && req.header("Sec-Fetch-Site")=="same-origin" && (!req.header("User-Agent") || !req.header("User-Agent").startsWith('Postman'))) || req.headers.origin == "http://localhost:4200"
-}
