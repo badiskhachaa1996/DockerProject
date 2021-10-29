@@ -10,6 +10,7 @@ install_dependencies:
     paths:
       - frontend/node_modules/
   script:
+    - cd frontend
     - npm ci
   only:
     - NewUpdate
