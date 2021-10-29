@@ -6,7 +6,7 @@ build_angular:
   tags:
   - dev
   script:
-      -ls
+      - ls
       - echo "This is a test and it passed " 
   only:
   - NewUpdate
