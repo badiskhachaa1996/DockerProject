@@ -3,6 +3,8 @@ stages:
    - build
 install_dependencies:
   stage: install_dependencies
+  tags:
+  - dev
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -10,8 +12,9 @@ install_dependencies:
   script:
     - npm ci
   only:
-    changes:
-      - frontend/package-lock.json
+    - NewUpdate
+    # changes:
+    #   - frontend/package-lock.json
 
 
 build_angular:
