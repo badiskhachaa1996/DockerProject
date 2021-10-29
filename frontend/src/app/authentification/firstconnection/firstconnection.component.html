@@ -152,7 +152,7 @@
                             <div>
                                 <label for="classe" class="p-sr-only">Classe :</label>
                             </div>
-                            <input type="text" formControlName="numero_adresse" class="form-control col-12"
+                            <input type="text" formControlName="classe" class="form-control col-12"
                                 placeholder="MPI" pInputText>
                             <div *ngIf="classe.invalid && (classe.touched || classe.dirty)">
                                 <span class="error" *ngIf="classe.errors?.required">*La classe est
@@ -180,7 +180,7 @@
                             <div>
                                 <label for="nationalite" class="p-sr-only">Nationalité :</label>
                             </div>
-                            <input type="text" formControlName="statut" class="form-control col-12"
+                            <input type="text" formControlName="nationalite" class="form-control col-12"
                                 placeholder="Française" pInputText>
                             <div *ngIf="nationalite.invalid && (nationalite.touched || nationalite.dirty)">
                                 <span class="error" *ngIf="nationalite.errors?.required">*La nationalité est
@@ -194,7 +194,7 @@
                             <div>
                                 <label for="date_de_naissance" class="p-sr-only">Date de naissance :</label>
                             </div>
-                            <input type="text" formControlName="statut" class="form-control col-12"
+                            <input type="text" formControlName="date_de_naissance" class="form-control col-12"
                                 placeholder="21/12/2000" pInputText>
                             <div *ngIf="date_de_naissance.invalid && (date_de_naissance.touched || date_de_naissance.dirty)">
                                 <span class="error" *ngIf="date_de_naissance.errors?.required">*La date de naissance est
