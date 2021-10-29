@@ -1,6 +1,7 @@
 stages:
    - install_dependencies
    - build
+   - deployangular
 install_dependencies:
   stage: install_dependencies
   tags:
@@ -13,10 +14,8 @@ install_dependencies:
     - cd frontend
     - npm ci
   only:
-    - NewUpdate
-    # changes:
-    #   - frontend/package-lock.json
-
+    changes:
+      - frontend/package-lock.json
 
 build_angular:
   stage: build
@@ -34,10 +33,17 @@ build_angular:
   only:
   - NewUpdate
   artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
       - frontend/dist
-    expire_in: 1 week
+    expire_in: 1 hour
 
 
-
-
+deployangular_todev:
+  stage: deployangular
+  tags:
+    - dev
+  script:
+    - ls frontend 
+  only:
+  - NewUpdate
