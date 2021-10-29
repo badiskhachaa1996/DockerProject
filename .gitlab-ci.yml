@@ -1,0 +1,12 @@
+stages:
+   - build
+
+build_angular:
+  stage: build
+  tags:
+  - dev
+  script:
+      -ls
+      - echo "This is a test and it passed " 
+  only:
+  - NewUpdate
