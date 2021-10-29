@@ -33,9 +33,9 @@ app.post("/registre", (req, res) => {
                     firstname: data.firstname,
                     lastname: data.lastname,
                     phone: data.phone,
-                    adresse: data.adresse,
                     role: data.role,
                     service_id: data?.service_id || null,
+                    type: data.type,
                     entreprise: data.entreprise,
                     pays_adresse: data.pays_adresse,
                     ville_adresse: data.ville_adresse,
@@ -55,11 +55,11 @@ app.post("/registre", (req, res) => {
                 firstname: data.firstname,
                 lastname: data.lastname,
                 phone: data.phone,
-                adresse: data.adresse,
                 email: data?.email,
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
                 service_id: data?.service_id || null,
+                type: data.type,
                 entreprise: data.entreprise,
                 pays_adresse: data.pays_adresse,
                 ville_adresse: data.ville_adresse,
@@ -148,14 +148,14 @@ app.post("/updateById/:id", (req, res) => {
             lastname: req.body.lastname,
             phone: req.body.phone,
             role: req.body.role,
-            adresse: req.body.adresse,
-            service_id: req.body.service_id,
-            entreprise: req.entreprise,
-            pays_adresse: req.pays_adresse,
-            ville_adresse: req.ville_adresse,
-            rue_adresse: req.rue_adresse,
-            numero_adresse: req.numero_adresse,
-            postal_adresse: req.postal_adresse 
+            service_id: req.body?.service_id,
+            entreprise: req.body.entreprise,
+            type: req.body.type,
+            pays_adresse: req.body.pays_adresse,
+            ville_adresse: req.body.ville_adresse,
+            rue_adresse: req.body.rue_adresse,
+            numero_adresse: req.body.numero_adresse,
+            postal_adresse: req.body.postal_adresse 
 
         }, { new: true }, (err, user) => {
             if (err) {

@@ -30,9 +30,6 @@ const user_schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    adresse: {
-        type: String
-    },
     service_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",
