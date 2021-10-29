@@ -6,7 +6,12 @@ build_angular:
   tags:
   - dev
   script:
-      - ls
-      - echo "This is a test and it passed " 
+      - cd frontend
+      - npm install -q
+      - ng build --prod 
   only:
   - NewUpdate
+  artifacts:
+    paths:
+      - frontend/node_modules/
+    expire_in: 1 week
