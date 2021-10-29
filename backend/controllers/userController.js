@@ -144,19 +144,19 @@ app.get("/getAll", (req, res) => {
 app.post("/updateById/:id", (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id },
         {
-            civilite: req.body.civilite,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            phone: req.body.phone,
-            role: req.body.role,
-            service_id: req.body?.service_id,
-            entreprise: req.body.entreprise,
-            type: req.body.type,
-            pays_adresse: req.body.pays_adresse,
-            ville_adresse: req.body.ville_adresse,
-            rue_adresse: req.body.rue_adresse,
-            numero_adresse: req.body.numero_adresse,
-            postal_adresse: req.body.postal_adresse 
+            civilite: req.body.user.civilite,
+            firstname: req.body.user.firstname,
+            lastname: req.body.user.lastname,
+            phone: req.body.user.phone,
+            role: req.body.user.role,
+            service_id: req.body?.user.service_id,
+            entreprise: req.body.user.entreprise,
+            type: req.body.user.type,
+            pays_adresse: req.body.user.pays_adresse,
+            ville_adresse: req.body.user.ville_adresse,
+            rue_adresse: req.body.user.rue_adresse,
+            numero_adresse: req.body.user.numero_adresse,
+            postal_adresse: req.body.user.postal_adresse 
 
         }, { new: true }, (err, user) => {
             if (err) {
@@ -167,8 +167,37 @@ app.post("/updateById/:id", (req, res) => {
                 Inscription.findById(user._id,(err,inscription)=>{
                     if(inscription){
                         //findOneAndUpdate
+                        Inscription.findOneAndUpdate({user_id: user._id},
+                            {
+                                classe: req.body.inscription.classe,
+                                statut: req.body.inscription.statut,
+                                diplome: req.body.inscription.diplome,
+                                nationalite: req.body.inscription.nationalite,
+                                date_de_naissance: req.body.inscription.date_de_naissance
+                            },(err,InscriptionUpdate)=>{
+                                if(err){
+                                    console.log(err)
+                                    res.send(err)
+                                }
+                                else{
+                                    res.send(InscriptionUpdate)
+                                }
+                            });
                     }else{
                         //new Inscription()
+                        let Inscription = new Inscription ({
+                            user_id : user._id,
+                            classe: req.body.inscription.classe,
+                            statut: req.body.inscription.statut,
+                            diplome: req.body.inscription.diplome,
+                            nationalite: req.body.inscription.nationalite,
+                            date_de_naissance: req.body.inscription.date_de_naissance
+                        });
+
+                        Inscription.save()
+                        .then(() => res.status(201).send(user))
+                        .catch(err => res.status(400).send(err));
+
                     }
                 })
             }
