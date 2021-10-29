@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
-const fs = require("fs")
+const fs = require("fs");
+const { Inscription } = require("../models/inscription");
 
 
 let transporter = nodemailer.createTransport({
@@ -163,6 +164,13 @@ app.post("/updateById/:id", (req, res) => {
                 res.send(err)
             } else {
                 res.send(user)
+                Inscription.findById(user._id,(err,inscription)=>{
+                    if(inscription){
+                        //findOneAndUpdate
+                    }else{
+                        //new Inscription()
+                    }
+                })
             }
         })
 })
