@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ClasseService } from 'src/app/services/classe.service';
+import { Inscription } from 'src/app/models/Inscription';
 
 @Component({
   selector: 'app-firstconnection',
@@ -36,7 +37,10 @@ export class FirstconnectionComponent implements OnInit {
     rue_adresse: new FormControl("",[Validators.required]),
     numero_adresse: new FormControl("",[Validators.required]),
     postal_adresse: new FormControl("",[Validators.required]),
-    
+    classe: new FormControl(""),
+    statut:new FormControl(""),
+    nationalite:new FormControl("",[Validators.required]),
+    date_de_naissance:new FormControl("",[Validators.required]),
   })
 
   ngOnInit(): void {
@@ -79,7 +83,13 @@ export class FirstconnectionComponent implements OnInit {
       this.RegisterForm.value.numero_adresse,
       this.RegisterForm.value.postal_adresse,
     )
-    this.AuthService.update(user).subscribe((data: any) => {
+    let inscription = new Inscription(null,this.userConnected._id,
+      this.RegisterForm.value.classe,
+      this.RegisterForm.value.statut,
+      this.RegisterForm.value.nationalite,
+      this.RegisterForm.value.date_de_naissance
+      )
+    this.AuthService.update(user,inscription).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil réussie' });
       localStorage.removeItem('modify')
       window.location.reload();
@@ -103,11 +113,15 @@ export class FirstconnectionComponent implements OnInit {
   get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
   get type() { return this.RegisterForm.get('type').value.value; }
 
-  get pays_adresse() { return this.RegisterForm.get('pays_adresse').value; }
-  get ville_adresse() { return this.RegisterForm.get('ville_adresse').value; }
-  get rue_adresse() { return this.RegisterForm.get('rue_adresse').value; }
-  get numero_adresse() { return this.RegisterForm.get('numero_adresse').value; }
-  get postal_adresse() { return this.RegisterForm.get('postal_adresse').value; }
+  get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
+  get ville_adresse() { return this.RegisterForm.get('ville_adresse'); }
+  get rue_adresse() { return this.RegisterForm.get('rue_adresse'); }
+  get numero_adresse() { return this.RegisterForm.get('numero_adresse'); }
+  get postal_adresse() { return this.RegisterForm.get('postal_adresse'); }
 
+  get classe() { return this.RegisterForm.get('classe'); }
+  get statut() { return this.RegisterForm.get('statut'); }
+  get nationalite() { return this.RegisterForm.get('nationalite'); }
+  get date_de_naissance() { return this.RegisterForm.get('date_de_naissance'); }
 
 }

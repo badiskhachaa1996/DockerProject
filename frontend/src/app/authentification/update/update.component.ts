@@ -13,6 +13,7 @@ import { Service } from 'src/app/models/Service';
 import { SelectableRow } from 'primeng/table';
 import { ListUserComponent } from '../list-user/list-user.component';
 import { ClasseService } from 'src/app/services/classe.service';
+import { Inscription } from 'src/app/models/Inscription';
 @Component({
   selector: 'app-upduser',
   templateUrl: './update.component.html',
@@ -47,6 +48,10 @@ export class UpdateUserComponent implements OnInit {
     rue_adresse: new FormControl("",[Validators.required]),
     numero_adresse: new FormControl("",[Validators.required]),
     postal_adresse: new FormControl("",[Validators.required]),
+    classe: new FormControl(""),
+    statut:new FormControl(""),
+    nationalite:new FormControl("",[Validators.required]),
+    date_de_naissance:new FormControl("",[Validators.required]),
   })
 
   UpdateUser() {
@@ -65,7 +70,15 @@ export class UpdateUserComponent implements OnInit {
       null,
       this.RegisterForm.value.type.value,
       this.RegisterForm.value.entreprise.value)
-    this.AuthService.update(user).subscribe((data) => {
+    let inscription = new Inscription(
+      null,
+      this.userupdate._id,
+      this.RegisterForm.value.type.classe,
+      this.RegisterForm.value.type.statut,
+      this.RegisterForm.value.type.nationalite,
+      this.RegisterForm.value.type.date_de_naissance,
+    )
+    this.AuthService.update(user,inscription).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Cette utilisateur a bien été modifié' });
     }, (error) => {

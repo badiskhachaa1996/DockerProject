@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { Service } from 'src/app/models/Service';
 import { ClasseService } from 'src/app/services/classe.service';
+import { Inscription } from 'src/app/models/Inscription';
 
 @Component({
   selector: 'app-modifier-profil',
@@ -76,11 +77,23 @@ export class ModifierProfilComponent implements OnInit {
     rue_adresse: new FormControl("",[Validators.required]),
     numero_adresse: new FormControl("",[Validators.required]),
     postal_adresse: new FormControl("",[Validators.required]),
+    classe: new FormControl(""),
+    statut:new FormControl(""),
+    nationalite:new FormControl("",[Validators.required]),
+    date_de_naissance:new FormControl("",[Validators.required]),
   })
 
   UpdateUser() {
     let user = new User(this.userco._id, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.phone, this.userupdate.email, this.userupdate.password, this.userupdate.role, this.userupdate.etat, this.userupdate.service_id, this.RegisterForm.value.civilite.value, null, null, this.RegisterForm.value.type.value, this.RegisterForm.value.entreprise.value)
-    this.AuthService.update(user).subscribe((data) => {
+    let inscription = new Inscription(
+      null,
+      this.userco._id,
+      this.RegisterForm.value.type.classe,
+      this.RegisterForm.value.type.statut,
+      this.RegisterForm.value.type.nationalite,
+      this.RegisterForm.value.type.date_de_naissance,
+    )
+    this.AuthService.update(user,inscription).subscribe((data) => {
       this.userco = data;
       this.toggleUpdate = false;
       this.messageService.add({ severity: 'success', summary: 'Message de modification', detail: 'Mon profil a bien été modifié' });
