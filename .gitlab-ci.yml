@@ -1,17 +1,39 @@
 stages:
+   - install_dependencies
    - build
+install_dependencies:
+  stage: install_dependencies
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - frontend/node_modules/
+  script:
+    - npm ci
+  only:
+    changes:
+      - frontend/package-lock.json
+
 
 build_angular:
   stage: build
   tags:
   - dev
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - frontend/node_modules/
+    policy: pull
+
   script:
       - cd frontend
-      - npm install -q
       - ng build --prod 
   only:
   - NewUpdate
   artifacts:
     paths:
-      - frontend/node_modules/
+      - frontend/dist
     expire_in: 1 week
+
+
+
+
