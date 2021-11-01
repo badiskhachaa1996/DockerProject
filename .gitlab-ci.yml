@@ -45,6 +45,6 @@ deployangular_todev:
     - dev-server
   script:
     - ls frontend 
-    - sudo mv dist /var/www/html/ems
+    - mv dist /var/www/html/ems
   only:
   - dev
