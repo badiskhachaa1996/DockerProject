@@ -29,9 +29,9 @@ build_angular:
 
   script:
       - cd frontend
-      - ng build --prod 
+      - ng build --configuration=dev --aot
   only:
-  - NewUpdate
+  - dev
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -45,5 +45,6 @@ deployangular_todev:
     - dev-server
   script:
     - ls frontend 
+    - sudo mv dist /var/www/html/ems
   only:
-  - NewUpdate
+  - dev
