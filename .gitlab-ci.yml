@@ -47,17 +47,19 @@ sonar-angular:
   script:
     - cd frontend
     - npm install -g sonarqube-scanner
-    # - >
-    #   sonar-scanner
-    #   -Dsonar.projectKey=elitech-ecole_ems2_AXuPM7gG38mGkzIHXcIr
-    #   -Dsonar.host.url=http://51.68.215.184:9000
-    #   -Dsonar.login=fc8633efd4b1d7da6613efb22ab4226c1d8d7e29
-    #   -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
-    #   -Dsonar.sourceEncoding=UTF-8
-    #   -Dsonar.sources=src/app
-    #   -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
-    #   -Dsonar.tests=src/app
-    #   -Dsonar.test.inclusions=**/*.spec.ts
+    - >
+    - >
+      sonar-scanner
+      -Dsonar.projectKey=elitech-ecole_ems2_AXuPM7gG38mGkzIHXcIr
+      -Dsonar.host.url="$SONAR_HOST_URL"
+      -Dsonar.login="$SONAR_TOKEN"
+      -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
+      -Dsonar.sourceEncoding=UTF-8
+      -Dsonar.sources=src/app
+      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
+      -Dsonar.tests=src/app
+      -Dsonar.test.inclusions=**/*.spec.ts
+
   allow_failure: true
   only:
     - dev
