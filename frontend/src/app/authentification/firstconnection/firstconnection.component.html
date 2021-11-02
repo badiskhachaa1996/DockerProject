@@ -65,6 +65,7 @@
                             </span>
                         </div>
                         
+                        
                         <div class="field col mt-2 mb-2 col-12" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
                             <div>
                                 <label for="entreprise" class="p-sr-only">Entreprise :</label>
@@ -77,33 +78,17 @@
 
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
-                                <label for="pays_adresse" class="p-sr-only">Pays :</label>
+                                <label for="numero_adresse" class="p-sr-only">Numéro de rue :</label>
                             </div>
-                            <input type="text" formControlName="pays_adresse" class="form-control col-12"
-                                placeholder="France" pInputText>
-                            <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
-                                <span class="error" *ngIf="pays_adresse.errors?.required">*Le pays est
+                            <input type="text" formControlName="numero_adresse" class="form-control col-12"
+                                placeholder="20" pInputText>
+                            <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
+                                <span class="error" *ngIf="numero_adresse.errors?.required">*Le numéro de l'adresse est
                                     obligatoire.</span>
-                                <span class="error" *ngIf="pays_adresse.errors?.pattern">*Seul les lettres sont
+                                <span class="error" *ngIf="numero_adresse.errors?.pattern">*Seul les lettres sont
                                     acceptés.</span>
                             </div>
                         </div>
-
-
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
-                            <div>
-                                <label for="ville_adresse" class="p-sr-only">Ville :</label>
-                            </div>
-                            <input type="text" formControlName="ville_adresse" class="form-control col-12"
-                                placeholder="Paris" pInputText>
-                            <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
-                                <span class="error" *ngIf="ville_adresse.errors?.required">*La ville est
-                                    obligatoire.</span>
-                                <span class="error" *ngIf="ville_adresse.errors?.pattern">*Seul les lettres sont
-                                    acceptés.</span>
-                            </div>
-                        </div>
-
 
                         <div class="field col mt-2 mb-2 col-lg-6 col-6">
                             <div>
@@ -119,7 +104,7 @@
                             </div>
                         </div>
 
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+                        <div class="field col mt-2 mb-2 col-lg-4 col-4">
                             <div>
                                 <label for="postal_adresse" class="p-sr-only">Code postal :</label>
                             </div>
@@ -134,16 +119,32 @@
                         </div>
 
 
-                        <div class="field col mt-2 mb-2 col-lg-6 col-6">
+
+                        <div class="field col mt-2 mb-2 col-lg-4 col-4">
                             <div>
-                                <label for="numero_adresse" class="p-sr-only">Numéro de rue :</label>
+                                <label for="ville_adresse" class="p-sr-only">Ville :</label>
                             </div>
-                            <input type="text" formControlName="numero_adresse" class="form-control col-12"
-                                placeholder="20" pInputText>
-                            <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
-                                <span class="error" *ngIf="numero_adresse.errors?.required">*Le numéro de l'adresse est
+                            <input type="text" formControlName="ville_adresse" class="form-control col-12"
+                                placeholder="Paris" pInputText>
+                            <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
+                                <span class="error" *ngIf="ville_adresse.errors?.required">*La ville est
                                     obligatoire.</span>
-                                <span class="error" *ngIf="numero_adresse.errors?.pattern">*Seul les lettres sont
+                                <span class="error" *ngIf="ville_adresse.errors?.pattern">*Seul les lettres sont
+                                    acceptés.</span>
+                            </div>
+                        </div>
+
+
+                        <div class="field col mt-2 mb-2 col-lg-4 col-4">
+                            <div>
+                                <label for="pays_adresse" class="p-sr-only">Pays :</label>
+                            </div>
+                            <input type="text" formControlName="pays_adresse" class="form-control col-12"
+                                placeholder="France" pInputText>
+                            <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
+                                <span class="error" *ngIf="pays_adresse.errors?.required">*Le pays est
+                                    obligatoire.</span>
+                                <span class="error" *ngIf="pays_adresse.errors?.pattern">*Seul les lettres sont
                                     acceptés.</span>
                             </div>
                         </div>
