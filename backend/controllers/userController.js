@@ -163,7 +163,6 @@ app.post("/updateById/:id", (req, res) => {
                 console.error(err);
                 res.send(err)
             } else {
-                res.send(user)
                 Inscription.findById(user._id,(err,inscription)=>{
                     if(inscription){
                         //findOneAndUpdate
@@ -185,7 +184,7 @@ app.post("/updateById/:id", (req, res) => {
                             });
                     }else{
                         //new Inscription()
-                        let Inscription = new Inscription ({
+                        let inscrit = new Inscription({
                             user_id : user._id,
                             classe: req.body.inscription.classe,
                             statut: req.body.inscription.statut,
@@ -194,8 +193,8 @@ app.post("/updateById/:id", (req, res) => {
                             date_de_naissance: req.body.inscription.date_de_naissance
                         });
 
-                        Inscription.save()
-                        .then(() => res.status(201).send(user))
+                        inscrit.save()
+                        .then(() => res.status(200).send(user))
                         .catch(err => res.status(400).send(err));
 
                     }
