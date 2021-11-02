@@ -38,8 +38,6 @@ build_angular:
     paths:
       - frontend/dist
     expire_in: 1 hour
-
-
  
 sonar-angular:
   stage: test
@@ -48,9 +46,8 @@ sonar-angular:
     - cd frontend
     - npm install -g sonarqube-scanner
     - >
-    - >
       sonar-scanner
-      -Dsonar.projectKey=elitech-ecole_ems2_AXuPM7gG38mGkzIHXcIr
+      -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzf-Al-1eE81W_XHtjA
       -Dsonar.host.url="$SONAR_HOST_URL"
       -Dsonar.login="$SONAR_TOKEN"
       -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
