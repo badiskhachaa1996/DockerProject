@@ -232,7 +232,7 @@ import { ClasseComponent } from './classe/classe.component';
         return new PublicClientApplication({
           auth: {
             // clientId: '6226576d-37e9-49eb-b201-ec1eeb0029b6', // Prod enviroment. Uncomment to use.
-            clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // PPE testing environment
+            clientId: '25314c92-c369-4273-b8b0-5b3d2096ed05', // PPE testing environment
             // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
             authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
             redirectUri: '/',

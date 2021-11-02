@@ -16,6 +16,6 @@ const sujet_schema= new mongoose.Schema({
 
 });
 //creation de la table avec le nom Sujet ( model/classe) à l'aide de la biblio mongoose et son schema
-const Sujet= mongoose.model("sujet",sujet_schema);
+const Sujet= mongoose.model("sujet", sujet_schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
 module.exports={Sujet};
