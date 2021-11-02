@@ -53,6 +53,7 @@ export class FirstconnectionComponent implements OnInit {
             lastname: this.userConnected.lastname,
             firstname: this.userConnected.firstname })
         } else {
+          localStorage.removeItem("modify")
           this.router.navigateByUrl('/ticket/suivi')
         }
       })

@@ -1,17 +1,7 @@
 const mongoose = require("mongoose");
 const schema= new mongoose.Schema({
-    nom:{
-        type:String,
-        required:true
-    },
-    nom_court:{
-        type:String,
-        required:true
-    },
-    active:{
-        type:Boolean,
-        default:true
-    }
+    diplome: { type: mongoose.SchemaTypes.ObjectId, ref: "Diplome", required: true },
+    libelle:{ type: String, required: true }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const Classe= mongoose.model("classe",schema);
