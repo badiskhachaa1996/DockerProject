@@ -7,6 +7,6 @@ export class Campus {
         public pays?:       string,
         public email?:      string,
         public adresse?:    string,
-        public site?:       string,
+        public site?:       string
     ){}
 }

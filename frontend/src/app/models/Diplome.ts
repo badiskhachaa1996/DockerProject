@@ -15,8 +15,9 @@ export class Diplome{
         public duree?:          number,
         public date_debut?:     Date,
         public date_fin?:       Date,
-
-
+        public rythme?:         string,
+        public frais?:          number,
+        public frais_en_ligne?: number
     ){}
 
 }

@@ -1,4 +1,5 @@
 export class Ecole {
+
     constructor( 
         public _id?:            string, 
         public libelle?:        string, 
@@ -8,6 +9,7 @@ export class Ecole {
         public adresse?:        string,
         public email?:          string,
         public site?:           string,
-        public telephone?:      string,
+        public telephone?:      string
         ) {}
+        
 }

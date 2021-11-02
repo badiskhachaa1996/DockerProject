@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 //Creation du schema de la table ressource
 const ressourceSchema = mongoose.Schema({
-    edt: { type: Blob, required: true }
+    edt: { type: String, required: true }
 });
 
 //creation de la table ressource et export du model Ressource
