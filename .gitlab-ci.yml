@@ -15,9 +15,11 @@ node_dependencies:
   script:
     - cd backend
     - npm ci
+  when: manual
   only:
     changes:
       - backend/package-lock.json
+    
 
 
 angular_dependencies:
@@ -31,6 +33,7 @@ angular_dependencies:
   script:
     - cd frontend
     - npm ci
+  when: manual
   only:
     changes:
       - frontend/package-lock.json
@@ -50,6 +53,7 @@ build_angular:
       - ng build --configuration=dev --aot
   only:
   - dev
+  when: manual
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -65,6 +69,7 @@ deployangular_todev:
     - dev-shell
   script:
     - sudo mv -f frontend/dist /var/www/html/ems
+  when: manual
   only:
   - dev
   # when: manual
