@@ -117,6 +117,10 @@ sonarqube-check:
       sonar-scanner 
       -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzlBhDN1eE81W_XHtj1
       -Dsonar.qualitygate.wait=true
+      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
+      -Dsonar.test.inclusions=**/*.spec.ts
+      -Dsonar.sources=frontend/src/app,backend/controllers,backend/models,backend/middleware
+
 
   allow_failure: true
   only:
