@@ -3,76 +3,55 @@ stages:
    - build
    - test
    - deployangular
-# install_dependencies:
-#   stage: install_dependencies
-#   tags:
-#   - dev-server
-#   cache: 
-#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-#     paths:
-#       - frontend/node_modules/
-#   script:
-#     - cd frontend
-#     - npm ci
-#   only:
-#     changes:
-#       - frontend/package-lock.json
+install_dependencies:
+  stage: install_dependencies
+  tags:
+  - dev-server
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - frontend/node_modules/
+  script:
+    - cd frontend
+    - npm ci
+  only:
+    changes:
+      - frontend/package-lock.json
 
-# build_angular:
-#   stage: build
-#   tags:
-#   - dev-server
-#   cache: 
-#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-#     paths:
-#       - frontend/node_modules/
-#     policy: pull
+build_angular:
+  stage: build
+  tags:
+  - dev-server
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - frontend/node_modules/
+    policy: pull
 
-#   script:
-#       - cd frontend
-#       - ng build --configuration=dev --aot
-#   only:
-#   - dev
-#   artifacts:
-#     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
-#     paths:
-#       - frontend/dist
-#     expire_in: 1 hour
-#   when: manual
+  script:
+      - cd frontend
+      - ng build --configuration=dev --aot
+  only:
+  - dev
+  artifacts:
+    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+    paths:
+      - frontend/dist
+    expire_in: 1 hour
+  when: manual
  
-# sonar-angular:
-#   stage: test
-#   image: trion/ng-cli:latest
-#   script:
-#     - cd frontend
-#     - npm install -g sonarqube-scanner
-#     - >
-#       sonar-scanner
-#       -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzlBhDN1eE81W_XHtj1
-#       -Dsonar.host.url="$SONAR_HOST_URL"
-#       -Dsonar.login=c544ce01591fdf08382e33570de9cdbc4b16aea3
-#       -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
-#       -Dsonar.sourceEncoding=UTF-8
-#       -Dsonar.sources=src/app
-#       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
-#       -Dsonar.tests=src/app
-#       -Dsonar.test.inclusions=**/*.spec.ts
-
-#   allow_failure: true
-#   only:
-#     - dev
-#   tags:
-#     - dev-docker
-#   when: manual
-# deployangular_todev:
-#   stage: deployangular
-#   tags:
-#     - dev-server
-#   script:
-#     - sudo mv frontend/dist /var/www/html/ems
-#   only:
-#   - dev
-#   when: manual
+deployangular_todev:
+  stage: deployangular
+  needs:
+    - job: build_angular
+      artifacts: true
+  tags:
+    - dev-server
+  script:
+    - sudo mv frontend/dist /var/www/html/ems
+  only:
+  - dev
+  # when: manual
 
 # sonar-node:
 #   stage: test
@@ -101,21 +80,22 @@ stages:
 #   tags:
 #     - dev-docker
 #   when: manual 
-test:karma:
-  stage: test
-  image: trion/ng-cli-karma
-  allow_failure: false
-  script:
-    - cd frontend
-    - npm install 
-    - ng test --code-coverage --progress false --watch false
-  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
-  artifacts:
-    paths:
-      - coverage/
-  tags:
-    - dev-docker
-  when: manual 
+#=======================================================================
+# test:karma:
+#   stage: test
+#   image: trion/ng-cli-karma
+#   allow_failure: false
+#   script:
+#     - cd frontend
+#     - npm install 
+#     - ng test --code-coverage --progress false --watch false
+#   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+#   artifacts:
+#     paths:
+#       - coverage/
+#   tags:
+#     - dev-docker
+#   when: manual 
 
 
 sonarqube-check:
@@ -138,6 +118,7 @@ sonarqube-check:
       -Dsonar.test.inclusions=**/*.spec.ts
       -Dsonar.sources=frontend/src/app,backend/controllers,backend/models,backend/middleware
       -Dsonar.typescript.lcov.reportPaths=frontend/coverage/lcov/lcov.info
+   
   allow_failure: true
   tags:
     - dev-docker
