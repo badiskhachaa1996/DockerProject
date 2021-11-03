@@ -44,10 +44,10 @@ export class AnneeScolaireComponent implements OnInit {
   }
 
   saveAnneScolaire(){
-    let anneScolaire= new AnneScolaire(this.anneScolaireForm.value.nom,this.anneScolaireForm.value.nom_court)
+    let anneScolaire= new AnneScolaire(null,this.anneScolaireForm.value.libelle,this.anneScolaireForm.value.etat)
 
     this.AnneScolaireService.create(anneScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneScolaires', detail: 'Votre anneScolaire a bien été ajouté' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des anneScolaires', detail: 'Votre anneScolaire a bien été ajoutée' });
       this.anneScolaires.push(data)
       this.showFormAddAnneScolaire=false;
       this.anneScolaireForm.reset();

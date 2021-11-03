@@ -1,15 +1,16 @@
 const express = require("express");
 const app = express();
-const { anneeScolaire }  = require("./../models/anneeScolaire");
+const { AnneeScolaire }  = require("./../models/anneeScolaire");
 
 
-app.post("/addanneeScolaire", (req, res) =>{
+app.post("/create", (req, res) =>{
     //Ajouter une année scolaire
     let data = req.body;
-    let anneeScolaire = new AnneeScolaire ({
+    let anneeScolaire = new AnneeScolaire({
         libelle: data.libelle,
-        etat: data.etat
+        etat: data.etat,
     });
+    console.log(data)
     anneeScolaire.save().then((anneeScolaireFromDB) =>{
         res.status(200).send(anneeScolaireFromDB);
     }).catch((error) => {
