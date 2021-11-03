@@ -38,7 +38,7 @@ build_angular:
     paths:
       - frontend/dist
     expire_in: 1 hour
-  when: manual
+#  when: manual
  
 deployangular_todev:
   stage: deployangular
