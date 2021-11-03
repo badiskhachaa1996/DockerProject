@@ -7,7 +7,7 @@ stages:
 node_dependencies:
   stage: install_dependencies
   tags:
-  - dev-server
+  - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -23,7 +23,7 @@ node_dependencies:
 angular_dependencies:
   stage: install_dependencies
   tags:
-  - dev-server
+  - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -38,7 +38,7 @@ angular_dependencies:
 build_angular:
   stage: build
   tags:
-  - dev-server
+  - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -62,7 +62,7 @@ deployangular_todev:
   dependencies: 
     - build_angular
   tags:
-    - dev-server
+    - dev-shell
   script:
     - sudo mv -f frontend/dist /var/www/html/ems
   only:
@@ -128,7 +128,7 @@ sonarqube-check:
   script:
     - >
       sonar-scanner 
-      -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzlBhDN1eE81W_XHtj1
+      -Dsonar.projectKey=elitech-ecole_ems3_AXzmMbQe1eE81W_XHtkV
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
