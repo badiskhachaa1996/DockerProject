@@ -8,4 +8,6 @@ const seanceSchema = mongoose.Schema({
 });
 
 //Creation de la table seance et export du model Seance
-module.exports = mongoose.model("Seance", seanceSchema);
+const Seance = mongoose.model("seance",seanceSchema);
+//on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
+module.exports={Seance};

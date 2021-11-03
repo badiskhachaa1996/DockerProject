@@ -23,4 +23,6 @@ const diplomeSchema = mongoose.Schema({
 });
 
 //creation de la table diplome et export du model Diplome 
-module.exports = mongoose.model("Diplome", diplomeSchema);
+const Diplome = mongoose.model("diplome",diplomeSchema);
+//on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
+module.exports={Diplome};
