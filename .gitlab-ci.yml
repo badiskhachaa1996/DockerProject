@@ -38,6 +38,7 @@ build_angular:
     paths:
       - frontend/dist
     expire_in: 1 hour
+  when: manual
  
 sonar-angular:
   stage: test
@@ -62,7 +63,7 @@ sonar-angular:
     - dev
   tags:
     - dev-docker
-
+  when: manual
 deployangular_todev:
   stage: deployangular
   tags:
@@ -71,3 +72,31 @@ deployangular_todev:
     - sudo mv frontend/dist /var/www/html/ems
   only:
   - dev
+  when: manual
+
+sonar-node:
+  stage: test
+  image: sonarsource/sonar-scanner-cli
+  needs: []
+  dependencies: []
+  script:
+    - cd backend
+    - >
+      sonar-scanner 
+      -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzf-Al-1eE81W_XHtjA
+      -Dsonar.host.url="$SONAR_HOST_URL"
+      -Dsonar.login="$SONAR_TOKEN"
+
+  allow_failure: true
+  variables:
+    SONAR_PROJECT_BASE_DIR: "${CI_PROJECT_DIR}"
+    GIT_DEPTH: 0
+  cache:
+    key: "sonar-${CI_PROJECT_ID}"
+    paths:
+      - ".scannerwork"
+      - ".sonar"
+  tags:
+    - dev-docker
+  when: manual 
+
