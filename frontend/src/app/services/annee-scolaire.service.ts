@@ -13,7 +13,7 @@ const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-C
 export class AnneeScolaireService {
 
   
-  apiUrl =environment.origin+ "anneScolaire/"
+  apiUrl =environment.origin+ "anneeScolaire/"
   constructor(private http : HttpClient, private _router: Router) { }
 
   getAll(){
@@ -27,7 +27,7 @@ export class AnneeScolaireService {
   }
  create(anneScolaire: any){
     let anneeScolaireUrl=this.apiUrl+"create";
-    return this.http.post<any>(anneeScolaireUrl,AnneScolaire,httpOptions1);
+    return this.http.post<any>(anneeScolaireUrl,anneScolaire,httpOptions1);
   }
   
   edit(AnneScolaire: any){
