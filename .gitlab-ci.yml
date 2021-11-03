@@ -61,11 +61,6 @@ deployangular_todev:
   stage: deployangular
   dependencies: 
     - build_angular
-  cache: 
-    key: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
-    paths:
-      - frontend/dist
-    policy: pull
   tags:
     - dev-server
   script:
