@@ -154,7 +154,7 @@ sonarqube-check:
   script:
     - >
       sonar-scanner 
-      -Dsonar.projectKey=elitech-ecole_ems3_AXzmMbQe1eE81W_XHtkV
+      -Dsonar.projectKey=elitech-ecole_ems3_AXzmdwSp1eE81W_XHtlA
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
