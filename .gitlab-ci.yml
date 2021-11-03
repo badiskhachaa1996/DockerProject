@@ -1,9 +1,26 @@
 stages:
    - install_dependencies
-   - build
    - test
+   - build
    - deployangular
-install_dependencies:
+
+node_dependencies:
+  stage: install_dependencies
+  tags:
+  - dev-server
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - backend/node_modules/
+  script:
+    - cd backend
+    - npm ci
+  only:
+    changes:
+      - backend/package-lock.json
+
+
+angular_dependencies:
   stage: install_dependencies
   tags:
   - dev-server
@@ -42,7 +59,13 @@ build_angular:
  #======================================================
 deployangular_todev:
   stage: deployangular
-  needs: ['build_angular']
+  dependencies: 
+    - build_angular
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR_dist
+    paths:
+      - frontend/dist
+    policy: pull
   tags:
     - dev-server
   script:
