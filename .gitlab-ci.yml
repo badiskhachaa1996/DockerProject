@@ -3,42 +3,42 @@ stages:
    - build
    - test
    - deployangular
-install_dependencies:
-  stage: install_dependencies
-  tags:
-  - dev-server
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - frontend/node_modules/
-  script:
-    - cd frontend
-    - npm ci
-  only:
-    changes:
-      - frontend/package-lock.json
+# install_dependencies:
+#   stage: install_dependencies
+#   tags:
+#   - dev-server
+#   cache: 
+#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+#     paths:
+#       - frontend/node_modules/
+#   script:
+#     - cd frontend
+#     - npm ci
+#   only:
+#     changes:
+#       - frontend/package-lock.json
 
-build_angular:
-  stage: build
-  tags:
-  - dev-server
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - frontend/node_modules/
-    policy: pull
+# build_angular:
+#   stage: build
+#   tags:
+#   - dev-server
+#   cache: 
+#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+#     paths:
+#       - frontend/node_modules/
+#     policy: pull
 
-  script:
-      - cd frontend
-      - ng build --configuration=dev --aot
-  only:
-  - dev
-  artifacts:
-    name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
-    paths:
-      - frontend/dist
-    expire_in: 1 hour
-  when: manual
+#   script:
+#       - cd frontend
+#       - ng build --configuration=dev --aot
+#   only:
+#   - dev
+#   artifacts:
+#     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
+#     paths:
+#       - frontend/dist
+#     expire_in: 1 hour
+#   when: manual
  
 # sonar-angular:
 #   stage: test
