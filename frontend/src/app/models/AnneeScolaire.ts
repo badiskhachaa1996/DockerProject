@@ -1,4 +1,4 @@
-export class AnneScolaire {
+export class AnneeScolaire {
     constructor(
         public _id?: string,
         public libelle?:string,
