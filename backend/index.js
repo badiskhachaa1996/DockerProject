@@ -45,7 +45,7 @@ const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
 const anneeScolaireController = require('./controllers/anneeScolaireController');
-const Ecole = require('./controllers/ecoleController');
+const ecoleController = require('./controllers/ecoleController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
