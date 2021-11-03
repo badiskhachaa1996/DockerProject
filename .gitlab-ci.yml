@@ -123,5 +123,4 @@ sonarqube-check:
 
 
   allow_failure: true
-  only:
-    - dev # or the name of your main branch
+
