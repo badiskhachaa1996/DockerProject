@@ -17,7 +17,7 @@ install_dependencies:
   only:
     changes:
       - frontend/package-lock.json
-
+#========================================================
 build_angular:
   stage: build
   tags:
@@ -39,12 +39,10 @@ build_angular:
       - frontend/dist
     expire_in: 1 hour
 #  when: manual
- 
+ #======================================================
 deployangular_todev:
   stage: deployangular
-  needs:
-    - job: build_angular
-      artifacts: true
+  needs: ['build_angular']
   tags:
     - dev-server
   script:
