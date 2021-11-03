@@ -64,7 +64,7 @@ deployangular_todev:
   tags:
     - dev-server
   script:
-    - sudo mv frontend/dist /var/www/html/ems
+    - sudo mv -f frontend/dist /var/www/html/ems
   only:
   - dev
   # when: manual
