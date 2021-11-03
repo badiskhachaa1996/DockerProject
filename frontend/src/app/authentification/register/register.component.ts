@@ -39,15 +39,17 @@ export class RegisterComponent implements OnInit {
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),//Si il finit par .png ou .jpg
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]),
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl('', [Validators.required]),
     /*password: new FormControl('', [Validators.required, Validators.minLength(5)]),
     verifypassword: new FormControl('', [Validators.required, Validators.minLength(5)]),*/
     role: new FormControl('user', Validators.required),
     service_id: new FormControl(null),
     entreprise : new FormControl(this.entreprisesList[0]),
     type: new FormControl(this.statutList[0], [Validators.required]),
-    campus: new FormControl(this.campusList[0]),
-    formation : new FormControl('')
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
 
   })
 
@@ -61,14 +63,11 @@ export class RegisterComponent implements OnInit {
       //this.RegisterForm.value.password,
       this.RegisterForm.value.role.value || this.Roles[0].value,
       null,
-      this.RegisterForm.value.adresse,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value,
       null,
       null,
-      this.RegisterForm.value.campus.value,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.formation._id,
       this.RegisterForm.value.entreprise.value
     )
 
@@ -101,7 +100,6 @@ export class RegisterComponent implements OnInit {
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   /*get password() { return this.RegisterForm.get('password'); }
   get verifypassword() { return this.RegisterForm.get('verifypassword'); }*/
   get role() { return this.RegisterForm.get('role').value; }

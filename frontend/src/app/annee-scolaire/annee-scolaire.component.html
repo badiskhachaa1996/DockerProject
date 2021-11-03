@@ -1,0 +1,113 @@
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddAnneeScolaire">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddAnneeScolaire=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="anneeScolaireForm">
+                   
+                    <h3 class="text-center">Ajouter une annee Scolaire</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Date de debut et de fin:</label>
+                            <input type="text" formControlName="libelle" class="form-control col-12"
+                            placeholder="Etat de la anneScolaire" pInputText>
+                            
+                        </div>
+                        
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Etat:</label>
+                            <input type="text" formControlName="etat" class="form-control col-12"
+                                placeholder="Etat de la anneScolaire" pInputText>
+                        </div>
+                        
+                       
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneeScolaireForm.invalid"
+                                label="Enregistrer" (click)="saveAnneeScolaire()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateAnneeScolaire">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateAnneeScolaire=null"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="anneeScolaireFormUpdate">
+
+                    <h3 class="text-center">Modifier la anneScolaire</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Libelle:</label>
+                            <input type="text" formControlName="libelle" class="form-control col-12"
+                                placeholder="Libelle de l'annee scolaire" pInputText>
+                        </div>
+                       
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneeScolaireFormUpdate.invalid"
+                                label="Enregistrer" (click)="modifyAnneeScolaire();"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddAnneeScolaire" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormUpdateAnneeScolaire=null;showFormAddAnneeScolaire=true" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des anneeScolaires</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="anneeScolaires" [columns]="cols" [value]="anneeScolaires" selectionMode="single"
+             [rows]="5" [paginator]="true" [pageLinks]="5"
+                [responsive]="true" [totalRecords]="anneeScolaires.length" [filterDelay]="0" [globalFilterFields]="['libelle','etat']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="libelle">
+                            Libelle <p-sortIcon field="Libelle"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="etat">
+                            Etat <p-sortIcon field="Etat"></p-sortIcon>
+                        </th>
+                        <th class="col-2" style="text-decoration: underline;">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            {{rowData.libelle}}
+                        </td>
+                        <td>
+                            {{rowData.Etat}}
+                        </td>
+                        <td>
+                            <i *ngIf="rowData.active" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye"
+                            (click)="hide(rowData)"></i>
+                            <i *ngIf="!rowData.active" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye-slash"
+                            (click)="show(rowData)"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

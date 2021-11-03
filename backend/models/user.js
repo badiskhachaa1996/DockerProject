@@ -30,9 +30,6 @@ const user_schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    adresse: {
-        type: String
-    },
     service_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Service",
@@ -48,18 +45,33 @@ const user_schema = new mongoose.Schema({
     typeImageProfil: {
         type: String
     },
-    campus:{
-        type: String
+    type: {
+        type: String,
+        required: false
     },
-    type:{
-        type: String
+    entreprise: {
+        type: String,
+        required: false
     },
-    formation:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Classe"
+    pays_adresse: {
+        type: String,
+        required: false
     },
-    entreprise:{
-        type: String
+    ville_adresse: {
+        type: String,
+        required: false
+    },
+    rue_adresse: {
+        type: String,
+        required: false
+    },
+    numero_adresse: {
+        type: String,
+        required: false
+    },
+    postal_adresse: {
+        type: String,
+        required: false
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema

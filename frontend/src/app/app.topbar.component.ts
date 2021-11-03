@@ -60,7 +60,7 @@ export class AppTopBarComponent implements OnInit {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
         if(this.userconnected){
           this.socket.emit("userLog", this.userconnected)
-        }else if(this.userconnected.adresse==null || !this.userconnected.phone==null || !this.userconnected.civilite==null){
+        }else if(!this.userconnected.phone==null || !this.userconnected.civilite==null){
           this.router.navigateByUrl('/profil/creation')
         }
         

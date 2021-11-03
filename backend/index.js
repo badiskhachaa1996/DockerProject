@@ -40,19 +40,17 @@ mongoose
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
-const messageController = require('./controllers/messageController')
+const messageController = require('./controllers/messageController');
 const ticketController = require('./controllers/ticketController');
-const notifController = require('./controllers/notificationController')
+const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
+const anneeScolaireController = require('./controllers/anneeScolaireController');
+const ecoleController = require('./controllers/ecoleController');
+const campusController = require('./controllers/campusController');
+const diplomeController = require('./controllers/diplomeController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    /*if(AuthorizeAccess(req)){
-        next();
-    }else{
-        res.status(403).send("Accès non autorisé")
-    }*/
-
     let token = jwt.decode(req.header("token"))
     if(token && token.id && token.role){
         User.findOne({_id:token.id,role:token.role},(err,user)=>{
@@ -67,7 +65,6 @@ app.use('/', function (req, res, next) {
             }
         })
     }else{
-        console.log(req.originalUrl)
         if(req.originalUrl=="/soc/user/AuthMicrosoft"){
             next()
         }else{
@@ -85,11 +82,19 @@ app.use("/soc/sujet", SujetController);
 
 app.use("/soc/message", messageController);
 
-app.use('/soc/ticket', ticketController)
+app.use('/soc/ticket', ticketController);
 
-app.use('/soc/notification', notifController)
+app.use('/soc/notification', notifController);
 
-app.use('/soc/classe', classeController)
+app.use('/soc/classe', classeController);
+
+app.use('/soc/anneeScolaire', anneeScolaireController);
+
+app.use('/soc/ecole', ecoleController);
+
+app.use('/soc/campus', campusController);
+
+app.use('/soc/diplome', diplomeController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

@@ -80,7 +80,9 @@ export const environment = {
 
   entreprisesList:[
     {value:"Elitelabs"},
-    {value:"ESTYA"}
+    {value:"ESTYA"},
+    {value:"ADG"},
+    {value:"Autre"}
   ],
 
 

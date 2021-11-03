@@ -16,7 +16,7 @@ import {NotificationComponent} from './notification/notification.component';
 import { ModifierProfilComponent } from './authentification/modifier-profil/modifier-profil.component';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
-
+import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -28,7 +28,7 @@ const routes: Routes = [
     { path:'ticket/suivi',component:SuiviComponent},
     { path:'home', component: HomeComponent},
     { path:'listUser', component: ListUserComponent},
-    
+    { path:'anneeScolaire', component: AnneeScolaireComponent},
     { path: 'notification', component: NotificationComponent},
     { path: 'profil', component: ModifierProfilComponent },
     { path: 'profil/creation',component:FirstconnectionComponent},

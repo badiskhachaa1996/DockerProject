@@ -5,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const multer = require('multer');
-const fs = require("fs")
+const fs = require("fs");
+const { Inscription } = require("../models/inscription");
 
 
 let transporter = nodemailer.createTransport({
@@ -33,13 +34,15 @@ app.post("/registre", (req, res) => {
                     firstname: data.firstname,
                     lastname: data.lastname,
                     phone: data.phone,
-                    adresse: data.adresse,
                     role: data.role,
                     service_id: data?.service_id || null,
-                    entreprise:req.body?.entreprise,
-                    type:req.body?.type,
-                    formation:req.body?.formation,
-                    campus:req.body?.campus
+                    type: data.type,
+                    entreprise: data.entreprise,
+                    pays_adresse: data.pays_adresse,
+                    ville_adresse: data.ville_adresse,
+                    rue_adresse: data.rue_adresse,
+                    numero_adresse: data.numero_adresse,
+                    postal_adresse: data.postal_adresse 
                 }, { new: true }, (err, userModified) => {
                     if (err) {
                         console.error(err)
@@ -53,15 +56,17 @@ app.post("/registre", (req, res) => {
                 firstname: data.firstname,
                 lastname: data.lastname,
                 phone: data.phone,
-                adresse: data.adresse,
                 email: data?.email,
                 /*password: bcrypt.hashSync(data.password, 8),*/
                 role: data.role || "user",
                 service_id: data?.service_id || null,
-                entreprise:req.body?.entreprise,
-                type:req.body?.type,
-                formation:req.body?.formation,
-                campus:req.body?.campus
+                type: data.type,
+                entreprise: data.entreprise,
+                pays_adresse: data.pays_adresse,
+                ville_adresse: data.ville_adresse,
+                rue_adresse: data.rue_adresse,
+                numero_adresse: data.numero_adresse,
+                postal_adresse: data.postal_adresse 
             })
             user.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
@@ -139,24 +144,61 @@ app.get("/getAll", (req, res) => {
 app.post("/updateById/:id", (req, res) => {
     User.findOneAndUpdate({ _id: req.params.id },
         {
-            civilite: req.body.civilite,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            phone: req.body.phone,
-            role: req.body.role,
-            adresse: req.body.adresse,
-            service_id: req.body.service_id,
-            entreprise:req.body?.entreprise,
-            type:req.body?.type,
-            formation:req.body?.formation,
-            campus:req.body?.campus
+            civilite: req.body.user.civilite,
+            firstname: req.body.user.firstname,
+            lastname: req.body.user.lastname,
+            phone: req.body.user.phone,
+            role: req.body.user.role,
+            service_id: req.body?.user.service_id,
+            entreprise: req.body.user.entreprise,
+            type: req.body.user.type,
+            pays_adresse: req.body.user.pays_adresse,
+            ville_adresse: req.body.user.ville_adresse,
+            rue_adresse: req.body.user.rue_adresse,
+            numero_adresse: req.body.user.numero_adresse,
+            postal_adresse: req.body.user.postal_adresse 
 
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
                 res.send(err)
             } else {
-                res.send(user)
+                Inscription.findById(user._id,(err,inscription)=>{
+                    if(inscription){
+                        //findOneAndUpdate
+                        Inscription.findOneAndUpdate({user_id: user._id},
+                            {
+                                classe: req.body.inscription.classe,
+                                statut: req.body.inscription.statut,
+                                diplome: req.body.inscription.diplome,
+                                nationalite: req.body.inscription.nationalite,
+                                date_de_naissance: req.body.inscription.date_de_naissance
+                            },(err,InscriptionUpdate)=>{
+                                if(err){
+                                    console.log(err)
+                                    res.send(err)
+                                }
+                                else{
+                                    res.send(InscriptionUpdate)
+                                }
+                            });
+                    }else{
+                        //new Inscription()
+                        let inscrit = new Inscription({
+                            user_id : user._id,
+                            classe: req.body.inscription.classe,
+                            statut: req.body.inscription.statut,
+                            diplome: req.body.inscription.diplome,
+                            nationalite: req.body.inscription.nationalite,
+                            date_de_naissance: req.body.inscription.date_de_naissance
+                        });
+
+                        inscrit.save()
+                        .then(() => res.status(200).send(user))
+                        .catch(err => res.status(400).send(err));
+
+                    }
+                })
             }
         })
 })
@@ -275,7 +317,7 @@ app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (user) {
             let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
-            if(user.type==null ||user.adresse==null || user.phone==null){
+            if(user.type==null || user.phone==null){
                 res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
             }else{
                 res.status(200).send({ token });
