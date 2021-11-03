@@ -101,6 +101,22 @@ build_angular:
 #   tags:
 #     - dev-docker
 #   when: manual 
+test:karma:
+  stage: test
+  image: trion/ng-cli-karma
+  allow_failure: false
+  script:
+    - cd frontend
+    - ng test --code-coverage --progress false --watch false
+  coverage: '/Lines \W+: (\d+\.\d+)%.*/'
+  artifacts:
+    paths:
+      - coverage/
+  tags:
+    - dev-docker
+  when: manual 
+
+
 sonarqube-check:
   image: 
     name: sonarsource/sonar-scanner-cli:latest
@@ -119,11 +135,8 @@ sonarqube-check:
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.branch.name=dev
       -Dsonar.sources=frontend/src/app,backend/controllers,backend/models,backend/middleware
-      -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
-
-
-
+      -Dsonar.typescript.lcov.reportPaths=frontend/coverage/lcov/lcov.info
   allow_failure: true
-
+  tags:
+    - dev-docker
