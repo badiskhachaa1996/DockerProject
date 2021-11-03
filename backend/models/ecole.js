@@ -13,4 +13,6 @@ const ecole_schema = new mongoose.Schema({
 });
 
 //Creation de la table ecole et export du model Ecole
-module.exports = mongoose.model("Ecole", ecole_schema);
+const Ecole = mongoose.model("ecole",ecole_schema);
+//on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
+module.exports={Ecole};

@@ -22,7 +22,7 @@ const diplome_schema = mongoose.Schema({
 
 });
 
-//creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
+//creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema
 const Diplome= mongoose.model("diplome", diplome_schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
 module.exports={ Diplome };

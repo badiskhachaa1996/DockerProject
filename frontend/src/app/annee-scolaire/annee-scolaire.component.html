@@ -1,15 +1,16 @@
 <div class="p-grid mt-2">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddAnneScolaire">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddAnneeScolaire">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddAnneScolaire=false"> </i>
-                <form class="col-8 col-offset-2" [formGroup]="anneScolaireForm">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddAnneeScolaire=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="anneeScolaireForm">
                    
                     <h3 class="text-center">Ajouter une annee Scolaire</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
                             <label>Date de debut et de fin:</label>
-                            <p-calendar formControlName="libelle" [(ngModel)]="dateValue" view="month" dateFormat="yy" [yearNavigator]="true" yearRange="2020:2030" selectionMode="range"></p-calendar>
+                            <input type="text" formControlName="libelle" class="form-control col-12"
+                            placeholder="Etat de la anneScolaire" pInputText>
                             
                         </div>
                         
@@ -21,8 +22,8 @@
                         
                        
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneScolaireForm.invalid"
-                                label="Enregistrer" (click)="saveAnneScolaire()"></button>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneeScolaireForm.invalid"
+                                label="Enregistrer" (click)="saveAnneeScolaire()"></button>
                         </div>
                     </div>
                 </form>
@@ -31,11 +32,11 @@
     </div>
 </div>
 <div class="p-grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateAnneScolaire">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateAnneeScolaire">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateAnneScolaire=null"> </i>
-                <form class="col-8 col-offset-2" [formGroup]="anneScolaireFormUpdate">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateAnneeScolaire=null"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="anneeScolaireFormUpdate">
 
                     <h3 class="text-center">Modifier la anneScolaire</h3>
                     <div class="p-grid">
@@ -46,8 +47,8 @@
                         </div>
                        
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneScolaireFormUpdate.invalid"
-                                label="Enregistrer" (click)="modifyAnneScolaire();"></button>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneeScolaireFormUpdate.invalid"
+                                label="Enregistrer" (click)="modifyAnneeScolaire();"></button>
                         </div>
                     </div>
                 </form>
@@ -59,13 +60,13 @@
 
 <div class="grid">
     <div class="col-10 col-offset-1">
-        <button *ngIf="!showFormAddAnneScolaire" pButton class="ui-button-raised ui-button-success"
-            (click)="showFormUpdateAnneScolaire=null;showFormAddAnneScolaire=true" style="float:right;" label="Ajouter"></button>
-        <h3>Liste des anneScolaires</h3>
+        <button *ngIf="!showFormAddAnneeScolaire" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormUpdateAnneeScolaire=null;showFormAddAnneeScolaire=true" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des anneeScolaires</h3>
         <div class="col-12 card shadow-lg my-5 ">
-            <p-table #dt1 *ngIf="anneScolaires" [columns]="cols" [value]="anneScolaires" selectionMode="single"
+            <p-table #dt1 *ngIf="anneeScolaires" [columns]="cols" [value]="anneeScolaires" selectionMode="single"
              [rows]="5" [paginator]="true" [pageLinks]="5"
-                [responsive]="true" [totalRecords]="anneScolaires.length" [filterDelay]="0" [globalFilterFields]="['libelle','etat']">
+                [responsive]="true" [totalRecords]="anneeScolaires.length" [filterDelay]="0" [globalFilterFields]="['libelle','etat']">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">

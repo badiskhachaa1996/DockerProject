@@ -9,7 +9,7 @@ const anneeScolaire_schema = new mongoose.Schema({
 
 });
 
-//creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
+//creation de la table avec le nom AnneeScolaire ( model/classe) à l'aide de la biblio mongoose et son schema
 const AnneeScolaire= mongoose.model("anneeScolaire", anneeScolaire_schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
 module.exports={ AnneeScolaire };

@@ -11,7 +11,7 @@ const campus_schema = mongoose.Schema({
     site: { type: String, required: true }
 });
 
-//creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
+//creation de la table avec le nom Campus ( model/classe) à l'aide de la biblio mongoose et son schema
 const Campus= mongoose.model("campus",campus_schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
 module.exports={ Campus };
