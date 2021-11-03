@@ -1,7 +1,7 @@
 //declaration de la bibliothèque mongodb
 const mongoose = require("mongoose");
 //creation du schema de table campus
-const campusSchema = mongoose.createSchema({
+const campus_schema = mongoose.Schema({
     libelle: { type: String, required: true },
     ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "Ecole", required: true },
     ville: { type: String, required: true },
@@ -11,5 +11,7 @@ const campusSchema = mongoose.createSchema({
     site: { type: String, required: true }
 });
 
-//Creation de la table campus et export du model Campus
-module.exports = mongoose.model("Campus", campusSchema);
+//creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
+const Campus= mongoose.model("campus",campus_schema);
+//on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
+module.exports={ Campus };

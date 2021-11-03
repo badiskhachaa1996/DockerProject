@@ -3,7 +3,7 @@ const ecole = require("./../models/ecole");
 const app = express();
 const { Ecole } = require("./../models/ecole");
 
-app.post("/addecole", (req, res) => {
+app.post("/createecole", (req, res) => {
     //Ajouter une école
     let data = req.body;
     let ecole = new Ecole({
@@ -24,8 +24,8 @@ app.post("/addecole", (req, res) => {
 
 });
 
-app.post("/updateById/:id", (req, res) => {
-    ecole.updateById(req.params.id, 
+app.post("/editById/:id", (req, res) => {
+    Ecole.updateById(req.params.id, 
         {
             libelle: req.body.libelle,
             annee_id: req.body.annee_id,
@@ -71,3 +71,5 @@ app.get("/getAllByAnnee/:id", (req, res) => {
         res.status(404).send(error);
     })
 });
+
+module.exports = app;

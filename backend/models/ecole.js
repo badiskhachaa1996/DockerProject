@@ -1,9 +1,9 @@
 // déclaration de la bibliothèque mongoose
 const mongoose = require('mongoose');
 //creation du schema de la table ecole
-const ecoleSchema = mongoose.createSchema({
+const ecole_schema = new mongoose.Schema({
     libelle : { type: String, required: true }, 
-    annee_id: { type: mongoose.Schema.Types.ObjectId, ref: anneScolaire, required: true },
+    annee_id: { type: mongoose.Schema.Types.ObjectId, ref: "anneeScolaire", required: true },
     ville: { type: String, required: true },
     pays: { type: String, required: true },
     adresse: { type: String, required: true },
@@ -13,4 +13,4 @@ const ecoleSchema = mongoose.createSchema({
 });
 
 //Creation de la table ecole et export du model Ecole
-module.exports = mongoose.model("Ecole", ecoleSchema);
+module.exports = mongoose.model("Ecole", ecole_schema);

@@ -45,7 +45,9 @@ const ticketController = require('./controllers/ticketController');
 const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
 const anneeScolaireController = require('./controllers/anneeScolaireController');
-const Ecole = require('./controllers/ecoleController');
+const ecoleController = require('./controllers/ecoleController');
+const campusController = require('./controllers/campusController');
+const diplomeController = require('./controllers/diplomeController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
@@ -89,6 +91,10 @@ app.use('/soc/classe', classeController);
 app.use('/soc/anneeScolaire', anneeScolaireController);
 
 app.use('/soc/ecole', ecoleController);
+
+app.use('/soc/campus', campusController);
+
+app.use('/soc/diplome', diplomeController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

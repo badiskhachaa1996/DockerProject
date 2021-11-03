@@ -1,32 +1,35 @@
 const express = require("express");
 const app = express();
-const { anneeScolaire }  = require("./../models/anneeScolaire");
+const { AnneeScolaire }  = require("./../models/anneeScolaire");
 
 
-app.post("/addanneeScolaire", (req, res) =>{
-    //Ajouter une année scolaire
+app.post("/createanneeScolaire", (req, res) =>{
+    //Ajout d'une année scolaire
     let data = req.body;
     let anneeScolaire = new AnneeScolaire ({
         libelle: data.libelle,
         etat: data.etat
     });
-    anneeScolaire.save().then((anneeScolaireFromDB) =>{
+    AnneeScolaire.save().then((anneeScolaireFromDB) =>{
         res.status(200).send(anneeScolaireFromDB);
     }).catch((error) => {
-        res.status(400).send(error);
+        res.status(404).send(error);
     });
 });
 
-app.post("/updateById/:id", (req, res) => {
+app.post("/editById/:id", (req, res) => {
     //Modifier une année scolaire
-    AnneeScolaire.updateById(req.params.id,
+    AnneeScolaire.findOneAndUpdate(req.params.id,
         {
             libelle : req.body.libelle,
         }, { new: true }, (err,anneeScolaire) => {
             if (err) {
                 res.send(err)
             }
-            res.send(anneeScolaire)
+            else {
+                res.send(anneeScolaire)
+            }
+            
         });
 });
 
@@ -45,9 +48,9 @@ app.get("/getById/:id", (req, res) => {
     AnneeScolaire.findOne({_id: req.params.id}).then((dataAnneeScolaire) => {
         res.status(200).send({ dataAnneeScolaire });
     }).catch((error) => {
-        res.status(404).send("erreur :" + error);
+        res.status(400).send("erreur :" + error);
     })
-})
+});
 
 app.get("/archivee/:id", (req, res) => {
     //Modifier une année scolaire
@@ -58,6 +61,11 @@ app.get("/archivee/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(anneeScolaire)
+            else {
+                res.send(anneeScolaire)
+            }
+           
         });
 });
+
+module.exports = app;
