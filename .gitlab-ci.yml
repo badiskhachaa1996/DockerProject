@@ -118,6 +118,28 @@ deployangular_todev:
 #     - dev-docker
 #   when: manual 
 
+sonar-angular:
+  stage: test
+  image: trion/ng-cli:latest
+  script:
+    - cd frontend
+    - npm install -g sonarqube-scanner
+    - >
+      sonar-scanner
+      -Dsonar.projectKey=elitech-ecole_ems3_AXzmMbQe1eE81W_XHtkV
+      -Dsonar.host.url=http://51.68.215.184:9000
+      -Dsonar.login=fc8633efd4b1d7da6613efb22ab4226c1d8d7e29
+      -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
+      -Dsonar.sourceEncoding=UTF-8
+      -Dsonar.sources=frontend/src/app
+      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
+      -Dsonar.tests=src/app
+      -Dsonar.test.inclusions=**/*.spec.ts
+  allow_failure: true
+  only:
+    - dev
+  tags:
+    - dev-docker
 
 sonarqube-check:
   image: 
@@ -137,8 +159,7 @@ sonarqube-check:
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=frontend/src/app,backend/controllers,backend/models,backend/middleware
-      -Dsonar.typescript.lcov.reportPaths=frontend/coverage/lcov/lcov.info
+      -Dsonar.sources=backend/controllers,backend/models,backend/middleware
    
   allow_failure: true
   tags:
