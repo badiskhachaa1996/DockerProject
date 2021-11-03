@@ -119,7 +119,11 @@ sonarqube-check:
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
+      -Dsonar.branch.name=dev
       -Dsonar.sources=frontend/src/app,backend/controllers,backend/models,backend/middleware
+      -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
+      -Dsonar.javascript.lcov.reportPaths=coverage/lcov/lcov.info
+      sonar.javascript.lcov.reportPaths
 
 
   allow_failure: true
