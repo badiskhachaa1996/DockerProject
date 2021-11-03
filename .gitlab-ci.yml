@@ -107,6 +107,7 @@ test:karma:
   allow_failure: false
   script:
     - cd frontend
+    - npm install 
     - ng test --code-coverage --progress false --watch false
   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
   artifacts:
