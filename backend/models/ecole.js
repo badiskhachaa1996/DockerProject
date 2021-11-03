@@ -1,9 +1,9 @@
 // déclaration de la bibliothèque mongoose
 const mongoose = require('mongoose');
 //creation du schema de la table ecole
-const ecoleSchema = mongoose.createSchema({
+const ecoleSchema = mongoose.Schema({
     libelle : { type: String, required: true }, 
-    annee_id: { type: mongoose.Schema.Types.ObjectId, ref: anneScolaire, required: true },
+    annee_id: { type: mongoose.Schema.Types.ObjectId, ref: "anneeScolaire", required: true },
     ville: { type: String, required: true },
     pays: { type: String, required: true },
     adresse: { type: String, required: true },

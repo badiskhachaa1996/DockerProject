@@ -98,6 +98,7 @@ import { IPublicClientApplication, PublicClientApplication, InteractionType, Bro
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
+import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 
 
 
@@ -207,6 +208,7 @@ import { ClasseComponent } from './classe/classe.component';
         FooterComponent,
         FirstconnectionComponent,
         ClasseComponent,
+        AnneeScolaireComponent,
     
 
                

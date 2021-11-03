@@ -61,3 +61,6 @@ app.get("/archivee/:id", (req, res) => {
             res.send(anneeScolaire)
         });
 });
+
+
+module.exports = app;
