@@ -19,8 +19,6 @@ node_dependencies:
   only:
     changes:
       - backend/package-lock.json
-    
-
 
 angular_dependencies:
   stage: install_dependencies
@@ -74,72 +72,6 @@ deployangular_todev:
   - dev
   # when: manual
 
-# sonar-node:
-#   stage: test
-#   image: sonarsource/sonar-scanner-cli
-#   needs: []
-#   dependencies: []
-#   script:
-    # - cd backend
-    # - >
-    #   sonar-scanner 
-    #   -Dsonar.projectKey=Typlosion14_estya-ticketing_AXzf-Al-1eE81W_XHtjA
-    #   -Dsonar.host.url="$SONAR_HOST_URL"
-    #   -Dsonar.login="$SONAR_TOKEN"
-    #   -Dsonar.sources=frontend/src/app
-    #   -Dsonar.sources=backend/
-
-#   allow_failure: true
-#   variables:
-#     SONAR_PROJECT_BASE_DIR: "${CI_PROJECT_DIR}"
-#     GIT_DEPTH: 0
-#   cache:
-#     key: "sonar-${CI_PROJECT_ID}"
-#     paths:
-#       - ".scannerwork"
-#       - ".sonar"
-#   tags:
-#     - dev-docker
-#   when: manual 
-#=======================================================================
-# test:karma:
-#   stage: test
-#   image: trion/ng-cli-karma
-#   allow_failure: false
-#   script:
-#     - cd frontend
-#     - npm install 
-#     - ng test --code-coverage --progress false --watch false
-#   coverage: '/Lines \W+: (\d+\.\d+)%.*/'
-#   artifacts:
-#     paths:
-#       - coverage/
-#   tags:
-#     - dev-docker
-#   when: manual 
-
-sonar-angular:
-  stage: test
-  image: trion/ng-cli:latest
-  script:
-    - cd frontend
-    - npm install -g sonarqube-scanner
-    - >
-      sonar-scanner
-      -Dsonar.projectKey=elitech-ecole_ems3_AXzmMbQe1eE81W_XHtkV
-      -Dsonar.host.url=http://51.68.215.184:9000
-      -Dsonar.typescript.lcov.reportPaths=coverage/lcov/lcov.info
-      -Dsonar.sourceEncoding=UTF-8
-      -Dsonar.sources=frontend/src/app
-      -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts
-      -Dsonar.tests=src/app
-      -Dsonar.test.inclusions=**/*.spec.ts
-  allow_failure: true
-  only:
-    - dev
-  tags:
-    - dev-docker
-
 sonarqube-check:
   image: 
     name: sonarsource/sonar-scanner-cli:latest
@@ -154,11 +86,11 @@ sonarqube-check:
   script:
     - >
       sonar-scanner 
-      -Dsonar.projectKey=elitech-ecole_ems3_AXzmdwSp1eE81W_XHtlA
+      -Dsonar.projectKey=elitech-ecole_ems3_AXzmfloY1eE81W_XHtln
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=backend/controllers,backend/models,backend/middleware
+      -Dsonar.sources=backend/controllers,backend/models,backend/middleware,frontend/app/src
    
   allow_failure: true
   tags:
