@@ -90,7 +90,7 @@ sonarqube-check:
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=backend/controllers,backend/models,backend/middleware,frontend/app/src
+      -Dsonar.sources=backend/controllers,backend/models,backend/middleware,frontend/src/app/
    
   allow_failure: true
   tags:
