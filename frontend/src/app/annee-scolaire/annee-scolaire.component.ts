@@ -15,9 +15,11 @@ export class AnneeScolaireComponent implements OnInit {
 
   etat_annee: any[]= environment.etat_annee
 
+   
+
   showFormAddAnneeScolaire:Boolean=false;
   showFormUpdateAnneeScolaire:AnneeScolaire = null;
-  rangedate:string="";
+  rangedate:any;
   rangedateS : string="" ;
   anneeScolaires:AnneeScolaire[]=[];
 
@@ -46,8 +48,15 @@ export class AnneeScolaireComponent implements OnInit {
     })
   }
 
+ 
+
   saveAnneeScolaire(){
-    let anneeScolaire= new AnneeScolaire(null,this.anneeScolaireForm.value.libelle,String(this.anneeScolaireForm.value.etat.value))
+    
+   
+    var str = String(this.anneeScolaireForm.value.libelle)
+    var splited=str.split(',').join('/');
+    console.log(splited)
+    let anneeScolaire= new AnneeScolaire(null,splited,String(this.anneeScolaireForm.value.etat.value))
 
     this.AnneeScolaireService.create(anneeScolaire).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été ajouté' });
@@ -84,8 +93,10 @@ console.log(anneeScolaire._id)
   }
 
   rangedatechange($event){
-    console.log(this.rangedate + this.rangedateS)
-    this.rangedateS = String(this.rangedate)
+    console.log('label'+this.rangedate )
+    var str = String(this.anneeScolaireForm.value.libelle)
+    var splited=str.split(',').join('/');
+    console.log(splited)
   }
 
 }
