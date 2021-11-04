@@ -111,9 +111,3 @@ sonarqube-check:
   allow_failure: true
   tags:
     - dev-docker
-
-
-
-
-
-pm2 start index.js
