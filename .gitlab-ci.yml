@@ -2,7 +2,7 @@ stages:
    - install_dependencies
    - test
    - build
-   - deployangular
+   - deploy
 
 node_dependencies:
   stage: install_dependencies
@@ -59,14 +59,30 @@ build_angular:
     expire_in: 1 hour
 #  when: manual
  #======================================================
-deployangular_todev:
-  stage: deployangular
+deploy_angular_todev:
+  stage: deploy
   dependencies: 
     - build_angular
   tags:
     - dev-shell
   script:
     - sudo mv -f frontend/dist /var/www/html/ems
+  when: manual
+  only:
+  - dev
+  # when: manual
+#===========================================================
+deploy_node_todev:
+  stage: deploy
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - backend/node_modules/
+    policy: pull
+  tags:
+    - dev-shell
+  script:
+    - pm2 start backend/index.js --watch --ignore-watch="node_modules"
   when: manual
   only:
   - dev
@@ -95,3 +111,9 @@ sonarqube-check:
   allow_failure: true
   tags:
     - dev-docker
+
+
+
+
+
+pm2 start index.js
