@@ -7,9 +7,9 @@ import { environment } from 'src/environments/environment';
 import { NodeWithI18n } from '@angular/compiler';
 import {CalendarModule} from 'primeng/calendar';
 @Component({
-  selector: 'app-annee-Scolaire',
-  templateUrl: './annee-Scolaire.component.html',
-  styleUrls: ['./annee-Scolaire.component.css']
+  selector: 'app-annee-scolaire',
+  templateUrl: './annee-scolaire.component.html',
+  styleUrls: ['./annee-scolaire.component.css']
 })
 export class AnneeScolaireComponent implements OnInit {
 
@@ -17,8 +17,8 @@ export class AnneeScolaireComponent implements OnInit {
 
   showFormAddAnneeScolaire:Boolean=false;
   showFormUpdateAnneeScolaire:AnneeScolaire = null;
-  rangedate:any;
-  rangedateS : string ;
+  rangedate:string="";
+  rangedateS : string="" ;
   anneeScolaires:AnneeScolaire[]=[];
 
   anneeScolaireForm:FormGroup = new FormGroup({
@@ -84,6 +84,7 @@ console.log(anneeScolaire._id)
   }
 
   rangedatechange($event){
+    console.log(this.rangedate + this.rangedateS)
     this.rangedateS = String(this.rangedate)
   }
 

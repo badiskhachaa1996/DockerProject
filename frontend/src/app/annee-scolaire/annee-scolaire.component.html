@@ -11,10 +11,10 @@
                             <label style ="font-weight: bold;">Libelle:</label>
                             
                             <input type="text" formControlName="libelle" class="form-control col-12"
-                            placeholder="Date de debut et de fin (xxxx/xxxx)" [(value)]="rangedateS" pInputText>
+                            placeholder="Date de debut et de fin (xxxx/xxxx)" [(value)]="rangedate" pInputText>
                             <div class="p-col-12 p-md-4">
                                 <h3>Range</h3>
-                                <p-calendar  value="rangedate" dateFormat="yy"  selectionMode="range" onYearChange="rangedatechange($event)" ></p-calendar>
+                                <p-calendar  value="[rangedate]" dateFormat="yy" yearNavigator="true" yearRange="2020:2030" selectionMode="range" dataType="string" onClose="rangedatechange($event)" ></p-calendar>
                             </div>
                         </div>
                         
