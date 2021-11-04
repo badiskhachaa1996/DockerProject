@@ -35,9 +35,9 @@ export class AnneeScolaireService {
     return this.http.post<any>(anneeScolaireUrl,AnneeScolaire,httpOptions1);
   }
 
-  archiveee(AnneeScolaire: any){
-    let anneeScolaireUrl=this.apiUrl+"archivee"+AnneeScolaire._id;
-    return this.http.post<any>(anneeScolaireUrl,AnneeScolaire,httpOptions1);
+  archivee(AnneeScolaire: any){
+    let anneeScolaireUrl=this.apiUrl+"archivee/"+AnneeScolaire;
+    return this.http.get<any>(anneeScolaireUrl,httpOptions1);
   }
   update(anneeScolaire :any){
     let registreUrl=this.apiUrl+"updateById/"+anneeScolaire._id;

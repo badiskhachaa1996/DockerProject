@@ -10,7 +10,8 @@ app.post("/create", (req, res) =>{
         libelle: data.libelle,
         etat: data.etat,
     });
-    AnneeScolaire.save().then((anneeScolaireFromDB) =>{
+    console.log(data)
+    anneeScolaire.save().then((anneeScolaireFromDB) =>{
         res.status(200).send(anneeScolaireFromDB);
     }).catch((error) => {
         res.status(404).send(error);
@@ -54,7 +55,8 @@ app.get("/getById/:id", (req, res) => {
 
 app.get("/archivee/:id", (req, res) => {
     //Modifier une année scolaire
-    AnneeScolaire.updateById(req.params.id,
+   
+    AnneeScolaire.findOneAndUpdate({_id:req.params.id} ,
         {
             etat : "Archive",
         }, { new: true }, (err,anneeScolaire) => {

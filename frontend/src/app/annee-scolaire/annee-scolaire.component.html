@@ -5,19 +5,23 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddAnneeScolaire=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="anneeScolaireForm">
                    
-                    <h3 class="text-center">Ajouter une annee Scolaire</h3>
+                    <h3 class="text-center"style ="font-weight: bold;" >Ajouter une année Scolaire</h3>
                     <div class="p-grid">
-                        <div class="mt-2 mb-2 col-8">
-                            <label>Date de debut et de fin:</label>
-                            <input type="text" formControlName="libelle" class="form-control col-12"
-                            placeholder="Etat de la anneScolaire" pInputText>
+                        <div class="mt-2 mb-2 col-8"style="display: grid; align-items: center;">
+                            <label style ="font-weight: bold;">Libelle:</label>
                             
+                            <input type="text" formControlName="libelle" class="form-control col-12"
+                            placeholder="Date de debut et de fin (xxxx/xxxx)" [(value)]="rangedateS" pInputText>
+                            <div class="p-col-12 p-md-4">
+                                <h3>Range</h3>
+                                <p-calendar  value="rangedate" dateFormat="yy"  selectionMode="range" onYearChange="rangedatechange($event)" ></p-calendar>
+                            </div>
                         </div>
                         
-                        <div class="mt-2 mb-2 col-8">
-                            <label>Etat:</label>
-                            <input type="text" formControlName="etat" class="form-control col-12"
-                                placeholder="Etat de la anneScolaire" pInputText>
+                        <div class="mt-2 mb-2 col-8" style="display: grid; align-items: center;">
+                            <label style ="font-weight: bold;">Etat:</label>
+                               
+                            <p-dropdown formControlName="etat" [options]="etat_annee" optionLabel="value" ></p-dropdown>
                         </div>
                         
                        
@@ -32,36 +36,14 @@
     </div>
 </div>
 <div class="p-grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateAnneeScolaire">
-        <p-card>
-            <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateAnneeScolaire=null"> </i>
-                <form class="col-8 col-offset-2" [formGroup]="anneeScolaireFormUpdate">
-
-                    <h3 class="text-center">Modifier la anneScolaire</h3>
-                    <div class="p-grid">
-                        <div class="mt-2 mb-2 col-8">
-                            <label>Libelle:</label>
-                            <input type="text" formControlName="libelle" class="form-control col-12"
-                                placeholder="Libelle de l'annee scolaire" pInputText>
-                        </div>
-                       
-                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="anneeScolaireFormUpdate.invalid"
-                                label="Enregistrer" (click)="modifyAnneeScolaire();"></button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </p-card>
-    </div>
+    
 </div>
 
 
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddAnneeScolaire" pButton class="ui-button-raised ui-button-success"
-            (click)="showFormUpdateAnneeScolaire=null;showFormAddAnneeScolaire=true" style="float:right;" label="Ajouter"></button>
+            (click)="showFormAddAnneeScolaire=true" style="float:right;" label="Ajouter"></button>
         <h3>Liste des anneeScolaires</h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="anneeScolaires" [columns]="cols" [value]="anneeScolaires" selectionMode="single"
@@ -82,7 +64,7 @@
                             Libelle <p-sortIcon field="Libelle"></p-sortIcon>
                         </th>
                         <th class="col-5" style="text-decoration: underline;" pSortableColumn="etat">
-                            Etat <p-sortIcon field="Etat"></p-sortIcon>
+                            Etat <p-sortIcon field="etat"></p-sortIcon>
                         </th>
                         <th class="col-2" style="text-decoration: underline;">
                             Action
@@ -95,15 +77,13 @@
                             {{rowData.libelle}}
                         </td>
                         <td>
-                            {{rowData.Etat}}
+                            {{rowData.etat}}
                         </td>
                         <td>
-                            <i *ngIf="rowData.active" pTooltip="Cacher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye"
-                            (click)="hide(rowData)"></i>
-                            <i *ngIf="!rowData.active" pTooltip="Afficher dans la liste des choix" tooltipPosition="bottom" class="pi pi-eye-slash"
-                            (click)="show(rowData)"></i>
-                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                                (click)="showModify(rowData)"></i>
+                           
+                            <i  pTooltip="archiver" tooltipPosition="bottom" class="pi pi-eye-slash"
+                            (click)="modifyAnneeScolaire(rowData)"></i>
+                           
                         </td>
                     </tr>
                 </ng-template>
