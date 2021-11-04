@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AnneeScolaireService } from '../services/annee-Scolaire.service';
+import { AnneeScolaireService } from '../services/annee-scolaire.service';
 import {AnneeScolaire} from '../models/AnneeScolaire'
 import { MessageService } from 'primeng/api';
-
+import { environment } from 'src/environments/environment';
+import { NodeWithI18n } from '@angular/compiler';
+import {CalendarModule} from 'primeng/calendar';
 @Component({
   selector: 'app-annee-Scolaire',
   templateUrl: './annee-Scolaire.component.html',
@@ -11,9 +13,12 @@ import { MessageService } from 'primeng/api';
 })
 export class AnneeScolaireComponent implements OnInit {
 
+  etat_annee: any[]= environment.etat_annee
+
   showFormAddAnneeScolaire:Boolean=false;
   showFormUpdateAnneeScolaire:AnneeScolaire = null;
-
+  rangedate:any;
+  rangedateS : string ;
   anneeScolaires:AnneeScolaire[]=[];
 
   anneeScolaireForm:FormGroup = new FormGroup({
@@ -22,8 +27,7 @@ export class AnneeScolaireComponent implements OnInit {
   })
 
   anneeScolaireFormUpdate:FormGroup = new FormGroup({
-    libelle : new FormControl('',Validators.required),
-    etat : new FormControl('',Validators.required),
+    etat : new FormControl('Archivée',Validators.required),
   })
 
   columns = [
@@ -43,10 +47,10 @@ export class AnneeScolaireComponent implements OnInit {
   }
 
   saveAnneeScolaire(){
-    let anneeScolaire= new AnneeScolaire(null,this.anneeScolaireForm.value.libelle,this.anneeScolaireForm.value.etat)
+    let anneeScolaire= new AnneeScolaire(null,this.anneeScolaireForm.value.libelle,String(this.anneeScolaireForm.value.etat.value))
 
     this.AnneeScolaireService.create(anneeScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre anneeScolaire a bien été ajouté' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été ajouté' });
       this.anneeScolaires.push(data)
       this.showFormAddAnneeScolaire=false;
       this.anneeScolaireForm.reset();
@@ -54,43 +58,33 @@ export class AnneeScolaireComponent implements OnInit {
       console.error(error)
     });
   }
-
+/*
   showModify(rowData:AnneeScolaire){
     this.showFormUpdateAnneeScolaire=rowData;
     this.showFormAddAnneeScolaire=false
     this.anneeScolaireFormUpdate.setValue({libelle:rowData.libelle,etat:rowData.etat})
   }
-
-  modifyAnneeScolaire(){
-    let anneeScolaire = this.anneeScolaireFormUpdate.value
+*/
+  modifyAnneeScolaire(rowData:AnneeScolaire){
+    
+    this.showFormUpdateAnneeScolaire=rowData;
+    this.showFormAddAnneeScolaire=false
+    let anneeScolaire = this.showFormUpdateAnneeScolaire
     anneeScolaire._id=this.showFormUpdateAnneeScolaire._id
-
-    this.AnneeScolaireService.update(anneeScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre anneeScolaire a bien été modifié' });
+console.log(anneeScolaire._id)
+    this.AnneeScolaireService.archivee(anneeScolaire._id).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été archivé' });
       this.updateList()
       this.showFormUpdateAnneeScolaire=null;
       this.anneeScolaireFormUpdate.reset();
     }, (error) => {
-      console.error(error)
+      console.log(error)
     });
+  
   }
 
-  hide(anneeScolaire :AnneeScolaire){
-    this.AnneeScolaireService.hide(anneeScolaire._id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: anneeScolaire.etat+' ne s\'affichera plus dans la liste' });
-      this.updateList()
-    }, (error) => {
-      console.error(error)
-    });
-  }
-
-  show(anneeScolaire :AnneeScolaire){
-    this.AnneeScolaireService.show(anneeScolaire._id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: anneeScolaire.libelle+' s\'affichera de nouveau dans la liste' });
-      this.updateList()
-    }, (error) => {
-      console.error(error)
-    });
+  rangedatechange($event){
+    this.rangedateS = String(this.rangedate)
   }
 
 }

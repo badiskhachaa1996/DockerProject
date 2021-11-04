@@ -523,6 +523,12 @@ export const environment = {
     { label: "En attente de retour", value: 'En attente de retour' },
     { label: "Clôturé", value: 'Clôturé' }
   ],
+  etat_annee: [
+    { label: "Nouvelle", value: 'Nouvelle' },
+    { label: "Active", value: 'Active' },
+    { label: "archivée", value: 'archivée' },
+   
+  ],
 };
 /*
  * For easier debugging in development mode, you can import the following file
