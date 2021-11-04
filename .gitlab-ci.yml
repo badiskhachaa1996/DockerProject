@@ -82,7 +82,8 @@ deploy_node_todev:
   tags:
     - dev-shell
   script:
-    - pm2 start backend/index.js --watch --ignore-watch="node_modules"
+    - pm2 stop 0 
+    - pm2 start backend/index.js
   when: manual
   only:
   - dev
