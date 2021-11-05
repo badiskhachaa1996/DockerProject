@@ -4,22 +4,22 @@ stages:
    - build
    - deploy
 
-node_dependencies:
-  stage: install_dependencies
-  tags:
-  - dev-shell
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - backend/node_modules/
-  script:
-    - cd backend
-    - npm ci
-  # only:
-  #   changes:
-  #     - backend/package-lock.json
-  only:
-  - dev
+# node_dependencies:
+#   stage: install_dependencies
+#   tags:
+#   - dev-shell
+#   cache: 
+#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+#     paths:
+#       - backend/node_modules/
+#   script:
+#     - cd backend
+#     - npm ci
+#   # only:
+#   #   changes:
+#   #     - backend/package-lock.json
+#   only:
+#   - dev
   
 angular_dependencies:
   stage: install_dependencies
@@ -75,16 +75,14 @@ deploy_angular_todev:
 #===========================================================
 deploy_node_todev:
   stage: deploy
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - backend/node_modules/
-    policy: pull
+
   tags:
     - dev-shell
   script:
+    
     - pm2 list
     - cd backend
+    - npm ci
     - pm2 logs index
     - pm2 delete index
     - pm2 start index.js
