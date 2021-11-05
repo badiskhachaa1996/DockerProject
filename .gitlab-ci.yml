@@ -85,8 +85,11 @@ deploy_node_todev:
   script:
     - pm2 list
     - cd backend
+    - pm2 logs index
     - pm2 delete index
     - pm2 start index.js
+    - pm2 logs index
+    - pm2 list
   only:
   - dev
   # when: manual
