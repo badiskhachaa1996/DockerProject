@@ -15,10 +15,12 @@ node_dependencies:
   script:
     - cd backend
     - npm ci
+  # only:
+  #   changes:
+  #     - backend/package-lock.json
   only:
-    changes:
-      - backend/package-lock.json
-
+  - dev
+  
 angular_dependencies:
   stage: install_dependencies
   tags:
@@ -31,8 +33,10 @@ angular_dependencies:
     - cd frontend
     - npm ci
   only:
-    changes:
-      - frontend/package-lock.json
+  - dev
+  # only:
+  #   changes:
+  #     - frontend/package-lock.json
 #========================================================
 build_angular:
   stage: build
