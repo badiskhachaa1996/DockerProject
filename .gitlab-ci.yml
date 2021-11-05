@@ -108,3 +108,5 @@ sonarqube-check:
   allow_failure: true
   tags:
     - dev-docker
+  only:
+  - dev
