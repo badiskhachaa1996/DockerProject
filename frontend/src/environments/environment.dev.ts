@@ -5,7 +5,7 @@
 export const environment = {
   origin: "https://t.dev.estya.com/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
-  User: null,
+   User: null,
 
   fr: {
     firstDayOfWeek: 0,
@@ -80,7 +80,9 @@ export const environment = {
 
   entreprisesList:[
     {value:"Elitelabs"},
-    {value:"ESTYA"}
+    {value:"ESTYA"},
+    {value:"ADG"},
+    {value:"Autre"}
   ],
 
 
@@ -522,6 +524,12 @@ export const environment = {
     { label: "En cours de traitement", value: 'En cours de traitement' },
     { label: "En attente de retour", value: 'En attente de retour' },
     { label: "Clôturé", value: 'Clôturé' }
+  ],
+
+  etat_annee: [
+    { label: "Nouvelle", value: 'Nouvelle' },
+    { label: "Active", value: 'Active' },
+    { label: "archivée", value: 'archivée' },
   ],
 };
 /*
