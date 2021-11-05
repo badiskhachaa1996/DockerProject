@@ -58,13 +58,13 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="libelle">
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="libelle" scope="col">
                             Libelle <p-sortIcon field="Libelle"></p-sortIcon>
                         </th>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="etat">
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="etat" scope="col">
                             Etat <p-sortIcon field="etat"></p-sortIcon>
                         </th>
-                        <th class="col-2" style="text-decoration: underline;">
+                        <th class="col-2" style="text-decoration: underline;" scope="col">
                             Action
                         </th>
                     </tr>

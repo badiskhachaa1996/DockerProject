@@ -196,20 +196,20 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th style="width: 3rem"> </th>
+                        <th style="width: 3rem" scope="col"> </th>
 
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service"> Service
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service" scope="col"> Service
                             <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="sujet" scope="col"> Sujet
                             <p-sortIcon field="sujet"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout"> Date de
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="date_ajout" scope="col"> Date de
                             création <p-sortIcon field="date_ajout"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;"> Temps d'attente
+                        <th style="text-decoration: underline; padding-top: 5%;" scope="col"> Temps d'attente
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
+                        <th style="text-decoration: underline;padding-top: 5%;" scope="col">
                             Action
                         </th>
                     </tr>
@@ -422,29 +422,29 @@
                 <div id="top">
                     <ng-template pTemplate="header" let-columns>
                         <tr>
-                            <th style="width: 3rem"></th>
-                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
+                            <th style="width: 3rem" scope="col"></th>
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service" scope="col">
                                 Service <p-sortIcon field="service"></p-sortIcon>
 
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet" scope="col"> Sujet
                                 <p-sortIcon field="sujet"></p-sortIcon>
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep">
+                            <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep" scope="col">
                                 Date d'acceptation
 
                                 <p-sortIcon field="date_affec_accep"></p-sortIcon>
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;">
+                            <th style="text-decoration: underline;padding-top: 5%;" scope="col">
                                 Temps de traitement
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected">
+                            <th style="text-decoration: underline;padding-top: 5%; " pSortableColumn="isAffected" scope="col">
                                 Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                             </th>
-                            <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
+                            <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut" scope="col">
                                 Statut <p-sortIcon field="statut"></p-sortIcon>
                             </th>
-                            <th style="text-decoration: underline;padding-top: 5%;">
+                            <th style="text-decoration: underline;padding-top: 5%;" scope="col">
                                 Action
                             </th>
                         </tr>
@@ -699,30 +699,30 @@
 
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th style="width: 3rem"></th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service">
+                        <th style="width: 3rem" scope="col"></th>
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="service" scope="col"> 
                             Service <p-sortIcon field="service"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet"> Sujet
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet" scope="col"> Sujet
                             <p-sortIcon field="sujet"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep"> Date
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="date_affec_accep" scope="col"> Date
                             d'acceptation <p-sortIcon field="date_affec_accep"></p-sortIcon>
 
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;">
+                        <th style="text-decoration: underline;padding-top: 5%;" scope="col"> 
                             Temps de traitement
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="isAffected" scope="col">
                             Désignation <p-sortIcon field="isAffected"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut">
+                        <th style="text-decoration: underline ; padding-top: 5%;" pSortableColumn="statut" scope="col">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="agent" scope="col">
                             Agent <p-sortIcon field="agent"></p-sortIcon>
                         </th>
-                        <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;">
+                        <th *ngIf="token['role']!='Agent'" style="padding-top: 5%;" scope="col">
                             Action
                         </th>
                     </tr>

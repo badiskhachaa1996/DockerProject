@@ -153,19 +153,19 @@
                 [customSort]="true">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem"></th>
+                        <th style="width: 3rem" scope="col"></th>
 
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service">
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="service" scope="col">
                             Service <p-sortIcon field="service"></p-sortIcon>
 
                         </th>
-                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet">
+                        <th style="text-decoration: underline;padding-top: 5%;" pSortableColumn="sujet" scope="col">
                             Sujet <p-sortIcon field="sujet"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="statut">
+                        <th style="text-decoration: underline; padding-top: 5%;" pSortableColumn="statut" scope="col">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
-                        <th style="text-decoration: underline; padding-top: 5%;">
+                        <th style="text-decoration: underline; padding-top: 5%;" scope="col">
                             Action
                         </th>
                     </tr>

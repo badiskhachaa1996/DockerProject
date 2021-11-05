@@ -427,9 +427,6 @@ export class SuiviComponent implements OnInit {
             value2 = user.firstname + " " + user.lastname;
           }
         })
-      } else if (event.field=="sujet"){
-        value1 = this.sujetList[data1.sujet_id].label
-        value2 = this.sujetList[data2.sujet_id].label
       }
       let result = null;
 
