@@ -7,22 +7,20 @@
                    
                     <h3 class="text-center"style ="font-weight: bold;" >Ajouter une année Scolaire</h3>
                     <div class="p-grid">
-                        <div class="mt-2 mb-2 col-8"style="display: grid; align-items: center;">
+                        <div class="mt-2 mb-2 col-12"style="display: grid; text-align: center;">
                             <label style ="font-weight: bold;">Libelle:</label>
                             
-                            <input type="text" formControlName="libelle" class="form-control col-12"
-                            placeholder="Date de debut et de fin (xxxx/xxxx)" [(value)]="rangedateS" pInputText>
-                            <div class="p-col-12 p-md-4">
-                                <h3>Range</h3>
-                                <p-calendar  value="rangedate" dateFormat="yy"  selectionMode="range" onYearChange="rangedatechange($event)" ></p-calendar>
-                            </div>
+                                <p-calendar  formControlName="libelle" value="[rangedate]" dateFormat="yy" yearNavigator="true" yearRange="2020:2030"
+                                             selectionMode="range" dataType="string" (onClose)="rangedatechange($event)" multipleSeparator="/" ></p-calendar>
+                            
+                                            
+                                                <label style ="font-weight: bold;">Etat:</label>
+                                                   
+                                                <p-dropdown formControlName="etat" [options]="etat_annee" optionLabel="value" ></p-dropdown>
+                                            
                         </div>
                         
-                        <div class="mt-2 mb-2 col-8" style="display: grid; align-items: center;">
-                            <label style ="font-weight: bold;">Etat:</label>
-                               
-                            <p-dropdown formControlName="etat" [options]="etat_annee" optionLabel="value" ></p-dropdown>
-                        </div>
+                     
                         
                        
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
@@ -44,7 +42,7 @@
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddAnneeScolaire" pButton class="ui-button-raised ui-button-success"
             (click)="showFormAddAnneeScolaire=true" style="float:right;" label="Ajouter"></button>
-        <h3>Liste des anneeScolaires</h3>
+        <h3>Liste des années scolaires</h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="anneeScolaires" [columns]="cols" [value]="anneeScolaires" selectionMode="single"
              [rows]="5" [paginator]="true" [pageLinks]="5"

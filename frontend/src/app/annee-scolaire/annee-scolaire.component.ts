@@ -7,18 +7,20 @@ import { environment } from 'src/environments/environment';
 import { NodeWithI18n } from '@angular/compiler';
 import {CalendarModule} from 'primeng/calendar';
 @Component({
-  selector: 'app-annee-Scolaire',
-  templateUrl: './annee-Scolaire.component.html',
-  styleUrls: ['./annee-Scolaire.component.css']
+  selector: 'app-annee-scolaire',
+  templateUrl: './annee-scolaire.component.html',
+  styleUrls: ['./annee-scolaire.component.css']
 })
 export class AnneeScolaireComponent implements OnInit {
 
   etat_annee: any[]= environment.etat_annee
 
+   
+
   showFormAddAnneeScolaire:Boolean=false;
   showFormUpdateAnneeScolaire:AnneeScolaire = null;
   rangedate:any;
-  rangedateS : string ;
+  rangedateS : string="" ;
   anneeScolaires:AnneeScolaire[]=[];
 
   anneeScolaireForm:FormGroup = new FormGroup({
@@ -46,8 +48,15 @@ export class AnneeScolaireComponent implements OnInit {
     })
   }
 
+ 
+
   saveAnneeScolaire(){
-    let anneeScolaire= new AnneeScolaire(null,this.anneeScolaireForm.value.libelle,String(this.anneeScolaireForm.value.etat.value))
+    
+   
+    var str = String(this.anneeScolaireForm.value.libelle)
+    var splited=str.split(',').join('/');
+    console.log(splited)
+    let anneeScolaire= new AnneeScolaire(null,splited,String(this.anneeScolaireForm.value.etat.value))
 
     this.AnneeScolaireService.create(anneeScolaire).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été ajouté' });
@@ -84,7 +93,10 @@ console.log(anneeScolaire._id)
   }
 
   rangedatechange($event){
-    this.rangedateS = String(this.rangedate)
+    console.log('label'+this.rangedate )
+    var str = String(this.anneeScolaireForm.value.libelle)
+    var splited=str.split(',').join('/');
+    console.log(splited)
   }
 
 }
