@@ -1,5 +1,4 @@
 const express = require("express");
-const campus = require("./../models/campus");
 const app = express();
 const { Campus } = require("./../models/campus");
 
@@ -15,7 +14,7 @@ app.post("/createcampus", (req, res) => {
         adresse: data.adresse,
         site: data.site,
     });
-    Campus.save().then((campusFromDB) => {
+    campus.save().then((campusFromDB) => {
         res.status(200).send(campusFromDB);
     }).catch((error) => {
         res.status(404).send(error);

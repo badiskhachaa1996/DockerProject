@@ -69,11 +69,7 @@ export class ServiceComponent implements OnInit {
       }
       this.showFormAddService=false;
       this.serviceForm.reset();
-     
     }, (error) => {
-      if (error.status == 400) {
-       
-      }
       console.error(error)
     });
   }
@@ -88,9 +84,6 @@ export class ServiceComponent implements OnInit {
       this.showFormAddSujet=false;
       this.sujetForm.reset();
     }, (error) => {
-      if (error.status == 400) {
-       
-      }
       console.error(error)
     });
   }

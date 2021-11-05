@@ -292,11 +292,10 @@ export class ListTicketComponent implements OnInit {
             this.listSujetSelected[element._id] = [];
             this.serviceList[element._id] = element.label;
           });
-          this.SujetService.getAll().subscribe((data) => {
-            this.listSujets = data;
-            if (!data.message) {
-
-              data.forEach(sujet => {
+          this.SujetService.getAll().subscribe((SujetL) => {
+            this.listSujets = SujetL;
+            if (!SujetL.message) {
+              SujetL.forEach(sujet => {
                 this.listSujetSelected[sujet.service_id].push(sujet);
                 this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
               });
@@ -306,19 +305,8 @@ export class ListTicketComponent implements OnInit {
       })
 
       this.updateAccAffList()
+      this.updateUserList()
 
-      this.AuthService.getAll().subscribe((data) => {
-        if (!data.message) {
-          data.forEach(user => {
-            this.userDic[user._id] = null;
-            this.userDic[user._id] = user;
-            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
-              this.userList.push(user);
-            }
-          });
-          this.AllUsers = data;
-        }
-      })
     }
     this.socket.on("refreshMessage", () => {
       if (this.comments && this.comments.length > 0) {
@@ -345,19 +333,7 @@ export class ListTicketComponent implements OnInit {
 
     this.socket.on("refreshQueue", () => {
       this.updateQueue()
-      this.AuthService.getAll().subscribe((data) => {
-        this.userDic = [];
-        if (!data.message) {
-          data.forEach(user => {
-            this.userDic[user._id] = null;
-            this.userDic[user._id] = user;
-            if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
-              this.userList.push(user);
-            }
-          });
-          this.AllUsers = data;
-        }
-      })
+      this.updateUserList()
     })
     this.ClasseService.getAll().subscribe((data)=>{
       data.forEach(element => {
@@ -365,7 +341,20 @@ export class ListTicketComponent implements OnInit {
       });
     })
   }
-
+  updateUserList(){
+    this.AuthService.getAll().subscribe((data) => {
+      if (!data.message) {
+        data.forEach(user => {
+          this.userDic[user._id] = null;
+          this.userDic[user._id] = user;
+          if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
+            this.userList.push(user);
+          }
+        });
+        this.AllUsers = data;
+      }
+    })
+  }
   //QueueToAccAff
   QueueToAccAff(user, event?) {
     this.queueList.splice(this.queueList.indexOf(user), 1)
@@ -408,16 +397,16 @@ export class ListTicketComponent implements OnInit {
       agent_id: event.value._id,
       isAffected: true
     }
-    this.TicketService.setAccAff(data).subscribe((data) => {
-      this.SujetService.getASujetByid(data.sujet_id).subscribe((sujet) => {
-        this.Socket.refreshAll(sujet.dataSujet.service_id, data.createur_id)
+    this.TicketService.setAccAff(data).subscribe((dataTick) => {
+      this.SujetService.getASujetByid(dataTick.sujet_id).subscribe((sujet) => {
+        this.Socket.refreshAll(sujet.dataSujet.service_id, dataTick.createur_id)
       })
 
       this.queueList.splice(this.queueList.indexOf(this.showDropDown), 1)
       if (event.value._id == jwt_decode(localStorage.getItem("token"))["id"]) {
         this.updateAccAffList()
       }
-      this.NotifService.create(new Notification(null, data._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
+      this.NotifService.create(new Notification(null, dataTick._id, false, "Nouveau Ticket Affecté", null, event.value._id)).subscribe((notif) => {
         this.NotifService.newNotif(notif)
       }, (error) => {
         console.error(error)
@@ -461,17 +450,17 @@ export class ListTicketComponent implements OnInit {
       this.Socket.AddNewTicket(this.TicketFormAdd.value.sujet.service_id)
       this.TicketFormAdd.reset()
       this.TicketFormAdd.setValue({email:'',description:null,sujet:'',service:''})
-      this.AuthService.getAll().subscribe((data) => {
-        if (!data.message) {
+      this.AuthService.getAll().subscribe((listU) => {
+        if (!listU.message) {
           this.userDic= [];
-          data.forEach(user => {
+          listU.forEach(user => {
             this.userDic[user._id] = null;
             this.userDic[user._id] = user;
             if (user.role == "Agent" && (user.service_id == this.token["service_id"] && user._id != this.token.id)) {
               this.userList.push(user);
             }
           });
-          this.AllUsers = data;
+          this.AllUsers = listU;
         }
       })
     }, (error) => {
