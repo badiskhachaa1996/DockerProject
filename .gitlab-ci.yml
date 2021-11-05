@@ -83,8 +83,10 @@ deploy_node_todev:
   tags:
     - dev-shell
   script:
+    - pm2 list
+    - cd backend
     - pm2 delete index
-    - pm2 start backend/index.js
+    - pm2 start index.js
   only:
   - dev
   # when: manual
