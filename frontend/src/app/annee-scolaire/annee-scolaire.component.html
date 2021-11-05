@@ -79,9 +79,10 @@
                         </td>
                         <td>
                            
-                            <i   pTooltip="archiver" tooltipPosition="bottom" class="pi pi-eye-slash"
-                            (click)="modifyAnneeScolaire(rowData)"></i>
-                           
+                            <i  *ngIf="rowData.etat!=='Archivée'" pTooltip="archiver" tooltipPosition="bottom" class="pi pi-eye-slash"
+                            (click)="archiverAnneeScolaire(rowData)"></i>
+                            <i  *ngIf="rowData.etat=='Nouvelle'" pTooltip="Activer" tooltipPosition="bottom" class="pi pi-play"
+                            (click)="activerAnneeScolaire(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>

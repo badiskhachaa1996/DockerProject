@@ -58,7 +58,24 @@ app.get("/archivee/:id", (req, res) => {
    
     AnneeScolaire.findOneAndUpdate({_id:req.params.id} ,
         {
-            etat : "Archive",
+            etat : "Archivée",
+        }, { new: true }, (err,anneeScolaire) => {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                res.send(anneeScolaire)
+            }
+           
+        });
+});
+
+app.get("/activer/:id", (req, res) => {
+    //Modifier une année scolaire
+   
+    AnneeScolaire.findOneAndUpdate({_id:req.params.id} ,
+        {
+            etat : "Actuelle",
         }, { new: true }, (err,anneeScolaire) => {
             if (err) {
                 res.send(err)
