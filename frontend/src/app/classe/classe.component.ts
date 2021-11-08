@@ -64,6 +64,7 @@ export class ClasseComponent implements OnInit {
   modifyClasse(){
     let classe = this.classeFormUpdate.value
     classe._id=this.showFormUpdateClasse._id
+    console.log(classe)
 
     this.ClasseService.update(classe).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: 'Votre classe a bien été modifié' });
@@ -76,6 +77,7 @@ export class ClasseComponent implements OnInit {
   }
 
   hide(classe :Classe){
+    console.log(classe)
     this.ClasseService.hide(classe._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' ne s\'affichera plus dans la liste' });
       this.updateList()
@@ -85,6 +87,7 @@ export class ClasseComponent implements OnInit {
   }
 
   show(classe :Classe){
+    console.log(classe)
     this.ClasseService.show(classe._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom_court+' s\'affichera de nouveau dans la liste' });
       this.updateList()

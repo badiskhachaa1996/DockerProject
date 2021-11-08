@@ -63,14 +63,15 @@ app.use('/', function (req, res, next) {
             else if(user){
                 next()
             }else{
+                console.log(req.originalUrl)
                 res.status(403).send("Accès non autorisé")
             }
         })
     }else{
-        console.log(req.originalUrl)
         if(req.originalUrl=="/soc/user/AuthMicrosoft"){
             next()
         }else{
+            console.log(req.originalUrl)
             res.status(403).send("Accès non autorisé")
         }
     }

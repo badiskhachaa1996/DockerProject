@@ -20,6 +20,7 @@ export class ClasseService {
   }
 
   update(classe :any){
+    console.log(classe)
     let registreUrl=this.apiUrl+"updateById/"+classe._id;
     return this.http.post<any>(registreUrl,classe,httpOptions1);
   }
