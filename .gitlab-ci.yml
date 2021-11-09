@@ -4,22 +4,21 @@ stages:
    - build
    - deploy
 
-# node_dependencies:
-#   stage: install_dependencies
-#   tags:
-#   - dev-shell
-#   cache: 
-#     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-#     paths:
-#       - backend/node_modules/
-#   script:
-#     - cd backend
-#     - npm ci
-#   # only:
-#   #   changes:
-#   #     - backend/package-lock.json
-#   only:
-#   - dev
+node_dependencies:
+  stage: install_dependencies
+  tags:
+  - dev-shell
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - backend/node_modules/
+  script:
+    - cd backend
+    - npm ci
+  only:
+    changes:
+      - backend/package-lock.json
+
   
 angular_dependencies:
   stage: install_dependencies
@@ -32,16 +31,16 @@ angular_dependencies:
   script:
     - cd frontend
     - npm ci
-  only:
-  - dev
   # only:
-  #   changes:
-  #     - frontend/package-lock.json
+  #   - dev
+  only:
+    changes:
+      - frontend/package-lock.json
 #========================================================
 build_angular:
   stage: build
   tags:
-  - dev-shell
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -52,7 +51,7 @@ build_angular:
       - cd frontend
       - ng build --configuration=dev --aot
   only:
-  - dev
+    - dev
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -70,7 +69,7 @@ deploy_angular_todev:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f frontend/dist /var/www/html/ems
   only:
-  - dev
+    - dev
   # when: manual
 #===========================================================
 deploy_node_todev:
@@ -79,16 +78,15 @@ deploy_node_todev:
   tags:
     - dev-shell
   script:
-    
     - pm2 list
     - cd backend
     - npm ci
     - pm2 delete index
     - pm2 start index.js
-    - pm2 logs index
+    # - pm2 logs index
     - pm2 list
   only:
-  - dev
+    - dev
   # when: manual
 
 sonarqube-check:
@@ -115,4 +113,4 @@ sonarqube-check:
   tags:
     - dev-docker
   only:
-  - dev
+    - dev
