@@ -99,6 +99,7 @@ import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfig
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
+import { EcoleComponent } from './ecole/ecole.component';
 
 
 
@@ -209,6 +210,7 @@ import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.componen
         FirstconnectionComponent,
         ClasseComponent,
         AnneeScolaireComponent,
+        EcoleComponent,
     
 
                
