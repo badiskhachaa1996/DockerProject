@@ -306,6 +306,16 @@
             </p-table>
         </div>
         </p-fieldset>
+        <p-fieldset *ngIf="comments && comments.length!=0" legend="Liste des fichiers"
+        [style]="{'color':'green','font-weight': 'bold'}">
+        <p-table [value]="comments" dataKey="id">
+            <ng-template pTemplate="body" let-message>
+                <div style="text-align:left;padding-bottom: 1%;" *ngIf="message.document">
+                    <a style="cursor: pointer;" (click)="downloadFile(message)"><i>{{message.document}}</i></a>
+                </div>
+            </ng-template>
+        </p-table>
+    </p-fieldset>
         </td>
         </tr>
         </ng-template>
