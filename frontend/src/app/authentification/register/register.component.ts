@@ -75,7 +75,7 @@ export class RegisterComponent implements OnInit {
     if (this.router.url == "/register") {
       user.role="user"
     }
-    this.AuthService.register(user).subscribe((data: any) => {
+    this.AuthService.registerAdmin(user).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Message d\'inscription', detail: 'Inscription réussie' });
 
       if (this.router.url == "/register") {
