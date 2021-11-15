@@ -217,8 +217,8 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-                        *ngIf="sujetList[rowData.sujet_id]" pDraggable="QueueToAccAff">
-                        <td>
+                        *ngIf="sujetList[rowData.sujet_id]" pDraggable="QueueToAccAff" id="p-table-list-ticket">
+                        <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
@@ -234,7 +234,7 @@
                         <td>
                             {{showWaitingTime(rowData)}}
                         </td>
-                        <td>
+                        <td style="background-color: white;">
                             <i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
                                 class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
 

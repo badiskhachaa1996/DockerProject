@@ -54,6 +54,7 @@ app.use('/', function (req, res, next) {
     }*/
 
     let token = jwt.decode(req.header("token"))
+    console.log(token)
     if(token && token.id && token.role){
         User.findOne({_id:token.id,role:token.role},(err,user)=>{
             if(err){
