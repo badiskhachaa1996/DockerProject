@@ -17,6 +17,7 @@ import { ModifierProfilComponent } from './authentification/modifier-profil/modi
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
+import { EcoleComponent } from './ecole/ecole.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -33,6 +34,7 @@ const routes: Routes = [
     { path: 'profil', component: ModifierProfilComponent },
     { path: 'profil/creation',component:FirstconnectionComponent},
     { path: 'classe',component:ClasseComponent},
+    { path:'ecoles', component: EcoleComponent},
     { path: '**', redirectTo: '/' }
   ];
 

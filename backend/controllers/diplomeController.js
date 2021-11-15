@@ -24,7 +24,7 @@ app.post("/creatediplome", (req, res) => {
         frais : data.frais,
         frais_en_ligne : data.frais_en_ligne,
     });
-    Diplome.save().then((diplomeFromDB) => {
+    diplome.save().then((diplomeFromDB) => {
         res.status(200).send(diplomeFromDB);
     }).catch((error) => {
         res.status(404).send(error);

@@ -15,11 +15,11 @@ node_dependencies:
   script:
     - cd backend
     - npm ci
-  when: manual
   only:
     changes:
       - backend/package-lock.json
 
+  
 angular_dependencies:
   stage: install_dependencies
   tags:
@@ -31,7 +31,8 @@ angular_dependencies:
   script:
     - cd frontend
     - npm ci
-  when: manual
+  # only:
+  #   - dev
   only:
     changes:
       - frontend/package-lock.json
@@ -39,7 +40,7 @@ angular_dependencies:
 build_angular:
   stage: build
   tags:
-  - dev-shell
+    - dev-shell
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
@@ -50,8 +51,7 @@ build_angular:
       - cd frontend
       - ng build --configuration=dev --aot
   only:
-  - dev
-  when: manual
+    - dev
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -66,27 +66,27 @@ deploy_angular_todev:
   tags:
     - dev-shell
   script:
+    - sudo rm -r /var/www/html/ems
     - sudo mv -f frontend/dist /var/www/html/ems
-  when: manual
   only:
-  - dev
+    - dev
   # when: manual
 #===========================================================
 deploy_node_todev:
   stage: deploy
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - backend/node_modules/
-    policy: pull
+
   tags:
     - dev-shell
   script:
-    - pm2 stop 0 
-    - pm2 start backend/index.js
-  when: manual
+    - pm2 list
+    - cd backend
+    - npm ci
+    - pm2 delete index
+    - pm2 start index.js
+    # - pm2 logs index
+    - pm2 list
   only:
-  - dev
+    - dev
   # when: manual
 
 sonarqube-check:
@@ -112,3 +112,5 @@ sonarqube-check:
   allow_failure: true
   tags:
     - dev-docker
+  only:
+    - dev

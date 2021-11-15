@@ -1,2 +1,2 @@
-const origin = "http://localhost:4200" //"https://ticket.estya.com/"
+const origin = "http://localhost:4200"
 module.exports=origin;

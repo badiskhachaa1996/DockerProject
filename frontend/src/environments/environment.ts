@@ -526,7 +526,7 @@ export const environment = {
   etat_annee: [
     { label: "Nouvelle", value: 'Nouvelle' },
     { label: "Active", value: 'Active' },
-    { label: "archivée", value: 'archivée' },
+    { label: "Archivée", value: 'Archivée' },
    
   ],
 };

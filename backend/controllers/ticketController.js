@@ -211,7 +211,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
-                        if (ticket.sujet_id in listSujetofService) {
+                        if (listSujetofService.includes(ticket.sujet_id.toString())) {
                             TicketList.push(ticket)
                         }
                     })
@@ -465,7 +465,7 @@ app.post("/createForUser", (req, res) => {
                 res.send({ message: "Votre ticket a été crée!", doc });
             });
         }else{
-            let user = new User({
+            let newUser = new User({
                 firstname: req.body.email[0],
                 lastname: req.body.email.substring(req.body.email.indexOf('.')+1,req.body.email.indexOf('@')),
                 email: req.body.email,
@@ -473,7 +473,7 @@ app.post("/createForUser", (req, res) => {
                 service_id: null
             })
             
-            user.save().then((userFromDb) => {
+            newUser.save().then((userFromDb) => {
                 const ticket = new Ticket({
                     createur_id: userFromDb._id,
                     sujet_id: req.body.sujet_id,

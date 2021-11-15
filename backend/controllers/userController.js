@@ -26,7 +26,10 @@ let transporter = nodemailer.createTransport({
 //Enregsitrement d'un nouvel user
 app.post("/registre", (req, res) => {
     let data = req.body;
-    User.findOne({ email: data?.email,role:"user" }, (err, user) => {
+    User.findOne({ email: data?.email,role:"user" }, (errFO, user) => {
+        if(errFO){
+            console.error(errFO)
+        }
         if (user) {
             User.findOneAndUpdate({_id:user._id},
                 {
@@ -51,7 +54,7 @@ app.post("/registre", (req, res) => {
                     }
                 })
         } else {
-            let user = new User({
+            let newUser = new User({
                 civilite: data.civilite,
                 firstname: data.firstname,
                 lastname: data.lastname,
@@ -68,7 +71,7 @@ app.post("/registre", (req, res) => {
                 numero_adresse: data.numero_adresse,
                 postal_adresse: data.postal_adresse 
             })
-            user.save().then((userFromDb) => {
+            newUser.save().then((userFromDb) => {
                 res.status(200).send(userFromDb);
                 let gender = (userFromDb.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
                 let htmlmail = '<p>Bonjour ' + gender + userFromDb.lastname + ' ' + userFromDb.firstname + ', </p><p style="color:black"> <span style="color:orange">Felicitations ! </span> Votre compte E-Ticketing a été crée avec succés.</p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
@@ -102,7 +105,7 @@ app.post("/login", (req, res) => {
     User.findOne({
         email: data.email,
     }).then((userFromDb) => {
-        comparer = bcrypt.compareSync(data.password, userFromDb.password);
+        let comparer = bcrypt.compareSync(data.password, userFromDb.password);
         if (!userFromDb || !comparer) {
             res.status(404).send({ message: data });
         }
@@ -136,7 +139,7 @@ app.get("/getAll", (req, res) => {
         })
         .catch(err => {
             console.error(err);
-            res.status(404).send(error);
+            res.status(404).send(err);
         })
 });
 
@@ -174,9 +177,9 @@ app.post("/updateById/:id", (req, res) => {
                                 nationalite: req.body.inscription.nationalite,
                                 date_de_naissance: req.body.inscription.date_de_naissance
                             },(err,InscriptionUpdate)=>{
-                                if(err){
-                                    console.log(err)
-                                    res.send(err)
+                                if(errInscription){
+                                    console.log(errInscription)
+                                    res.send(errInscription)
                                 }
                                 else{
                                     res.send(InscriptionUpdate)
@@ -195,7 +198,7 @@ app.post("/updateById/:id", (req, res) => {
 
                         inscrit.save()
                         .then(() => res.status(200).send(user))
-                        .catch(err => res.status(400).send(err));
+                        .catch(errSave => res.status(400).send(errSave));
 
                     }
                 })
@@ -231,14 +234,14 @@ app.get("/getAllAgent/", (req, res) => {
 //Mise à jour du mot de passe
 app.post("/updatePassword/:id", (req, res) => {
     User.findById(req.params.id, (err, user) => {
-        comparer = bcrypt.compareSync(req.body.actualpassword, user.password)
+        let comparer = bcrypt.compareSync(req.body.actualpassword, user.password)
         if (comparer) {
             User.findOneAndUpdate({ _id: req.params.id }, {
                 password: bcrypt.hashSync(req.body.password, 8)
-            }, { new: true }, (err, user) => {
-                if (err) {
-                    console.error(err);
-                    res.send(err)
+            }, { new: true }, (errfind, user) => {
+                if (errfind) {
+                    console.error(errfind);
+                    res.send(errfind)
                 } else {
                     res.send(user)
                 }
@@ -284,7 +287,7 @@ app.post('/file', upload.single('file'), (req, res, next) => {
     User.findOneAndUpdate({ _id: req.body.id }, {
         pathImageProfil: file.filename,
         typeImageProfil: file.mimetype
-    }, (err, user) => {
+    }, (errUser, user) => {
         //Renvoie de la photo de profile au Front pour pouvoir l'afficher
         res.send({ message: "Photo mise à jour" });
 
@@ -325,14 +328,14 @@ app.post('/AuthMicrosoft', (req, res) => {
         } else {
             let lastname = req.body.name.substring(req.body.name.indexOf(" ") + 1); //Morgan HUE
             let firstname = req.body.name.replace(" " + lastname, '')
-            let user = new User({
+            let newUser = new User({
                 firstname: firstname,
                 lastname: lastname,
                 email: req.body.email,
                 role: "user",
                 service_id: null
             })
-            user.save().then((userFromDb) => {
+            newUser.save().then((userFromDb) => {
                 let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
                 res.status(200).send({ token, message: "Nouveau compte crée" });
             })

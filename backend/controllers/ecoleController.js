@@ -1,5 +1,4 @@
 const express = require("express");
-const ecole = require("./../models/ecole");
 const app = express();
 const { Ecole } = require("./../models/ecole");
 

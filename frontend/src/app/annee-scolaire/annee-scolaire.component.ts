@@ -59,7 +59,7 @@ export class AnneeScolaireComponent implements OnInit {
     let anneeScolaire= new AnneeScolaire(null,splited,String(this.anneeScolaireForm.value.etat.value))
 
     this.AnneeScolaireService.create(anneeScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été ajouté' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des années scolaires', detail: 'Votre année scolaire a bien été ajouté' });
       this.anneeScolaires.push(data)
       this.showFormAddAnneeScolaire=false;
       this.anneeScolaireForm.reset();
@@ -74,7 +74,7 @@ export class AnneeScolaireComponent implements OnInit {
     this.anneeScolaireFormUpdate.setValue({libelle:rowData.libelle,etat:rowData.etat})
   }
 */
-  modifyAnneeScolaire(rowData:AnneeScolaire){
+  archiverAnneeScolaire(rowData:AnneeScolaire){
     
     this.showFormUpdateAnneeScolaire=rowData;
     this.showFormAddAnneeScolaire=false
@@ -82,7 +82,25 @@ export class AnneeScolaireComponent implements OnInit {
     anneeScolaire._id=this.showFormUpdateAnneeScolaire._id
 console.log(anneeScolaire._id)
     this.AnneeScolaireService.archivee(anneeScolaire._id).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'Votre année scolaire a bien été archivé' });
+      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'année scolaire a bien été archivé' });
+      this.updateList()
+      this.showFormUpdateAnneeScolaire=null;
+      this.anneeScolaireFormUpdate.reset();
+    }, (error) => {
+      console.log(error)
+    });
+  
+  }
+
+  activerAnneeScolaire(rowData:AnneeScolaire){
+    
+    this.showFormUpdateAnneeScolaire=rowData;
+    this.showFormAddAnneeScolaire=false
+    let anneeScolaire = this.showFormUpdateAnneeScolaire
+    anneeScolaire._id=this.showFormUpdateAnneeScolaire._id
+console.log(anneeScolaire._id)
+    this.AnneeScolaireService.activer(anneeScolaire._id).subscribe((data) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: "l'année scolaire a bien été Activé" });
       this.updateList()
       this.showFormUpdateAnneeScolaire=null;
       this.anneeScolaireFormUpdate.reset();
