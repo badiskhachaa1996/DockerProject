@@ -175,7 +175,7 @@
                                                     </div>
                                                     <span>
                                                         <p-dropdown formControlName="type" [options]="statutList" optionLabel="value"
-                                                            class="register"></p-dropdown>
+                                                            class="register" (onChange)="changeStatut($event)"></p-dropdown>
                                                     </span>
                                                 </div>
 

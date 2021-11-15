@@ -357,6 +357,7 @@ export class ListTicketComponent implements OnInit {
           this.AllUsers = data;
         }
       })
+      this.messageService.add({ severity: 'info', summary: 'Nouveau Ticket', detail: 'Un nouveau ticket est arrivé dans la queue d\'entrée.' });
     })
     this.ClasseService.getAll().subscribe((data)=>{
       data.forEach(element => {

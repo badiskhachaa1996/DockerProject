@@ -37,6 +37,28 @@ export class ModifierProfilComponent implements OnInit {
   userco: any = this.userupdate;
   imageToShow: any = "../assets/images/avatar.PNG";
 
+  changeStatut(event){
+    if(event.value.value=="Salarié" || event.value.value=="Alternant/Stagiaire"){
+      if(this.userco.entreprise!=null){
+        this.RegisterForm.patchValue({entreprise:{ value: this.userco.entreprise }})
+      }else{
+        this.RegisterForm.patchValue({entreprise:this.entreprisesList[0]})
+      }
+    }
+    if(event.value.value=="Etudiant" || event.value.value=="Alternant/Stagiaire"){
+      if(this.userco.formation!=null){
+        this.RegisterForm.patchValue({formations:this.formationDic[this.userco.formation]})
+      }else{
+        this.RegisterForm.patchValue({formations:this.formationList[0]})
+      }
+      if(this.userco.campus!=null){
+        this.RegisterForm.patchValue({campus:{ value: this.userco.campus }})
+      }else{
+        this.RegisterForm.patchValue({campus:this.campusList[0]})
+      }
+    }
+  }
+
   public ToggleUpdate() {
     this.toggleUpdate = !this.toggleUpdate
     this.toggleUpdatepwd = false
@@ -74,7 +96,7 @@ export class ModifierProfilComponent implements OnInit {
     entreprise: new FormControl({ value: this.userco.entreprise }),
     type: new FormControl({ value: this.userco.type }, [Validators.required]),
     campus: new FormControl({ value: this.userco.campus }),
-    formation: new FormControl('')
+    formation: new FormControl(this.formationDic[this.userco.formation])
   })
 
   UpdateUser() {
