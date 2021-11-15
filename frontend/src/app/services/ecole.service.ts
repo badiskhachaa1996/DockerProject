@@ -20,7 +20,7 @@ export class EcoleService {
   }
 
   getByID(Ecole: any){
-    let ecoleUrl=this.apiUrl+"archivee"+Ecole._id;
+    let ecoleUrl=this.apiUrl+"getById/"+Ecole._id;
     return this.http.post<any>(ecoleUrl,Ecole,httpOptions1);
   }
  create(ecole: any){
@@ -29,7 +29,7 @@ export class EcoleService {
   }
   
   edit(Ecole: any){
-    let ecoleUrl=this.apiUrl+"edit"+Ecole._id;
+    let ecoleUrl=this.apiUrl+"editById/"+Ecole._id;
     return this.http.post<any>(ecoleUrl,Ecole,httpOptions1);
   
 }}
