@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const seanceSchema = mongoose.Schema({
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: true },
     date_debut: { type: Date, required: true },
-    date_fin: { typr: Date, required: true }
+    date_fin: { type: Date, required: true },
+    formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Formateur', required: false }
 });
 
 //Creation de la table seance et export du model Seance
