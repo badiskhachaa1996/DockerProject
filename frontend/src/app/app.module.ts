@@ -98,6 +98,7 @@ import { IPublicClientApplication, PublicClientApplication, InteractionType, Bro
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
+import { environment } from 'src/environments/environment';
 
 
 
@@ -231,8 +232,8 @@ import { ClasseComponent } from './classe/classe.component';
       export function MSALInstanceFactory(): IPublicClientApplication {
         return new PublicClientApplication({
           auth: {
-            // clientId: '6226576d-37e9-49eb-b201-ec1eeb0029b6', // Prod enviroment. Uncomment to use.
-            clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // PPE testing environment
+            // clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // Prod enviroment. Uncomment to use.
+            clientId: environment.clientId, // DEV
             // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
             authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
             redirectUri: '/',

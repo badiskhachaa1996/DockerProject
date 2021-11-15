@@ -6,6 +6,7 @@ export const environment = {
   origin: "http://localhost:3000/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
   User: null,
+  clientId:"25314c92-c369-4273-b8b0-5b3d2096ed05",
 
   fr: {
     firstDayOfWeek: 0,
@@ -81,7 +82,8 @@ export const environment = {
   
   entreprisesList:[
     {value:"Elitelabs"},
-    {value:"ESTYA"}
+    {value:"ESTYA"},
+    {value:"Autre"}
   ],
 
   civilite: [

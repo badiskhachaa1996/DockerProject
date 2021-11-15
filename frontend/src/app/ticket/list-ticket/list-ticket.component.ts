@@ -297,6 +297,7 @@ export class ListTicketComponent implements OnInit {
             if (!data.message) {
 
               data.forEach(sujet => {
+                console.log(sujet)
                 this.listSujetSelected[sujet.service_id].push(sujet);
                 this.sujetList[sujet._id] = { "label": sujet.label, "service_id": sujet.service_id, "_id": sujet._id };
               });
