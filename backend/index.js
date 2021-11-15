@@ -7,8 +7,10 @@ const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-
-const origin = require("./config")
+let origin = require("./config")
+if(process.env.origin){
+    origin = process.env.origin
+}
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);

@@ -171,4 +171,23 @@ app.get("/downloadFile/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
+
+//Télécharger tous les fichiers d'une conversation
+app.get("/downloadAllFiles/:id", (req, res) => {
+    dataToSend = [];
+    Message.find({ ticket_id: req.params.id }).then((data) => {
+        data.forEach(msg => {
+            let filename = msg.document
+            let file = fs.readFileSync("storage/" + msg.ticket_id + "/" + filename, { encoding: 'base64' }, (err) => {
+                if (err) {
+                    return console.error(err);
+                }
+            });
+            dataToSend.push({ file: file, documentType: msg.documentType })
+        });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+    res.send(dataToSend)
+});
 module.exports = app;
