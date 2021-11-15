@@ -31,7 +31,7 @@ app.post("/creatediplome", (req, res) => {
     })
 });
 
-app.post("/editById/ :id", (req, res) => {
+app.post("/editById/:id", (req, res) => {
     //Modifier un diplome
     Diplome.findOneAndUpdate(req.params.id,
         {
