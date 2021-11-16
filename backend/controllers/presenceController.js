@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const { Presence } = require("./../models/presence");
+const fs = require("fs")
 
 //Récuperer une présence
 app.post("/getById/:id", (req, res) => {
@@ -60,6 +61,7 @@ app.get("/isPresent/:id", (req, res) => {
 app.post("/create", (req, res) => {
 
     //Sauvegarde du message
+    console.log(req.body)
     const presence = new Presence({
         seance_id: req.body.seance_id,
         user_id: req.body.user_id,
@@ -68,12 +70,14 @@ app.post("/create", (req, res) => {
         justificatif: false,
         date_signature : Date.now()
     });
-
+    console.log(presence)
     presence.save((err, data) => {
-        res.send(data);
         //Sauvegarde de la signature si il y en a une
         if(err){
-            res.status(500).send(err)
+            console.log(err)
+            res.send(err)
+        }else{
+            res.send(data);
         }
         if (req.body.signature && req.body.signature != null && req.body.signature != '') {
             fs.mkdir("./storage/signature/",
@@ -88,9 +92,7 @@ app.post("/create", (req, res) => {
                 }
             });
         }
-    }).catch((error) => {
-        res.status(400).send(error);
-    });
+    })
 });
 
 //Mets un étudiant en présent

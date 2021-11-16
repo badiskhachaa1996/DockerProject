@@ -3,3 +3,8 @@
 <p>
     <canvas #mon_canvas width="300" height="100"></canvas>
 </p>
+
+<p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
+chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1"
+accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000" [auto]="true">
+</p-fileUpload>
