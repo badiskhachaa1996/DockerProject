@@ -35,6 +35,7 @@ const routes: Routes = [
     { path: 'profil/creation',component:FirstconnectionComponent},
     { path: 'classe',component:ClasseComponent},
     { path:'ecoles', component: EcoleComponent},
+    { path:'ecoles/:id', component: EcoleComponent},
     { path: '**', redirectTo: '/' }
   ];
 

@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { NodeWithI18n } from '@angular/compiler';
 import {CalendarModule} from 'primeng/calendar';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-annee-scolaire',
   templateUrl: './annee-scolaire.component.html',
@@ -36,7 +37,7 @@ export class AnneeScolaireComponent implements OnInit {
     
   ]
 
-  constructor(private AnneeScolaireService:AnneeScolaireService,private messageService:MessageService) { }
+  constructor(private AnneeScolaireService:AnneeScolaireService,private messageService:MessageService ,private router: Router) { }
 
   ngOnInit(): void {
     this.updateList()
@@ -66,6 +67,11 @@ export class AnneeScolaireComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
+  }
+  navigatetoEcole(rowData:AnneeScolaire){
+
+    this.router.navigateByUrl('/ecoles/'+rowData._id);
+
   }
 /*
   showModify(rowData:AnneeScolaire){
