@@ -23,7 +23,7 @@ app.post("/createcampus", (req, res) => {
 
 app.post("/editById/ :id", (req, res) => {
     //Modifier un campus 
-    Campus.updateById(req.params.id,
+    Campus.findByIdAndUpdate(req.params.id,
         {
             libelle: req.body.libelle,
             ville: req.body.ville,
