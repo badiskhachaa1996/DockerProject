@@ -33,7 +33,7 @@ app.post("/creatediplome", (req, res) => {
 
 app.post("/editById/ :id", (req, res) => {
     //Modifier un diplome
-    Diplome.findOneAndUpdate(req.params.id,
+    Diplome.findByIdAndUpdate(req.params.id,
         {
             titre : req.body.titre,
             titre_long : req.body.titre_long,
