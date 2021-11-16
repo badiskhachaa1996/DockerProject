@@ -6,7 +6,8 @@ const presenceSchema = mongoose.Schema({
     user_id:        { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     isPresent:      { type: Boolean, required: true },
     signature:      { type: Boolean, default: false },
-    justificatif:   { type: Boolean, default: false }
+    justificatif:   { type: Boolean, default: false },
+    date_signature: { type: Date}
 });
 
 //Creation de la table presence et export du model Presence   

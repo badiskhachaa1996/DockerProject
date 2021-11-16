@@ -65,7 +65,8 @@ app.post("/create", (req, res) => {
         user_id: req.body.user_id,
         isPresent: req.body.isPresent,
         signature: (req.body.signature)?true:false,
-        justificatif: false
+        justificatif: false,
+        date_signature : Date.now()
     });
 
     presence.save((err, data) => {
@@ -97,7 +98,8 @@ app.post("/addSignature/:id", (req, res) => {
     Presence.findOneAndUpdate(req.params.id,
         {
             signature: true,
-            isPresent:true
+            isPresent:true,
+            date_signature : Date.now()
         }, { new: true }, (err, data) => {
             if (err) {
                 res.send(err)
@@ -158,7 +160,7 @@ app.get("/getSignature/:id", (req, res) => {
                 return console.error(err);
             }
         });
-        res.status(200).send(file)
+        res.status(200).send({file,date_signature : data.date_signature})
     }).catch((error) => {
         res.status(404).send(error);
     })
