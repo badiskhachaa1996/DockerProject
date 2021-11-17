@@ -217,7 +217,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-                        *ngIf="sujetList[rowData.sujet_id]" pDraggable="QueueToAccAff" id="p-table-list-ticket">
+                        *ngIf="sujetList[rowData.sujet_id]" pDraggable="QueueToAccAff" class="p-table-list-ticket">
                         <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
@@ -453,8 +453,8 @@
                 </div>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr (onDragStart)="dragStart($event, rowData)" (onDragEnd)="dragEnd($event)"
-                        *ngIf="sujetList[rowData.sujet_id]" [pSelectableRow]="rowData" pDroppable="QueueToAccAff">
-                        <td>
+                        *ngIf="sujetList[rowData.sujet_id]" [pSelectableRow]="rowData" pDroppable="QueueToAccAff" class="p-table-list-ticket">
+                        <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)='loadMessages(rowData,"AccAff",expanded)'></button>
@@ -728,8 +728,8 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
-                    <tr *ngIf="sujetList[rowData.sujet_id]">
-                        <td>
+                    <tr *ngIf="sujetList[rowData.sujet_id]" class="p-table-list-ticket">
+                        <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)='loadMessages(rowData,"All",expanded)'></button>
