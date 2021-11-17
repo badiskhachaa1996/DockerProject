@@ -1,0 +1,138 @@
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddSeance">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddSeance=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="seanceForm">
+
+                    <h3 class="text-center">Ajouter une séance</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <input type="text" formControlName="classe" class="form-control col-12"
+                                placeholder="Nom de la classe" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <p-calendar formControlName="debut" showTime="true" hourFormat="24" placeholder="Début de la séance" [showIcon]="true"></p-calendar>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <p-calendar formControlName="fin" showTime="true" hourFormat="24" placeholder="Fin de la séance" [showIcon]="true"></p-calendar>
+                        </div>
+                        <div class="mt-2 mb-2 col-6">
+                            <input type="text" formControlName="formateur" class="form-control col-12"
+                                placeholder="Formateur" pInputText>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
+                                label="Enregistrer" (click)="saveSeance()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateSeance">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateSeance=null"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="seanceFormUpdate">
+
+                    <h3 class="text-center">Modifier la séance</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Classe:</label>
+                            <input type="text" formControlName="classe" class="form-control col-12"
+                                placeholder="Nom de la classe" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Début:</label>
+                            <input type="datetime-local" formControlName="debut" class="form-control col-12"
+                                placeholder="Début de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-6">
+                            <label>Fin:</label>
+                            <input type="datetime-local" formControlName="fin" class="form-control col-12"
+                                placeholder="Fin de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-6">
+                            <label>Formateur:</label>
+                            <input type="text" formControlName="formateur" class="form-control col-12"
+                                placeholder="Formateur" pInputText>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success"
+                                [disabled]="seanceFormUpdate.invalid" label="Enregistrer"
+                                (click)="modifySeance();"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddSeance" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormUpdateSeance=null; showFormAddSeance=true" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des séances</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" selectionMode="single" [rows]="5"
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="seances.length" [filterDelay]="0"
+                [globalFilterFields]="['classe_id','date_debut','date_fin','formateur_id']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="classe" scope="col">
+                            Classe <p-sortIcon field="classe"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="debut" scope="col">
+                            Début <p-sortIcon field="debut"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="fin" scope="col">
+                            Fin <p-sortIcon field="fin"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="formateur" scope="col">
+                            Formateur <p-sortIcon field="formateur"></p-sortIcon>
+                        </th>
+                        <th class="col-2" style="text-decoration: underline;" scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            {{rowData.classe_id}}
+                        </td>
+                        <td>
+                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td>
+                            {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td>
+                            {{rowData.formateur_id}}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<!-- Partie dediée au full-calendar -->

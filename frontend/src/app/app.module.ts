@@ -100,6 +100,7 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
+import { SeanceComponent } from './seance/seance.component';
 
 
 
@@ -211,6 +212,7 @@ import { EcoleComponent } from './ecole/ecole.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
+        SeanceComponent,
     
 
                

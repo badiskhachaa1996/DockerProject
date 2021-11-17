@@ -71,6 +71,11 @@ socket = io(environment.origin.replace('/soc',''));
             icon: 'pi pi-calendar-times',
             routerLink: '/anneeScolaire'
           },
+          {
+            label: 'Gestions des séances',
+            icon: 'pi pi-video',
+            routerLink: '/seance'
+          },
           
           ]
         }else{
