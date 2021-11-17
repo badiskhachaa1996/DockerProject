@@ -399,7 +399,6 @@ export class ListTicketComponent implements OnInit {
           this.userList.push({ label: user.lastname + " " + user.firstname, value: user })
         }
       })
-      console.log(this.userList)
     }
   }
 

@@ -77,7 +77,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
+                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns" class="p-table-list-ticket">
                         <td *ngFor="let col of columns">
                             {{rowData.label}}
                         </td>
@@ -173,8 +173,8 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns">
-                        <td *ngFor="let col of columns">
+                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns" class="p-table-list-ticket">
+                        <td *ngFor="let col of columns" >
                             {{rowData.label}}
                         </td>
                         <td>

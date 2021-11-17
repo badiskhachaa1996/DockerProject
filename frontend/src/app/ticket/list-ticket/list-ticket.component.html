@@ -234,7 +234,7 @@
                         <td>
                             {{showWaitingTime(rowData)}}
                         </td>
-                        <td style="background-color: white;">
+                        <td>
                             <i *ngIf="rowData.createur_id!=token.id" pTooltip="Accepter" tooltipPosition="bottom"
                                 class="pi pi-check" (click)="QueueToAccAff(rowData)"></i>
 

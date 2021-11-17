@@ -54,17 +54,16 @@ app.use('/', function (req, res, next) {
     }*/
 
     let token = jwt.decode(req.header("token"))
-    console.log(token)
     if(token && token.id && token.role){
         User.findOne({_id:token.id,role:token.role},(err,user)=>{
             if(err){
-                console.log(err)
+                console.error(err)
                 res.status(403).send("Accès non autorisé")
             }
             else if(user){
                 next()
             }else{
-                console.log(req.originalUrl)
+                console.error(req.originalUrl)
                 res.status(403).send("Accès non autorisé")
             }
         })

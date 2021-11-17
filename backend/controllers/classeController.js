@@ -28,7 +28,6 @@ app.get("/deleteById/:id", (req, res) => {
 
 //Modification d'un classe
 app.post("/updateById/:id", (req, res) => {
-    console.log(req.body)
     Classe.findByIdAndUpdate(req.params.id,
         {
             nom: req.body?.nom,
@@ -37,7 +36,6 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            console.log(user)
             res.send(user)
         })
 });
