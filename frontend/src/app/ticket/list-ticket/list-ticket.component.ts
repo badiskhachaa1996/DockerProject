@@ -392,13 +392,14 @@ export class ListTicketComponent implements OnInit {
 
   showDropdownUser(rawData: Ticket) {
     this.showDropDown = (this.showDropDown) ? null : rawData;
-    if (rawData && this.token.role == "Admin") {
+    if (rawData) {
       this.userList = []
       this.AllUsers.forEach(user => {
         if (user.service_id == this.sujetList[rawData.sujet_id].service_id) {
           this.userList.push({ label: user.lastname + " " + user.firstname, value: user })
         }
       })
+      console.log(this.userList)
     }
   }
 
