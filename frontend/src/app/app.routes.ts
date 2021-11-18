@@ -18,6 +18,7 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
+import { CampusComponent } from './campus/campus.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -36,6 +37,8 @@ const routes: Routes = [
     { path: 'classe',component:ClasseComponent},
     { path:'ecoles', component: EcoleComponent},
     { path:'ecoles/:id', component: EcoleComponent},
+    { path:'campus', component: CampusComponent},
+    { path:'campus/:id', component: CampusComponent},
     { path: '**', redirectTo: '/' }
   ];
 
