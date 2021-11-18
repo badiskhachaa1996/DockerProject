@@ -12,10 +12,12 @@
                                 placeholder="Nom de la classe" pInputText>
                         </div>
                         <div class="mt-2 mb-2 col-12">
-                            <p-calendar formControlName="debut" showTime="true" hourFormat="24" placeholder="Début de la séance" [showIcon]="true"></p-calendar>
+                            <p-calendar formControlName="debut" showTime="true" hourFormat="24"
+                                placeholder="Début de la séance" [showIcon]="true"></p-calendar>
                         </div>
                         <div class="mt-2 mb-2 col-12">
-                            <p-calendar formControlName="fin" showTime="true" hourFormat="24" placeholder="Fin de la séance" [showIcon]="true"></p-calendar>
+                            <p-calendar formControlName="fin" showTime="true" hourFormat="24"
+                                placeholder="Fin de la séance" [showIcon]="true"></p-calendar>
                         </div>
                         <div class="mt-2 mb-2 col-6">
                             <input type="text" formControlName="formateur" class="form-control col-12"
@@ -76,6 +78,9 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddSeance" pButton class="ui-button-raised ui-button-success"
+            (click)="onShowCalendar()" style="float:right; margin-left: 2px;" label="Afficher le calendrier"></button>
+
+        <button *ngIf="!showFormAddSeance" pButton class="ui-button-raised ui-button-success"
             (click)="showFormUpdateSeance=null; showFormAddSeance=true" style="float:right;" label="Ajouter"></button>
         <h3>Liste des séances</h3>
         <div class="col-12 card shadow-lg my-5 ">
@@ -134,5 +139,9 @@
         </div>
     </div>
 </div>
-
+<hr>
 <!-- Partie dediée au full-calendar -->
+<div class="col-10 col-offset-1">
+    <h1>Calendrier</h1>
+    <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+</div>
