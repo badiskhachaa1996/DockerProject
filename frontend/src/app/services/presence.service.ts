@@ -50,6 +50,7 @@ export class PresenceService {
   }
   
   addJustificatif(data){
+    console.log(data)
     let registreUrl=this.apiUrl+"addJustificatif/"+data._id;
     return this.http.post<any>(registreUrl,data,httpOptions1);
   }
@@ -61,6 +62,12 @@ export class PresenceService {
   
   getJustificatif(id:string){
     let registreUrl=this.apiUrl+"getJustificatif/"+id;
+    return this.http.get<any>(registreUrl,httpOptions1);
+  }
+
+  getAllSignatureBySeance(id:string){
+    let registreUrl=this.apiUrl+"getAllSignatureBySeance/"+id;
+    console.log(id)
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 

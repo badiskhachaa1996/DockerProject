@@ -3,6 +3,9 @@ import { Presence } from 'src/app/models/Presence';
 import jwt_decode from 'jwt-decode';
 import { PresenceService } from 'src/app/services/presence.service';
 import { FileUpload } from 'primeng/fileupload';
+import { saveAs as importedSaveAs } from "file-saver";
+import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-sign',
@@ -11,9 +14,17 @@ import { FileUpload } from 'primeng/fileupload';
 })
 export class SignComponent implements OnInit {
 
-  constructor(private PresenceService:PresenceService) { }
+  constructor(private PresenceService: PresenceService, private route: ActivatedRoute,private AuthService:AuthService) { }
 
   token;
+  justif_file_value;
+  justif_file_name;
+  showJustif;
+  loadingFile = false;
+  uploadFile = false;
+  presences;
+  userList=[];
+  ID = (this.route.snapshot.paramMap.get('id')) ? this.route.snapshot.paramMap.get('id') : "6193cff7cfe12a30f41859ed";
 
   @ViewChild("mon_canvas") myCanvas: ElementRef;
   @ViewChild('justificatif') fileInput: FileUpload;
@@ -57,21 +68,49 @@ export class SignComponent implements OnInit {
       context.closePath();
     }
   }
+  reloadPresence(){
+    this.PresenceService.getAllBySeance(this.ID).subscribe(data => {
+      console.log(data)
+      this.presences = data;
+
+    }, error => console.log(error))
+  }
   ngOnInit(): void {
+    this.ID = (this.route.snapshot.paramMap.get('id')) ? this.route.snapshot.paramMap.get('id') : "6193cff7cfe12a30f41859ed";
     this.token = jwt_decode(localStorage.getItem("token"))
+    this.reloadPresence();
+    this.AuthService.getAll().subscribe((data)=>{
+      data.forEach(user => {
+        this.userList[user._id]=user;
+      });
+    })
+      /*const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      if(data.fileType.includes("Error")){
+        console.log(data.fileType)
+      }
+      let blob: Blob = new Blob([byteArray], { type: data.fileType})
+      let reader: FileReader = new FileReader();
+      reader.addEventListener("load", () => {
+        this.showJustif = reader.result;
+      }, false);
+      if (blob) {
+        this.showJustif = "../assets/images/avatar.PNG"
+        reader.readAsDataURL(blob);
+      }*/
+
   }
 
-  getSignature(){
+  getSignature() {
     var canvasContents = this.myCanvas.nativeElement.toDataURL();
     var data = { a: canvasContents };
     var string = JSON.stringify(data);
     var signature = string.substring(6, string.length - 2);
-    var sign = signature.substring(signature.indexOf(",")+1)
+    var sign = signature.substring(signature.indexOf(",") + 1)
     console.log(sign)
-    let presence = new Presence(null,"617bbf3f2ad5353fe4f44fd4",this.token.id,true,sign)
-    this.PresenceService.create(presence).subscribe((data)=>{
+    let presence = new Presence(null, "617bbf3f2ad5353fe4f44fd4", this.token.id, true, sign)
+    this.PresenceService.create(presence).subscribe((data) => {
       console.log(data)
-    },err=>{
+    }, err => {
       console.error(err)
     })
   }
@@ -79,20 +118,37 @@ export class SignComponent implements OnInit {
   onFileChange(event) {
     let reader = new FileReader();
     if (event.files && event.files.length > 0) {
-      this.loading = true
+      this.uploadFile = true
       let file = event.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        /*this.commentForm.get('file').setValue({
-          filename: file.name,
-          filetype: file.type,
-          value: reader.result.toString().split(',')[1]
-        })
-        this.commentForm.get('value').setValue(reader.result.toString().split(',')[1])
-        */this.loading = false;
+        this.justif_file_value = reader.result.toString().split(',')[1];
+        this.justif_file_name = file.name;
+        this.uploadFile = false;
       };
     }
     this.fileInput.clear()
   }
 
+  sendJustif() {
+    this.uploadFile = true
+    this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, _id: this.ID }).subscribe((data) => {
+      this.uploadFile = false;
+    }, error => console.log(error))
+  }
+  downloadFile(rowData) {
+    this.PresenceService.getJustificatif(rowData._id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.fileType }), data.fileName)
+    }, (error) => {
+      console.error(error)
+    })
+  }
+  acceptJustif(rowData) {
+    this.PresenceService.isPresent(rowData._id).subscribe((data) => {
+      this.reloadPresence();
+    }, (error) => {
+      console.error(error)
+    })
+  }
 }

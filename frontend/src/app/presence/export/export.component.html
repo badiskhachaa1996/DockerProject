@@ -1,0 +1,35 @@
+<p-table #dt1 *ngIf="allPresences" [columns]="cols" [value]="allPresences" selectionMode="single" [rows]="30"
+    [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="allPresences.length">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th class="col-4" style="text-decoration: underline;">
+                Nom Prénom
+            </th>
+            <th class="col-4" style="text-decoration: underline;">
+                Signature
+            </th>
+            <th class="col-3" style="text-decoration: underline;">
+                Date de présence
+            </th>
+            <th class="col-2" style="text-decoration: underline;">
+                Etat
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngIf="userList[rowData.data.user_id]">
+                {{userList[rowData.data.user_id].lastname}} {{userList[rowData.data.user_id].firstname}}
+            </td>
+            <td>
+                <img [src]="rowData.file" alt="signature">
+            </td>
+            <td>
+                {{rowData.data.date_signature| date:'dd/MM/yyyy HH:mm'}}
+            </td>
+            <td>
+                {{rowData.data.date_signature| date:'dd/MM/yyyy HH:mm'}}
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

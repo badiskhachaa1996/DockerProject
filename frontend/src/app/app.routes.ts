@@ -19,6 +19,7 @@ import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
 import { SignComponent } from './presence/sign/sign.component';
+import { ExportComponent } from './presence/export/export.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -37,6 +38,8 @@ const routes: Routes = [
     { path: 'classe',component:ClasseComponent},
     { path:'ecoles', component: EcoleComponent},
     {path: 'sign',component:SignComponent},
+    {path: 'sign/:id',component:SignComponent},
+    {path: 'export/:id',component:ExportComponent},
     { path: '**', redirectTo: '/' }
   ];
 
