@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -100,6 +100,8 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
+import { SeanceComponent } from './seance/seance.component';
+import { CalendarComponent } from './seance/calendar/calendar.component';
 import { CampusComponent } from './campus/campus.component';
 
 
@@ -212,6 +214,8 @@ import { CampusComponent } from './campus/campus.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
+        SeanceComponent,
+        CalendarComponent,
         CampusComponent,
     
 
