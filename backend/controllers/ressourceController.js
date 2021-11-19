@@ -58,16 +58,15 @@ app.post("/sendRessource/:id/:nom", (req, res) => {
         )};
         fs.writeFile("/storage/" + req.body.classe_id + "/" + req.params.nom + req.body.file.filename, req.body.file.value, 'base64', function (err) {
             if(err) {
-               return res.status(500).send(console.error(err));
+                console.error(err);
             }
-            res.status(200).send({ file: file, documentType: data.documentType })
         });
 });
 
 app.get("/getEDT/:id", (req, res) => {
     //Récupérer l'emploi du temps par classe
     Ressource.findOne({ _id: req.params.id }).then((data) => {
-        let filename = "emploi_du_temps"
+        let filename = data.edt
         let file = fs.readFileSync("storage/" + data.classe_id + "/" + filename, { encoding: 'base64' }, (err) => {
             if (err) {
                 return console.error(err);
@@ -82,29 +81,16 @@ app.get("/getEDT/:id", (req, res) => {
 app.get("/getProgram/:id", (req, res) => {
     //Récupérer le programme par classe
     Ressource.findOne({ _id: req.params.id }).then((data) => {
-        let filename = "programme"
+        let filename = data.edt
         let file = fs.readFileSync("storage/" + data.classe_id + "/" + filename, { encoding: 'base64' }, (err) => {
             if (err) {
                 return console.error(err);
             }
         });
-        res.status(200).send({ file: file, documentType: data.programType })
+        res.status(200).send({ file: file, documentType: data.edtType })
     }).catch((error) => {
         res.status(404).send("erreur :" + error);
     })
 });
 
-app.get("/getCalendar/:id", (req, res) => {
-    //Récupérer le calendrier par classe
-    Ressource.findOne({ _id: req.params.id }).then((data) => {
-        let filename = "calendrier"
-        let file = fs.readFileSync("storage/" + data.classe_id + "/" + filename, { encoding: 'base64' }, (err) => {
-            if (err) {
-                return console.error(err);
-            }
-        });
-        res.status(200).send({ file: file, documentType: data.calendarType })
-    }).catch((error) => {
-        res.status(404).send("erreur :" + error);
-    })
-});
+module.exports = app;
