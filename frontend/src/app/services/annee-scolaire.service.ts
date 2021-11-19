@@ -25,6 +25,9 @@ export class AnneeScolaireService {
     let anneeScolaireUrl=this.apiUrl+"archivee"+AnneeScolaire._id;
     return this.http.post<any>(anneeScolaireUrl,AnneeScolaire,httpOptions1);
   }
+  
+
+  
  create(anneeScolaire: any){
     let anneeScolaireUrl=this.apiUrl+"create";
     return this.http.post<any>(anneeScolaireUrl,anneeScolaire,httpOptions1);
