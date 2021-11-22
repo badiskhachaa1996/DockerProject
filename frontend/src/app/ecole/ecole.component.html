@@ -187,7 +187,7 @@
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddEcole" pButton class="ui-button-raised ui-button-success"
             (click)="showFormAddEcole=true" style="float:right;" label="Ajouter"></button>
-        <h3>Liste des ecoles</h3>
+        <h3>      <a routerLink =  '/anneeScolaire' >{{LblAnneselected }}</a> /Liste des ecoles</h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="ecoles" [columns]="cols" [value]="ecoles" selectionMode="single" [rows]="5"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="ecoles.length" [filterDelay]="0"

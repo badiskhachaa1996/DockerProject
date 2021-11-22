@@ -25,7 +25,7 @@ export class EcoleComponent implements OnInit {
   showFormAddEcole:Boolean=false;
   showFormUpdateEcole:Boolean=false;
   ecoleToUpdate:Ecole;
-  
+  LblAnneselected:string;
   
 
   addecoleForm: FormGroup = new FormGroup({
@@ -71,7 +71,15 @@ export class EcoleComponent implements OnInit {
       console.error(error)
     });
     console.log(this.annees)
-  })}
+  })
+  this.anneeScolaireService.getByID(id).subscribe((data) =>{
+    this.LblAnneselected=data.dataAnneeScolaire.libelle
+    console.log(this.LblAnneselected)
+  }
+  )
+
+
+}
 
   updateList(){
     const id = this.route.snapshot.paramMap.get('id');

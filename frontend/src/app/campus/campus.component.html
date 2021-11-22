@@ -6,7 +6,7 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddCampus=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="addcampusForm">
 
-                    <h3 class="text-center" style="font-weight: bold;">Ajouter une campus</h3>
+                    <h3 class="text-center" style="font-weight: bold;">Ajouter un campus</h3>
 
                     <div class="container">
                         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
@@ -92,7 +92,7 @@
                 <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateCampus=false"> </i>
                 <form class="col-8 col-offset-2" [formGroup]="campusFormUpdate">
 
-                    <h3 class="text-center" style="font-weight: bold;">Modifier une campus</h3>
+                    <h3 class="text-center" style="font-weight: bold;">Modifier un campus</h3>
 
                     <div class="container">
                         <!-- Stack the columns on mobile by making one full-width and the other half-width -->
@@ -178,7 +178,7 @@
     <div class="col-10 col-offset-1">
         <button *ngIf="!showFormAddCampus" pButton class="ui-button-raised ui-button-success"
             (click)="showFormAddCampus=true" style="float:right;" label="Ajouter"></button>
-        <h3>Liste des campuss</h3>
+               <h3><a routerLink =  '/anneeScolaire' >{{LblAnneselected }}</a> / <a routerLink =  '/ecoles/{{idanneeselected }}' >{{Lblecoleselected }}</a> / Liste des campus</h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="campuss" [columns]="cols" [value]="campuss" selectionMode="single" [rows]="5"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="campuss.length" [filterDelay]="0"
