@@ -21,9 +21,9 @@ export class AnneeScolaireService {
     return this.http.get<any>(anneeScolaireUrl,httpOptions1);
   }
 
-  getByID(AnneeScolaire: any){
-    let anneeScolaireUrl=this.apiUrl+"archivee"+AnneeScolaire._id;
-    return this.http.post<any>(anneeScolaireUrl,AnneeScolaire,httpOptions1);
+  getByID(AnneeScolaireid: any){
+    let anneeScolaireUrl=this.apiUrl+"getById/"+AnneeScolaireid;
+    return this.http.get<any>(anneeScolaireUrl,httpOptions1);
   }
   
 

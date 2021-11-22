@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { EcoleService } from '../services/ecole.service';
 import { CampusService } from '../services/campus.service';
+import { AnneeScolaireService } from '../services/annee-scolaire.service';
 import {Ecole} from '../models/Ecole'
 import {Campus} from '../models/Campus'
 import { MessageService } from 'primeng/api';
@@ -12,6 +13,7 @@ import {CalendarModule} from 'primeng/calendar';
 import {DropdownModule} from 'primeng/dropdown';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
+import { AnneeScolaire } from '../models/AnneeScolaire';
 @Component({
   selector: 'app-campus',
   templateUrl: './campus.component.html',
@@ -24,7 +26,10 @@ export class CampusComponent implements OnInit {
   showFormAddCampus:Boolean=false;
   showFormUpdateCampus:Boolean=false;
   campusToUpdate:Campus;
-  
+   ecoleid :String;
+   idanneeselected:any;
+   Lblecoleselected:any;
+   LblAnneselected:any;
   
 
   addcampusForm: FormGroup = new FormGroup({
@@ -54,9 +59,15 @@ export class CampusComponent implements OnInit {
   columns = [
   ]
 
-  constructor(private ecoleService:EcoleService,private messageService:MessageService,private campusService:CampusService,private route: ActivatedRoute ,private router: Router) { }
+  constructor(private ecoleService:EcoleService,private messageService:MessageService,private campusService:CampusService,private route: ActivatedRoute ,private router: Router,private anneeScolaireService:AnneeScolaireService) { }
 
   ngOnInit(): void {
+
+    this.ecoleid = this.route.snapshot.paramMap.get('id');
+    console.log(this.ecoleid)
+    
+    
+    
 
     const id = this.route.snapshot.paramMap.get('id');
     this.updateList()
@@ -69,8 +80,27 @@ export class CampusComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
-    console.log(this.ecoles)
-  })}
+   
+  })
+
+  this.ecoleService.getByID(this.ecoleid).subscribe((data)=>{
+   
+    this.idanneeselected=data.dataEcole.annee_id;
+     this.Lblecoleselected=data.dataEcole.libelle;
+     console.log(data.dataEcole.annee_id)
+  
+  
+ 
+  this.anneeScolaireService.getByID(this?.idanneeselected).subscribe((data2)=>{
+    
+     this.LblAnneselected=data2.dataAnneeScolaire.libelle;
+
+  console.log( this.LblAnneselected)
+  })
+})
+  
+
+}
 
   updateList(){
     const id = this.route.snapshot.paramMap.get('id');
@@ -126,7 +156,7 @@ console.log(campus)
     this.campusFormUpdate.setValue({libelle:rowData.libelle,ecole_id:rowData.ecole_id,  email:rowData.email,site:rowData.site,pays:rowData.pays,adresse:rowData.adresse,ville:rowData.ville})
   }
 
-  navigatetoCampus(rowData:Campus){
+  navigatetoDiplome(rowData:Campus){
 
     this.router.navigateByUrl('/diplomes/'+rowData._id);
 

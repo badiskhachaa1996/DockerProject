@@ -24,9 +24,9 @@ export class EcoleService {
     return this.http.get<any>(ecoleUrl,httpOptions1);
   }
 
-  getByID(Ecole: any){
-    let ecoleUrl=this.apiUrl+"getById/"+Ecole._id;
-    return this.http.post<any>(ecoleUrl,Ecole,httpOptions1);
+  getByID(id: any){
+    let ecoleUrl=this.apiUrl+"getById/"+id;
+    return this.http.get<any>(ecoleUrl,httpOptions1);
   }
   
  create(ecole: any){
