@@ -6,6 +6,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-sign',
@@ -14,7 +15,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SignComponent implements OnInit {
 
-  constructor(private PresenceService: PresenceService, private route: ActivatedRoute,private AuthService:AuthService) { }
+  constructor(private PresenceService: PresenceService, private route: ActivatedRoute,private AuthService:AuthService,private MessageService:MessageService) { }
 
   token;
   justif_file_value;
@@ -30,42 +31,44 @@ export class SignComponent implements OnInit {
   @ViewChild('justificatif') fileInput: FileUpload;
   loading: boolean = false;
   ngAfterViewInit(): void {
-    let isDrawing = false;
-    let x = 0;
-    let y = 0;
-
-    var context = this.myCanvas.nativeElement.getContext('2d');
-    this.myCanvas.nativeElement.addEventListener('mousedown', e => {
-      x = e.offsetX;
-      y = e.offsetY;
-      isDrawing = true;
-    });
-
-    this.myCanvas.nativeElement.addEventListener('mousemove', e => {
-      if (isDrawing === true) {
-        drawLine(context, x, y, e.offsetX, e.offsetY);
+    if(this.token.role=='user' || this.token.role=='Formateur'){
+      let isDrawing = false;
+      let x = 0;
+      let y = 0;
+  
+      var context = this.myCanvas.nativeElement.getContext('2d');
+      this.myCanvas.nativeElement.addEventListener('mousedown', e => {
         x = e.offsetX;
         y = e.offsetY;
+        isDrawing = true;
+      });
+  
+      this.myCanvas.nativeElement.addEventListener('mousemove', e => {
+        if (isDrawing === true) {
+          drawLine(context, x, y, e.offsetX, e.offsetY);
+          x = e.offsetX;
+          y = e.offsetY;
+        }
+      });
+  
+      window.addEventListener('mouseup', e => {
+        if (isDrawing === true) {
+          drawLine(context, x, y, e.offsetX, e.offsetY);
+          x = 0;
+          y = 0;
+          isDrawing = false;
+        }
+      });
+  
+      function drawLine(context, x1, y1, x2, y2) {
+        context.beginPath();
+        context.strokeStyle = 'black';
+        context.lineWidth = 1;
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+        context.closePath();
       }
-    });
-
-    window.addEventListener('mouseup', e => {
-      if (isDrawing === true) {
-        drawLine(context, x, y, e.offsetX, e.offsetY);
-        x = 0;
-        y = 0;
-        isDrawing = false;
-      }
-    });
-
-    function drawLine(context, x1, y1, x2, y2) {
-      context.beginPath();
-      context.strokeStyle = 'black';
-      context.lineWidth = 1;
-      context.moveTo(x1, y1);
-      context.lineTo(x2, y2);
-      context.stroke();
-      context.closePath();
     }
   }
   reloadPresence(){
@@ -96,15 +99,20 @@ export class SignComponent implements OnInit {
     console.log(sign)
     let presence = new Presence(null, "617bbf3f2ad5353fe4f44fd4", this.token.id, true, sign)
     this.PresenceService.create(presence).subscribe((data) => {
+      this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
       console.log(data)
     }, err => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
       console.error(err)
     })
   }
 
   getPDF(){
     this.PresenceService.getPDF(this.ID).subscribe((data)=>{
-      console.log(data)
+      if(data){
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), this.ID+".pdf")
+      }
     })
   }
 
@@ -127,6 +135,7 @@ export class SignComponent implements OnInit {
     this.uploadFile = true
     this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, _id: this.ID }).subscribe((data) => {
       this.uploadFile = false;
+      this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
     }, error => console.log(error))
   }
   downloadFile(rowData) {
@@ -134,6 +143,7 @@ export class SignComponent implements OnInit {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.fileType }), data.fileName)
     }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: rowData._id })
       console.error(error)
     })
   }

@@ -261,7 +261,7 @@ app.get("/getPDF/:id", (req, res) => {
                     const buff = canvas.toBuffer('application/pdf', {
                         title: 'Feuille de présence',
                         author: 'ESTYA',
-                        subject: 'Feuille de présence du ' + dateFormat(seance.date_debut) + ' pour la classe XXX',
+                        subject: 'Feuille de présence du ' + dateFormat(seance.date_debut),
                         modDate: new Date()
                     })
                     fs.writeFileSync("storage/"+pdfName, buff, function (err) {
@@ -275,25 +275,19 @@ app.get("/getPDF/:id", (req, res) => {
                             console.error(err);
                         }
                     });
-                    console.log(res)
-                    res.status(200).send({data:base64PDF})
+                    res.status(200).send({file:base64PDF})
                 }).catch((error) => {
-                    console.log("ERROR4")
-                    console.log(error)
-                    //res.status(500).send(error);
+                    res.status(500).send(error);
                 })
             }).catch((error) => {
-                console.log("ERROR1")
                 res.status(500).send(error);
             })
 
         }).catch((error) => {
-            console.log("ERROR2")
             res.status(500).send(error);
         })
 
     }).catch((error) => {
-        console.log("ERROR3")
         res.status(500).send(error);
     })
 });
