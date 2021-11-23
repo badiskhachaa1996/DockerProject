@@ -685,11 +685,14 @@
         </div>
         </p-fieldset>
         <p-fieldset *ngIf="comments && comments.length!=0" legend="Liste des fichiers"
-            [style]="{'color':'green','font-weight': 'bold'}">
+            [style]="{'color':'green','font-weight': 'bold'}"> 
+            <p style="text-align:center; padding-bottom: 2%; color: black; font-weight: normal;">Retrouvez tous les fichiers qui ont été envoyés lors de cette conversation</p>
             <p-table [value]="comments" dataKey="id">
                 <ng-template pTemplate="body" let-message>
-                    <div style="text-align:left;padding-bottom: 1%;" *ngIf="message.document">
-                        <a style="cursor: pointer;" (click)="downloadFile(message)"><i>{{message.document}}</i></a>
+                    <div class="col-6"  *ngIf="message.document">
+                        <ul>
+                            <li id="fichier" (click)="downloadFile(message)"><i>{{message.document}}</i></li>
+                        </ul>
                     </div>
                 </ng-template>
             </p-table>

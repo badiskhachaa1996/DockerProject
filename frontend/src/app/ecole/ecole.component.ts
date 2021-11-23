@@ -9,6 +9,9 @@ import { NodeWithI18n } from '@angular/compiler';
 import {CalendarModule} from 'primeng/calendar';
 import { AnneeScolaire } from '../models/AnneeScolaire';
 import {DropdownModule} from 'primeng/dropdown';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+ 
 @Component({
   selector: 'app-ecole',
   templateUrl: './ecole.component.html',
@@ -22,7 +25,7 @@ export class EcoleComponent implements OnInit {
   showFormAddEcole:Boolean=false;
   showFormUpdateEcole:Boolean=false;
   ecoleToUpdate:Ecole;
-  
+  LblAnneselected:string;
   
 
   addecoleForm: FormGroup = new FormGroup({
@@ -53,9 +56,10 @@ export class EcoleComponent implements OnInit {
   columns = [
   ]
 
-  constructor(private EcoleService:EcoleService,private messageService:MessageService,private anneeScolaireService:AnneeScolaireService, ) { }
+  constructor(private EcoleService:EcoleService,private messageService:MessageService,private anneeScolaireService:AnneeScolaireService,private route: ActivatedRoute ,private router: Router) { }
 
   ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
     this.updateList()
 
     this.anneeScolaireService.getAll().subscribe((data) => {
@@ -67,12 +71,28 @@ export class EcoleComponent implements OnInit {
       console.error(error)
     });
     console.log(this.annees)
-  })}
+  })
+  this.anneeScolaireService.getByID(id).subscribe((data) =>{
+    this.LblAnneselected=data.dataAnneeScolaire.libelle
+    console.log(this.LblAnneselected)
+  }
+  )
+
+
+}
 
   updateList(){
-    this.EcoleService.getAll().subscribe((data)=>{
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id!==null){
+    this.EcoleService.getAllByAnnee(id).subscribe((data)=>{
       this.ecoles=data;
     })
+  }
+    else {
+      this.EcoleService.getAll().subscribe((data)=>{
+      this.ecoles=data;
+    
+    })}
   }
 
  
@@ -113,6 +133,12 @@ console.log(ecole)
     this.showFormUpdateEcole=true;
 
     this.ecoleFormUpdate.setValue({libelle:rowData.libelle,site:rowData.site,email:rowData.email,annee_id:rowData.annee_id,telephone:rowData.telephone,pays:rowData.pays,adresse:rowData.adresse,ville:rowData.ville})
+  }
+
+  navigatetoCampus(rowData:Ecole){
+
+    this.router.navigateByUrl('/campus/'+rowData._id);
+
   }
 
 }

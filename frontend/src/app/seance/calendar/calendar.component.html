@@ -1,0 +1,8 @@
+<!-- Partie dediée au full-calendar -->
+<div class="col-10 col-offset-1">
+    <button pButton class="ui-button-raised ui-button-success"
+    (click)="onShowSeance()" style="float:right;" label="Retour à la liste des séances"></button>
+
+    <h1>Calendrier</h1>
+    <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+</div>
