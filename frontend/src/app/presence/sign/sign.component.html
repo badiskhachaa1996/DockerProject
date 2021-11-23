@@ -21,11 +21,11 @@
     </div>
 </div>
 
-<button pButton
-    class="ui-button-raised ui-button-success" label="Export PDF" (click)="getPDF();"></button>
+
 
 <div class="grid" *ngIf="token.role!='user'">
     <div class="col-10 col-offset-1">
+        <button pButton class="ui-button-raised ui-button-success" label="Export en PDF" style="float:right;" (click)="getPDF();"></button>
         <h3>Liste des présence de la séance: </h3><!-- Afficher le nom de la séance-->
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" selectionMode="single" [rows]="10"
@@ -41,7 +41,8 @@
                         <th class="col-5" style="text-decoration: underline;" pSortableColumn="isPresent" scope="col">
                             Présent <p-sortIcon field="isPresent"></p-sortIcon>
                         </th>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_signature" scope="col">
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_signature"
+                            scope="col">
                             Date de présence <p-sortIcon field="date_signature"></p-sortIcon>
                         </th>
                         <th class="col-2" style="text-decoration: underline;" scope="col">

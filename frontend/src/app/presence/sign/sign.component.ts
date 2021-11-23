@@ -7,6 +7,9 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MessageService } from 'primeng/api';
+import { environment } from 'src/environments/environment';
+import { SocketService } from 'src/app/services/socket.service';
+const io = require("socket.io-client");
 
 @Component({
   selector: 'app-sign',
@@ -15,8 +18,8 @@ import { MessageService } from 'primeng/api';
 })
 export class SignComponent implements OnInit {
 
-  constructor(private PresenceService: PresenceService, private route: ActivatedRoute,private AuthService:AuthService,private MessageService:MessageService) { }
-
+  constructor(private PresenceService: PresenceService, private route: ActivatedRoute,private AuthService:AuthService,private MessageService:MessageService, private SocketService:SocketService) { }
+  socket = io(environment.origin.replace('/soc',''));
   token;
   justif_file_value;
   justif_file_name;
@@ -87,7 +90,9 @@ export class SignComponent implements OnInit {
         this.userList[user._id]=user;
       });
     })
-
+    this.socket.on("refreshPresences", () => {
+      this.reloadPresence();
+    })
   }
 
   getSignature() {
@@ -100,6 +105,7 @@ export class SignComponent implements OnInit {
     let presence = new Presence(null, "617bbf3f2ad5353fe4f44fd4", this.token.id, true, sign)
     this.PresenceService.create(presence).subscribe((data) => {
       this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
+      this.SocketService.addPresence();
       console.log(data)
     }, err => {
       this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
