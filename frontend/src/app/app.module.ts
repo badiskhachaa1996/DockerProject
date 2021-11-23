@@ -214,7 +214,7 @@ import { CampusComponent } from './campus/campus.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
-        SignComponent
+        SignComponent,
         SeanceComponent,
         CalendarComponent,
         CampusComponent,
