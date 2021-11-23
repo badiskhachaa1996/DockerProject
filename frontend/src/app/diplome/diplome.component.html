@@ -1,0 +1,374 @@
+<!-- Formulaire d'ajout d'un nouveau diplome -->
+<div *ngIf="showFormAddDiplome" class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" >
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddDiplome = false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="formAddDiplome" (ngSubmit)="onAddDiplome()">
+
+                    <h3>Ajouter un diplôme</h3>
+                    <div class="p-grid">
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="titre" class="form-control col-12"
+                                placeholder="Titre du diplôme" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="titre_long" class="form-control col-12"
+                                placeholder="Titre long" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="campus_id" class="form-control col-12"
+                                placeholder="Campus" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <textarea type="text" formControlName="description" class="form-control col-12"
+                            placeholder="Description du diplôme" pInputText></textarea>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="type_diplome" class="form-control col-12"
+                                placeholder="Type de diplôme" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="type_etude" class="form-control col-12"
+                                placeholder="Type d'étude" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="domaine" class="form-control col-12"
+                                placeholder="Domaine d'étude" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="niveau" class="form-control col-12" placeholder="Niveau"
+                                pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <input type="text" formControlName="certificateur" class="form-control col-12"
+                                placeholder="Certificateur" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <input type="text" formControlName="code_RNCP" class="form-control col-12"
+                                placeholder="Code RNCP" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="duree" class="form-control col-12"
+                                placeholder="Nombre de mois de la formation" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="nb_heure" class="form-control col-12"
+                                placeholder="Nombre d'heure de la formation" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="date" formControlName="date_debut" class="form-control col-12"
+                                placeholder="Date de début" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="date" formControlName="date_fin" class="form-control col-12"
+                                placeholder="Date de fin" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <input type="text" formControlName="rythme" class="form-control col-12" placeholder="Rythme"
+                                pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="frais" class="form-control col-12"
+                                placeholder="Coût de la formation" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="frais_en_ligne" class="form-control col-12"
+                                placeholder="Coût de la formation EN LIGNE" pInputText>
+                        </div>
+
+                        <div>
+                            <button pButton type="submit" label="Ajouter le diplome" [disabled]="formAddDiplome.invalid" style="margin-left: 72%;"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+
+<!-- Formulaire de mise à jour d'un diplome -->
+<div *ngIf="showFormUpdateDiplome" class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" >
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateDiplome = false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="formUpdateDiplome" (ngSubmit)="onUpdateDiplome()">
+
+                    <h3>Formulaire de modification du diplôme</h3>
+                    <div class="p-grid">
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="titre" class="form-control col-12"
+                                placeholder="{{ diplomeToUpdate.titre }}" [(ngModel)]="diplomeToUpdate.titre" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="titre_long" class="form-control col-12"
+                                placeholder="{{ diplomeToUpdate.titre_long }}" [(ngModel)]="diplomeToUpdate.titre_long" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="campus_id" class="form-control col-12"
+                                placeholder="{{ diplomeToUpdate.campus_id }}" [(ngModel)]="diplomeToUpdate.campus_id" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <textarea type="text" formControlName="description" class="form-control col-12"
+                            placeholder="{{ diplomeToUpdate.description }}" [(ngModel)]="diplomeToUpdate.description" pInputText></textarea>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="type_diplome" class="form-control col-12"
+                                placeholder="Type de diplôme" [(ngModel)]="diplomeToUpdate.type_diplome" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="type_etude" class="form-control col-12"
+                                placeholder="Type d'étude" [(ngModel)]="diplomeToUpdate.type_etude" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="domaine" class="form-control col-12"
+                                placeholder="Domaine d'étude" [(ngModel)]="diplomeToUpdate.domaine" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="niveau" class="form-control col-12" placeholder="Niveau"
+                            [(ngModel)]="diplomeToUpdate.niveau" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <input type="text" formControlName="certificateur" class="form-control col-12"
+                                placeholder="Certificateur" [(ngModel)]="diplomeToUpdate.certificateur" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-12">
+                            <input type="text" formControlName="code_RNCP" class="form-control col-12"
+                                placeholder="Code RNCP" [(ngModel)]="diplomeToUpdate.code_RNCP" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="duree" class="form-control col-12"
+                                placeholder="Nombre de mois de la formation" [(ngModel)]="diplomeToUpdate.duree" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="nb_heure" class="form-control col-12"
+                                placeholder="Nombre d'heure de la formation" [(ngModel)]="diplomeToUpdate.nb_heure" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="date" formControlName="date_debut" class="form-control col-12"
+                                placeholder="Date de début" value="diplomeToUpdate.date_debut" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="date" formControlName="date_fin" class="form-control col-12"
+                                placeholder="Date de fin" value="diplomeToUpdate.date_fin" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <input type="text" formControlName="rythme" class="form-control col-12" placeholder="Rythme"
+                            [(ngModel)]="diplomeToUpdate.rythme" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="frais" class="form-control col-12"
+                            [(ngModel)]="diplomeToUpdate.frais" placeholder="Coût de la formation" pInputText>
+                        </div>
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="number" formControlName="frais_en_ligne" class="form-control col-12"
+                                placeholder="Coût de la formation EN LIGNE" [(ngModel)]="diplomeToUpdate.frais_en_ligne" pInputText>
+                        </div>
+
+                        <div>
+                            <button pButton type="submit" label="Modifier le diplome" [disabled]="formUpdateDiplome.invalid" style="margin-left: 70%;"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+
+<!-- Table d'affichage de la liste des diplômes -->
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <!-- Bouton d'ajout d'un noveau diplome -->
+        <button (click)="showFormAddDiplome = true; showFormUpdateDiplome = false" pButton type="button" label="Nouveau diplôme" style="float:right;"></button>
+        <h3>Liste des diplômes</h3>
+        <div class="col-12 card shadow-lg my-5">
+            <!-- input de recherche -->
+            <input style="margin:5px;" pInputText type="text"
+                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+
+            <p-table #dt1 [globalFilterFields]="['titre_long', 'domaine', 'certificateur', 'code_RNCP', 'duree']"
+                [rows]="5" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="diplomes"
+                [totalRecords]="diplomes.length" dataKey="_id" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="titre_long">
+                            Titre long <p-sortIcon field="titre_long"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="domaine">
+                            Domaine <p-sortIcon field="domaine"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="certificateur">
+                            Certificateur <p-sortIcon field="certificateur"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="code_RNCP">
+                            Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="duree">
+                            Durée <p-sortIcon field="duree"></p-sortIcon>
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-diplome let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="diplome"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                style="background-color:white; color: green; border: 0px">
+                            </button>
+                        </td>
+                        <td>
+                            {{ diplome.titre_long }}
+                        </td>
+                        <td>
+                            {{ diplome.domaine }}
+                        </td>
+                        <td>
+                            {{ diplome.certificateur }}
+                        </td>
+                        <td>
+                            {{ diplome.code_RNCP }}
+                        </td>
+                        <td>
+                            {{ diplome.duree }} Mois
+                        </td>
+                        <td>
+                            <i style="margin-left: 2%;" (click)="showFormUpdateDiplome = true; showFormAddDiplome = false; idDiplomeToUpdate = diplome._id; onGetbyId();" class="pi pi-pencil"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-diplome>
+                    <tr>
+                        <td colspan="7">
+                            <p-fieldset legend="Information supplementaire">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">titre:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.titre }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Campus:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.campus_id }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Nombre d'heure:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.nb_heure }} heures</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Description:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.description }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Type du diplôme:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.type_diplome }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Type d'étude:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.type_etude }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Niveau:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.niveau }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Début:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.date_debut | date:'dd/MM/yyyy'
+                                                }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Fin:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.date_fin | date:'dd/MM/yyyy'
+                                                }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Rythme:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.rythme }}</i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Frais:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.frais }} <b>€</b></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Frais en ligne:</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <i style="color: black;">{{ diplome.frais_en_ligne }} <b>€</b> </i>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </p-fieldset>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -20,6 +20,7 @@ import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.componen
 import { EcoleComponent } from './ecole/ecole.component';
 import { SeanceComponent } from './seance/seance.component';
 import { CalendarComponent } from './seance/calendar/calendar.component';
+import { DiplomeComponent } from './diplome/diplome.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -39,6 +40,7 @@ const routes: Routes = [
     { path:'ecoles', component: EcoleComponent},
     { path:'seance', component: SeanceComponent },
     { path: 'seance/calendrier', component: CalendarComponent },
+    { path: 'diplome', component: DiplomeComponent },
     { path: '**', redirectTo: '/' }
   ];
 

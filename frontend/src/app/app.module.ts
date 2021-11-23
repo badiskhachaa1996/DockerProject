@@ -102,6 +102,7 @@ import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.componen
 import { EcoleComponent } from './ecole/ecole.component';
 import { SeanceComponent } from './seance/seance.component';
 import { CalendarComponent } from './seance/calendar/calendar.component';
+import { DiplomeComponent } from './diplome/diplome.component';
 
 
 
@@ -215,6 +216,7 @@ import { CalendarComponent } from './seance/calendar/calendar.component';
         EcoleComponent,
         SeanceComponent,
         CalendarComponent,
+        DiplomeComponent,
     
 
                

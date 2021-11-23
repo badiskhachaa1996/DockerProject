@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const diplome_schema = mongoose.Schema({
     titre: { type: String, required: true },
     titre_long: { type: String, required: true },
-    campus_id: { type: mongoose.Schema.Types.ObjectId, red: "Campus", required: true },
-    descriptions: { type: String, required: true },
+    //campus_id: { type: mongoose.Schema.Types.ObjectId, ref: "Campus", required: true },
+    campus_id: { type: String, required: true },
+    description: { type: String, required: true },
     type_diplome: { type: String, required: true },
     type_etude: { type: String, required: true },
     domaine: { type: String, required: true },
