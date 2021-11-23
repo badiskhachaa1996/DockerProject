@@ -152,6 +152,10 @@ io.on("connection", (socket) => {
         //Refresh les tickets suivi de l'user
         io.to(data.user_id).emit('refreshSuivi')
     })
+
+    socket.on('addPresence',()=>{
+        io.emit('refreshPresences')
+    })
 });
 
 httpServer.listen(3000, () => {
