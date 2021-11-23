@@ -84,19 +84,6 @@ export class SignComponent implements OnInit {
         this.userList[user._id]=user;
       });
     })
-      /*const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-      if(data.fileType.includes("Error")){
-        console.log(data.fileType)
-      }
-      let blob: Blob = new Blob([byteArray], { type: data.fileType})
-      let reader: FileReader = new FileReader();
-      reader.addEventListener("load", () => {
-        this.showJustif = reader.result;
-      }, false);
-      if (blob) {
-        this.showJustif = "../assets/images/avatar.PNG"
-        reader.readAsDataURL(blob);
-      }*/
 
   }
 
@@ -112,6 +99,12 @@ export class SignComponent implements OnInit {
       console.log(data)
     }, err => {
       console.error(err)
+    })
+  }
+
+  getPDF(){
+    this.PresenceService.getPDF(this.ID).subscribe((data)=>{
+      console.log(data.data)
     })
   }
 

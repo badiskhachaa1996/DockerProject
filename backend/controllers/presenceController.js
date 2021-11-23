@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const { Presence } = require("./../models/presence");
-const fs = require("fs")
-const path = require('path')
+var fs = require('fs')
+var Canvas = require('canvas');
+const { User } = require("../models/user");
+const { Seance } = require("../models/seance");
 
 //Récuperer une présence
 app.post("/getById/:id", (req, res) => {
@@ -62,7 +64,6 @@ app.get("/isPresent/:id", (req, res) => {
 app.post("/create", (req, res) => {
 
     //Sauvegarde du message
-    console.log(req.body)
     const presence = new Presence({
         seance_id: req.body.seance_id,
         user_id: req.body.user_id,
@@ -71,7 +72,6 @@ app.post("/create", (req, res) => {
         justificatif: false,
         date_signature: Date.now()
     });
-    console.log(presence)
     presence.save((err, data) => {
         //Sauvegarde de la signature si il y en a une
         if (err) {
@@ -192,35 +192,102 @@ app.get("/getSignature/:id", (req, res) => {
     })
 });
 
-app.get("/getAllSignatureBySeance/:id", (req, res) => {
+app.get("/getPDF/:id", (req, res) => {
     Presence.find({ seance_id: req.params.id }).then((data) => {
-        let ids = [];
-        let infoData = [];
-        data.forEach((presence) => {
-            ids.push(presence._id)
-            infoData[presence._id] = presence;
-        })
-        let filesReturn = [];
-        var files = fs.readdirSync("storage/signature/");
-        files.forEach(file => {
-            let temp = file.replace(".png", '')
-            ids.forEach(ID => {
-                if (ID == temp) {
-                    let tFile = fs.readFileSync("storage/signature/" + file, { encoding: 'base64' }, (err) => {
-                        if (err) {
-                            console.log(err);
+        Seance.find({ _id: req.params.id }).then(seance => {
+            User.find({ _id: seance.formateur_id }).then(formateur => {
+                /*let ids = [];
+                let infoData = [];
+                data.forEach((presence) => {
+                    ids.push(presence._id)
+                    infoData[presence._id] = presence;
+                })
+                let filesReturn = [];
+                var files = fs.readdirSync("storage/signature/");
+                files.forEach(file => {
+                    let temp = file.replace(".png", '')
+                    ids.forEach(ID => {
+                        if (ID == temp) {
+                            filesReturn.push(file)
                         }
                     });
-                    let infoD=infoData[ID]
-                    filesReturn.push({ file:tFile, data:infoD })
+                });*/
+                function dateFormat(inputFormat) {
+                    function pad(s) { return (s < 10) ? '0' + s : s; }
+                    var d = new Date(inputFormat)
+                    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/')
                 }
-            });
-        });
-        res.status(200).send(filesReturn)
+                User.find().then(userList => {
+                    let UserDic = [];
+                    userList.forEach(user => {
+                        UserDic[user._id] = user
+                    })
+                    const canvas = Canvas.createCanvas(827, 1170, 'pdf')
+                    const ctx = canvas.getContext('2d')
+                    const bg = new Canvas.Image()
+                    bg.src = "assets/827X1170.png"
+                    ctx.drawImage(bg, 0, 0)
+                    ctx.font = '20px Arial'
+                    ctx.fillText("Morgan Hue", 131, 88, (414 - 131))
+                    //Taille signature  532 88 799-532
+                    //Date 85 130 412-85 
+                    //Heure 488 130
+                    x = 253
+                    data.forEach(file => {
+                        //PREMIER Eleve 30 253 350
+                        if (UserDic[file.user_id]) {
+                            ctx.font = '20px Arial'
+                            ctx.fillText(UserDic[file.user_id].lastname + " " + UserDic[file.user_id].firstname, 30, x, 350)
+                        }
+                        if (file.signature) {
+                            console.log(file)
+                            //Date Signature 390 253 577-390
+                            ctx.font = '20px Arial'
+                            ctx.fillText(dateFormat(file.date_signature), 390, x, (577 - 390))
+                            //Signature 585 253 793-585
+                            let img = new Canvas.Image()
+                            img.src = "storage/signature/" + file._id + ".png"
+                            ctx.drawImage(img, 583, x - 23, (793 - 583), 50)
+                        }
+                        //+0 +30 max 1034
+
+                        if (x == 1034 || x > 1034) {
+                            console.log("err")
+                            throw x;
+                        }
+                        x += 57
+                        console.log(x)
+
+                    })
+
+
+                    ctx.addPage()
+
+                    const buff = canvas.toBuffer('application/pdf', {
+                        title: 'Feuille de présence',
+                        author: 'ESTYA',
+                        subject: 'Feuille de présence du XX/XX/XXXX pour la classe XXX',
+                        modDate: new Date()
+                    })
+                    let pdfName = ".pdf"
+                    fs.writeFile(pdfName, buff, function (err) {
+                        if (err) throw err
+                    })
+                    let file = fs.readFileSync(pdfName, { encoding: 'base64' }, (err) => {
+                        if (err) {
+                            return console.error(err);
+                        }
+                    });
+                    res.status(200).send({ data: file });
+                })
+            })
+
+        })
 
     }).catch((error) => {
         res.status(404).send(error);
     })
+
 });
 
 app.get("/getJustificatif/:id", (req, res) => {

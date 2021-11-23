@@ -56,7 +56,8 @@ const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
     let token = jwt.decode(req.header("token"))
-    if(token && token.id && token.role){
+    next()
+    /*if(token && token.id && token.role){
         User.findOne({_id:token.id,role:token.role},(err,user)=>{
             if(err){
                 console.log(err)
@@ -74,7 +75,7 @@ app.use('/', function (req, res, next) {
         }else{
             res.status(403).send("Accès non autorisé")
         }
-    }
+    }*/
     
   });
 

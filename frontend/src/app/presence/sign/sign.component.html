@@ -3,7 +3,7 @@
         <h3>Signature de la séance: </h3><!-- Afficher le nom de la séance-->
         <div class="col-12 card shadow-lg my-5 ">
             <p>
-                <canvas #mon_canvas width="300" height="100"></canvas>
+                <canvas #mon_canvas width="210" height="25"></canvas>
             </p>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
@@ -21,6 +21,8 @@
     </div>
 </div>
 
+<button pButton
+    class="ui-button-raised ui-button-success" label="Export PDF" (click)="getPDF();"></button>
 
 <div class="grid" *ngIf="token.role!='user'">
     <div class="col-10 col-offset-1">

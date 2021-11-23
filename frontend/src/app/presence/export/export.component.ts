@@ -17,7 +17,7 @@ export class ExportComponent implements OnInit {
   userList = [];
   presences;
   allPresences;
-  reader: FileReader = new FileReader();
+  reader: FileReader[] = [];
   ID = (this.route.snapshot.paramMap.get('id')) ? this.route.snapshot.paramMap.get('id') : "6193cff7cfe12a30f41859ed";
 
   constructor(private PresenceService: PresenceService, private route: ActivatedRoute, private AuthService: AuthService) { }
@@ -30,10 +30,6 @@ export class ExportComponent implements OnInit {
       });
     })
 
-    this.reader.addEventListener("load", () => {
-      //console.log(this.reader.result);
-    }, false);
-
     this.PresenceService.getAllBySeance(this.ID).subscribe(data => {
       this.presences = data;
     }, error => console.log(error))
@@ -45,13 +41,13 @@ export class ExportComponent implements OnInit {
         const byteArray = new Uint8Array(atob(element.file).split('').map(char => char.charCodeAt(0)));
         let blob: Blob = new Blob([byteArray], { type: 'image/png' })
         if (blob) {
-          this.reader.readAsDataURL(blob);
+          this.reader[element.data._id]=new FileReader();
+          this.reader[element.data._id].addEventListener('load',()=>{
+            this.reader[element.data._id].result;
+          },false)
+          this.reader[element.data._id].readAsDataURL(blob);
         }
       });*/
     }, error => console.log(error))
-  }
-  test(){
-    console.log("REREqsd")
-    return '../assets/layout/images/pages/avatar.png'
   }
 }

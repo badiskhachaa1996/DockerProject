@@ -65,9 +65,8 @@ export class PresenceService {
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 
-  getAllSignatureBySeance(id:string){
-    let registreUrl=this.apiUrl+"getAllSignatureBySeance/"+id;
-    console.log(id)
+  getPDF(id:string){
+    let registreUrl=this.apiUrl+"getPDF/"+id;
     return this.http.get<any>(registreUrl,httpOptions1);
   }
 

@@ -101,8 +101,6 @@ import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
 import { SignComponent } from './presence/sign/sign.component';
-import { ExportComponent } from './presence/export/export.component';
-
 
 
 
@@ -213,8 +211,7 @@ import { ExportComponent } from './presence/export/export.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
-        SignComponent,
-        ExportComponent,
+        SignComponent
     
 
                
