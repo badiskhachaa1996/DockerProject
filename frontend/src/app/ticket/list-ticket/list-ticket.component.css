@@ -81,3 +81,12 @@ td{
   p-button{
     margin-left: 40%;
   }
+
+  #fichier {
+    border-radius: 15px;
+    background-color: #92cf80;
+    text-align:left !important;
+    margin-top: -25px;
+    color: black;
+    padding: 4px;
+  }

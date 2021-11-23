@@ -19,6 +19,9 @@ import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
 import { SignComponent } from './presence/sign/sign.component';
+import { SeanceComponent } from './seance/seance.component';
+import { CalendarComponent } from './seance/calendar/calendar.component';
+import { CampusComponent } from './campus/campus.component';
 const routes: Routes = [
     // { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '', component: ListTicketComponent},
@@ -38,6 +41,11 @@ const routes: Routes = [
     { path:'ecoles', component: EcoleComponent},
     {path: 'sign',component:SignComponent},
     {path: 'sign/:id',component:SignComponent},
+    { path:'seance', component: SeanceComponent },
+    { path: 'seance/calendrier', component: CalendarComponent },
+    { path:'ecoles/:id', component: EcoleComponent},
+    { path:'campus', component: CampusComponent},
+    { path:'campus/:id', component: CampusComponent},
     { path: '**', redirectTo: '/' }
   ];
 
