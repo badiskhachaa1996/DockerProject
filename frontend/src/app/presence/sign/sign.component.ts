@@ -104,7 +104,7 @@ export class SignComponent implements OnInit {
 
   getPDF(){
     this.PresenceService.getPDF(this.ID).subscribe((data)=>{
-      console.log(data.data)
+      console.log(data)
     })
   }
 

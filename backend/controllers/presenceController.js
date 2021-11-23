@@ -194,28 +194,17 @@ app.get("/getSignature/:id", (req, res) => {
 
 app.get("/getPDF/:id", (req, res) => {
     Presence.find({ seance_id: req.params.id }).then((data) => {
-        Seance.find({ _id: req.params.id }).then(seance => {
-            User.find({ _id: seance.formateur_id }).then(formateur => {
-                /*let ids = [];
-                let infoData = [];
-                data.forEach((presence) => {
-                    ids.push(presence._id)
-                    infoData[presence._id] = presence;
-                })
-                let filesReturn = [];
-                var files = fs.readdirSync("storage/signature/");
-                files.forEach(file => {
-                    let temp = file.replace(".png", '')
-                    ids.forEach(ID => {
-                        if (ID == temp) {
-                            filesReturn.push(file)
-                        }
-                    });
-                });*/
+        const pdfName = req.params.id + ".pdf"
+        Seance.findOne({ _id: req.params.id }).then(seance => {
+            User.findOne({ _id: seance.formateur_id }).then(formateur => {
+                function pad(s) { return (s < 10) ? '0' + s : s; }
                 function dateFormat(inputFormat) {
-                    function pad(s) { return (s < 10) ? '0' + s : s; }
                     var d = new Date(inputFormat)
-                    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/')
+                    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/') //TODO HEURE Minutes
+                }
+                function heureFormat(input) {
+                    var d = new Date(input)
+                    return [pad(d.getHours()), pad(d.getMinutes())].join(':') //TODO HEURE Minutes
                 }
                 User.find().then(userList => {
                     let UserDic = [];
@@ -228,22 +217,31 @@ app.get("/getPDF/:id", (req, res) => {
                     bg.src = "assets/827X1170.png"
                     ctx.drawImage(bg, 0, 0)
                     ctx.font = '20px Arial'
-                    ctx.fillText("Morgan Hue", 131, 88, (414 - 131))
-                    //Taille signature  532 88 799-532
+                    ctx.fillText(formateur.lastname + " " + formateur.firstname, 131, 88, (414 - 131))
                     //Date 85 130 412-85 
+                    ctx.fillText(dateFormat(seance.date_debut), 85, 130, (412 - 85))
                     //Heure 488 130
+                    ctx.fillText(heureFormat(seance.date_debut), 488, 130, (412 - 85))
                     x = 253
                     data.forEach(file => {
                         //PREMIER Eleve 30 253 350
                         if (UserDic[file.user_id]) {
-                            ctx.font = '20px Arial'
-                            ctx.fillText(UserDic[file.user_id].lastname + " " + UserDic[file.user_id].firstname, 30, x, 350)
+                            if (formateur._id == file.user_id) {
+                                if (fs.existsSync("storage/signature/" + file._id + ".png")) {
+                                    //Taille signature  532 88 799-532
+                                    let img = new Canvas.Image()
+                                    img.src = "storage/signature/" + file._id + ".png"
+                                    ctx.drawImage(img, 532, 88, (799 - 532), 50)
+                                }
+                            } else {
+                                ctx.font = '20px Arial'
+                                ctx.fillText(UserDic[file.user_id].lastname + " " + UserDic[file.user_id].firstname, 30, x, 350)
+                            }
                         }
                         if (file.signature) {
-                            console.log(file)
                             //Date Signature 390 253 577-390
                             ctx.font = '20px Arial'
-                            ctx.fillText(dateFormat(file.date_signature), 390, x, (577 - 390))
+                            ctx.fillText(heureFormat(file.date_signature), 390, x, (577 - 390))
                             //Signature 585 253 793-585
                             let img = new Canvas.Image()
                             img.src = "storage/signature/" + file._id + ".png"
@@ -252,12 +250,9 @@ app.get("/getPDF/:id", (req, res) => {
                         //+0 +30 max 1034
 
                         if (x == 1034 || x > 1034) {
-                            console.log("err")
-                            throw x;
+                            console.log("ERROR DANS X")
                         }
                         x += 57
-                        console.log(x)
-
                     })
 
 
@@ -266,28 +261,41 @@ app.get("/getPDF/:id", (req, res) => {
                     const buff = canvas.toBuffer('application/pdf', {
                         title: 'Feuille de présence',
                         author: 'ESTYA',
-                        subject: 'Feuille de présence du XX/XX/XXXX pour la classe XXX',
+                        subject: 'Feuille de présence du ' + dateFormat(seance.date_debut) + ' pour la classe XXX',
                         modDate: new Date()
                     })
-                    let pdfName = ".pdf"
-                    fs.writeFile(pdfName, buff, function (err) {
-                        if (err) throw err
-                    })
-                    let file = fs.readFileSync(pdfName, { encoding: 'base64' }, (err) => {
+                    fs.writeFileSync(pdfName, buff, function (err) {
                         if (err) {
-                            return console.error(err);
+                            console.log("ERROR DANS WRITEFILE")
+                        }
+                    })
+                    let base64PDF = fs.readFileSync(pdfName, { encoding: 'base64' }, (err) => {
+                        if (err) {
+                            console.log("ERROR DANS READFILESYNV")
+                            console.error(err);
                         }
                     });
-                    res.status(200).send({ data: file });
+                    console.log(res)
+                    res.status(200).send({data:base64PDF})
+                }).catch((error) => {
+                    console.log("ERROR4")
+                    console.log(error)
+                    //res.status(500).send(error);
                 })
+            }).catch((error) => {
+                console.log("ERROR1")
+                res.status(500).send(error);
             })
 
+        }).catch((error) => {
+            console.log("ERROR2")
+            res.status(500).send(error);
         })
 
     }).catch((error) => {
-        res.status(404).send(error);
+        console.log("ERROR3")
+        res.status(500).send(error);
     })
-
 });
 
 app.get("/getJustificatif/:id", (req, res) => {
