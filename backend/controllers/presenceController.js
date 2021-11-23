@@ -264,12 +264,12 @@ app.get("/getPDF/:id", (req, res) => {
                         subject: 'Feuille de présence du ' + dateFormat(seance.date_debut) + ' pour la classe XXX',
                         modDate: new Date()
                     })
-                    fs.writeFileSync(pdfName, buff, function (err) {
+                    fs.writeFileSync("storage/"+pdfName, buff, function (err) {
                         if (err) {
                             console.log("ERROR DANS WRITEFILE")
                         }
                     })
-                    let base64PDF = fs.readFileSync(pdfName, { encoding: 'base64' }, (err) => {
+                    let base64PDF = fs.readFileSync("storage/"+pdfName, { encoding: 'base64' }, (err) => {
                         if (err) {
                             console.log("ERROR DANS READFILESYNV")
                             console.error(err);
