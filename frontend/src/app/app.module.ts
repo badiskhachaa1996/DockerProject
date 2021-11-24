@@ -22,7 +22,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FullCalendarModule } from 'primeng/fullcalendar';
+import {FullCalendarModule} from 'primeng/fullcalendar';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -100,10 +100,11 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
+import { SignComponent } from './presence/sign/sign.component';
 import { SeanceComponent } from './seance/seance.component';
 import { CalendarComponent } from './seance/calendar/calendar.component';
 import { DiplomeComponent } from './diplome/diplome.component';
-
+import { CampusComponent } from './campus/campus.component';
 
 
 
@@ -185,7 +186,7 @@ import { DiplomeComponent } from './diplome/diplome.component';
         TriStateCheckboxModule,
         ProgressSpinnerModule,
         DragDropModule,
-        
+        FullCalendarModule 
        
     ],
     declarations: [
@@ -214,9 +215,11 @@ import { DiplomeComponent } from './diplome/diplome.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
+        SignComponent,
         SeanceComponent,
         CalendarComponent,
         DiplomeComponent,
+        CampusComponent,
     
 
                

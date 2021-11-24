@@ -95,7 +95,7 @@ export class FirstconnectionComponent implements OnInit {
       localStorage.removeItem('modify')
       window.location.reload();
     }, (error) => {
-      if (error.status == 500 || error.includes("500")) {
+      if (error.status == 500) {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
       } else {
