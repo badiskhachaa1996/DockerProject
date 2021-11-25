@@ -26,21 +26,21 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[];
   connected = false;
   role: string;
-  userconnected: User = null ;
+  userconnected: User = null;
 
-socket = io(environment.origin.replace('/soc',''));
+  socket = io(environment.origin.replace('/soc', ''));
 
-  constructor(public app: AppComponent, private messageService: MessageService ,private AuthService: AuthService, private router: Router, ) { }
+  constructor(public app: AppComponent, private messageService: MessageService, private AuthService: AuthService, private router: Router,) { }
 
   ngOnInit(): void {
-    
+
     this.connected = true;
     if (localStorage.getItem("token") != null) {
       this.isAuth = true;
       let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
-        if(this.userconnected.role=="Admin"){
+        if (this.userconnected.role == "Admin") {
           this.items = [{
             label: 'Suivre mes tickets',
             icon: 'pi pi-check-circle',
@@ -52,9 +52,9 @@ socket = io(environment.origin.replace('/soc',''));
             routerLink: '/'
           },
           {
-            label :'Gestions des services',
+            label: 'Gestions des services',
             icon: 'pi pi-sitemap',
-            routerLink :'/service'
+            routerLink: '/service'
           },
           {
             label: 'Gestions des agents',
@@ -76,9 +76,12 @@ socket = io(environment.origin.replace('/soc',''));
             icon: 'pi pi-video',
             routerLink: '/seance'
           },
-          
-          ]
-        }else{
+          {
+            label: 'Diplôme',
+            icon: 'pi pi-list',
+            routerLink: '/diplome'
+          }]
+        } else {
           this.items = [{
             label: 'Suivre mes tickets',
             icon: 'pi pi-check-circle',
@@ -91,12 +94,12 @@ socket = io(environment.origin.replace('/soc',''));
           }
           ]
         }
-     
+
       }, (error) => {
         console.error(error)
       })
     }
-    
+
 
 
   }

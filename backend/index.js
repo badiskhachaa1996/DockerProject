@@ -53,6 +53,8 @@ const diplomeController = require('./controllers/diplomeController');
 const presenceController = require('./controllers/presenceController');
 const seanceController =  require('./controllers/seanceController');
 const inscriptionController =  require('./controllers/inscriptionController');
+const ressourceController = require('./controllers/ressourceController');
+const etudiantController = require('./controllers/etudiantController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
@@ -106,6 +108,9 @@ app.use('/soc/presence', presenceController);
 app.use('/soc/seance', seanceController);
 
 app.use('soc/inscription',inscriptionController);
+app.use('/soc/ressource', ressourceController);
+
+app.use('/soc/etudiant', etudiantController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
@@ -154,6 +159,10 @@ io.on("connection", (socket) => {
         io.to('Admin').to(data.service_id).emit('refreshAllTickets')
         //Refresh les tickets suivi de l'user
         io.to(data.user_id).emit('refreshSuivi')
+    })
+
+    socket.on('addPresence',()=>{
+        io.emit('refreshPresences')
     })
 });
 
