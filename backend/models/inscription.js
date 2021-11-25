@@ -7,11 +7,7 @@ const inscriptionSchema= new mongoose.Schema({
         ref: "User",
         required: true
     },
-    classe: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Classe",
-        default: null
-    },
+    
     statut: {
         type: String,
         required: true
