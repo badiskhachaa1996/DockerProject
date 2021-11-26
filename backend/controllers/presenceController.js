@@ -222,7 +222,7 @@ app.get("/getPDF/:id", (req, res) => {
                     ctx.fillText(dateFormat(seance.date_debut), 85, 130, (412 - 85))
                     //Heure 488 130
                     ctx.fillText(heureFormat(seance.date_debut), 488, 130, (412 - 85))
-                    x = 253
+                    let x = 253
                     data.forEach(file => {
                         //PREMIER Eleve 30 253 350
                         if (UserDic[file.user_id]) {
@@ -299,6 +299,7 @@ app.get("/getJustificatif/:id", (req, res) => {
         const img = ['jpeg', 'png', 'img', 'jpg'];
         const appli = ['pdf'];
         files.forEach(file => {
+            let fileType = "";
             if (file.includes(req.params.id)) {
                 let ext = file.split('.').pop().replace('.', '')
                 let data_file = fs.readFileSync("storage/justificatif/" + req.params.id + "." + ext, { encoding: 'base64' }, (err) => {

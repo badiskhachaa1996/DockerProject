@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 let origin = require("./config")
-if(process.env.origin){
+if (process.env.origin) {
     origin = process.env.origin
 }
 app.use(cors({ origin: origin }));
@@ -51,32 +51,35 @@ const ecoleController = require('./controllers/ecoleController');
 const campusController = require('./controllers/campusController');
 const diplomeController = require('./controllers/diplomeController');
 const presenceController = require('./controllers/presenceController');
-const seanceController =  require('./controllers/seanceController');
+const seanceController = require('./controllers/seanceController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    let token = jwt.decode(req.header("token"))
-    if(token && token.id && token.role){
-        User.findOne({_id:token.id,role:token.role},(err,user)=>{
-            if(err){
-                console.log(err)
-                res.status(403).send("Accès non autorisé")
-            }
-            else if(user){
+    if (!origin || origin == "http://localhost:4200") {
+        next()
+    } else {
+        let token = jwt.decode(req.header("token"))
+        if (token && token.id && token.role) {
+            User.findOne({ _id: token.id, role: token.role }, (err, user) => {
+                if (err) {
+                    console.log(err)
+                    res.status(403).send("Accès non autorisé")
+                }
+                else if (user) {
+                    next()
+                } else {
+                    res.status(403).send("Accès non autorisé")
+                }
+            })
+        } else {
+            if (req.originalUrl == "/soc/user/AuthMicrosoft") {
                 next()
-            }else{
+            } else {
                 res.status(403).send("Accès non autorisé")
             }
-        })
-    }else{
-        if(req.originalUrl=="/soc/user/AuthMicrosoft"){
-            next()
-        }else{
-            res.status(403).send("Accès non autorisé")
         }
     }
-    
-  });
+});
 
 app.use("/soc/user", UserController);
 
@@ -109,7 +112,7 @@ io.on("connection", (socket) => {
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
-        console.log("User join: "+LISTTOJOIN)
+        console.log("User join: " + LISTTOJOIN)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
@@ -153,7 +156,7 @@ io.on("connection", (socket) => {
         io.to(data.user_id).emit('refreshSuivi')
     })
 
-    socket.on('addPresence',()=>{
+    socket.on('addPresence', () => {
         io.emit('refreshPresences')
     })
 });
