@@ -103,6 +103,7 @@ import { EcoleComponent } from './ecole/ecole.component';
 import { SignComponent } from './presence/sign/sign.component';
 import { SeanceComponent } from './seance/seance.component';
 import { CalendarComponent } from './seance/calendar/calendar.component';
+import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
 
 
@@ -217,6 +218,7 @@ import { CampusComponent } from './campus/campus.component';
         SignComponent,
         SeanceComponent,
         CalendarComponent,
+        DiplomeComponent,
         CampusComponent,
     
 

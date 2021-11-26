@@ -13,6 +13,7 @@ export class Diplome{
         public certificateur?:  string,
         public code_RNCP?:      string,
         public duree?:          number,
+        public nb_heure?:       number,
         public date_debut?:     Date,
         public date_fin?:       Date,
         public rythme?:         string,
