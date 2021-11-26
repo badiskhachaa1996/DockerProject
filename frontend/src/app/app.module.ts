@@ -105,6 +105,7 @@ import { SeanceComponent } from './seance/seance.component';
 import { CalendarComponent } from './seance/calendar/calendar.component';
 import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
+import { FormateurComponent } from './formateur/formateur.component';
 
 
 
@@ -220,6 +221,7 @@ import { CampusComponent } from './campus/campus.component';
         CalendarComponent,
         DiplomeComponent,
         CampusComponent,
+        FormateurComponent,
     
 
                
