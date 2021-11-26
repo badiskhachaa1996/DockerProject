@@ -52,6 +52,7 @@ const campusController = require('./controllers/campusController');
 const diplomeController = require('./controllers/diplomeController');
 const presenceController = require('./controllers/presenceController');
 const seanceController =  require('./controllers/seanceController');
+const formateurController = require('./controllers/formateurController');
 const ressourceController = require('./controllers/ressourceController');
 const etudiantController = require('./controllers/etudiantController');
 const { User } = require("./models/user");
@@ -109,6 +110,7 @@ app.use('/soc/presence', presenceController);
 
 app.use('/soc/seance', seanceController);
 
+app.use('/soc/formateur', formateurController);
 app.use('/soc/ressource', ressourceController);
 
 app.use('/soc/etudiant', etudiantController);
