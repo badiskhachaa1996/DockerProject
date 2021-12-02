@@ -101,71 +101,68 @@
                     <div class="p-grid">
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="titre" class="form-control col-12"
-                                placeholder="{{ diplomeToUpdate.titre }}" [(ngModel)]="diplomeToUpdate.titre" pInputText>
+                                placeholder="Titre" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="titre_long" class="form-control col-12"
-                                placeholder="{{ diplomeToUpdate.titre_long }}" [(ngModel)]="diplomeToUpdate.titre_long" pInputText>
+                                placeholder="Titre Long" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="campus_id" class="form-control col-12"
-                                placeholder="{{ diplomeToUpdate.campus_id }}" [(ngModel)]="diplomeToUpdate.campus_id" pInputText>
+                                placeholder="Campus" pInputText>
                         </div>
                         <div class="mt-2 mb-2 col-12">
                             <textarea type="text" formControlName="description" class="form-control col-12"
-                            placeholder="{{ diplomeToUpdate.description }}" [(ngModel)]="diplomeToUpdate.description" pInputText></textarea>
+                            placeholder="Description" pInputText></textarea>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="type_diplome" class="form-control col-12"
-                                placeholder="Type de diplôme" [(ngModel)]="diplomeToUpdate.type_diplome" pInputText>
+                                placeholder="Type de diplôme" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="type_etude" class="form-control col-12"
-                                placeholder="Type d'étude" [(ngModel)]="diplomeToUpdate.type_etude" pInputText>
+                                placeholder="Type d'étude" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="text" formControlName="domaine" class="form-control col-12"
-                                placeholder="Domaine d'étude" [(ngModel)]="diplomeToUpdate.domaine" pInputText>
+                                placeholder="Domaine d'étude" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
-                            <input type="text" formControlName="niveau" class="form-control col-12" placeholder="Niveau"
-                            [(ngModel)]="diplomeToUpdate.niveau" pInputText>
+                            <input type="text" formControlName="niveau" class="form-control col-12" placeholder="Niveau" pInputText>
                         </div>
                         <div class="mt-2 mb-2 col-12">
                             <input type="text" formControlName="certificateur" class="form-control col-12"
-                                placeholder="Certificateur" [(ngModel)]="diplomeToUpdate.certificateur" pInputText>
+                                placeholder="Certificateur" pInputText>
                         </div>
                         <div class="mt-2 mb-2 col-12">
                             <input type="text" formControlName="code_RNCP" class="form-control col-12"
-                                placeholder="Code RNCP" [(ngModel)]="diplomeToUpdate.code_RNCP" pInputText>
+                                placeholder="Code RNCP" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="number" formControlName="duree" class="form-control col-12"
-                                placeholder="Nombre de mois de la formation" [(ngModel)]="diplomeToUpdate.duree" pInputText>
+                                placeholder="Nombre de mois de la formation" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="number" formControlName="nb_heure" class="form-control col-12"
-                                placeholder="Nombre d'heure de la formation" [(ngModel)]="diplomeToUpdate.nb_heure" pInputText>
+                                placeholder="Nombre d'heure de la formation" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="date" formControlName="date_debut" class="form-control col-12"
-                                placeholder="Date de début" value="diplomeToUpdate.date_debut" pInputText>
+                                placeholder="Date de début" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="date" formControlName="date_fin" class="form-control col-12"
-                                placeholder="Date de fin" value="diplomeToUpdate.date_fin" pInputText>
+                                placeholder="Date de fin" pInputText>
                         </div>
                         <div class="mt-2 mb-2 col-8">
-                            <input type="text" formControlName="rythme" class="form-control col-12" placeholder="Rythme"
-                            [(ngModel)]="diplomeToUpdate.rythme" pInputText>
+                            <input type="text" formControlName="rythme" class="form-control col-12" placeholder="Rythme" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
-                            <input type="number" formControlName="frais" class="form-control col-12"
-                            [(ngModel)]="diplomeToUpdate.frais" placeholder="Coût de la formation" pInputText>
+                            <input type="number" formControlName="frais" class="form-control col-12" placeholder="Coût de la formation" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="number" formControlName="frais_en_ligne" class="form-control col-12"
-                                placeholder="Coût de la formation EN LIGNE" [(ngModel)]="diplomeToUpdate.frais_en_ligne" pInputText>
+                                placeholder="Coût de la formation EN LIGNE" pInputText>
                         </div>
 
                         <div>
@@ -180,10 +177,10 @@
 
 
 
-<!-- Table d'affichage de la liste des diplômes -->
-<div class="grid">
-    <div class="col-10 col-offset-1">
-        <!-- Bouton d'ajout d'un noveau diplome -->
+    <!-- Table d'affichage de la liste des diplômes -->
+    <div class="grid">
+        <div class="col-10 col-offset-1">
+        <!-- Bouton d'ajout d'un nouveau diplome -->
         <button (click)="showFormAddDiplome = true; showFormUpdateDiplome = false" pButton type="button" label="Nouveau diplôme" style="float:right;"></button>
         <h3>Liste des diplômes</h3>
         <div class="col-12 card shadow-lg my-5">
@@ -196,23 +193,23 @@
                 [totalRecords]="diplomes.length" dataKey="_id" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem"></th>
-                        <th pSortableColumn="titre_long">
+                        <th style="width: 3rem" scope="col"></th>
+                        <th pSortableColumn="titre_long" scope="col">
                             Titre long <p-sortIcon field="titre_long"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="domaine">
+                        <th pSortableColumn="domaine" scope="col">
                             Domaine <p-sortIcon field="domaine"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="certificateur">
+                        <th pSortableColumn="certificateur" scope="col">
                             Certificateur <p-sortIcon field="certificateur"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="code_RNCP">
+                        <th pSortableColumn="code_RNCP" scope="col">
                             Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="duree">
+                        <th pSortableColumn="duree" scope="col">
                             Durée <p-sortIcon field="duree"></p-sortIcon>
                         </th>
-                        <th>
+                        <th scope="col">
                             Action
                         </th>
                     </tr>
@@ -249,116 +246,114 @@
                 <ng-template pTemplate="rowexpansion" let-diplome>
                     <tr>
                         <td colspan="7">
-                            <p-fieldset legend="Information supplementaire">
+                            <p-fieldset legend="Informations supplementaires">
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">titre:</b>
+                                            <strong style="text-align:left !important;">titre:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.titre }}</i>
+                                            <span style="color: black;">{{ diplome.titre }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Campus:</b>
+                                            <strong style="text-align:left !important;">Campus:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.campus_id }}</i>
+                                            <span style="color: black;">{{ diplome.campus_id }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Nombre d'heure:</b>
+                                            <strong style="text-align:left !important;">Nombre d'heure:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.nb_heure }} heures</i>
+                                            <span style="color: black;">{{ diplome.nb_heure }} heures</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-12 ui-md-12">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Description:</b>
+                                            <strong style="text-align:left !important;">Description:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.description }}</i>
+                                            <span style="color: black;">{{ diplome.description }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Type du diplôme:</b>
+                                            <strong style="text-align:left !important;">Type du diplôme:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.type_diplome }}</i>
+                                            <span style="color: black;">{{ diplome.type_diplome }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Type d'étude:</b>
+                                            <strong style="text-align:left !important;">Type d'étude:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.type_etude }}</i>
+                                            <span style="color: black;">{{ diplome.type_etude }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Niveau:</b>
+                                            <strong style="text-align:left !important;">Niveau:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.niveau }}</i>
+                                            <span style="color: black;">{{ diplome.niveau }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Début:</b>
+                                            <strong style="text-align:left !important;">Début:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.date_debut | date:'dd/MM/yyyy'
-                                                }}</i>
+                                            <span style="color: black;">{{ diplome.date_debut | date:'dd/MM/yyyy' }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-6 ui-md-6">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Fin:</b>
+                                            <strong style="text-align:left !important;">Fin:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.date_fin | date:'dd/MM/yyyy'
-                                                }}</i>
+                                            <span style="color: black;">{{ diplome.date_fin | date:'dd/MM/yyyy' }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Rythme:</b>
+                                            <strong style="text-align:left !important;">Rythme:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.rythme }}</i>
+                                            <span style="color: black;">{{ diplome.rythme }}</span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Frais:</b>
+                                            <strong style="text-align:left !important;">Frais:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.frais }} <b>€</b></i>
+                                            <span style="color: black;">{{ diplome.frais }} <b>€</b></span>
                                         </div>
                                     </div>
 
                                     <div class="ui-g-4 ui-md-4">
                                         <div class="ui-g-6 ui-md-6">
-                                            <b style="text-align:left !important;">Frais en ligne:</b>
+                                            <strong style="text-align:left !important;">Frais en ligne:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ diplome.frais_en_ligne }} <b>€</b> </i>
+                                            <span style="color: black;">{{ diplome.frais_en_ligne }} <strong>€</strong> </span>
                                         </div>
                                     </div>
 

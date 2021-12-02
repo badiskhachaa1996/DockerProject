@@ -48,7 +48,7 @@ export class NavbarComponent implements OnInit {
           },
           {
             label: 'Gestions des tickets',
-            icon: 'pi pi-list',
+            icon: 'pi pi-ticket',
             routerLink: '/'
           },
           {
@@ -77,10 +77,16 @@ export class NavbarComponent implements OnInit {
             routerLink: '/seance'
           },
           {
-            label: 'Diplôme',
-            icon: 'pi pi-list',
+            label: 'Diplômes',
+            icon: 'pi pi-ellipsis-v',
             routerLink: '/diplome'
-          }]
+          },
+          {
+            label: 'Formateurs',
+            icon: 'pi pi-users',
+            routerLink: '/formateur'
+          }
+          ]
         } else {
           this.items = [{
             label: 'Suivre mes tickets',

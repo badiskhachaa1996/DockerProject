@@ -24,6 +24,7 @@ import { CalendarComponent } from './seance/calendar/calendar.component';
 import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
 import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
+import { FormateurComponent } from './formateur/formateur.component';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', component: ListTicketComponent },
@@ -46,7 +47,7 @@ const routes: Routes = [
     { path: 'seance/calendrier', component: CalendarComponent },
     { path: 'diplome', component: DiplomeComponent },
     { path:'ecoles/:id', component: EcoleComponent},
-    { path:'ecoles', component: EcoleComponent},
+    
     { path:'campus', component: CampusComponent},
     { path:'campus/:id', component: CampusComponent},
     {path:'firstInscription',component:FirstInscriptionComponent},

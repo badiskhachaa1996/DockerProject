@@ -112,7 +112,13 @@ export class DiplomeComponent implements OnInit {
   {
     //Recuperation du diplome à modifier
     this.diplomeService.getById(this.idDiplomeToUpdate).subscribe(
-      ((response) => { this.diplomeToUpdate = response; }),
+      ((response) => { 
+        this.diplomeToUpdate = response; 
+        if(this.diplomeToUpdate)
+        {
+          this.formUpdateDiplome.patchValue({titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, campus_id: this.diplomeToUpdate.campus_id, description: this.diplomeToUpdate.description, type_diplome: this.diplomeToUpdate.type_diplome, type_etude: this.diplomeToUpdate.type_etude, domaine: this.diplomeToUpdate.domaine, niveau: this.diplomeToUpdate.niveau, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP, duree: this.diplomeToUpdate.duree, nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin, rythme: this.diplomeToUpdate.rythme, frais: this.diplomeToUpdate.frais, frais_en_ligne: this.diplomeToUpdate.frais_en_ligne});
+        }
+      }),
       ((error) => { console.log("Impossible de recuperer le diplome à modifier: " + error.message); })
     );
   }
