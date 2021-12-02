@@ -138,9 +138,9 @@ console.log(campus)
     console.log(campus)
         this.campusService.edit(campus).subscribe((data) => {
           this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
-          this.campuss.push(data)
-          this.showFormUpdateCampus=false;
         
+          this.showFormUpdateCampus=false;
+          this.updateList();
         }, (error) => {
           console.error(error)
         });
