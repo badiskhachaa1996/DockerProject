@@ -34,8 +34,8 @@ export class EcoleService {
     return this.http.post<any>(ecoleUrl,ecole,httpOptions1);
   }
   
-  edit(Ecole: any){
-    let ecoleUrl=this.apiUrl+"editById/"+Ecole._id;
-    return this.http.post<any>(ecoleUrl,Ecole,httpOptions1);
+  edit(ecole: any){
+    let ecoleUrl=this.apiUrl+"editById/"+ecole._id;
+    return this.http.post<any>(ecoleUrl,ecole,httpOptions1);
   
 }}

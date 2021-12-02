@@ -24,7 +24,7 @@ app.post("/createecole", (req, res) => {
 });
 
 app.post("/editById/:id", (req, res) => {
-    Ecole.findOneAndUpdate(req.params.id, 
+    Ecole.findByIdAndUpdate(req.params.id, 
         {
             libelle: req.body.libelle,
             annee_id: req.body.annee_id,

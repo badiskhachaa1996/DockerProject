@@ -113,11 +113,14 @@ console.log(ecole)
   }
 
   editEcole(){
-    let ecole= new Ecole(this.ecoleToUpdate._id,this.ecoleFormUpdate.value.libelle,this.ecoleFormUpdate.value.annee_id.value,this.ecoleFormUpdate.value.ville,this.ecoleFormUpdate.value.pays,this.ecoleFormUpdate.value.adresse,this.ecoleFormUpdate.value.email,this.ecoleFormUpdate.value.site,this.ecoleFormUpdate.value.telephone)
-    console.log(ecole)
-        this.EcoleService.edit(ecole).subscribe((data) => {
-          this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
-          this.ecoles.push(data)
+
+    let ecoleupdated = new Ecole(this.ecoleToUpdate._id,this.ecoleFormUpdate.value.libelle,this.ecoleFormUpdate.value.annee_id.value,this.ecoleFormUpdate.value.ville,this.ecoleFormUpdate.value.pays,this.ecoleFormUpdate.value.adresse,this.ecoleFormUpdate.value.email,this.ecoleFormUpdate.value.site,this.ecoleFormUpdate.value.telephone)
+    console.log(ecoleupdated)
+        this.EcoleService.edit(ecoleupdated).subscribe((data2) => {
+          this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été modifié' });
+          console.log("console.log(data);");
+          console.log(data2);
+          this.updateList();
           this.showFormUpdateEcole=false;
         
         }, (error) => {
@@ -127,13 +130,15 @@ console.log(ecole)
   }
 
   showModify(rowData:Ecole){
+    console.log("rowdata:")
     console.log(rowData)
-    this.ecoleToUpdate=rowData;
+    this.ecoleToUpdate=rowData
     this.showFormAddEcole=false;
-    this.showFormUpdateEcole=true;
-
+   
     this.ecoleFormUpdate.setValue({libelle:rowData.libelle,site:rowData.site,email:rowData.email,annee_id:rowData.annee_id,telephone:rowData.telephone,pays:rowData.pays,adresse:rowData.adresse,ville:rowData.ville})
+    this.showFormUpdateEcole=true;  
   }
+
 
   navigatetoCampus(rowData:Ecole){
 

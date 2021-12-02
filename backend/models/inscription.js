@@ -17,14 +17,9 @@ const inscriptionSchema= new mongoose.Schema({
         ref: "Diplome",
         default: null
     },
-    nationalite: {
-        type: String,
-        required: true
-    },
-    date_de_naissance: {
-        type: Date,
-        required: true
-    }
+  
+    
+ 
 });
 
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose

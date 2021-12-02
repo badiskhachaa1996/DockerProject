@@ -223,7 +223,8 @@
                         </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
                     <tr>
                         <td>
                             {{rowData.libelle}}

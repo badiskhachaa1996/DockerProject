@@ -218,6 +218,17 @@ app.get("/getAllbyService/:id", (req, res) => {
         })
 });
 
+app.get("/getAllbyEmailPerso/:id", (req, res) => {
+    User.find({ email_perso: req.params.id })
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            res.status(404).send(error);
+            console.error(err);
+        })
+});
+
 //Récupérer tous les non-users
 app.get("/getAllAgent/", (req, res) => {
     User.find({ role: ["Responsable", "Agent", "Admin"] })
