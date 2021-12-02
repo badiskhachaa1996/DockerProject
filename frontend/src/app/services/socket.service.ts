@@ -29,4 +29,8 @@ export class SocketService {
 
     this.socket.emit("refreshAll",{service_id,user_id})
   }
+
+  addPresence(){
+    this.socket.emit("addPresence")
+  }
 }

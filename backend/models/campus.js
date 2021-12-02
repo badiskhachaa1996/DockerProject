@@ -8,7 +8,7 @@ const campus_schema = mongoose.Schema({
     pays: { type: String, required: true },
     email: { type: String, required: true },
     adresse: { type: String, required: true },
-    site: { type: String, required: true }
+    site: { type: String, required: false }
 });
 
 //creation de la table avec le nom Campus ( model/classe) à l'aide de la biblio mongoose et son schema

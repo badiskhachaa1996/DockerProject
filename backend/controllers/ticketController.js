@@ -316,7 +316,7 @@ app.post("/changeService/:id", (req, res) => {
         })
 });
 
-//Change lestatut d'un ticket
+//Change le statut d'un ticket
 app.post("/changeStatut/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {

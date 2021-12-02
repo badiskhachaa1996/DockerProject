@@ -10,6 +10,7 @@ import {CalendarModule} from 'primeng/calendar';
 import { AnneeScolaire } from '../models/AnneeScolaire';
 import {DropdownModule} from 'primeng/dropdown';
 import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
  
 @Component({
   selector: 'app-ecole',
@@ -24,7 +25,7 @@ export class EcoleComponent implements OnInit {
   showFormAddEcole:Boolean=false;
   showFormUpdateEcole:Boolean=false;
   ecoleToUpdate:Ecole;
-  
+  LblAnneselected:string;
   
 
   addecoleForm: FormGroup = new FormGroup({
@@ -55,7 +56,7 @@ export class EcoleComponent implements OnInit {
   columns = [
   ]
 
-  constructor(private EcoleService:EcoleService,private messageService:MessageService,private anneeScolaireService:AnneeScolaireService,private route: ActivatedRoute ) { }
+  constructor(private EcoleService:EcoleService,private messageService:MessageService,private anneeScolaireService:AnneeScolaireService,private route: ActivatedRoute ,private router: Router) { }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -70,7 +71,15 @@ export class EcoleComponent implements OnInit {
       console.error(error)
     });
     console.log(this.annees)
-  })}
+  })
+  this.anneeScolaireService.getByID(id).subscribe((data) =>{
+    this.LblAnneselected=data.dataAnneeScolaire.libelle
+    console.log(this.LblAnneselected)
+  }
+  )
+
+
+}
 
   updateList(){
     const id = this.route.snapshot.paramMap.get('id');
@@ -104,11 +113,14 @@ console.log(ecole)
   }
 
   editEcole(){
-    let ecole= new Ecole(this.ecoleToUpdate._id,this.ecoleFormUpdate.value.libelle,this.ecoleFormUpdate.value.annee_id.value,this.ecoleFormUpdate.value.ville,this.ecoleFormUpdate.value.pays,this.ecoleFormUpdate.value.adresse,this.ecoleFormUpdate.value.email,this.ecoleFormUpdate.value.site,this.ecoleFormUpdate.value.telephone)
-    console.log(ecole)
-        this.EcoleService.edit(ecole).subscribe((data) => {
-          this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
-          this.ecoles.push(data)
+
+    let ecoleupdated = new Ecole(this.ecoleToUpdate._id,this.ecoleFormUpdate.value.libelle,this.ecoleFormUpdate.value.annee_id.value,this.ecoleFormUpdate.value.ville,this.ecoleFormUpdate.value.pays,this.ecoleFormUpdate.value.adresse,this.ecoleFormUpdate.value.email,this.ecoleFormUpdate.value.site,this.ecoleFormUpdate.value.telephone)
+    console.log(ecoleupdated)
+        this.EcoleService.edit(ecoleupdated).subscribe((data2) => {
+          this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été modifié' });
+          console.log("console.log(data);");
+          console.log(data2);
+          this.updateList();
           this.showFormUpdateEcole=false;
         
         }, (error) => {
@@ -118,12 +130,20 @@ console.log(ecole)
   }
 
   showModify(rowData:Ecole){
+    console.log("rowdata:")
     console.log(rowData)
-    this.ecoleToUpdate=rowData;
+    this.ecoleToUpdate=rowData
     this.showFormAddEcole=false;
-    this.showFormUpdateEcole=true;
-
+   
     this.ecoleFormUpdate.setValue({libelle:rowData.libelle,site:rowData.site,email:rowData.email,annee_id:rowData.annee_id,telephone:rowData.telephone,pays:rowData.pays,adresse:rowData.adresse,ville:rowData.ville})
+    this.showFormUpdateEcole=true;  
+  }
+
+
+  navigatetoCampus(rowData:Ecole){
+
+    this.router.navigateByUrl('/campus/'+rowData._id);
+
   }
 
 }

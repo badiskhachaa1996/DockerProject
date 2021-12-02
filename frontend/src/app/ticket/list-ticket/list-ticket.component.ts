@@ -732,7 +732,7 @@ export class ListTicketComponent implements OnInit {
         this.loading = false;
       };
     }
-    this.fileInput.clear() //TODO .clear()
+    this.fileInput.clear()
   }
 
   toggleFormCancel() {

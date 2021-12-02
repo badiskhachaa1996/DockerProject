@@ -6,6 +6,7 @@ const { Seance } = require("./../models/seance");
 
 //Creation d'une nouvelle seance
 app.post('/create', (req, res, next) => {
+    
     //Création d'une nouvelle seance
     const seance = new Seance({
         classe_id: req.body.classe_id,
@@ -24,7 +25,7 @@ app.post('/create', (req, res, next) => {
 //Modification d'une seance via son id
 app.post('/edit/:id', (req, res, next) => {
     //Trouve et met à jour une seance
-    Seance.updateOne(
+    Seance.findOneAndUpdate(
         { _id: req.params.id },
         {
             classe_id: req.body.classe_id,
@@ -67,6 +68,7 @@ app.get('/getAllbyFormateur/:id', (req, res, next) => {
         .then((seancefromdb) => res.status(200).send(seancefromdb))
         .catch(error => res.status(400).send(error));
 });
+
 
 
 module.exports = app;

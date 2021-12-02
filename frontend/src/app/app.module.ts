@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,7 +22,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FullCalendarModule } from 'primeng/fullcalendar';
+import {FullCalendarModule} from 'primeng/fullcalendar';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -100,7 +100,13 @@ import { FirstconnectionComponent } from './authentification/firstconnection/fir
 import { ClasseComponent } from './classe/classe.component';
 import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
 import { EcoleComponent } from './ecole/ecole.component';
-
+import { SignComponent } from './presence/sign/sign.component';
+import { SeanceComponent } from './seance/seance.component';
+import { CalendarComponent } from './seance/calendar/calendar.component';
+import { DiplomeComponent } from './diplome/diplome.component';
+import { CampusComponent } from './campus/campus.component';
+import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
+import { FormateurComponent } from './formateur/formateur.component';
 
 
 
@@ -182,7 +188,7 @@ import { EcoleComponent } from './ecole/ecole.component';
         TriStateCheckboxModule,
         ProgressSpinnerModule,
         DragDropModule,
-        
+        FullCalendarModule 
        
     ],
     declarations: [
@@ -211,6 +217,13 @@ import { EcoleComponent } from './ecole/ecole.component';
         ClasseComponent,
         AnneeScolaireComponent,
         EcoleComponent,
+        SignComponent,
+        SeanceComponent,
+        CalendarComponent,
+        DiplomeComponent,
+        CampusComponent,
+        FirstInscriptionComponent,
+        FormateurComponent,
     
 
                

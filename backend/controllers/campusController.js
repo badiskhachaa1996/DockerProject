@@ -21,7 +21,7 @@ app.post("/createcampus", (req, res) => {
     });
 });
 
-app.post("/editById/ :id", (req, res) => {
+app.post("/editById/:id", (req, res) => {
     //Modifier un campus 
     Campus.findByIdAndUpdate(req.params.id,
         {
