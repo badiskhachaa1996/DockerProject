@@ -929,7 +929,7 @@
                                         </div>
                                     </div>
                                     <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
-                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.createur_id].type"
+                                        <div class="ui-g-6 ui-md-6" *ngIf="userDic[rowData.agent_id].type"
                                             style="color: black;font-weight:normal;">
                                             <div class="ui-g-6 ui-md-6">
                                                 <b style="text-align:left !important;">Statut:</b>
@@ -939,7 +939,7 @@
                                         </div>
     
                                         <div class="ui-g-6 ui-md-6"
-                                            *ngIf="userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Salarié' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].entreprise"
+                                            *ngIf="userDic[rowData.agent_id].type && (userDic[rowData.agent_id].type=='Salarié' || userDic[rowData.agent_id].type=='Alternant/Stagiaire') && userDic[rowData.agent_id].entreprise"
                                             style="color: black;font-weight:normal;">
                                             <div class="ui-g-6 ui-md-6">
                                                 <b style="text-align:left !important;">Entreprise:</b>
@@ -949,7 +949,7 @@
                                             </div>
                                         </div>
                                         <div class="ui-g-12 ui-md-12">
-                                            <div *ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                            <div *ngIf="userDic[rowData.agent_id].campus && userDic[rowData.agent_id].type && (userDic[rowData.agent_id].type=='Etudiant' || userDic[rowData.agent_id].type=='Alternant/Stagiaire')"
                                                 class="ui-g-6 ui-md-6">
                                                 <div class="ui-g-6 ui-md-6">
                                                     <b style="text-align:left !important;">Campus:</b>
@@ -958,7 +958,7 @@
                                                     {{userDic[rowData.agent_id].campus}}</div>
                                             </div>
     
-                                            <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
+                                            <div *ngIf="userDic[rowData.agent_id].formation && userDic[rowData.agent_id].type && (userDic[rowData.agent_id].type=='Etudiant' || userDic[rowData.agent_id].type=='Alternant/Stagiaire')"
                                                 class="ui-g-6 ui-md-6">
                                                 <div class="ui-g-6 ui-md-6">
                                                     <b style="text-align:left !important;">Classe :</b>
