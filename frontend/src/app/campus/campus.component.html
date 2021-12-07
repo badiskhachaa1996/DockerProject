@@ -1,0 +1,246 @@
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddCampus">
+        <p-card>
+            <div class=" p-grid">
+
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddCampus=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="addcampusForm">
+
+                    <h3 class="text-center" style="font-weight: bold;">Ajouter un campus</h3>
+
+                    <div class="container">
+                        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+                        <div class="row grid">
+                            <div class="col-12 md:col-7">
+
+                                <label for="libelle" class="p-sr-only">Libelle :</label>
+
+                                <input type="text" formControlName="libelle" class="form-control col-12"
+                                    placeholder="Libelle du campus" pInputText>
+
+
+                            </div>
+                            <div class="col-6 md:col-5">
+
+
+                            </div>
+                        </div>
+
+                        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+                        <div class="row grid">
+                            <div class="col-6 md:col-4">
+                                <label for="Email" class="p-sr-only">Email :</label>
+
+                                <input type="text" formControlName="email" class="form-control col-12"
+                                    placeholder="email du siége du campus" pInputText>
+
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="Site" class="p-sr-only">Site web :</label>
+
+                                <input type="text" class="form-control col-12" formControlName="site"
+                                    placeholder="site web du campus" pInputText>
+
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="ecole_id">Ecole :</label>
+
+                                <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="libelle">
+                                </p-dropdown>
+
+                            </div>
+                            <div class="col-6 md:col-4">
+                                <label for="Adresse" class="p-sr-only">Adresse :</label>
+
+                                <input type="text" formControlName="adresse" class="form-control col-12"
+                                    placeholder="adresse du siége du campus" pInputText>
+                            </div>
+                            <div class="col-6 md:col-4">
+
+                                <label for="Ville" class="p-sr-only">Ville :</label>
+
+                                <input type="text" formControlName="ville" class="form-control col-12"
+                                    placeholder="ville du siége du campus" pInputText>
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="Pays" class="p-sr-only">Pays :</label>
+                                <input type="text" formControlName="pays" class="form-control col-12"
+                                    placeholder="pays du siége du campus" pInputText>
+                            </div>
+
+
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-8">
+                                <button pButton class="ui-button-raised ui-button-success"
+                                    [disabled]="addcampusForm.invalid" label="Enregistrer"
+                                    (click)="saveCampus()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+
+
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateCampus">
+        <p-card>
+            <div class=" p-grid">
+
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateCampus=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="campusFormUpdate">
+
+                    <h3 class="text-center" style="font-weight: bold;">Modifier un campus</h3>
+
+                    <div class="container">
+                        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+                        <div class="row grid">
+                            <div class="col-12 md:col-7">
+
+                                <label for="libelle" class="p-sr-only">Libelle :</label>
+
+                                <input type="text" formControlName="libelle" class="form-control col-12"
+                                    placeholder="Libelle du campus" pInputText>
+
+
+                            </div>
+                            <div class="col-6 md:col-5">
+
+
+                            </div>
+                        </div>
+
+                        <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+                        <div class="row grid">
+                            <div class="col-6 md:col-4">
+                                <label for="Email" class="p-sr-only">Email :</label>
+
+                                <input type="text" formControlName="email" class="form-control col-12"
+                                    placeholder="email du siége du campus" pInputText>
+
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="Site" class="p-sr-only">Site web :</label>
+
+                                <input type="text" class="form-control col-12" formControlName="site"
+                                    placeholder="site web du campus" pInputText>
+
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="ecole_id">Ecole :</label>
+
+                                <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="libelle">
+                                </p-dropdown>
+
+                            </div>
+                            <div class="col-6 md:col-4">
+                                <label for="Adresse" class="p-sr-only">Adresse :</label>
+
+                                <input type="text" formControlName="adresse" class="form-control col-12"
+                                    placeholder="adresse du siége du campus" pInputText>
+                            </div>
+                            <div class="col-6 md:col-4">
+
+                                <label for="Ville" class="p-sr-only">Ville :</label>
+
+                                <input type="text" formControlName="ville" class="form-control col-12"
+                                    placeholder="ville du siége du campus" pInputText>
+                            </div>
+
+                            <div class="col-6 md:col-4">
+                                <label for="Pays" class="p-sr-only">Pays :</label>
+                                <input type="text" formControlName="pays" class="form-control col-12"
+                                    placeholder="pays du siége du campus" pInputText>
+                            </div>
+                            <div class="col-offset-5 md:col-offset-5 sm:col-offset-8">
+                                <button pButton class="ui-button-raised ui-button-success"
+                                    [disabled]="campusFormUpdate.invalid" label="Enregistrer"
+                                    (click)="editCampus()"></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </form>
+
+            </div>
+        </p-card>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddCampus" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormAddCampus=true" style="float:right;" label="Ajouter"></button>
+               <h3><a routerLink =  '/anneeScolaire' >{{LblAnneselected }}</a> / <a routerLink =  '/ecoles/{{idanneeselected }}' >{{Lblecoleselected }}</a> / Liste des campus</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="campuss" [columns]="cols" [value]="campuss" selectionMode="single" [rows]="5"
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="campuss.length" [filterDelay]="0"
+                [globalFilterFields]="['libelle','email','site','ville','pays']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="Libelle" scope="col">
+                            Libelle <p-sortIcon field="Libelle"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="annee_id" scope="col">
+                            Ecole <p-sortIcon field="annee_id"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="email" scope="col">
+                            Email <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="site" scope="col">
+                            Site <p-sortIcon field="site"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="ville" scope="col">
+                            Ville <p-sortIcon field="ville"></p-sortIcon>
+                        </th>
+                        <th class="col-2" style="text-decoration: underline;" scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            {{rowData.libelle}}
+                        </td>
+                        <td>
+                            {{ ecoles[rowData.ecole_id]?.libelle }}
+                        </td>
+                        <td>
+                            {{rowData.email}}
+                        </td>
+                        <td>
+                            {{rowData.site}}
+                        </td>
+                        <td>
+                            {{rowData.ville}}
+                        </td>
+                        <td>
+
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData)"></i>
+                            <i pTooltip="Campus" tooltipPosition="bottom" class="pi pi-play"
+                                (click)="navigatetoCampus(rowData)"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

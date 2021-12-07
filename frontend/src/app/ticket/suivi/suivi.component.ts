@@ -455,14 +455,18 @@ export class SuiviComponent implements OnInit {
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
 
-    let campusCustom = campus[0].toUpperCase()
+    let campusCustom 
 
-    if(campus=="Montréal"){
+    if(campus==null){
+      campusCustom="X"
+    }else if(campus=="Montréal"){
       campusCustom="C"
     }else if(campus=="En Ligne(365)"){
       campusCustom="O"
+    }else {
+      campusCustom = campus[0].toUpperCase() 
     }
-
+    
     return 'ESTYA' + prenom + nom +''+ campusCustom+statut[0].toUpperCase()+'' + date + '' + random;
   }
 

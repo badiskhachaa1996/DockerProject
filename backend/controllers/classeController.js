@@ -1,8 +1,9 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { Classe } = require("./../models/classe");
+const { Ecole } = require("./../models/ecole");
 
-//Création d'un nouveau classe 
+//Création d'une nouveau classe 
 app.post("/create", (req, res) => {
         //Sauvegarde d'une classe
         const classe = new Classe({
@@ -105,6 +106,15 @@ app.get("/seeAll", (req, res) => {
         .catch(err => {
             console.error(err);
         })
+});
+
+//Récupérer une classe via une école
+app.get("/getAllByEcoleID/:id", (req, res) => {
+    Ecole.findById({ecole_id: req.params.id}).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
 });
 
 module.exports = app;

@@ -83,6 +83,8 @@
                             (click)="archiverAnneeScolaire(rowData)"></i>
                             <i  *ngIf="rowData.etat=='Nouvelle'" pTooltip="Activer" tooltipPosition="bottom" class="pi pi-play"
                             (click)="activerAnneeScolaire(rowData)"></i>
+                            <i  pTooltip="Ecoles" tooltipPosition="bottom" class="pi pi-play"
+                            (click)="navigatetoEcole(rowData)"></i>
                         </td>
                     </tr>
                 </ng-template>

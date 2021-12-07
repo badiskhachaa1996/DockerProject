@@ -7,33 +7,35 @@ app.post("/creatediplome", (req, res) => {
     //Ajout d'un diplôme
     let data = req.body;
     let diplome = new Diplome ({
-        titre : data.titre,
-        titre_long: data.titre_long,
-        description : data.description,
-        type_diplome : data.type_diplome,
-        type_etude : data.type_etude,
-        domaine : data.domaine,
-        niveau : data.niveau,
-        certificateur : data.certificateur,
-        code_RNCP : data.code_RNCP,
-        duree : data.duree,
-        nb_heure : data.nb_heure,
-        date_debut : data.date_debut,
-        date_fin : data.date_fin,
-        rythme : data.rythme,
-        frais : data.frais,
-        frais_en_ligne : data.frais_en_ligne,
+        titre : data?.titre,
+        titre_long: data?.titre_long,
+        campus_id:data?.campus_id,
+        description : data?.description,
+        type_diplome : data?.type_diplome,
+        type_etude : data?.type_etude,
+        domaine : data?.domaine,
+        niveau : data?.niveau,
+        certificateur : data?.certificateur,
+        code_RNCP : data?.code_RNCP,
+        duree : data?.duree,
+        nb_heure : data?.nb_heure,
+        date_debut : data?.date_debut,
+        date_fin : data?.date_fin,
+        rythme : data?.rythme,
+        frais : data?.frais,
+        frais_en_ligne : data?.frais_en_ligne,
     });
     diplome.save().then((diplomeFromDB) => {
         res.status(200).send(diplomeFromDB);
     }).catch((error) => {
+        console.log(error)
         res.status(404).send(error);
     })
 });
 
-app.post("/editById/ :id", (req, res) => {
+app.post("/editById/:id", (req, res) => {
     //Modifier un diplome
-    Diplome.findOneAndUpdate(req.params.id,
+    Diplome.findByIdAndUpdate(req.params.id,
         {
             titre : req.body.titre,
             titre_long : req.body.titre_long,
@@ -72,14 +74,15 @@ app.get("/getAll", (req, res) => {
     })
 });
 
-app.get("/getAll/:id", (req, res) => {
+app.get("/getById/:id", (req, res) => {
     //Récupérer un diplome via un id
-    Diplome.find({_id: req.params.id}).then((datadiplome) => {
-        res.status(200).send( datadiplome );
+    Diplome.findOne({_id: req.params.id}).then((diplome) => {
+        res.status(200).send( diplome );
     }).catch((error) => {
         res.status(404).send(error);
     })
 });
+
 
 app.get("/getAllByCampus/:id", (req, res) => {
     //Récupérer un diplome via un campus

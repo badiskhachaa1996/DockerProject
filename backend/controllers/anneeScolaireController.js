@@ -71,12 +71,29 @@ app.get("/archivee/:id", (req, res) => {
 });
 
 app.get("/activer/:id", (req, res) => {
-    //Modifier une année scolaire
+    //Activer une année scolaire
    
     AnneeScolaire.findOneAndUpdate({_id:req.params.id} ,
         {
-            etat : "Actuelle",
+            etat : "Activer",
         }, { new: true }, (err,anneeScolaire) => {
+            if (err) {
+                res.send(err)
+            }
+            else {
+                res.send(anneeScolaire)
+            }
+           
+        });
+});
+
+app.get("/actuelle", (req, res) => {
+    //Année scolaire actuelle
+   
+    AnneeScolaire.findOne(
+        {
+            etat : "Actuelle",
+        }, (err,anneeScolaire) => {
             if (err) {
                 res.send(err)
             }
