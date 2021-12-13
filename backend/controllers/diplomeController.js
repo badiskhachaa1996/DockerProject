@@ -39,7 +39,8 @@ app.post("/editById/:id", (req, res) => {
         {
             titre : req.body.titre,
             titre_long : req.body.titre_long,
-            descriptions : req.body.descriptions,
+            description : req.body.description,
+            campus_id : req.body.campus_id,
             type_diplome : req.body.type_diplome,
             type_etude : req.body.type_etude,
             domaine : req.body.domaine,

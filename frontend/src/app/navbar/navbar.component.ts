@@ -57,6 +57,11 @@ export class NavbarComponent implements OnInit {
             routerLink: '/service'
           },
           {
+            label: 'Ecoles',
+            icon: 'pi pi-home',
+            routerLink: '/ecoles'
+          },
+          {
             label: 'Gestions des agents',
             icon: 'pi pi-users',
             routerLink: '/listUser'
@@ -70,6 +75,11 @@ export class NavbarComponent implements OnInit {
             label: 'Gestions des Années Scolaire',
             icon: 'pi pi-calendar-times',
             routerLink: '/anneeScolaire'
+          },
+          {
+            label: 'Campus',
+            icon: 'pi pi-th-large',
+            routerLink: '/campus'
           },
           {
             label: 'Gestions des séances',
