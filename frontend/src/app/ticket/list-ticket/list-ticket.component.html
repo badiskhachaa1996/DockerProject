@@ -980,7 +980,7 @@
                                                 <b style="text-align:left !important;">Statut:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].type}}</div>
+                                                {{userDic[rowData.agent_id].type}}</div>
                                         </div>
 
                                         <div class="ui-g-6 ui-md-6"
@@ -990,7 +990,7 @@
                                                 <b style="text-align:left !important;">Entreprise:</b>
                                             </div>
                                             <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                {{userDic[rowData.createur_id].entreprise}}
+                                                {{userDic[rowData.agent_id].entreprise}}
                                             </div>
                                         </div>
                                         <div class="ui-g-12 ui-md-12">
@@ -1000,7 +1000,7 @@
                                                     <b style="text-align:left !important;">Campus:</b>
                                                 </div>
                                                 <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                    {{userDic[rowData.createur_id].campus}}</div>
+                                                    {{userDic[rowData.agent_id].campus}}</div>
                                             </div>
 
                                             <div *ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')"
@@ -1009,8 +1009,7 @@
                                                     <b style="text-align:left !important;">Classe :</b>
                                                 </div>
                                                 <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                                    {{formationDic[userDic[rowData.createur_id].formation].nom_court}}
-                                                </div>
+                                                    {{formationDic[userDic[rowData.agent_id].formation].nom_court}}</div>
                                             </div>
                                         </div>
                                     </div>
