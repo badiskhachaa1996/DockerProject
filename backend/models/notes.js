@@ -4,8 +4,7 @@ const mongoose = require("mongoose");
 const note_schema = mongoose.Schema({
     score:{type:Number,default:0},
     user_id:{ type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
-    examen_id:{ type: mongoose.Schema.Types.ObjectId, ref: "examen", required: true },
-    answerList:{type: [],default:[] }
+    examen_id:{ type: mongoose.Schema.Types.ObjectId, ref: "examen", required: true }
 });
 
 //creation de la table avec le nom Campus ( model/classe) à l'aide de la biblio mongoose et son schema
