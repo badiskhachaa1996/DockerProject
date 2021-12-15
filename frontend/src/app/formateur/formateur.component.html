@@ -1,9 +1,10 @@
 <!-- Formulaire d'ajout d'un nouveau formateur -->
 <div *ngIf="showFormAddFormateur" class="grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" >
+    <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddFormateur = false"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddFormateur = false">
+                </i>
                 <form class="col-8 col-offset-2" [formGroup]="formAddFormateur" (ngSubmit)="onAddFormateur()">
 
                     <h3>Ajouter un formateur</h3>
@@ -11,7 +12,8 @@
 
                         <div class="ui-g-12 ui-md-12">
                             <span>
-                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite"></p-dropdown>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite">
+                                </p-dropdown>
                             </span>
                         </div>
 
@@ -21,8 +23,8 @@
                         </div>
 
                         <div class="ui-g-6 ui-md-6">
-                            <input type="text" formControlName="lastname" class="form-control col-12"
-                                placeholder="Nom" pInputText>
+                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom"
+                                pInputText>
                         </div>
 
                         <div class="ui-g-12 ui-md-12">
@@ -31,8 +33,8 @@
                         </div>
 
                         <div class="ui-g-12 ui-md-12">
-                            <input type="email" formControlName="email" class="form-control col-12"
-                                placeholder="Email" pInputText>
+                            <input type="email" formControlName="email" class="form-control col-12" placeholder="Email"
+                                pInputText>
                         </div>
 
                         <div class="ui-g-6 ui-md-6">
@@ -66,35 +68,53 @@
 
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-dropdown [options]="statutList" optionLabel="label" formControlName="statut"></p-dropdown>
+                                <p-dropdown [options]="statutList" optionLabel="label" formControlName="statut">
+                                </p-dropdown>
                             </span>
                         </div>
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat"></p-dropdown>
+                                <p-dropdown [options]="typeContratList" optionLabel="label"
+                                    formControlName="type_contrat"></p-dropdown>
                             </span>
                         </div>
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-toggleButton onLabel="Interne" offLabel="Non Interne" formControlName="isInterne"></p-toggleButton>
+                                <p-toggleButton onLabel="Interne" offLabel="Non Interne" formControlName="isInterne">
+                                </p-toggleButton>
                             </span>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="number" formControlName="taux_h" class="form-control col-12"
-                            placeholder="Coût/heure" pInputText>
+                                placeholder="Coût/heure" pInputText>
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <input type="number" formControlName="taux_j" class="form-control col-12"
                                 placeholder="Coût/jour" pInputText>
                         </div>
+                        <!--
+                            
+                        -->
+                        <div class="ui-g-12 ui-md-12" formArrayName="volume_h">
+                            <div class="grid" *ngFor="let tempControl of getVolumeH().controls; let i = index">
+                                <span>
+                                    <p-dropdown class="form-control col-8" [options]="matiereList" placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
+                                    </p-dropdown>
+                                </span>
+                                <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"  placeholder="Volume horaire" pInputText>
+                            </div>
+                            <button class="btn btn-success"  type="button" (click)="onAddMatiere()">Ajouter une matière</button>
+                        </div>
                         <div class="ui-g-12 ui-md-12" *ngIf="onGetStatut() == 'Prestataire'">
                             <span>
-                                <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id"></p-dropdown>
+                                <p-dropdown [options]="prestataireList" optionLabel="label"
+                                    formControlName="prestataire_id"></p-dropdown>
                             </span>
                         </div>
 
                         <div>
-                            <button pButton type="submit" label="Ajouter le formateur" [disabled]="formAddFormateur.invalid" style="margin-left: 70%;"></button>
+                            <button pButton type="submit" label="Ajouter le formateur"
+                                [disabled]="formAddFormateur.invalid" style="margin-left: 70%;"></button>
                         </div>
                     </div>
                 </form>
@@ -107,10 +127,11 @@
 
 <!-- Formulaire de mise à jour d'un formateur -->
 <div *ngIf="showFormUpdateFormateur" class="grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" >
+    <div class="xl:col-8 xl:col-offset-2 col-12">
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateFormateur = false"> </i>
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateFormateur = false">
+                </i>
                 <form class="col-8 col-offset-2" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
 
                     <h3>Formulaire de modification du formateur</h3>
@@ -118,37 +139,42 @@
 
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-dropdown [options]="statutList" optionLabel="label" formControlName="statut"></p-dropdown>
+                                <p-dropdown [options]="statutList" optionLabel="label" formControlName="statut">
+                                </p-dropdown>
                             </span>
                         </div>
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat"></p-dropdown>
+                                <p-dropdown [options]="typeContratList" optionLabel="label"
+                                    formControlName="type_contrat"></p-dropdown>
                             </span>
                         </div>
-                        
+
                         <div class="ui-g-4 ui-md-4">
                             <span>
-                                <p-toggleButton onLabel="Interne" offLabel="Non Interne" formControlName="isInterne"></p-toggleButton>
+                                <p-toggleButton onLabel="Interne" offLabel="Non Interne" formControlName="isInterne">
+                                </p-toggleButton>
                             </span>
                         </div>
                         <div class="ui-g-12 ui-md-12">
                             <input type="number" formControlName="taux_h" class="form-control col-12"
-                            placeholder="Coût/Heure" pInputText>
+                                placeholder="Coût/Heure" pInputText>
                         </div>
                         <div class="ui-g-12 ui-md-12">
                             <input type="number" formControlName="taux_j" class="form-control col-12"
-                            placeholder="Coût/Jour" pInputText>
+                                placeholder="Coût/Jour" pInputText>
                         </div>
-                        
+
                         <div class="ui-g-12 ui-md-12" *ngIf="onGetStatutToUpdate() == 'Prestataire'">
                             <span>
-                                <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id"></p-dropdown>
+                                <p-dropdown [options]="prestataireList" optionLabel="label"
+                                    formControlName="prestataire_id"></p-dropdown>
                             </span>
                         </div>
-                       
+
                         <div>
-                            <button pButton type="submit" label="Modifier le formateur" [disabled]="formUpdateFormateur.invalid" style="margin-left: 68%;"></button>
+                            <button pButton type="submit" label="Modifier le formateur"
+                                [disabled]="formUpdateFormateur.invalid" style="margin-left: 68%;"></button>
                         </div>
                     </div>
                 </form>
@@ -170,8 +196,8 @@
             <input style="margin:5px;" pInputText type="text"
                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
 
-            <p-table #dt1 [globalFilterFields]="['statut', 'type_contrat', 'taux_h', 'isInterne']"
-                [rows]="5" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="formateurs"
+            <p-table #dt1 [globalFilterFields]="['statut', 'type_contrat', 'taux_h', 'isInterne']" [rows]="5"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="formateurs"
                 [totalRecords]="formateurs.length" dataKey="_id" responsiveLayout="scroll">
                 <ng-template pTemplate="header">
                     <tr>

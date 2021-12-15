@@ -29,6 +29,7 @@ app.post("/create", (req, res, next) => {
 
     //Création d'un nouvel objet formateur
     let data = req.body.newFormateur;
+    console.log(data)
     let formateur = new Formateur(
         {
             user_id: data.user_id,
@@ -37,7 +38,9 @@ app.post("/create", (req, res, next) => {
             taux_h: data.taux_h,
             taux_j: data.taux_j,
             isInterne: data?.isInterne,
-            prestataire_id: data?.prestataire
+            prestataire_id: data?.prestataire,
+            volume_h: data?.volume_h,
+            volume_h_consomme: data?.volume_h_consomme
         });
 
     //Creation du nouveau user
@@ -65,32 +68,29 @@ app.post("/create", (req, res, next) => {
     User.findOne({ email: userData.email })
         .then((userFromDb) => {
             if (userFromDb) {
-                Formateur.findOne({ user_id: userFromDb._id})
-                .then( (formateurFromDb) => 
-                {
-                    if(formateurFromDb)
-                    {
-                        res.json({ success: 'Cet formateur existe déja'});
-                    } else {
-                        formateur.user_id = userFromDb._id;
-                formateur.save()
-                    .then((formateurFromDb) => { res.status(201).json({ success: "Formateur ajouté dans la BD!" }) })
-                    .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce formateur " + error }) });
-            
-                    }
-                })
-                .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du formateur"})});
-                }
+                Formateur.findOne({ user_id: userFromDb._id })
+                    .then((formateurFromDb) => {
+                        if (formateurFromDb) {
+                            res.json({ success: 'Cet formateur existe déja' });
+                        } else {
+                            formateur.user_id = userFromDb._id;
+                            formateur.save()
+                                .then((formateurFromDb) => { res.status(201).json({ success: "Formateur ajouté dans la BD!" }) })
+                                .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce formateur " + error }) });
+
+                        }
+                    })
+                    .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du formateur" }) });
+            }
             else {
                 user.save()
-                .then( (userCreated) => 
-                {
-                    formateur.user_id = userCreated._id;
-                    formateur.save()
-                    .then( (formateurCreated) => {res.status(201).json({ success: 'Formateur crée' })} )
-                    .catch( (error) => { res.status(400).json({ error: 'Impossible de crée ce formateur' })});
-                })
-                .catch( (error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
+                    .then((userCreated) => {
+                        formateur.user_id = userCreated._id;
+                        formateur.save()
+                            .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée' }) })
+                            .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce formateur' }) });
+                    })
+                    .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }
         })
         .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });

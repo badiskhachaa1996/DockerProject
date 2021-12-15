@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService, SelectItem } from 'primeng/api';
 import { environment } from 'src/environments/environment';
@@ -30,6 +30,8 @@ export class FormateurComponent implements OnInit {
   statutList = [];
   typeContratList = [];
   prestataireList = [];
+  matiereList = [];
+  volumeHList = [];
   affichePrestataire: string;
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
@@ -72,6 +74,33 @@ export class FormateurComponent implements OnInit {
       { label: 'Autre', value: 'Autre' }
     ];
 
+    this.matiereList = [
+      {
+        label: 'Germany',
+        items: [
+          { label: 'Audi', value: 'Audi' },
+          { label: 'BMW', value: 'BMW' },
+          { label: 'Mercedes', value: 'Mercedes' }
+        ]
+      },
+      {
+        label: 'USA',
+        items: [
+          { label: 'Cadillac', value: 'Cadillac' },
+          { label: 'Ford', value: 'Ford' },
+          { label: 'GMC', value: 'GMC' }
+        ]
+      },
+      {
+        label: 'Japan',
+        items: [
+          { label: 'Honda', value: 'Honda' },
+          { label: 'Mazda', value: 'Mazda' },
+          { label: 'Toyota', value: 'Toyota' }
+        ]
+      }
+    ];
+
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau formateur
@@ -87,13 +116,13 @@ export class FormateurComponent implements OnInit {
       rue_adresse: ['', Validators.required],
       numero_adresse: ['', Validators.required],
       postal_adresse: ['', Validators.required],
-
       statut: ['', Validators.required],
       type_contrat: ['', Validators.required],
       taux_h: ['', Validators.required],
       taux_j: ['', Validators.required],
       isInterne: [false, Validators.required],
-      prestataire_id: ['']
+      prestataire_id: [''],
+      volume_h: this.formBuilder.array([]),
     });
   }
 
@@ -118,12 +147,22 @@ export class FormateurComponent implements OnInit {
     let taux_j = this.formAddFormateur.get('taux_j')?.value;
     let isInterne = this.formAddFormateur.get('isInterne')?.value;
     let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
+    let tempVH = this.formAddFormateur.get('volume_h').value ? this.formAddFormateur.get('volume_h').value : [];
+    let volumeH = {};
+    let volumeH_ini = {};
+
+    this.volumeHList.forEach((VH, index) => {
+      volumeH[tempVH[index]] = VH
+      volumeH_ini[tempVH[index]] = 0;
+    });
+    console.log(volumeH)
+    console.log(typeof(volumeH))
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, phone, email, null, 'user', civilite, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet diplôme
-    let newFormateur = new Formateur(null, '', statut, type_contrat, taux_h, taux_j, isInterne, prestataire_id);
+    let newFormateur = new Formateur(null, '', statut, type_contrat, taux_h, taux_j, isInterne, prestataire_id,volumeH,volumeH_ini);
 
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
@@ -147,10 +186,9 @@ export class FormateurComponent implements OnInit {
   onGetbyId() {
     //Recuperation du formateur à modifier
     this.formateurService.getById(this.idFormateurToUpdate).subscribe(
-      ((response) => 
-      { 
-        this.formateurToUpdate = response; 
-        this.formUpdateFormateur.patchValue({statut: this.formateurToUpdate.statut, type_contrat: this.formateurToUpdate.type_contrat, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j});
+      ((response) => {
+        this.formateurToUpdate = response;
+        this.formUpdateFormateur.patchValue({ statut: this.formateurToUpdate.statut, type_contrat: this.formateurToUpdate.type_contrat, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j });
       }),
       ((error) => { console.log(error); })
     );
@@ -206,5 +244,18 @@ export class FormateurComponent implements OnInit {
     return this.formUpdateFormateur.get('statut').value.value;
   }
 
+  getVolumeH() {
+    return this.formAddFormateur.get('volume_h') as FormArray;
+  }
+
+  onAddMatiere() {
+    const tempControl = this.formBuilder.control('', Validators.required);
+    this.getVolumeH().push(tempControl);
+  }
+
+  changeVolumeH(i, event) {
+    this.volumeHList[i] = parseInt(event.target.value);
+    //TODO if event.target.value == null -> formcontrol isInvalid
+  }
 
 }
