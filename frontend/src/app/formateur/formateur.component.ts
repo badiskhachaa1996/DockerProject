@@ -155,8 +155,6 @@ export class FormateurComponent implements OnInit {
       volumeH[tempVH[index]] = VH
       volumeH_ini[tempVH[index]] = 0;
     });
-    console.log(volumeH)
-    console.log(typeof(volumeH))
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, phone, email, null, 'user', civilite, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
@@ -189,6 +187,19 @@ export class FormateurComponent implements OnInit {
       ((response) => {
         this.formateurToUpdate = response;
         this.formUpdateFormateur.patchValue({ statut: this.formateurToUpdate.statut, type_contrat: this.formateurToUpdate.type_contrat, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j });
+        //TODO matiereList
+        let dic = response.volume_h // {id:nb}
+        let k = [];
+        this.volumeHList = [];
+        console.log(response)
+        if(response.volume_h){
+          k = Object.keys(dic)
+          k.forEach(key => {
+            this.volumeHList.push(parseInt(dic[key]))
+          });
+        }
+
+        this.formUpdateFormateur.setControl('volume_h',this.formBuilder.array(k))
       }),
       ((error) => { console.log(error); })
     );
@@ -202,7 +213,8 @@ export class FormateurComponent implements OnInit {
       taux_h: ['', Validators.required],
       taux_j: ['', Validators.required],
       isInterne: [false, Validators.required],
-      prestataire_id: ['']
+      prestataire_id: [''],
+      volume_h: this.formBuilder.array([])
     });
   }
 
@@ -216,6 +228,18 @@ export class FormateurComponent implements OnInit {
     this.formateurToUpdate.taux_j = this.formUpdateFormateur.get('taux_j')?.value;
     this.formateurToUpdate.isInterne = this.formUpdateFormateur.get('isInterne')?.value;
     this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value.value;
+    let tempVH = this.formUpdateFormateur.get('volume_h').value ? this.formUpdateFormateur.get('volume_h').value : [];
+
+    let volumeH = {};
+    let volumeH_ini = {};
+
+    this.volumeHList.forEach((VH, index) => {
+      volumeH[tempVH[index]] = VH
+      volumeH_ini[tempVH[index]] = 0;
+    });
+
+    this.formateurToUpdate.volume_h= volumeH;
+    this.formateurToUpdate.volume_h_consomme= volumeH_ini;
 
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       (() => {
@@ -233,6 +257,14 @@ export class FormateurComponent implements OnInit {
     this.showFormUpdateFormateur = false;
   }
 
+  resetForm(){
+    this.volumeHList = [];
+    this.formAddFormateur.reset()
+    this.formUpdateFormateur.reset()
+    this.onInitFormAddFormateur()
+    this.onInitFormUpdateFormateur()
+  }
+
 
   onGetStatut() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
@@ -248,14 +280,22 @@ export class FormateurComponent implements OnInit {
     return this.formAddFormateur.get('volume_h') as FormArray;
   }
 
+  getVolumeHUpdate() {
+    return this.formUpdateFormateur.get('volume_h') as FormArray;
+  }
+
   onAddMatiere() {
     const tempControl = this.formBuilder.control('', Validators.required);
     this.getVolumeH().push(tempControl);
+  }
+
+  onUpdateMatiere() {
+    const tempControl = this.formBuilder.control('', Validators.required);
+    this.getVolumeHUpdate().push(tempControl);
   }
 
   changeVolumeH(i, event) {
     this.volumeHList[i] = parseInt(event.target.value);
     //TODO if event.target.value == null -> formcontrol isInvalid
   }
-
 }

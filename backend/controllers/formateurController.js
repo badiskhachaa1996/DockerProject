@@ -106,7 +106,9 @@ app.post('/updateById/:id', (req, res, next) => {
             taux_h: req.body?.taux_h,
             taux_j: req.body?.taux_j,
             isInterne: req.body?.isInterne,
-            prestataire_id: req.body.prestataire_id
+            prestataire_id: req.body.prestataire_id,
+            volume_h: req.body?.volume_h,
+            volume_h_consomme: req.body?.volume_h_consomme
 
         }, { new: true }, (err, formateurUpdated) => {
             if (err) {

@@ -96,14 +96,19 @@
                             
                         -->
                         <div class="ui-g-12 ui-md-12" formArrayName="volume_h">
-                            <div class="grid" *ngFor="let tempControl of getVolumeH().controls; let i = index">
-                                <span>
-                                    <p-dropdown class="form-control col-8" [options]="matiereList" placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
-                                    </p-dropdown>
-                                </span>
-                                <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"  placeholder="Volume horaire" pInputText>
+                            <div *ngFor="let tempControl of getVolumeH().controls; let i = index">
+                                <div class="grid pb-3">
+                                    <span>
+                                        <p-dropdown class="form-control col-8" [options]="matiereList"
+                                            placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
+                                        </p-dropdown>
+                                    </span>
+                                    <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"
+                                        placeholder="Volume horaire" pInputText>
+                                </div>
                             </div>
-                            <button class="btn btn-success"  type="button" (click)="onAddMatiere()">Ajouter une matière</button>
+                            <button class="btn btn-success" type="button" (click)="onAddMatiere()" pButton
+                                label="Ajouter une matière"></button>
                         </div>
                         <div class="ui-g-12 ui-md-12" *ngIf="onGetStatut() == 'Prestataire'">
                             <span>
@@ -171,7 +176,21 @@
                                     formControlName="prestataire_id"></p-dropdown>
                             </span>
                         </div>
-
+                        <div class="ui-g-12 ui-md-12" formArrayName="volume_h">
+                            <div *ngFor="let tempControl of getVolumeHUpdate().controls; let i = index">
+                                <div class="grid pb-3">
+                                    <span>
+                                        <p-dropdown class="form-control col-8" [options]="matiereList"
+                                            placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
+                                        </p-dropdown>
+                                    </span>
+                                    <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"
+                                        placeholder="Volume horaire" [(value)]="volumeHList[i]" pInputText/>
+                                </div>
+                            </div>
+                            <button class="btn btn-success" type="button" (click)="onUpdateMatiere()" pButton
+                                label="Ajouter une matière"></button>
+                        </div>
                         <div>
                             <button pButton type="submit" label="Modifier le formateur"
                                 [disabled]="formUpdateFormateur.invalid" style="margin-left: 68%;"></button>
@@ -188,8 +207,8 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
         <!-- Bouton d'ajout d'un nouveau formateur -->
-        <button (click)="showFormAddFormateur = true; showFormUpdateFormateur = false" pButton type="button"
-            label="Nouveau Formateur" style="float:right;"></button>
+        <button (click)="showFormAddFormateur = true; showFormUpdateFormateur = false; resetForm()" pButton
+            type="button" label="Nouveau Formateur" style="float:right;"></button>
         <h3>Liste des Formateurs</h3>
         <div class="col-12 card shadow-lg my-5">
             <!-- input de recherche -->
@@ -242,7 +261,7 @@
                         </td>
                         <td>
                             <i style="margin-left: 2%;"
-                                (click)="showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"
+                                (click)="resetForm();showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"
                                 class="pi pi-pencil"></i>
                         </td>
                     </tr>
