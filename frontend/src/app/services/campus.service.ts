@@ -23,8 +23,8 @@ apiUrl =environment.origin+ "campus/"
   }
 
   getByID(Campus: any){
-    let campusUrl=this.apiUrl+"getById/"+Campus._id;
-    return this.http.post<any>(campusUrl,Campus,httpOptions1);
+    let campusUrl=this.apiUrl+"getById/"+Campus;
+    return this.http.get<any>(campusUrl,httpOptions1);
   }
 
   createCampus(campus: any){

@@ -1,1 +1,48 @@
-<p>first-inscription works!</p>
+<div *ngIf="showAddNewInscription" class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" >
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddnewInscription = false"> </i>
+                <h3>Ajouter  une nouvelle inscription</h3>
+                <form class="col-8 col-offset-2" [formGroup]="formAddNewInscription">
+
+                    
+                    <div class="p-grid">
+
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="firstname" class="form-control col-12"
+                                placeholder="Prénom" pInputText>    
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <input type="text" formControlName="lastname" class="form-control col-12"
+                                placeholder="Nom" pInputText>
+                        </div>
+
+
+                        <div class="ui-g-12 ui-md-12">
+                            <input type="emailperso" formControlName="emailperso" class="form-control col-12"
+                                placeholder="EmailPerso" pInputText>
+                        </div>
+
+
+                        <div class="ui-g-12 ui-md-12">
+                        
+                        </div>
+
+                        <div class="ui-g-4 ui-md-4">
+                            <span>
+                                <p-dropdown [options]="diplomes" optionLabel="titre" formControlName="diplomeID"></p-dropdown>
+                            </span>
+                        </div>
+ 
+                        <div>
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="formAddNewInscription.invalid" label="Ajouter l'inscription"  (click)="createfInscription()" style="margin-left: 70%;"></button>
+                           
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
