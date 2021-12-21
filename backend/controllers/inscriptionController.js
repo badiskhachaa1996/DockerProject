@@ -6,8 +6,9 @@ const { User } = require("./../models/user");
 app.post("/create", (req, res) => {
     //Ajouter une inscription pour un user existant ( réinscription)
     let data = req.body;
+  
     let inscription = new Inscription({
-        user_id: data.user_id,
+        user_id: null,
         statut: data.statut,
         diplome: data.diplome,
 
@@ -21,41 +22,47 @@ app.post("/create", (req, res) => {
 });
 // Ajouter une premiere inscription implique creation d'un user 
 app.post("/firstInscription", (req, res) => {
-    //Ajouter une inscription pour un user existant ( réinscription)
-    let data = req.body.newInscription;
+
+    let data = req.body.fInscription;
+    console.log("ici"),
+    console.log(data.diplome)
+
     let inscription = new Inscription({
-        user_id: data.user_id,
-        statut: data.statut,
-        diplome: data.diplome,
-
+       
+        user_id: null,
+        statut:  "data.statut1",
+        diplome: data.diplome
     });
-
 
     //Creation du nouveau user
     let userData = req.body.newUser;
-    let user = new User(
-        {
-            civilite: userData.civilite,
+  
+    let user = new User({
+        
+            civilite:null,
             firstname: userData.firstname,
             lastname: userData.lastname,
-            phone: userData.phone,
-            email: userData.email,
+            phone: null,
+            email: userData.email_perso,
             /*password: bcrypt.hashSync(data.password, 8),*/
-            role: userData.role,
+            role:"user",
             service_id: null,
-            type: userData.type,
-            entreprise: userData.entreprise,
-            pays_adresse: userData.pays_adresse,
-            ville_adresse: userData.ville_adresse,
-            rue_adresse: userData.rue_adresse,
-            numero_adresse: userData.numero_adresse,
-            postal_adresse: userData.postal_adresse
+            type: null,
+            entreprise: null,
+            pays_adresse: null,
+            ville_adresse: null,
+            rue_adresse: null,
+            numero_adresse: null,
+            postal_adresse: null
         });
     //vérification de l'existence du user
     User.findOne({ email_perso: userData.email_perso })
         .then((userFromDb) => {
             if (userFromDb) {
+    console.log(userFromDb)
+
                 inscription.user_id = userFromDb.user_id;
+              //  console.log("ici user_id =" ,inscription.user_id)
                 inscription.save().then((InscriptionFromDb) => { res.status(201).json({ success: "Inscription ajouté !" }) })
                     .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter l'inscription " + error }) });
             }
@@ -63,7 +70,7 @@ app.post("/firstInscription", (req, res) => {
     else {
         user.save().then((userCreated) => {
             inscription.user_id = userCreated._id;
-            Inscription.save()
+            inscription.save()
             .then((inscriptionCreated) => { res.status(201).json({ success: 'Inscription crée' }) })
             .catch((error) => { res.status(400).json({ error: 'Impossible de crée cette inscription' }) });
     })
@@ -88,16 +95,16 @@ app.post("/editById/:id", (req, res) => {
             res.status(201).send(inscriptionFromDB);
         }).catch((error) => {
             res.status(400).send(error);
-        })
-
-
+        });
+    })
+        
     app.get("/getAll", (req, res) => {
         //Récupérer toutes les inscription
         Inscription.find().then(result => {
             res.send(result.length > 0 ? result : [])
         })
             .catch((error) => {
-                console.error(error);
+              //  console.error(error);
             })
     });
 
@@ -109,5 +116,5 @@ app.post("/editById/:id", (req, res) => {
             res.status(404).send(error);
         })
     })
-});
+
 module.exports = app;

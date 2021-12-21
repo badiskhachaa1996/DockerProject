@@ -158,7 +158,7 @@ console.log(campus)
 
   navigatetoDiplome(rowData:Campus){
 
-    this.router.navigateByUrl('/diplomes/'+rowData._id);
+    this.router.navigateByUrl('/diplome/'+rowData._id);
 
   }
 

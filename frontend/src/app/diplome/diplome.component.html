@@ -182,8 +182,10 @@
         <div class="col-10 col-offset-1">
         <!-- Bouton d'ajout d'un nouveau diplome -->
         <button (click)="showFormAddDiplome = true; showFormUpdateDiplome = false" pButton type="button" label="Nouveau diplôme" style="float:right;"></button>
-        <h3>Liste des diplômes</h3>
+        <h3><a routerLink =  '/anneeScolaire' >{{LblAnneselected }}</a> / <a routerLink =  '/ecoles/{{idanneeselected }}' >{{Lblecoleselected }}</a>/ <a routerLink =  '/campus/{{idecoleselected }}' >{{Lblecoleselected }}</a> / Liste des Diplomes</h3>
+        
         <div class="col-12 card shadow-lg my-5">
+         
             <!-- input de recherche -->
             <input style="margin:5px;" pInputText type="text"
                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />

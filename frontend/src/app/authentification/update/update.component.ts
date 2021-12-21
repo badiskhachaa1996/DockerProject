@@ -75,8 +75,6 @@ export class UpdateUserComponent implements OnInit {
       this.userupdate._id,
       this.RegisterForm.value.type.classe,
       this.RegisterForm.value.type.statut,
-      this.RegisterForm.value.type.nationalite,
-      this.RegisterForm.value.type.date_de_naissance,
     )
     this.AuthService.update(user,inscription).subscribe((data) => {
       this.listUserComponent.tabUser.splice(this.listUserComponent.tabUser.indexOf(this.listUserComponent.selectedUser), 1, data)

@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Diplome } from '../models/Diplome';
 import { User } from '../models/User';
 import { DiplomeService } from '../services/diplome.service';
-
+import { CampusService } from '../services/campus.service';
 
 @Component({
   selector: 'app-diplome',
@@ -24,11 +24,20 @@ export class DiplomeComponent implements OnInit {
   showFormUpdateDiplome: boolean = false;
   diplomeToUpdate: Diplome = new Diplome();
   idDiplomeToUpdate: string;
-
-  constructor(private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
+  campusId: string;
+  LblAnneselected: any;
+  constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.campusId = this.route.snapshot.paramMap.get('id');
+    console.log(this.campusId)
     //Recuperation de la liste des diplômes
+    if(this.campusId){
+      this.diplomeService.getAllByCampus(this.campusId).subscribe(
+        (data) => { this.diplomes = data; },
+        (error) => { console.log(error) }
+      );
+    }else
     this.diplomeService.getAll().subscribe(
       (data) => { this.diplomes = data; },
       (error) => { console.log(error) }
@@ -39,6 +48,15 @@ export class DiplomeComponent implements OnInit {
 
     //Initialisation du formulaire de modification de diplome
     this.onInitFormUpdateDiplome();
+
+
+    this.campusService.getByID(this.campusId).subscribe((data2)=>{
+      console.log(data2)
+    
+     this.LblAnneselected=data2.libelle;
+
+  console.log( this.LblAnneselected)
+  })
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau diplome

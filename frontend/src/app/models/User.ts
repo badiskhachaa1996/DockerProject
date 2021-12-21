@@ -5,6 +5,7 @@ export class User {
         public lastname?: string,
         public phone?:string,
         public email?:string,
+        public email_perso?:string,
         public password?:string,
         public role?:string,
         public etat?: boolean,

@@ -87,8 +87,7 @@ export class FirstconnectionComponent implements OnInit {
     let inscription = new Inscription(null,this.userConnected._id,
       this.RegisterForm.value.classe,
       this.RegisterForm.value.statut,
-      this.RegisterForm.value.nationalite,
-      this.RegisterForm.value.date_de_naissance
+  
       )
     this.AuthService.update(user,inscription).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil réussie' });
