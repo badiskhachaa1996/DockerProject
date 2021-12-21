@@ -2,10 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { Campus } from '../models/Campus';
 import { Diplome } from '../models/Diplome';
 import { User } from '../models/User';
-import { DiplomeService } from '../services/diplome.service';
 import { CampusService } from '../services/campus.service';
+import { DiplomeService } from '../services/diplome.service';
+
 
 @Component({
   selector: 'app-diplome',
@@ -27,6 +29,11 @@ export class DiplomeComponent implements OnInit {
   campusId: string;
   LblAnneselected: any;
   constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
+
+  campusList = [];
+  campusListToUpdate = [];
+
+  dicCampus = {};
 
   ngOnInit(): void {
     this.campusId = this.route.snapshot.paramMap.get('id');
@@ -88,7 +95,7 @@ export class DiplomeComponent implements OnInit {
     //recupération des données du formulaire
     let titre = this.formAddDiplome.get('titre')?.value;
     let titre_long = this.formAddDiplome.get('titre_long')?.value;
-    let campus_id = this.formAddDiplome.get('campus_id')?.value;
+    let campus_id = this.formAddDiplome.get('campus_id')?.value.id;
     let description = this.formAddDiplome.get('description')?.value;
     let type_diplome = this.formAddDiplome.get('type_diplome')?.value;
     let type_etude = this.formAddDiplome.get('type_etude')?.value;
@@ -126,19 +133,13 @@ export class DiplomeComponent implements OnInit {
   }
 
   //Methode de recuperation du diplome à mettre à jour
-  onGetbyId()
+  onGetbyId(diplome)
   {
     //Recuperation du diplome à modifier
-    this.diplomeService.getById(this.idDiplomeToUpdate).subscribe(
-      ((response) => { 
-        this.diplomeToUpdate = response; 
-        if(this.diplomeToUpdate)
-        {
-          this.formUpdateDiplome.patchValue({titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, campus_id: this.diplomeToUpdate.campus_id, description: this.diplomeToUpdate.description, type_diplome: this.diplomeToUpdate.type_diplome, type_etude: this.diplomeToUpdate.type_etude, domaine: this.diplomeToUpdate.domaine, niveau: this.diplomeToUpdate.niveau, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP, duree: this.diplomeToUpdate.duree, nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin, rythme: this.diplomeToUpdate.rythme, frais: this.diplomeToUpdate.frais, frais_en_ligne: this.diplomeToUpdate.frais_en_ligne});
-        }
-      }),
-      ((error) => { console.log("Impossible de recuperer le diplome à modifier: " + error.message); })
-    );
+    this.diplomeToUpdate = diplome; 
+    
+    this.formUpdateDiplome.patchValue({ campus_id: this.dicCampus[diplome.campus_id], titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, description: this.diplomeToUpdate.description, type_diplome: this.diplomeToUpdate.type_diplome, type_etude: this.diplomeToUpdate.type_etude, domaine: this.diplomeToUpdate.domaine, niveau: this.diplomeToUpdate.niveau, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP, duree: this.diplomeToUpdate.duree, nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin, rythme: this.diplomeToUpdate.rythme, frais: this.diplomeToUpdate.frais, frais_en_ligne: this.diplomeToUpdate.frais_en_ligne});
+    
   }
 
   //Methode d'initialisation du formulaire de modification de diplome
@@ -171,7 +172,7 @@ export class DiplomeComponent implements OnInit {
     //Mis à jour du diplome et envoi dans la base de données
     this.diplomeToUpdate.titre = this.formUpdateDiplome.get('titre')?.value;
     this.diplomeToUpdate.titre_long = this.formUpdateDiplome.get('titre_long')?.value;
-    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value;
+    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value.id;
     this.diplomeToUpdate.description = this.formUpdateDiplome.get('description')?.value;
     this.diplomeToUpdate.type_diplome = this.formUpdateDiplome.get('type_diplome')?.value;
     this.diplomeToUpdate.type_etude = this.formUpdateDiplome.get('type_etude')?.value;
