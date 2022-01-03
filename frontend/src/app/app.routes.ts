@@ -47,6 +47,7 @@ const routes: Routes = [
     { path: 'seance/calendrier', component: CalendarComponent },
     { path: 'diplome', component: DiplomeComponent },
     { path:'ecoles/:id', component: EcoleComponent},
+    { path:'formateurs', component: FormateurComponent},
     
     { path:'campus', component: CampusComponent},
     { path:'campus/:id', component: CampusComponent},

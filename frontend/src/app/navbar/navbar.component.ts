@@ -94,7 +94,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'Formateurs',
             icon: 'pi pi-users',
-            routerLink: '/formateur'
+            routerLink: '/formateurs'
           }
           ]
         } else {
