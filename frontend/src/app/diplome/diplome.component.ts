@@ -28,6 +28,8 @@ export class DiplomeComponent implements OnInit {
   idDiplomeToUpdate: string;
   campusId: string;
   LblAnneselected: any;
+  idanneeselected:any;
+  Lblecoleselected:any
   constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
 
   campusList = [];
@@ -60,10 +62,13 @@ export class DiplomeComponent implements OnInit {
     this.campusService.getByID(this.campusId).subscribe((data2)=>{
       console.log(data2)
     
-     this.LblAnneselected=data2.libelle;
+     this.LblAnneselected=data2[0].libelle;
+     this.idanneeselected=data2[0]._id
 
   console.log( this.LblAnneselected)
-  })
+  
+  console.log( this.idanneeselected)    
+})
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau diplome

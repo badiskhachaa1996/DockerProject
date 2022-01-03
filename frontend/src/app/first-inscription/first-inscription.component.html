@@ -1,4 +1,4 @@
-<div *ngIf="showAddNewInscription" class="grid">
+<div *ngIf="showFormAddnewInscription" class="grid">
     <div class="xl:col-8 xl:col-offset-2 col-12" >
         <p-card>
             <div class="p-grid">
@@ -45,4 +45,53 @@
             </div>
         </p-card>
     </div>
+</div>
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddnewInscription" pButton class="ui-button-raised ui-button-success"
+            (click)="toggleFormfInscriptionAdd()" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des Préinscriptions</h3>
+
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="inscriptions" [columns]="cols" [value]="inscriptions" selectionMode="single"
+                [(selection)]="Selectedinscription" (onRowSelect)="onRowSelect($event)"  rowExpandMode="single" 
+                (onRowUnselect)="onRowUnselect($event)" [rows]="5" [paginator]="true" [pageLinks]="5"
+                [responsive]="true" [totalRecords]="inscriptions.length" [filterDelay]="0" [globalFilterFields]="['emailperso']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <th style="width: 3rem" scope="col"></th>
+                        <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="statut" scope="col">
+                            statut <p-sortIcon field="statut" scope="col"></p-sortIcon>
+                        </th>
+                        <th class="col-4 col-offset-2" style="text-decoration: underline;" scope="col">
+                            Action
+                        </th>
+                    
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData="inscriptions" let-columns="columns" let-expanded="expanded">
+                    <tr [pSelectableRow]="rowData" class="bodytab">
+                        
+                        <td *ngFor="let col of columns">
+                            {{rowData.user_id}}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"></i>
+
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+               
+
+
+</div>
+</div>        
 </div>
