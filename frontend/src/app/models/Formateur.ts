@@ -8,7 +8,9 @@ export class Formateur{
         public taux_h?:             number,
         public taux_j?:             number,
         public isInterne?:          boolean,
-        public prestataire_id?:     string
+        public prestataire_id?:     string,
+        public volume_h?:           any,
+        public volume_h_consomme?:  any
     ){}
 
 }

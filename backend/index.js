@@ -56,6 +56,7 @@ const inscriptionController =  require('./controllers/inscriptionController');
 const formateurController = require('./controllers/formateurController');
 const ressourceController = require('./controllers/ressourceController');
 const etudiantController = require('./controllers/etudiantController');
+const notesController = require('./controllers/notesController')
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
@@ -117,6 +118,8 @@ app.use('/soc/formateur', formateurController);
 app.use('/soc/ressource', ressourceController);
 
 app.use('/soc/etudiant', etudiantController);
+
+app.use('/soc/notes', notesController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

@@ -4,8 +4,7 @@
                 'layout-mobile-active': overlayMenuMobileActive}" [class]="layout">
 
   <app-topbar></app-topbar>
-  <app-navbar *ngIf="isStaff"></app-navbar>
-  <app-menu [reset]="resetMenu"></app-menu>
+  <app-menu *ngIf="isStaff"></app-menu>
 
   <div [ngClass]="connected? 'layout-content':''">
 
