@@ -59,6 +59,7 @@ const etudiantController = require('./controllers/etudiantController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
+    console.log(req.body)
     if (!origin || origin == "http://localhost:4200") {
         next()
     } else {
@@ -111,7 +112,7 @@ app.use('/soc/presence', presenceController);
 
 app.use('/soc/seance', seanceController);
 
-app.use('soc/inscription',inscriptionController);
+app.use('/soc/inscription',inscriptionController);
 app.use('/soc/formateur', formateurController);
 app.use('/soc/ressource', ressourceController);
 
