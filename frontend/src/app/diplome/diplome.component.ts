@@ -30,6 +30,7 @@ export class DiplomeComponent implements OnInit {
   LblAnneselected: any;
   idanneeselected:any;
   Lblecoleselected:any
+  idecoleselected:any
   constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
 
   campusList = [];
