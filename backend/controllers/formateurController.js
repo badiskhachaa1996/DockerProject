@@ -58,7 +58,7 @@ app.post("/create", (req, res, next) => {
     console.log(data)
     let formateur = new Formateur(
         {
-            user_id: data.user_id,
+            user_id: data.user_id, //null
             statut: data.statut,
             type_contrat: data?.type_contrat,
             taux_h: data.taux_h,

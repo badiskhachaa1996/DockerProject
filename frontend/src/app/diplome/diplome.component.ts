@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Campus } from '../models/Campus';
 import { Diplome } from '../models/Diplome';
@@ -26,16 +26,25 @@ export class DiplomeComponent implements OnInit {
   showFormUpdateDiplome: boolean = false;
   diplomeToUpdate: Diplome = new Diplome();
   idDiplomeToUpdate: string;
+  campusId: string;
+  LblAnneselected: any;
+  constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
 
   campusList = [];
   campusListToUpdate = [];
 
   dicCampus = {};
 
-  constructor(private diplomeService: DiplomeService, private router: Router, private campusService: CampusService, private formBuilder: FormBuilder, private messageService: MessageService) { }
-
   ngOnInit(): void {
+    this.campusId = this.route.snapshot.paramMap.get('id');
+    console.log(this.campusId)
     //Recuperation de la liste des diplômes
+    if(this.campusId){
+      this.diplomeService.getAllByCampus(this.campusId).subscribe(
+        (data) => { this.diplomes = data; },
+        (error) => { console.log(error) }
+      );
+    }else
     this.diplomeService.getAll().subscribe(
       (data) => { this.diplomes = data; },
       (error) => { console.log(error) }
@@ -47,20 +56,14 @@ export class DiplomeComponent implements OnInit {
     //Initialisation du formulaire de modification de diplome
     this.onInitFormUpdateDiplome();
 
-    //Recuperation de la liste des campus
-    this.campusService.getAll().subscribe(
-      ((response) => 
-      {
-        this.campusListToUpdate = response;
-        response.forEach(campus => {
-          this.campusList.push({label: campus.libelle, value: campus._id, id: campus._id});
-          
-          this.dicCampus[campus._id] = campus;
-        });
-      }),
-      ((error) => { console.log(error) })
-    );
 
+    this.campusService.getByID(this.campusId).subscribe((data2)=>{
+      console.log(data2)
+    
+     this.LblAnneselected=data2.libelle;
+
+  console.log( this.LblAnneselected)
+  })
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau diplome

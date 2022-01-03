@@ -159,7 +159,7 @@ export class FormateurComponent implements OnInit {
     });
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
-    let newUser = new User(null, firstname, lastname, phone, email, null, 'user', civilite, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
+    let newUser = new User(null, firstname, lastname, phone, email, null, 'user', civilite, null,'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet diplôme
     let newFormateur = new Formateur(null, '', statut, type_contrat, taux_h, taux_j, isInterne, prestataire_id, volumeH, volumeH_ini);

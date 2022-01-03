@@ -60,6 +60,7 @@ const notesController = require('./controllers/notesController')
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
+    console.log(req.body)
     if (!origin || origin == "http://localhost:4200") {
         next()
     } else {
