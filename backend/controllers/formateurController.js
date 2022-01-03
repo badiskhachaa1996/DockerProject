@@ -24,6 +24,32 @@ app.get("/getByUserId/:id", (req, res, next) => {
         .catch((error) => { res.status(400).json({ error: "Impossible de recuperer cet formateur via son userId " + error.message }) });
 })
 
+//Récupère le dictionaire id:formateur
+app.get("/getAllUser", (req, res, next) => {
+    var dicformateur = {};
+    Formateur.find()
+        .then((formateurList) => {
+            User.find().then((UserList) => {
+                var dicUser = {};
+
+                UserList.forEach(formateur => {
+                    dicUser[formateur._id] = formateur
+                })
+                formateurList.forEach(formateur => {
+                    dicformateur[formateur._id] = dicUser[formateur.user_id]
+                })
+                res.status(200).send(dicformateur)
+            }).catch((error) => {
+                console.log(error)
+                res.status(400).json({ error: "Impossible de recuperer les users" + error.message })
+            });
+        })
+        .catch((error) => {
+            console.log(error)
+            res.status(400).json({ error: "Impossible de recuperer les users" + error.message })
+        });
+})
+
 //Création d'un nouveau formateur et d'un nouveau user par la même occasion
 app.post("/create", (req, res, next) => {
 
@@ -71,7 +97,7 @@ app.post("/create", (req, res, next) => {
                 Formateur.findOne({ user_id: userFromDb._id })
                     .then((formateurFromDb) => {
                         if (formateurFromDb) {
-                            res.json({ success: 'Cet formateur existe déja' });
+                            res.status(201).json({ error: 'Cet formateur existe déja' });
                         } else {
                             formateur.user_id = userFromDb._id;
                             formateur.save()

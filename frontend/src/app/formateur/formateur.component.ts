@@ -7,6 +7,7 @@ import { Formateur } from '../models/Formateur';
 import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
 import { FormateurService } from '../services/formateur.service';
+import { ServService } from '../services/service.service';
 
 @Component({
   selector: 'app-formateur',
@@ -27,16 +28,36 @@ export class FormateurComponent implements OnInit {
 
   users: User[] = [];
   civiliteList = environment.civilite;
-  statutList = [];
-  typeContratList = [];
-  prestataireList = [];
+  statutList = [
+    { label: 'Prestataire', value: 'Prestataire' },
+    { label: 'Sous traitant', value: 'Sous traitant' },
+    { label: 'Vacataire', value: 'Vacataire' }
+  ];
+  typeContratList = [
+    { label: 'CDI', value: 'CDI' },
+    { label: 'CDD', value: 'CDD' },
+    { label: 'Prestation', value: 'Prestation' },
+    { label: 'Vacation', value: 'Vacation' },
+    { label: 'Sous-traitance', value: 'Sous-traitance' }
+  ];
+  prestataireList = [
+    { label: 'EliteLabs', value: 'EliteLabs' },
+    { label: 'Autre', value: 'Autre' }
+  ];
   matiereList = [];
   volumeHList = [];
   affichePrestataire: string;
+  tempVolumeCons = null;
+  userList: any = {};
+  serviceDic = []
 
-  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
+  genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+
+  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private ServService: ServService) { }
 
   ngOnInit(): void {
+    this.getUserList()
+
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
       (data) => { this.formateurs = data; },
@@ -49,32 +70,7 @@ export class FormateurComponent implements OnInit {
     //Initialisation du formulaire de modification de formateur
     this.onInitFormUpdateFormateur();
 
-    //Tableau de liste de statuts
-    this.statutList = [
-      { label: '--- Statut ---', value: null },
-      { label: 'Prestataire', value: 'Prestataire' },
-      { label: 'Sous traitant', value: 'Sous traitant' },
-      { label: 'Vacataire', value: 'Vacataire' }
-    ];
-
-    //Tableau de la liste des types de contrat
-    this.typeContratList = [
-      { label: '--- Type de contrat ---', value: null },
-      { label: 'CDI', value: 'CDI' },
-      { label: 'CDD', value: 'CDD' },
-      { label: 'Prestation', value: 'Prestation' },
-      { label: 'Vacation', value: 'Vacation' },
-      { label: 'Sous-traitance', value: 'Sous-traitance' }
-    ];
-
-    //Tableau de liste des prestataire
-    this.prestataireList = [
-      { label: '--- Prestataire Entreprise ---', value: null },
-      { label: 'EliteLabs', value: 'EliteLabs' },
-      { label: 'Autre', value: 'Autre' }
-    ];
-
-    this.matiereList = [
+    this.matiereList = [ //TODO Faire les matières
       {
         label: 'Germany',
         items: [
@@ -101,6 +97,12 @@ export class FormateurComponent implements OnInit {
       }
     ];
 
+    this.ServService.getAll().subscribe((services) => {
+      services.forEach(serv => {
+        this.serviceDic[serv._id] = serv;
+      });
+    })
+
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau formateur
@@ -116,12 +118,12 @@ export class FormateurComponent implements OnInit {
       rue_adresse: ['', Validators.required],
       numero_adresse: ['', Validators.required],
       postal_adresse: ['', Validators.required],
-      statut: ['', Validators.required],
-      type_contrat: ['', Validators.required],
+      statut: [this.statutList[0], Validators.required],
+      type_contrat: [this.typeContratList[0], Validators.required],
       taux_h: ['', Validators.required],
       taux_j: ['', Validators.required],
       isInterne: [false, Validators.required],
-      prestataire_id: [''],
+      prestataire_id: [this.prestataireList[0]],
       volume_h: this.formBuilder.array([]),
     });
   }
@@ -160,21 +162,28 @@ export class FormateurComponent implements OnInit {
     let newUser = new User(null, firstname, lastname, phone, email, null, 'user', civilite, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet diplôme
-    let newFormateur = new Formateur(null, '', statut, type_contrat, taux_h, taux_j, isInterne, prestataire_id,volumeH,volumeH_ini);
+    let newFormateur = new Formateur(null, '', statut, type_contrat, taux_h, taux_j, isInterne, prestataire_id, volumeH, volumeH_ini);
 
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
-        this.formateurService.getAll().subscribe(
-          (data) => {
-            this.formateurs = data;
-          },
-          (error) => { console.log(error) }
-        );
+        if (response.success) {
+          this.getUserList()
 
-        //this.router.navigate(['formateur']);
+          this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+          this.formateurService.getAll().subscribe(
+            (data) => {
+              this.formateurs = data;
+            },
+            (error) => { console.log(error) }
+          );
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
+        }
       }),
-      ((error) => { console.log(error); })
+      ((error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
+        console.log(error);
+      })
     );
 
     this.showFormAddFormateur = false;
@@ -186,20 +195,21 @@ export class FormateurComponent implements OnInit {
     this.formateurService.getById(this.idFormateurToUpdate).subscribe(
       ((response) => {
         this.formateurToUpdate = response;
-        this.formUpdateFormateur.patchValue({ statut: this.formateurToUpdate.statut, type_contrat: this.formateurToUpdate.type_contrat, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j });
+        this.tempVolumeCons = response.volume_h_consomme
+        this.formUpdateFormateur.patchValue({ statut: { label: this.formateurToUpdate.statut, value: this.formateurToUpdate.statut }, type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j });
         //TODO matiereList
         let dic = response.volume_h // {id:nb}
         let k = [];
         this.volumeHList = [];
         console.log(response)
-        if(response.volume_h){
+        if (response.volume_h) {
           k = Object.keys(dic)
           k.forEach(key => {
             this.volumeHList.push(parseInt(dic[key]))
           });
         }
 
-        this.formUpdateFormateur.setControl('volume_h',this.formBuilder.array(k))
+        this.formUpdateFormateur.setControl('volume_h', this.formBuilder.array(k))
       }),
       ((error) => { console.log(error); })
     );
@@ -235,21 +245,31 @@ export class FormateurComponent implements OnInit {
 
     this.volumeHList.forEach((VH, index) => {
       volumeH[tempVH[index]] = VH
-      volumeH_ini[tempVH[index]] = 0;
+      if (this.tempVolumeCons[tempVH[index]]) {
+        volumeH_ini[tempVH[index]] = this.tempVolumeCons[tempVH[index]];
+      } else {
+        volumeH_ini[tempVH[index]] = 0;
+      }
+
     });
 
-    this.formateurToUpdate.volume_h= volumeH;
-    this.formateurToUpdate.volume_h_consomme= volumeH_ini;
+    this.formateurToUpdate.volume_h = volumeH;
+    this.formateurToUpdate.volume_h_consomme = volumeH_ini;
 
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
-      (() => {
-        this.messageService.add({ severity: 'success', summary: 'Modification de formateur', detail: 'Cet formateur a bien été modifié' });
-        this.formateurService.getAll().subscribe(
-          (data) => {
-            this.formateurs = data;
-          },
-          (error) => { console.log(error) }
-        );
+      ((data) => {
+        if (data.error) {
+          this.messageService.add({ severity: 'error', summary: 'Erreur lors de la modification de formateur', detail: 'data.error' });
+        } else {
+          this.messageService.add({ severity: 'success', summary: 'Modification de formateur', detail: 'Cet formateur a bien été modifié' });
+          this.getUserList()
+          this.formateurService.getAll().subscribe(
+            (data) => {
+              this.formateurs = data;
+            },
+            (error) => { console.log(error) }
+          );
+        }
       }),
       ((error) => { console.log(error); })
     );
@@ -257,7 +277,7 @@ export class FormateurComponent implements OnInit {
     this.showFormUpdateFormateur = false;
   }
 
-  resetForm(){
+  resetForm() {
     this.volumeHList = [];
     this.formAddFormateur.reset()
     this.formUpdateFormateur.reset()
@@ -296,6 +316,38 @@ export class FormateurComponent implements OnInit {
 
   changeVolumeH(i, event) {
     this.volumeHList[i] = parseInt(event.target.value);
-    //TODO if event.target.value == null -> formcontrol isInvalid
+  }
+
+  deleteMatiereAdd(i) {
+    let temp = (this.volumeHList[i]) ? this.volumeHList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer la matière " + temp + "avec son volume horaire ET son volume consommé ?")) {
+      this.volumeHList.splice(i)
+
+      let FArray: [] = this.formAddFormateur.get('volume_h').value;
+      FArray.splice(i)
+      this.formAddFormateur.setControl('volume_h', this.formBuilder.array(FArray))
+    }
+  }
+
+
+  deleteMatiereUpdate(i) {
+    let temp = (this.volumeHList[i]) ? this.volumeHList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer la matière " + temp + "avec son volume horaire ET son volume consommé ?")) {
+      this.volumeHList.splice(i)
+
+      let FArray: [] = this.formUpdateFormateur.get('volume_h').value;
+      FArray.splice(i)
+      this.formUpdateFormateur.setControl('volume_h', this.formBuilder.array(FArray))
+
+    }
+  }
+
+  getUserList() {
+    this.formateurService.getAllUser().subscribe((data) => {
+      this.userList = data;
+      console.log(data)
+    }, error => {
+      console.log(error)
+    })
   }
 }

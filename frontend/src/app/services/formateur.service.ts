@@ -48,7 +48,11 @@ export class FormateurService {
   updateById(formateur: Formateur)
   {
     let registreUrl = this.apiUrl + "updateById/" + formateur._id;
-    return this.httpClient.post<Formateur>(registreUrl, formateur, httpOptions1);
+    return this.httpClient.post<any>(registreUrl, formateur, httpOptions1);
+  }
+
+  getAllUser(){
+    return this.httpClient.get(this.apiUrl+"getAllUser",httpOptions1)
   }
 
 }

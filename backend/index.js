@@ -112,7 +112,7 @@ app.use('/soc/presence', presenceController);
 
 app.use('/soc/seance', seanceController);
 
-app.use('soc/inscription',inscriptionController);
+app.use('/soc/inscription',inscriptionController);
 app.use('/soc/formateur', formateurController);
 app.use('/soc/ressource', ressourceController);
 

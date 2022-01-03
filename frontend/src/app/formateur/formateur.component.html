@@ -92,19 +92,19 @@
                             <input type="number" formControlName="taux_j" class="form-control col-12"
                                 placeholder="Coût/jour" pInputText>
                         </div>
-                        <!--
-                            
-                        -->
                         <div class="ui-g-12 ui-md-12" formArrayName="volume_h">
                             <div *ngFor="let tempControl of getVolumeH().controls; let i = index">
                                 <div class="grid pb-3">
                                     <span>
-                                        <p-dropdown class="form-control col-8" [options]="matiereList"
+                                        <p-dropdown class="form-control col-7" [options]="matiereList"
                                             placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
                                         </p-dropdown>
                                     </span>
                                     <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"
-                                        placeholder="Volume horaire" pInputText>
+                                        placeholder="Volume horaire" value="0" pInputText>
+                                    <div class="col-1">
+                                        <i class="fas fa-trash-alt" (click)="deleteMatiereAdd(i)"></i>
+                                    </div>
                                 </div>
                             </div>
                             <button class="btn btn-success" type="button" (click)="onAddMatiere()" pButton
@@ -119,7 +119,8 @@
 
                         <div>
                             <button pButton type="submit" label="Ajouter le formateur"
-                                [disabled]="formAddFormateur.invalid" style="margin-left: 70%;"></button>
+                                [disabled]="formAddFormateur.invalid || getVolumeH().length!=volumeHList.length"
+                                style="margin-left: 70%;"></button>
                         </div>
                     </div>
                 </form>
@@ -176,24 +177,30 @@
                                     formControlName="prestataire_id"></p-dropdown>
                             </span>
                         </div>
+
                         <div class="ui-g-12 ui-md-12" formArrayName="volume_h">
                             <div *ngFor="let tempControl of getVolumeHUpdate().controls; let i = index">
                                 <div class="grid pb-3">
                                     <span>
-                                        <p-dropdown class="form-control col-8" [options]="matiereList"
+                                        <p-dropdown class="form-control col-7" [options]="matiereList"
                                             placeholder="Choissisez une matière" [group]="true" [formControlName]="i">
                                         </p-dropdown>
                                     </span>
-                                    <input type="number" class="col-4" (change)="changeVolumeH(i,$event)"
-                                        placeholder="Volume horaire" [(value)]="volumeHList[i]" pInputText/>
+                                    <input type="number" class="col-3" (change)="changeVolumeH(i,$event)"
+                                        placeholder="Volume horaire" [(value)]="volumeHList[i]" pInputText />
+                                    <div class="col-1">
+                                        <i class="fas fa-trash-alt" (click)="deleteMatiereUpdate(i)"></i>
+                                    </div>
                                 </div>
                             </div>
                             <button class="btn btn-success" type="button" (click)="onUpdateMatiere()" pButton
                                 label="Ajouter une matière"></button>
+
                         </div>
                         <div>
                             <button pButton type="submit" label="Modifier le formateur"
-                                [disabled]="formUpdateFormateur.invalid" style="margin-left: 68%;"></button>
+                                [disabled]="formUpdateFormateur.invalid || getVolumeHUpdate().length!=volumeHList.length"
+                                style="margin-left: 68%;"></button>
                         </div>
                     </div>
                 </form>
@@ -221,6 +228,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
+                        <th pSortableColumn="user_id" scope="col">Nom & Prénom: <p-sortIcon field="user_id"></p-sortIcon></th>
                         <th pSortableColumn="statut" scope="col">
                             Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
@@ -245,6 +253,11 @@
                             </button>
                         </td>
                         <td>
+                            {{userList[formateur._id].civilite |
+                                i18nSelect: genderMap}} {{userList[formateur._id].lastname | titlecase}}
+                                {{userList[formateur._id].firstname | titlecase}}
+                        </td>
+                        <td>
                             {{ formateur.statut }}
                         </td>
                         <td>
@@ -257,19 +270,55 @@
                             <i class="pi pi-check"></i>
                         </td>-->
                         <td>
-                            {{ formateur.isInterne }}
+                            {{ formateur.isInterne?'Est interne':"n'est pas interne" }}
                         </td>
                         <td>
                             <i style="margin-left: 2%;"
                                 (click)="resetForm();showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"
                                 class="pi pi-pencil"></i>
+                            <i style="margin-left: 2%;" (click)="resetHeure()" class="fas fa-undo"></i>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-formateur>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <p-fieldset legend="Informations supplementaires">
+                                <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Service :</b>
+                                        </div>
+                                        <div *ngIf="userList[formateur._id].service_id" class="ui-g-6 ui-md-6"
+                                            style="text-align:left !important;">
+                                            <span style="color: black;">{{
+                                                serviceDic[userList[formateur._id].service_id].label
+                                                }}</span>
+                                        </div>
+                                        <div *ngIf="!userList[formateur._id].service_id" class="ui-g-6 ui-md-6"
+                                            style="text-align:left !important;">
+                                            <span style="color: black;">Sans Service</span>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Role :</b>
+                                        </div>
+                                        <div *ngIf="userList[formateur._id].role" class="ui-g-6 ui-md-6"
+                                            style="text-align:left !important;">
+                                            <span style="color: black;">{{userList[formateur._id].role=='user'?'Utilisateur':userList[formateur._id].role}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Email :</b>
+                                        </div>
+                                        <div *ngIf="userList[formateur._id].email" class="ui-g-6 ui-md-6"
+                                            style="text-align:left !important;">
+                                            <span style="color: black;">{{userList[formateur._id].email}}</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal;">
 
                                     <div class="ui-g-4 ui-md-4">
@@ -286,11 +335,11 @@
                                             <b style="text-align:left !important;">Coût/jour</b>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <i style="color: black;">{{ formateur.taux_j }} €</i>
+                                            <span style="color: black;">{{ formateur.taux_j }} €</span>
                                         </div>
                                     </div>
 
-                                    <div class="ui-g-4 ui-md-4">
+                                    <div class="ui-g-4 ui-md-4" *ngIf="formateur.prestataire_id">
                                         <div class="ui-g-6 ui-md-6">
                                             <b style="text-align:left !important;">Prestataire</b>
                                         </div>
