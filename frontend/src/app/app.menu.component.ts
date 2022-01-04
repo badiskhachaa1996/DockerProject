@@ -52,6 +52,7 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         { label: 'Liste des apprenants', icon: 'pi pi-fw pi-users', routerLink: ['../listeEtudiants'] },
                         { label: 'Gestion des classes', icon: 'pi pi-fw pi-cog', routerLink: ['../gestionClasses'] },
+                        { label: 'Gestion des matières', icon: 'pi pi-tags', routerLink: ['/matieres'] },
                         { label: 'Gestions des séances', icon: 'pi pi-video', routerLink: ['/seance'] },
                         { label: 'Gestions des formateurs', icon: 'pi pi-users', routerLink: ['/formateurs'] },
                     ]

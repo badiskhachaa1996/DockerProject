@@ -90,7 +90,6 @@
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
-                            <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
                                 placeholder="Recherche" />
                         </span>
@@ -98,17 +97,17 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="classe" scope="col">
-                            Classe <p-sortIcon field="classe"></p-sortIcon>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="classe_id" scope="col">
+                            Classe <p-sortIcon field="classe_id"></p-sortIcon>
                         </th>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="debut" scope="col">
-                            Début <p-sortIcon field="debut"></p-sortIcon>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_debut" scope="col">
+                            Début <p-sortIcon field="date_debut"></p-sortIcon>
                         </th>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="fin" scope="col">
-                            Fin <p-sortIcon field="fin"></p-sortIcon>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_fin" scope="col">
+                            Fin <p-sortIcon field="date_fin"></p-sortIcon>
                         </th>
-                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="formateur" scope="col">
-                            Formateur <p-sortIcon field="formateur"></p-sortIcon>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="formateur_id" scope="col">
+                            Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
                         <th class="col-2" style="text-decoration: underline;" scope="col">
                             Action
