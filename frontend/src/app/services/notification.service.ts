@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Notification } from '../models/notification';
 import { Observable, Subject } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
-import {tap} from 'rxjs/operators';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 
@@ -29,7 +28,7 @@ export class NotificationService {
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.post<any>(loginUrl, httpOptions1);
+    return this.http.get<any>(loginUrl, httpOptions1);
   }
 
   update(notif :any){

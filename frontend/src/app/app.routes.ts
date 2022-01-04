@@ -26,6 +26,7 @@ import { CampusComponent } from './campus/campus.component';
 import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
 import { FormateurComponent } from './formateur/formateur.component';
 import { MatiereComponent } from './matiere/matiere.component';
+import { NotesComponent } from './notes/notes.component';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', component: ListTicketComponent },
@@ -55,10 +56,11 @@ const routes: Routes = [
     { path:'campus', component: CampusComponent},
     { path:'campus/:id', component: CampusComponent},
     {path:'firstInscription',component:FirstInscriptionComponent},
+  { path: 'notes/:type/:id', component: NotesComponent },
+  { path: 'notes', component: NotesComponent },
     { path: '**', redirectTo: '/' }
   ];
-
-
+  
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

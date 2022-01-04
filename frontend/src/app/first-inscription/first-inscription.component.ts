@@ -48,7 +48,10 @@ export class FirstInscriptionComponent implements OnInit {
     );
   
       }
+      toggleFormfInscriptionAdd(){
 
+        this.showFormAddnewInscription=!this.showFormAddnewInscription;
+      }
 
       createfInscription(){
         console.log(this.formAddNewInscription.value.diplomeID._id)
