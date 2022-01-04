@@ -75,7 +75,7 @@
       <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
              placeholder="Recherche" />
 
-      <p-table #dt1 [columns]="cols" selectionMode="single" [value]="matieres" responsiveLayout="scroll" 
+      <p-table #dt1 selectionMode="single" [value]="matieres" responsiveLayout="scroll" 
               [rows]="5" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="matieres.length" 
               [filterDelay]="0" [globalFilterFields]="['nom']">
         <ng-template pTemplate="header">
