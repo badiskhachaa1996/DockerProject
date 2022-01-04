@@ -25,6 +25,7 @@ import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
 import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
 import { FormateurComponent } from './formateur/formateur.component';
+import { MatiereComponent } from './matiere/matiere.component';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', component: ListTicketComponent },
@@ -49,6 +50,7 @@ const routes: Routes = [
     { path: 'diplome/:id', component: DiplomeComponent },
     { path:'ecoles/:id', component: EcoleComponent},
     { path:'formateurs', component: FormateurComponent},
+    { path:'matieres', component: MatiereComponent},
     
     { path:'campus', component: CampusComponent},
     { path:'campus/:id', component: CampusComponent},
