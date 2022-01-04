@@ -107,6 +107,7 @@ import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
 import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
 import { FormateurComponent } from './formateur/formateur.component';
+import { MatiereComponent } from './matiere/matiere.component';
 import { NotesComponent } from './notes/notes.component';
 
 
@@ -225,6 +226,7 @@ import { NotesComponent } from './notes/notes.component';
         CampusComponent,
         FirstInscriptionComponent,
         FormateurComponent,
+        MatiereComponent,
         NotesComponent,
     
 
