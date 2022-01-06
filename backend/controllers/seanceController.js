@@ -10,9 +10,12 @@ app.post('/create', (req, res, next) => {
     //Création d'une nouvelle seance
     const seance = new Seance({
         classe_id: req.body.classe_id,
+        matiere_id: req.body.matiere_id,
+        libelle: req.body.libelle,
         date_debut: req.body.date_debut,
         date_fin: req.body.date_fin,
-        formateur_id: req.body.formateur_id
+        formateur_id: req.body.formateur_id,
+        infos: req.body.infos,
     });
 
     //Envoi vers la BD
@@ -29,9 +32,12 @@ app.post('/edit/:id', (req, res, next) => {
         { _id: req.params.id },
         {
             classe_id: req.body.classe_id,
+            matiere_id: req.body.matiere_id,
+            libelle: req.body.libelle,
             date_debut: req.body.date_debut,
             date_fin: req.body.date_fin,
-            formateur_id: req.body.formateur_id
+            formateur_id: req.body.formateur_id,
+            infos: req.body.infos,
         }
     ).then((seancefromdb) => res.status(201).send(seancefromdb))
         .catch(error => res.status(400).send(error));
