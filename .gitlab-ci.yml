@@ -82,7 +82,7 @@ deploy_node_todev:
     - cd backend
     - npm ci
     #- pm2 delete index.js
-    - pm2 start index.js
+    - pm2 start -f index.js
     # - pm2 logs index
     - pm2 list
   only:
