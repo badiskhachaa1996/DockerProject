@@ -55,7 +55,7 @@ app.post("/create", (req, res, next) => {
 
     //Création d'un nouvel objet formateur
     let data = req.body.newFormateur;
-    console.log(data)
+    
     let formateur = new Formateur(
         {
             user_id: data.user_id, //null

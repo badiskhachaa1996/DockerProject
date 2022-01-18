@@ -109,6 +109,7 @@ import { FirstInscriptionComponent } from './first-inscription/first-inscription
 import { FormateurComponent } from './formateur/formateur.component';
 import { MatiereComponent } from './matiere/matiere.component';
 import { NotesComponent } from './notes/notes.component';
+import { EntrepriseComponent } from './entreprise/entreprise.component';
 
 
 
@@ -228,6 +229,7 @@ import { NotesComponent } from './notes/notes.component';
         FormateurComponent,
         MatiereComponent,
         NotesComponent,
+        EntrepriseComponent,
     
 
                

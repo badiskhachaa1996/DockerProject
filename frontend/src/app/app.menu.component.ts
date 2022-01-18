@@ -55,6 +55,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Gestion des matières', icon: 'pi pi-tags', routerLink: ['/matieres'] },
                         { label: 'Gestions des séances', icon: 'pi pi-video', routerLink: ['/seance'] },
                         { label: 'Gestions des formateurs', icon: 'pi pi-users', routerLink: ['/formateurs'] },
+                        { label: 'Gestions des entreprises', icon: 'pi pi-desktop', routerLink: ['/entreprises'] },
                     ]
                 },
                 {

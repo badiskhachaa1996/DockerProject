@@ -27,40 +27,42 @@ import { FirstInscriptionComponent } from './first-inscription/first-inscription
 import { FormateurComponent } from './formateur/formateur.component';
 import { MatiereComponent } from './matiere/matiere.component';
 import { NotesComponent } from './notes/notes.component';
+import { EntrepriseComponent } from './entreprise/entreprise.component';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', component: ListTicketComponent },
 
-    { path:'login',component:LoginComponent},
-    { path:'register',component:RegisterComponent},
-    { path:'service',component:ServiceComponent},
-    { path:'ticket/suivi',component:SuiviComponent},
-    { path:'home', component: HomeComponent},
-    { path:'listUser', component: ListUserComponent},
-    { path:'anneeScolaire', component: AnneeScolaireComponent},
-    { path: 'notification', component: NotificationComponent},
-    { path: 'profil', component: ModifierProfilComponent },
-    { path: 'profil/creation',component:FirstconnectionComponent},
-    { path: 'classe',component:ClasseComponent},
-    { path:'ecoles', component: EcoleComponent},
-    {path: 'sign',component:SignComponent},
-    {path: 'sign/:id',component:SignComponent},
-    { path:'seance', component: SeanceComponent },
-    { path: 'seance/calendrier', component: CalendarComponent },
-    { path: 'diplome', component: DiplomeComponent },
-    { path: 'diplome/:id', component: DiplomeComponent },
-    { path:'ecoles/:id', component: EcoleComponent},
-    { path:'formateurs', component: FormateurComponent},
-    { path:'matieres', component: MatiereComponent},
-    
-    { path:'campus', component: CampusComponent},
-    { path:'campus/:id', component: CampusComponent},
-    {path:'firstInscription',component:FirstInscriptionComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'service', component: ServiceComponent },
+  { path: 'ticket/suivi', component: SuiviComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'listUser', component: ListUserComponent },
+  { path: 'anneeScolaire', component: AnneeScolaireComponent },
+  { path: 'notification', component: NotificationComponent },
+  { path: 'profil', component: ModifierProfilComponent },
+  { path: 'profil/creation', component: FirstconnectionComponent },
+  { path: 'classe', component: ClasseComponent },
+  { path: 'ecoles', component: EcoleComponent },
+  { path: 'sign', component: SignComponent },
+  { path: 'sign/:id', component: SignComponent },
+  { path: 'seance', component: SeanceComponent },
+  { path: 'seance/calendrier', component: CalendarComponent },
+  { path: 'diplome', component: DiplomeComponent },
+  { path: 'diplome/:id', component: DiplomeComponent },
+  { path: 'ecoles/:id', component: EcoleComponent },
+  { path: 'formateurs', component: FormateurComponent },
+  { path: 'matieres', component: MatiereComponent },
+  { path: 'entreprises', component: EntrepriseComponent },
+  { path: 'campus', component: CampusComponent },
+  { path: 'campus/:id', component: CampusComponent },
+  { path: 'firstInscription', component: FirstInscriptionComponent },
   { path: 'notes/:type/:id', component: NotesComponent },
   { path: 'notes', component: NotesComponent },
-    { path: '**', redirectTo: '/' }
-  ];
-  
+  { path: '**', redirectTo: '/' }
+
+];
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
