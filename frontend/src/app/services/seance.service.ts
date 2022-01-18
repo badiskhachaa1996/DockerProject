@@ -22,6 +22,11 @@ export class SeanceService {
     let registreUrl = this.apiUrl + "create";
     return this.httpClient.post<Seance>(registreUrl, seance, httpOptions1);
   }
+  
+  getById(id:String){
+    let registreUrl = this.apiUrl + "getById/"+id;
+    return this.httpClient.get<Seance>(registreUrl, httpOptions1);
+  }
 
   //Recupération de toute les séances 
   getAll() {
