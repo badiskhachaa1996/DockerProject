@@ -4,9 +4,12 @@ const mongoose = require('mongoose');
 const seanceSchema = mongoose.Schema({
     //classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: true },
     classe_id: { type: String, required: true },
+    matiere_id: { type: String, required: true },
+    libelle: { type: String, required: false },
     date_debut: { type: Date, required: true },
     date_fin: { type: Date, required: true },
-    formateur_id: { type: String, required: false }
+    formateur_id: { type: String, required: false },
+    infos: { type: String, required: false }
     //formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Formateur', required: false }
 });
 

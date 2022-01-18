@@ -8,20 +8,33 @@
                     <h3 class="text-center">Ajouter une séance</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
-                            <input type="text" formControlName="classe" class="form-control col-12"
-                                placeholder="Nom de la classe" pInputText>
+                            <label>Nom de la classe</label><br>
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom">
+                            </p-dropdown>
                         </div>
-                        <div class="mt-2 mb-2 col-12">
-                            <p-calendar formControlName="debut" showTime="true" hourFormat="24"
-                                placeholder="Début de la séance" [showIcon]="true"></p-calendar>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Matière</label><br>
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom">
+                            </p-dropdown>
                         </div>
-                        <div class="mt-2 mb-2 col-12">
-                            <p-calendar formControlName="fin" showTime="true" hourFormat="24"
-                                placeholder="Fin de la séance" [showIcon]="true"></p-calendar>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Libelle</label><br>
+                            <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance" class="form-control col-12">
                         </div>
-                        <div class="mt-2 mb-2 col-6">
-                            <input type="text" formControlName="formateur" class="form-control col-12"
-                                placeholder="Formateur" pInputText>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Début:</label>
+                            <input type="datetime-local" formControlName="debut" class="form-control col-12"
+                                placeholder="Début de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Fin:</label>
+                            <input type="datetime-local" formControlName="fin" class="form-control col-12"
+                                placeholder="Fin de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom du formateur</label><br>
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom">
+                            </p-dropdown>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
@@ -43,24 +56,33 @@
                     <h3 class="text-center">Modifier la séance</h3>
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
-                            <label>Classe:</label>
-                            <input type="text" formControlName="classe" class="form-control col-12"
-                                placeholder="Nom de la classe" pInputText>
+                            <label>Nom de la classe</label><br>
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Matière</label><br>
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Libelle</label><br>
+                            <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance" class="form-control col-12">
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Début:</label>
                             <input type="datetime-local" formControlName="debut" class="form-control col-12"
                                 placeholder="Début de la séance" pInputText>
                         </div>
-                        <div class="mt-2 mb-2 col-6">
+                        <div class="mt-2 mb-2 col-8">
                             <label>Fin:</label>
                             <input type="datetime-local" formControlName="fin" class="form-control col-12"
                                 placeholder="Fin de la séance" pInputText>
                         </div>
-                        <div class="mt-2 mb-2 col-6">
-                            <label>Formateur:</label>
-                            <input type="text" formControlName="formateur" class="form-control col-12"
-                                placeholder="Formateur" pInputText>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom du formateur</label><br>
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom">
+                            </p-dropdown>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
                             <button pButton class="ui-button-raised ui-button-success"
@@ -86,7 +108,7 @@
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" selectionMode="single" [rows]="5"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="seances.length" [filterDelay]="0"
-                [globalFilterFields]="['classe_id','date_debut','date_fin','formateur_id']">
+                [globalFilterFields]="['classe_id','libelle','date_debut','date_fin','formateur_id','matiere']">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
@@ -99,6 +121,12 @@
                     <tr>
                         <th class="col-5" style="text-decoration: underline;" pSortableColumn="classe_id" scope="col">
                             Classe <p-sortIcon field="classe_id"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="matiere" scope="col">
+                            Matière <p-sortIcon field="matiere"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="libelle" scope="col">
+                            Libelle <p-sortIcon field="libelle"></p-sortIcon>
                         </th>
                         <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_debut" scope="col">
                             Début <p-sortIcon field="date_debut"></p-sortIcon>
@@ -117,7 +145,13 @@
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr>
                         <td>
-                            {{rowData.classe_id}}
+                            {{ classes[rowData.classe_id]?.nom }}
+                        </td>
+                        <td>
+                            {{ matieres[rowData.matiere_id]?.nom }}
+                        </td>
+                        <td>
+                            {{ rowData.libelle }}
                         </td>
                         <td>
                             {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
@@ -126,11 +160,11 @@
                             {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
                         </td>
                         <td>
-                            {{rowData.formateur_id}}
+                            {{ formateurs[rowData.formateur_id]?.firstname }} {{ formateurs[rowData.formateur_id]?.lastname }}
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                                (click)="showModify(rowData)"></i>
+                                (click)="showModify(rowData); classToModif = classes[rowData.classe_id]?.nom; matiereToModif = matieres[rowData.matiere_id]?.nom "></i>
                         </td>
                     </tr>
                 </ng-template>
