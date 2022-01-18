@@ -9,17 +9,19 @@
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
                             <label>Nom de la classe</label><br>
-                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom">
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom" 
+                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Matière</label><br>
-                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom">
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                            emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Libelle</label><br>
-                            <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance" class="form-control col-12">
+                            <input pInputText type="text" formControlName="libelle" placeholder="Libelle de la séance" class="form-control col-12">
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Début:</label>
@@ -33,7 +35,8 @@
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Nom du formateur</label><br>
-                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom">
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                            emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
@@ -57,12 +60,14 @@
                     <div class="p-grid">
                         <div class="mt-2 mb-2 col-8">
                             <label>Nom de la classe</label><br>
-                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom">
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom"
+                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Matière</label><br>
-                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom">
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                            emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="mt-2 mb-2 col-8">
@@ -81,7 +86,8 @@
                         </div>
                         <div class="mt-2 mb-2 col-8">
                             <label>Nom du formateur</label><br>
-                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom">
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                            emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
                             </p-dropdown>
                         </div>
                         <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">

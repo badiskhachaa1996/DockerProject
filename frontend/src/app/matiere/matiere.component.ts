@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Matiere } from '../models/Matiere';
+import { DiplomeService } from '../services/diplome.service';
 import { MatiereService } from '../services/matiere.service';
 
 @Component({
@@ -21,12 +22,14 @@ export class MatiereComponent implements OnInit {
 
   idMatiereToUpdate: string;
 
-  constructor(private messageService: MessageService, private matiereService: MatiereService, private formBuilder: FormBuilder) { }
+  formationList: any = [];
+  formationDic:any = {};
+
+  constructor(private messageService: MessageService, private matiereService: MatiereService, private formBuilder: FormBuilder, private diplomeService: DiplomeService) { }
 
   ngOnInit(): void {
 
-    //Initialisation du formulaire d'ajout de matieres
-    this.onInitFormAddMatiere();
+
 
     //Initialisation du formulaire de mdification d'une matière
     this.onInitFormModifMatiere();
@@ -37,12 +40,24 @@ export class MatiereComponent implements OnInit {
       ((error) => { console.log(error) })
     );
 
+    this.diplomeService.getAll().subscribe(data => {
+      this.formationList = data
+      data.forEach(formation=>{
+        this.formationDic[formation._id]=formation;
+      })
+
+      //Initialisation du formulaire d'ajout de matieres
+      this.onInitFormAddMatiere();
+
+    })
+
   }
 
   //methode d'initialisation du formulaire d'ajout de matière
   onInitFormAddMatiere() {
     this.formAddMatiere = this.formBuilder.group({
-      nom: ['', Validators.required]
+      nom: ['', Validators.required],
+      formation_id: [this.formationList[0], Validators.required]
     })
   }
 
@@ -50,7 +65,8 @@ export class MatiereComponent implements OnInit {
   onAddMatiere() {
 
     let nom = this.formAddMatiere.get('nom').value;
-    let matiere = new Matiere(null, nom);
+    let formation_id = this.formAddMatiere.get('formation_id').value;
+    let matiere = new Matiere(null, nom, formation_id);
 
     //Envoi vers la BD
     this.matiereService.create(matiere).subscribe(
@@ -66,25 +82,27 @@ export class MatiereComponent implements OnInit {
     );
 
     this.formAddMatiere.reset();
+    this.onInitFormAddMatiere();
     this.showFormAddMatiere = false;
   }
 
 
   //Methode de recuperation de la matière à modifier
-  onGetbyId() {
-    this.matiereService.getById(this.idMatiereToUpdate).subscribe(
-      ((response) => {
-        this.matiereToUpdate = response;
-        this.formModifMatiere.patchValue({ nom: this.matiereToUpdate.nom });
-      }),
-      ((error) => { console.log(error) })
-    );
+  onGetbyId(rowData) {
+    this.formModifMatiere.patchValue({ nom: rowData.nom});
+    this.diplomeService.getById(rowData.formation_id).subscribe(
+      (data) => {
+        console.log(data)
+        this.formModifMatiere.patchValue({ formation_id: data});
+      }
+    )
   }
 
   //Methode d'initialisation du formulaire de modification d'une matière
   onInitFormModifMatiere() {
     this.formModifMatiere = this.formBuilder.group({
       nom: ['', Validators.required],
+      formation_id: ["", Validators.required]
     });
   }
 
@@ -92,7 +110,7 @@ export class MatiereComponent implements OnInit {
   //Methode de modification d'une matière
   onModifMatiere() {
     //Création de la matière à modifier
-    this.matiereToUpdate = new Matiere(this.idMatiereToUpdate, this.formModifMatiere.get('nom').value);
+    this.matiereToUpdate = new Matiere(this.idMatiereToUpdate, this.formModifMatiere.get('nom').value, this.formModifMatiere.get('formation_id').value);
 
     this.matiereService.updateById(this.matiereToUpdate).subscribe(
       ((response) => {

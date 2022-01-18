@@ -15,6 +15,15 @@
                 pInputText>
             </div>
 
+            <div class="ui-g-6 ui-md-6">
+              <label>Formation</label>
+              <span>
+                <p-dropdown [options]="formationList" optionLabel="titre" optionValue="_id"
+                  formControlName="formation_id">
+                </p-dropdown>
+              </span>
+            </div>
+
             <div>
               <button pButton type="submit" label="Modifier la matiere" [disabled]="formModifMatiere.invalid"
                 style="margin-left: 77%;"></button>
@@ -46,7 +55,16 @@
               <input type="text" formControlName="nom" class="form-control col-12" placeholder="Ex: Cours de PHP"
                 pInputText>
             </div>
-
+            
+            <div class="ui-g-6 ui-md-6">
+              <label>Formation</label>
+              <span>
+                <p-dropdown [options]="formationList" optionLabel="titre" optionValue="_id"
+                  formControlName="formation_id">
+                </p-dropdown>
+              </span>
+            </div>
+      
             <div>
               <button pButton type="submit" label="Ajouter la matiere" [disabled]="formAddMatiere.invalid"
                 style="margin-left: 78%;" (click)="onAddMatiere(); showFormModifMatiere = false;"></button>
@@ -66,28 +84,34 @@
 <div class="grid">
   <div class="col-10 col-offset-1">
     <!-- Bouton d'ajout d'une nouvelle matière -->
-    <button pButton (click)="showFormAddMatiere = true; showFormModifMatiere = false;" type="button" label="Nouvelle matière"
-      style="float: right"></button>
+    <button pButton (click)="showFormAddMatiere = true; showFormModifMatiere = false;" type="button"
+      label="Nouvelle matière" style="float: right"></button>
 
     <h3>Liste des Matières</h3>
     <div class="col-12 card shadow-lg my-5">
 
       <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-             placeholder="Recherche" />
+        placeholder="Recherche" />
 
-      <p-table #dt1 selectionMode="single" [value]="matieres" responsiveLayout="scroll" 
-              [rows]="5" [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="matieres.length" 
-              [filterDelay]="0" [globalFilterFields]="['nom']">
+      <p-table #dt1 selectionMode="single" [value]="matieres" responsiveLayout="scroll" [rows]="5" [paginator]="true"
+        [pageLinks]="5" [responsive]="true" [totalRecords]="matieres.length" [filterDelay]="0"
+        [globalFilterFields]="['nom']">
         <ng-template pTemplate="header">
           <tr>
-            <th pSortableColumn="nom" scope="col">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+            <th pSortableColumn="nom" scope="col">Nom <p-sortIcon field="nom"></p-sortIcon>
+            </th>
+            <th pSortableColumn="formation_id" scope="col">Diplômes<p-sortIcon field="formation_id"></p-sortIcon>
+            </th>
             <th scope="col">Action</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-matiere>
           <tr>
             <td>{{ matiere.nom }}</td>
-            <td><i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil" (click)="showFormModifMatiere = true; idMatiereToUpdate = matiere._id; onGetbyId(); showFormAddMatiere = false;"></i></td>
+            <td *ngIf="formationDic[matiere.formation_id]!=undefined">{{ formationDic[matiere.formation_id].titre }}</td>
+            <td><i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                (click)="showFormModifMatiere = true; idMatiereToUpdate = matiere._id; onGetbyId(matiere); showFormAddMatiere = false;"></i>
+            </td>
           </tr>
         </ng-template>
       </p-table>

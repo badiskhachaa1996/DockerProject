@@ -43,4 +43,10 @@ export class MatiereService {
     return this.httpClient.post<Matiere>(registreUrl, matiere, httpOptions1);
   }
 
+  getMatiereList()
+  {
+    let registreUrl = this.apiUrl + "getMatiereList";
+    return this.httpClient.get<any>(registreUrl, httpOptions1);
+  }
+
 }

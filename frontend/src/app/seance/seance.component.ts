@@ -34,14 +34,14 @@ export class SeanceComponent implements OnInit {
   ////////////////////////
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{nom: '', value: ''}];
+  dropdownClasse: any[] = [{ nom: '', value: '' }];
   classToModif: string;
 
   formateurs: Formateur[] = [];
-  dropdownFormateur: any[] = [{nom: '', value: ''}];
+  dropdownFormateur: any[] = [{ nom: '', value: '' }];
 
   matieres: Matiere[] = [];
-  dropdownMatiere: any[] = [{nom: '', value: ''}];
+  dropdownMatiere: any[] = [{ nom: '', value: '' }];
   matiereToModif: string;
 
   //Evenement lié au calendrier
@@ -58,10 +58,6 @@ export class SeanceComponent implements OnInit {
     fin: new FormControl('', Validators.required),
     formateur: new FormControl('', Validators.required),
   });
-
-  columns = [
-
-  ]
 
 
   constructor(private matiereService: MatiereService, private formateurService: FormateurService, private seanceService: SeanceService, private classeService: ClasseService, private messageService: MessageService, private router: Router) { }
@@ -105,15 +101,19 @@ export class SeanceComponent implements OnInit {
 
     this.seanceService.getAll().subscribe(
       (datas) => {
+        this.seancesCal = [];
         for (let data of datas) {
           this.seancesCal.push({
             "id": data._id,
             "title": data.infos,
             "start": data.date_debut,
-            "end": data.date_fin
+            "end": data.date_fin,
+            "extendedProps": {
+              "description":data.infos
+            }
           });
         }
-
+        this.options.events = this.seancesCal
         this.events = this.seancesCal;
 
       },
@@ -122,7 +122,7 @@ export class SeanceComponent implements OnInit {
 
     //Options du calendrier
     this.options = {
-      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+      plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin ],
       defaultDate: new Date(),
       titleFormat: { year: 'numeric', month: 'long', day: 'numeric' },
       header: {
@@ -135,7 +135,8 @@ export class SeanceComponent implements OnInit {
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
       },
       eventClick: function (col) {
-        alert(col.event.title + "\n de " + col.event.start.getHours() + "h" + col.event.start.getMinutes() + " à " + col.event.end.getHours() + "h" + col.event.end.getMinutes());
+        console.log(col.event)
+        alert(col.event.extendedProps.description + "\n de " + col.event.start.getHours() + "h" + col.event.start.getMinutes() + " à " + col.event.end.getHours() + "h" + col.event.end.getMinutes());   
       },
       eventMouseEnter: function (col) {
         // changement de couleur
@@ -158,16 +159,42 @@ export class SeanceComponent implements OnInit {
   updateList() {
     this.seanceService.getAll().subscribe((data) => {
       this.seances = data;
+      this.seancesCal = [];
+      for (let d of data) { 
+        if(!d.libelle || d.libelle==""){
+          this.seancesCal.push({
+            "id": d._id,
+            "title": d.infos,
+            "start": d.date_debut,
+            "end": d.date_fin,
+            "extendedProps": {
+              "description":d.infos
+            }
+          });
+        }else{
+          this.seancesCal.push({
+            "id": d._id,
+            "title": d.libelle,
+            "start": d.date_debut,
+            "end": d.date_fin,
+            "extendedProps": {
+              "description":d.infos
+            }
+          });
+        }
+      }
+      this.options.events = this.seancesCal;
+      this.events = this.seancesCal;
     });
   }
 
   saveSeance() {
-    
+
     let seance = new Seance(null, this.seanceForm.value.classe.value, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, this.seanceForm.value.debut, this.seanceForm.value.fin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe.nom + ' Formateur: ' + this.seanceForm.value.formateur.nom);
 
     this.seanceService.create(seance).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
-      this.seances.push(data)
+      this.updateList()
       this.showFormAddSeance = false;
       this.seanceForm.reset();
     }, (error) => {
@@ -185,10 +212,12 @@ export class SeanceComponent implements OnInit {
       fin: new FormControl('', Validators.required),
       formateur: new FormControl('', Validators.required),
     });
-    
+
     this.showFormUpdateSeance = rowData;
     this.showFormAddSeance = false;
-    this.seanceFormUpdate.patchValue({ classe: rowData.classe_id, matiere: rowData.matiere_id, libelle: rowData.libelle, debut: rowData.date_debut, fin: rowData.date_fin, formateur: rowData.formateur_id });
+    this.seanceFormUpdate.patchValue({libelle: rowData.libelle}); //STRING
+    this.seanceFormUpdate.patchValue({debut: new Date(rowData.date_debut).toISOString().slice(0, 16), fin:  new Date(rowData.date_fin).toISOString().slice(0, 16)});//DATE
+    this.seanceFormUpdate.patchValue({classe: {nom:this.classes[rowData.classe_id].nom,value:rowData.classe_id}, matiere: {nom:this.matieres[rowData.matiere_id].nom,value:rowData.matiere_id}, formateur: {nom:this.formateurs[rowData.formateur_id].firstname+" "+this.formateurs[rowData.formateur_id].lastname,value:rowData.formateur_id} });//DROPDOWN ID
   }
 
   modifySeance() {
@@ -199,7 +228,6 @@ export class SeanceComponent implements OnInit {
       this.updateList()
       this.showFormUpdateSeance = null;
       this.seanceFormUpdate.reset();
-      location.reload();
     }, (error) => {
       console.error(error)
     });

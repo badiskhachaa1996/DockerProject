@@ -8,6 +8,7 @@ import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
 import { FormateurService } from '../services/formateur.service';
 import { ServService } from '../services/service.service';
+import { MatiereService } from '../services/matiere.service';
 
 @Component({
   selector: 'app-formateur',
@@ -53,7 +54,7 @@ export class FormateurComponent implements OnInit {
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
-  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private ServService: ServService) { }
+  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private ServService: ServService, private MatiereService:MatiereService) { }
 
   ngOnInit(): void {
     this.getUserList()
@@ -69,33 +70,9 @@ export class FormateurComponent implements OnInit {
 
     //Initialisation du formulaire de modification de formateur
     this.onInitFormUpdateFormateur();
-
-    this.matiereList = [ //TODO Faire les matières
-      {
-        label: 'Germany',
-        items: [
-          { label: 'Audi', value: 'Audi' },
-          { label: 'BMW', value: 'BMW' },
-          { label: 'Mercedes', value: 'Mercedes' }
-        ]
-      },
-      {
-        label: 'USA',
-        items: [
-          { label: 'Cadillac', value: 'Cadillac' },
-          { label: 'Ford', value: 'Ford' },
-          { label: 'GMC', value: 'GMC' }
-        ]
-      },
-      {
-        label: 'Japan',
-        items: [
-          { label: 'Honda', value: 'Honda' },
-          { label: 'Mazda', value: 'Mazda' },
-          { label: 'Toyota', value: 'Toyota' }
-        ]
-      }
-    ];
+    this.MatiereService.getMatiereList().subscribe((data)=>{
+      this.matiereList=data
+    })
 
     this.ServService.getAll().subscribe((services) => {
       services.forEach(serv => {
@@ -197,11 +174,9 @@ export class FormateurComponent implements OnInit {
         this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
         this.formUpdateFormateur.patchValue({ statut: { label: this.formateurToUpdate.statut, value: this.formateurToUpdate.statut }, type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h, taux_j: this.formateurToUpdate.taux_j });
-        //TODO matiereList
         let dic = response.volume_h // {id:nb}
         let k = [];
         this.volumeHList = [];
-        console.log(response)
         if (response.volume_h) {
           k = Object.keys(dic)
           k.forEach(key => {
