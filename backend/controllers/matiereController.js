@@ -49,18 +49,6 @@ app.get("/getMatiereList", (req, res, next) => {
         .then((matiereList) => {
             Diplome.find().then((diplomeList) => {
                 var r = []
-                /*
-                [
-                    {
-                        label: 'Germany',
-                        items: [
-                        { label: 'Audi', value: 'Audi' },
-                        { label: 'BMW', value: 'BMW' },
-                        { label: 'Mercedes', value: 'Mercedes' }
-                        ]
-                    }
-                ]
-                */
                 diplomeList.forEach(diplome => {
                     let items = []
                     matiereList.forEach(matiere => {
@@ -72,6 +60,26 @@ app.get("/getMatiereList", (req, res, next) => {
                     if(items.length!=0){
                         r.push({label:diplome.titre,items:items})
                     }
+                })
+                res.status(200).send(r)
+            })
+        })
+        .catch((error) => { res.status(400).send(error.message) });
+
+});
+
+app.get("/getDicMatiere", (req, res, next) => {
+    Matiere.find()
+        .then((matiereList) => {
+            Diplome.find().then((diplomeList) => {
+                var r = {}
+                diplomeList.forEach(diplome => {
+                    r[diplome._id.toString()]=[]
+                    matiereList.forEach(matiere => {
+                        if (matiere.formation_id.toString() == diplome._id.toString()) {
+                            r[diplome._id.toString()].push(matiere)
+                        }
+                    })
                 })
                 res.status(200).send(r)
             })

@@ -263,12 +263,6 @@
                         <td>
                             {{ formateur.type_contrat }}
                         </td>
-                        <!--<td *ngif="formateur.isInterne">
-                            <i class="pi pi-times"></i>
-                        </td>
-                        <td *ngif="!formateur.isInterne">
-                            <i class="pi pi-check"></i>
-                        </td>-->
                         <td>
                             {{ formateur.isInterne?'Est interne':"n'est pas interne" }}
                         </td>
@@ -345,6 +339,18 @@
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             <i style="color: black;">{{ formateur.prestataire_id }} </i>
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4" *ngIf="formateur.volume_h && formateur.volume_h.length!=0">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <strong style="text-align:left !important;">Matières:</strong>
+
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
+                                            <p *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
+                                                <span>{{matiereDic[matiere.key].nom}}:{{matiere.value}}:<span [ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}</span></span>
+                                            </p>
                                         </div>
                                     </div>
 

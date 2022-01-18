@@ -7,6 +7,7 @@ import { Diplome } from '../models/Diplome';
 import { User } from '../models/User';
 import { CampusService } from '../services/campus.service';
 import { DiplomeService } from '../services/diplome.service';
+import { MatiereService } from '../services/matiere.service';
 
 
 @Component({
@@ -31,7 +32,9 @@ export class DiplomeComponent implements OnInit {
   idanneeselected: any;
   Lblecoleselected: any
   idecoleselected: any
-  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
+
+  dicMatiere: any
+  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,private matiereService:MatiereService) { }
 
   campusList = [];
   campusListToUpdate = [];
@@ -61,7 +64,11 @@ export class DiplomeComponent implements OnInit {
       }
     )
 
-    //Initialisation du formulaire d'ajout de diplome
+    this.matiereService.getDicMatiere().subscribe(data=>
+      {
+        this.dicMatiere=data
+        console.log(data)
+      })
 
 
     //Initialisation du formulaire de modification de diplome

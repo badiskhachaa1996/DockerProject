@@ -46,6 +46,7 @@ export class FormateurComponent implements OnInit {
     { label: 'Autre', value: 'Autre' }
   ];
   matiereList = [];
+  matiereDic = {};
   volumeHList = [];
   affichePrestataire: string;
   tempVolumeCons = null;
@@ -73,6 +74,12 @@ export class FormateurComponent implements OnInit {
     this.MatiereService.getMatiereList().subscribe((data)=>{
       this.matiereList=data
     })
+    this.MatiereService.getAll().subscribe(data=>
+      {
+        data.forEach(m => {
+          this.matiereDic[m._id]=m
+        });
+      })
 
     this.ServService.getAll().subscribe((services) => {
       services.forEach(serv => {

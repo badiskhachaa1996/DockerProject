@@ -49,4 +49,10 @@ export class MatiereService {
     return this.httpClient.get<any>(registreUrl, httpOptions1);
   }
 
+  getDicMatiere()
+  {
+    let registreUrl = this.apiUrl + "getDicMatiere";
+    return this.httpClient.get<any>(registreUrl, httpOptions1);
+  }
+
 }
