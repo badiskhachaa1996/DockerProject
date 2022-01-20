@@ -28,6 +28,7 @@ import { FormateurComponent } from './formateur/formateur.component';
 import { MatiereComponent } from './matiere/matiere.component';
 import { NotesComponent } from './notes/notes.component';
 import { EntrepriseComponent } from './entreprise/entreprise.component';
+import { AlternantComponent } from './alternant/alternant.component';
 const routes: Routes = [
   // { path: '', redirectTo: '', pathMatch: 'full' },
   { path: '', component: ListTicketComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
   { path: 'firstInscription', component: FirstInscriptionComponent },
   { path: 'notes/:type/:id', component: NotesComponent },
   { path: 'notes', component: NotesComponent },
+  { path: 'alternants', component: AlternantComponent },
   { path: '**', redirectTo: '/' }
 
 ];

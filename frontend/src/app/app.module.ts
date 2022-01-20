@@ -110,6 +110,7 @@ import { FormateurComponent } from './formateur/formateur.component';
 import { MatiereComponent } from './matiere/matiere.component';
 import { NotesComponent } from './notes/notes.component';
 import { EntrepriseComponent } from './entreprise/entreprise.component';
+import { AlternantComponent } from './alternant/alternant.component';
 
 
 
@@ -230,6 +231,7 @@ import { EntrepriseComponent } from './entreprise/entreprise.component';
         MatiereComponent,
         NotesComponent,
         EntrepriseComponent,
+        AlternantComponent,
     
 
                

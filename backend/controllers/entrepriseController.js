@@ -92,8 +92,8 @@ app.put("/update", (req, res, next) => {
             website: req.body.website,
             financeur: req.body.financeur
         })
-        .then((entrepriseUpdated) => { res.status(200).send(entrepriseUpdated); })
-        .catch((error) => { console.log(error); })
+        .then((entrepriseUpdated) => { res.status(201).send(entrepriseUpdated); })
+        .catch((error) => { res.status(400).send("Impossible de modifier cette entreprise"); });
 
 });
 
