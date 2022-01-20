@@ -91,6 +91,16 @@ export const environment = {
     { id: 2, value: 'Madame', viewValue: 'Mme' },
   ],
 
+  profil: [
+    { id: 1, value: 'Salarié', viewValue: 'Salarié' },
+    { id: 2, value: 'Apprenti', viewValue: 'Apprenti' },
+    { id: 3, value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi' },
+    { id: 4, value: 'Paticulier', viewValue: 'Paticulier' },
+    { id: 5, value: 'Autre', viewValue: 'Autre' },
+    { id: 6, value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
+    { id: 7, value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage' },
+  ],
+
   statut: [
     { value: 'En cours de traitement', viewValue: 'En cours de traitement' },
     { value: 'En attente d\'une réponse', viewValue: 'En attente d\'une réponse' },

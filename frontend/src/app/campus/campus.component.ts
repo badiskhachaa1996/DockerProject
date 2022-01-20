@@ -74,7 +74,7 @@ export class CampusComponent implements OnInit {
     this.ecoleService.getAll().subscribe((data) => {
       data.forEach(ecole => {
       this.dropdownEcole.push({ libelle: ecole.libelle, value:ecole._id})
-      this.ecoles[ecole._id]=ecole;
+      this.ecoles[ecole._id] = ecole;
      
    
     }, (error) => {

@@ -10,5 +10,4 @@ export class Seance {
         public formateur_id?: string,
         public infos?: string,
     ){}
-
 }
