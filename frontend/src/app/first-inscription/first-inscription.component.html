@@ -1,49 +1,76 @@
+<h1 style=" 
+display: flex;
+flex-direction: column;
+justify-content: center;
+text-align: center;">SERVICE ADMISSION</h1>
 <div *ngIf="showFormAddnewInscription" class="grid">
-    <div class="xl:col-8 xl:col-offset-2 col-12" >
+
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+
         <p-card>
             <div class="p-grid">
-                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddnewInscription = false"> </i>
-                <h3>Ajouter  une nouvelle inscription</h3>
+                <i class="pi pi-times" style="float:right; font-size: 20px;"
+                    (click)="showFormAddnewInscription = false"> </i>
+                <h3>Ajouter une nouvelle inscription</h3>
                 <form class="col-8 col-offset-2" [formGroup]="formAddNewInscription">
 
-                    
+
                     <div class="p-grid">
 
                         <div class="ui-g-6 ui-md-6">
+                            <div>
+                                <label for="firstname" class="p-sr-only">Prénom :</label>
+                            </div>
                             <input type="text" formControlName="firstname" class="form-control col-12"
-                                placeholder="Prénom" pInputText>    
+                                placeholder="Prénom" pInputText>
                         </div>
 
                         <div class="ui-g-6 ui-md-6">
-                            <input type="text" formControlName="lastname" class="form-control col-12"
-                                placeholder="Nom" pInputText>
+                            <div>
+                                <label for="lastname" class="p-sr-only">Nom :</label>
+                            </div>
+                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom"
+                                pInputText>
                         </div>
 
 
                         <div class="ui-g-12 ui-md-12">
+                            <div>
+                                <label for="emailperso" class="p-sr-only">Email :</label>
+                            </div>
                             <input type="emailperso" formControlName="emailperso" class="form-control col-12"
                                 placeholder="EmailPerso" pInputText>
                         </div>
 
 
                         <div class="ui-g-12 ui-md-12">
-                        
+
                         </div>
 
                         <div class="ui-g-4 ui-md-4">
+                            <div>
+                                <label for="diplome" class="p-sr-only">Diplome souhaité :</label>
+                            </div>
                             <span>
-                                <p-dropdown [options]="diplomes" optionLabel="titre" formControlName="diplomeID"></p-dropdown>
+                                <p-dropdown [options]="diplomes" optionLabel="titre" formControlName="diplomeID">
+                                </p-dropdown>
                             </span>
                         </div>
- 
+
                         <div>
-                            <button pButton class="ui-button-raised ui-button-success" [disabled]="formAddNewInscription.invalid" label="Ajouter l'inscription"  (click)="createfInscription()" style="margin-left: 70%;"></button>
-                           
+                            <button pButton class="ui-button-raised ui-button-success"
+                                [disabled]="formAddNewInscription.invalid" label="Ajouter l'inscription"
+                                (click)="createfInscription()" style="margin-left: 70%;"></button>
+
                         </div>
                     </div>
                 </form>
             </div>
         </p-card>
+
+
+
+
     </div>
 </div>
 <div class="grid">
@@ -52,11 +79,40 @@
             (click)="toggleFormfInscriptionAdd()" style="float:right;" label="Ajouter"></button>
         <h3>Liste des Préinscriptions</h3>
 
+
+        <p-dialog header="Dossier Préinscription :" [(visible)]="display" position="bottom" [modal]="true"
+            [style]="{width: '50vw'}" [baseZIndex]="10000">
+
+
+            <h3 *ngIf="userSelected"> {{userSelected.firstname}} {{userSelected.lastname}} </h3>
+
+            <p-card>
+                Cv :
+                <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un CV"
+                    customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000"
+                    [auto]="true" #fileInput>
+
+                </p-fileUpload>
+           
+
+            </p-card>
+
+            <button pTooltip="Save" pButton type="button" icon="pi pi-check"
+            iconPos="left" class="p-button-sm" (click)="onUpload()"></button>
+
+
+
+            <ng-template pTemplate="body">
+
+            </ng-template>
+        </p-dialog>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="inscriptions" [columns]="cols" [value]="inscriptions" selectionMode="single"
-                [(selection)]="Selectedinscription" (onRowSelect)="onRowSelect($event)"  rowExpandMode="single" 
-                (onRowUnselect)="onRowUnselect($event)" [rows]="5" [paginator]="true" [pageLinks]="5"
-                [responsive]="true" [totalRecords]="inscriptions.length" [filterDelay]="0" [globalFilterFields]="['emailperso']">
+                dataKey="_id" [(selection)]="Selectedinscription" (onRowSelect)="onRowSelect($event)"
+                rowExpandMode="single" responsiveLayout="scroll" (onRowUnselect)="onRowUnselect($event)" [rows]="10"
+                [paginator]="true" [pageLinks]="10" [responsive]="true" [totalRecords]="inscriptions.length"
+                [filterDelay]="0" [globalFilterFields]="['user_id','emailperso','diplome']">
+
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex" style="text-align: right">
                         <span class="p-input-icon-left p-ml-auto">
@@ -67,31 +123,59 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
-                    <th style="width: 3rem" scope="col"></th>
-                        <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="statut" scope="col">
+                    <tr>
+                        <th class="col-4 col-offset-4" style="text-decoration: underline;" pSortableColumn="firstname"
+                            scope="col">
+
+                            Prénom <p-sortIcon field="firstname" scope="col"></p-sortIcon>
+                        </th>
+                        <th class="col-4 col-offset-4" style="text-decoration: underline;" pSortableColumn="lastname"
+                            scope="col">
+
+                            Nom <p-sortIcon field="lastname" scope="col"></p-sortIcon>
+                        </th>
+                        <th class="col-4 col-offset-2" style="text-decoration: underline;" pSortableColumn="diplome"
+                            scope="col">
+                            Diplome<p-sortIcon field="diplome" scope="col"></p-sortIcon>
+                        </th>
+                        <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="statut"
+                            scope="col">
+
                             statut <p-sortIcon field="statut" scope="col"></p-sortIcon>
                         </th>
                         <th class="col-4 col-offset-2" style="text-decoration: underline;" scope="col">
                             Action
                         </th>
-                    
+                    </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData="inscriptions" let-columns="columns" let-expanded="expanded">
-                    <tr [pSelectableRow]="rowData" class="bodytab">
-                        
-                        <td *ngFor="let col of columns">
-                            {{rowData.user_id}}
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="columns" class="bodytab">
+                        <td>
+                            {{ userDic[rowData.user_id]?.firstname }}
+                        </td>
+                        <td>
+                            {{ userDic[rowData.user_id]?.lastname }}
+                        </td>
+                        <td>
+                            {{diplomeDic[rowData.diplome]?.titre }}
+                        </td>
+                        <td>
+                            {{rowData.statut}}
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"></i>
+                            <i pTooltip="Voir les Documents" tooltipPosition="bottom" class="pi pi-file-pdf"
+                                (click)="showDialog(rowData)"></i>
+                            <button pTooltip="validé inscription" pButton type="button" icon="pi pi-check"
+                                iconPos="left" class="p-button-sm"></button>
 
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-               
 
 
-</div>
-</div>        
+
+        </div>
+    </div>
 </div>
