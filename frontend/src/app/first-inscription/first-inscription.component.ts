@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -10,7 +10,7 @@ import { FirstInscriptionService } from '../services/first-inscription.service';
 import { AuthService } from '../services/auth.service';
 import  jwt_decode from 'jwt-decode';
 import {DialogModule} from 'primeng/dialog';
-import {FileUploadModule} from 'primeng/fileupload';
+import {FileUpload, FileUploadModule} from 'primeng/fileupload';
 import {HttpClientModule} from '@angular/common/http';
 
 
@@ -24,7 +24,7 @@ export class FirstInscriptionComponent implements OnInit {
   display: boolean = false;
 
  
-
+  @ViewChild('fileInput') fileInput: FileUpload;
   inscriptions: Inscription[] = [];
   diplomes: Diplome[] = [];
   formAddNewInscription: FormGroup = new FormGroup({
@@ -43,6 +43,8 @@ export class FirstInscriptionComponent implements OnInit {
   userSelected: User;
   userDic:any= {};
   diplomeDic:any={};
+  uploadedFile: File=null;
+  reader: any;
 
   constructor(private diplomeService: DiplomeService, private fInscriptionService: FirstInscriptionService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private authService: AuthService) { }
 
@@ -125,4 +127,35 @@ this.authService.getById(this.Selectedinscription.user_id).subscribe(
         );
         this.display = true;
   }
+
+
+  FileUpload(event){
+ console.log(event.files)
+ const formData = new FormData();
+
+   formData.append('file', event.files[0])
+   formData.append('id', this.Selectedinscription._id)
+    console.log(formData)
+
+  this.fInscriptionService.uploadFile(formData).subscribe(res =>{
+      console.log(res)
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload', detail: ' avec succès' });
+   });
+  event.target=null;
+  }
+  
+ /** 
+  onUpload() {
+    console.log(this.uploadedFile)
+   
+    formData.append(this.uploadedFile.name,this.uploadedFile,this.Selectedinscription._id+"__"+this.uploadedFile.name);
+    console.log(formData.get(this.uploadedFile.name))
+    this.fInscriptionService.uploadFile(formData,this.Selectedinscription._id).subscribe(res =>{
+      //console.log(res);
+   });
+  }
+*/
+
+
+
 }

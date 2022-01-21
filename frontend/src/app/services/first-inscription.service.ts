@@ -44,4 +44,14 @@ export class FirstInscriptionService {
     return this.httpClient.post<Inscription>(registreUrl, inscription, httpOptions1);
   }
 
+  uploadFile(data: FormData){
+    let url = this.apiUrl+"uploadFile";
+    return this.httpClient.post<any>(url,data,httpOptions1)
+  }
+
+  downloadFile(id){
+    let registreUrl=this.apiUrl+"downloadFile/"+id;
+    return this.httpClient.get<any>(registreUrl,httpOptions1);
+  }
+
 }

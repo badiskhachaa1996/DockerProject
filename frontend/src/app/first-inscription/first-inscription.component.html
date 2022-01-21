@@ -80,20 +80,30 @@ text-align: center;">SERVICE ADMISSION</h1>
         <h3>Liste des Préinscriptions</h3>
 
 
-        <p-dialog header="Dossier Préinscription :"[(visible)]="display" position="bottom" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000">
-         
-            
-            <h3 *ngIf="userSelected">  {{userSelected.firstname}} {{userSelected.lastname}} </h3>
+        <p-dialog header="Dossier Préinscription :" [(visible)]="display" position="bottom" [modal]="true"
+            [style]="{width: '50vw'}" [baseZIndex]="10000">
+
+
+            <h3 *ngIf="userSelected"> {{userSelected.firstname}} {{userSelected.lastname}} </h3>
 
             <p-card>
-                Cv : 
-                LM : 
+                Cv :
+                <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un CV"
+                    customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000"
+                    [auto]="true" #fileInput>
+
+                </p-fileUpload>
+           
+
             </p-card>
 
+            <button pTooltip="Save" pButton type="button" icon="pi pi-check"
+            iconPos="left" class="p-button-sm" (click)="onUpload()"></button>
 
-            <p-fileUpload name="myfile[]" url="./upload.php" multiple="multiple"></p-fileUpload>
+
+
             <ng-template pTemplate="body">
-                <h3>DIalog</h3>
+
             </ng-template>
         </p-dialog>
         <div class="col-12 card shadow-lg my-5 ">

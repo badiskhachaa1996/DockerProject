@@ -3,9 +3,19 @@ const app = express();
 const { Inscription } = require("./../models/inscription");
 const { User } = require("./../models/user");
 const nodemailer = require('nodemailer');
+const fs = require("fs")
+const multer = require('multer');
 
 
-
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'storage/preinscription')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})  
+const upload = multer({ storage: storage })
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -155,26 +165,45 @@ app.get("/getById/:id", (req, res) => {
         res.status(404).send(error);
     })
 })
-
-app.get("/uploadFile/:id", (req, res) => {
-fs.mkdir("./storage/" +"Préinscription" + "/",
+ /**
+app.post("/uploadFile/:id", upload.single('file') (req, res) => {
+fs.mkdir("./storage/" +"Préinscription" + "/"+ req.id + "/",
 { recursive: true }, (err) => {
     if (err) {
         console.error(err);
     }
 });
-fs.writeFile("storage/" +"Préinscription" + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
+console.log(req)
+fs.writeFile("storage/" +"Préinscription" + "/" + req.id + "/" + req.body.file.filename, req.body.file.value, 'base64', function (err) {
 if (err) {
     console.error(err);
 }})
 });
+*/
 
+app.post('/uploadFile', upload.single('file'), (req, res) => {
+  
+    const file = req.file;
+    console.log(file.filename)
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        return next(error)
+    }
+    if(req.body.secret!="6abdfb04243e096a4a51b46c8f3d4b32"){
+        res.status(401).send('Fichier non autorisé')
+    }
+   
+            fs.unlinkSync("storage/" +"Preinscription" )
+            //file removed
+    
+})
 
 
 app.get("/downloadFile/:id", (req, res) => {
     Inscription.findOne({ _id: req.params.id }).then((data) => {
         let filename = data.document
-        let file = fs.readFileSync("storage/"+"Préinscription" + "/" + data._id + "/" + filename, { encoding: 'base64' }, (err) => {
+        let file = fs.readFileSync("storage/"+"Preinscription" + "/" + data._id + "/" + filename, { encoding: 'base64' }, (err) => {
             if (err) {
                 return console.error(err);
             }
@@ -184,6 +213,7 @@ app.get("/downloadFile/:id", (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 });
+
 
 
 
