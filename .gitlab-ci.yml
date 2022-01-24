@@ -51,7 +51,7 @@ build_angular:
       - cd frontend
       - ng build --configuration=dev --aot
   only:
-    - TrueDev
+    - dev
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
@@ -69,7 +69,7 @@ deploy_angular_todev:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f frontend/dist /var/www/html/ems
   only:
-    - TrueDev
+    - dev
   # when: manual
 #===========================================================
 deploy_node_todev:
@@ -86,7 +86,7 @@ deploy_node_todev:
     # - pm2 logs index
     - pm2 list
   only:
-    - TrueDev
+    - dev
   # when: manual
 
 sonarqube-check:
@@ -113,4 +113,4 @@ sonarqube-check:
   tags:
     - dev-docker
   only:
-    - TrueDev
+    - dev
