@@ -56,14 +56,10 @@ const inscriptionController =  require('./controllers/inscriptionController');
 const formateurController = require('./controllers/formateurController');
 const ressourceController = require('./controllers/ressourceController');
 const etudiantController = require('./controllers/etudiantController');
-const matiereController = require('./controllers/matiereController');
-const notesController = require('./controllers/notesController');
-const entrepriseController = require('./controllers/entrepriseController');
-const alternantController = require('./controllers/alternantController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    
+    console.log(req.body)
     if (!origin || origin == "http://localhost:4200") {
         next()
     } else {
@@ -117,20 +113,10 @@ app.use('/soc/presence', presenceController);
 app.use('/soc/seance', seanceController);
 
 app.use('/soc/inscription',inscriptionController);
-
 app.use('/soc/formateur', formateurController);
-
 app.use('/soc/ressource', ressourceController);
 
 app.use('/soc/etudiant', etudiantController);
-
-app.use('/soc/matiere', matiereController);
-
-app.use('/soc/notes', notesController);
-
-app.use('/soc/entreprise', entrepriseController);
-
-app.use('/soc/alternant', alternantController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

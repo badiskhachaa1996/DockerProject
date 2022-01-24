@@ -19,6 +19,7 @@ const diplomeSchema = mongoose.Schema({
     rythme: { type: String, required: true },
     frais: { type: String, required: true },
     frais_en_ligne: { type: Number, required: true }
+
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

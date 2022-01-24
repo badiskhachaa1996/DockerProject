@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
+import {Component, Input, OnInit, AfterViewInit, ViewChild, OnDestroy} from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MenuItem } from 'primeng/api';
 import { AppComponent } from './app.component';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-menu',
     template: `
-        <div *ngIf="isAuth" class="layout-menu-container" (click)="app.onMenuClick($event)">
+        <div *ngIf="isAuth"  class="layout-menu-container" (click)="app.onMenuClick($event)">
             <div class="overlay-menu-button" (click)="app.onMenuButtonClick($event)">
                 <div class="overlay-menu-button-bars">
                     <span></span>
@@ -20,8 +20,12 @@ import { Subscription } from 'rxjs';
                 </div>
             </div>
             <div style="width: 280px;" class="layout-menu-wrapper fadeInDown">
-                <ul app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset"  parentActive="true"></ul>               
-            </div>
+                <ul *ngIf="admin" app-submenu [item]="model" root="true" class="layout-menu" visible="true" [reset]="reset"  parentActive="true"></ul>
+               
+
+                
+
+                </div>
         </div>
     `
 })
@@ -30,8 +34,43 @@ export class AppMenuComponent implements OnInit {
     @Input() reset: boolean;
 
     model: any[];
-    isAuth: any = true;
-    constructor(public app: AppComponent) { }
+    modelProspect: any [];
+    modelProspEtudiant: any [];
+    modelEtudiant: any [];
+    admin:boolean;
+    adminF:boolean;
+    prospect: boolean;
+    etudiant:boolean;
+    prospectEtudiant:boolean;
+    notconnected:boolean=false;
+    modelComCONSU: any [];
+    modelComEDU: any [];
+    modelPartenaireEDU: any [];
+    modelPartenaireCONSU: any [];
+    modelconnexion:any[];
+    idunique:any;
+    keycloak: any;
+    isAuth: any;
+    userInformations: any;
+    role:any;
+    modelProspectTraining: any [];
+    modelProspEtudiantTraining: any [];
+    modelEtudiantTraining: any [];
+    modelProspectAdg: any [];
+    modelProspEtudiantAdg: any [];
+    modelEtudiantAdg: any [];
+    //apporteur d'affaires
+    modelApporteurDaffaires: any[];
+    apporteur_d_affaires:Boolean;
+    modelF: any [];
+    modelA: any [];
+    adminA:boolean;
+    modelC: any [];
+    adminC:boolean;
+    modelP: any [];
+    adminP:boolean;
+
+    constructor(public app: AppComponent ) { }
 
     ngOnInit() {
         if (this.isAuth) {
@@ -81,6 +120,8 @@ export class AppMenuComponent implements OnInit {
     }
 }
 
+}
+}
 @Component({
     /* tslint:disable:component-selector */
     selector: '[app-submenu]',
@@ -151,7 +192,7 @@ export class AppSubMenuComponent implements OnDestroy {
 
     routeItems: MenuItem[];
 
-    constructor(public app: AppComponent, public appMenu: AppMenuComponent) { }
+    constructor(public app: AppComponent, public appMenu: AppMenuComponent) {}
 
     ngOnDestroy() {
         if (this.subscription) {
@@ -226,5 +267,4 @@ export class AppSubMenuComponent implements OnDestroy {
         if (!this._parentActive) {
             this.activeIndex = null;
         }
-    }
-}
+    }}

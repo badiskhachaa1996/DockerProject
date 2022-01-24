@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from '../app.component';
+
+import { MenuModule } from 'primeng/menu';
 import { MenuItem, MessageService } from 'primeng/api';
 import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
@@ -7,7 +9,7 @@ const io = require("socket.io-client");
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -92,12 +94,7 @@ export class NavbarComponent implements OnInit {
           {
             label: 'Formateurs',
             icon: 'pi pi-users',
-            routerLink: '/formateurs'
-          },
-          {
-            label: 'Matières',
-            icon: 'pi pi-tags',
-            routerLink: '/matieres'
+            routerLink: '/formateur'
           }
           ]
         } else {

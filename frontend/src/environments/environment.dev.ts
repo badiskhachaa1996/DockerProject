@@ -5,8 +5,8 @@
 export const environment = {
   origin: "https://t.dev.estya.com/soc/",
   key: "6abdfb04243e096a4a51b46c8f3d4b32",
-  clientId:"c2fdb74f-1c56-4ebb-872b-0e0279e91612",
-   User: null,
+  clientId: "c2fdb74f-1c56-4ebb-872b-0e0279e91612",
+  User: null,
 
   fr: {
     firstDayOfWeek: 0,
@@ -34,56 +34,56 @@ export const environment = {
     value: "Alternant/Stagiaire"
   }],
 
-  campus:[
-    {value:"Paris"},
-    {value:"Montpellier"},
-    {value:"Dubai"},
-    {value:"Montréal"},
-    {value:"Londres"},
-    {value:"Tunis"},
-    {value:"En Ligne(365)"}
+  campus: [
+    { value: "Paris" },
+    { value: "Montpellier" },
+    { value: "Dubai" },
+    { value: "Montréal" },
+    { value: "Londres" },
+    { value: "Tunis" },
+    { value: "En Ligne(365)" }
   ],
 
-  formations:[
-    {value:"BTS MCO"},
-    {value:"BTS NDR"},
-    {value:"RNCP MUM"},
-    {value:"RNCP NTC"},
-    {value:"RNCP MERCD"},
-    {value:"RNCP CMD"},
-    {value:"RNCP MCI"},
-    {value:"RNCP MCI CI"},
-    {value:"RNCP MCI IA"},
-    {value:"BTS SIO"},
-    {value:"BTS WEB"},
-    {value:"RNCP Réseaux"},
-    {value:"RNCP Développeur"},
-    {value:"RNCP AIS"},
-    {value:"MPI Big Data"},
-    {value:"MPI CyberSecurité"},
-    {value:"RNCP ARH"},
-    {value:"BTS Assurance"},
-    {value:"BTS Banque"},
-    {value:"BTS CG"},
-    {value:"RNCP GCF"},
-    {value:"BTS PME"},
-    {value:"BTS Notariat"},
-    {value:"DCG"},
-    {value:"DCGS"},
-    {value:"RNCP MRH"},
-    {value:"RNCP BIM"},
-    {value:"BTS MEC"},
-    {value:"Bachelor BIM"},
-    {value:"BTS Hôtellerie-Restauration"},
-    {value:"BTS SPSSS"},
-    {value:"RNCP RET"},
+  formations: [
+    { value: "BTS MCO" },
+    { value: "BTS NDR" },
+    { value: "RNCP MUM" },
+    { value: "RNCP NTC" },
+    { value: "RNCP MERCD" },
+    { value: "RNCP CMD" },
+    { value: "RNCP MCI" },
+    { value: "RNCP MCI CI" },
+    { value: "RNCP MCI IA" },
+    { value: "BTS SIO" },
+    { value: "BTS WEB" },
+    { value: "RNCP Réseaux" },
+    { value: "RNCP Développeur" },
+    { value: "RNCP AIS" },
+    { value: "MPI Big Data" },
+    { value: "MPI CyberSecurité" },
+    { value: "RNCP ARH" },
+    { value: "BTS Assurance" },
+    { value: "BTS Banque" },
+    { value: "BTS CG" },
+    { value: "RNCP GCF" },
+    { value: "BTS PME" },
+    { value: "BTS Notariat" },
+    { value: "DCG" },
+    { value: "DCGS" },
+    { value: "RNCP MRH" },
+    { value: "RNCP BIM" },
+    { value: "BTS MEC" },
+    { value: "Bachelor BIM" },
+    { value: "BTS Hôtellerie-Restauration" },
+    { value: "BTS SPSSS" },
+    { value: "RNCP RET" },
   ],
 
-  entreprisesList:[
-    {value:"Elitelabs"},
-    {value:"ESTYA"},
-    {value:"ADG"},
-    {value:"Autre"}
+  entreprisesList: [
+    { value: "Elitelabs" },
+    { value: "ESTYA" },
+    { value: "ADG" },
+    { value: "Autre" }
   ],
 
 
@@ -92,16 +92,6 @@ export const environment = {
   civilite: [
     { id: 1, value: 'Monsieur', viewValue: 'Mr' },
     { id: 2, value: 'Madame', viewValue: 'Mme' },
-  ],
-
-  profil: [
-    { id: 1, value: 'Salarié', viewValue: 'Salarié' },
-    { id: 2, value: 'Apprenti', viewValue: 'Apprenti' },
-    { id: 3, value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi' },
-    { id: 4, value: 'Paticulier', viewValue: 'Paticulier' },
-    { id: 5, value: 'Autre', viewValue: 'Autre' },
-    { id: 6, value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
-    { id: 7, value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage' },
   ],
 
   statut: [

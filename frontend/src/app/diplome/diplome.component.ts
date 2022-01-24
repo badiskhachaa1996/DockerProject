@@ -7,7 +7,6 @@ import { Diplome } from '../models/Diplome';
 import { User } from '../models/User';
 import { CampusService } from '../services/campus.service';
 import { DiplomeService } from '../services/diplome.service';
-import { MatiereService } from '../services/matiere.service';
 
 
 @Component({
@@ -29,12 +28,10 @@ export class DiplomeComponent implements OnInit {
   idDiplomeToUpdate: string;
   campusId: string;
   LblAnneselected: any;
-  idanneeselected: any;
-  Lblecoleselected: any
-  idecoleselected: any
-
-  dicMatiere: any
-  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,private matiereService:MatiereService) { }
+  idanneeselected:any;
+  Lblecoleselected:any
+  idecoleselected:any
+  constructor(private route: ActivatedRoute,private campusService: CampusService,private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService) { }
 
   campusList = [];
   campusListToUpdate = [];
@@ -43,42 +40,36 @@ export class DiplomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.campusId = this.route.snapshot.paramMap.get('id');
+    console.log(this.campusId)
     //Recuperation de la liste des diplômes
-    if (this.campusId) {
+    if(this.campusId){
       this.diplomeService.getAllByCampus(this.campusId).subscribe(
         (data) => { this.diplomes = data; },
         (error) => { console.log(error) }
       );
-    } else
-      this.diplomeService.getAll().subscribe(
-        (data) => { this.diplomes = data; },
-        (error) => { console.log(error) }
-      );
-    this.campusService.getAll().subscribe(
-      (data) => {
-        this.campusList = data
-        this.onInitFormAddDiplome();
-        data.forEach(d => {
-          this.dicCampus[d._id]=d
-        });
-      }
-    )
+    }else
+    this.diplomeService.getAll().subscribe(
+      (data) => { this.diplomes = data; },
+      (error) => { console.log(error) }
+    );
 
-    this.matiereService.getDicMatiere().subscribe(data=>
-      {
-        this.dicMatiere=data
-        console.log(data)
-      })
-
+    //Initialisation du formulaire d'ajout de diplome
+    this.onInitFormAddDiplome();
 
     //Initialisation du formulaire de modification de diplome
     this.onInitFormUpdateDiplome();
-    if (this.campusId) {
-      this.campusService.getByID(this.campusId).subscribe((data2) => {
-        this.LblAnneselected = data2[0].libelle;
-        this.idanneeselected = data2[0]._id
-      })
-    }
+
+
+    this.campusService.getByID(this.campusId).subscribe((data2)=>{
+      console.log(data2)
+    
+     this.LblAnneselected=data2[0].libelle;
+     this.idanneeselected=data2[0]._id
+
+  console.log( this.LblAnneselected)
+  
+  console.log( this.idanneeselected)    
+})
   }
 
   //Methode d'initialisation du formulaire d'ajout de nouveau diplome
@@ -86,7 +77,7 @@ export class DiplomeComponent implements OnInit {
     this.formAddDiplome = this.formBuilder.group({
       titre: ['', Validators.required],
       titre_long: ['', Validators.required],
-      campus_id: [this.campusList[0], Validators.required],
+      campus_id: ['', Validators.required],
       description: ['', Validators.required],
       type_diplome: ['', Validators.required],
       type_etude: ['', Validators.required],
@@ -110,7 +101,7 @@ export class DiplomeComponent implements OnInit {
     //recupération des données du formulaire
     let titre = this.formAddDiplome.get('titre')?.value;
     let titre_long = this.formAddDiplome.get('titre_long')?.value;
-    let campus_id = this.formAddDiplome.get('campus_id')?.value._id;
+    let campus_id = this.formAddDiplome.get('campus_id')?.value.id;
     let description = this.formAddDiplome.get('description')?.value;
     let type_diplome = this.formAddDiplome.get('type_diplome')?.value;
     let type_etude = this.formAddDiplome.get('type_etude')?.value;
@@ -133,7 +124,8 @@ export class DiplomeComponent implements OnInit {
     );
 
     this.diplomeService.create(newDiplome).subscribe(
-      (() => {
+      (() => 
+      { 
         this.messageService.add({ severity: 'success', summary: 'Ajout de diplôme', detail: 'Cet diplôme a bien été ajouté' });
         this.diplomeService.getAll().subscribe(
           (data) => { this.diplomes = data; },
@@ -147,12 +139,13 @@ export class DiplomeComponent implements OnInit {
   }
 
   //Methode de recuperation du diplome à mettre à jour
-  onGetbyId(diplome) {
+  onGetbyId(diplome)
+  {
     //Recuperation du diplome à modifier
-    this.diplomeToUpdate = diplome;
-    this.formUpdateDiplome.patchValue({campus_id: this.dicCampus[diplome.campus_id]})
-    this.formUpdateDiplome.patchValue({ titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, description: this.diplomeToUpdate.description, type_diplome: this.diplomeToUpdate.type_diplome, type_etude: this.diplomeToUpdate.type_etude, domaine: this.diplomeToUpdate.domaine, niveau: this.diplomeToUpdate.niveau, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP, duree: this.diplomeToUpdate.duree, nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin, rythme: this.diplomeToUpdate.rythme, frais: this.diplomeToUpdate.frais, frais_en_ligne: this.diplomeToUpdate.frais_en_ligne });
-
+    this.diplomeToUpdate = diplome; 
+    
+    this.formUpdateDiplome.patchValue({ campus_id: this.dicCampus[diplome.campus_id], titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, description: this.diplomeToUpdate.description, type_diplome: this.diplomeToUpdate.type_diplome, type_etude: this.diplomeToUpdate.type_etude, domaine: this.diplomeToUpdate.domaine, niveau: this.diplomeToUpdate.niveau, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP, duree: this.diplomeToUpdate.duree, nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin, rythme: this.diplomeToUpdate.rythme, frais: this.diplomeToUpdate.frais, frais_en_ligne: this.diplomeToUpdate.frais_en_ligne});
+    
   }
 
   //Methode d'initialisation du formulaire de modification de diplome
@@ -179,12 +172,13 @@ export class DiplomeComponent implements OnInit {
   }
 
   //Methode d'ajout du nouveau diplome dans la base de données
-  onUpdateDiplome() {
+  onUpdateDiplome() 
+  {
 
     //Mis à jour du diplome et envoi dans la base de données
     this.diplomeToUpdate.titre = this.formUpdateDiplome.get('titre')?.value;
     this.diplomeToUpdate.titre_long = this.formUpdateDiplome.get('titre_long')?.value;
-    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value._id;
+    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value.id;
     this.diplomeToUpdate.description = this.formUpdateDiplome.get('description')?.value;
     this.diplomeToUpdate.type_diplome = this.formUpdateDiplome.get('type_diplome')?.value;
     this.diplomeToUpdate.type_etude = this.formUpdateDiplome.get('type_etude')?.value;
@@ -201,14 +195,15 @@ export class DiplomeComponent implements OnInit {
     this.diplomeToUpdate.frais_en_ligne = this.formUpdateDiplome.get('frais_en_ligne')?.value;
 
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
-      (() => {
+      ( () => 
+      {
         this.messageService.add({ severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
         this.diplomeService.getAll().subscribe(
           (data) => { this.diplomes = data; },
           (error) => { console.log(error) }
         );
-      }),
-      ((error) => { console.log("Modification du diplome impossible " + error.message); })
+      } ),
+      ( (error) => { console.log("Modification du diplome impossible " + error.message); })
     );
 
     this.showFormUpdateDiplome = false;
