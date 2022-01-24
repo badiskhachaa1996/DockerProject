@@ -18,7 +18,7 @@
                         </div>
                         <div class="ui-g-6 ui-md-6">
                             <span>
-                                <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id">
+                                <p-dropdown [options]="campusList" optionLabel="label" formControlName="campus_id">
                                 </p-dropdown>
                             </span>
                             <!--<input type="text" formControlName="campus_id" class="form-control col-12"
@@ -80,6 +80,7 @@
                             <input type="number" formControlName="frais_en_ligne" class="form-control col-12"
                                 placeholder="Coût de la formation EN LIGNE" pInputText>
                         </div>
+
                         <div>
                             <button pButton type="submit" label="Ajouter le diplome" [disabled]="formAddDiplome.invalid"
                                 style="margin-left: 72%;"></button>
@@ -112,11 +113,19 @@
                             <input type="text" formControlName="titre_long" class="form-control col-12"
                                 placeholder="Titre Long" pInputText>
                         </div>
-                        <div class="ui-g-6 ui-md-6">
-                            <span>
-                                <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id">
-                                </p-dropdown>
-                            </span>
+                        <div class="ui-g-12 ui-md-12">
+
+
+                            <select formControlName="campus_id" class="form-control col-12">
+
+                                <option [ngValue]="null" disabled>Choissisez un campus</option>
+
+                                <option *ngFor="let campus of campusListToUpdate" [ngValue]="campus">
+                                    {{ campus.libelle }}
+                                </option>
+
+                            </select>
+
                         </div>
                         <div class="ui-g-12 ui-md-12">
                             <textarea type="text" formControlName="description" class="form-control col-12"
@@ -192,14 +201,11 @@
 <div class="grid">
     <div class="col-10 col-offset-1">
         <!-- Bouton d'ajout d'un nouveau diplome -->
-        <button (click)="showFormAddDiplome = true; showFormUpdateDiplome = false" pButton type="button"
-            label="Nouveau diplôme" style="float:right;"></button>
-        <h3><a routerLink='/anneeScolaire'>{{LblAnneselected }}</a> / <a
-                routerLink='/ecoles/{{idanneeselected }}'>{{Lblecoleselected }}</a>/ <a
-                routerLink='/campus/{{idecoleselected }}'>{{Lblecoleselected }}</a> / Liste des Diplomes</h3>
-
+        <button (click)="showFormAddDiplome = true; showFormUpdateDiplome = false" pButton type="button" label="Nouveau diplôme" style="float:right;"></button>
+        <h3><a routerLink =  '/anneeScolaire' >{{LblAnneselected }}</a> / <a routerLink =  '/ecoles/{{idanneeselected }}' >{{Lblecoleselected }}</a>/ <a routerLink =  '/campus/{{idecoleselected }}' >{{Lblecoleselected }}</a> / Liste des Diplomes</h3>
+        
         <div class="col-12 card shadow-lg my-5">
-
+         
             <!-- input de recherche -->
             <input style="margin:5px;" pInputText type="text"
                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
@@ -365,7 +371,7 @@
                                             <strong style="text-align:left !important;">Frais:</strong>
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <span style="color: black;">{{ diplome.frais }} <strong>€</strong></span>
+                                            <span style="color: black;">{{ diplome.frais }} <b>€</b></span>
                                         </div>
                                     </div>
 
@@ -375,19 +381,6 @@
                                         </div>
                                         <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
                                             <span style="color: black;">{{ diplome.frais_en_ligne }} <strong>€</strong>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="ui-g-4 ui-md-4" *ngIf="dicMatiere[diplome._id] && dicMatiere[diplome._id].length!=0">
-                                        <div class="ui-g-6 ui-md-6">
-                                            <strong style="text-align:left !important;">Matières:</strong>
-
-                                        </div>
-                                        <div class="ui-g-6 ui-md-6" style="text-align:left !important;">
-                                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
-                                                <span *ngIf="index==0">{{matiere.nom}}</span>
-                                                <span *ngIf="index!=0">, {{matiere.nom}}</span>
                                             </span>
                                         </div>
                                     </div>

@@ -107,10 +107,6 @@ import { DiplomeComponent } from './diplome/diplome.component';
 import { CampusComponent } from './campus/campus.component';
 import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
 import { FormateurComponent } from './formateur/formateur.component';
-import { MatiereComponent } from './matiere/matiere.component';
-import { NotesComponent } from './notes/notes.component';
-import { EntrepriseComponent } from './entreprise/entreprise.component';
-import { AlternantComponent } from './alternant/alternant.component';
 import { environment } from 'src/environments/environment';
 
 
@@ -229,10 +225,6 @@ import { environment } from 'src/environments/environment';
         CampusComponent,
         FirstInscriptionComponent,
         FormateurComponent,
-        MatiereComponent,
-        NotesComponent,
-        EntrepriseComponent,
-        AlternantComponent,
     
 
                
