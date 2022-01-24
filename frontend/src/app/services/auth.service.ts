@@ -26,6 +26,11 @@ export class AuthService {
     let API_URL = this.apiUrl+"registre";
     return this.http.post(API_URL, user)
   }
+
+  registerAdmin(user: any) {
+    let API_URL = this.apiUrl+"registre";
+    return this.http.post(API_URL, user,httpOptions1)
+  }
  
   login(user){
     let loginUrl=this.apiUrl+"login";

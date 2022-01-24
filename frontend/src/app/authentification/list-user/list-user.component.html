@@ -63,8 +63,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-columns="columns" let-expanded="expanded">
-                    <tr [pSelectableRow]="rowData" class="bodytab">
-                        <td>
+                    <tr [pSelectableRow]="rowData" class="bodytab" class="p-table-list-ticket">
+                        <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
