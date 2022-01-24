@@ -11,7 +11,7 @@
                 (onDrop)="dragInscritToList($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" style="padding-right: 20%;">
+                        <th *ngFor="let col of columns" style="padding-right: 20%;" scope="col">
                             {{col.header}}
                         </th>
                     </tr>
@@ -38,7 +38,7 @@
                 (onDrop)="dragListToPreInscrit($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns">
+                        <th *ngFor="let col of columns" scope="col">
                             {{col.header}}
                         </th>
                     </tr>
@@ -66,7 +66,7 @@
                 (onDrop)="dragPreInscritToInscrit($event)">
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th *ngFor="let col of columns">
+                        <th *ngFor="let col of columns" scope="col">
                             {{col.header}}
                         </th>
                     </tr>

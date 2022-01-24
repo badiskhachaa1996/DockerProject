@@ -30,6 +30,36 @@ app.post("/create", (req, res) => {
 
     ticket.save((err, doc) => {
         res.send({ message: "Votre ticket a été crée!", doc });
+        Sujet.findOne({_id:req.body.sujet_id}, (err,sujet)=>{
+            console.log(sujet)
+            User.find({service_id:sujet.service_id,role:"Responsable"},(err,listResponsable)=>{
+                console.log(listResponsable)
+                listResponsable.forEach(responsable=>{
+                    console.log(responsable)
+                    let gender = (responsable.civilite=='Monsieur')?'M. ':'Mme ';
+                    let htmlemail = '<p style="color:black"> Bonjour  '+gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </b> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </b></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                    let mailOptions = {
+                        from: 'estya-ticketing@estya.com',
+                        to: responsable.email,
+                        subject: '[ESTYA Ticketing] - Notification ',
+                        html: htmlemail,
+                        priority : 'high',
+                        attachments: [{
+                            filename: 'signature.png',
+                            path: 'assets/signature.png',
+                            cid: 'red' //same cid value as in the html img src
+                        }]
+                    };
+    
+    
+                    transporter.sendMail(mailOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+            })
+        })
     });
 });
 
@@ -211,7 +241,7 @@ app.get("/getAccAffByService/:id", (req, res) => {
                 .then(result => {
                     let listTicket = result.length > 0 ? result : []
                     listTicket.forEach(ticket => {
-                        if (ticket.sujet_id in listSujetofService) {
+                        if (listSujetofService.includes(ticket.sujet_id.toString())) {
                             TicketList.push(ticket)
                         }
                     })
@@ -316,7 +346,7 @@ app.post("/changeService/:id", (req, res) => {
         })
 });
 
-//Change lestatut d'un ticket
+//Change le statut d'un ticket
 app.post("/changeStatut/:id", (req, res) => {
     Ticket.findByIdAndUpdate(req.params.id,
         {
@@ -465,7 +495,7 @@ app.post("/createForUser", (req, res) => {
                 res.send({ message: "Votre ticket a été crée!", doc });
             });
         }else{
-            let user = new User({
+            let newUser = new User({
                 firstname: req.body.email[0],
                 lastname: req.body.email.substring(req.body.email.indexOf('.')+1,req.body.email.indexOf('@')),
                 email: req.body.email,
@@ -473,7 +503,7 @@ app.post("/createForUser", (req, res) => {
                 service_id: null
             })
             
-            user.save().then((userFromDb) => {
+            newUser.save().then((userFromDb) => {
                 const ticket = new Ticket({
                     createur_id: userFromDb._id,
                     sujet_id: req.body.sujet_id,

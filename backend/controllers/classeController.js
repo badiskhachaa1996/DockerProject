@@ -1,10 +1,11 @@
 const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 const { Classe } = require("./../models/classe");
+const { Ecole } = require("./../models/ecole");
 
-//Création d'un nouveau classe 
+//Création d'une nouveau classe 
 app.post("/create", (req, res) => {
-        //Sauvegarde du classe
+        //Sauvegarde d'une classe
         const classe = new Classe({
             nom: req.body.nom,
             nom_court: req.body.nom_court
@@ -16,17 +17,20 @@ app.post("/create", (req, res) => {
 });
 
 
-//Suppression d'un classe
+//Suppression d'une classe
 app.get("/deleteById/:id", (req, res) => {
     Classe.findByIdAndRemove(req.params.id, (err, user) => {
         if (err) {
             res.send(err)
         }
-        res.send(user)
+        else {
+            res.send(user)
+        }
+        
     })
 });
 
-//Modification d'un classe
+//Modification d'une classe
 app.post("/updateById/:id", (req, res) => {
     Classe.findByIdAndUpdate(req.params.id,
         {
@@ -36,11 +40,14 @@ app.post("/updateById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user)
+            else {
+                res.send(user)
+            }
+            
         })
 });
 
-//Récuperer un classe par ID
+//Récuperer une classe par ID
 
 app.get("/getById/:id", (req, res) => {
     Classe.findOne({ _id: req.params.id }).then((data) => {
@@ -68,7 +75,10 @@ app.get("/hideById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user)
+            else {
+                res.send(user)
+            }
+            
         })
 });
 
@@ -80,7 +90,10 @@ app.get("/showById/:id", (req, res) => {
             if (err) {
                 res.send(err)
             }
-            res.send(user)
+            else {
+                res.send(user)
+            }
+            
         })
 });
 
@@ -93,6 +106,15 @@ app.get("/seeAll", (req, res) => {
         .catch(err => {
             console.error(err);
         })
+});
+
+//Récupérer une classe via une école
+app.get("/getAllByEcoleID/:id", (req, res) => {
+    Ecole.findById({ecole_id: req.params.id}).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
 });
 
 module.exports = app;

@@ -5,6 +5,7 @@ import { User } from '../models/User';
 import { catchError, map } from 'rxjs/operators';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
+import { Inscription } from '../models/Inscription';
 
 
 const httpOptions={​​​​​​​​ headers : new HttpHeaders({​​​​​​​​'Content-Type' : 'application/json','Access-Control-Allow-Origin':'*',"Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept"}​​​​​​​​)}​​​​​​​​;
@@ -46,9 +47,9 @@ export class AuthService {
     return this.http.get<any>(loginUrl,httpOptions1);
   }
 
-  update(user :any){
+  update(user :User,inscription:Inscription){
     let registreUrl=this.apiUrl+"updateById/"+user._id;
-    return this.http.post<any>(registreUrl,user,httpOptions1);
+    return this.http.post<any>(registreUrl,{user,inscription},httpOptions1);
 
   }
   

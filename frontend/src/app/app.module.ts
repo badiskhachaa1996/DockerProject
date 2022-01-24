@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,7 +22,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
 import { FileUploadModule } from 'primeng/fileupload';
-import { FullCalendarModule } from 'primeng/fullcalendar';
+import {FullCalendarModule} from 'primeng/fullcalendar';
 import { GalleriaModule } from 'primeng/galleria';
 import { InplaceModule } from 'primeng/inplace';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -98,8 +98,20 @@ import { IPublicClientApplication, PublicClientApplication, InteractionType, Bro
 import { MsalGuard, MsalInterceptor, MsalBroadcastService, MsalInterceptorConfiguration, MsalModule, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalGuardConfiguration, MsalRedirectComponent } from '@azure/msal-angular';
 import { FirstconnectionComponent } from './authentification/firstconnection/firstconnection.component';
 import { ClasseComponent } from './classe/classe.component';
+import { AnneeScolaireComponent } from './annee-scolaire/annee-scolaire.component';
+import { EcoleComponent } from './ecole/ecole.component';
+import { SignComponent } from './presence/sign/sign.component';
+import { SeanceComponent } from './seance/seance.component';
+import { CalendarComponent } from './seance/calendar/calendar.component';
+import { DiplomeComponent } from './diplome/diplome.component';
+import { CampusComponent } from './campus/campus.component';
+import { FirstInscriptionComponent } from './first-inscription/first-inscription.component';
+import { FormateurComponent } from './formateur/formateur.component';
+import { MatiereComponent } from './matiere/matiere.component';
+import { NotesComponent } from './notes/notes.component';
+import { EntrepriseComponent } from './entreprise/entreprise.component';
+import { AlternantComponent } from './alternant/alternant.component';
 import { environment } from 'src/environments/environment';
-
 
 
 
@@ -181,7 +193,7 @@ import { environment } from 'src/environments/environment';
         TriStateCheckboxModule,
         ProgressSpinnerModule,
         DragDropModule,
-        
+        FullCalendarModule 
        
     ],
     declarations: [
@@ -208,6 +220,19 @@ import { environment } from 'src/environments/environment';
         FooterComponent,
         FirstconnectionComponent,
         ClasseComponent,
+        AnneeScolaireComponent,
+        EcoleComponent,
+        SignComponent,
+        SeanceComponent,
+        CalendarComponent,
+        DiplomeComponent,
+        CampusComponent,
+        FirstInscriptionComponent,
+        FormateurComponent,
+        MatiereComponent,
+        NotesComponent,
+        EntrepriseComponent,
+        AlternantComponent,
     
 
                

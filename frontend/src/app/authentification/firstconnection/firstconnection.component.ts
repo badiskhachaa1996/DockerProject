@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ClasseService } from 'src/app/services/classe.service';
+import { Inscription } from 'src/app/models/Inscription';
 
 @Component({
   selector: 'app-firstconnection',
@@ -22,10 +23,6 @@ export class FirstconnectionComponent implements OnInit {
 
   statutList = environment.typeUser
 
-  campusList = environment.campus
-
-  formationList = environment.formations
-
   entreprisesList =environment.entreprisesList
 
   RegisterForm: FormGroup = new FormGroup({
@@ -33,11 +30,17 @@ export class FirstconnectionComponent implements OnInit {
     lastname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),//Lettre et espace
     firstname: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),//Si il finit par .png ou .jpg
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
-    adresse: new FormControl('', [Validators.required]),
     entreprise : new FormControl(this.entreprisesList[0]),
     type: new FormControl(this.statutList[0], [Validators.required]),
-    campus: new FormControl(this.campusList[0]),
-    formation : new FormControl('')
+    pays_adresse: new FormControl("",[Validators.required]),
+    ville_adresse: new FormControl("",[Validators.required]),
+    rue_adresse: new FormControl("",[Validators.required]),
+    numero_adresse: new FormControl("",[Validators.required]),
+    postal_adresse: new FormControl("",[Validators.required]),
+    classe: new FormControl(""),
+    statut:new FormControl(""),
+    nationalite:new FormControl("",[Validators.required]),
+    date_de_naissance:new FormControl("",[Validators.required]),
   })
 
   ngOnInit(): void {
@@ -45,24 +48,18 @@ export class FirstconnectionComponent implements OnInit {
     if (token) {
       this.AuthService.getById(token['id']).subscribe((data) => {
         this.userConnected = jwt_decode(data.userToken)['userFromDb']
-        if (this.userConnected.adresse == null || this.userConnected.phone == null || this.userConnected.civilite == null ||this.userConnected.type == null) {
+        if (this.userConnected.phone == null || this.userConnected.civilite == null ||this.userConnected.type == null) {
           this.RegisterForm.patchValue({
             lastname: this.userConnected.lastname,
             firstname: this.userConnected.firstname })
         } else {
+          localStorage.removeItem("modify")
           this.router.navigateByUrl('/ticket/suivi')
         }
       })
     } else {
       this.router.navigateByUrl('/login')
     }
-
-    this.ClasseService.seeAll().subscribe((data)=>{
-      this.formationList = data;
-      this.RegisterForm.patchValue({
-        formation: data[0]
-      })
-    })
 
   }
 
@@ -75,22 +72,29 @@ export class FirstconnectionComponent implements OnInit {
       null,
       'user',
       null,
-      this.RegisterForm.value.adresse,
       null,
       this.RegisterForm.value.civilite.value,
       null,
       null,
-      this.RegisterForm.value.campus.value,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.formation._id,
-      this.RegisterForm.value.entreprise.value
+      this.RegisterForm.value.entreprise.value,
+      this.RegisterForm.value.pays_adresse,
+      this.RegisterForm.value.ville_adresse,
+      this.RegisterForm.value.rue_adresse,
+      this.RegisterForm.value.numero_adresse,
+      this.RegisterForm.value.postal_adresse,
     )
-    this.AuthService.update(user).subscribe((data: any) => {
+    let inscription = new Inscription(null,this.userConnected._id,
+      this.RegisterForm.value.classe,
+      this.RegisterForm.value.statut,
+  
+      )
+    this.AuthService.update(user,inscription).subscribe((data: any) => {
       this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil réussie' });
       localStorage.removeItem('modify')
       window.location.reload();
     }, (error) => {
-      if (error.status == 500 || error.includes("500")) {
+      if (error.status == 500) {
         //Bad Request (Champ non fourni)
         this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
       } else {
@@ -104,12 +108,20 @@ export class FirstconnectionComponent implements OnInit {
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get phone() { return this.RegisterForm.get('phone'); }
-  get adresse() { return this.RegisterForm.get('adresse'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
 
   get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
   get type() { return this.RegisterForm.get('type').value.value; }
-  get campus() { return this.RegisterForm.get('campus').value.value; }
-  get formation() { return this.RegisterForm.get('formation').value; }
+
+  get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
+  get ville_adresse() { return this.RegisterForm.get('ville_adresse'); }
+  get rue_adresse() { return this.RegisterForm.get('rue_adresse'); }
+  get numero_adresse() { return this.RegisterForm.get('numero_adresse'); }
+  get postal_adresse() { return this.RegisterForm.get('postal_adresse'); }
+
+  get classe() { return this.RegisterForm.get('classe'); }
+  get statut() { return this.RegisterForm.get('statut'); }
+  get nationalite() { return this.RegisterForm.get('nationalite'); }
+  get date_de_naissance() { return this.RegisterForm.get('date_de_naissance'); }
 
 }

@@ -1,0 +1,364 @@
+<!-- Formulaire d'ajout d'un alternant -->
+<div *ngIf="showFormAddAlternant" class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddAlternant = false; resetForms();"></i>
+                <form class="col-8 col-offset-2" [formGroup]="formAddAlternant" (ngSubmit)="onAddAlternant()">
+
+                    <h3>Ajouter un alternant</h3>
+                    <div class="p-grid">
+                        
+                        <div class="ui-g-12 ui-md-12">
+                            <span>
+                                <label>Civilité</label><br>
+                                <p-dropdown [options]="civiliteList" optionLabel="viewValue" formControlName="civilite">
+                                </p-dropdown>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Prénom</label>
+                            <input type="text" formControlName="firstname" class="form-control col-12"
+                                placeholder="Prénom" pInputText>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Nom</label>
+                            <input type="text" formControlName="lastname" class="form-control col-12" placeholder="Nom"
+                                pInputText>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <label>Numéro de téléphone</label>
+                            <input type="text" formControlName="phone" class="form-control col-12"
+                                placeholder="Télephone" pInputText>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <label>Email</label>
+                            <input type="email" formControlName="email" class="form-control col-12" placeholder="Email"
+                                pInputText>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Pays</label>
+                            <input type="text" formControlName="pays_adresse" class="form-control col-12"
+                                placeholder="Pays" pInputText>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Ville</label>
+                            <input type="text" formControlName="ville_adresse" class="form-control col-12"
+                                placeholder="Ville" pInputText>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Nom de la rue</label>
+                            <input type="text" formControlName="rue_adresse" class="form-control col-12"
+                                placeholder="Nom de la rue" pInputText>
+                        </div>
+
+                        <div class="ui-g-3 ui-md-3">
+                            <label>Numéro de la rue</label>
+                            <input type="number" formControlName="numero_adresse" class="form-control col-12"
+                                placeholder="Numéro de rue" pInputText>
+                        </div>
+
+                        <div class="ui-g-3 ui-md-3">
+                            <label>Code postal</label>
+                            <input type="number" formControlName="postal_adresse" class="form-control col-12"
+                                placeholder="Code postale" pInputText>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <hr>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Rôle</label><br>
+                            <p-dropdown [options]="dropdownRole" optionLabel="libelle" formControlName="role">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Statut</label><br>
+                            <p-dropdown [options]="statutList" optionLabel="viewValue" formControlName="statut">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Classe</label><br>
+                            <p-dropdown formControlName="classe_id" [options]="dropdownClasse" optionLabel="libelle">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Entreprise</label><br>
+                            <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle">
+                            </p-dropdown>
+                        </div>
+                        
+                        <div class="ui-g-12 ui-md-12">
+                            <label>Date de naissance</label><br>
+                            <input type="date" formControlName="date_de_naissance" class="form-control col-12"
+                                placeholder="Date de naissance" pInputText>
+                        </div>
+                                            
+                        <button pButton type="submit" label="Ajouter l'alternant"
+                                [disabled]="formAddAlternant.invalid"
+                                style="margin-left: 75%;"></button>
+
+                    </div>
+
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+
+<!-- Formulaire de modification d'un alternant -->
+<div *ngIf="showFormUpdateAlternant" class="grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateAlternant = false; resetForms();"></i>
+                <form class="col-8 col-offset-2" [formGroup]="formUpdateAlternant" (ngSubmit)="onUpdateAlternant()">
+
+                    <h3>Modifier un alternant</h3>
+                    <div class="p-grid">
+                        
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Rôle</label><br>
+                            <p-dropdown [options]="dropdownRole" optionLabel="libelle" formControlName="role">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Statut</label><br>
+                            <p-dropdown [options]="statutList" optionLabel="viewValue" formControlName="statut">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Classe</label><br>
+                            <p-dropdown formControlName="classe_id" [options]="dropdownClasse" optionLabel="libelle">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <label>Entreprise</label><br>
+                            <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle">
+                            </p-dropdown>
+                        </div>
+                        
+                        <div class="ui-g-12 ui-md-12">
+                            <label>Date de naissance</label><br>
+                            <input type="date" formControlName="date_de_naissance" class="form-control col-12"
+                                placeholder="Date de naissance" pInputText>
+                        </div>
+                                            
+                        <button pButton type="submit" label="Modifier l'alternant"
+                                [disabled]="formUpdateAlternant.invalid"
+                                style="margin-left: 73%;"></button>
+
+                    </div>
+
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+
+
+<!-- Table d'affichage de la liste des alternants -->
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <!-- Bouton d'ajout d'un nouvelle alternant -->
+        <button pButton (click)="showFormAddAlternant = true; showFormUpdateAlternant = false;"
+        type="button" label="Nouvel alternant" style="float:right;"></button>
+        <h3>Alternants</h3>
+        <div class="col-12 card shadow-lg my-5">
+             <!-- input de recherche -->
+             <input style="margin:5px;" pInputText type="text"
+             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+
+            <p-table [value]="alternants" dataKey="_id" responsiveLayout="scroll"
+                #dt1 [globalFilterFields]="['statut', 'user_id', 'classe_id', 'entreprise_id']" [rows]="5"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="alternants.length">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="user_id">Nom et prénom <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
+                        <th pSortableColumn="classe_id">Classe <p-sortIcon field="classe_id"></p-sortIcon></th>
+                        <th pSortableColumn="entreprise_id">Nom de l'entreprise <p-sortIcon field="entreprise_id"></p-sortIcon></th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-alternant let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="alternant" 
+                                class="p-button-text p-button-rounded p-button-plain" 
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                style="background-color:white; color: green; border: 0px">
+                            </button>
+                        </td>
+                        <td>{{ users[alternant.user_id]?.civilite }}. {{ users[alternant.user_id]?.lastname | uppercase }} {{ users[alternant.user_id]?.firstname }}</td>
+                        <td>{{ alternant.statut }}</td>
+                        <td>{{ classes[alternant.classe_id]?.nom }}</td>
+                        <td>{{ entreprises[alternant.entreprise_id]?.r_sociale }}</td>
+                        <td><i style="margin-left: 2%;" 
+                            class="pi pi-pencil"
+                            (click)="resetForms(); showFormUpdateAlternant = true; 
+                                    showFormAddAlternant = false; 
+                                    idAlternantToUpdate = alternant._id; 
+                                    idUserOfAlternantToUpdate = alternant.user_id;
+                                    roleToUpdate = alternant.role;
+                                    statutToUpdate = alternant.statut;
+                                    classeToUpdate = classes[alternant.classe_id]?.nom;
+                                    entrepriseToUpdate = entreprises[alternant.entreprise_id]?.r_sociale;
+                                    onGetbyId();"
+                            title="Modifier"></i>
+                        
+                            <i style="margin-left: 2%;"
+                                class="pi pi-user-plus"
+                                title="Definir comme étudiant"
+                            ></i>
+                        </td>
+               
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-alternant>
+                    <tr>
+                        <td colspan="6">
+                            <p-fieldset legend="Informations supplementaires">
+                                <div class="p-grid ui-fluid">
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Role :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ alternant.role }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Nationnalitée :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ alternant.nationalite }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Date de naissance :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ alternant.date_de_naissance | date:'dd/MM/yyyy' }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Email :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ users[alternant.user_id]?.email }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-6 ui-md-6">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Numéro de téléphone :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ users[alternant.user_id]?.phone }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <hr>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Nom contact entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.nom_contact }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Prénom contact entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.prenom_contact }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Email contact entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.email_contact }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Ville entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.ville_adresse }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Pays entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.pays_adresse }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Rue entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.rue_adresse }}
+                                        </div>
+                                    </div>
+
+                                    <div class="ui-g-4 ui-md-4">
+                                        <div class="ui-g-6 ui-md-6">
+                                            <b style="text-align:left !important;">Numéro de rue entreprise :</b>
+                                        </div>
+                                        <div class="ui-g-6 ui-md-6">
+                                            {{ entreprises[alternant.entreprise_id]?.numero_adresse }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </p-fieldset>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+        </div>
+    </div>
+</div>

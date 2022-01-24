@@ -295,7 +295,7 @@ export class SuiviComponent implements OnInit {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
       description: this.TicketForm.value.description,
-      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,this.userconnected.campus,this.userconnected.type)
+      customid:this.generateCustomID(this.userconnected.firstname,this.userconnected.lastname,"Paris",this.userconnected.type)
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
@@ -427,9 +427,6 @@ export class SuiviComponent implements OnInit {
             value2 = user.firstname + " " + user.lastname;
           }
         })
-      } else if (event.field=="sujet"){
-        value1 = this.sujetList[data1.sujet_id].label
-        value2 = this.sujetList[data2.sujet_id].label
       }
       let result = null;
 
@@ -458,14 +455,18 @@ export class SuiviComponent implements OnInit {
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
 
-    let campusCustom = campus[0].toUpperCase()
+    let campusCustom 
 
-    if(campus=="Montréal"){
+    if(campus==null){
+      campusCustom="X"
+    }else if(campus=="Montréal"){
       campusCustom="C"
     }else if(campus=="En Ligne(365)"){
       campusCustom="O"
+    }else {
+      campusCustom = campus[0].toUpperCase() 
     }
-
+    
     return 'ESTYA' + prenom + nom +''+ campusCustom+statut[0].toUpperCase()+'' + date + '' + random;
   }
 

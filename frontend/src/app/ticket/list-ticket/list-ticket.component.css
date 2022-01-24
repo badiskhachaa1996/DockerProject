@@ -81,7 +81,14 @@ td{
   p-button{
     margin-left: 40%;
   }
-
+  #fichier {
+    border-radius: 15px;
+    background-color: #92cf80;
+    text-align:left !important;
+    margin-top: -25px;
+    color: black;
+    padding: 4px;
+  }
   /* Pour mettre une couleur une fois sur deux sur le tableau de la liste des tickets users*/
 .p-table-list-ticket:nth-child(odd) 
 {

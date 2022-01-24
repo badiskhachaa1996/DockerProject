@@ -1,0 +1,186 @@
+<div class="p-grid mt-2">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormAddSeance">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormAddSeance=false"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="seanceForm">
+
+                    <h3 class="text-center">Ajouter une séance</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom de la classe</label><br>
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom" 
+                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Matière</label><br>
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                            emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Libelle</label><br>
+                            <input pInputText type="text" formControlName="libelle" placeholder="Libelle de la séance" class="form-control col-12">
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Début:</label>
+                            <input type="datetime-local" formControlName="debut" class="form-control col-12"
+                                placeholder="Début de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Fin:</label>
+                            <input type="datetime-local" formControlName="fin" class="form-control col-12"
+                                placeholder="Fin de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom du formateur</label><br>
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                            emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
+                                label="Enregistrer" (click)="saveSeance()"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+<div class="p-grid">
+    <div class="xl:col-8 xl:col-offset-2 col-12" *ngIf="showFormUpdateSeance">
+        <p-card>
+            <div class="p-grid">
+                <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showFormUpdateSeance=null"> </i>
+                <form class="col-8 col-offset-2" [formGroup]="seanceFormUpdate">
+
+                    <h3 class="text-center">Modifier la séance</h3>
+                    <div class="p-grid">
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom de la classe</label><br>
+                            <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="nom"
+                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de classe" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Matière</label><br>
+                            <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                            emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Libelle</label><br>
+                            <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance" class="form-control col-12">
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Début:</label>
+                            <input type="datetime-local" formControlName="debut" class="form-control col-12"
+                                placeholder="Début de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Fin:</label>
+                            <input type="datetime-local" formControlName="fin" class="form-control col-12"
+                                placeholder="Fin de la séance" pInputText>
+                        </div>
+                        <div class="mt-2 mb-2 col-8">
+                            <label>Nom du formateur</label><br>
+                            <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                            emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                            <button pButton class="ui-button-raised ui-button-success"
+                                [disabled]="seanceFormUpdate.invalid" label="Enregistrer"
+                                (click)="modifySeance();"></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </p-card>
+    </div>
+</div>
+
+
+<div class="grid">
+    <div class="col-10 col-offset-1">
+        <button *ngIf="!showFormAddSeance" pButton class="ui-button-raised ui-button-success"
+            (click)="onShowCalendar()" style="float:right; margin-left: 2px;" label="Afficher le calendrier"></button>
+
+        <button *ngIf="!showFormAddSeance" pButton class="ui-button-raised ui-button-success"
+            (click)="showFormUpdateSeance=null; showFormAddSeance=true" style="float:right;" label="Ajouter"></button>
+        <h3>Liste des séances</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" selectionMode="single" [rows]="5"
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="seances.length" [filterDelay]="0"
+                [globalFilterFields]="['classe_id','libelle','date_debut','date_fin','formateur_id','matiere']">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex" style="text-align: right">
+                        <span class="p-input-icon-left p-ml-auto">
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="classe_id" scope="col">
+                            Classe <p-sortIcon field="classe_id"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="matiere" scope="col">
+                            Matière <p-sortIcon field="matiere"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="libelle" scope="col">
+                            Libelle <p-sortIcon field="libelle"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_debut" scope="col">
+                            Début <p-sortIcon field="date_debut"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="date_fin" scope="col">
+                            Fin <p-sortIcon field="date_fin"></p-sortIcon>
+                        </th>
+                        <th class="col-5" style="text-decoration: underline;" pSortableColumn="formateur_id" scope="col">
+                            Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
+                        </th>
+                        <th class="col-2" style="text-decoration: underline;" scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            {{ classes[rowData.classe_id]?.nom }}
+                        </td>
+                        <td>
+                            {{ matieres[rowData.matiere_id]?.nom }}
+                        </td>
+                        <td>
+                            {{ rowData.libelle }}
+                        </td>
+                        <td>
+                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td>
+                            {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td>
+                            {{ formateurs[rowData.formateur_id]?.firstname }} {{ formateurs[rowData.formateur_id]?.lastname }}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData); classToModif = classes[rowData.classe_id]?.nom; matiereToModif = matieres[rowData.matiere_id]?.nom "></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+<hr>
+<!-- Partie dediée au full-calendar -->
+<div class="col-10 col-offset-1">
+    <h1>Calendrier</h1>
+    <p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+</div>

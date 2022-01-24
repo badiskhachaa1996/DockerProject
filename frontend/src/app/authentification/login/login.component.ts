@@ -40,32 +40,16 @@ export class LoginComponent implements OnInit {
           this.msalService.instance.setActiveAccount(response.account);
           if (response.account) {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
-              this.auth(data)
-            },(error)=>{
-              console.error(error)
-            })
-          }
-        });
-    } else {
-      this.msalService.loginPopup()
-        .subscribe((response: AuthenticationResult) => {
-          this.msalService.instance.setActiveAccount(response.account);
-          if (response.account) {
-            this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
-              this.auth(data)
+              localStorage.setItem("token", data.token)
+              if (data.message) {
+                localStorage.setItem("modify", "true")
+              }
+              window.location.reload();
             },(error)=>{
               console.error(error)
             })
           }
         });
     }
-  }
-
-  auth(data) {
-    localStorage.setItem("token", data.token)
-    if (data.message) {
-      localStorage.setItem("modify", "true")
-    }
-    window.location.reload();
   }
 }

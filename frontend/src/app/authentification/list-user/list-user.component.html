@@ -39,25 +39,25 @@
 
 
                 <ng-template pTemplate="header" let-columns>
-                    <th style="width: 3rem"></th>
-                    <th style="text-decoration: underline;" pSortableColumn="lastname"> Nom & Prénom <p-sortIcon
+                    <th style="width: 3rem" scope="col"></th>
+                    <th style="text-decoration: underline;" pSortableColumn="lastname" scope="col"> Nom & Prénom <p-sortIcon
                             field="lastname"></p-sortIcon>
 
                     </th>
-                    <th style="text-decoration: underline;" pSortableColumn="service"> Service <p-sortIcon
+                    <th style="text-decoration: underline;" pSortableColumn="service" scope="col"> Service <p-sortIcon
                             field="service"></p-sortIcon>
 
 
                     </th>
-                    <th style="text-decoration: underline;" pSortableColumn="role"> Role <p-sortIcon field="role">
+                    <th style="text-decoration: underline;" pSortableColumn="role" scope="col"> Role <p-sortIcon field="role">
                         </p-sortIcon>
 
                     </th>
-                    <th style="text-decoration: underline;" pSortableColumn="email"> Email <p-sortIcon field="email">
+                    <th style="text-decoration: underline;" pSortableColumn="email" scope="col"> Email <p-sortIcon field="email">
                         </p-sortIcon>
 
                     </th>
-                    <th>
+                    <th scope="col">
                         Action
                     </th>
                 </ng-template>

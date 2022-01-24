@@ -57,8 +57,8 @@ export class CreateComponent implements OnInit {
       data.forEach(service => {
         this.listSujets[service._id]=[];
       });
-      this.sujetServ.getAll().subscribe((data)=>{
-        data.forEach(sujet => {
+      this.sujetServ.getAll().subscribe((sujetL)=>{
+        sujetL.forEach(sujet => {
           this.listSujets[sujet.service_id].push(sujet);
         });
       })

@@ -68,10 +68,10 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label">
-                            Service <p-sortIcon field="service_id"></p-sortIcon>
+                        <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label" scope="col">
+                            Service <p-sortIcon field="service_id" scope="col"></p-sortIcon>
                         </th>
-                        <th class="col-4 col-offset-2" style="text-decoration: underline;">
+                        <th class="col-4 col-offset-2" style="text-decoration: underline;" scope="col">
                             Action
                         </th>
                     </tr>
@@ -156,10 +156,10 @@
             <p-table #dt1 *ngIf="sujetShow" [columns]="cols" [value]="sujetShow" [rows]="5" [paginator]="true"
                 [pageLinks]="5" [responsive]="true" [totalRecords]="sujetShow.length" [globalFilterFields]="['label']">
                 <ng-template pTemplate="header" let-columns>
-                    <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label"> Sujet
+                    <th class="col-8 col-offset-4" style="text-decoration: underline;" pSortableColumn="label" scope="col"> Sujet
                         <p-sortIcon field="service_id"></p-sortIcon>
                     </th>
-                    <th class="col-4 col-offset-2" style="text-decoration: underline;">
+                    <th class="col-4 col-offset-2" style="text-decoration: underline;" scope="col">
                         Action
                     </th>
                 </ng-template>

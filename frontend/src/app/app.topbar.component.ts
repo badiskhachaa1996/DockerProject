@@ -60,7 +60,7 @@ export class AppTopBarComponent implements OnInit {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
         if(this.userconnected){
           this.socket.emit("userLog", this.userconnected)
-        }else if(this.userconnected.adresse==null || !this.userconnected.phone==null || !this.userconnected.civilite==null){
+        }else if(!this.userconnected.phone==null || !this.userconnected.civilite==null){
           this.router.navigateByUrl('/profil/creation')
         }
         
@@ -68,23 +68,7 @@ export class AppTopBarComponent implements OnInit {
         console.error(error)
       })
 
-      this.AuthService.getProfilePicture(temp.id).subscribe((data) => {
-        if (data.error) {
-          this.imageToShow = "../assets/images/avatar.PNG"
-        } else {
-          const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-          let blob: Blob = new Blob([byteArray], { type: data.documentType })
-          let reader: FileReader = new FileReader();
-          reader.addEventListener("load", () => {
-            this.imageToShow = reader.result;
-          }, false);
-          if (blob) {
-            this.imageToShow = "../assets/images/avatar.PNG"
-            reader.readAsDataURL(blob);
-          }
-        }
-
-      })
+      this.reloadImage(temp.id)
 
       this.NotificationService.getAllByUserId(temp.id).subscribe((data) => {
         this.Notifications = data;
@@ -110,27 +94,31 @@ export class AppTopBarComponent implements OnInit {
       })
 
       this.socket.on("reloadImage", () => {
-        this.AuthService.getProfilePicture(temp.id).subscribe((data) => {
-          if (data.error) {
-            this.imageToShow = "../assets/images/avatar.PNG"
-          } else {
-            const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-            let blob: Blob = new Blob([byteArray], { type: data.documentType })
-            let reader: FileReader = new FileReader();
-            reader.addEventListener("load", () => {
-              this.imageToShow = reader.result;
-            }, false);
-            if (blob) {
-              this.imageToShow = "../assets/images/avatar.PNG"
-              reader.readAsDataURL(blob);
-            }
-          }
-
-        })
+        this.reloadImage(temp.id)
       })
     }else if (localStorage.getItem("token") == null){
       this.router.navigateByUrl('/login')
     }
+  }
+
+  reloadImage(id){
+    this.AuthService.getProfilePicture(id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
   }
 
 

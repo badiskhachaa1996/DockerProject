@@ -7,8 +7,10 @@ const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-
-const origin = require("./config")
+let origin = require("./config")
+if (process.env.origin) {
+    origin = process.env.origin
+}
 app.use(cors({ origin: origin }));
 
 const httpServer = require("http").createServer(app);
@@ -40,43 +42,53 @@ mongoose
 const UserController = require('./controllers/userController');
 const ServiceController = require('./controllers/serviceController');
 const SujetController = require('./controllers/sujetController');
-const messageController = require('./controllers/messageController')
+const messageController = require('./controllers/messageController');
 const ticketController = require('./controllers/ticketController');
-const notifController = require('./controllers/notificationController')
+const notifController = require('./controllers/notificationController');
 const classeController = require('./controllers/classeController');
+const anneeScolaireController = require('./controllers/anneeScolaireController');
+const ecoleController = require('./controllers/ecoleController');
+const campusController = require('./controllers/campusController');
+const diplomeController = require('./controllers/diplomeController');
+const presenceController = require('./controllers/presenceController');
+const seanceController =  require('./controllers/seanceController');
+const inscriptionController =  require('./controllers/inscriptionController');
+const formateurController = require('./controllers/formateurController');
+const ressourceController = require('./controllers/ressourceController');
+const etudiantController = require('./controllers/etudiantController');
+const matiereController = require('./controllers/matiereController');
+const notesController = require('./controllers/notesController');
+const entrepriseController = require('./controllers/entrepriseController');
+const alternantController = require('./controllers/alternantController');
 const { User } = require("./models/user");
 
 app.use('/', function (req, res, next) {
-    /*if(AuthorizeAccess(req)){
-        next();
-    }else{
-        res.status(403).send("Accès non autorisé")
-    }*/
-
-    let token = jwt.decode(req.header("token"))
-    if(token && token.id && token.role){
-        User.findOne({_id:token.id,role:token.role},(err,user)=>{
-            if(err){
-                console.error(err)
-                res.status(403).send("Accès non autorisé")
-            }
-            else if(user){
+    
+    if (!origin || origin == "http://localhost:4200") {
+        next()
+    } else {
+        let token = jwt.decode(req.header("token"))
+        if (token && token.id && token.role) {
+            User.findOne({ _id: token.id, role: token.role }, (err, user) => {
+                if (err) {
+                    console.log(err)
+                    res.status(403).send("Accès non autorisé")
+                }
+                else if (user) {
+                    next()
+                } else {
+                    res.status(403).send("Accès non autorisé")
+                }
+            })
+        } else {
+            if (req.originalUrl == "/soc/user/AuthMicrosoft") {
                 next()
-            }else{
-                console.error(req.originalUrl)
+            } else {
                 res.status(403).send("Accès non autorisé")
             }
-        })
-    }else{
-        if(req.originalUrl=="/soc/user/AuthMicrosoft"){
-            next()
-        }else{
-            console.log(req.originalUrl)
-            res.status(403).send("Accès non autorisé")
         }
     }
-    
-  });
+});
 
 app.use("/soc/user", UserController);
 
@@ -86,18 +98,46 @@ app.use("/soc/sujet", SujetController);
 
 app.use("/soc/message", messageController);
 
-app.use('/soc/ticket', ticketController)
+app.use('/soc/ticket', ticketController);
 
-app.use('/soc/notification', notifController)
+app.use('/soc/notification', notifController);
 
-app.use('/soc/classe', classeController)
+app.use('/soc/classe', classeController);
+
+app.use('/soc/anneeScolaire', anneeScolaireController);
+
+app.use('/soc/ecole', ecoleController);
+
+app.use('/soc/campus', campusController);
+
+app.use('/soc/diplome', diplomeController);
+
+app.use('/soc/presence', presenceController);
+
+app.use('/soc/seance', seanceController);
+
+app.use('/soc/inscription',inscriptionController);
+
+app.use('/soc/formateur', formateurController);
+
+app.use('/soc/ressource', ressourceController);
+
+app.use('/soc/etudiant', etudiantController);
+
+app.use('/soc/matiere', matiereController);
+
+app.use('/soc/notes', notesController);
+
+app.use('/soc/entreprise', entrepriseController);
+
+app.use('/soc/alternant', alternantController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
     socket.on('userLog', (user) => {
         LISTTOJOIN = [user._id, (user.service_id) ? user.service_id : user.role]
         socket.join(LISTTOJOIN)
-        console.log("User join: "+LISTTOJOIN)
+        console.log("User join: " + LISTTOJOIN)
     })
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
@@ -139,6 +179,10 @@ io.on("connection", (socket) => {
         io.to('Admin').to(data.service_id).emit('refreshAllTickets')
         //Refresh les tickets suivi de l'user
         io.to(data.user_id).emit('refreshSuivi')
+    })
+
+    socket.on('addPresence', () => {
+        io.emit('refreshPresences')
     })
 });
 

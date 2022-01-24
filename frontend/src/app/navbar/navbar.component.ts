@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AppComponent } from '../app.component';
-
-import { MenuModule } from 'primeng/menu';
 import { MenuItem, MessageService } from 'primeng/api';
 import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
@@ -9,7 +7,7 @@ const io = require("socket.io-client");
 import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 
-import { interval, Subscription } from 'rxjs';
+import { interval } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 
@@ -26,21 +24,21 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[];
   connected = false;
   role: string;
-  userconnected: User = null ;
+  userconnected: User = null;
 
-socket = io(environment.origin.replace('/soc',''));
+  socket = io(environment.origin.replace('/soc', ''));
 
-  constructor(public app: AppComponent, private messageService: MessageService ,private AuthService: AuthService, private router: Router, ) { }
+  constructor(public app: AppComponent, private messageService: MessageService, private AuthService: AuthService, private router: Router,) { }
 
   ngOnInit(): void {
-    
+
     this.connected = true;
     if (localStorage.getItem("token") != null) {
       this.isAuth = true;
       let temp: any = jwt_decode(localStorage.getItem("token"))
       this.AuthService.getById(temp.id).subscribe((data) => {
         this.userconnected = jwt_decode(data.userToken)["userFromDb"];
-        if(this.userconnected.role=="Admin"){
+        if (this.userconnected.role == "Admin") {
           this.items = [{
             label: 'Suivre mes tickets',
             icon: 'pi pi-check-circle',
@@ -48,13 +46,18 @@ socket = io(environment.origin.replace('/soc',''));
           },
           {
             label: 'Gestions des tickets',
-            icon: 'pi pi-list',
+            icon: 'pi pi-ticket',
             routerLink: '/'
           },
           {
-            label :'Gestions des services',
+            label: 'Gestions des services',
             icon: 'pi pi-sitemap',
-            routerLink :'/service'
+            routerLink: '/service'
+          },
+          {
+            label: 'Ecoles',
+            icon: 'pi pi-home',
+            routerLink: '/ecoles'
           },
           {
             label: 'Gestions des agents',
@@ -66,9 +69,38 @@ socket = io(environment.origin.replace('/soc',''));
             icon: 'pi pi-desktop',
             routerLink: '/classe'
           },
-      
+          {
+            label: 'Gestions des Années Scolaire',
+            icon: 'pi pi-calendar-times',
+            routerLink: '/anneeScolaire'
+          },
+          {
+            label: 'Campus',
+            icon: 'pi pi-th-large',
+            routerLink: '/campus'
+          },
+          {
+            label: 'Gestions des séances',
+            icon: 'pi pi-video',
+            routerLink: '/seance'
+          },
+          {
+            label: 'Diplômes',
+            icon: 'pi pi-ellipsis-v',
+            routerLink: '/diplome'
+          },
+          {
+            label: 'Formateurs',
+            icon: 'pi pi-users',
+            routerLink: '/formateurs'
+          },
+          {
+            label: 'Matières',
+            icon: 'pi pi-tags',
+            routerLink: '/matieres'
+          }
           ]
-        }else{
+        } else {
           this.items = [{
             label: 'Suivre mes tickets',
             icon: 'pi pi-check-circle',
@@ -81,12 +113,12 @@ socket = io(environment.origin.replace('/soc',''));
           }
           ]
         }
-     
+
       }, (error) => {
         console.error(error)
       })
     }
-    
+
 
 
   }

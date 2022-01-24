@@ -83,12 +83,23 @@ export const environment = {
   entreprisesList:[
     {value:"Elitelabs"},
     {value:"ESTYA"},
+    {value:"ADG"},
     {value:"Autre"}
   ],
 
   civilite: [
     { id: 1, value: 'Monsieur', viewValue: 'Mr' },
     { id: 2, value: 'Madame', viewValue: 'Mme' },
+  ],
+
+  profil: [
+    { id: 1, value: 'Salarié', viewValue: 'Salarié' },
+    { id: 2, value: 'Apprenti', viewValue: 'Apprenti' },
+    { id: 3, value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi' },
+    { id: 4, value: 'Paticulier', viewValue: 'Paticulier' },
+    { id: 5, value: 'Autre', viewValue: 'Autre' },
+    { id: 6, value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
+    { id: 7, value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage' },
   ],
 
   statut: [
@@ -522,6 +533,12 @@ export const environment = {
     { label: "En cours de traitement", value: 'En cours de traitement' },
     { label: "En attente de retour", value: 'En attente de retour' },
     { label: "Clôturé", value: 'Clôturé' }
+  ],
+  etat_annee: [
+    { label: "Nouvelle", value: 'Nouvelle' },
+    { label: "Active", value: 'Active' },
+    { label: "Archivée", value: 'Archivée' },
+   
   ],
 };
 /*
