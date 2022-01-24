@@ -143,18 +143,6 @@ this.authService.getById(this.Selectedinscription.user_id).subscribe(
    });
   event.target=null;
   }
-  
- /** 
-  onUpload() {
-    console.log(this.uploadedFile)
-   
-    formData.append(this.uploadedFile.name,this.uploadedFile,this.Selectedinscription._id+"__"+this.uploadedFile.name);
-    console.log(formData.get(this.uploadedFile.name))
-    this.fInscriptionService.uploadFile(formData,this.Selectedinscription._id).subscribe(res =>{
-      //console.log(res);
-   });
-  }
-*/
 
 
 
