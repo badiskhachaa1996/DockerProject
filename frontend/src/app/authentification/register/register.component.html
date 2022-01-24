@@ -57,7 +57,7 @@
                                 <span class="error" *ngIf="email.errors?.required">*L'adresse mail est
                                     obligatoire.</span>
                                 <span class="error" *ngIf="email.errors?.pattern && email.value.endsWith('@estya.com')">*L'email n'est pas correct.</span>
-                                <span class="error" *ngIf="email.errors?.pattern && !email.value.endsWith('@estya.com')">*L'email doit être un mail estya.com.</span>
+                                <span class="error" *ngIf="email.errors?.pattern && !email.value.endsWith('@estya.com')">*L'email doit être un mail estya.com, estyagroup.com, elitech.education ou eduhorizons.com</span>
                                 <span class="error" *ngIf="emailExists">*L'email est déjà utilisé.</span>
                             </div>
                         </div>
