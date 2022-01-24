@@ -32,7 +32,6 @@ export class NotificationComponent implements OnInit {
         .subscribe(
           data => {
             this.notifications = data;
-            console.log(data)
             this.NotificationService.viewNotifs(this.notifications)
               .subscribe(
                 response => {

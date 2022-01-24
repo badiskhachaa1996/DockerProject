@@ -22,3 +22,7 @@
     
     background: white;
   }
+  .p-table-list-ticket:nth-child(odd) 
+  {
+    background-color: #f1f1f1;
+  }

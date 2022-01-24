@@ -189,8 +189,8 @@
                 </ng-template>
 
                 <ng-template pTemplate="body" let-rowData let-expanded="expanded">
-                    <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab">
-                        <td>
+                    <tr *ngIf="sujetList[rowData.sujet_id]" class="bodytab" id="p-table-list-ticket">
+                        <td style="background-color: white;">
                             <button type="button" pButton [pRowToggler]="rowData" class="expanded"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)='loadMessages(rowData)'></button>
@@ -203,6 +203,9 @@
                             {{sujetList[rowData.sujet_id].label}}
                         </td>
                         <td>
+                            <i *ngIf="rowData.statut=='Queue d\'entrée'" class="pi pi-circle-off" style="color: red;"></i>
+                            <i *ngIf="rowData.statut=='Traité'" class="pi pi-circle-on" style="color: green;"></i>
+                            <i *ngIf="rowData.statut=='En cours de traitement' || rowData.statut=='En attente d\'une réponse'" class="pi pi-circle-off" style="color: orange;"></i>
                             {{(rowData.statut=='Queue d\'entrée')?'File d\'attente':rowData.statut}}
                         </td>
                         <td>
