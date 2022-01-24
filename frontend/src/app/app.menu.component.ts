@@ -119,9 +119,6 @@ export class AppMenuComponent implements OnInit {
         }
     }
 }
-
-}
-}
 @Component({
     /* tslint:disable:component-selector */
     selector: '[app-submenu]',
