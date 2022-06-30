@@ -129,7 +129,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
                     { path: 'gestion-tickets', component: GestionTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'matières', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },

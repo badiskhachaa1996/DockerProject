@@ -48,7 +48,7 @@ export class AppMenuComponent implements OnInit {
                     ];
                 }
 
-                else if (data != null && this.token.role == "user" && data.type != "Formateur" && data.type != "Commercial" && data.type != "Partenaire") 
+                else if (data != null && this.token.role == "user" && data.type != "Formateur" && data.type != "Commercial" && data.type != "Partenaire" && data.type != 'Prospect') 
                 {
                     this.model = [
                         {
