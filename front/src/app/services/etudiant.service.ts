@@ -38,8 +38,8 @@ export class EtudiantService {
     //Recuperation d'un etudiant via son user_id
     getByUser_id(user_id: string)
     {
-      let registreUrl = this.apiUrl + "getById/" + user_id;
-      return this.httpClient.get<Etudiant>(registreUrl, httpOptions1);
+      let registreUrl = this.apiUrl + "getByUserid/" + user_id;
+      return this.httpClient.get<any>(registreUrl, httpOptions1);
     }
   
     //Mis à jour d'un etudiant

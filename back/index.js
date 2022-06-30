@@ -60,6 +60,7 @@ const matiereController = require('./controllers/matiereController');
 const noteController = require('./controllers/noteController');
 const entrepriseController = require('./controllers/entrepriseController');
 const examenController = require('./controllers/examenController');
+
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
@@ -141,6 +142,8 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
+
+
 
 app.use('/soc/prestataire', prestataireController);
 

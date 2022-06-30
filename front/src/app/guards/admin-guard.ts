@@ -27,11 +27,7 @@ export class AdminGuardService implements CanActivate {
         } else {
             console.log(role)
             this.router.navigate(['/pages/access']);
-            
             return false;
         }
-
-
-
     }
 }
