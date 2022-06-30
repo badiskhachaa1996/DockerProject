@@ -31,7 +31,8 @@ const etudiantSchema = mongoose.Schema({
     phone_tuteur: { type: String, default: null },
     indicatif_tuteur: { type: String, default: null },
     isHandicaped: { type: Boolean, default: false },
-    suivi_handicaped: { type: String, default: null }
+    suivi_handicaped: { type: String, default: null },
+    entreprise_id: { type:String, default: null }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

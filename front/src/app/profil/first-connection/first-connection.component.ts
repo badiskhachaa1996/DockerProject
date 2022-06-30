@@ -27,6 +27,7 @@ export class FirstConnectionComponent implements OnInit {
   dropdownEntreprise: any[] = [];
   userConnected: User;
   nationList = environment.nationalites;
+  paysList = environment.pays;
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -47,7 +48,7 @@ export class FirstConnectionComponent implements OnInit {
       firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       indicatif: new FormControl('', [Validators.required]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      entreprise: new FormControl('null'),
+      entreprise_id: new FormControl(this.dropdownEntreprise[0]),
       type: new FormControl(this.statutList[0], [Validators.required]),
       pays_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
       ville_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
@@ -57,7 +58,7 @@ export class FirstConnectionComponent implements OnInit {
       classe_id: new FormControl(this.dropdownClasse[0]),
       nationalite: new FormControl(this.nationList[0]),
       date_naissance: new FormControl(""),
-
+      entreprise: new FormControl("")
     });
   }
 
@@ -91,7 +92,6 @@ export class FirstConnectionComponent implements OnInit {
            response.forEach(item => {
              this.dropdownClasse.push({ nom: item.nom, value: item._id });
              this.classes[item._id] = item;
-             console.log(item);
            });
   
          }),
@@ -130,12 +130,13 @@ export class FirstConnectionComponent implements OnInit {
       null,
       null,
       this.RegisterForm.value.type.value,
-      this.RegisterForm.value.entreprise?.value?.value,
+      this.RegisterForm.value.entreprise_id?.value,
       this.RegisterForm.value.pays_adresse,
       this.RegisterForm.value.ville_adresse,
       this.RegisterForm.value.rue_adresse,
       this.RegisterForm.value.numero_adresse,
       this.RegisterForm.value.postal_adresse,
+      this.RegisterForm.value.entreprise?.value
     )
     /* SAVE PREINSCRIT
     let inscription = new Inscription(null, this.userConnected._id,
@@ -186,8 +187,10 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          this.RegisterForm.value.type.value != "Etudiant"
+          this.RegisterForm.value.type.value != "Etudiant",
+          null
         )
+        console.log(etudiant.entreprise)
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           localStorage.removeItem('modify')

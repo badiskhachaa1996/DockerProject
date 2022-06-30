@@ -55,6 +55,7 @@ app.post("/create", (req, res, next) => {
             numero_adresse: userData.numero_adresse,
             postal_adresse: userData.postal_adresse,
             date_creation: new Date()
+            
         });
 
     //Verification de l'existence de l'Utilisateur
@@ -68,6 +69,7 @@ app.post("/create", (req, res, next) => {
                         } else {
                             etudiant.user_id = userFromDb._id;
                             etudiant.save()
+                                
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
 

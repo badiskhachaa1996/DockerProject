@@ -51,6 +51,7 @@ export class ListEtudiantComponent implements OnInit {
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
+  paysList = environment.pays;
 
   //Infos exportations
   formExportEtudiant: FormGroup;
@@ -285,7 +286,7 @@ export class ListEtudiantComponent implements OnInit {
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
+    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value;
 
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
