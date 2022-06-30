@@ -1,7 +1,7 @@
 {
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "cli": {
-      "analytics": false
+        "analytics": false
     },
     "version": 1,
     "newProjectRoot": "projects",
@@ -77,6 +77,33 @@
                             "extractLicenses": false,
                             "sourceMap": true,
                             "namedChunks": true
+                        },
+                        "dev": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.dev.ts"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "5mb",
+                                    "maximumError": "10mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": "production"
@@ -121,7 +148,8 @@
                             "node_modules/@fullcalendar/core/main.js",
                             "node_modules/@fullcalendar/daygrid/main.js",
                             "node_modules/@fullcalendar/timegrid/main.js",
-                            "node_modules/@fullcalendar/interaction/main.js"]
+                            "node_modules/@fullcalendar/interaction/main.js"
+                        ]
                     }
                 }
             }
