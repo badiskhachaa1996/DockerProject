@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
 import { io } from 'socket.io-client';
@@ -20,37 +20,29 @@ export class EtudiantGuardService implements CanActivate {
         private serv: ServService,
         private etudiantService: EtudiantService) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot,): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot,): Observable<boolean> | Promise<boolean> | boolean {
 
         let currenttoken: any = jwt_decode(localStorage.getItem("token"))
         let role: string = currenttoken.role;
         let serviceName: string
         if (role == 'Admin') {
-            console.log(currenttoken)
-            console.log("accés autorisé:"+ role)
+            console.log("accés autorisé:" + role)
             return true;
         } else {
-            console.log(currenttoken)
-            this.etudiantService.getByUser_id(currenttoken.id).subscribe((data) => {
-                console.log(data)
-                if (data) {
-                    console.log("accés autorisé : étudiant")
 
-                    return true
-                }
-                else {
-                    this.router.navigate(['/pages/access']);
-                    console.log("accés refusé: page resérvée aux  étudiants")
-                    return false
-                }
-
-            })
-
-            
+            return this.etudiantService.getByUser_id(currenttoken.id).pipe(
+                map(data => {
+                    console.log(data)
+                    if (data) {
+                        console.log("accés autorisé : étudiant")
+                        return true
+                    }
+                    else {
+                        this.router.navigate(['/pages/access']);
+                        console.log("accés refusé: page resérvée aux  étudiants")
+                        return false
+                    }
+                }));
         }
-
-
-        //this.router.navigateByUrl('/pages/access');
-
     }
 }

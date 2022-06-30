@@ -86,7 +86,7 @@ export class AuthGuardService implements CanActivate {
             currenttoken=jwt_decode(localStorage.getItem("token"))
 
             role = currenttoken.role;
-            console.log(currenttoken.role)
+
             return true;
         } else {
 

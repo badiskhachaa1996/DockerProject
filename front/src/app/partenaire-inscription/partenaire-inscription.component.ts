@@ -125,7 +125,9 @@ export class PartenaireInscriptionComponent implements OnInit {
     this.etatForm += val
   }
 
-  submitForm() {
+  
+  submitForm() {   
+    console.log("ok")
     if (this.passwordCorrect()) {
       let u = new User(
         null,
@@ -175,8 +177,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
 
       this.PartenaireService.inscription(u, p, c).subscribe(data => {
-        this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' });
-        this.router.navigate(['/connexionPartenaire'])
+        this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' }); 
       }, error => {
         console.log(error)
         this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
@@ -200,7 +201,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   };
 
   redirectLogin() {
-    this.router.navigate(["/login-externe"])
+    this.router.navigate(["/login"])
   };
 
 }

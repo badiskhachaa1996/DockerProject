@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import jwt_decode from "jwt-decode";
@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { EventEmitterService } from 'src/app/services/event-emitter.service';
 import { SocketService } from 'src/app/services/socket.service';
+import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
+import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
 
 @Component({
   selector: 'app-externe',
@@ -20,12 +22,11 @@ export class ExterneComponent implements OnInit {
   })
 
   token: any;
-
-  constructor(public authService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService) { }
+  constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
-    this.authService.WhatTheRole(this.token.id).subscribe(
+    this.AuthService.WhatTheRole(this.token.id).subscribe(
       ((data) => {
         if(data != null && data.type == "Prospect")
         {
@@ -37,10 +38,10 @@ export class ExterneComponent implements OnInit {
 
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
-    this.authService.login(userToLog).subscribe((data) => {
+    this.AuthService.login(userToLog).subscribe((data) => {
       localStorage.setItem('token', data.token)
       this.socket.isAuth()
-      this.authService.WhatTheRole(jwt_decode(data.token)['id']).subscribe((roleConnected) => {
+      this.AuthService.WhatTheRole(jwt_decode(data.token)['id']).subscribe((roleConnected) => {
         if (roleConnected.type == "Prospect") {
           localStorage.setItem('ProspectConected', roleConnected.Ptoken)
           this.router.navigate(['/suivre-ma-preinscription'])
@@ -61,5 +62,35 @@ export class ExterneComponent implements OnInit {
     })
 
   }
+
+  toLoginMiscroft() {
+    
+    if (this.msalGuardConfig.authRequest) {
+      this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
+        .subscribe((response: AuthenticationResult) => {
+          this.msalService.instance.setActiveAccount(response.account);
+          if (response.account) {
+            this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
+              localStorage.setItem("token", data.token)
+              if (data.message) {
+                localStorage.setItem("modify", "true")
+                window.location.reload()
+              }else{
+                this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+                  this.ss.connected()
+                });
+
+              }
+              
+            },(error)=>{
+              console.error(error)
+            })
+          }else{
+            console.error("ERROR MICROSOFT")
+          }
+        });
+    }
+  }
+  
 
 }

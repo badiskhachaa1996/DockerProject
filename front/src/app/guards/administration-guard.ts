@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
 import { io } from 'socket.io-client';
@@ -17,36 +17,38 @@ export class AdministrationGuardService implements CanActivate {
         private ss: EventEmitterService,
         private router: Router,
         private serv: ServService) { }
-
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot,): boolean {
-
+      canActivate(
+        route: ActivatedRouteSnapshot,
+        state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         let currenttoken: any = jwt_decode(localStorage.getItem("token"))
+
         let role: string = currenttoken.role;
-        let serviceName: string
+        let serviceName: string 
+    
         if (role == 'Admin') {
-            console.log(role)
-            console.log("accés autorisé")
-            return true;
-        } else if (role == 'Responsable' || role == 'Agent') {
-
-            console.log(currenttoken.service_id)
-            this.serv.getAServiceByid(currenttoken.service_id).subscribe(
-                (data) => {
-                    serviceName = data.dataService.label
-                    console.log(data.dataService.label)
-                    if (serviceName.includes("Administration")) {
-                        console.log("accés autorisé: " + role)
-                    }
-                    else {
-                        console.log("accés refusé: page resérvé membres du service Administration")
-                    }
-                })
-
+          console.log("accés autorisé")
+          return true;
         }
         else {
-            console.log("accés refusé: page resérvé au staff")
-            this.router.navigate(['/pages/access']);
-            return false
+    
+          return this.serv.getAServiceByid(currenttoken.service_id).pipe(
+            map(service => {           
+              serviceName = service.dataService.label
+              if (serviceName.includes("Administration")) {
+                console.log("accés autorisé: " + role)
+                return true
+              }
+              else {
+                console.log("accés refusé: page resérvé membres du service Administration")
+                this.router.navigate(['/pages/access']);
+            return false;
+              }
+            }))
         }
+    
+      }
     }
-}
+    
+    
+    
+    
