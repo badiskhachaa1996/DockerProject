@@ -21,10 +21,19 @@ export class ExterneComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
   })
 
+  token: any;
   constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
 
   ngOnInit(): void {
-    
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.AuthService.WhatTheRole(this.token.id).subscribe(
+      ((data) => {
+        if(data != null && data.type == "Prospect")
+        {
+          this.router.navigate(['/suivre-ma-preinscription']);
+        }
+      })
+    );
   }
 
   Login() {
