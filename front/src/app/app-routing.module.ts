@@ -76,6 +76,7 @@ import { AdministrationGuardService } from './guards/administration-guard';
 import { EtudiantGuardService } from './guards/etudiant-guard';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
+import { ProspectGuard } from './guards/prospect-guard';
 
 
 @NgModule({
@@ -84,7 +85,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    { path: '', component: DashboardComponent },
+                    { path: '', component: DashboardComponent ,canActivate: [AuthGuardService]},
                     { path: 'uikit/formlayout', component: FormLayoutComponent },
                     { path: 'uikit/input', component: InputComponent },
                     { path: 'uikit/floatlabel', component: FloatLabelComponent },
@@ -153,7 +154,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent },
-            { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent },
+            { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate : [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },
