@@ -15,9 +15,9 @@ import { AdmissionService } from 'src/app/services/admission.service';
   styleUrls: ['./suivie-preinscription.component.scss']
 })
 export class SuiviePreinscriptionComponent implements OnInit {
-  
+
   @ViewChild('fileInput') fileInput: FileUpload;
- 
+
   ecoleProspect: any;
   subscription: Subscription;
   ListDocuments: String[] = [];
@@ -58,15 +58,15 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (localStorage.getItem('ProspectConected')) {
 
-      this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
-  
-      this.ecoleProspect = this.ProspectConnected.type_form
-    }
-    else {
-      this.router.navigate(['/login'])
-    }
+
+    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
+
+    this.ecoleProspect = this.ProspectConnected.type_form
+
+
+    this.router.navigate(['/login'])
+
 
     this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
 
@@ -105,7 +105,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
       (error) => { console.log(error) }
     );
 
- 
+
   }
 
   resetAuth() {
@@ -146,7 +146,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
       else if (doc.includes('TCF')) {
         this.TCFTest = true;
       }
-      if(this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest){
+      if (this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest) {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
     },
@@ -160,5 +160,5 @@ export class SuiviePreinscriptionComponent implements OnInit {
     event.target = null;
   }
 
-  
+
 }

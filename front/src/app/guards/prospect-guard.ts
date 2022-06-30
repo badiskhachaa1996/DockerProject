@@ -13,37 +13,26 @@ import { ServService } from "../services/service.service";
 })
 
 export class ProspectGuard implements CanActivate {
+ 
     constructor(private router: Router,
         private serv: ServService) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-        let currenttoken: any = jwt_decode(localStorage.getItem("token"))
-        let role: string = currenttoken.role;
-        let serviceName: string
-        if (role == 'Admin') {
+
+        if (localStorage.getItem('ProspectConected')) {
+
+            console.log("Prospect Connecté");
             return true;
-        } else if (role == 'Responsable' || role == 'Agent') {
+           
+          }
+          else {
+            
+            console.log("Prospect non authentifier");
+            this.router.navigate(['/#/login']);
+            return false;
+          }
+      
 
-            console.log(currenttoken.service_id)
-            this.serv.getAServiceByid(currenttoken.service_id).subscribe(
-                (data) => {
-                    serviceName = data.dataService.label
-                    console.log(data.dataService.label)
-                    if (serviceName.includes("Admission")) {
-                        console.log("accés autorisé: " + role)
-                    }
-                    else {
-                        console.log("accés refusé: page resérvé membres du service Admission")
-                    }
-                })
-
-            //this.router.navigateByUrl('/pages/access');
-        }
-        else {
-            console.log("accés refusé: page resérvé au staff")
-            this.router.navigate(['/pages/access']);
-            return false
-        }
-    }
+          }
 }
