@@ -65,7 +65,6 @@ import { EmploiDuTempsComponent } from './pedagogie/seances/emploi-du-temps/empl
 import { EmergementComponent } from './pedagogie/seances/emergement/emergement.component';
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
-import { InterneComponent } from './authentification/interne/interne.component';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
@@ -151,7 +150,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 
                 ],
             },
-            { path: 'formulaire-admission', component: FormulaireAdmissionComponent },
+            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent },
