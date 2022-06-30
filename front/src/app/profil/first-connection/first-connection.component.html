@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Groupe :</label>
+                    <label>Classe :</label>
                     <p-dropdown formControlName="classe_id" [options]="dropdownClasse" optionLabel="nom"
                     filterPlaceholder="Groupe" filter="true" emptyFilterMessage="Pas de groupe trouvé" ></p-dropdown>
                     <!-- <p-dropdown *ngIf="dropdownClasse && dropdownClasse[0]!=null" formControlName="classe_id"
@@ -59,11 +59,12 @@
                 </div>
                 <div class="field col-12" *ngIf="type=='Salarié' || type=='Alternant/Stagiaire'">
                     <label>Entreprise</label>
-                    <p-dropdown *ngIf="dropdownEntreprise && dropdownEntreprise[0]!=null"
+                    <!-- <p-dropdown *ngIf="dropdownEntreprise && dropdownEntreprise[0]!=null"
                         formControlName="entreprise" [options]="dropdownEntreprise" optionLabel="libelle"
                         emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
-                        filter="true">
-                    </p-dropdown>
+                        filter="true"> -->
+                        <input type="text" formControlName="entreprise" placeholder="Entreprise" pInputText>
+                    <!-- </p-dropdown> -->
                 </div>
 
                 <div class="field col-12 md:col-2">
@@ -112,12 +113,14 @@
 
                 <div class="field col-12 md:col-6">
                     <label for="pays_adresse" >Pays :</label>
-                    <input type="text" formControlName="pays_adresse" placeholder="France" pInputText>
+                    <!-- <input type="text" formControlName="pays_adresse" placeholder="France" pInputText> -->
+                    <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
+                        emptyFilterMessage="Pas de pays trouvé" placeholder="France" filterPlaceholder="France"
+                        filter="true"></p-dropdown>
                     <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                         <span class="error" *ngIf="pays_adresse.errors?.required">*Le pays est
                             obligatoire.</span>
-                        <span class="error" *ngIf="pays_adresse.errors?.pattern">*Seul les lettres sont
-                            acceptés.</span>
+                        
                     </div>
                 </div>
 

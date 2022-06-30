@@ -51,6 +51,7 @@ export class ListEtudiantComponent implements OnInit {
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
+  paysList = environment.pays;
 
   //Infos exportations
   formExportEtudiant: FormGroup;
