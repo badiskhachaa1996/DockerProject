@@ -30,6 +30,7 @@ angular_dependencies:
       - front/node_modules/
   script:
     - cd front
+    - rm -rf node_modules/
     - npm install web-animations-js
     - npm install
   # only:
@@ -82,7 +83,6 @@ deploy_node_todev:
     - cd back
     - ln -s ~/storage storage
     - npm ci
-    - pm2 list
     - pm2 delete index
     - pm2 start index.js
    # - pm2 logs index

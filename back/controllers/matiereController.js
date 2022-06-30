@@ -18,6 +18,7 @@ app.post("/create", (req, res, next) => {
     let matiere = new Matiere({
         nom: req.body.nom,
         formation_id: req.body.formation_id,
+        volume_init: req.body.volume_init,
         abbrv: req.body.abbrv,
         classe_id: req.body.classe_id,
         seance_max: req.body.seance_max
@@ -44,6 +45,7 @@ app.post("/updateById", (req, res, next) => {
         {
             nom: req.body?.nom,
             formation_id: req.body.formation_id,
+            volume_init: req.body.volume_init,
             abbrv: req.body.abbrv,
             classe_id: req.body.classe_id,
             seance_max: req.body.seance_max
