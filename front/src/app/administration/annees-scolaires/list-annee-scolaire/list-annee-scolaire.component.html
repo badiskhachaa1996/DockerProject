@@ -1,0 +1,61 @@
+<div class="grid">
+    <div class="col-12">
+		<div class="card">
+			<h5>Liste des années scolaires</h5>
+			<p-table #dt1 *ngIf="anneeScolaires" [value]="anneeScolaires"
+                     dataKey="_id" [rows]="10" 
+                     [rowHover]="true" rowExpandMode="single"
+                     [paginator]="true" [pageLinks]="5" [rows]="5" [paginator]="true" [responsive]="true" [totalRecords]="anneeScolaires.length"
+                     [filterDelay]="0" [globalFilterFields]="['libelle','etat']"
+                     responsiveLayout="scroll">
+
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Libéllé
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Etat
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-rowData>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{ rowData.libelle }}
+						</td>
+						<td style="min-width: 12rem;">
+							{{ rowData.etat }}
+						</td>
+						<td style="min-width: 10rem;">
+							<i *ngIf="rowData.etat!=='Archivée'" pTooltip="Archiver" tooltipPosition="bottom"
+                                class="pi pi-eye-slash" aria-hidden="true" (click)="archiverAnneeScolaire(rowData)"></i>
+                            <i *ngIf="rowData.etat=='Nouvelle'" pTooltip="Activer" tooltipPosition="bottom"
+                                class="pi pi-play" aria-hidden="true" (click)="activerAnneeScolaire(rowData)"></i>
+                            <i pTooltip="Ecoles" tooltipPosition="bottom" class="pi pi-play" aria-hidden="true"
+                                (click)="navigatetoEcole(rowData)"></i>
+						</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>

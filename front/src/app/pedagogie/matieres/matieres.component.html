@@ -1,0 +1,211 @@
+<div class="grid">
+    <div *ngIf="showFormAddMatiere">
+        <div class="col-12">
+                <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle matière" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+                    <p class="line-height-3 m-0">
+                        Voici les informationns à savoir pour créer une nouvelle matière: 
+                    </p>
+                    <ul>
+                        <li><span style="color: red;">Nom de la matière</span> : Entrez le nom de la matiere. </li>
+                    </ul>
+                    <ul>
+                        <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation de la matière. </li>
+                    </ul>
+                    <ul>
+                        <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans laquelle vous voulez ajoutez la matière. </li>
+                    </ul>
+                    <ul>
+                        <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum de la matière. </li>
+                    </ul>
+                    <ul>
+                        <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire de la matière. </li>
+                    </ul>
+                    <p class="line-height-3 m-0">
+                        Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter la matière"</span> pour finaliser l'ajout de la matiere.
+                    </p>
+                    <ng-template pTemplate="footer">
+                            <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
+                    </ng-template>
+                </p-dialog>
+                <div class="grid">
+                    <div class="col-12">
+                        <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations" style="width:auto;"></button>
+                    </div>
+                </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormAddMatiere = false; resetAddMatiere()" aria-hidden="true"> </i>
+                <h4 style="text-align: center;">Créer une matière </h4>
+                <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
+                
+                <form class="p-fluid p-formgrid grid" [formGroup]="formAddMatiere" (ngSubmit)="onAddMatiere();">
+                    <div class="field col-12 md:col-12">
+                        <label For="matiere">Nom de la matière <span style="color: red;"> * </span></label>
+                        <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
+                        <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
+                            <span *ngIf="nom.errors?.pattern" style="color: red;">
+                             * Le nom n'est pas dans le bon format
+                            </span>
+                          </div>
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
+                        <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="Exemple : CGE" />
+                    </div>
+                    <div class="field col-6 md:col-3">
+                        <label For="classe">Classe <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id" placeholder="Choissisez une classe"></p-dropdown>
+                    </div>
+                    <div class="field col-6 md:col-3">
+                        <label For="seance_max">Séance max <span style="color: red;"> * </span></label>
+                        <input pInputText id="seance_max" type="number" formControlName="seance_max" placeholder="0" />
+                    </div>
+                    <div class="field col-12 md:col-3">
+                        <label For="vol_horaire">Volume horaire <span style="color: red;"> * </span></label>
+                        <input pInputText id="vol_horaire" type="number" formControlName="volume" placeholder="0" />
+                    </div>
+                    <div>
+                        <button pButton label="Ajouter la matière" type="submit" [disabled]="formAddMatiere.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="showFormModifMatiere" class="col-12">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormModifMatiere = false;formModifMatiere.reset()" aria-hidden="true"> </i>
+            <h4 style="text-align: center;">Modifier cette matière </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
+            
+            <form class="p-fluid p-formgrid grid" [formGroup]="formModifMatiere" (ngSubmit)="onModifMatiere()">
+                <div class="field col-12 md:col-12">
+                    <label For="matiere">Nom de la matière <span style="color: red;"> * </span></label>
+                    <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="abreviation">Abréaviation <span style="color: red;"> * </span></label>
+                    <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="Exemple : CGE" />
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label For="classe">Classe <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id" placeholder="Choissisez une classe"></p-dropdown>
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label For="seance_max">Séance max <span style="color: red;"> * </span></label>
+                    <input pInputText id="seance_max" type="number" formControlName="seance_max" placeholder="0" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="vol_horaire">Volume horaire <span style="color: red;"> * </span></label>
+                    <input pInputText id="vol_horaire" type="number" formControlName="volume" placeholder="0" />
+                </div>
+                <div>
+                    <button pButton label="Ajouter la matière" type="submit" [disabled]="formModifMatiere.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="col-12">
+		<div class="card">
+            <div style="float: right;">
+                <button pButton label="Ajouter une matière" (click)="showFormAddMatiere = true; showFormModifMatiere = false;" ></button>
+            </div>
+			<h5>Liste des matières</h5>
+			<p-table #dt1 rowExpandMode="single" [value]="matieres"
+                     dataKey="_id" [rows]="10" 
+                     [rowHover]="true" [totalRecords]="matieres.length"
+                     styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
+                     [globalFilterFields]="['nom']"
+                     responsiveLayout="scroll">
+
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom 
+							</div>
+						</th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Abréviation
+							</div>
+                        </th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Diplôme
+							</div>
+                        </th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Volume initiale 
+							</div>
+                        </th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Volume réalisé 
+							</div>
+                        </th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Volume planifié 
+							</div>
+                        </th> 
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+                        </th>              
+				</ng-template>
+                <ng-template pTemplate="body" let-matiere>
+                    <tr>
+						<td style="min-width: 12rem;">
+							{{ matiere.nom }}
+						</td>
+                        <td style="min-width: 12rem;">
+							{{ matiere.abbrv }}
+						</td>
+                        <td *ngIf="formationDic[matiere.formation_id]!=undefined" style="min-width: 12rem;">
+							{{ formationDic[matiere.formation_id].titre }}
+						</td>
+                        <td style="min-width: 12rem;">
+							{{matiere.volume_init}}
+						</td>
+                        <td *ngIf="matiereVolume && matiereVolume.rCons && matiereVolume.rCons[matiere._id]!=undefined" style="min-width: 12rem;">
+							{{matiereVolume.rCons[matiere._id]}}
+						</td>
+                        <td *ngIf="!matiereVolume || matiereVolume.rCons==undefined || !matiereVolume.rCons[matiere._id]" style="min-width: 12rem;">
+							0
+						</td>
+                        <td *ngIf="!matiereVolume || !matiereVolume.rPlan || !matiereVolume.rPlan[matiere._id]" style="min-width: 12rem;">
+							0
+						</td>
+                        <td *ngIf="matiereVolume && matiereVolume.rPlan && matiereVolume.rPlan[matiere._id]" style="min-width: 12rem;">
+                            {{matiereVolume.rPlan[matiere._id]}}
+						</td>
+                        <td>
+							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showFormModifMatiere = true; idMatiereToUpdate = matiere._id; onGetbyId(matiere); showFormAddMatiere = false;"
+                                aria-hidden="true"></i>
+						</td>
+                    </tr>
+                </ng-template>
+    		</p-table>
+		</div>
+    </div>
+</div>
+
+

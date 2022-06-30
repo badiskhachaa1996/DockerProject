@@ -1,0 +1,262 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h3 style="text-align: center;">Formulaire d'ajout d'un partenaire</h3>
+            <div class="col-12 flex justify-content-center flex-wrap card-container">
+                <img src="assets/images/partenaire-inscription.jpg"
+                    style="width: 220px; height: 220px; text-align: center;">
+            </div>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
+            </div>
+            <br>
+            <form [formGroup]="RegisterForm">
+                <p-fieldset legend="Informations de la société" [style]="{'color': 'red', 'font-weight': 'bold'}"
+                    *ngIf="etatForm==1">
+                    <div class="grid" style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-12">
+                                <label For="nomSoc">Nom de la société : <span style="color: red;"> * </span></label>
+                                <input pInputText id="nomSoc" type="text" formControlName="nomSoc"
+                                    placeholder="Nom de la société" />
+                                <div *ngIf="nomSoc.invalid && (nomSoc.touched || nomSoc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="nomSoc.errors?.required">* Le nom est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="nomSoc.errors?.pattern">* Seul les lettres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="typeSoc">Type de la société : <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="typeSoc" optionLabel="value" formControlName="type"></p-dropdown>
+                                <div *ngIf="type.invalid && (type.touched || type.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="type.errors?.required">* Le type de société est obligatoire</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="format_juridique">Format juridique de la société : <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="formatJuridique" optionLabel="value" formControlName="format_juridique"></p-dropdown>
+                                <div *ngIf="format_juridique.invalid && (format_juridique.touched || format_juridique.dirty)">
+                                <span style="color: red;" class="error" *ngIf="format_juridique.errors?.required">* Le format juridique de société est obligatoire</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="indicatifPhone">Indicatif : <span style="color: red;"> * </span></label>
+                                <input pInputText id="indicatifPhone" type="number" formControlName="indicatifPhone" placeholder="Indicatif du numéro téléphone de la société" />
+                                <div *ngIf="indicatifPhone.invalid && (indicatifPhone.touched || indicatifPhone.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatifPhone.errors?.required">* L'indicatif est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatifPhone.errors?.pattern">* Seul les chiffres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-8">
+                                <label For="phone_partenaire">Numéro de téléphone : <span style="color: red;"> *</span></label>
+                                <input pInputText id="phone_partenaire" type="number" formControlName="phone_partenaire" placeholder="Numéro de téléphone de la société" />
+                                <div *ngIf="phone_partenaire.invalid && (phone_partenaire.touched || phone_partenaire.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone_partenaire.errors?.required">* Le téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error"*ngIf="phone_partenaire.errors?.minlength || phone_partenaire.errors?.maxlength">*Le téléphone doit être composé:+33 612345678.</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="email_partenaire">Email : <span style="color: red;"> * </span></label>
+                                <input pInputText id="email_partenaire" type="email" formControlName="email_partenaire" placeholder="Adresse email de la société" />
+                                <div *ngIf="email_partenaire.invalid && (email_partenaire.touched || email_partenaire.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="email_partenaire.errors">* L'email est obligatoire.</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="number_TVA">TVA : <span style="color: red;"> * </span></label>
+                                <input pInputText id="number_TVA" type="number" formControlName="number_TVA" placeholder="TVA de la société" />
+                                <div *ngIf="number_TVA.invalid && (number_TVA.touched || number_TVA.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="number_TVA.errors?.required">* Le numéro de TVA est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="number_TVA.errors?.pattern">* Le numéro de TVA semble incorrect.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="SIREN">SIREN : <span style="color: red;"> * </span></label>
+                                <input pInputText id="SIREN" type="number" formControlName="SIREN" placeholder="SIREN de la société" />
+                                <div *ngIf="SIREN.invalid && (SIREN.touched || SIREN.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="SIREN.errors?.required">* Le numéro de SIREN est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="SIREN.errors?.pattern">* Le numéro de SIREN semble incorrect.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="SIRET">SIRET : <span style="color: red;"> * </span></label>
+                                <input pInputText id="SIRET" type="number" formControlName="SIRET" placeholder="SIRET de la société" />
+                                <div *ngIf="SIRET.invalid && (SIRET.touched || SIRET.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="SIRET.errors?.required">* Le numéro de SIRET est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="SIRET.errors?.pattern">* Le numéro de SIRET semble incorrect.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="APE">Code APE : <span style="color: red;"> * </span></label>
+                                <input pInputText id="APE" type="number" formControlName="APE" placeholder="Code APE de la société" />
+                                <div *ngIf="APE.invalid && (APE.touched || APE.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="APE.errors?.required">* Le code APE est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="APE.errors?.pattern">* Le code APE semble incorrect.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="Services">Services proposés : <span style="color: red;"> * </span></label>
+                                <textarea pInputTextarea type="text" formControlName="Services" placeholder="Hébérgement des étudiants, Recherche d'emploi pour étudiant"></textarea>
+                                <div *ngIf="Services.invalid && (Services.touched || Services.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="Services.errors?.required">* Les services proposés est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="Services.errors?.pattern">* Les services proposés semble incorrect.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="Pays">Pays d'activité : <span style="color: red;"> * </span></label>
+                                <input pInputText id="Pays" type="text" formControlName="Pays" placeholder="France, Canada, Londres,..." />
+                                <div *ngIf="Pays.invalid && (Pays.touched || Pays.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="Pays.errors?.required">* Les pays d'activités sont obligatoires.</span>
+                                    <span style="color: red;" class="error" *ngIf="Pays.errors?.pattern">* Les pays d'activités sont incorrect.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="float: right;">
+                        <button pButton type="button" label="Continuer" (click)="changeEtatForm()"></button>
+                    </div>
+                </p-fieldset>
+
+                <p-fieldset legend="Informations du réprésentant" *ngIf="etatForm==2">
+                    <div class="grid" style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label For="civilite">Civilité: <span style="color: red;"> * </span></label>
+                                <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="lastname">Nom : <span style="color: red;"> * </span></label>
+                                <input pInputText id="lastname" type="text" formControlName="lastname" placeholder="Nom du réprésentant" />
+                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.pattern">* Seul les lettres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="firstname">Prénom : <span style="color: red;"> * </span></label>
+                                <input pInputText id="firstname" type="text" formControlName="firstname" placeholder="Prénom du réprésentant" />
+                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le prénom est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="phone">Numéro de téléphone : <span style="color: red;"> * </span></label>
+                                <input pInputText id="phone" type="number" formControlName="phone" placeholder="Numéro de téléphone du réprésentant*" />
+                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le téléphone doit être composé:+33 612345678.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="whatsApp">Numéro whatsapp : <span style="color: red;"> * </span></label>
+                                <input pInputText id="whatsApp" type="number" formControlName="whatsApp" placeholder="Numéro whatsApp du réprésentant" />
+                                <div *ngIf="whatsApp.invalid && (whatsApp.touched || whatsApp.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="whatsApp.errors?.required">* Le numéro WhatsApp est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">*Le numéro WhatsApp doit être composé: 0612345678.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="email">Email : <span style="color: red;"> * </span></label>
+                                <input pInputText id="email" type="email" formControlName="email" placeholder="Adresse email du représentant" />
+                                <div *ngIf="email.invalid && (email.touched || email.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="email.errors">* L'email est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="date_naissance">Date de naissance : <span style="color: red;"> *
+                                    </span></label>
+                                <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy"
+                                    [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
+                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                    [yearRange]="rangeYear"></p-calendar>
+                                <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.required">* La date de naissance est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.pattern">* Le format ne correspond pas à une date dd/MM/YYYY.</span>
+                                </div>    
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="nationalite">Nationalité : <span style="color: red;"> * </span></label>
+                                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                                    filter="true"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="numero_adresse">Numéro de la rue : <span style="color: red;"> * </span></label>
+                                <input pInputText id="numero_adresse" type="number" formControlName="numero_adresse" placeholder="Numéro de la rue du représentant" />
+                                <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="numero_adresse.errors?.required">* Le numéro de l'adresse est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="numero_adresse.errors?.pattern">* Seul les chiffres sont acceptés.</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="rue_adresse">Nom de la rue : <span style="color: red;"> * </span></label>
+                                <input pInputText id="rue_adresse" type="text" formControlName="rue_adresse" placeholder="Nom de la rue du représentant" />
+                                <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="rue_adresse.errors?.required">* Le nom de la rue est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="rue_adresse.errors?.pattern">* Seul les lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="postal_adresse">Code postal : <span style="color: red;"> * </span></label>
+                                <input pInputText id="postal_adresse" type="number" formControlName="postal_adresse" placeholder="Code postal du représentant" />
+                                <div *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_adresse.errors?.required">* Le code postal est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="postal_adresse.errors?.pattern">* Seul les chiffres sont acceptés.</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="ville_adresse">Ville: <span style="color: red;"> * </span></label>
+                                <input pInputText id="ville_adresse" type="text" formControlName="ville_adresse" placeholder="Ville du représentant" />
+                                <div  *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.required">* La ville est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.pattern">* Seul les lettres sont acceptés.</span>
+                            </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="pays_adresse">Pays: <span style="color: red;"> * </span></label>
+                                <input pInputText id="pays_adresse" type="text" formControlName="pays_adresse" placeholder="Pays du représentant" />
+                                <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.required">* Le pays est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.pattern">* Seul les lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="statut">Statut du représentant au sein de l'entreprise : <span style="color: red;"> * </span></label>
+                                <input pInputText id="statut" type="text" formControlName="statut" placeholder="Statut du représentant" />
+                                <div *ngIf="statut.invalid && (statut.touched || statut.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="statut.errors?.required">* Le statut est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="statut.errors?.pattern">* Seul les lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="password">Mot de passe : <span style="color: red;"> * </span></label>
+                                <input pInputText id="password" type="text" formControlName="password" placeholder="**********" />
+                                <div *ngIf="password.invalid && (password.touched || password.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="password.errors?.required">* Le mot de passe est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="password_confirmed">Confirmez le mot de passe : <span style="color: red;"> * </span></label>
+                                <input pInputText id="password_confirmed" type="text" formControlName="password_confirmed" placeholder="**********" />
+                                <div *ngIf="password_confirmed.invalid && (password_confirmed.touched || password_confirmed.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="password_confirmed.errors?.required">* Le mot de passe est obligatoire.</span>
+                                </div>
+                                <div *ngIf="!passwordCorrect() && (password_confirmed.touched || password_confirmed.dirty || password_confirmed.touched || password_confirmed.dirty)">
+                                <span class="error">*Le mot de passe et le mot de passe confirmé ne sont pas les mêmes.</span>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="float:left">
+                        <button pButton type="button" label="Retour" (click)="changeEtatForm(-1)"></button>
+                    </div>
+                    <div style="float: right;">
+                        <button pButton type="button" label="Continuer" (click)="changeEtatForm()"></button>
+                    </div>
+                </p-fieldset>
+            </form>
+        </div>
+    </div>
+</div>

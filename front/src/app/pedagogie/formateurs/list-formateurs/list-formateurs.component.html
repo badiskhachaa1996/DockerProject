@@ -1,0 +1,450 @@
+<div class="grid">
+	<!-- Formulaire de modification d'un formateur -->
+	<div class="col-12" *ngIf="showFormUpdateFormateur">
+		<div class="card">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px;"
+				(click)="showFormUpdateFormateur = false;" aria-hidden="true">
+			</i>
+			<h4 style="text-align: center;">Modifier un formateur </h4>
+			<p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+					style="color: red;"> * </span> sont obligatoires</p>
+
+			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
+				<div class="field col-12 md:col-4">
+					<label For="contrat">Type de contract<span style="color: red;"> * </span></label>
+					<p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
+					</p-dropdown>
+				</div>
+				<div class="field col-12 md:col-4">
+					<label for="isInterne">Type formateur<span style="color: red;"> * </span></label>
+					<p-selectButton [options]="[{label:'Interne',value:true},{label:'Externe',value:false}]"
+						formControlName="isInterne"></p-selectButton>
+				</div>
+				<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation'">
+					<label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
+					<p-tabView>
+						<p-tabPanel header="Lundi">
+							<div class="grid">
+								<div class="field col-12 md:col-6">
+									<label For="monday_h_remarque">Disponiblité :</label>
+									<p-selectButton formControlName="monday_available"
+										[options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+									</p-selectButton>
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="monday_h_remarque">Remarque :</label>
+									<input type="text" pInputText formControlName="monday_remarque" pInputText
+										placeholder="Disponible seulement le 1er lundi de chaque mois" />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="monday_h_debut">Heure de début </label>
+									<input type="time" pInputText formControlName="monday_h_debut" pInputText />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="monday_h_fin">Heure de fin : </label>
+									<input type="time" pInputText formControlName="monday_h_fin" pInputText />
+								</div>
+							</div>
+						</p-tabPanel>
+						<p-tabPanel header="Mardi">
+							<div class="grid">
+								<div class="field col-12 md:col-6">
+									<label For="tuesday_available">Disponiblité :</label>
+									<p-selectButton formControlName="tuesday_available"
+										[options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+									</p-selectButton>
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="tuesday_remarque">Remarque :</label>
+									<input type="text" pInputText formControlName="tuesday_remarque" pInputText
+										placeholder="Disponible seulement le 1er lundi de chaque mois" />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="tuesday_h_debut">Heure de début </label>
+									<input type="time" pInputText formControlName="tuesday_h_debut" pInputText />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="tuesday_h_fin">Heure de fin : </label>
+									<input type="time" pInputText formControlName="tuesday_h_fin" pInputText />
+								</div>
+							</div>
+						</p-tabPanel>
+						<p-tabPanel header="Mercredi">
+							<div class="grid">
+								<div class="field col-12 md:col-6">
+									<label For="wednesday_available">Disponiblité :</label>
+									<p-selectButton formControlName="wednesday_available"
+										[options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+									</p-selectButton>
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="wednesday_remarque">Remarque :</label>
+									<input type="text" pInputText formControlName="wednesday_remarque" pInputText
+										placeholder="Disponible seulement le 1er lundi de chaque mois" />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="wednesday_h_debut">Heure de début </label>
+									<input type="time" pInputText formControlName="wednesday_h_debut" pInputText />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="wednesday_h_fin">Heure de fin : </label>
+									<input type="time" pInputText formControlName="wednesday_h_fin" pInputText />
+								</div>
+							</div>
+						</p-tabPanel>
+						<p-tabPanel header="Jeudi">
+							<div class="grid">
+								<div class="field col-12 md:col-6">
+									<label For="thursday_available">Disponiblité :</label>
+									<p-selectButton formControlName="thursday_available"
+										[options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+									</p-selectButton>
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="thursday_remarque">Remarque :</label>
+									<input type="text" pInputText formControlName="thursday_remarque" pInputText
+										placeholder="Disponible seulement le 1er lundi de chaque mois" />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="thursday_h_debut">Heure de début </label>
+									<input type="time" pInputText formControlName="thursday_h_debut" pInputText />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="thursday_h_fin">Heure de fin : </label>
+									<input type="time" pInputText formControlName="thursday_h_fin" pInputText />
+								</div>
+							</div>
+						</p-tabPanel>
+						<p-tabPanel header="Vendredi">
+							<div class="grid">
+								<div class="field col-12 md:col-6">
+									<label For="friday_available">Disponiblité :</label>
+									<p-selectButton formControlName="friday_available"
+										[options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+									</p-selectButton>
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="friday_remarque">Remarque :</label>
+									<input type="text" pInputText formControlName="friday_remarque" pInputText
+										placeholder="Disponible seulement le 1er lundi de chaque mois" />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="friday_h_debut">Heure de début </label>
+									<input type="time" pInputText formControlName="friday_h_debut" pInputText />
+								</div>
+								<div class="field col-12 md:col-6">
+									<label For="friday_h_fin">Heure de fin : </label>
+									<input type="time" pInputText formControlName="friday_h_fin" pInputText />
+								</div>
+							</div>
+						</p-tabPanel>
+					</p-tabView>
+				</div>
+
+				<div class="field col-12 md:col-6">
+					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
+					<input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
+						formControlName="taux_h" />
+				</div>
+				<div class="field col-12 md:col-6">
+					<label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
+					<input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
+						formControlName="taux_j" />
+				</div>
+
+				<div class="field col-12 md:col-12" formArrayName="volume_h">
+					<label>Liste des matières sur lesquelles il est rattaché:</label>
+					<div *ngFor="let tempControl of getVolumeHUpdate().controls; let i = index">
+						<p style="font-style:italic">Matière n°{{i+1}}</p>
+						<div>
+							<div class="field">
+								<p-dropdown [options]="matiereList" [group]="true" formControlName="i"></p-dropdown>
+							</div>
+							<div class="field">
+								<input type="number" (change)="changeVolumeH(i,$event)" [(value)]="volumeHList[i]"
+									placeholder="Volume horaire" value="0" pInputText>
+							</div>
+							<div class="field">
+								<i class="pi pi-trash" (click)="deleteMatiereUpdate(i)" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+					<button type="button" (click)="onUpdateMatiere()" pButton label="Ajouter une matière"></button>
+				</div>
+
+				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation'">
+					<label For="isPrestataire">Entreprise</label>
+					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+					</p-dropdown>
+				</div>
+
+				<div class="field col-12 md:col-6">
+					<label>Campus</label><br>
+					<p-dropdown formControlName="campus" [options]="dropdownCampus"
+						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+					</p-dropdown>
+				</div>
+
+				<div class="field col-12 md:col-12">
+					<label For="remarque">Remarque</label>
+					<textarea pInputText id="remarque" formControlName="remarque"></textarea>
+				</div>
+				<div>
+					<button pButton label="Modifier le formateur" type="submit"
+						[disabled]="formUpdateFormateur.invalid"></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--Formulaire de téléchargement de Fichier-->
+	<div *ngIf="showUploadFile!=null" class="col-12">
+		<div class="card">
+			<i class="pi pi-times" style="float:right; font-size: 20px; cursor:pointer" (click)="showUploadFile = null"
+				aria-hidden="true"> </i>
+			<h4 *ngIf="showUploadFile._id && userList[showUploadFile._id]"
+				style="font-weight: bold;text-align: center;">Ajouter un document à : {{
+				userList[showUploadFile._id]?.firstname }} {{
+				userList[showUploadFile._id]?.lastname | uppercase }}</h4>
+			<form class="p-fluid p-formgrid grid">
+				<div class="col-2 md:col-5"></div>
+				<div class="field col-10 md:col-4">
+					<p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
+						customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+						maxFileSize="10000000" [auto]="true" #fileInput>
+					</p-fileUpload>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<div class="col-12">
+		<div class="card">
+			<h5>Liste des formateurs</h5>
+			<p-toast></p-toast>
+			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'isInterne']"
+				[totalRecords]="formateurs.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
+				styleClass="p-datatable-gridlines" [value]="formateurs" dataKey="_id" responsiveLayout="scroll">
+
+				<ng-template pTemplate="caption">
+					<div class="flex table-header">
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem"></th>
+						<th>Nom & Prénom</th>
+						<th>Type de contrat</th>
+						<th>Type de formateur</th>
+						<!--<th>Coût/heure</th>-->
+						<th>Campus</th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-formateur let-expanded="expanded">
+					<tr>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="formateur"
+								class="p-button-text p-button-rounded p-button-plain"
+								[icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+								(click)="expandFc(formateur)"></button>
+						</td>
+						<td style="min-width: 12rem;" *ngIf="userList">
+							{{userList[formateur._id].civilite | i18nSelect: genderMap}}
+							{{userList[formateur._id].lastname | titlecase}}
+							{{userList[formateur._id].firstname | titlecase}}
+						</td>
+						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
+						<td style="min-width: 10rem;">{{ formateur.isInterne?'Interne':"Externe" }}</td>
+						<!--<td style="min-width: 10rem;">{{ formateur.taux_h }} €</td>-->
+						<td>{{campusList[formateur?.campus_id]?.libelle}}</td>
+						<td>
+							<i style="margin-left: 2%;"
+								(click)="showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"
+								class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le formateur"></i>
+							<i class="pi pi-calendar" aria-hidden="true" (click)="showCalendar(formateur)"
+								pTooltip="Voir le calendrier du formateur"></i>
+							<!--<i style="margin-left: 2%;" (click)="resetHeure()" class="fas fa-undo"></i>-->
+							<i class="pi pi-calendar" aria-hidden="true" (click)="sendCalendar(rowData)"
+								pTooltip="Envoyer le calendrier au groupe"></i>
+							<i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+								(click)="showUploadFile=formateur" aria-hidden="true"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="rowexpansion" let-formateur>
+					<tr>
+						<td colspan="7">
+							<div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+					<tr>
+						<th>Service</th>
+						<th>Role</th>
+						<th>Email</th>
+						<!--<th>Coût/jour</th>-->
+						<th *ngIf="formateur.prestataire_id">Entreprise</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-order>
+
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td *ngIf="userList[formateur._id].service_id">{{
+							serviceDic[userList[formateur._id].service_id].label }}</td>
+						<td *ngIf="!userList[formateur._id].service_id">Sans service</td>
+						<td *ngIf="userList[formateur._id].role">
+							{{userList[formateur._id].role=='user'?'Utilisateur':userList[formateur._id].role}}</td>
+						<td *ngIf="userList[formateur._id].email">{{userList[formateur._id].email}}</td>
+						<!--<td>{{ formateur.taux_j }} €</td>-->
+						<td *ngIf="formateur.prestataire_id">{{ entrepriseDic[formateur?.prestataire_id]?.r_sociale }}
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+
+			<p-table responsiveLayout="scroll" *ngIf="formateur.volume_h && formateur.volume_h.length!=0">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Matières</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-order>
+
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td>
+							<p *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
+								<span>{{matiereDic[matiere.key].nom}} : {{matiere.value}} : <span
+										[ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}
+										: </span><span
+										*ngIf="seanceNB[formateur._id]">{{seanceNB[formateur._id]}}</span><span
+										*ngIf="!seanceNB[formateur._id]">0</span></span>
+							</p>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+
+			<p-tabView>
+				<p-tabPanel header="Lundi" *ngIf="formateur.monday_available.state">
+					<div class="grid">
+						<div class="field col-12 md:col-6" *ngIf="formateur.monday_available.h_debut!=''">
+							<p>Heure de début: {{formateur.monday_available.h_debut}}</p>
+						</div>
+						<div class="field col-12 md:col-6" *ngIf="formateur.monday_available.h_fin!=''">
+							<p>Heure de fin: {{formateur.monday_available.h_fin}}</p>
+						</div>
+						<div class="field col-12 md:col-12" *ngIf="formateur.monday_available.remarque!=''">
+							<p>Remarque: {{formateur.monday_available.remarque}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
+				<p-tabPanel header="Mardi" *ngIf="formateur.tuesday_available.state">
+					<div class="grid">
+						<div class="field col-12 md:col-6" *ngIf="formateur.tuesday_available.h_debut!=''">
+							<p>Heure de début: {{formateur.tuesday_available.h_debut}}</p>
+						</div>
+						<div class="field col-12 md:col-6" *ngIf="formateur.tuesday_available.h_fin!=''">
+							<p>Heure de fin: {{formateur.tuesday_available.h_fin}}</p>
+						</div>
+						<div class="field col-12 md:col-12" *ngIf="formateur.tuesday_available.remarque!=''">
+							<p>Remarque: {{formateur.tuesday_available.remarque}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
+				<p-tabPanel header="Mercredi" *ngIf="formateur.wednesday_available.state">
+					<div class="grid">
+						<div class="field col-12 md:col-6" *ngIf="formateur.wednesday_available.h_debut!=''">
+							<p>Heure de début: {{formateur.wednesday_available.h_debut}}</p>
+						</div>
+						<div class="field col-12 md:col-6" *ngIf="formateur.wednesday_available.h_fin!=''">
+							<p>Heure de fin: {{formateur.wednesday_available.h_fin}}</p>
+						</div>
+						<div class="field col-12 md:col-12" *ngIf="formateur.wednesday_available.remarque!=''">
+							<p>Remarque: {{formateur.wednesday_available.remarque}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
+				<p-tabPanel header="Jeudi" *ngIf="formateur.thursday_available.state">
+					<div class="grid">
+						<div class="field col-12 md:col-6" *ngIf="formateur.thursday_available.h_debut!=''">
+							<p>Heure de début: {{formateur.thursday_available.h_debut}}</p>
+						</div>
+						<div class="field col-12 md:col-6" *ngIf="formateur.thursday_available.h_fin!=''">
+							<p>Heure de fin: {{formateur.thursday_available.h_fin}}</p>
+						</div>
+						<div class="field col-12 md:col-12" *ngIf="formateur.thursday_available.remarque!=''">
+							<p>Remarque: {{formateur.thursday_available.remarque}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
+				<p-tabPanel header="Vendredi" *ngIf="formateur.friday_available.state">
+					<div class="grid">
+						<div class="field col-12 md:col-6" *ngIf="formateur.friday_available.h_debut!=''">
+							<p>Heure de début: {{formateur.friday_available.h_debut}}</p>
+						</div>
+						<div class="field col-12 md:col-6" *ngIf="formateur.friday_available.h_fin!=''">
+							<p>Heure de fin: {{formateur.friday_available.h_fin}}</p>
+						</div>
+						<div class="field col-12 md:col-12" *ngIf="formateur.friday_available.remarque!=''">
+							<p>Remarque: {{formateur.friday_available.remarque}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
+			</p-tabView>
+
+			<!--<p-table responsiveLayout="scroll" *ngIf="formateur.availableDates && formateur.availableDates.length!=0">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Date</th>
+						<th>Debut</th>
+						<th>Fin</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-order>
+
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td>
+							<p *ngFor="let date of formateur.availableDates;let index=index">
+								<span>{{date["date"]}}</span>
+								<span>{{date["debut"]}}</span>
+								<span>{{date["fin"]}}</span>
+							</p>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>-->
+
+			<!-- Partie dedié à l'affichage des documents -->
+
+			<div class="col-12">
+				<div class="col-12" *ngFor="let file of ListDocuments; index as i">
+					<div class="box">
+						<i class="pi pi-times" style="float:right; font-size: 20px;"
+							(click)="deleteFile(formateur._id,i)" aria-hidden="true"> </i>
+						<i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(formateur._id,i)"></i>
+						<em (click)="downloadFile(formateur._id,i)" [id]="i" class="docDownload">
+							{{ ListDocuments[i] }}</em>
+					</div>
+					<div class="col-2"></div>
+				</div>
+
+				<div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
+																		width: auto;">
+					<h4>Aucun document n'a été chargé !</h4>
+				</div>
+			</div>
+		</div>
+		</td>
+		</tr>
+		</ng-template>
+		</p-table>
+	</div>
+</div>
+</div>

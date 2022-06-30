@@ -1,0 +1,154 @@
+<div class="grid">
+    <div class="col-12">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
+            modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+            <p class="line-height-3 m-0">
+                Veuillez saisir tous les champs obligatoires
+            </p>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                    class="p-button-outlined"></button>
+            </ng-template>
+        </p-dialog>
+        <div class="grid">
+            <div class="col-12">
+                <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+                    style="width:auto;"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toast key="tst" [baseZIndex]="99999"></p-toast>
+            <h4 style="text-align: center;">Ajouter un diplôme</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddDiplome" (ngSubmit)="onAddDiplome()">
+
+                <div class="field col-12 md:col-10">
+                    <label For="titre">Titre RNCP du diplôme</label>
+                    <input pInputText id="titre" type="text" formControlName="titre" />
+                </div>
+
+                <div class="field col-12 md:col-2">
+                    <label For="code_RNCP">Code RNCP</label>
+                    <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" />
+                </div>
+
+                <div class="field col-12">
+                    <label For="titre_long">Titre long du diplôme</label>
+                    <input pInputText id="titre_long" type="text" formControlName="titre_long" />
+                </div>
+
+                <div class="field col-12">
+                    <label For="description">Description</label>
+                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize
+                        rows="3" cols="30" formControlName="description"></textarea>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Campus</label>
+                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Type de diplôme</label>
+                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Type d'étude</label>
+                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Domaine</label>
+                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Niveau d'étude</label>
+                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"></p-dropdown>
+                </div>
+
+                <div class="field col-12">
+                    <label>Cette formation est-elle diplômante ?</label>
+                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-8">
+                    <label For="certificateur">Certificateur</label>
+                    <input pInputText id="certificateur" type="text" formControlName="certificateur" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="code_diplome">Code diplôme</label>
+                    <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
+                </div>
+
+                <div class="field col-12 md:col-2">
+                    <label For="nb_heure">Durée en heure</label>
+                    <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
+                </div>
+
+                <div class="field col-12 md:col-5">
+                    <label>Date de début de la formation</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-5">
+                    <label>Date de fin de la formation</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label>Rythme de la formation</label>
+                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="frais">Prix de la formation</label>
+                    <input pInputText id="frais" type="number" formControlName="frais" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="frais_en_ligne">Prix de la formation en ligne</label>
+                    <input pInputText id="frais_en_ligne" type="number" formControlName="frais_en_ligne" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début des examens</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_examen">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin des examens</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_examen"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début des stages</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_stage">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin des stages</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_stage"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Formateur référent</label>
+                    <p-dropdown [options]="dropdownFormateur" optionLabel="label" formControlName="formateur_id">
+                    </p-dropdown>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter" type="submit" [disabled]="formAddDiplome.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

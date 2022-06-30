@@ -1,0 +1,394 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { saveAs as importedSaveAs } from "file-saver";
+import { FileUpload } from 'primeng/fileupload';
+import jwt_decode from "jwt-decode";
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Prospect } from 'src/app/models/Prospect';
+import { User } from 'src/app/models/User';
+import { MessageService } from 'primeng/api';
+
+@Component({
+  selector: 'app-gestion-preinscriptions',
+  templateUrl: './gestion-preinscriptions.component.html',
+  styleUrls: ['./gestion-preinscriptions.component.scss']
+})
+export class GestionPreinscriptionsComponent implements OnInit {
+
+  @ViewChild('fileInput') fileInput: FileUpload;
+  code = this.ActiveRoute.snapshot.paramMap.get('code');
+  users: User[] = [];
+  prospects: any[] = [];
+  inscriptionSelected: Prospect;
+  showUploadFile: Prospect;
+  ListDocuments: String[] = []
+  token;
+  dataCommercial: CommercialPartenaire;
+  infoCommercialExpand: CommercialPartenaire;
+  ListPiped: String[] = []
+  DocTypes: any[] = [
+    { value: null, label: "Choississez le type de fichier", },
+    { value: 'piece_identite', label: 'Pièce d\'identité', },
+    { value: 'CV', label: "CV" },
+    { value: 'LM', label: "LM" },
+    { value: 'diplome', label: 'Diplôme' },
+    { value: 'releve_notes', label: 'Relevé de notes' },
+    { value: 'TCF', label: "TCF" }
+  ];
+
+  DocTypes2: any[] = [
+    { value: 'piece_identite', label: 'Pièce d\'identité', },
+    { value: 'CV', label: "CV" },
+    { value: 'LM', label: "LM" },
+    { value: 'diplome', label: 'Diplôme' },
+    { value: 'releve_notes', label: 'Relevé de notes' },
+    { value: 'TCF', label: "TCF" }
+  ];
+  statutList: any[] = [
+    { value: "Documents manquants" },
+    { value: "Dossier passable" },
+    { value: "Dossier complet" },
+    { value: "Manque d'orientation" }
+  ]
+  statutVisible = [
+    { value: "Dossier suspendu - En attente du prospect" },
+    { value: "Traitement Terminé" }
+  ]
+
+  listFR = [
+    { value: "Pas de TCF - Pays non Francophone" },
+    { value: "TCF B2 ou plus" },
+    { value: "ILC B2 ou plus" },
+    { value: "Moins de B2" },
+    { value: "Non concerné" }
+  ]
+  decisionList = [
+    { value: "Suspendu" },
+    { value: "Suspension - Test TCF" },
+    { value: "Accepté" },
+    { value: "Accepté sur réserve" },
+    { value: "Non Retenu" },
+    { value: "Payée" },
+  ]
+  dropdownDecision = [
+    { value: null, label: "Toute" },
+    { value: "Suspendu", label: "Suspendu" },
+    { value: "Accepté", label: "Accepté" },
+    { value: "Accepté sur réserve", label: "Accepté sur réserve" },
+    { value: "Non Retenu", label: "Non Retenu" },
+    { value: "Validé", label: "Validé" },
+  ]
+
+  phaseComplementaire = [
+    { value: "Aucune" },
+    { value: "Choix de formation" },
+    { value: "Changement de campus" },
+    { value: "Manquant" },
+    { value: "Rupture d'étude" },
+    { value: "Sous Dossier" },
+    { value: "Envoyé à Eduhorizons" },
+    { value: "En attente du retour ELC" },
+    { value: "Demande équivalence envoyée" },
+  ]
+
+  statutPayement = [
+    { value: "Aucun" },
+    { value: "Pré-inscription" },
+    { value: "Inscription" },
+    { value: "Inscription définitive" },
+  ]
+
+  listAgent = [
+    { value: "Aucun" },
+    { value: "Haitham" },
+    { value: "Dhekra" },
+    { value: "Moez" },
+    { value: "Dhouha" },
+    { value: "Maroua N" },
+    { value: "Malek" },
+    { value: "Feryel" },
+    { value: "Elyes" },
+    { value: "Rania" },
+    { value: "Asma" },
+    { value: "Islem" },
+    { value: "SLIM" },
+    { value: "Achraf" },
+  ]
+  uploadFileForm: FormGroup = new FormGroup({
+    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  })
+
+  constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
+
+  ngOnInit(): void {
+    this.token = jwt_decode(localStorage.getItem("token"))
+    this.userService.WhatTheRole(this.token.id).subscribe(data => {
+      if (data.type == 'Commercial' && data.data.statut == 'Admin') {
+        this.dataCommercial = data.data
+      }
+      this.refreshProspect()
+    })
+
+  }
+
+  expandRow(prospect: Prospect) {
+    this.admissionService.getFiles(prospect?._id).subscribe(
+      (data) => {
+        console.log(data)
+        this.ListDocuments = data
+        this.ListPiped = []
+        data.forEach(doc => {
+          let docname: string = doc.replace("/", ": ").replace('releve_notes', 'Relevé de notes ').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+        })
+      },
+      (error) => { console.error(error) }
+    );
+    if (prospect.code_commercial) {
+      this.commercialService.getCommercialDataFromCommercialCode(prospect.code_commercial).subscribe(data => {
+        this.infoCommercialExpand = data
+      },
+        (error) => { console.error(error) })
+    } else {
+      this.infoCommercialExpand = null
+    }
+  }
+
+  refreshProspect() {
+    //Recuperation de la liste des utilisateurs
+    this.userService.getAll().subscribe(
+      ((response) => {
+        if (this.code) {
+          if (this.token != null && this.dataCommercial != null) {
+            this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
+              ((responseAdmission) => {
+                this.prospects = []
+                response.forEach((user) => {
+                  this.users[user._id] = user;
+                });
+                //Recuperation de la liste des prospect
+                responseAdmission.forEach(p => {
+                  p['lastname'] = this.users[p.user_id].lastname
+                  p['firstname'] = this.users[p.user_id].firstname
+                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
+                  p['nationnalite'] = this.users[p.user_id].nationnalite
+                  p['email'] = this.users[p.user_id].email_perso
+                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
+                  this.prospects.push(p)
+                })
+              }),
+              ((error) => { console.log(error); })
+            );
+          } else {
+            this.admissionService.getAllCodeCommercial(this.code).subscribe(
+              ((responseAdmission) => {
+                this.prospects = []
+                response.forEach((user) => {
+                  this.users[user._id] = user;
+                });
+                //Recuperation de la liste des prospect
+                responseAdmission.forEach(p => {
+                  p['lastname'] = this.users[p.user_id].lastname
+                  p['firstname'] = this.users[p.user_id].firstname
+                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
+                  p['nationnalite'] = this.users[p.user_id].nationnalite
+                  p['email'] = this.users[p.user_id].email_perso
+                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
+                  this.prospects.push(p)
+                })
+              }),
+              ((error) => { console.log(error); })
+            );
+          }
+
+        } else {
+          if (this.dataCommercial && this.dataCommercial.statut == "Admin" || this.token.role == "Admin") {
+            this.admissionService.getAll().subscribe(
+              ((responseAdmission) => {
+                this.prospects = []
+                response.forEach((user) => {
+                  this.users[user._id] = user;
+                });
+                //Recuperation de la liste des prospect
+                responseAdmission.forEach(p => {
+                  if (this.users[p.user_id]) {
+                    p['lastname'] = this.users[p.user_id].lastname
+                    p['firstname'] = this.users[p.user_id].firstname
+                    p['pays_de_residence'] = this.users[p.user_id].pays_adresse
+                    p['nationnalite'] = this.users[p.user_id].nationnalite
+                    p['email'] = this.users[p.user_id].email_perso
+                    p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
+                    this.prospects.push(p)
+                  }
+                })
+              }),
+              ((error) => { console.log(error); })
+            );
+          }
+        }
+      }),
+      ((error) => { console.log(error); })
+    );
+  }
+
+  changeStateForm: FormGroup = new FormGroup({
+    statut: new FormControl(this.statutList[0], Validators.required),
+    typeDoc: new FormControl(""),
+    statut_fr: new FormControl(this.listFR[0]),
+    decision_admission: new FormControl(this.decisionList[0]),
+    phase_complementaire: new FormControl(this.phaseComplementaire[0]),
+    statut_payement: new FormControl(this.statutPayement[0]),
+    customid: new FormControl("", Validators.required),
+    traited_by: new FormControl(this.listAgent[0])
+  })
+
+
+  initStatutForm(prospect: Prospect) {
+    this.changeStateForm.patchValue({
+      statut: { value: prospect.statut_dossier },
+      statut_fr: { value: prospect.tcf },
+      decision_admission: { value: prospect.decision_admission },
+      phase_complementaire: { value: prospect.phase_complementaire },
+      statut_payement: { value: prospect.statut_payement },
+      customid: prospect.customid,
+      traited_by: { value: prospect.traited_by },
+    })
+  }
+
+  changeStateBtn() {
+    console.log(this.changeStateForm.value.statut.value)
+    let p = {
+      _id: this.inscriptionSelected._id,
+      statut_dossier: this.changeStateForm.value.statut.value,
+      tcf: this.changeStateForm.value.statut_fr.value,
+      document_manquant: this.changeStateForm.value.typeDoc,
+      agent_id: this.token.id,
+      decision_admission: this.changeStateForm.value.decision_admission.value,
+      phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
+      statut_payement: this.changeStateForm.value.statut_payement.value,
+      customid: this.changeStateForm.value.customid,
+      traited_by: this.changeStateForm.value.traited_by.value
+    }
+    this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
+      this.refreshProspect()
+      this.inscriptionSelected = null
+    }, (error) => {
+      console.error(error)
+    })
+  }
+
+
+  //Methode de redirection vers la page d'ajout d'une nouvelle admission
+  onGetFormAdmissionESTYA() {
+    this.router.navigate(['demande-admission', 'estya']);
+  }
+
+  onGetFormAdmissionADG() {
+    this.router.navigate(['demande-admission', 'adg']);
+  }
+
+  onGetFormAdmissionESPIC() {
+    this.router.navigate(['demande-admission', 'espic']);
+  }
+
+  downloadFile(id, i) {
+    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
+
+  deleteFile(id, i) {
+    if (confirm("Voulez-vous vraiment supprimer le fichier " + this.ListPiped[i] + " ?")) {
+      this.admissionService.deleteFile(id, this.ListDocuments[i]).subscribe((data) => {
+        this.messageService.add({ severity: "success", summary: "Le fichier a bien été supprimé" })
+        this.ListDocuments.splice(i, 1)
+        this.ListPiped.splice(i, 1)
+      }, (error) => {
+        this.messageService.add({ severity: "error", summary: "Le fichier n'a pas pu être supprimé", detail: error })
+        console.error(error)
+      })
+    }
+  }
+
+  FileUpload(event) {
+    console.log(event)
+    console.log(this.uploadFileForm.value.typeDoc)
+    if (this.uploadFileForm.value.typeDoc != null && event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('id', this.showUploadFile._id)
+      formData.append('document', this.uploadFileForm.value.typeDoc)
+      formData.append('file', event.files[0])
+      this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.expandRow(this.showUploadFile)
+        event.target = null;
+        this.showUploadFile = null;
+        this.fileInput.clear()
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.prospects.forEach(p => {
+      let t = {}
+      t['NOM'] = p.lastname.toUpperCase()
+      t['Prenom'] = p.firstname
+      t['Date de la demande'] = p?.date_creation
+      t['Date de naissance'] = p.date_naissance
+      t['Pays de residence'] = p['pays_de_residence']
+      t['Nationalite'] = p['nationnalite']
+      t['Email'] = p['email']
+      t['Telephone'] = p['telephone']
+      t['Ecole demande'] = p?.type_form
+      t['1er choix'] = p.campus_choix_1
+      t['2eme choix'] = p.campus_choix_2
+      t['3eme choix'] = p.campus_choix_3
+      t['Programme'] = p.programme
+      t['formation'] = p.formation
+      t['Rythme de Formation'] = p.rythme_formation
+      t['Dernier niveau academique'] = p.validated_academic_level
+      t['Num WhatsApp'] = p.indicatif_whatsapp + " " + p.numero_whatsapp
+      t['Statut pro actuel'] = p.statut_actuel
+      t['Langues'] = p.languages
+      t['Experiences pro'] = p.professional_experience
+      t['Nom du garant'] = p?.nomGarant.toUpperCase()
+      t['Prenom du garant'] = p?.prenomGarant
+      t['Nom de l\'agence'] = p?.nomAgence
+      t['Code du commercial'] = p?.code_commercial
+      t['Autre'] = p.other
+      t['Nombre de documents'] = p.nbDoc
+      t['Decision Admission'] = p.decision_admission
+      t['Phase complémentaire'] = p.phase_complementaire
+      t['Statut Payement'] = p.statut_payement
+      t['ID Etudiant'] = p.customid
+      t['Att Traité par'] = p.traited_by
+      if (p.agent_id) {
+        t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
+      }
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "preinscrit" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
+  }
+}

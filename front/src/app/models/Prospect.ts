@@ -1,0 +1,40 @@
+export class Prospect {
+
+    constructor(
+        public _id?: string,
+        public user_id?: string,
+        public date_naissance?: Date,
+        public numero_whatsapp?: string,
+        public validated_academic_level?: string,
+        public statut_actuel?: string,
+        public other?: string,
+        public languages?: string,
+        public professional_experience?: string,
+        public campus_choix_1?: string,
+        public campus_choix_2?: string,
+        public campus_choix_3?: string,
+        public programme?: string,
+        public formation?: string,
+        public rythme_formation?: string,
+        public servicesEh?: Boolean[],
+        public nomGarant?: string,
+        public prenomGarant?: string,
+        public nomAgence?: string,
+        public donneePerso?: string,
+        public date_creation?: string,
+        public type_form?: string,
+        public code_commercial?: string,
+        public statut_dossier?: string,
+        public date_traitement?: string,
+        public etat_dossier?: string,
+        public tcf?:string,
+        public agent_id?:string,
+        public indicatif_whatsapp?:string,
+        public decision_admission?:string,
+        public statut_payement?:string,
+        public phase_complementaire?:string,
+        public customid?:string,
+        public traited_by?:string     
+    ) { }
+
+}

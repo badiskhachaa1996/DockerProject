@@ -1,0 +1,195 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle entreprise"
+            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
+            [breakpoints]="{'960px': '75vw'}">
+            <p class="line-height-3 m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                laborum.
+            </p>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                    class="p-button-outlined"></button>
+            </ng-template>
+        </p-dialog>
+        <div class="grid">
+            <div class="col-12">
+                <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+                    style="width:auto;"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter une entreprise </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
+                <div class="field col-12 md:col-6">
+                    <label For="raison_sociale">Raison sociale <span style="color: red;"> * </span></label>
+                    <input pInputText id="raison_sociale" formControlName="r_sociale" type="text" placeholder="Raison sociale" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="forme_juridique">Forme juridique <span style="color: red;"> * </span></label>
+                    <input pInputText id="forme_juridique" formControlName="fm_juridique" type="text" placeholder="Forme juridique" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="vip">VIP <span style="color: red;"> * </span></label>
+                    <input pInputText id="vip" type="text" formControlName="vip"  placeholder="VIP" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>NDA</label><br>
+                    <input type="text" formControlName="nda" class="form-control col-12"
+                        placeholder="NDA" pInputText>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="type_entreprise">Type d'entreprise <span style="color: red;"> * </span></label>
+                    <input pInputText id="type_entreprise" formControlName="type_ent" type="text" placeholder="Type d'entreprise" />
+                </div>
+                <!-- vérifier dans le ts remplacer var bool-->
+                <div class="field col-12 md:col-4">
+                    <label For="isInterne">Cette entreprise est-elle interne ? <span style="color: red;"> * </span></label>
+                    <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="siret">Numéro de SIRET <span style="color: red;"> * </span></label>
+                    <input pInputText id="siret" formControlName="siret" type="text" placeholder="Numéro de SIRET" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="code_ape">Code APE NAF <span style="color: red;"> * </span></label>
+                    <input pInputText id="code_ape" formControlName="code_ape_naf" type="text" placeholder="Code APE NAF" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="tva">Numéro TVA <span style="color: red;"> * </span></label>
+                    <input pInputText id="tva" formControlName="num_tva" type="text" placeholder="Numéro TVA" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="nom_contact">Nom du contact principal <span style="color: red;"> * </span></label>
+                    <input pInputText id="nom_contact" formControlName="nom_contact" type="text" placeholder="Nom du contact principal" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="prenom_contact">Prénom du contact principal <span style="color: red;"> * </span></label>
+                    <input pInputText id="prenom_contact" formControlName="prenom_contact" type="text" placeholder="Prénom du contact principal" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="fonction_contact">Fonction du contact principal dans l'entreprise<span
+                            style="color: red;"> * </span></label>
+                    <input pInputText id="fonction_contact" type="text" formControlName="fc_contact"
+                        placeholder="Fonction du contact principal dans l'entreprise" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="adresse_contact">Adresse mail du contact principal<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="adresse_contact" type="text" formControlName="email_contact"
+                        placeholder="Adresse mail du contact principal" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label>Indicatif du numéro de téléphone:</label><br>
+                    <input type="text" formControlName="indicatif_1er" class="form-control col-12"
+                        placeholder="Numéro de téléphone contact" pInputText>
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="num_contact">Numéro de téléphone du contact principal<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="num_contact" type="text" formControlName="phone_contact"
+                        placeholder="Numéro de téléphone du contact principal" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="nom_second">Nom du contact sécondaire <span style="color: red;"> * </span></label>
+                    <input pInputText id="nom_second" type="text" placeholder="Nom du contact sécondaire" formControlName="nom_contact_2nd" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="prenom_second">Prénom du contact sécondaire <span style="color: red;" > * </span></label>
+                    <input pInputText id="adresse_contact" type="text" formControlName="prenom_contact_2nd"
+                        placeholder="Adresse mail du contact principal" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="fonction_second">Fonction du contact secondaire dans l'entreprise<span
+                            style="color: red;"> * </span></label>
+                    <input pInputText id="fonction_contact" type="text" formControlName="fc_contact_2nd"
+                        placeholder="Fonction du contact principal dans l'entreprise" />
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label For="mail_second">Adresse email du contact sécondaire<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="mail_second" type="text" placeholder="Adresse email du contact sécondaire" formControlName="email_contact_2nd" />
+                </div>
+                
+                <div class="field col-12 md:col-4">
+                    <label>Indicatif du numéro de téléphone:</label><br>
+                    <input type="text" formControlName="indicatif_2nd" class="form-control col-12"
+                        placeholder="Numéro de téléphone contact" pInputText>
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="num_second">Numéro de téléphone du contact sécondaire<span style="color: red;" > *
+                        </span></label>
+                    <input pInputText id="num_second" type="text" formControlName="phone_contact_2nd"
+                        placeholder="Numéro de téléphone du contact sécondaire" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="pays_entreprise">Pays où se situe l'entreprise<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="pays_entreprise" type="text" placeholder="Pays où se situe l'entreprise" formControlName="pays_adresse"/>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="ville_entreprise">Ville où se situe l'entreprise<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="ville_entreprise" type="text" placeholder="Ville où se situe l'entreprise" formControlName="ville_adresse" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="nom_rue_entreprise">Nom de la rue où se situe l'entreprise<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="nom_rue_entreprise" type="text" formControlName="rue_adresse"
+                        placeholder="Nom de la rue où se situe l'entreprise" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="num_rue_entreprise">Numéro de la rue où se situe l'entreprise<span style="color: red;">
+                            * </span></label>
+                    <input pInputText id="num_rue_entreprise" type="text" formControlName="numero_adresse"
+                        placeholder="Numéro de la rue où se situe l'entreprise" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="code_postale_entreprise">Code postale<span style="color: red;"> * </span></label>
+                    <input pInputText id="code_postale_entreprise" type="text" placeholder="Code postale" formControlName="postal_adresse" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="email_entreprise">Email de l'entreprise<span style="color: red;"> * </span></label>
+                    <input pInputText id="email_entreprise" type="text" placeholder="Email de l'entreprise" formControlName="email" />
+                </div>
+                
+
+                <div class="field col-12 md:col-4">
+                    <label>Indicatif du numéro de téléphone:</label><br>
+                    <input type="text" formControlName="indicatif_ent" class="form-control col-12"
+                        placeholder="+33" pInputText>
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="phone_entreprise">Numéro de téléphone de l'entreprise<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="phone_entreprise" type="text" formControlName="phone"
+                        placeholder="Numéro de téléphone de l'entreprise" />
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label For="site_entreprise">Site internet de l'entreprise<span style="color: red;"> *
+                        </span></label>
+                    <input pInputText id="site_entreprise" type="text" placeholder="Site internet de l'entreprise" formControlName="website"/>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label For="organisme_financeur">Organisme financeur<span style="color: red;"> * </span></label>
+                    <input pInputText id="organisme_financeur" type="text" placeholder="Organisme financeur" formControlName="financeur" />
+                </div>
+                <div>
+                    <button pButton label="Ajouter l'entreprise" [disabled]="formAddEntreprise.invalid" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

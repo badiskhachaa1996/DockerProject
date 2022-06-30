@@ -1,0 +1,167 @@
+<div class="grid">
+    <div class="col-12" *ngIf="showFormUpdateSeance!=null">
+        <div class="card">
+            <h4 style="text-align: center;">Modifier une séance </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <form class="p-fluid p-formgrid grid" [formGroup]="seanceFormUpdate" (ngSubmit)="modifySeance()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom du groupe</label><br>
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                        defaultLabel="Selection des classes" optionLabel="nom" filter="true"></p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Matière</label><br>
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                        emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Libelle</label><br>
+                    <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance"
+                        class="form-control col-12">
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Début:</label>
+                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
+                        placeholder="Début de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Fin:</label>
+                    <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
+                        placeholder="Fin de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Nom du formateur</label><br>
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Campus</label><br>
+                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
+                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
+                        formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-12" *ngIf="isPresentielUpdated.value==true">
+                    <label>Salle Présentiel:</label><br>
+                    <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
+                    </p-dropdown>
+                </div>
+                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceFormUpdate.invalid"
+                        label="Enregistrer" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <div class="card">
+        <div style="float: right;">
+            <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Valider la planification"
+                (click)="validPlanification()"></button>
+        </div>
+        <h3>Liste des séances {{ titre }}</h3>
+        <div class="col-12 card shadow-lg my-5 ">
+            <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="5"
+                responsiveLayout="scroll" [paginator]="true" [pageLinks]="5" [responsive]="true"
+                [totalRecords]="seances.length" [filterDelay]="0"
+                [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <p-dropdown *ngIf="diplomeFilter!=null && diplomeFilter.length!=1" [options]="diplomeFilter"
+                            class="mb-2" (onChange)="dt1.filter($event.value, 'diplome_titre', 'equals')">
+                        </p-dropdown>
+                        <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
+                            class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">
+                        </p-dropdown>
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th pSortableColumn="classe_id" scope="col">
+                            Groupe <p-sortIcon field="classe_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="libelle" scope="col">
+                            Libelle <p-sortIcon field="libelle"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="abbrv" scope="col" *ngIf="type!='classe'">
+                            Code Grp <p-sortIcon field="abbrv"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="matiere" scope="col">
+                            Matière <p-sortIcon field="matiere"></p-sortIcon>
+                        </th>
+
+                        <th pSortableColumn="date_debut" scope="col">
+                            Début <p-sortIcon field="date_debut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="date_fin" scope="col">
+                            Fin <p-sortIcon field="date_fin"></p-sortIcon>
+                        </th>
+                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col">
+                            Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
+                        </th>
+                        <th scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td *ngIf="type!='[classes]'" style="min-width: 12rem;">
+                            <span *ngFor="let cid of rowData.classe_id; let index = index">
+                                <span *ngIf="classes[cid] && classes[cid].nom && index==0">{{classes[cid].nom}}</span>
+                                <span *ngIf="classes[cid] && classes[cid].nom && index!=0">,<br>{{classes[cid].nom}}</span>
+                            </span>
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData.libelle }}
+                        </td>
+                        <td *ngIf="type!='classe'" style="min-width: 12rem;">
+                            <span *ngFor="let cid of rowData.classe_id; let index = index">
+                                <span *ngIf="classes[cid] && classes[cid].abbrv && index==0">{{classes[cid].abbrv}}</span>
+                                <span *ngIf="classes[cid] && classes[cid].abbrv && index!=0">,<br>{{classes[cid].abbrv}}</span>
+                            </span>
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ matieres[rowData.matiere_id]?.nom }}
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td *ngIf="type!='formateur'" style="min-width: 12rem;">
+                            {{ formateurs[rowData.formateur_id]?.firstname }} {{
+                            formateurs[rowData.formateur_id]?.lastname }}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData);" aria-hidden="true"></i>
+                            <i pTooltip="Voir la feuille d'émergement" tooltipPosition="bottom" class="pi pi-list"
+                                (click)="toSign(rowData)" aria-hidden="true" style="margin-left: 5%;"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,124 @@
+<div class="grid">
+
+	<!-- Formulaire de modification d'un campus -->
+	<div class="col-12" *ngIf="showFormUpdateCampus">
+        <div class="card">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormUpdateCampus=false;campusFormUpdate.reset()"  aria-hidden="true"> </i>
+            <h4 style="text-align: center;">Modifier un campus</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="campusFormUpdate" (ngSubmit)="editCampus()">
+                <div class="field col-12 md:col-6">
+                    <label for="libelle">Libellé</label>
+                    <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Nom du campus" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="email">Email</label>
+                    <input pInputText id="email" type="email" formControlName="email" placeholder="email du siége du campus" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="site">Site Web</label>
+                    <input pInputText id="site" type="text" formControlName="site" placeholder="site web du campus" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label for="ecole">Ecole</label>
+                    <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="libelle"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="adress">Adresse</label>
+                    <input pInputText id="adress" type="text" formControlName="adresse" placeholder="adresse du siége du campus" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="ville">Ville</label>
+                    <input pInputText id="ville" type="text" formControlName="ville" placeholder="ville du siége du campus" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label for="ville">Pays</label>
+                    <input pInputText id="ville" type="text" formControlName="pays" placeholder="pays du siége du campus" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Modifier" type="submit" [disabled]="campusFormUpdate.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-12">
+		<div class="card">
+			<h5>Liste des campus</h5>
+			<p-table #dt1 *ngIf="campuss" [value]="campuss" rowExpandMode="single"
+                     dataKey="_id" [rows]="10" 
+                     [rowHover]="true" [paginator]="true" [pageLinks]="5"
+                     [globalFilterFields]="['libelle','email','site','ville','pays']"
+                     responsiveLayout="scroll">
+
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Libellé
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Ecole
+							</div>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Email
+							</div>
+						</th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Site web
+							</div>
+						</th>
+                        <th>
+							<div class="flex justify-content-between align-items-center">
+								Ville
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-rowData>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{rowData.libelle}}
+						</td>
+						<td style="min-width: 12rem;">
+							{{ ecoles[rowData.ecole_id]?.libelle }}
+						</td>
+						<td style="min-width: 14rem;">
+							{{ (rowData.email.length>25)? (rowData.email | slice:0:25)+'..':(rowData.email) }}
+						</td>
+						<td>
+                            {{rowData.site}}
+                        </td>
+                        <td>
+                            {{rowData.ville}}
+                        </td>
+						<td style="min-width: 10rem;">
+							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showModify(rowData)" aria-hidden="true"></i>
+                            <i pTooltip="Diplomes" tooltipPosition="bottom" class="pi pi-play"
+                                (click)="navigatetoDiplome(rowData)" aria-hidden="true"></i>
+						</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>

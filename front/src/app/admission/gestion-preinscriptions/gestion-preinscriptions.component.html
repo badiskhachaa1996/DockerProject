@@ -1,0 +1,395 @@
+<div class="grid">
+    <!-- Partie changement de statut -->
+    <div class="col-12" *ngIf="inscriptionSelected!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="inscriptionSelected = null" aria-hidden="true"> </i>
+            <h3 *ngIf="inscriptionSelected.user_id && users[inscriptionSelected.user_id]"
+                style="font-weight: bold; text-align: center;">Changer le statut de : {{
+                users[inscriptionSelected.user_id]?.firstname }} {{
+                users[inscriptionSelected.user_id]?.lastname | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm" (ngSubmit)="changeStateBtn()">
+                <div class="field col-12 md:col-4">
+                    <label>Statut</label>
+                    <p-dropdown formControlName="statut" optionLabel="value" [options]="statutList">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4" *ngIf="changeStateForm.value.statut.value=='Documents manquants'">
+                    <label>Type de document manquant </label>
+                    <p-multiSelect [options]="DocTypes2" defaultLabel="Choississez le type de fichier"
+                        formControlName="typeDoc"></p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-4"
+                    *ngIf="changeStateForm.value.statut.value=='Dossier passable' || changeStateForm.value.statut.value=='Dossier complet'">
+                    <label>Statut du Niveau FR </label>
+                    <p-dropdown [options]="listFR" optionLabel="value" formControlName="statut_fr"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Decision Admission: </label>
+                    <p-dropdown [options]="decisionList" optionLabel="value" formControlName="decision_admission">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Phase Complémentaire: </label>
+                    <p-dropdown [options]="phaseComplementaire" optionLabel="value"
+                        formControlName="phase_complementaire"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Statut Payement: </label>
+                    <p-dropdown [options]="statutPayement" optionLabel="value" formControlName="statut_payement">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Attestation traité par: </label>
+                    <p-dropdown [options]="listAgent" optionLabel="value" formControlName="traited_by"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4 md:col-offset-4">
+                    <label>Code étudiant: </label>
+                    <input pInputText type="text" formControlName="customid" placeholder="DUSB010199"
+                        class="form-control">
+                </div>
+
+                <button pButton [disabled]="changeStateForm.invalid" label="Changer le statut"></button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- partie ajout de document -->
+    <div class="col-12" *ngIf="showUploadFile!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showUploadFile = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
+                style="font-weight: bold;">Ajouter un document à : {{
+                users[showUploadFile.user_id]?.firstname }} {{
+                users[showUploadFile.user_id]?.lastname | uppercase }}
+            </h3>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
+                <div class="field col-12">
+                    <label>Type de document</label>
+                    <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-fileUpload style="text-align: right;" (uploadHandler)="FileUpload($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Table d'affichage de la liste des preinscription -->
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
+                    label="Nouvelle demande ESPIC"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
+                    label="Nouvelle demande ADG"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
+                    label="Nouvelle demande ESTYA"></button>
+            </div>
+            <h5>Liste des pre-inscriptions</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
+                [value]="prospects" [paginator]="true" [pageLinks]="5"
+                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3']"
+                responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
+                        (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                        style="float: right;margin-left:2%" *ngIf="!code">
+                    </button>
+                    <div class="flex table-header">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem" scope="col"></th>
+                        <th pSortableColumn="customid" scope="col">
+                            ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="lastname" scope="col">
+                            Nom & Prénom: <p-sortIcon field="lastname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type_form" scope="col">
+                            Etablissement <p-sortIcon field="type_form"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation" scope="col">
+                            Formation <p-sortIcon field="formation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="campus_choix_1" scope="col">
+                            Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nbDoc" scope="col">
+                            Nombre de documents<p-sortIcon field="nbDoc"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut_dossier" scope="col">
+                            Statut Dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="action" scope="col">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="expandRow(prospect)"></button>
+                        </td>
+                        <td>
+                            {{ prospect.customid }}
+                        </td>
+                        <td
+                            *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
+                            {{ users[prospect.user_id].civilite }}
+                            {{ users[prospect.user_id].lastname | uppercase }}
+                            {{ users[prospect.user_id].firstname | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.type_form | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.formation }}
+                        </td>
+                        <td>
+                            {{ prospect.campus_choix_1 }}
+                        </td>
+                        <td>
+                            {{ prospect.nbDoc }}
+                        </td>
+                        <td>
+                            {{ prospect.statut_dossier }}
+                        </td>
+                        <td>
+                            <i pTooltip="Changer le statut du dossier" tooltipPosition="bottom" class="pi pi-bookmark"
+                                (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
+                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                                (click)="showUploadFile=prospect" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-prospect>
+                    <tr>
+                        <td colspan="9">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date de naissance</th>
+                        <th>Nationnalité</th>
+                        <th>Pays de résidence</th>
+                        <th>Email</th>
+                        <th>Statut Pro</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{users[prospect.user_id].nationnalite}}</td>
+                        <td>{{users[prospect.user_id].pays_adresse}}</td>
+                        <td>{{users[prospect.user_id].email}}</td>
+                        <td>{{prospect.statut_actuel}}</td>
+                        <td>
+                            {{ users[prospect.user_id].indicatif }}
+                            {{ users[prospect.user_id].phone }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <br>
+
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Numéro whatsapp</th>
+                        <th>Langues</th>
+                        <th>Expériences pro</th>
+                        <th>Programme choisi</th>
+                        <th>Rythme</th>
+                        <th>Niveau Académique</th>
+                        <th>Statut actuel</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.indicatif_whatsapp }} {{ prospect.numero_whatsapp }}</td>
+                        <td>{{ prospect.languages }}</td>
+                        <td>{{ prospect.professional_experience }}</td>
+                        <td>{{ prospect.programme }}</td>
+                        <td>{{ prospect.rythme_formation}}</td>
+                        <td>{{ prospect.validated_academic_level }}</td>
+                        <td>{{ prospect.statut_actuel }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Campus Choix 1</th>
+                        <th>Campus Choix 2</th>
+                        <th>Campus Choix 3</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.campus_choix_1 }}</td>
+                        <td>{{ prospect.campus_choix_2 }}</td>
+                        <td>{{ prospect.campus_choix_3 }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 style="text-align: center; color: red;">Service Eduhorizon</h5>
+            <ul *ngIf="prospect.servicesEh.includes(true)">
+                <li *ngIf="prospect.servicesEh[0]">Orientation et accompagnement à l'admission</li>
+                <li *ngIf="prospect.servicesEh[1]">
+                    Prépa internationale : formation de 3 mois pour augmenter vos chances de
+                    réussite de votre orientation
+                </li>
+                <li *ngIf="prospect.servicesEh[2]">
+                    Accompagnement dossier visa
+                </li>
+                <li *ngIf="prospect.servicesEh[3]">Logement</li>
+                <li *ngIf="prospect.servicesEh[4]">
+                    Attestation de virement irrévocable (AVI)
+                </li>
+            </ul>
+            <p *ngIf="!prospect.servicesEh.includes(true)">Aucun service EH choisis</p>
+
+            <h5 style="text-align: center; color: red;">Garant</h5>
+            <p *ngIf="prospect.nomGarant">{{ prospect.nomGarant }} {{ prospect.prenomGarant }}</p>
+            <p *ngIf="!prospect.nomGarant"><strong>Aucun garant declaré</strong></p>
+
+            <h5 style="text-align: center; color: red;">Commercial</h5>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Code commercial</th>
+                        <th>Commercial</th>
+                        <th>Agence</th>
+                        <th>Date de la demande</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.code_commercial }}</td>
+                        <td
+                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
+                            {{ users[infoCommercialExpand.user_id].civilite }}
+                            {{ users[infoCommercialExpand.user_id].lastname | titlecase }}
+                            {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
+                        </td>
+                        <td *ngIf="!infoCommercialExpand"></td>
+                        <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
+                        <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
+                        <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p *ngIf="prospect.donneePerso">
+                <strong>Ce prospect <span style="color: green;">accepte</span> que ses données personnelles soient
+                    utilisées</strong>
+            </p>
+
+            <p *ngIf="!prospect.donneePerso">
+                <strong>Ce prospect <span style="color: red;">réfuse</span> que ses données personnelles soient
+                    utilisées</strong>
+            </p>
+
+            <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date du dernier traitement</th>
+                        <th>Désignation du TCF</th>
+                        <th>Agent</th>
+                        <th>Décision Admission</th>
+                        <th>Phase complémentaire</th>
+                        <th>Statut Payement</th>
+                        <th>Attestation traité par</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ prospect.tcf }}</td>
+                        <td>
+                            {{ users[prospect.agent_id].civilite }}
+                            {{ users[prospect.agent_id].lastname | titlecase }}
+                            {{ users[prospect.agent_id].firstname | titlecase }}
+                        </td>
+                        <td>{{prospect.decision_admission}}</td>
+                        <td>{{prospect.phase_complementaire}}</td>
+                        <td>{{prospect.statut_payement}}</td>
+                        <td>{{prospect.traited_by}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 style="color: red; text-align: center;">Documents</h5>
+            <ul>
+                <li *ngFor="let file of ListDocuments; index as i">
+                    <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer"
+                        (click)="deleteFile(prospect._id,i)" aria-hidden="true"> </i>
+                    <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(prospect._id,i)"></i>
+                    <em (click)="downloadFile(prospect._id,i)" [id]="i" style="cursor: pointer;">
+                        {{ ListPiped[i] }}
+                    </em>
+                </li>
+            </ul>
+
+            <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
+
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>

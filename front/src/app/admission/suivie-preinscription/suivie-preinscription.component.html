@@ -1,0 +1,301 @@
+<div class="col-12">
+    <p-toast></p-toast>
+    <div class="grid" style="min-height: 100%;">
+        <img *ngIf="ecoleProspect=='eduhorizons'" src="..\assets\images\logo_eh.webp" alt="logo eduhorizons"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="ecoleProspect=='adg'" src="..\assets\images\logo_adg.png" alt="logo adg" style="width: 10%;"
+            class="m-2">
+        <img *ngIf="ecoleProspect=='estya'" src="..\assets\images\logo-estya-fr.png" alt="logo estya"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="ecoleProspect=='espic'" src="..\assets\images\logoESPIC.png" alt="logo ESPIC" style="width: 10%;"
+            class="m-2">
+    </div>
+
+
+
+    <h2 Style="text-align: center; color: black;font-weight: bold;">Poursuivre ma demande d'admission </h2>
+
+
+    <div style="text-align: right;"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
+                pTooltip="Se déconnecter"></i> Déconnexion</button>
+    </div>
+
+    <div class="col-12 p-md-12 p-lg-12">
+
+        <p-panel header="Instructions et Détails du Cursus demandé" [toggleable]="false" [collapsed]="false"
+            [style]="{'margin-bottom':'20px'}">
+
+            <p-fieldset legend="Instructions" [style]="{'color':'#dc143c','font-weight': 'bold'}">
+                <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
+                    <div class="col-12 p-md-12 p-lg-12">
+                        <p>
+                            <i class="pi pi-info-circle"></i> Vous trouverez ci-dessous les étapes nécessaires
+                            pour votre demande d'admission.<br>
+                            <i class="pi pi-info-circle"></i> Merci de télécharger tous les documents pour valider votre
+                            dossier d'admission.<br>
+
+                            <span
+                                *ngIf="diplomeTest && piece_identiteTest && CVTest && LMTest && RdNTest && RdNTest2 && TCFTest">
+                                <i class="pi pi-info-circle"></i> Tous les documents ont été télécharges, attendez la
+                                validation
+                                d'un agent.<br>
+                            </span>
+                        </p>
+                    </div>
+                </div>
+                <br>
+                <div class="p-grid">
+
+                    <div class="col-12 p-md-3 p-lg-3">
+
+                    </div>
+                    <div class="col-12 p-md-12 p-lg-6">
+
+
+                    </div>
+
+                    <div class="col-12 p-md-3 p-lg-3">
+
+
+                    </div>
+                </div>
+
+            </p-fieldset>
+            <br>
+            <p-fieldset legend="Veuillez trouver ci-après les informations relatives au cursus choisi"
+                [style]="{'color':'#dc143c','font-weight': 'bold'}">
+
+                <div class="grid" style="color: black;font-weight:normal">
+
+                    <div class="grid">
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <b *ngIf="ProspectConnected.type_form!=='eduhorizons'">Ecole:</b>
+                                    <b *ngIf="ProspectConnected.type_form=='eduhorizons'">Organisme:</b>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;">{{ProspectConnected.type_form | uppercase }}</span>
+                                </div>
+
+
+                                <div class=" col-12 md:col-6">
+                                    <b>Vos choix des compus:</b>
+
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;"> 1- {{ProspectConnected.campus_choix_1 }}</span><br>
+                                    <span style="color: gray;"> 2- {{ProspectConnected.campus_choix_2 }}</span><br>
+                                    <span style="color: gray;"> 3- {{ProspectConnected.campus_choix_3 }}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <b>Etude du Dossier :</b>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;">{{ProspectConnected.statut_dossier }}</span>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <b>Etat de la demande:</b>
+
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;">{{ProspectConnected.etat_dossier }}</span>
+                                </div>
+
+
+
+                                <div class="col-12 md:col-6">
+                                    <b>Date d'inscription à la platforme:</b>
+
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;">{{ProspectConnected.date_creation | date:
+                                        'dd/MM/yyyy' }}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
+
+
+            <p-fieldset legend="Veuillez charger votre dossier d'admission" [style]="{'font-weight': 'bold'}">
+                <div class="layout-dashboard">
+
+                    <div class="card tasks">
+                        <ul>
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+                                <span [style.color]="piece_identiteTest ? 'green' : 'red'">Pièce d’identité (passeport
+                                    pour
+                                    les non-résidents)* Une copie de votre titre de
+                                    séjour</span>
+
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="piece_identiteTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <!-- Attachement = pass/cin -->
+                                    <p-fileUpload id="PIupload" class="ui-fileUpload-buttonbar" name="Pass"
+                                        customUpload="true" mode="basic" auto=true showCancelButton=false
+                                        chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'piece_identite')" fileLimit="1"
+                                        multiple="false" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000"
+                                        #fileInput>
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+
+                                <span [style.color]="diplomeTest ? 'green' : 'red'">Une copie du dernier diplôme obtenu
+                                </span>
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="diplomeTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="Diplo" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'diplome')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+
+                                <span [style.color]="RdNTest ? 'green' : 'red'">Une copie de vos relevés de notes des
+                                    deux
+                                    dernières années (1ére
+                                    année)</span>
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="RdNTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="Relev1" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'releve_notes1')" fileLimit="1"
+                                        multiple="false" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                        maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+                                <span [style.color]="RdNTest2 ? 'green' : 'red'"
+                                    pTooltip="Veuillez nous envoyer les 2 derniers relevés de la 2ème année dans un seul document (PDF , Word, PNG, JPEG..)">Une
+                                    copie de vos relevés de notes des deux dernières années (2ème année)*
+                                </span>
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="RdNTest2">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="Relev2" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'releve_notes2')" fileLimit="1"
+                                        multiple="false" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                                        maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+                                <span [style.color]="CVTest ? 'green' : 'red'">Un Curriculum Vitae (CV)</span>
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+
+                                    <span *ngIf="CVTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="CV" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'CV')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+
+                                <span [style.color]="LMTest ? 'green' : 'red'" pTooltip="Ce document est optionnel">*Une
+                                    lettre de motivation expliquant le choix de votre cursus ainsi que votre
+                                    projet professionnel
+                                </span>
+
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="LMTest">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="Motiv" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'LM')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+
+                            <li
+                                class="flex flex-column md:flex-row md:align-items-center md:justify-content-between mb-4">
+                                <span [style.color]="TCFTest ? 'green' : 'red'"
+                                    pTooltip="Ce document est obligatoire pour les pays non francophones ">*TCF valide,
+                                    DELF
+                                    ou DALF (Pour les pays non francophones)</span>
+                                <div class="mt-2 md:mt-0 flex align-items-center">
+                                    <span *ngIf="TCFTest" style="display:block">
+                                        Chargé<i class="pi pi-check" style="color: green;"></i>
+                                    </span>
+                                    <p-fileUpload #fileInput name="TCF" customUpload="true" mode="basic" auto=true
+                                        showCancelButton=false chooseLabel="Joindre" uploadLabel="Enregistrer"
+                                        (uploadHandler)="FileUpload($event,'TCF')" fileLimit="1" multiple="false"
+                                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="20000000">
+                                    </p-fileUpload>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <p-fieldset legend="Autres documents a joindre ?" [style]="{'color':'#dc143c'}">
+
+                    <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
+
+                        <div class="col-12 field">
+                            <label for="typeDoc">Type de document: </label>
+                            <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
+                        </div>
+
+                        <div class="col-12 field">
+                            <p-fileUpload style="text-align: right;"
+                                (uploadHandler)="FileUpload($event,uploadFileForm.value.typeDoc)" mode="basic"
+                                chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                                accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true"
+                                #fileInput>
+                            </p-fileUpload>
+                        </div>
+
+
+                    </form>
+
+                </p-fieldset>
+
+            </p-fieldset>
+
+        </p-panel>
+    </div>
+
+
+    <app-footer-eh *ngIf="ecoleProspect=='eduhorizons'"></app-footer-eh>
+    <app-footer-adg *ngIf="ecoleProspect=='adg'"></app-footer-adg>
+</div>

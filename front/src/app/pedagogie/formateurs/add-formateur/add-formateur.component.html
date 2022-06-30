@@ -1,0 +1,326 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div *ngIf="!showFormAddFormateur">
+        <div class="col-12">
+            <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle matière"
+                [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
+                [breakpoints]="{'960px': '75vw'}">
+                <p class="line-height-3 m-0">
+                    Voici les informationns à savoir pour créer une nouvelle matière:
+                </p>
+                <ul>
+                    <li><span style="color: red;">Nom de la matière</span> : Entrez le nom de la matiere. </li>
+                </ul>
+                <ul>
+                    <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation de la matière. </li>
+                </ul>
+                <ul>
+                    <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans
+                        laquelle vous voulez ajoutez la matière. </li>
+                </ul>
+                <ul>
+                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum de la matière.
+                    </li>
+                </ul>
+                <ul>
+                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire de la matière. </li>
+                </ul>
+                <p class="line-height-3 m-0">
+                    Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter la
+                        matière"</span> pour finaliser l'ajout de la matiere.
+                </p>
+                <ng-template pTemplate="footer">
+                    <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                        class="p-button-outlined"></button>
+                </ng-template>
+            </p-dialog>
+            <div class="grid">
+                <div class="col-12">
+                    <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+                        style="width:auto;"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <h4 style="text-align: center;">Ajouter un formateur </h4>
+                <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</p>
+
+                <form class="p-fluid p-formgrid grid" [formGroup]="formAddFormateur" (ngSubmit)="onAddFormateur()">
+                    <div class="field col-5 md:col-4">
+                        <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="nom">Nom <span style="color: red;"> * </span></label>
+                        <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                            formControlName="lastname" />
+                        <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                            <span *ngIf="lastname.errors?.pattern" style="color: red;">
+                                * Le nom est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                        <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                            formControlName="firstname" />
+                        <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                            <span *ngIf="firstname.errors?.pattern" style="color: red;">
+                                Le prénom est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-4 md:col-2">
+                        <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                        <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
+                    </div>
+                    <div class="field col-8 md:col-4">
+                        <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
+                        <input pInputText id="telephone" type="text" placeholder="Entrez votre numéro de téléphone"
+                            formControlName="phone" />
+                        <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                            <span *ngIf="phone.errors?.pattern" style="color: red;">
+                                * Le numéro de téléphone est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="mail">Adresse mail <span style="color: red;"> * </span></label>
+                        <input pInputText id="mail" type="email" placeholder="Entrez votre adresse mail"
+                            formControlName="email" />
+                        <div *ngIf="email.invalid && (email.touched || email.dirty)">
+                            <span *ngIf="email.errors?.pattern" style="color: red;">
+                                L'email' n'est pas dans le bon format, 'xxx@estya.com'
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="nom_rue">Nom de la rue <span style="color: red;"> * </span></label>
+                        <input pInputText id="nom_rue" type="text" placeholder="Nom de votre rue"
+                            formControlName="rue_adresse" />
+                        <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
+                            <span *ngIf="rue_adresse.errors?.pattern" style="color: red;">
+                                Le nom de la rue n'est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-6 md:col-3">
+                        <label For="numero_rue">Numéro de la rue <span style="color: red;"> * </span></label>
+                        <input pInputText id="numero_rue" type="number" placeholder="Numéro de votre rue"
+                            formControlName="numero_adresse" />
+                    </div>
+                    <div class="field col-6 md:col-3">
+                        <label For="code_postale">Code postale<span style="color: red;"> * </span></label>
+                        <input pInputText id="code_postale" type="number" placeholder="Code postale"
+                            formControlName="postal_adresse" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="pays">Pays <span style="color: red;"> * </span></label>
+                        <input pInputText id="pays" type="text" placeholder="Pays" formControlName="pays_adresse" />
+                        <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
+                            <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
+                                Le nom du pays n'est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="ville">Ville<span style="color: red;"> * </span></label>
+                        <input pInputText id="ville" type="text" placeholder="Ville" formControlName="ville_adresse" />
+                        <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
+                            <span *ngIf="ville_adresse.errors?.pattern" style="color: red;">
+                                Le nom de la ville n'est pas dans le bon format
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="contrat">Type de contract<span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
+                        </p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label for="isInterne">Interne ou Externe ?<span style="color: red;"> * </span></label>
+                        <p-selectButton [options]="[{label:'Interne',value:true},{label:'Externe',value:false}]"
+                            formControlName="isInterne"></p-selectButton>
+                    </div>
+                    <div class="field col-12 md:col-12" *ngIf="onGetStatut()=='Prestation et Vacation'">
+                        <label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
+                        <p-tabView>
+                            <p-tabPanel header="Lundi">
+                                <div class="grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label For="monday_h_remarque">Disponiblité :</label>
+                                        <p-selectButton formControlName="monday_available"
+                                            [options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+                                        </p-selectButton>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="monday_h_remarque">Remarque :</label>
+                                        <input type="text" pInputText formControlName="monday_remarque" pInputText
+                                            placeholder="Disponible seulement le 1er lundi de chaque mois" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="monday_h_debut">Heure de début </label>
+                                        <input type="time" pInputText formControlName="monday_h_debut" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="monday_h_fin">Heure de fin : </label>
+                                        <input type="time" pInputText formControlName="monday_h_fin" pInputText />
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Mardi">
+                                <div class="grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label For="tuesday_available">Disponiblité :</label>
+                                        <p-selectButton formControlName="tuesday_available"
+                                            [options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+                                        </p-selectButton>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="tuesday_remarque">Remarque :</label>
+                                        <input type="text" pInputText formControlName="tuesday_remarque" pInputText
+                                            placeholder="Disponible seulement le 1er lundi de chaque mois" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="tuesday_h_debut">Heure de début </label>
+                                        <input type="time" pInputText formControlName="tuesday_h_debut" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="tuesday_h_fin">Heure de fin : </label>
+                                        <input type="time" pInputText formControlName="tuesday_h_fin" pInputText />
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Mercredi">
+                                <div class="grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label For="wednesday_available">Disponiblité :</label>
+                                        <p-selectButton formControlName="wednesday_available"
+                                            [options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+                                        </p-selectButton>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="wednesday_remarque">Remarque :</label>
+                                        <input type="text" pInputText formControlName="wednesday_remarque" pInputText
+                                            placeholder="Disponible seulement le 1er lundi de chaque mois" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="wednesday_h_debut">Heure de début </label>
+                                        <input type="time" pInputText formControlName="wednesday_h_debut" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="wednesday_h_fin">Heure de fin : </label>
+                                        <input type="time" pInputText formControlName="wednesday_h_fin" pInputText />
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Jeudi">
+                                <div class="grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label For="thursday_available">Disponiblité :</label>
+                                        <p-selectButton formControlName="thursday_available"
+                                            [options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+                                        </p-selectButton>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="thursday_remarque">Remarque :</label>
+                                        <input type="text" pInputText formControlName="thursday_remarque" pInputText
+                                            placeholder="Disponible seulement le 1er lundi de chaque mois" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="thursday_h_debut">Heure de début </label>
+                                        <input type="time" pInputText formControlName="thursday_h_debut" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="thursday_h_fin">Heure de fin : </label>
+                                        <input type="time" pInputText formControlName="thursday_h_fin" pInputText />
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Vendredi">
+                                <div class="grid">
+                                    <div class="field col-12 md:col-6">
+                                        <label For="friday_available">Disponiblité :</label>
+                                        <p-selectButton formControlName="friday_available"
+                                            [options]="[{value:true,label:'Disponible'},{value:false,label:'Indisponible'}]">
+                                        </p-selectButton>
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="friday_remarque">Remarque :</label>
+                                        <input type="text" pInputText formControlName="friday_remarque" pInputText
+                                            placeholder="Disponible seulement le 1er lundi de chaque mois" />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="friday_h_debut">Heure de début </label>
+                                        <input type="time" pInputText formControlName="friday_h_debut" pInputText />
+                                    </div>
+                                    <div class="field col-12 md:col-6">
+                                        <label For="friday_h_fin">Heure de fin : </label>
+                                        <input type="time" pInputText formControlName="friday_h_fin" pInputText />
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                        </p-tabView>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
+                        <input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
+                            formControlName="taux_h" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
+                        <input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
+                            formControlName="taux_j" />
+                    </div>
+
+                    <div class="field col-12 md:col-12" formArrayName="volume_h">
+                        <label>Liste des matières sur lesquelles il est rattaché:</label>
+                        <div *ngFor="let tempControl of getVolumeH().controls; let i = index">
+                            <p style="font-style:italic">Matière n°{{i+1}}</p>
+                            <div>
+                                <div class="field">
+                                    <p-dropdown [options]="matiereList" [group]="true" formControlName="i"></p-dropdown>
+                                </div>
+                                <div class="field">
+                                    <input type="number" (change)="changeVolumeH(i,$event)" placeholder="Volume horaire"
+                                        value="0" pInputText>
+                                </div>
+                                <div class="field">
+                                    <i class="pi pi-trash" (click)="deleteMatiereAdd(i)" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" (click)="onAddMatiere()" pButton label="Ajouter une matière"></button>
+                    </div>
+
+                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation'">
+                        <label For="isPrestataire">Entreprise</label>
+                        <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label>Campus</label><br>
+                        <p-dropdown formControlName="campus" [options]="dropdownCampus"
+                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label For="remarque">Remarque</label>
+                        <textarea pInputText id="remarque" formControlName="remarque"></textarea>
+                    </div>
+                    <div>
+                        <button pButton label="Ajouter le formateur" type="submit"
+                            [disabled]="formAddFormateur.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+<div class="grid">
+    <!-- Partie changement de statut -->
+    
+    <div class="col-12" *ngIf="showFormUpdateExamen">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                title="Fermer" (click)="showFormUpdateExamen = false;formUpdateExamen.reset()" aria-hidden="true">
+            </i>
+            <h3 style="text-align: center;">Modification</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
+
+                <div class="field col-12">
+                    <small>Tout les champs marqués d'un asterix * sont obligatoires</small>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Classe*:</label><br>
+
+                    <p-dropdown [options]="dropdownClasse" optionLabel="libelle" formControlName="classe_id">
+                    </p-dropdown>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Matière*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" formControlName="matiere_id">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Libellé*:</label><br>
+                    <input type="text" formControlName="libelle" class="form-control col-12"
+                        placeholder="Intitulé de l'examen/ évaluation" pInputText>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Formateur*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownFormateur" optionLabel="libelle" formControlName="formateur_id">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Note max*:</label><br>
+                    <input type="text" formControlName="note_max" class="form-control col-12"
+                        placeholder="Note maximal à attribuer pour les étudiants lors de cet examen" pInputText>
+
+                    <div *ngIf="note_max_m.invalid && (note_max_m.touched || note_max_m.dirty)">
+                        <span *ngIf="note_max_m.errors?.pattern" style="color: red;">
+                            La note maximale n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Coefficient*:</label><br>
+                    <input type="number" formControlName="coef" class="form-control col-12"
+                        placeholder="Coefficient de cet examen" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date*:</label><br>
+                    <input type="datetime-local" formControlName="date" class="form-control col-12" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Type d'examen*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownType" optionLabel="libelle" formControlName="type">
+                        </p-dropdown>
+                    </span>
+                </div>
+                <div>
+                    <button pButton type="submit" label="Modifier l'examen"
+                        [disabled]="formUpdateExamen.invalid"></button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+          
+            <h3>Examens</h3>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['libelle', 'classe_id', 'matiere_id', 'note_max', 'coef']" [rows]="5"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length">
+
+                <ng-template pTemplate="caption">
+
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="field" *ngIf="dropdownClasse.length!=1">
+                            <p-dropdown filter="true" [options]="dropdownClasse"
+                                (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')" optionLabel="libelle"
+                                emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de la classe">
+                            </p-dropdown>
+
+
+
+                            <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
+                                <p-dropdown filter="true" [options]="dropdownType"
+                                    (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="libelle"
+                                    emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'examens">
+                                </p-dropdown>
+                            </span>
+                        </div>
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText class="w-full" type="text"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
+                        </span>
+                    </div>
+
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th id="expandBtn" style="width: 3rem"></th>
+                        <th>Formateur</th>
+                        <th pSortableColumn="classe_id">Classe <p-sortIcon field="classe_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="matiere_id">Matière <p-sortIcon field="matiere_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="libelle">Libellé <p-sortIcon field="libelle"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="coef">Coefficient <p-sortIcon field="coef"></p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-examen let-expanded="expanded">
+                    <tr class="bandeau-show">
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="examen"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                style="background-color:white; color: green; border: 0px"></button>
+                        </td>
+                        <td>{{ users[formateurs[examen.formateur_id]?.user_id]?.firstname }} {{
+                            users[formateurs[examen.formateur_id]?.user_id]?.lastname }}</td>
+                        <td>{{ classes[examen.classe_id]?.nom }}</td>
+                        <td>{{ matieres[examen.matiere_id]?.nom }}</td>
+                        <td>{{ examen.libelle }}</td>
+                        <td>{{ examen.coef }}</td>
+                        <td>
+                            <button pButton pRipple type="button" pTooltip="Modifier" tooltipPosition="bottom"
+                                icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text mr-2 mb-2"
+                                (click)="showFormUpdateExamen = true; 
+                            showFormAddExamen = false;
+                            idExamenToUpdate = examen._id;
+                            idClasseToUpdate = examen.classe_id;
+                            nomClasseToUpdate = classes[examen.classe_id].nom;
+                            idMatiereToUpdate = examen.matiere_id;
+                            nomMatiereToUpdate = matieres[examen.matiere_id].nom;
+                            formateurToUpdate = formateurs[examen.formateur_id];
+                            onGetById();" title="Modifier" aria-hidden="true"></button>
+
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-examen>
+                    <tr>
+                        <td colspan="9">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type d'examen:</th>
+                        <th>Date d'examen:</th>
+                        <th>Note max:</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-examen>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ examen.type }}</td>
+                        <td> {{ examen.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                        <td>{{ examen.note_max }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>

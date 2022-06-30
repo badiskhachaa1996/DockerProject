@@ -1,0 +1,79 @@
+<div class="grid">
+    <div class="col-12" *ngIf="SeanceToUpdate!=null">
+        <div class="card">
+            <h4 style="text-align: center;">Modifier une séance </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <form class="p-fluid p-formgrid grid" [formGroup]="seanceFormUpdate" (ngSubmit)="modifySeance()">
+                <div class="field col-12 md:col-6">
+                    <label>Nom du groupe</label><br>
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                        defaultLabel="Selection des classes" optionLabel="nom" filter="true"></p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Matière</label><br>
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                        emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Libelle</label><br>
+                    <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance"
+                        class="form-control col-12">
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Début:</label>
+                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
+                        placeholder="Début de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Fin:</label>
+                    <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
+                        placeholder="Fin de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Nom du formateur</label><br>
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Campus</label><br>
+                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
+                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
+                        formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-12" *ngIf="isPresentielUpdated.value==true">
+                    <label>Salle Présentiel:</label><br>
+                    <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
+                    </p-dropdown>
+                </div>
+                <div class="col-offset-5 md:col-offset-5 sm:col-offset-4">
+                    <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceFormUpdate.invalid"
+                        label="Enregistrer" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <div class="card">
+        <h5>Calendrier</h5>
+        <div class="flex justify-content-between flex-column sm:flex-row mb-2" *ngIf="type==null">
+            <p-selectButton [options]="planOptions" (onChange)="showPlanifiedSeance($event.value);"
+                [(ngModel)]="btnPlan">
+            </p-selectButton>
+            <button pButton class="ui-button-raised ui-button-success" (click)="validPlanification()"
+                style="float:left;" label="Valider la planification"></button>
+        </div>
+        <p-fullCalendar #calendar [events]="events" [options]="options"></p-fullCalendar>
+    </div>
+</div>

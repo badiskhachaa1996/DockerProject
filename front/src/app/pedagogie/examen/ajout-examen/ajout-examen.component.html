@@ -1,0 +1,85 @@
+<div class="grid">
+
+    <div class="col-12" >
+        <div class="card">
+
+            <h3 style="text-align: center;">Ajouter un examen</h3>
+            <p-toast></p-toast>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddExamen"
+                (ngSubmit)="onAddExamen();formAddExamen.reset()">
+                <div class="field col-12 ">
+                    <small>Tout les champs marqués d'un asterix * sont obligatoires</small>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="classe">Classe*:</label><br>
+
+                    <p-dropdown [options]="dropdownClasse" optionLabel="libelle" formControlName="classe_id">
+                    </p-dropdown>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Matière*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" formControlName="matiere_id">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Libellé*:</label><br>
+                    <input type="text" formControlName="libelle" class="form-control col-12"
+                        placeholder="Intitulé de l'examen/ évaluation" pInputText>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Formateur*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownFormateur" optionLabel="libelle" formControlName="formateur_id">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Note max*:</label><br>
+                    <input type="text" formControlName="note_max" class="form-control col-12"
+                        placeholder="Note maximal à attribuer pour les étudiants lors de cet examen" pInputText>
+
+                    <div *ngIf="note_max.invalid && (note_max.touched || note_max.dirty)">
+                        <span *ngIf="note_max.errors?.pattern" style="color: red;">
+                            La note maximale n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Coefficient*:</label><br>
+                    <input type="number" formControlName="coef" class="form-control col-12"
+                        placeholder="Coefficient de cet examen" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date*:</label><br>
+                    <input type="datetime-local" formControlName="date" class="form-control col-12" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Type d'examen*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownType" optionLabel="libelle" formControlName="type">
+                        </p-dropdown>
+                    </span>
+                </div>
+                <div>
+                    <button pButton type="submit" label="Ajouter l'examen" [disabled]="formAddExamen.invalid"></button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>

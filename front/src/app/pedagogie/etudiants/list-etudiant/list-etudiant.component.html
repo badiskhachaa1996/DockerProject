@@ -1,0 +1,399 @@
+<div class="grid">
+
+    <!-- Partie ajout de documents -->
+    <div class="col-12" *ngIf="showUploadFile!=null">
+		<div class="card">
+            <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
+                    aria-hidden="true"> </i>
+            <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
+                style="font-weight: bold;">Ajouter un document à : {{
+                users[showUploadFile.user_id]?.firstname }} {{
+                users[showUploadFile.user_id]?.lastname | uppercase }}</h3>
+            <form class="col-8 col-offset-2">
+                <div class="p-grid">
+                    <div style="margin-left: 32%;">
+                        <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic"
+                            chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                            accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true"
+                            #fileInput>
+                        </p-fileUpload>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire de modification d'un étudiant -->
+    <div class="col-12" *ngIf="showFormUpdateEtudiant">
+		<div class="card">
+
+            <h4 style="text-align: center;">Modifier cet étudiant </h4>
+            <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
+            
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    (click)="showFormUpdateEtudiant = false; formUpdateEtudiant.reset()" aria-hidden="true"></i>
+            
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateEtudiant" (ngSubmit)="onUpdateEtudiant()">
+                
+                <div class="field col-12 md:col-6">
+                    <label For="statut">Statut<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="statutList" optionLabel="viewValue" placeholder="Choissisez un statut" formControlName="statut"></p-dropdown>
+                </div> 
+
+                <!-- liste à retirer car récupérer -->
+                <div class="field col-12 md:col-6">
+                    <label For="groupe">Groupe<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownClasse" optionLabel="libelle"
+                                placeholder="Choissisez un groupe" formControlName="classe_id"
+                                emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe" filter="true">
+                    </p-dropdown>
+                </div> 
+
+                <div class="field col-12 md:col-6">
+                    <label For="nationalite">Nationaltié<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                                emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                                filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="date_naissance">Date de naissance<span style="color: red;"> * </span></label>
+                    <p-calendar formControlName="date_naissance" [showIcon]="true" [showButtonBar]="true" 
+                                [readonlyInput]="true"
+                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                [yearRange]="rangeYear" (change)="isMinorFC()"
+                                dateFormat="dd/mm/yy">
+                    </p-calendar>    
+                </div>   
+
+                <div class="field col-12">
+                    <label For="ville">Dernier diplome obtenu</label>
+                    <input pInputText type="text" id="ville" placeholder="Licence en DEV WEB & WEB Mobile" formControlName="dernier_diplome" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="sosemail">Email d'une personne en cas d'urgence</label>
+                    <input pInputText type="email" id="sosemail" placeholder="email@gmail.com" formControlName="sos_email" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="sostel">Téléphone d'une personne en cas d'urgence</label>
+                    <input pInputText type="text" id="sostel" placeholder="+33 0601234589" formControlName="sos_phone" />
+                </div>
+
+                <div class="field col-12">
+                    <label>Code Etudiant:</label>
+                    <div class="p-inputgroup">
+                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
+                        <button type="button" pButton pRipple icon="pi pi-refresh"
+                                styleClass="p-button-warn" (click)="generateCustomCode()">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="ine">Numéro INE</label>
+                    <input pInputText type="text" id="ine" placeholder="1234567890G" formControlName="numero_INE" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="nir">Numéro NIR</label>
+                    <input pInputText type="text" id="nir" placeholder="1 53 12 45 007 231 48" formControlName="numero_NIR" />
+                </div>
+
+
+                <div *ngIf="isMinor">
+                    <hr>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="nrl">Nom du représentant légal</label>
+                        <input pInputText type="text" id="nrl" placeholder="Doe" formControlName="nom_rl" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="prl">Prénom du représentant légal</label>
+                        <input pInputText type="text" id="prl" placeholder="John" formControlName="prenom_rl" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="erl">Email du représentant légal</label>
+                        <input pInputText type="email" id="erl" placeholder="email@gmail.com" formControlName="email_rl" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="erl">Adresse du représentant légal</label>
+                        <textarea pInputTextarea placeholder="15 Rue du louvre 75001 Paris, France" formControlName="adresse_rl" autoResize rows="3" cols="30"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="field col-12">
+                    <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]" formControlName="isAlternant"></p-selectButton>
+                </div>
+
+                <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant">
+                    <div class="field col-12">
+                        <label>Entreprise<span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                                    emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
+                                    filter="true">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="tn">Nom du tuteur</label>
+                        <input pInputText type="text" id="tn" placeholder="Doe" formControlName="nom_tuteur" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="tp">Prénom du tuteur</label>
+                        <input pInputText type="text" id="tp" placeholder="John" formControlName="prenom_tuteur" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="tiph">Indicatif télephone du tuteur</label>
+                        <input pInputText type="text" id="tiph" placeholder="+33" formControlName="indicatif_tuteur" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="tph">Télephone du tuteur</label>
+                        <input pInputText type="text" id="tph" placeholder="0612121214" formControlName="phone_tuteur" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="te">Email du tuteur</label>
+                        <input pInputText type="email" id="te" placeholder="email@xxx.com" formControlName="email_tuteur" />
+                    </div>
+
+                    <div class="field col-12">
+                        <label For="erl">Adresse du tuteur</label>
+                        <textarea pInputTextarea placeholder="15 Rue du louvre 75001 Paris, France" formControlName="adresse_tuteur" autoResize rows="3" cols="30"></textarea>
+                    </div>
+                </div>
+
+                <div class="field col-12">
+                    <label>Etes-vous une Personne à Mobilité Réduite ?</label>
+                    <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]" formControlName="isHandicaped"></p-selectButton>
+                </div>
+
+                <div class="field col-12">
+                    <label>Avez-vous besoin d'un suivi particulier ?</label>
+                    <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />    
+                </div>
+
+                <div>
+                    <button pButton label="Modifier l'étudiant" type="submit"  [disabled]="formUpdateEtudiant.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    
+    <div class="col-12">
+		<div class="card">
+			<h5>Liste des étudiants</h5>
+			<p-toast></p-toast>
+			<p-table  #dt1 [value]="etudiants" dataKey="_id"
+                      [expandedRowKeys]="expandedRows" responsiveLayout="scroll"[globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
+                      [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem"></th>
+                        <th>ID </th>
+						<th>Nom et prénom </th>
+						<th>Statut</th>
+						<th>Groupe </th>
+						<th>Email </th>
+						<th>Nationnalitée </th>
+						<th>Action </th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-etudiant let-expanded="expanded">
+					<tr>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="etudiant" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)="loadPP(etudiant)"></button>
+						</td>
+						<td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
+						<td>
+                            {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname | uppercase }} {{ etudiant?.firstname }}
+                        </td>
+						<td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
+                        <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
+						<td style="min-width: 10rem;">{{ classes[etudiant.classe_id]?.nom }}</td>
+						<td style="min-width: 10rem;">{{ users[etudiant.user_id]?.email }}</td>
+                        <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
+						<td>
+                            <i style="margin-left: 2%;" class="pi pi-pencil" (click)=" showFormUpdateEtudiant = true; 
+                                    showFormExportEtudiant = false; 
+                                    idEtudiantToUpdate = etudiant._id; 
+                                    idUserOfEtudiantToUpdate = etudiant.user_id;
+                                    statutToUpdate = etudiant.statut;
+                                    classeToUpdate = classes[etudiant.classe_id]?.nom;
+                                    nationaliteToUpdate = etudiant.nationalite;
+                                    onGetbyId();" pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+
+                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                                (click)="showUploadFile=etudiant" aria-hidden="true"></i>
+                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
+                                (click)="clickFile(etudiant)" aria-hidden="true"></i>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="rowexpansion" let-etudiant>
+					<tr>
+						<td colspan="8">
+							<div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th></th>
+                                            <th>Adresse </th>
+                                            <th>Date de naissance </th>
+                                            <th>Téléphone </th>
+                                            <th>Dernier diplôme obtenu </th>
+                                            <th>Email d'urgence </th>
+                                            <th>Téléphone d'urgence</th>
+                                            <th>Numéro INE</th>
+                                            <th>Numéro NIR </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
+                                            </td>
+                                            <td>
+                                                {{ users[etudiant.user_id].numero_adresse }} {{ users[etudiant.user_id].rue_adresse }} {{ users[etudiant.user_id].postal_adresse }} <br> {{ users[etudiant.user_id].ville_adresse }} {{ users[etudiant.user_id].pays_adresse }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                                            </td>
+                                            <td>
+                                                {{ users[etudiant.user_id]?.phone }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.dernier_diplome }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.sos_email }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.sos_phone }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.numero_INE }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.numero_NIR }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
+                                <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Tuteur </th>
+                                            <th>Adresse du tuteur </th>
+                                            <th>Email du tuteur </th>
+                                            <th>Téléphone du tuteur </th>
+                                            <th>Entreprise</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                {{ etudiant.nom_tuteur }} {{ etudiant.prenom_tuteur }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.adresse_tuteur }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.email_tuteur }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.indicatif_tuteur }} {{ etudiant.phone_tuteur }}
+                                            </td>
+                                            <td>
+                                                {{ entreprises[etudiant.entreprise_id].r_sociale }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
+                                <p-table responsiveLayout="scroll" *ngIf="nom_rl">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Représentant légal </th>
+                                            <th>Adresse du Représentant légal </th>
+                                            <th>Email du représentant légal </th>
+                                            <th>Téléphone du représentant légal </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+                                        
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                {{ etudiant.nom_rl }} {{ etudiant.prenom_rl }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.adresse_rl }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.email_rl }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.indicatif_rl }} {{ etudiant.phone_rl }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
+                                <!-- Partie dedié à l'affichage des documents -->
+
+                                <div class="col-12">
+                                    <div class="col-12"
+                                        *ngFor="let file of ListDocuments; index as i">
+                                        <div class="box">
+                                            <i class="pi pi-times" style="float:right; font-size: 20px;"
+                                                (click)="deleteFile(etudiant._id,i)" aria-hidden="true"> </i>
+                                            <i class="pi pi-file-pdf " style="font-size: 2rem"
+                                                (click)="downloadFile(etudiant._id,i)"></i>
+                                            <em (click)="downloadFile(etudiant._id,i)" [id]="i"
+                                                class="docDownload">
+                                                {{ ListDocuments[i] }}</em>
+                                        </div>
+                                        <div class="col-2"></div>
+                                    </div>
+
+                                    <div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
+                                        width: auto;">
+                                        <h4>Aucun document n'a été chargé !</h4>
+                                    </div>
+                                </div>
+		                    </div>
+		                </td>
+		            </tr>
+		        </ng-template>
+		    </p-table>
+	    </div>
+	</div>
+</div> 

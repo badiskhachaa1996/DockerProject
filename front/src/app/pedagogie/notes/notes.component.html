@@ -1,0 +1,653 @@
+<div class="grid">
+    <!-- Formulaire d'ajout d'une note -->
+    <div class="col-12" *ngIf="showFormAddNote">
+        <div class="card">
+            <h3>Ajouter une note</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormAddNote = false;formAddNote.reset()" aria-hidden="true"></i>
+
+            <form [formGroup]="formAddNote" (ngSubmit)="onAddNote()" class="p-fluid p-formgrid grid">
+                
+                <div class="field col-12 md:col-12">
+                    <label>Examen</label>
+                    <p-dropdown formControlName="examen_id" [options]="dropdownExamen" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label For="note">Note</label>
+                    <input pInputText id="note" formControlName="note_val" placeholder="Veuillez saisir la note" type="text" />
+
+                    <div *ngIf="note_val.invalid && (note_val.touched || note_val.dirty)">
+                        <span *ngIf="note_val.errors?.pattern" style="color: red;">
+                            La valeur de la note n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Semestre</label>
+                    <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Etudiant</label>
+                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'étudiant trouvé" filterPlaceholder="Etudiant" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label For="appreciation">Appreciation</label>
+                    <input pInputText id="appreciation" formControlName="appreciation" placeholder="Veuillez saisir une appreciation" type="text" />
+
+                    <div *ngIf="appreciation.invalid && (appreciation.touched || appreciation.dirty)">
+                        <span *ngIf="appreciation.errors?.pattern" style="color: red;">
+                            L'appreciation n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+                
+                <div>
+                    <button pButton label="Ajouter la note" type="submit" [disabled]="formAddNote.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire d'ajout d'une note par classe et par examen-->
+    <div class="col-12" *ngIf="showFormAddNoteByClasseByExam">
+        <div class="card">
+            <h3>Ajouter une note</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormAddNoteByClasseByExam = false; formAddNoteByClasseByExam.reset()" aria-hidden="true"></i>
+
+            <form [formGroup]="formAddNoteByClasseByExam" (ngSubmit)="onAddNoteByClasseByExam()" class="p-fluid p-formgrid grid">
+                
+                <div class="field col-12 md:col-12">
+                    <label For="note">Note</label>
+                    <input pInputText id="note" formControlName="note_val" placeholder="Veuillez saisir la note" type="text" />
+
+                    <div *ngIf="note_val_esm.invalid && (note_val_esm.touched || note_val_esm.dirty)">
+                        <span *ngIf="note_val_esm.errors?.pattern" style="color: red;">
+                            La valeur de la note n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Etudiant</label>
+                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'étudiant trouvé" filterPlaceholder="Etudiant" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label For="appreciation">Appreciation</label>
+                    <input pInputText id="appreciation" formControlName="appreciation" placeholder="Veuillez saisir une appreciation" type="text" />
+
+                    <div *ngIf="appreciation_esm.invalid && (appreciation._esmtouched || appreciation_esm.dirty)">
+                        <span *ngIf="appreciation_esm.errors?.pattern" style="color: red;">
+                            L'appreciation n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+                
+                <div>
+                    <button pButton label="Ajouter" type="submit" [disabled]="formAddNoteByClasseByExam.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Formulaire de modification d'une note -->
+    <div class="col-12" *ngIf="showFormUpdateNote">
+        <div class="card">
+            <h3>Modifier une note</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormUpdateNote = false; formUpdateNote.reset()" aria-hidden="true"></i>
+
+            <form [formGroup]="formUpdateNote" (ngSubmit)="onUpdateNote()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-12">
+                    <label For="examen">Examen</label>
+                    <p-dropdown formControlName="examen_id" [options]="dropdownExamen" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="note">Note</label>
+                    <input pInputText id="note" formControlName="note_val" placeholder="Veuillez saisir la note" type="text" />
+
+                    <div *ngIf="note_val_m.invalid && (note_val_m.touched || note_val_m.dirty)">
+                        <span *ngIf="note_val_m.errors?.pattern" style="color: red;">
+                            La valeur de la note n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Semestre</label>
+                    <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Etudiant</label>
+                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'étudiant trouvé" filterPlaceholder="Etudiant" filter="true">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="appreciation">Appreciation</label>
+                    <input pInputText id="appreciation" formControlName="appreciation" placeholder="Veuillez saisir une appreciation" type="text" />
+
+                    <div *ngIf="appreciation_m.invalid && (appreciation_m.touched || appreciation_m.dirty)">
+                        <span *ngIf="appreciation_m.errors?.pattern" style="color: red;">
+                            L'appreciation n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+                
+                <div>
+                    <button pButton label="Modifier" type="submit" [disabled]="formUpdateNote.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Formulaire de selection d'une classe -->
+    <div class="col-12" *ngIf="showFormSelectClasse">
+        <div class="card">
+            <h3>Veuillez choisir la classe et le semestre</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormSelectClasse = false; dropdownExamByClasse = [];" aria-hidden="true"></i>
+            
+            <form [formGroup]="formSelectClasse" (ngSubmit)="onSelectClasse()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label For="examen">Examen</label>
+                    <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
+                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="semestre">Semestre</label>
+                    <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                    </p-dropdown>
+                </div>
+                
+                <div>
+                    <button pButton label="Continuer" type="submit" [disabled]="formSelectClasse.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Formulaire de selection d'un examen -->
+    <div class="col-12" *ngIf="showFormSelectExam">
+        <div class="card">
+            <h3>Veuillez choisir un examen</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormSelectExam = false" aria-hidden="true"></i>
+        
+            <form [formGroup]="formSelectExam" (ngSubmit)="onSelectExam()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label For="examen">Examen</label>
+                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle"
+                        emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
+                    </p-dropdown>
+                </div>
+                
+                <div>
+                    <button pButton label="Continuer" type="submit" [disabled]="formSelectExam.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Formulaire de generation de bulletin de note -->
+    <div class="col-12" *ngIf="showFormGenerateBulletin">
+        <div class="card">
+            <h3>Générer un bulletin de note</h3>
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormGenerateBulletin = false" aria-hidden="true"></i>
+        
+            <form [formGroup]="formGenerateBulletin" (ngSubmit)="onGenerateClasse()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-6">
+                    <label For="classe">Classe</label>
+                    <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
+                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="semestre">Semestre</label>
+                    <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                    </p-dropdown>
+                </div>
+                
+                <div>
+                    <button pButton label="Afficher la classe" type="submit" [disabled]="formGenerateBulletin.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Formulaire de saisie d'appreciation générale -->
+    <div class="col-12" *ngIf="showFormAppreciationGenerale">
+        <div class="card">
+            <h3>Appréciation générale</h3>
+            <i class="pi pi-times" style="float:right;"
+                (click)="showFormAppreciationGenerale = false" aria-hidden="true">
+            </i>
+
+            <form [formGroup]="formAppreciationGenerale" (ngSubmit)="onSetAppreciationGenerale()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-12">
+                    <label For="appreciation">Appréciation</label>
+                    <input type="text" id="appreciation" formControlName="appreciation" placeholder="appreciation" pInputText>                
+                    <small style="color: red;">L'appréciation est définie pour le semestre actuel</small>
+                </div>
+                
+                <div>
+                    <button pButton label="Ajouter l'appréciation" type="submit" [disabled]="formAppreciationGenerale.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Formulaire de mise à jour d'une appreciation générale -->
+    <div class="col-12" *ngIf="showFormUpdateAppreciationGenerale">
+        <div class="card">
+            <h3>Appréciation générale</h3>
+            <i class="pi pi-times" style="float:right;"
+                (click)="showFormUpdateAppreciationGenerale = false" aria-hidden="true">
+            </i>
+
+            <form [formGroup]="formUpdateAppreciationGenerale" (ngSubmit)="onUpdateAppreciationGenerale()" class="p-fluid p-formgrid grid">
+                <div class="field col-12 md:col-12">
+                    <label For="appreciation">Appréciation</label>
+                    <input type="text" id="appreciation" formControlName="appreciation" placeholder="appreciation" pInputText>                
+                </div>
+                
+                <div>
+                    <button pButton label="Modifier l'appréciation" type="submit" [disabled]="formUpdateAppreciationGenerale.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Modèle de bulletin de note -->
+    <div class="col-12"  *ngIf="showBulletin">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red"
+                (click)="showBulletin = false; notesForGenerateBulletin = [];" aria-hidden="true">
+            </i>
+            <h3>Prévisualisation du bulletin</h3>
+
+            <div style="float: right;">
+                <button pButton (click)="showFormAppreciationGenerale = true; 
+                                         showBulletin = false; 
+                                         showGenerateBulletin = false;" type="button"
+                        label="Saisir appréciation générale"
+                        *ngIf="showBtnAddAppreciationGenerale">
+                </button>
+
+                <button pButton (click)="showFormUpdateAppreciationGenerale = true; 
+                                        showBulletin = false; 
+                                        showGenerateBulletin = false;;
+                                        appreciationToUpdate = appreciationGenerale;" type="button"
+                        label="Modifier l'appréciation générale"
+                        *ngIf="showBtnUpdateAppreciationGenerale">
+                </button>
+
+                <button pButton
+                    (click)="onGenerateBulletin(); notesForGenerateBulletin = []; onNullAppreciationGenerale()"
+                    type="button" style="float:right;" label="Exporter en pdf">
+                </button>
+            </div>
+
+
+            <div id="content">
+                <div style="float: right; margin-top: 80px; margin-right: 20px;">
+                    <p>
+                        Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
+                        Bulletin du {{ semestreForGenerateBulletin }} <br>
+                        <strong>{{ classeForBGenerateBulletin.nom }}</strong> <br>
+                        {{ users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
+                        users[etudiantToGenerateBulletin.user_id]?.firstname | uppercase }} <br>
+                        Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
+                    </p>
+                </div>
+
+                <figure>
+                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
+                    <figcaption *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
+                        activeCampus.ville }},
+                        {{ activeCampus.pays }}</figcaption>
+                </figure>
+
+
+                <p style="text-align:center;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+                <p-table [value]="notesForGenerateBulletin" class="bulletin" responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th style="width: 4em;"></th>
+                            <th colspan="4" style="width: 20em;">Moyenne</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Matières</th>
+                            <th style="width: 4em;">Coef</th>
+                            <th style="width: 5em;">Moy. Etudiant</th>
+                            <th style="width: 5em;">Moy. Promo</th>
+                            <th style="width: 5em;">Min. Promo</th>
+                            <th style="width: 5em;">Max. Promo</th>
+                            <th>Appréciations</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-note>
+                        <tr>
+                            <td>{{ matieres[note?.matiere_id]?.nom }}</td>
+                            <td style="width: 4em;">{{ examens[note.examen_id]?.coef }}</td>
+                            <td style="width: 5em;">{{ note.note_val | number : '0.1-2' }}</td>
+                            <td style="width: 5em;">{{ note.moyPromo | number : '0.1-2' }}</td>
+                            <td style="width: 5em;">{{ note.minPromo | number : '0.1-2' }}</td>
+                            <td style="width: 5em;">{{ note.maxPromo | number : '0.1-2' }}</td>
+                            <td>{{ note.appreciation }}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <tr *ngIf="showAppreciationGenerale">
+                            <td colspan="2">Appréciation générale</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align: center;">{{ appreciationGenerale.appreciation }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Moyenne générale</td>
+                            <td>{{ moyEtudiant | number : '0.1-2' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        <br>
+
+                        <tr>
+                            <th colspan="2">Décison du conseil de classe</th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Semestre validé</td>
+                            <td *ngIf="moyEtudiant >= 10">X</td>
+                            <td *ngIf="moyEtudiant < 10"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Semestre non validé</td>
+                            <td *ngIf="moyEtudiant >= 10"></td>
+                            <td *ngIf="moyEtudiant < 10">X</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <img src="assets/images/service-administratif.png" alt="signature"
+                    style="float: right; width: 30%; height: 30%;">
+                <img src="assets/images/footer-bulletin.png" alt="footer"
+                    style="display: block; margin-left: auto; margin-right: auto; clear: both;" width="800">
+
+            </div>
+        </div>
+    </div>
+    
+
+
+    <!-- Table d'affichage de toutes les notes par classes -->
+    <div class="col-12" *ngIf="showGenerateBulletin">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false" aria-hidden="true"></i>
+            <h3>Notes par classe: {{ classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
+
+            <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
+                     [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="5" [pageLinks]="5"
+                     [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center"pSortableColumn="user_id">
+                                Nom
+                            </div>
+						</th>
+						<th>
+							<div pSortableColumn="note_val" class="flex justify-content-between align-items-center" pSortableColumn="user_id">
+                                Prénom
+                            </div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+                            </div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-etudiant>
+					<tr>
+						<td>{{ users[etudiant.user_id].firstname }}</td>
+                        <td>{{ users[etudiant.user_id].lastname }}</td>
+                        <td><i style="margin-left: 2%;" class="pi pi-file-excel" title="Générer le bulletin"
+                                aria-hidden="true" (click)="moyEtudiant = null;
+                                     notesForGenerateBulletin = [];
+                                     onNullAppreciationGenerale();
+                                     etudiantToGenerateBulletin = etudiant; 
+                                     onGetNotes();
+                                     onGetAppreciationGenerale();
+                                     showBulletin = true;"></i>
+                            <i class="pi pi-file-excel" title="Générer le bulletin 2" (click)="GenerateBulletin2(etudiant._id,semestreForGenerateBulletin)" ></i>
+                        </td>
+					</tr>
+				</ng-template>
+    		</p-table>
+
+        </div>
+    </div>
+
+
+    <!-- Table d'ajout de note par classe -->
+    <div class="col-12" *ngIf="showTableAddnotes">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showTableAddnotes = false"
+                aria-hidden="true">
+            </i>
+            <button style="float:right;" pButton (click)="showFormAddNoteByClasseByExam = true" label="Ajouter"></button>
+
+            <h3>Saisie de notes</h3>
+            <p>
+                Classe: <strong>{{ classeSelected.abbrv }}</strong> <br />
+                Examen: <strong>{{ matieres[examSelected.matiere_id]?.nom }}</strong> <br />
+                Semestre: <strong>{{ semestreSelected }}</strong>
+            </p>
+
+            <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
+                     [globalFilterFields]="['note_val', 'semestre']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                     rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom et prénom
+                            </div>
+						</th>
+						<th>
+							<div pSortableColumn="note_val" class="flex justify-content-between align-items-center">
+								Note
+                            </div>
+						</th>
+						<th>
+							<div pSortableColumn="appreciation" class="flex justify-content-between align-items-center">
+								Appreciation
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+                            </div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-note>
+					<tr>
+						<td>{{ users[etudiants[note.etudiant_id]?.user_id]?.firstname }} {{
+                            users[etudiants[note.etudiant_id]?.user_id]?.lastname }} </td>
+                        <td>{{ note.note_val | number : '0.2-9' }} </td>
+                        <td>{{ note.appreciation }} </td>
+                        <td><i style="margin-left: 2%;" class="pi pi-pencil" title="Modifier" aria-hidden="true"
+                                (click)="showFormUpdateNote = true; 
+                                     showFormAddNote = false;
+                                     idNoteToUpdate = note._id;
+                                     examenToUpdate = matieres[examens[note.examen_id].matiere_id].nom;
+                                     etudiantToUpdate = etudiants[note.etudiant_id];
+                                     noteToUpdate = note;
+                                     onGetById()"></i>
+                        </td>
+					</tr>
+				</ng-template>
+    		</p-table>
+        </div>
+    </div>
+
+
+
+    <!-- Table d'affichage de toutes les notes par étudiants -->
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button  style="margin-left: 2px;" pButton label="Ajout rapide de note" (click)="showFormAddNote = true; showFormGenerateBulletin = false; showFormUpdateNote = false;"></button>
+                <button  style="margin-left: 2px;" pButton label="Attribuer des notes" (click)="showFormSelectClasse=true; showFormGenerateBulletin = false; showFormUpdateNote = false;"></button>
+                <button  style="margin-left: 2px;" pButton label="Générer bulletins de notes" (click)="showFormGenerateBulletin = true; showGenerateBulletin = false;"></button>
+            </div>
+
+            <h5>Notes par étudiants</h5>
+            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" 
+                     [rowHover]="true" [paginator]="true" [pageLinks]="5" [paginator]="true"
+                     [globalFilterFields]="['note_val', 'semestre']" responsiveLayout="scroll"
+                     rowExpandMode="single" [totalRecords]="notes.length">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <p-dropdown filter="true" [options]="dropdownClasse"
+                            (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')"
+                            optionLabel="libelle" emptyFilterMessage="Pas de classe trouvé">
+                        </p-dropdown>						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom et prénom
+                            </div>
+						</th>
+						<th>
+							<div pSortableColumn="classe_id" class="flex justify-content-between align-items-center">
+								Classe
+                            </div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Matière
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Évaluation
+                            </div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Note
+                            </div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Semestre
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Appreciation
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+                            </div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-note>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{ users[etudiants[note.etudiant_id]?.user_id]?.firstname }} 
+                            {{ users[etudiants[note.etudiant_id]?.user_id]?.lastname }}
+						</td>
+						<td style="min-width: 12rem;">
+							{{ classes[examens[note.examen_id]?.classe_id]?.nom }}
+						</td>
+						<td style="min-width: 14rem;">
+							{{ matieres[examens[note.examen_id]?.matiere_id]?.nom }}
+						</td>
+						<td style="min-width: 10rem;">
+							{{ examens[note.examen_id]?.libelle }}
+						</td>
+						<td style="min-width: 10rem;">
+							{{ note.note_val | number : '0.2-9' }}
+						</td>
+						<td style="min-width: 12rem;">
+							{{ note.semestre }}
+						</td>
+						<td style="min-width: 12rem; ">
+							{{ note.appreciation }}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+                            <i   style="margin-left: 2%;" class="pi pi-pencil" title="Modifier" aria-hidden="true"
+                                 (click)="showFormUpdateNote = true; 
+                                 showFormAddNote = false;
+                                 idNoteToUpdate = note._id;
+                                 examenToUpdate = matieres[examens[note.examen_id].matiere_id].nom;
+                                 etudiantToUpdate = etudiants[note.etudiant_id];
+                                 noteToUpdate = note;
+                                 onGetById()"></i>
+                        </td>
+					</tr>
+				</ng-template>
+    		</p-table>
+        </div>
+    </div>
+</div>

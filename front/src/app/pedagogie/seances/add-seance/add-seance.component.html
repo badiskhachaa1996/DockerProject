@@ -1,0 +1,100 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
+            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
+            [breakpoints]="{'960px': '75vw'}">
+            <p class="line-height-3 m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                laborum.
+            </p>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                    class="p-button-outlined"></button>
+            </ng-template>
+        </p-dialog>
+        <div class="grid">
+            <div class="col-12">
+                <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+                    style="width:auto;"></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter une séance </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+            <form class="p-fluid p-formgrid grid" [formGroup]="seanceForm" (ngSubmit)="saveSeance()">
+                <div class="field col-12 md:col-6" *ngIf="type!='classe'">
+                    <label>Nom du groupe</label><br>
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                        defaultLabel="Selection des classes" optionLabel="nom"></p-multiSelect>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Matière</label><br>
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                        emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Libelle</label><br>
+                    <input pInputText type="text" formControlName="libelle" placeholder="Libelle de la séance"
+                        class="form-control col-12">
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Début:</label>
+                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
+                        placeholder="Début de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Fin:</label>
+                    <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
+                        placeholder="Fin de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-12">
+                    <label>Campus</label><br>
+                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
+                    <label>Nom du formateur</label><br>
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Nombre de séance/Séance Max</label><br>
+                    <input pInputText type="text" formControlName="nbseance" placeholder="1/9"
+                        class="form-control col-8">
+                </div>
+                <div class="field col-12 md:col-6">
+
+                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
+                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-6">
+
+                    <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
+                        formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
+
+                </div>
+                <div class="field col-12 md:col-12" *ngIf="isPresentiel.value==true">
+                    <label>Salle Présentiel:</label><br>
+                    <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
+                        label="Ajouter la séance" type="submit"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

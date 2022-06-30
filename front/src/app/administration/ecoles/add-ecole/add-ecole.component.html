@@ -1,0 +1,76 @@
+<div class="grid">
+    <div class="col-12">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
+            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
+            [breakpoints]="{'960px': '75vw'}">
+            <p class="line-height-3 m-0">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam,
+                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                laborum.
+            </p>
+            <ng-template pTemplate="footer">
+                <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
+                    class="p-button-outlined"></button>
+            </ng-template>
+        </p-dialog>
+        <div class="grid">
+            <div class="col-12">
+                <button (click)="display=true" pButton icon="pi pi-info-circle" label="Informations"
+                    style="width:auto;"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h4 style="text-align: center;">Ajouter une école</h4>
+            <form class="p-fluid p-formgrid grid" [formGroup]="addecoleForm" (ngSubmit)="saveEcole()">
+                <div class="field col-12 md:col-6">
+                    <label For="libelle">Libéllé</label>
+                    <input pInputText id="libelle" type="text" formControlName="libelle" />
+
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="site">Site web</label>
+                    <input pInputText id="site" type="text" formControlName="site" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="email">Email</label>
+                    <input pInputText id="email" type="email" formControlName="email" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="phone">Téléphone</label>
+                    <input pInputText id="phone" type="phone" formControlName="telephone" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="annee_scolaire">Année scolaire</label>
+                    <p-dropdown formControlName="annee_id" [options]="dropdownAnnee" optionLabel="libelle" ></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="adress">Adresse</label>
+                    <input pInputText id="adress" type="text" formControlName="adresse" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="ville">Ville</label>
+                    <input pInputText id="ville" type="text" formControlName="ville" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="pays">Pays</label>
+                    <input pInputText id="pays" type="text" formControlName="pays" />
+                </div>
+                <div style="justify-content: right;">
+                    <button pButton label="Ajouter" type="submit" [disabled]="addecoleForm.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

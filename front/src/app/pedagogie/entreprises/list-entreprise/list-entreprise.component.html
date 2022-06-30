@@ -1,0 +1,446 @@
+<div class="grid">
+    <!-- Formulaire de modification d'une entreprise -->
+    <div class="col-12" *ngIf="showFormUpdateEntreprise!=null">
+        <div class="card">
+            <h4 style="text-align: center;">Modifier une entreprise </h4>
+            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                    style="color: red;"> * </span> sont obligatoires</p>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateEntreprise" (ngSubmit)="onUpdateEntreprise()">
+
+                <div class="field col-12 md:col-12">
+                    <label>Raison sociale:</label><br>
+                    <input type="text" formControlName="r_sociale" class="form-control col-12"
+                        placeholder="Raison sociale" pInputText>
+
+                    <div *ngIf="r_sociale_m.invalid && (r_sociale_m.touched || r_sociale_m.dirty)">
+                        <span *ngIf="r_sociale_m.errors?.pattern" style="color: red;">
+                            La raison sociale n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Forme juridique:</label><br>
+                    <input type="text" formControlName="fm_juridique" class="form-control col-12"
+                        placeholder="Forme juridique" pInputText>
+
+                    <div *ngIf="fm_juridique_m.invalid && (fm_juridique_m.touched || fm_juridique_m.dirty)">
+                        <span *ngIf="fm_juridique_m.errors?.pattern" style="color: red;">
+                            La forme juridique n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>VIP:</label><br>
+                    <input type="number" formControlName="vip" class="form-control col-12" placeholder="VIP"
+                        pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>NDA</label><br>
+                    <input type="text" formControlName="nda" class="form-control col-12"
+                        placeholder="NDA" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Type d'entreprise:</label><br>
+                    <input type="text" formControlName="type_ent" class="form-control col-12"
+                        placeholder="Type d'entreprise" pInputText>
+
+                    <div *ngIf="type_ent_m.invalid && (type_ent_m.touched || type_ent_m.dirty)">
+                        <span *ngIf="type_ent_m.errors?.pattern" style="color: red;">
+                            La forme juridique n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Entreprise Interne ou Externe ?</label><br>
+                    <p-selectButton [options]="IntExtChoice" formControlName="isInterne"></p-selectButton>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Numéro de siret:</label><br>
+                    <input type="text" formControlName="siret" class="form-control col-12" placeholder="Siret"
+                        pInputText>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Code APE NAF:</label><br>
+                    <input type="text" formControlName="code_ape_naf" class="form-control col-12"
+                        placeholder="Code APE NAF" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Numéro TVA:</label><br>
+                    <input type="text" formControlName="num_tva" class="form-control col-12"
+                        placeholder="Numéro TVA" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Nom du contact principal:</label><br>
+                    <input type="text" formControlName="nom_contact" class="form-control col-12"
+                        placeholder="Nom contact" pInputText>
+
+                    <div *ngIf="nom_contact_m.invalid && (nom_contact_m.touched || nom_contact_m.dirty)">
+                        <span *ngIf="nom_contact_m.errors?.pattern" style="color: red;">
+                            Le nom n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Prénom du contact principal:</label><br>
+                    <input type="text" formControlName="prenom_contact" class="form-control col-12"
+                        placeholder="Prénom contact" pInputText>
+
+                    <div *ngIf="prenom_contact_m.invalid && (prenom_contact_m.touched || prenom_contact_m.dirty)">
+                        <span *ngIf="prenom_contact_m.errors?.pattern" style="color: red;">
+                            Le prénom n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Fonction du contact principal dans l'entreprise:</label><br>
+                    <input type="text" formControlName="fc_contact" class="form-control col-12"
+                        placeholder="Fonction Contact" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Adresse email du contact principal:</label><br>
+                    <input type="email" formControlName="email_contact" class="form-control col-12"
+                        placeholder="Email contact" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Numéro de téléphone du contact principal:</label><br>
+                    <input type="text" formControlName="phone_contact" class="form-control col-12"
+                        placeholder="Numéro de téléphone contact" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Nom du contact sécondaire:</label><br>
+                    <input type="text" formControlName="nom_contact_2nd" class="form-control col-12"
+                        placeholder="Nom contact sécondaire" pInputText>
+
+                    <div
+                        *ngIf="nom_contact_2nd_m.invalid && (nom_contact_2nd_m.touched || nom_contact_2nd_m.dirty)">
+                        <span *ngIf="nom_contact_2nd_m.errors?.pattern" style="color: red;">
+                            Le nom n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Prénom du contact sécondaire:</label><br>
+                    <input type="text" formControlName="prenom_contact_2nd" class="form-control col-12"
+                        placeholder="Prénom contact sécondaire" pInputText>
+
+                    <div
+                        *ngIf="prenom_contact_2nd_m.invalid && (prenom_contact_2nd_m.touched || prenom_contact_2nd_m.dirty)">
+                        <span *ngIf="prenom_contact_2nd_m.errors?.pattern" style="color: red;">
+                            Le prénom n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Fonction du contact sécondaire dans l'entreprise:</label><br>
+                    <input type="text" formControlName="fc_contact_2nd" class="form-control col-12"
+                        placeholder="Fonction contact sécondaire" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-66">
+                    <label>Adresse email du contact sécondaire:</label><br>
+                    <input type="email" formControlName="email_contact_2nd" class="form-control col-12"
+                        placeholder="Email contact sécondaire" pInputText>
+                </div>
+
+
+                <div class="field col-12 md:col-12">
+                    <label>Numéro de téléphone du contact sécondaire:</label><br>
+                    <input type="text" formControlName="phone_contact_2nd" class="form-control col-12"
+                        placeholder="Numéro de téléphone contact sécondaire" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Pays où se situe l'entreprise:</label><br>
+                    <input type="text" formControlName="pays_adresse" class="form-control col-12" placeholder="Pays"
+                        pInputText>
+
+                    <div *ngIf="pays_adresse_m.invalid && (pays_adresse_m.touched || pays_adresse_m.dirty)">
+                        <span *ngIf="pays_adresse_m.errors?.pattern" style="color: red;">
+                            Le pays n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Ville où se situe l'entreprise:</label><br>
+                    <input type="text" formControlName="ville_adresse" class="form-control col-12"
+                        placeholder="Ville" pInputText>
+
+                    <div *ngIf="ville_adresse_m.invalid && (ville_adresse_m.touched || ville_adresse_m.dirty)">
+                        <span *ngIf="ville_adresse_m.errors?.pattern" style="color: red;">
+                            La ville n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Numéro de la rue où se situe l'entreprise:</label><br>
+                    <input type="number" formControlName="numero_adresse" class="form-control col-12"
+                        placeholder="Numéro de la rue" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Nom de la rue où se situe l'entreprise:</label><br>
+                    <input type="text" formControlName="rue_adresse" class="form-control col-12"
+                        placeholder="Nom de la rue" pInputText>
+
+                    <div *ngIf="rue_adresse_m.invalid && (rue_adresse_m.touched || rue_adresse_m.dirty)">
+                        <span *ngIf="rue_adresse_m.errors?.pattern" style="color: red;">
+                            La rue n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+
+
+
+                <div class="field col-12 md:col-3">
+                    <label>Code postale:</label><br>
+                    <input type="text" formControlName="postal_adresse" class="form-control col-12"
+                        placeholder="Code postale" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Email de l'entreprise:</label><br>
+                    <input type="email" formControlName="email" class="form-control col-12" placeholder="Email"
+                        pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Numéro de téléphone de l'entreprise:</label><br>
+                    <input type="text" formControlName="phone" class="form-control col-12"
+                        placeholder="Numéro de téléphone de l'entreprise" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Site internet de l'entreprise:</label><br>
+                    <input type="text" formControlName="website" class="form-control col-12"
+                        placeholder="Site internet" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Organisme financeur:</label><br>
+                    <input type="text" formControlName="financeur" class="form-control col-12"
+                        placeholder="Financeur" pInputText>
+
+                    <div *ngIf="financeur_m.invalid && (financeur_m.touched || financeur_m.dirty)">
+                        <span *ngIf="financeur_m.errors?.pattern" style="color: red;">
+                            Le financeur n'est pas dans le bon format
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <button pButton label="Modifier le entreprise" type="submit"
+                        [disabled]="formUpdateEntreprise.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des entreprise</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret', 'isInterne', 'website', 'vip']"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
+                responsiveLayout="scroll" [rows]="10">
+
+                <!--<ng-template pTemplate="caption 
+                    <div class="flex table-header">
+                    </div>
+                </ng-template>-->
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!--<th id="expandBtn" style="width: 3rem"></th>
+                        <th id="r_social" pSortableColumn="r_sociale">Raison sociale <p-sortIcon field="r_sociale">
+                            </p-sortIcon>
+                        </th>
+                        <th id="fm_juridique" pSortableColumn="fm_juridique">Forme juridique <p-sortIcon
+                                field="fm_juridique"></p-sortIcon>
+                        </th>
+                        <th id="siret" pSortableColumn="siret">Siret <p-sortIcon field="siret"></p-sortIcon>
+                        </th>
+                        <th id="website" pSortableColumn="phone"> Téléphone <p-sortIcon field="website">
+                            </p-sortIcon>
+                        </th>
+                        <th id="vip" pSortableColumn="vip">VIP <p-sortIcon field="vip"></p-sortIcon>
+                        </th>
+                        <th id="action">Action</th>-->
+                        <th style="width: 3rem;">
+
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Raison sociale
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Forme juridique
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Siret
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Téléphone
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                VIP
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-entreprise>
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="entreprise"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 8rem;">{{ entreprise.r_sociale }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.fm_juridique }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.siret }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.phone }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.vip }}</td>
+                        <td>
+                            <i style="margin-left: 2%;" class="pi pi-pencil"
+                                (click)="initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-entreprise>
+                    <tr>
+                        <td colspan="7">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type Entreprise</th>
+                        <th>Code APE</th>
+                        <th>Numéro TVA</th>
+                        <th>Interne/Externe</th>
+                        <th>Financeur</th>
+                        <th>Email</th>
+                        <th>Website</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.type_ent}}</td>
+                        <td>{{entreprise.code_ape_naf}}</td>
+                        <td>{{entreprise.num_tva}}</td>
+                        <td *ngIf="entreprise.isInterne">Interne</td>
+                        <td *ngIf="!entreprise.isInterne">Externe</td>
+                        <td>{{entreprise.financeur}}</td>
+                        <td>{{entreprise.email}}</td>
+                        <td>{{entreprise.website}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <h5 *ngIf="entreprise.ville_adresse" style="text-align:center;">Adresse de l'entreprise</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.ville_adresse">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Pays</th>
+                        <th>Ville</th>
+                        <th>Rue</th>
+                        <th>Numéro de Rue</th>
+                        <th>Code Postal</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.pays_adresse}}</td>
+                        <td>{{entreprise.ville_adresse}}</td>
+                        <td>{{entreprise.rue_adresse}}</td>
+                        <td>{{entreprise.numero_adresse}}</td>
+                        <td>{{entreprise.postal_adresse}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du 1er contact</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Fonction</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.nom_contact}}</td>
+                        <td>{{entreprise.prenom_contact}}</td>
+                        <td>{{entreprise.fc_contact}}</td>
+                        <td>{{entreprise.email_contact}}</td>
+                        <td>{{entreprise.phone_contact}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">Informations du 2ème contact</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Fonction</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.nom_contact_2nd}}</td>
+                        <td>{{entreprise.prenom_contact_2nd}}</td>
+                        <td>{{entreprise.fc_contact_2nd}}</td>
+                        <td>{{entreprise.email_contact_2nd}}</td>
+                        <td>{{entreprise.phone_contact_2nd}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>

@@ -1,0 +1,164 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+
+import jwt_decode from "jwt-decode";
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { FileUpload } from 'primeng/fileupload';
+
+import { MessageService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AdmissionService } from 'src/app/services/admission.service';
+
+@Component({
+  selector: 'app-suivie-preinscription',
+  templateUrl: './suivie-preinscription.component.html',
+  styleUrls: ['./suivie-preinscription.component.scss']
+})
+export class SuiviePreinscriptionComponent implements OnInit {
+  
+  @ViewChild('fileInput') fileInput: FileUpload;
+ 
+  ecoleProspect: any;
+  subscription: Subscription;
+  ListDocuments: String[] = [];
+  ListPiped: String[] = [];
+
+  ProspectConnected: any = {};
+
+  diplomeTest: boolean = false;
+  piece_identiteTest: boolean = false;
+  CVTest: boolean = false;
+  LMTest: boolean = false;
+  RdNTest: boolean = false;
+  RdNTest2: boolean = false;
+  TCFTest: boolean = false;
+  DocTypes: any[] = [
+    { value: null, label: "Choississez le type de fichier", },
+    { value: 'Carte_vitale', label: 'Carte vitale.', },
+    { value: 'Carte_sejour', label: "Carte séjour" },
+    { value: 'Carte_etudiant', label: "Carte étudiant" },
+    { value: 'Attestation_scolarite', label: 'Attestation de scolarité' },
+    { value: 'Attestation_travail', label: 'Attestation de travaille' },
+    { value: 'Visa', label: "Visa" }
+  ];
+
+  DocTypes2: any[] = [
+    { value: 'piece_identite', label: 'Pièce d\'identité', },
+    { value: 'CV', label: "CV" },
+    { value: 'LM', label: "LM" },
+    { value: 'diplome', label: 'Diplôme' },
+    { value: 'releve_notes', label: 'Relevé de notes' },
+    { value: 'TCF', label: "TCF" }
+  ];
+
+  uploadFileForm: FormGroup = new FormGroup({
+    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  })
+  constructor(private router: Router, private messageService: MessageService, private admissionService: AdmissionService) { }
+
+  ngOnInit(): void {
+
+    if (localStorage.getItem('ProspectConected')) {
+
+      this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
+  
+      this.ecoleProspect = this.ProspectConnected.type_form
+    }
+    else {
+      this.router.navigate(['/loginExterne'])
+    }
+
+    this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
+
+      (data) => {
+        console.log(data)
+        this.ListDocuments = data
+
+        for (let doc of this.ListDocuments) {
+
+          let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+          this.ListPiped.push(docname)
+          if (doc.includes('diplome/')) {
+            this.diplomeTest = true;
+          }
+          if (doc.includes('piece_identite/')) {
+            this.piece_identiteTest = true;
+          }
+          if (doc.includes('CV/')) {
+            this.CVTest = true;
+          }
+          if (doc.includes('LM/')) {
+            this.LMTest = true;
+          }
+          if (doc.includes('releve_notes1/')) {
+            this.RdNTest = true;
+          }
+          if (doc.includes('releve_notes2/')) {
+            this.RdNTest2 = true;
+          }
+          if (doc.includes('TCF/')) {
+            this.TCFTest = true;
+          }
+
+        }
+      },
+      (error) => { console.log(error) }
+    );
+
+ 
+  }
+
+  resetAuth() {
+    localStorage.clear();
+    window.location.reload()
+  }
+
+
+
+  FileUpload(event, doc: string) {
+    let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+    this.messageService.add({ severity: 'info', summary: 'Fichier en cours d\envoi', detail: docname + ' en cours d\'upload\nVeuillez Patientez' });
+    let formData = new FormData();
+    formData.append('id', this.ProspectConnected._id);
+    formData.append('document', doc);
+    formData.append('file', event.files[0]);
+    console.log(this.ProspectConnected._id)
+    this.admissionService.uploadFile(formData, this.ProspectConnected._id).subscribe(res => {
+      this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
+      if (doc.includes('diplome')) {
+        this.diplomeTest = true;
+      }
+      else if (doc.includes('piece_identite')) {
+        this.piece_identiteTest = true;
+      }
+      else if (doc.includes('CV')) {
+        this.CVTest = true;
+      }
+      else if (doc.includes('LM')) {
+        this.LMTest = true;
+      }
+      else if (doc.includes('releve_notes1')) {
+        this.RdNTest = true;
+      }
+      else if (doc.includes('releve_notes2')) {
+        this.RdNTest2 = true;
+      }
+      else if (doc.includes('TCF')) {
+        this.TCFTest = true;
+      }
+      if(this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest){
+        this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
+      }
+    },
+      (error) => {
+        this.messageService.add({ severity: 'error', summary: doc, detail: 'Erreur de chargement' + 'Réessayez SVP' });
+        console.error(error)
+      });
+
+
+    this.fileInput.clear()
+    event.target = null;
+  }
+
+  
+}

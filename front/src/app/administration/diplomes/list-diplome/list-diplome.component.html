@@ -1,0 +1,272 @@
+<div class="grid">
+
+    <!-- formulaire de modification d'un diplome -->
+    <div class="col-12" *ngIf="showFormUpdateDiplome">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;" title="Fermer"
+                (click)="showFormUpdateDiplome = false; formUpdateDiplome.reset()">
+            </i>
+
+            <h4 style="text-align: center;">Modifier un diplôme</h4>
+            <p-toast key="tst" [baseZIndex]="99999"></p-toast>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDiplome" (ngSubmit)="onUpdateDiplome()">
+
+                <div class="field col-12 md:col-8">
+                    <label For="titre">Titre RNCP du diplôme</label>
+                    <input pInputText id="titre" type="text" formControlName="titre" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="code_RNCP">Code RNCP</label>
+                    <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" />
+                </div>
+
+                <div class="field col-12">
+                    <label For="titre_long">Titre long du diplôme</label>
+                    <input pInputText id="titre_long" type="text" formControlName="titre_long" />
+                </div>
+
+                <div class="field col-12">
+                    <label For="description">Description</label>
+                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize
+                        rows="3" cols="30" formControlName="description"></textarea>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Campus</label>
+                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Type de diplôme</label>
+                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-3">
+                    <label>Type d'étude</label>
+                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Domaine</label>
+                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Niveau d'étude</label>
+                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"></p-dropdown>
+                </div>
+
+                <div class="field col-12">
+                    <label>Cette formation est-elle diplômante ?</label>
+                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-8">
+                    <label For="certificateur">Certificateur</label>
+                    <input pInputText id="certificateur" type="text" formControlName="certificateur" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="code_diplome">Code diplôme</label>
+                    <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
+                </div>
+
+                <div class="field col-12 md:col-2">
+                    <label For="nb_heure">Durée en heure</label>
+                    <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
+                </div>
+
+                <div class="field col-12 md:col-5">
+                    <label>Date de début de la formation</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-5">
+                    <label>Date de fin de la formation</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label>Rythme de la formation</label>
+                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="frais">Prix de la formation</label>
+                    <input pInputText id="frais" type="number" formControlName="frais" />
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="frais_en_ligne">Prix de la formation en ligne</label>
+                    <input pInputText id="frais_en_ligne" type="number" formControlName="frais_en_ligne" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début des examens</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_examen">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin des examens</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_examen"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début des stages</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_stage">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin des stages</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_stage"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label>Formateur référent</label>
+                    <p-dropdown [options]="dropdownFormateur" optionLabel="label" formControlName="formateur_id">
+                    </p-dropdown>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Modifier" type="submit" [disabled]="formUpdateDiplome.invalid"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- affichage de la partie upload de fichier -->
+    <div class="col-12">
+        <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
+            style="display: none;" pInputFile />
+    </div>
+
+    <!-- Affichage des diplomes -->
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des diplômes</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id" [expandedRowKeys]="expandedRows"
+                responsiveLayout="scroll" [globalFilterFields]="['niveau', 'titre_long', 'domaine', 'code_RNCP']"
+                [rows]="15" [pageLinks]="5" [paginator]="true" [totalRecords]="diplomes.length">
+                <ng-template pTemplate="caption">
+
+                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
+                        <span class="p-input-icon-right">
+                            <input pInputText type="text" placeholder="Recherche"
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Filtrer" />
+                            <i class="pi pi-search"></i>
+                        </span>
+                    </div>
+
+                    <div class="flex table-header">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="niveau">Niveau <p-sortIcon field="niveau"></p-sortIcon>
+                        </th>
+                        <th>Titre</th>
+                        <th>Domaine</th>
+                        <th pSortableColumn="code_RNCP">Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="certificateur">Certificateur <p-sortIcon field="certificateur">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-diplome let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="diplome"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 12rem;">{{ diplome.niveau }}</td>
+                        <td style="min-width: 8rem;">{{ diplome.titre_long }}</td>
+                        <td style="min-width: 8rem;">{{ diplome.domaine }}</td>
+                        <td style="min-width: 10rem;">{{ diplome.code_RNCP }}</td>
+                        <td style="min-width: 10rem;">{{diplome.certificateur}}</td>
+                        <td>
+                            <i style="margin-left: 2%;"
+                                (click)="showFormUpdateDiplome = true; idDiplomeToUpdate = diplome._id; onGetbyId(diplome);"
+                                class="pi pi-pencil" aria-hidden="true"></i>
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                (click)="clickFile(diplome)" style="margin-left: 2%;" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-diplome>
+                    <tr>
+                        <td colspan="8">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Titre RNCP</th>
+                        <th>Code Diplome</th>
+                        <th>Début</th>
+                        <th>Fin</th>
+                        <th>Matières</th>
+                        <th>Volume Initiale</th>
+                        <th>Volume Consommé</th>
+                        <th>Volume Planifié</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-diplome>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{diplome.titre}}</td>
+                        <td>{{diplome.code_diplome}}</td>
+                        <td>{{diplome.date_debut | date:'dd/MM/yyyy'}}</td>
+                        <td>{{diplome.date_fin | date :'dd/MM/yyyy'}}</td>
+                        <td>
+                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
+                                <span *ngIf="index==0">{{matiere.abbrv}}</span>
+                                <span *ngIf="index!=0">, {{matiere.abbrv}}</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
+                                <span *ngIf="index==0">{{matiere.volume_init}}</span>
+                                <span *ngIf="index!=0">, {{matiere.volume_init}}</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
+                                <span
+                                    *ngIf="index==0 && matiereVolume.rCons[matiere._id]">{{matiereVolume.rCons[matiere._id]}}</span>
+                                <span *ngIf="index==0 && matiereVolume.rCons[matiere._id]==undefined">0</span>
+                                <span *ngIf="index!=0 && matiereVolume.rCons[matiere._id]">,
+                                    {{matiereVolume.rCons[matiere._id]}}</span>
+                                <span *ngIf="index!=0 && matiereVolume.rCons[matiere._id]==undefined">, 0</span>
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
+                                <span *ngIf="index==0 && matiereVolume.rPlan[matiere._id]!=undefined">
+                                    {{matiereVolume.rPlan[matiere._id]}}</span>
+                                <span *ngIf="index==0 && matiereVolume.rPlan[matiere._id]==undefined">0</span>
+                                <span *ngIf="index!=0 && matiereVolume.rPlan[matiere._id]!=undefined">,
+                                    {{matiereVolume.rPlan[matiere._id]}}</span>
+                                <span *ngIf="index!=0 && matiereVolume.rPlan[matiere._id]==undefined">, 0</span>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>
