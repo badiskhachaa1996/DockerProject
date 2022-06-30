@@ -1,18 +1,23 @@
 <p-toast></p-toast>
 <div class="grid">
     <div class="col-12">
-        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
-            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
-            [breakpoints]="{'960px': '75vw'}">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
+                Voici les informations à savoir pour créer une nouvelle séance : 
             </p>
+            <p class="line-height-3 m-0">
+                <span style="color: red;">NB</span> : Avant de créer une séance, merci de bien vouloir vérifier qu'au moins un groupe, une matière, un campus, un formateur soient ajoutés.
+            </p>
+            <ul>
+                <li><span style="color: red;">Nom du groupe</span> : Sélectionner un ou plusieurs groupes pour lesquels vous voulez ajouter une séance.</li>
+                <li><span style="color: red;">Matière</span> : Sélectionner la matière de la séance.</li>
+                <li><span style="color: red;">Début / Fin </span> : Choissisez la date ainsi que l'heure de début et de fin de la séance.</li>
+                <li><span style="color: red;">Campus</span> : Sélectionner le campus où se déroulera la séance.</li>
+                <li><span style="color: red;">Nom du formateur</span> : Sélectionner le formateur de la séance.</li>
+                <li><span style="color: red;">Nombre de séance/séances max</span> : Indiquez le nombre de séances sur le nombre de séance maximum</li>
+                <li><span style="color: red;">Présentiel/Distanciel</span> : Choissisez si la séance est en présentiel ou en distanciel. Si la séance est en présentiel, une liste de choix va apparaître. Elle vous permettra de sélectionner la salle dans laquelle se déroulera la séance.</li>
+                <li><span style="color: red;">Planifiée/Validée</span> : Une séance planifiée est une séance qui est en attente de validation. Une séance validée est une séance validé par l'équipe pédaogique et par le formateur.</li>
+            </ul>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
                     class="p-button-outlined"></button>

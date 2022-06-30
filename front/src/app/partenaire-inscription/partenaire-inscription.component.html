@@ -3,15 +3,15 @@
         <div class="card">
             <h3 style="text-align: center;">Formulaire d'ajout d'un partenaire</h3>
             <div class="col-12 flex justify-content-center flex-wrap card-container">
+                <p-toast></p-toast>
                 <img src="assets/images/partenaire-inscription.jpg"
                     style="width: 220px; height: 220px; text-align: center;">
             </div>
             <div style="text-align: center;">
-                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
-                    obligatoires</small><br>
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
             </div>
             <br>
-            <form [formGroup]="RegisterForm">
+            <form [formGroup]="RegisterForm" (ngSubmit)="submitForm()">
                 <p-fieldset legend="Informations de la société" [style]="{'color': 'red', 'font-weight': 'bold'}"
                     *ngIf="etatForm==1">
                     <div class="grid" style="color: black;font-weight:normal">
@@ -57,14 +57,14 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="email_partenaire">Email : <span style="color: red;"> * </span></label>
-                                <input pInputText id="email_partenaire" type="email" formControlName="email_partenaire" placeholder="Adresse email de la société" />
+                                <input pInputText id="phone_partenaire" type="email" formControlName="email_partenaire" placeholder="Adresse email de la société" />
                                 <div *ngIf="email_partenaire.invalid && (email_partenaire.touched || email_partenaire.dirty)">
                                     <span style="color: red;" class="error" *ngIf="email_partenaire.errors">* L'email est obligatoire.</span>
                             </div>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="number_TVA">TVA : <span style="color: red;"> * </span></label>
-                                <input pInputText id="number_TVA" type="number" formControlName="number_TVA" placeholder="TVA de la société" />
+                                <input pInputText id="number_TVA" type="text" formControlName="number_TVA" placeholder="TVA de la société" />
                                 <div *ngIf="number_TVA.invalid && (number_TVA.touched || number_TVA.dirty)">
                                     <span style="color: red;" class="error" *ngIf="number_TVA.errors?.required">* Le numéro de TVA est obligatoire.</span>
                                     <span style="color: red;" class="error" *ngIf="number_TVA.errors?.pattern">* Le numéro de TVA semble incorrect.</span>
@@ -88,7 +88,7 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="APE">Code APE : <span style="color: red;"> * </span></label>
-                                <input pInputText id="APE" type="number" formControlName="APE" placeholder="Code APE de la société" />
+                                <input pInputText id="APE" type="text" formControlName="APE" placeholder="Code APE de la société" />
                                 <div *ngIf="APE.invalid && (APE.touched || APE.dirty)">
                                     <span style="color: red;" class="error" *ngIf="APE.errors?.required">* Le code APE est obligatoire.</span>
                                     <span style="color: red;" class="error" *ngIf="APE.errors?.pattern">* Le code APE semble incorrect.</span>
@@ -113,7 +113,11 @@
                         </div>
                     </div>
                     <div style="float: right;">
-                        <button pButton type="button" label="Continuer" (click)="changeEtatForm()"></button>
+                        <button pButton type="button" label="Continuer" 
+                            [disabled]="nomSoc.invalid || type.invalid || format_juridique.invalid || indicatifPhone.invalid || phone_partenaire.invalid
+                            || email_partenaire.invalid || phone_partenaire.invalid || number_TVA.invalid || SIREN.invalid || SIRET.invalid || APE.invalid
+                            || Services.invalid || Pays.invalid"
+                            (click)="changeEtatForm()"></button>
                     </div>
                 </p-fieldset>
 
@@ -253,9 +257,28 @@
                         <button pButton type="button" label="Retour" (click)="changeEtatForm(-1)"></button>
                     </div>
                     <div style="float: right;">
-                        <button pButton type="button" label="Continuer" (click)="changeEtatForm()"></button>
+                        <button pButton type="submit" label="Valider" [disabled]="civilite.invalid || lastname.invalid || firstname.invalid
+                        || phone.invalid || whatsApp.invalid || email.invalid || date_naissance.invalid || nationalite.invalid 
+                        || numero_adresse.invalid || rue_adresse.invalid || postal_adresse.invalid || ville_adresse.invalid 
+                        || pays_adresse.invalid || statut.invalid || password.invalid || password_confirmed.invalid"  ></button>
                     </div>
                 </p-fieldset>
+
+                <div class="p-fluid p-formgrid grid" *ngIf="etatForm==2">
+                    <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations ! Vos informations ont bien été envoyés !</h2>
+                    <div class="col-12 flex justify-content-center flex-wrap card-container">
+                        <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+                    </div>
+                    <div class="col-12 flex justify-content-center flex-wrap card-container">
+                        <p>
+                            Vous pouvez dés à présent vous connecter avec votre adresse email et le mot de passe que vous venez 
+                        </p>
+                    </div>
+                    <div class="col-12 flex justify-content-center flex-wrap card-container">
+                        <button pButton type="button" style="float: center;" (click)="redirectLogin()"
+                            label="Se connecter"></button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>

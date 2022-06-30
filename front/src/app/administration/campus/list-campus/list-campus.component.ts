@@ -111,7 +111,7 @@ export class ListCampusComponent implements OnInit {
   }
 
   navigatetoDiplome(rowData: Campus) {
-    this.router.navigate(['/diplome/', rowData._id]);
+    this.router.navigate(['/diplomes/', rowData._id]);
   }
 
 }

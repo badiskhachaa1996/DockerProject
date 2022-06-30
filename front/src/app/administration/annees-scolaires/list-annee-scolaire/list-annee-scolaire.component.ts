@@ -72,7 +72,7 @@ export class ListAnneeScolaireComponent implements OnInit {
     });
   }
   navigatetoEcole(rowData: AnneeScolaire) {
-    this.router.navigateByUrl('/ecoles/' + rowData._id);
+    this.router.navigate(['/ecole', rowData._id]);
   }
 
   archiverAnneeScolaire(rowData: AnneeScolaire) {

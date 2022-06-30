@@ -26,23 +26,23 @@ export class PartenaireInscriptionComponent implements OnInit {
   minDateCalendar = new Date("01/01/" + this.minYear);
   maxDateCalendar = new Date("01/01/" + this.maxYear);
 
-  typeSoc = 
-  [
-    { value: "Professionel (Société)" }, 
-    { value: "Particulier (Personne)" },
-  ];
+  typeSoc =
+    [
+      { value: "Professionel (Société)" },
+      { value: "Particulier (Personne)" },
+    ];
 
   formatJuridique =
-   [
-    { value: "EIRL" }, 
-    { value: "EURL" },
-    { value: "SARL" },
-    { value: "SA" }, 
-    { value: "SAS" }, 
-    { value: "SNC" }, 
-    { value: "Etudiant IMS" }, 
-    { value: "Individuel" },
-  ];
+    [
+      { value: "EIRL" },
+      { value: "EURL" },
+      { value: "SARL" },
+      { value: "SA" },
+      { value: "SAS" },
+      { value: "SNC" },
+      { value: "Etudiant IMS" },
+      { value: "Individuel" },
+    ];
 
 
 
@@ -54,7 +54,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     nomSoc: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     type: new FormControl(this.typeSoc[0]),
     format_juridique: new FormControl(this.formatJuridique[0]),
-    indicatifPhone : new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
     number_TVA: new FormControl(''),
@@ -114,9 +114,12 @@ export class PartenaireInscriptionComponent implements OnInit {
   get statut() { return this.RegisterForm.get('statut'); }
   get password() { return this.RegisterForm.get('password'); }
   get password_confirmed() { return this.RegisterForm.get('password_confirmed'); }
-  
+
+
   ngOnInit(): void {
+    console.log(this.RegisterForm.value)
   }
+
 
   changeEtatForm(val = 1) {
     this.etatForm += val
@@ -145,7 +148,8 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.RegisterForm.value.ville_adresse,
         this.RegisterForm.value.rue_adresse,
         this.RegisterForm.value.numero_adresse,
-        this.RegisterForm.value.postal_adresse
+        this.RegisterForm.value.postal_adresse,
+        this.RegisterForm.value.nationalite,
       )
 
       let p = new Partenaire(
@@ -153,8 +157,8 @@ export class PartenaireInscriptionComponent implements OnInit {
         null,
         this.generateCode(this.RegisterForm.value.nomSoc),
         this.RegisterForm.value.nomSoc,
-        this.RegisterForm.value.phonePartenaire,
-        this.RegisterForm.value.emailPartenaire,
+        this.RegisterForm.value.phone_partenaire,
+        this.RegisterForm.value.email_partenaire,
         this.RegisterForm.value.number_TVA,
         this.RegisterForm.value.SIREN,
         this.RegisterForm.value.SIRET,
@@ -163,7 +167,8 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.RegisterForm.value.APE,
         this.RegisterForm.value.Services,
         this.RegisterForm.value.Pays,
-        this.RegisterForm.value.WhatsApp
+        this.RegisterForm.value.whatsApp,
+        this.RegisterForm.value.indicatifPhone,
 
       )
 
@@ -173,9 +178,11 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' });
         this.router.navigate(['/connexionPartenaire'])
       }, error => {
+        console.log(error)
         this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
       })
     } else {
+      console.log()
       this.messageService.add({ severity: 'error', summary: 'Mot de passe incorrect', detail: "Les mots de passe ne correspondent pas" });
     }
 
@@ -186,9 +193,15 @@ export class PartenaireInscriptionComponent implements OnInit {
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
 
     return prenom + random;
-  }
+  };
 
   passwordCorrect() {
     return this.RegisterForm.value.password == this.RegisterForm.value.password_confirmed
-  }
+  };
+
+  redirectLogin() {
+    this.router.navigate(["/login-externe"])
+  };
+
 }
+

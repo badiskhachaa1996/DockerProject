@@ -28,7 +28,10 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Ajouter un étudiant </h4>
-            <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+            <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddEtudiant" (ngSubmit)="onAddEtudiant()">
                 <div class="field col-5 md:col-4">
                     <label For="civilite">Civilité<span style="color: red;"> * </span></label>
