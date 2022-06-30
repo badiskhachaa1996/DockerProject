@@ -156,7 +156,6 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login-externe', component: ExterneComponent },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent },
-            { path: 'suivre-ma-preinscription/:id', component: SuiviePreinscriptionComponent },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'login', component: InterneComponent },
             { path: 'pages/error', component: ErrorComponent },

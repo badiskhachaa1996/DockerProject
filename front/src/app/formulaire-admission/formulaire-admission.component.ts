@@ -359,7 +359,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       ((response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-          this.nextPage()
+          this.getFilesAccess(response.dataUser._id)
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)
@@ -371,9 +371,25 @@ export class FormulaireAdmissionComponent implements OnInit {
         console.error(error);
       })
     );
-  
-    console.log(prospect)
   }
+
+  getFilesAccess(ID) {
+    this.AuthService.WhatTheRole(ID).subscribe(data => {
+      localStorage.setItem("ProspectConected", data.Ptoken)
+      if (this.token == null) {
+        localStorage.setItem("token", this.token)
+      }
+      this.router.navigateByUrl('/#/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
+        if (this.token == null) {
+          localStorage.setItem("token", this.token)
+        }
+        localStorage.setItem("ProspectConected", data.Ptoken)
+        localStorage.setItem("token", this.token)
+        this.router.navigate(["/#/suivre-ma-preinscription"]);
+      });
+    })
+  }
+
 
 
 

@@ -41,16 +41,7 @@ export class MatieresComponent implements OnInit {
     , private ClasseService: ClasseService) { }
 
   ngOnInit(): void {
-    try {
-      this.token = jwt_decode(localStorage.getItem("token"))
-    } catch (e) {
-      this.token = null
-    }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+    
     //Initialisation du formulaire de mdification d'une matière
     this.onInitFormModifMatiere();
 
