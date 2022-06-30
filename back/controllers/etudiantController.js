@@ -173,7 +173,7 @@ app.put("/update", (req, res, next) => {
             phone_rl: req.body?.phone_rl,
             email_rl: req.body?.email_rl,
             adresse_rl: req.body?.adresse_rl,
-            entreprise_id: req.body?.entreprise_id,
+            entreprise: req.body?.entreprise,
             isHandicaped: req.body?.isHandicaped,
             suivi_handicaped: req.body?.suivi_handicaped,
         }, { new: true }, (err, user) => {

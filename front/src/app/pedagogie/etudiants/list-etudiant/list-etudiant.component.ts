@@ -231,7 +231,7 @@ export class ListEtudiantComponent implements OnInit {
       nationalite: ['', Validators.required],
       date_naissance: ['', Validators.required],
       isAlternant: [false],
-      entreprise_id: [],
+      entreprise: [],
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
       adresse_tuteur: [""],
@@ -285,14 +285,14 @@ export class ListEtudiantComponent implements OnInit {
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
+    let entreprise = this.formUpdateEtudiant.get('entreprise')?.value;
 
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
 
     let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
       null,null,null,null,custom_id,numero_INE,numero_NIR,sos_email,sos_phone,nom_rl,prenom_rl,phone_rl,email_rl,adresse_rl,dernier_diplome,
-      isAlternant,entreprise_id,nom_tuteur,prenom_tuteur,adresse_tuteur,email_tuteur,phone_tuteur,indicatif_tuteur,isHandicaped,suivi_handicaped);
+      isAlternant,entreprise,nom_tuteur,prenom_tuteur,adresse_tuteur,email_tuteur,phone_tuteur,indicatif_tuteur,isHandicaped,suivi_handicaped);
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -322,9 +322,9 @@ export class ListEtudiantComponent implements OnInit {
           email_tuteur: this.etudiantToUpdate.email_tuteur, phone_tuteur: this.etudiantToUpdate.phone_tuteur, indicatif_tuteur: this.etudiantToUpdate.indicatif_tuteur,
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
-          adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped
+          adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+          entreprise: this.etudiantToUpdate.entreprise,
         });
-        this.formUpdateEtudiant.patchValue({entreprise_id:{libelle:this.entreprises[response.entreprise_id].r_sociale,value:response.entreprise_id}})
       }),
       ((error) => { console.log(error); })
     );
