@@ -379,13 +379,13 @@ export class FormulaireAdmissionComponent implements OnInit {
       if (this.token == null) {
         localStorage.setItem("token", this.token)
       }
-      this.router.navigateByUrl('/#/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl('/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
         if (this.token == null) {
           localStorage.setItem("token", this.token)
         }
         localStorage.setItem("ProspectConected", data.Ptoken)
         localStorage.setItem("token", this.token)
-        this.router.navigate(["/#/suivre-ma-preinscription"]);
+        this.router.navigate(["/suivre-ma-preinscription"]);
       });
     })
   }
