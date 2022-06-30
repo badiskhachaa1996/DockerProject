@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { FileUpload } from 'primeng/fileupload';
@@ -54,16 +54,32 @@ export class ProspectsComponent implements OnInit {
 
   constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService,
     private messageService: MessageService, private commercialService: CommercialPartenaireService, private classeService: ClasseService,
-    private etudiantService: EtudiantService) { }
+    private etudiantService: EtudiantService, private formBuilder: FormBuilder) { }
 
 
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
-  AssignForm: FormGroup = new FormGroup({
-    groupe: new FormControl("", Validators.required),
-    statut: new FormControl(this.statutList[0], Validators.required)
+  AssignForm: FormGroup = this.formBuilder.group({
+    groupe: ["", Validators.required],
+    statut: [this.statutList[0], Validators.required],
+    numero_ine: [''],
+    numero_nir: [''],
+    sos_email: [''],
+    sos_phone: [''],
+    nom_rl: [''],
+    prenom_rl: [''],
+    phone_rl: [''],
+    email_rl: [''],
+    adresse_rl: [''],
+    entreprise: [''],
+    nom_tuteur: [''],
+    prenom_tuteur: [''],
+    adresse_tuteur: [''],
+    email_tuteur: [''],
+    phone_tuteur: [''],
+    indicatif_tuteur: [''],
   })
 
   ngOnInit(): void {
@@ -94,10 +110,10 @@ export class ProspectsComponent implements OnInit {
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_commercial,
       null, null, null, this.showAssignForm.customid,
-      null, null, null, null, null, null, null, null, null,//A faire pour Alternant
+      this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.validated_academic_level,
       this.AssignForm.value.statut.value == "Alternant",
-      null, null, null, null, null, null, null,//A faire pour Alternant
+      this.AssignForm.value.entreprise, this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur,//A faire pour Alternant
       null, null//A faire pour PMR
     )
     this.etudiantService.createfromPreinscris(etd).subscribe(data => {
@@ -185,6 +201,28 @@ export class ProspectsComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+
+  //Verification si le prospect est mineure ou majeur
+  onIsMinor(): boolean 
+  {
+    let result: boolean = false;
+
+    //recuperation de l'année actuelle
+    let anneeActuel = new Date().getFullYear();
+    //recuperation de l'année de naissance du prospect
+    let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
+
+    //Calcule de la difference
+    if(anneeActuel - anneeDeNaissance >= 18)
+    {
+      result = false;
+    } else
+    {
+      result = true;
+    }
+
+    return result;
   }
 
 }

@@ -135,10 +135,11 @@
                 <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant">
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                        <!-- <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
                                     emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
                                     filter="true">
-                        </p-dropdown>
+                        </p-dropdown> -->
+                        <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise" formControlName="entreprise" />
                     </div>
 
                     <div class="field col-12">
@@ -330,7 +331,7 @@
                                                 {{ etudiant.indicatif_tuteur }} {{ etudiant.phone_tuteur }}
                                             </td>
                                             <td>
-                                                {{ entreprises[etudiant.entreprise_id].r_sociale }}
+                                                {{ etudiant.entreprise }}
                                             </td>
                                         </tr>
                                     </ng-template>

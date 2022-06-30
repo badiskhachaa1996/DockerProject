@@ -260,6 +260,7 @@ export class AppMenuComponent implements OnInit {
                                                 {label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs']},
                                             ]
                                         },
+                                        {label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects']},
                                         {
                                             label: 'Gestions des étudiants', icon: 'pi pi-users',
                                             items: [
