@@ -11,13 +11,13 @@ node_dependencies:
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
-      - backend/node_modules/
+      - back/node_modules/
   script:
-    - cd backend
+    - cd back
     - npm ci
   only:
     changes:
-      - backend/package-lock.json
+      - back/package-lock.json
 
   
 angular_dependencies:
@@ -27,16 +27,16 @@ angular_dependencies:
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
-      - frontend/node_modules/
+      - front/node_modules/
   script:
-    - cd frontend
+    - cd front
     - npm install web-animations-js
     - npm install
   # only:
   #   - dev
   only:
     changes:
-      - frontend/package-lock.json
+      - front/package-lock.json
 #========================================================
 build_angular:
   stage: build
@@ -45,18 +45,18 @@ build_angular:
   cache: 
     key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
     paths:
-      - frontend/node_modules/
+      - front/node_modules/
     policy: pull
 
   script:
-      - cd frontend
+      - cd front
       - ng build --configuration=dev --aot
   only:
     - Version1-2
   artifacts:
     name: ${CI_PROJECT_NAME}-${CI_COMMIT_SHORT_SHA}
     paths:
-      - frontend/dist
+      - front/dist
     expire_in: 1 hour
 #  when: manual
  #======================================================
@@ -68,7 +68,7 @@ deploy_angular_todev:
     - dev-shell
   script:
     - sudo rm -r /var/www/html/ems
-    - sudo mv -f frontend/dist /var/www/html/ems
+    - sudo mv -f front/dist /var/www/html/ems
   only:
     - Version1-2
   # when: manual
@@ -79,7 +79,7 @@ deploy_node_todev:
   tags:
     - dev-shell
   script:
-    - cd backend
+    - cd back
     - ln -s ~/storage storage
     - npm ci
     - pm2 list
@@ -108,7 +108,7 @@ sonarqube-check:
       -Dsonar.qualitygate.wait=true
       -Dsonar.exclusions=**/node_modules/**,**/*.spec.ts, 
       -Dsonar.test.inclusions=**/*.spec.ts
-      -Dsonar.sources=backend/controllers,backend/models,backend/middleware,frontend/src/app/
+      -Dsonar.sources=back/controllers,back/models,back/middleware,front/src/app/
    
   allow_failure: true
   tags:
