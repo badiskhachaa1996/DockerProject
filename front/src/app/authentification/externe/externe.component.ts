@@ -19,10 +19,20 @@ export class ExterneComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
   })
 
+  token: any;
+
   constructor(public authService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService) { }
 
   ngOnInit(): void {
-    
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.authService.WhatTheRole(this.token.id).subscribe(
+      ((data) => {
+        if(data != null && data.type == "Prospect")
+        {
+          this.router.navigate(['/suivre-ma-preinscription']);
+        }
+      })
+    );
   }
 
   Login() {
