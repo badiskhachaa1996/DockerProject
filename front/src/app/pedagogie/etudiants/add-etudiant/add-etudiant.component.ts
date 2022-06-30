@@ -198,7 +198,7 @@ export class AddEtudiantComponent implements OnInit {
       nationalite: [this.nationList[0], Validators.required],
       date_naissance: [null, Validators.required],
       isAlternant: [false],
-      entreprise_id: [''],
+     
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
       adresse_tuteur: [""],
@@ -220,7 +220,8 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      entreprise: [''],
+      entreprise: ['']
+
 
     });
   }
@@ -245,7 +246,7 @@ export class AddEtudiantComponent implements OnInit {
   get rue_adresse() { return this.formAddEtudiant.get('rue_adresse'); };
   get nationalite() { return this.formAddEtudiant.get('nationalite').value; };
   get date_naissance() { return this.formAddEtudiant.get('date_naissance'); };
-
+  get entreprise() { return this.formAddEtudiant.get('entreprise'); };
   generateCode(lastname) {
 
 
@@ -296,19 +297,19 @@ export class AddEtudiantComponent implements OnInit {
     let phone_rl = this.formAddEtudiant.get('phone_rl')?.value;
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formAddEtudiant.get('entreprise_id')?.value;
+    let entreprise = this.formAddEtudiant.get('entreprise')?.value;
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
-    let entreprise = this.formAddEtudiant.get('entreprise')?.value;
+   
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, '', 'user', null, null, civilite, null, null, null, '', pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(null, '', classe_id, statut, nationalite, date_naissance, null, null, null, null, custom_id,
-      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant, entreprise_id, nom_tuteur, prenom_tuteur
-      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise);
+      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value,  nom_tuteur, prenom_tuteur
+      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped,entreprise);
     console.log(newEtudiant, newUser)
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {

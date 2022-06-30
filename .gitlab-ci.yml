@@ -30,6 +30,7 @@ angular_dependencies:
       - front/node_modules/
   script:
     - cd front
+    - rm -rf node_modules/
     - npm install web-animations-js
     - npm install
   # only:
@@ -68,7 +69,7 @@ deploy_angular_todev:
     - dev-shell
   script:
     - sudo rm -r /var/www/html/ems
-    - sudo mv -f front/dist /var/www/html/ems
+    - sudo mv -f front/dist/sakai /var/www/html/ems
   only:
     - Version1-2
   # when: manual
@@ -82,7 +83,6 @@ deploy_node_todev:
     - cd back
     - ln -s ~/storage storage
     - npm ci
-    - pm2 list
     - pm2 delete index
     - pm2 start index.js
    # - pm2 logs index

@@ -19,6 +19,103 @@
                 <label>Statut</label>
                 <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value"></p-dropdown>
             </div>
+
+            <!-- Si c'est un alternant -->
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="ine">Numéro INE</label>
+                <input pInputText type="text" formControlName="numero_ine" placeholder="Numéro INE">
+            </div>
+
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="nir">Numéro NIR</label>
+                <input pInputText type="text" formControlName="numero_nir" placeholder="Numéro NIR">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="sos_email">Email d'urgence</label>
+                <input pInputText type="email" formControlName="sos_email" placeholder="Adresse email d'un proche">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="sos_phone">Téléphone d'urgence</label>
+                <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="entreprise">Entreprise</label>
+                <input pInputText type="text" formControlName="entreprise" placeholder="Veuillez saisir le nom de l'entreprise">
+            </div>
+
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="nom_tuteur">Nom du tuteur</label>
+                <input pInputText type="text" formControlName="nom_tuteur" placeholder="Nom du tuteur d'alternance">
+            </div>
+
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="prenom_tuteur">Prenom du tuteur</label>
+                <input pInputText type="text" formControlName="prenom_tuteur" placeholder="Prenom du tuteur d'alternance">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="adresse_tuteur">Adresse du tuteur</label>
+                <textarea pInputText type="text" formControlName="adresse_tuteur" placeholder="Adresse du tuteur d'alternance"></textarea>
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="email_tuteur">Adresse email du tuteur</label>
+                <input pInputText type="email" formControlName="email_tuteur" placeholder="Adresse email du tuteur d'alternance">
+            </div>
+
+            <div class="field col-4 md:col-3" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="indicatif_tuteur">Indicatif</label>
+                <input pInputText type="text" formControlName="indicatif_tuteur" placeholder="Exemple: 00223">
+            </div>
+
+            <div class="field col-8 md:col-9" *ngIf="AssignForm.value.statut.value == 'Alternant'">
+                <label for="phone_tuteur">Numéro de téléphone du tuteur</label>
+                <input pInputText type="text" formControlName="phone_tuteur" placeholder="Exemple: 667717326">
+            </div>
+            <!-- End -->
+
+
+            <!-- Si c'est un étudiant -->
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
+                <label for="sos_email">Email d'urgence</label>
+                <input pInputText type="text" formControlName="sos_email" placeholder="Adresse email d'un proche">
+            </div>
+
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
+                <label for="sos_phone">Téléphone d'urgence</label>
+                <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
+            </div>
+                        
+            <!-- Si c'est un étudiant mineur -->
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+                <label for="nom_rl">Nom du répresentant légal</label>
+                <input pInputText type="text" formControlName="nom_rl" placeholder="Nom du répresentant légal">
+            </div>
+
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+                <label for="prenom_rl">Prénom du répresentant légal</label>
+                <input pInputText type="text" formControlName="prenom_rl" placeholder="Prénom du répresentant légal">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+                <label for="phone_rl">Numéro de téléphone du répresentant légal</label>
+                <input pInputText type="text" formControlName="phone_rl" placeholder="Numéro de téléphone du répresentant légal">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+                <label for="email_rl">Email du répresentant légal</label>
+                <input pInputText type="text" formControlName="email_rl" placeholder="Email du répresentant légal">
+            </div>
+
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+                <label for="adresse_rl">Email du répresentant légal</label>
+                <textarea pInputTextArea formControlName="adresse_rl" placeholder="Adresse du répresentant légal"></textarea>
+            </div>
+            <!-- End -->
+
             <div>
                 <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
             </div>
@@ -56,25 +153,25 @@
                 <tr>
                     <th style="width: 3rem" scope="col"></th>
                     <th pSortableColumn="customid" scope="col">
-                        ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
+                        ID Etudiant
                     </th>
                     <th pSortableColumn="lastname" scope="col">
-                        Nom & Prénom: <p-sortIcon field="lastname"></p-sortIcon>
+                        Nom & Prénom
                     </th>
                     <th pSortableColumn="type_form" scope="col">
-                        Etablissement <p-sortIcon field="type_form"></p-sortIcon>
+                        Etablissement
                     </th>
                     <th pSortableColumn="formation" scope="col">
-                        Formation <p-sortIcon field="formation"></p-sortIcon>
+                        Formation
                     </th>
                     <th pSortableColumn="campus_choix_1" scope="col">
-                        Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
+                        Campus Choix 1
                     </th>
                     <th pSortableColumn="nbDoc" scope="col">
-                        Nombre de documents<p-sortIcon field="nbDoc"></p-sortIcon>
+                        Nombre de documents
                     </th>
                     <th pSortableColumn="statut_dossier" scope="col">
-                        Statut Dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
+                        Statut Dossier
                     </th>
                     <th pSortableColumn="action" scope="col">
                         Action

@@ -33,8 +33,7 @@ app.post("/create", (req, res, next) => {
         {
             ...etudiantData
         });
-
-    //Creation du nouveau user
+        console.log(etudiant, etudiantData)  //Creation du nouveau user
     let userData = req.body.newUser;
     let user = new User(
         {
@@ -48,7 +47,7 @@ app.post("/create", (req, res, next) => {
             role: userData.role,
             service_id: userData.service_id,
             type: "Etudiant",
-            entreprise: userData.entreprise,
+            
             pays_adresse: userData.pays_adresse,
             ville_adresse: userData.ville_adresse,
             rue_adresse: userData.rue_adresse,
@@ -175,7 +174,7 @@ app.put("/update", (req, res, next) => {
             phone_rl: req.body?.phone_rl,
             email_rl: req.body?.email_rl,
             adresse_rl: req.body?.adresse_rl,
-            entreprise_id: req.body?.entreprise_id,
+            entreprise: req.body?.entreprise,
             isHandicaped: req.body?.isHandicaped,
             suivi_handicaped: req.body?.suivi_handicaped,
         }, { new: true }, (err, user) => {

@@ -22,7 +22,7 @@ export class Etudiant {
         public adresse_rl?: string,
         public dernier_diplome?: string,
         public isAlternant?: boolean,
-        public entreprise_id?: string,
+        // public entreprise_id?: string,
         public nom_tuteur?: string,
         public prenom_tuteur?: string,
         public adresse_tuteur?: string,
@@ -31,6 +31,6 @@ export class Etudiant {
         public indicatif_tuteur?: string,
         public isHandicaped?: boolean,
         public suivi_handicaped?:string,
-        public entreprise?: string
+        public entreprise?:string
     ) { }
 }

@@ -131,12 +131,11 @@ export class FirstConnectionComponent implements OnInit {
       null,
       this.RegisterForm.value.type.value,
       this.RegisterForm.value.entreprise_id?.value,
-      this.RegisterForm.value.pays_adresse,
+      this.RegisterForm.value.pays_adresse.value,
       this.RegisterForm.value.ville_adresse,
       this.RegisterForm.value.rue_adresse,
       this.RegisterForm.value.numero_adresse,
       this.RegisterForm.value.postal_adresse,
-      this.RegisterForm.value.entreprise?.value
     )
     /* SAVE PREINSCRIT
     let inscription = new Inscription(null, this.userConnected._id,
@@ -187,10 +186,18 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          this.RegisterForm.value.type.value != "Etudiant",
-          null
+          this.RegisterForm.value.type.value !== "Etudiant",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          this.RegisterForm.value.entreprise,
         )
-        console.log(etudiant.entreprise)
+        console.log(etudiant);
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           localStorage.removeItem('modify')
@@ -220,7 +227,7 @@ export class FirstConnectionComponent implements OnInit {
   get phone() { return this.RegisterForm.get('phone'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
 
-  get entreprise() { return this.RegisterForm.get('entreprise').value.value; }
+  
   get type() { return this.RegisterForm.get('type').value.value; }
 
   get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
@@ -233,5 +240,6 @@ export class FirstConnectionComponent implements OnInit {
   get statut() { return this.RegisterForm.get('statut'); }
   get nationalite() { return this.RegisterForm.get('nationalite').value; }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
+  get entreprise() { return this.RegisterForm.get('entreprise'); }
 
 }
