@@ -70,7 +70,6 @@ deploy_angular_todev:
   script:
     - sudo rm -r /var/www/html/ems
     - sudo mv -f front/dist/sakai /var/www/html/ems
-    - sudo mv /var/www/html/ems/sakai/* /var/www/html/
   only:
     - Version1-2
   # when: manual
