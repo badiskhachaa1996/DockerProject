@@ -1,82 +1,84 @@
 {
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-    "cli": {
-        "analytics": false
-    },
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "sakai": {
-            "projectType": "application",
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss"
-                }
-            },
+        "prestige": {
             "root": "",
             "sourceRoot": "src",
+            "projectType": "application",
+            "schematics": {},
             "prefix": "app",
             "architect": {
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/sakai",
+                        "outputPath": "dist/ems",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
-                        "inlineStyleLanguage": "scss",
+                        "aot": false,
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
+                            "src/upload.php",
+                            "src/assets",
+                            "src/loaderio-d942193e6c0fb92f1b93fb7d8a06cd94.txt",
+                            "src/assets/pages/access.html",
+                            {
+                                "glob": "access.html",
+                                "input": "src/assets/pages/",
+                                "output": "/home/"
+                            }
                         ],
                         "styles": [
-                            "src/styles.scss",
+                            "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
-                            "node_modules/@fullcalendar/timegrid/main.min.css"
+                            "node_modules/@fullcalendar/timegrid/main.min.css",
+                            "node_modules/quill/dist/quill.snow.css",
+                            "node_modules/primeicons/primeicons.css",
+                            "node_modules/primeflex/primeflex.css",
+                            "src/assets/theme/green/theme-light.css",
+                            "node_modules/font-awesome/css/font-awesome.css",
+                            "src/styles.scss"
                         ],
                         "scripts": [
-                            "node_modules/prismjs/prism.js",
-                            "node_modules/prismjs/components/prism-typescript.js",
+                            "node_modules/chart.js/dist/Chart.js",
                             "node_modules/@fullcalendar/core/main.js",
                             "node_modules/@fullcalendar/daygrid/main.js",
                             "node_modules/@fullcalendar/timegrid/main.js",
-                            "node_modules/@fullcalendar/interaction/main.js"
-                        ],
-                        "allowedCommonJsDependencies": [
-                            "chart.js"
+                            "node_modules/@fullcalendar/interaction/main.js",
+                            "node_modules/prismjs/prism.js",
+                            "node_modules/quill/dist/quill.js",
+                            "node_modules/chart.js/dist/Chart.js",
+                            "node_modules/keycloak-js/dist/keycloak.min.js",
+                            "node_modules/xlsx/dist/xlsx.core.min.js"
                         ]
                     },
                     "configurations": {
                         "production": {
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "3mb",
-                                    "maximumError": "5mb"
-                                },
-                                {
-                                    "type": "anyComponentStyle",
-                                    "maximumWarning": "6kb",
-                                    "maximumError": "10kb"
-                                }
-                            ],
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
                                     "with": "src/environments/environment.prod.ts"
                                 }
                             ],
-                            "outputHashing": "all"
-                        },
-                        "development": {
-                            "buildOptimizer": false,
-                            "optimization": false,
-                            "vendorChunk": true,
-                            "extractLicenses": false,
-                            "sourceMap": true,
-                            "namedChunks": true
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "extractCss": true,
+                            "namedChunks": false,
+                            "aot": true,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [
+                                {
+                                    "type": "initial",
+                                    "maximumWarning": "6mb",
+                                    "maximumError": "10mb"
+                                }
+                            ]
                         },
                         "dev": {
                             "fileReplacements": [
@@ -88,6 +90,7 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "extractCss": true,
                             "namedChunks": false,
                             "extractLicenses": true,
                             "vendorChunk": false,
@@ -104,25 +107,23 @@
                                 }
                             ]
                         }
-                    },
-                    "defaultConfiguration": "production"
+                    }
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "prestige:build"
+                    },
                     "configurations": {
                         "production": {
-                            "browserTarget": "sakai:build:production"
-                        },
-                        "development": {
-                            "browserTarget": "sakai:build:development"
+                            "browserTarget": "prestige:build:production"
                         }
-                    },
-                    "defaultConfiguration": "development"
+                    }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "sakai:build"
+                        "browserTarget": "prestige:build"
                     }
                 },
                 "test": {
@@ -132,27 +133,60 @@
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.spec.json",
                         "karmaConfig": "karma.conf.js",
-                        "inlineStyleLanguage": "scss",
                         "assets": [
-                            "src/favicon.ico",
+                            "src/upload.php",
                             "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss",
+                            "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
-                            "node_modules/@fullcalendar/timegrid/main.min.css"
+                            "node_modules/@fullcalendar/timegrid/main.min.css",
+                            "node_modules/quill/dist/quill.snow.css",
+                            "node_modules/font-awesome/css/font-awesome.css",
+                            "src/styles.scss"
                         ],
                         "scripts": [
+                            "node_modules/chart.js/dist/Chart.js",
                             "node_modules/@fullcalendar/core/main.js",
                             "node_modules/@fullcalendar/daygrid/main.js",
                             "node_modules/@fullcalendar/timegrid/main.js",
-                            "node_modules/@fullcalendar/interaction/main.js"
+                            "node_modules/@fullcalendar/interaction/main.js",
+                            "node_modules/quill/dist/quill.js",
+                            "node_modules/chart.js/dist/Chart.js"
                         ]
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-devkit/build-angular:tslint",
+                    "options": {
+                        "tsConfig": [
+                            "tsconfig.app.json",
+                            "tsconfig.spec.json",
+                            "e2e/tsconfig.json"
+                        ],
+                        "exclude": [
+                            "**/node_modules/**"
+                        ]
+                    }
+                },
+                "e2e": {
+                    "builder": "@angular-devkit/build-angular:protractor",
+                    "options": {
+                        "protractorConfig": "e2e/protractor.conf.js",
+                        "devServerTarget": "prestige:serve"
+                    },
+                    "configurations": {
+                        "production": {
+                            "devServerTarget": "prestige:serve:production"
+                        }
                     }
                 }
             }
         }
     },
-    "defaultProject": "sakai"
+    "defaultProject": "prestige",
+    "cli": {
+        "analytics": "13b4652e-ece6-4808-b6d3-1c4f54435470"
+    }
 }
