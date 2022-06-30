@@ -170,7 +170,6 @@ import { FormulaireAdmissionComponent } from './formulaire-admission/formulaire-
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NotesComponent } from './pedagogie/notes/notes.component';
 import { ExterneComponent } from './authentification/externe/externe.component';
-import { InterneComponent } from './authentification/interne/interne.component';
 import { SuiviePreinscriptionComponent } from './admission/suivie-preinscription/suivie-preinscription.component';
 
 import { ListSeancesComponent } from './pedagogie/seances/list-seances/list-seances.component';
@@ -352,7 +351,6 @@ import { FirstConnectionComponent } from './profil/first-connection/first-connec
         FormulaireAdmissionComponent,
         NotesComponent,
         ExterneComponent,
-        InterneComponent,
         SuiviePreinscriptionComponent,
         ListSeancesComponent,
         AddSeanceComponent,

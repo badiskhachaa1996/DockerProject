@@ -18,20 +18,13 @@ export class AdminGuardService implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-        let   currenttoken:any =jwt_decode(localStorage.getItem("token"))
-        let role: string=currenttoken.role;
-        if (role=='Admin') {
-         
-            console.log(role)
+        let currenttoken: any = jwt_decode(localStorage.getItem("token"))
+        let role: string = currenttoken.role;
+        if (role == 'Admin') {
             return true;
         } else {
-            console.log(role)
             this.router.navigate(['/pages/access']);
-            
             return false;
         }
-
-
-
     }
 }

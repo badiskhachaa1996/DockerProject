@@ -9,27 +9,23 @@
                 style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
                 <div class="w-full md:w-10 mx-auto">
                     <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                    <input id="email1" formControlName="email" type="email" placeholder="Email address" pInputText
+                    <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email" pInputText
                         class="w-full mb-3" style="padding:1rem;">
 
                     <label for="password1" class="block text-900 text-xl font-medium mb-2">Mot de passe</label>
-                    <input id="password1" formControlName="password" type="password" pInputText
+                    <input id="password1" formControlName="password" type="password" pInputText placeholder="Entrez votre mot de passe"
                         class="w-full mb-3" style="padding:1rem;">
 
                     <div class="flex align-items-center justify-content-between mb-5">
-                        <div class="flex align-items-center">
-                            <p-checkbox id="rememberme1" [binary]="true" styleClass="mr-2"></p-checkbox>
-                            <label for="rememberme1">Se rappeler de moi</label>
-                        </div>
                         <a class="font-medium no-underline ml-2 text-right cursor-pointer"
-                            style="color: var(--primary-color)">Mot de passe Oublié ?</a>
+                            style="color: var(--primary-color)" href="mailto:support@estya.com">Mot de passe oublié ?</a>
                     </div>
-                    <button pButton pRipple label="Se connecter" (click)="Login()" class="w-full p-3 text-xl"></button>
-                    <br><br><br>
-                    <small>Si vous avez une adresse email IMS, vous pouvez vous connecter en <a routerLink="/login" title="Connexion interne">cliquant ici</a>.</small>
+                    <button pButton pRipple label="Se connecter via votre adresse email" icon="pi pi-envelope" class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                    <br><br>
+                    <p style="text-align: center;">Ou</p>
+                    <button pButton pRipple label="Se connecter via Microsoft" icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-3 text-xl p-button-primary p-button-raised"></button>        
                 </div>
             </form>
-
         </div>
     </div>
 </div>

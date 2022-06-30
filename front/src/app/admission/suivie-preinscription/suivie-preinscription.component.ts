@@ -65,7 +65,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
       this.ecoleProspect = this.ProspectConnected.type_form
     }
     else {
-      this.router.navigate(['/loginExterne'])
+      this.router.navigate(['/login'])
     }
 
     this.admissionService.getFiles(this.ProspectConnected._id).subscribe(

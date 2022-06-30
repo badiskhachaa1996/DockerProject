@@ -65,7 +65,6 @@ import { EmploiDuTempsComponent } from './pedagogie/seances/emploi-du-temps/empl
 import { EmergementComponent } from './pedagogie/seances/emergement/emergement.component';
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
-import { InterneComponent } from './authentification/interne/interne.component';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
@@ -85,7 +84,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    { path: '', component: DashboardComponent },
+                    { path: '', component: DashboardComponent ,canActivate: [AuthGuardService]},
                     { path: 'uikit/formlayout', component: FormLayoutComponent },
                     { path: 'uikit/input', component: InputComponent },
                     { path: 'uikit/floatlabel', component: FloatLabelComponent },
@@ -129,7 +128,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
                     { path: 'gestion-tickets', component: GestionTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'matières', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
@@ -139,13 +138,11 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'formulaire-admission', component: FormulaireAdmissionComponent },
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'emploi-du-temps', component: EmploiDuTempsComponent},
                     { path: 'emploi-du-temps/:type/:id', component: EmploiDuTempsComponent },
                     { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
-                    { path: 'formulaire-admission', component: FormulaireAdmissionComponent },
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
@@ -153,12 +150,11 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 
                 ],
             },
+            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
-            { path: 'login-externe', component: ExterneComponent },
+            { path: 'login', component: ExterneComponent },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent },
-            { path: 'suivre-ma-preinscription/:id', component: SuiviePreinscriptionComponent },
             { path: 'pages/landing', component: LandingComponent },
-            { path: 'login', component: InterneComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },
             { path: 'pages/access', component: AccessComponent },

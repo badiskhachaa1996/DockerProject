@@ -140,7 +140,7 @@ app.get("/getById/:id", (req, res, next) => {
 });
 
 //Recupere un étudiant via son user_id
-app.get("/getById/:user_id", (req, res, next) => {
+app.get("/getByUserid/:user_id", (req, res, next) => {
     Etudiant.findOne({ user_id: req.params.user_id })
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
