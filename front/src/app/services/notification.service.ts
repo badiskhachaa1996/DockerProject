@@ -20,37 +20,37 @@ export class NotificationService {
 
   create(notif: any) {
     let url = this.apiUrl + "create";
-    return this.http.post<any>(url, notif, this.httpOptions1);
+    return this.http.post<any>(url, notif, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, this.httpOptions1);
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   update(notif: any) {
     let registreUrl = this.apiUrl + "updateById/" + notif._id;
-    return this.http.post<any>(registreUrl, notif, this.httpOptions1);
+    return this.http.post<any>(registreUrl, notif, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   delete(id: string) {
     let registreUrl = this.apiUrl + "deleteById/" + id;
-    return this.http.get<any>(registreUrl, this.httpOptions1);
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
-    return this.http.get<any>(registreUrl, this.httpOptions1);
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAllByUserId(id: string) {
     let registreUrl = this.apiUrl + "getAllByUserID/" + id;
-    return this.http.get<any>(registreUrl, this.httpOptions1);
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   get20ByUserID(id: string) {
     let registreUrl = this.apiUrl + "get20ByUserID/" + id;
-    return this.http.get<any>(registreUrl, this.httpOptions1);
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   newNotif(Notif) {
@@ -59,7 +59,7 @@ export class NotificationService {
 
   viewNotifs(notifications: Notification[]) {
     let registreUrl = this.apiUrl + "viewNotifs";
-    return this.http.post<any>(registreUrl, { notifications }, this.httpOptions1)
+    return this.http.post<any>(registreUrl, { notifications }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
       ;
   }
   reloadNotif(data) {

@@ -14,6 +14,6 @@ export class EtatPreinscriptionServiceService {
 
   uploadFile(id_preins,data: FormData){
     let url = this.apiUrl+"uploadFile/"+id_preins;
-    return this.httpClient.post<any>(url,data,this.httpOptions1)
+    return this.httpClient.post<any>(url,data,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 }

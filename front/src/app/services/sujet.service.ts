@@ -16,28 +16,28 @@ export class SujetService {
 
   public addSujet(sujet: any){
     let add_sujet=this.apiUrl+"addsujet";
-    return this.http.post<any>(add_sujet,sujet,this.httpOptions1);
+    return this.http.post<any>(add_sujet,sujet,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, this.httpOptions1);
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   update(sujet :any){
     let registreUrl=this.apiUrl+"updateById/"+sujet.id;
-    return this.http.post<any>(registreUrl,sujet,this.httpOptions1);
+    return this.http.post<any>(registreUrl,sujet,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,this.httpOptions1);
+    return this.http.get<any>(registreUrl,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getASujetByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,this.httpOptions1);
+    return this.http.get<any>(registreUrl,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 

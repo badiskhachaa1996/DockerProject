@@ -18,21 +18,21 @@ export class PartenaireService {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   create(newPartenaire: Partenaire) {
     let registreUrl = this.apiUrl + "create";
-    return this.httpClient.post<any>(registreUrl, { newPartenaire }, this.httpOptions1);
+    return this.httpClient.post<any>(registreUrl, { newPartenaire }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   inscription(newUser: User, newPartenaire: Partenaire, newCommercial: CommercialPartenaire) {
     let registreUrl = this.apiUrl + "inscription";
-    return this.httpClient.post<any>(registreUrl, { newUser, newPartenaire, newCommercial }, this.httpOptions);
+    return this.httpClient.post<any>(registreUrl, { newUser, newPartenaire, newCommercial }, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
-    return this.httpClient.get<Partenaire[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Partenaire[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
-    return this.httpClient.get<Partenaire>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Partenaire>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

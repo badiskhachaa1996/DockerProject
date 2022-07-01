@@ -19,58 +19,58 @@ export class AdmissionService {
   //Création d'un nouveau prospect
   create(tbObj: any) {
     let registerUrl = this.apiUrl + 'create';
-    return this.httpClient.post<any>(registerUrl, tbObj, this.httpOptions);
+    return this.httpClient.post<any>(registerUrl, tbObj, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   //Modification d'un prospect
   update(tbObj: any) {
     let registreUrl = this.apiUrl + 'update';
-    return this.httpClient.put<any>(registreUrl, tbObj, this.httpOptions1);
+    return this.httpClient.put<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Recuperation d'un prospect via son id
   getById(id: string) {
     let registreurl = this.apiUrl + 'getById/' + id;
-    return this.httpClient.get<any>(registreurl, this.httpOptions1);
+    return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   ValidateEmail(email) {
     let registreurl = this.apiUrl + "ValidateEmail/" + email
-    return this.httpClient.get<any>(registreurl, this.httpOptions);
+    return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   //Recuperation d'un prospect via son userId
   getByUserId(id: string) {
     let registreurl = this.apiUrl + 'getByUserId/' + id;
-    return this.httpClient.get<any>(registreurl, this.httpOptions1);
+    return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //recuperation de la liste des admissions
   getAll() {
     let registreUrl = this.apiUrl + 'getAll';
-    return this.httpClient.get<Prospect[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   updateStatut(id_prospect, p) {
     let url = this.apiUrl + "updateStatut/" + id_prospect
-    return this.httpClient.post<Prospect>(url, p, this.httpOptions1);
+    return this.httpClient.post<Prospect>(url, p, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 
 
   getFiles(id: any) {
     let url = this.apiUrl + "getFilesInscri/" + id
-    return this.httpClient.get<any>(url, this.httpOptions);
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   downloadFile(id, filename) {
     let url = this.apiUrl + "downloadFile/" + id + "/" + filename
-    return this.httpClient.get<any>(url, this.httpOptions1);
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   deleteFile(id, filename) {
     let url = this.apiUrl + "deleteFile/" + id + "/" + filename
-    return this.httpClient.get<any>(url, this.httpOptions1);
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   uploadFile(formData, id) {
@@ -80,15 +80,15 @@ export class AdmissionService {
 
   getAllCodeCommercial(code) {
     let registreUrl = this.apiUrl + "getAllByCodeCommercial/" + code;
-    return this.httpClient.get<any>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
   getAllByCodeAdmin(partenaire_id) {
     let registreUrl = this.apiUrl + "getAllByCodeAdmin/" + partenaire_id;
-    return this.httpClient.get<any>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAllWait() {
     let registreUrl = this.apiUrl + 'getAllWait';
-    return this.httpClient.get<Prospect[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

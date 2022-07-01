@@ -18,24 +18,24 @@ export class SeanceService {
   //Creation d'une nouvelle séance
   create(seance: Seance) {
     let registreUrl = this.apiUrl + "create";
-    return this.httpClient.post<Seance>(registreUrl, seance, this.httpOptions1);
+    return this.httpClient.post<Seance>(registreUrl, seance, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getById(id: String) {
     let registreUrl = this.apiUrl + "getById/" + id;
-    return this.httpClient.get<Seance>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Seance>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Recupération de toute les séances 
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
-    return this.httpClient.get<Seance[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //mise à jour d'une séance
   update(seance: Seance) {
     let registreUrl = this.apiUrl + "edit/" + seance._id;
-    return this.httpClient.post<Seance>(registreUrl, seance, this.httpOptions1);
+    return this.httpClient.post<Seance>(registreUrl, seance, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 
@@ -54,22 +54,22 @@ export class SeanceService {
   }
   getAllbyFormateur(id) {
     let registreUrl = this.apiUrl + "getAllbyFormateur/" + id;
-    return this.httpClient.get<Seance[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAllByClasseId(id: string) {
     let registreUrl = this.apiUrl + "getAllByClasseId/" + id;
-    return this.httpClient.get<Seance[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   convertAllPlanified(){
     let registreUrl = this.apiUrl + "convertAllPlanified";
-    return this.httpClient.get<any>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getPlanified() {
     let registreUrl = this.apiUrl + "getPlanified";
-    return this.httpClient.get<Seance[]>(registreUrl, this.httpOptions1);
+    return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

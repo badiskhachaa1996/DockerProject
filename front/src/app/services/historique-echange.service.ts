@@ -17,21 +17,21 @@ export class HistoriqueEchangeService {
   create(histo: historiqueEchange)
   {
     let registreUrl = this.apiUrl + "create";
-    return this.httpClient.post<historiqueEchange>(registreUrl, histo, this.httpOptions1);
+    return this.httpClient.post<historiqueEchange>(registreUrl, histo, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getByID(id:string){
     let url = this.apiUrl + "getById/"+id;
-    return this.httpClient.get<historiqueEchange>(url, this.httpOptions1);
+    return this.httpClient.get<historiqueEchange>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAll(){
     let url = this.apiUrl + "getAll";
-    return this.httpClient.get<historiqueEchange[]>(url, this.httpOptions1);
+    return this.httpClient.get<historiqueEchange[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getAllByAgentID(id:string){
     let url = this.apiUrl + "getAllByAgentID/"+id;
-    return this.httpClient.get<historiqueEchange[]>(url, this.httpOptions1);
+    return this.httpClient.get<historiqueEchange[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

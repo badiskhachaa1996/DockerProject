@@ -110,7 +110,7 @@ export class FirstConnectionComponent implements OnInit {
            });
   
          }),
-         ((error) => { console.error(error), console.error(error) })
+         ((error) => { console.error(error)})
        );
 
 
@@ -123,7 +123,7 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.error(error), console.error(error) })
+      ((error) => { console.error(error)})
     );
 
      //Recuperation de la liste des diplome
@@ -135,7 +135,7 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.log(error), console.log("pb ici") })
+      ((error) => { console.error(error) })
     );
   }
 
