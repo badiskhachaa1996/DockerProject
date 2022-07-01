@@ -138,10 +138,12 @@ export class FormulaireAdmissionComponent implements OnInit {
     { value: "Alternance" }
   ];
 
-  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin: string = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
+
+    console.log(this.form_origin);
 
     if (this.form_origin == "eduhorizons") 
     { 

@@ -1,9 +1,11 @@
 
-<div class="col-12 flex justify-content-center flex-wrap card-container">
+<div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
     <div class="card">
-        <div class="col-12 flex justify-content-center flex-wrap card-container">
-            <img src="assets/images/logo.png" style="width: 250px; height: 100px; text-align: center;">
-        </div>
+        <img *ngIf="form_origin=='eduhorizons'" src="\assets\images\eh.png" alt="logo eduhorizons" style="width: 10%;"class="m-2">
+        <img *ngIf="form_origin=='espic'" src="\assets\images\logoESPIC.png" alt="logo ESPIC" style="width: 10%;" class="m-2">
+        <img *ngIf="form_origin=='adg'" src="\assets\images\logo_adg.png" alt="logo adg" style="width: 10%;" class="m-2">
+        <img *ngIf="form_origin=='estya'" src="\assets\images\logo-estya-fr.png" alt="logo estya" style="width: 10%;"class="m-2">
+
         <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
         <div style="text-align: center;">
             <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
@@ -24,7 +26,7 @@
                         minutes.</small><br>
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/infoPerso.jpg" style="width: 220px; height: 220px; text-align: center;">
+                    <img src="assets/images/infoPerso.jpg" style="width: 220px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
@@ -84,7 +86,7 @@
                                     <span  style="color: red;" class="error" *ngIf="email.errors?.email" style="color: red;">* L'email n'est pas dans le bon format </span>
                                 </div>
                             </div>
-                            <div class="field col-5 md:col-3">
+                            <div class="field col-12 md:col-3">
                                 <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
                                 <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
                                 <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
@@ -92,7 +94,7 @@
                                     <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern">* Seul les chiffres sont acceptés</span>
                                 </div>
                             </div>
-                            <div class="field col-7 md:col-9">
+                            <div class="field col-12 md:col-9">
                                 <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
                                 <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone" formControlName="phone" />
                                 <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
@@ -100,7 +102,7 @@
                                     <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les chiffres sont acceptés</span>
                                 </div>
                             </div>
-                            <div class="field col-5 md:col-3">
+                            <div class="field col-12 md:col-3">
                                 <label For="indicatif">Indicatif WhatsApp</label>
                                 <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif_whatsapp" />
                                 <div *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
@@ -108,7 +110,7 @@
                                     <span style="color: red;" class="error" *ngIf="indicatif_whatsapp.errors?.pattern">* Seul les chiffres sont acceptés</span>
                                 </div>
                             </div>
-                            <div class="field col-7 md:col-9">
+                            <div class="field col-12 md:col-9">
                                 <label For="telephone">Numéro WhatsApp </label>
                                 <input pInputText id="telephone" type="text" placeholder="Entrez votre numéro de téléphone" formControlName="numero_whatsapp" />
                                 <div *ngIf="numero_whatsapp.invalid && (numero_whatsapp.touched || numero_whatsapp.dirty)">
@@ -120,7 +122,7 @@
                     </div>
                     <div>
                         <button pButton type="button" label="Suivant"
-                        style="float: right;" [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null ||
+                        style="float: right;" [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null || 
                         pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid"
                             (click)="nextPage();verifEmailInBD();"></button>
                     </div>
@@ -133,7 +135,7 @@
                         académique.</small><br>
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/formation.jpg" style="width: 280px; height: 220px; text-align: center;">
+                    <img src="assets/images/formation.jpg" style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset legend="Parcours académique et professionnel"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
@@ -176,8 +178,8 @@
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant"
-                            style="float: right;" (click)="nextPage()" [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid || languages.invalid || is_professional_experience.invalid"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid || languages.invalid || is_professional_experience.invalid"
+                            style="float: right;" (click)="nextPage()" ></button>
                     </div>
                 </p-fieldset>
             </div>
@@ -187,7 +189,7 @@
                     <small>Maintenant, l'étape la plus importante, que voulez-vous étudiez avec nous ?</small><br>
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/destination.jpg" style="width: 280px; height: 220px; text-align: center;">
+                    <img src="assets/images/destination.jpg" style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset class="col-12" legend="Choix du pays de destination, du programme et de la formation"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
@@ -241,7 +243,7 @@
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant"[disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "                            
+                        <button pButton type="button" label="Suivant" [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "                           
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
@@ -255,7 +257,7 @@
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <img src="assets/images/accompagnement.jpg"
-                        style="width: 280px; height: 220px; text-align: center;">
+                        style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
@@ -384,7 +386,7 @@
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
                         <button pButton type="button" label="Suivant"
-                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
+                        [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
                                 type="submit" style="float: right;"></button>
                     </div>
                 </p-fieldset>
@@ -394,7 +396,7 @@
                 <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
                     Votre candidature a été envoyé !</h2>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <p>Vos identifiants viennent de vous être envoyés par mail, merci de bien lire les
