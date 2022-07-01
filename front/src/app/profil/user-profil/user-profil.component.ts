@@ -232,7 +232,7 @@ export class UserProfilComponent implements OnInit {
     }, false);
 
     this.token = jwt_decode(localStorage.getItem("token"))
-
+    console.log(this.token)
     if (this.token["role"].includes("user")) {
       this.retour = true;
     }

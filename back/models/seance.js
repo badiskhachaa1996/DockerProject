@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 //Creation du schema de la table seance
 const seanceSchema = mongoose.Schema({
-    classe_id: { type: mongoose.Schema.Types.Mixed, ref: "Classe", required: true },
+    classe_id: { type: [mongoose.Schema.Types.ObjectId], ref: "Classe", required: true },
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
     libelle: { type: String, required: false },
     date_debut: { type: Date, required: true },
