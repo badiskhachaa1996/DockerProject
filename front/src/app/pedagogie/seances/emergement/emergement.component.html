@@ -1,11 +1,9 @@
-<div class="grid"
-    *ngIf="showCanvas || (token.role=='user' || (dataRole!=null && dataRole.type == 'Formateur')) && ((presence==null || showCanvas) || (presence && presence.justificatif))">
-    <div class="col-10 col-offset-1 card shadow-lg ">
+<div class="grid">
+    <div class="col-10 col-offset-1 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div *ngIf="(presence==null && (seance && date> date_debut && date_fin> date)) || showCanvas"
-            class="col-12 my-5 ">
+        <div class="col-12 my-5" *ngIf="showCanvas"> <!--  *ngIf="(presence==null && (seance!=null && date> date_debut && date_fin> date)) || showCanvas" -->
             <p>
-                <canvas #canva width="300" height="100"></canvas>
+                <canvas class="card" #canva width="300" height="100"></canvas>
             </p>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
@@ -54,8 +52,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-12 md:col-6 grid"
-                *ngIf="seance.classe_id && diplomeList">
+            <div class="col-12 md:col-6 grid" *ngIf="seance.classe_id && diplomeList">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Diplome :</strong>
                 </div>
@@ -64,15 +61,16 @@
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="classeList && seance.classe_id">
-                    <div class="col-6 md:col-6">
-                        <strong style="text-align:left !important;">Groupe :</strong>
-                    </div>
-                    <div class="col-6 md:col-6" style="text-align:left !important;">
-                        <span style="color: black;" *ngFor="let cid of seance.classe_id; let index = index">
-                            <span *ngIf="classeList[cid] && classeList[cid].nom && index==0">{{classeList[cid].nom}}</span>
-                            <span *ngIf="classeList[cid] && classeList[cid].nom && index!=0">,<br>{{classeList[cid].nom}}</span>
-                        </span>
-                    </div>
+                <div class="col-6 md:col-6">
+                    <strong style="text-align:left !important;">Groupe :</strong>
+                </div>
+                <div class="col-6 md:col-6" style="text-align:left !important;">
+                    <span style="color: black;" *ngFor="let cid of seance.classe_id; let index = index">
+                        <span *ngIf="classeList[cid] && classeList[cid].nom && index==0">{{classeList[cid].nom}}</span>
+                        <span
+                            *ngIf="classeList[cid] && classeList[cid].nom && index!=0">,<br>{{classeList[cid].nom}}</span>
+                    </span>
+                </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="matiereList && matiereList[seance.matiere_id]">
                 <div class="col-6 md:col-6">

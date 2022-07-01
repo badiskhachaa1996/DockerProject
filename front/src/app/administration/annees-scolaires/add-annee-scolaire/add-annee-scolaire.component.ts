@@ -27,7 +27,7 @@ export class AddAnneeScolaireComponent implements OnInit {
     libelle: new FormControl('', Validators.required),
     etat: new FormControl('', Validators.required),
   })
-  
+
   anneeScolaireFormUpdate: FormGroup = new FormGroup({
     etat: new FormControl('Archivée', Validators.required),
   })
@@ -95,7 +95,7 @@ export class AddAnneeScolaireComponent implements OnInit {
     this.showFormUpdateAnneeScolaire = rowData;
     this.showFormAddAnneeScolaire = false
     let anneeScolaire = this.showFormUpdateAnneeScolaire
-    anneeScolaire._id = this.showFormUpdateAnneeScolaire._id  
+    anneeScolaire._id = this.showFormUpdateAnneeScolaire._id
     this.ASService.activer(anneeScolaire._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: "l'année scolaire a bien été Activé" });
       this.updateList()
@@ -105,11 +105,6 @@ export class AddAnneeScolaireComponent implements OnInit {
       console.error(error)
     });
 
-  }
-
-  rangedatechange($event){
-    var str = String(this.anneeScolaireForm.value.libelle)
-    var splited=str.split(',').join('/');
   }
 
 }

@@ -15,7 +15,7 @@ import { FullCalendar } from 'primeng/fullcalendar';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
@@ -68,32 +68,36 @@ export class EmploiDuTempsComponent implements OnInit {
   }
 
   eventClickFC(col) {
-    this.seanceService.getById(col.event.id).subscribe(rowData => {
-      this.SeanceToUpdate = rowData
+    if (this.type == null) {
+      this.seanceService.getById(col.event.id).subscribe(rowData => {
+        this.SeanceToUpdate = rowData
+        let classeList = [];
+        rowData.classe_id.forEach(classeID => {
+          classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
+        });
+        this.seanceFormUpdate = new FormGroup({
+          classe: new FormControl(classeList),
+          matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
+          libelle: new FormControl(rowData.libelle),
+          date_debut: new FormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
+          date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
+          formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
+          isPresentiel: new FormControl(rowData.isPresentiel),
+          salle_name: new FormControl({ value: rowData.salle_name }),
+          campus_id: new FormControl(this.dropdownCampus[0]),
+          isPlanified: new FormControl(rowData.isPlanified),
+          nbseance: new FormControl(rowData.nbseance)
+        });
+        if (rowData.campus_id && rowData.campus_id != null) {
+          this.seanceFormUpdate.patchValue({ campus_id: { libelle: this.dicCampus[rowData.campus_id].libelle, value: rowData.campus_id } })
+        }
+      })
+    } else {
+      this.router.navigate(['/emergement/' + col.event.id])
+    }
 
-      let classeList = [];
-      rowData.classe_id.forEach(classeID => {
-        classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
-      });
-      this.seanceFormUpdate = new FormGroup({
-        classe: new FormControl(classeList),
-        matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
-        libelle: new FormControl(rowData.libelle),
-        date_debut: new FormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
-        date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
-        formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
-        isPresentiel: new FormControl(rowData.isPresentiel),
-        salle_name: new FormControl({ value: rowData.salle_name }),
-        campus_id: new FormControl(this.dropdownCampus[0]),
-        isPlanified: new FormControl(rowData.isPlanified),
-        nbseance: new FormControl(rowData.nbseance)
-      });
-      if (rowData.campus_id && rowData.campus_id != null) {
-        this.seanceFormUpdate.patchValue({ campus_id: { libelle: this.dicCampus[rowData.campus_id].libelle, value: rowData.campus_id } })
-      }
-    })
   }
-  
+
   get isPresentielUpdated() { return this.seanceFormUpdate.get('isPresentiel'); }
 
   events: any[];
@@ -127,8 +131,8 @@ export class EmploiDuTempsComponent implements OnInit {
   dropdownClasse: any[] = [];
   dicCampus: any = {}
 
-  constructor(public DiplomeService: DiplomeService, public seanceService: SeanceService, public matiereService: MatiereService, public classeService: ClasseService,
-    public formateurService: FormateurService, public CampusService: CampusService, private route: ActivatedRoute, private EtudiantService:EtudiantService, private messageService:MessageService) { }
+  constructor(public DiplomeService: DiplomeService, public seanceService: SeanceService, public matiereService: MatiereService, public classeService: ClasseService, private router: Router,
+    public formateurService: FormateurService, public CampusService: CampusService, private route: ActivatedRoute, private EtudiantService: EtudiantService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.refreshEvent()
@@ -276,11 +280,11 @@ export class EmploiDuTempsComponent implements OnInit {
     let seance: Seance
 
     let classeList = []
-    this.seanceFormUpdate.value.classe.forEach(c=>{
+    this.seanceFormUpdate.value.classe.forEach(c => {
       classeList.push(c.value)
     })
     seance = new Seance(this.SeanceToUpdate._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
-    this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
+      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
       this.seanceFormUpdate.value.classe.forEach(c => {
