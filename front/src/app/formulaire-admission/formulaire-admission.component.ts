@@ -25,7 +25,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
   selector: 'app-formulaire-admission',
   templateUrl: './formulaire-admission.component.html',
   styleUrls: ['./formulaire-admission.component.scss'],
-  
+
 })
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
@@ -50,12 +50,12 @@ export class FormulaireAdmissionComponent implements OnInit {
   token = localStorage.getItem('token')
 
   formSteps: any[] = [
-      "Infos",
-      "Parcours",
-      "Programme",
-      "Partenaires",
-      "Fin",
-    ];
+    "Infos",
+    "Parcours",
+    "Programme",
+    "Partenaires",
+    "Fin",
+  ];
 
   academicList =
     [
@@ -133,15 +133,86 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     ];
 
-    typeFormationDropdown = [
-      { value: "Intiale" },
-      { value: "Alternance" }
-    ];
+  typeFormationDropdown = [
+    { value: "Intiale" },
+    { value: "Alternance" }
+  ];
 
-    form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
+
+    if (this.form_origin == "eduhorizons") 
+    { 
+      this.campusDropdown = [
+        { value: "Campus France - Paris" }, 
+        { value: "Campus France - Montpellier" }, 
+        { value: "Campus Valence - Espagne" }, 
+        { value: "Campus Florence - Italie" }, 
+        { value: "Campus UAE - Dubai" }, 
+        { value: "Campus Tunisie - Tunis" }, 
+        { value: "Campus Montréal - Canada" }, 
+        { value: "Campus Malte " }, 
+        { value: "Campus Congo" }, 
+        { value: "Campus Maroc" }, 
+        { value: "Campus USA" }, 
+        { value: "Campus En ligne" }
+      ]  
+      } else if (this.form_origin == "estya") 
+      { 
+        this.campusDropdown = [
+          { value: "Campus Paris - France" }, 
+          { value: "Campus Montpellier - France" }, 
+          { value: "Campus Brazzaville - Congo" }, 
+          { value: "Campus Rabat - Maroc " }, 
+          { value: "Campus Malte" }, 
+          { value: "Campus En ligne" }
+        ] 
+      } else if (this.form_origin == "adg") 
+      { 
+        this.campusDropdown = [
+          { value: "Campus Paris - France" }, 
+          { value: "Campus Montpellier - France" }, 
+          { value: "Campus En ligne" }
+        ]      
+          
+        this.programeFrDropdown = [
+          { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" }, 
+          { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" }, 
+          { value: "GM - Gouvernant(e) de maison - Diplôme maison" }, 
+          { value: "BTS MCO - Management Commercial Operationnel" }, 
+          { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+          { value: "BTS GPME" }, 
+          { value: "BTS CI - Commerce International" }, 
+          { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" }, 
+          { value: "Chargé de gestion commerciale - Spécialité service commercial" }, 
+          { value: "IA - Ingénieur d'Affaires" }, 
+          { value: "Management et Stratégie d’Entreprise " }, 
+          { value: "BTS SIO - Services Informatiques aux Organisations" }, 
+          { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" }, 
+          { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" }, 
+          { value: "AIS - Administrateur d’Infrastructures Sécurisées" }, 
+          { value: "CDA - Concepteur Développeur d’Applications" }, 
+          { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " }, 
+          { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " }, 
+          { value: "BTS CJN  - Collaborateur Juriste Notarial" }, 
+          { value: "BTS CG - Comptabilité et Gestion" }, 
+          { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" }, 
+          { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" }, 
+          { value: "Coordinateur BIM du Bâtiment" }, 
+          { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" }, 
+          { value: "Formations continues IPERIA" }
+        ] 
+      } else if (this.form_origin == "espic") { 
+        this.campusDropdown = [
+          { value: "Campus France - Paris" }, 
+          { value: "Campus Athène - Grèce" }, 
+          { value: "Campus En ligne" }
+        ] 
+        
+      }
+
 
     this.onInitRegisterForm();
 
@@ -167,16 +238,16 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', ),
+      numero_whatsapp: new FormControl('',),
       indicatif_whatsapp: new FormControl('',),
 
-       //******* Parcours académiques et professionnel *******
+      //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
       statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
       other: new FormControl(''),
       languages: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       is_professional_experience: new FormControl(false, [Validators.required]),
-      professional_experience: new FormControl('', Validators.required), 
+      professional_experience: new FormControl('', Validators.required),
 
       //******* Choix du pays de destination, du programme et de la formation  *******
       campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
@@ -186,7 +257,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-       //****** Notre partenaire d'accompagnement Eduhorizons *******
+      //****** Notre partenaire d'accompagnement Eduhorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -278,7 +349,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
 
-  
+
   loadDiplome() {
 
     for (let diplome of this.diplomes) {
@@ -300,8 +371,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   }
 
 
-   //Methode d'ajout d'un nouveau prospect
-   onAddProspect() {
+  //Methode d'ajout d'un nouveau prospect
+  onAddProspect() {
     //recuperation des données du formulaire
     let civilite = this.RegisterForm.get('civilite').value.value;
     let lastname = this.RegisterForm.get('lastname').value;
