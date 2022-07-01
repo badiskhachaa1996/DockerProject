@@ -25,15 +25,7 @@ export class ExterneComponent implements OnInit {
   constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
 
   ngOnInit(): void {
-    this.token = jwt_decode(localStorage.getItem('token'));
-    this.AuthService.WhatTheRole(this.token.id).subscribe(
-      ((data) => {
-        if(data != null && data.type == "Prospect")
-        {
-          this.router.navigate(['/suivre-ma-preinscription']);
-        }
-      })
-    );
+   
   }
 
   Login() {
@@ -74,7 +66,7 @@ export class ExterneComponent implements OnInit {
               localStorage.setItem("token", data.token)
               if (data.message) {
                 localStorage.setItem("modify", "true")
-                window.location.reload()
+                window.location.reload(); 
               }else{
                 this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
                   this.ss.connected()

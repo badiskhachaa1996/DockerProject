@@ -29,7 +29,7 @@ export class ProspectGuard implements CanActivate {
           else {
             
             console.log("Prospect non authentifier");
-            this.router.navigate(['/#/login']);
+            this.router.navigate(['/login']);
             return false;
           }
       
