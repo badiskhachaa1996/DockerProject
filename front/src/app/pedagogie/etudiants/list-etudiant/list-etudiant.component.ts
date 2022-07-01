@@ -168,6 +168,7 @@ export class ListEtudiantComponent implements OnInit {
       } else {
         this.etudiantService.getAll().subscribe(
           ((responseEtu) => {
+            console.log(responseEtu)
             this.etudiants = [];
             //Recuperation de la liste des users
             this.userService.getAll().subscribe(
@@ -181,7 +182,8 @@ export class ListEtudiantComponent implements OnInit {
                     etu.lastname = this.users[etu.user_id].lastname
                   if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
                     etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
+                  if(etu.classe_id!=null)
+                    this.etudiants.push(etu)
                 })
               }),
               ((error) => { console.error(error); })

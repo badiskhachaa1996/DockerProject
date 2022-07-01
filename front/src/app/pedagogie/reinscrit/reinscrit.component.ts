@@ -19,7 +19,7 @@ export class ReinscritComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   showUploadFile: Etudiant;
-  etudiants: Etudiant[]= [];
+  etudiants: Etudiant[] = [];
   users: User[] = [];
   token;
   imageToShow;
@@ -63,13 +63,36 @@ export class ReinscritComponent implements OnInit {
     email_tuteur: [''],
     phone_tuteur: [''],
     indicatif_tuteur: [''],
-    custom_id:['',Validators.required]
+    custom_id: ['', Validators.required]
   })
 
-  initForm(etudiant:Etudiant){
+  initForm(etudiant: Etudiant) {
+    let s = (etudiant.statut == "Etudiant") ? "Etudiant" : "Alternant";
     this.AssignForm.patchValue({
-      customid:etudiant.custom_id
+      customid: etudiant.custom_id,
+      statut: { value: s },
+      sos_email: etudiant.sos_email,
+      sos_phone: etudiant.sos_phone,
+      nom_rl: etudiant.nom_rl,
+      prenom_rl: etudiant.prenom_rl,
+      phone_rl: etudiant.phone_rl,
+      email_rl: etudiant.email_rl,
     })
+    if (s == "Alternant") {
+      this.AssignForm.patchValue({
+        numero_ine: etudiant.numero_INE,
+        numero_nir: etudiant.numero_NIR,
+        adresse_rl: etudiant.adresse_rl,
+        entreprise: etudiant.entreprise,
+        nom_tuteur: etudiant.nom_tuteur,
+        prenom_tuteur: etudiant.prenom_tuteur,
+        adresse_tuteur: etudiant.adresse_tuteur,
+        email_tuteur: etudiant.email_tuteur,
+        phone_tuteur: etudiant.phone_tuteur,
+        indicatif_tuteur: etudiant.indicatif_tuteur,
+
+      })
+    }
   }
 
   uploadFileForm: FormGroup = new FormGroup({
@@ -77,8 +100,8 @@ export class ReinscritComponent implements OnInit {
   })
 
   groupeList = [];
-  constructor(public etudiantService: EtudiantService, private messageService:MessageService, 
-    private formBuilder: FormBuilder,public classeService:ClasseService, public userService:AuthService) { }
+  constructor(public etudiantService: EtudiantService, private messageService: MessageService,
+    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -107,18 +130,18 @@ export class ReinscritComponent implements OnInit {
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
       this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
-      ,this.showAssignForm.isHandicaped,this.showAssignForm.suivi_handicaped,this.showAssignForm.entreprise
+      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise
     )
     this.etudiantService.update(etd).subscribe(data => {
       this.refreshEtudiant()
-      this.messageService.add({severity:"success",summary:"Etudiant réinscrit avec succès"})
-      this.showAssignForm=null
+      this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+      this.showAssignForm = null
     }, err => {
-      this.messageService.add({severity:"error",summary:"Problème avec la réinscription",detail:err})
+      this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
       console.error(err)
     })
   }
-  refreshEtudiant(){
+  refreshEtudiant() {
     this.etudiantService.getAllWait().subscribe(data => {
       this.etudiants = data
     })
@@ -214,26 +237,23 @@ export class ReinscritComponent implements OnInit {
     );
   }
 
-    //Verification si le prospect est mineure ou majeur
-    onIsMinor(): boolean 
-    {
-      let result: boolean = false;
-  
-      //recuperation de l'année actuelle
-      let anneeActuel = new Date().getFullYear();
-      //recuperation de l'année de naissance du prospect
-      let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
-  
-      //Calcule de la difference
-      if(anneeActuel - anneeDeNaissance >= 18)
-      {
-        result = false;
-      } else
-      {
-        result = true;
-      }
-  
-      return result;
+  //Verification si le prospect est mineure ou majeur
+  onIsMinor(): boolean {
+    let result: boolean = false;
+
+    //recuperation de l'année actuelle
+    let anneeActuel = new Date().getFullYear();
+    //recuperation de l'année de naissance du prospect
+    let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
+
+    //Calcule de la difference
+    if (anneeActuel - anneeDeNaissance >= 18) {
+      result = false;
+    } else {
+      result = true;
     }
+
+    return result;
+  }
 
 }
