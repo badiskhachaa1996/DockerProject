@@ -1,8 +1,9 @@
-<div class="grid">
+<div class="grid" *ngIf="presence==null || presence.justificatif">
     <div class="col-10 col-offset-1 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
         <div class="col-12" *ngIf="showCanvas">
-            <canvas class="col-12" class="card" #canva width="300" height="100"></canvas><br>
+            <i class="pi pi-times" style="font-size: 20px;" (click)="clearCanvas()" aria-hidden="true" pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
+            <canvas class="card" #canva></canvas><br>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
         </div>

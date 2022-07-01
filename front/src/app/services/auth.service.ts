@@ -43,7 +43,8 @@ export class AuthService {
 
   getById(id) {
     let loginUrl = this.apiUrl + "getById/" + id;
-    return this.http.get<any>(loginUrl, this.httpOptions1);
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }
+    );
   }
 
   //Recuperation des infos du user
