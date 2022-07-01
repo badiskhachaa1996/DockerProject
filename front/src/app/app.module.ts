@@ -188,6 +188,7 @@ import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-exam
 import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
+import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -362,7 +363,8 @@ import { FirstConnectionComponent } from './profil/first-connection/first-connec
         AjoutExamenComponent,
         PartenaireInscriptionComponent,
         FirstConnectionComponent,
-        ProspectsComponent
+        ProspectsComponent,
+        ReinscritComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

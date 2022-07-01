@@ -68,7 +68,6 @@ export class EmploiDuTempsComponent implements OnInit {
   }
 
   eventClickFC(col) {
-    console.log(col.event.id)
     this.seanceService.getById(col.event.id).subscribe(rowData => {
       this.SeanceToUpdate = rowData
 
@@ -141,7 +140,7 @@ export class EmploiDuTempsComponent implements OnInit {
           this.dropdownMatiere.push({ nom: item.nom, value: item._id });
         })
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     this.classeService.getAll().subscribe(
@@ -152,7 +151,7 @@ export class EmploiDuTempsComponent implements OnInit {
           this.classes[response[classeID]._id] = response[classeID];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     this.CampusService.getAll().subscribe(
@@ -173,7 +172,7 @@ export class EmploiDuTempsComponent implements OnInit {
           this.formateurs[response[formateurId]._id] = response[formateurId];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
   }

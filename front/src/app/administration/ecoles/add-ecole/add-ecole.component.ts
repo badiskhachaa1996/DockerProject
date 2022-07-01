@@ -62,7 +62,6 @@ export class AddEcoleComponent implements OnInit {
       }, (error) => {
         console.error(error)
       });
-      console.log(this.annees)
     })
     this.anneeScolaireService.getByID(id).subscribe((data) => {
       this.AnneeSelected = data.dataAnneeScolaire
@@ -73,7 +72,6 @@ export class AddEcoleComponent implements OnInit {
 
   saveEcole() {
     let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone)
-    console.log(ecole)
     this.EcoleService.create(ecole).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
       this.ecoles.push(data);

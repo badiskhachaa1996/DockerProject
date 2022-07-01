@@ -50,7 +50,6 @@ export class PresenceService {
   }
   
   addJustificatif(data){
-    console.log(data)
     let registreUrl=this.apiUrl+"addJustificatif/"+data.user_id+"/"+data.seance_id;
     return this.http.post<any>(registreUrl,data,this.httpOptions1);
   }

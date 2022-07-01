@@ -128,7 +128,7 @@ export class NotesComponent implements OnInit {
     //Recuperation de l'année scolaire en cours
     this.anneeScolaireService.getActive().subscribe(
       ((response) => { this.anneScolaire = response; }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des diplomes
@@ -136,7 +136,7 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.diplomes = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des campus
@@ -144,7 +144,7 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.campus = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //recuperation de la liste des classes
@@ -156,7 +156,7 @@ export class NotesComponent implements OnInit {
         })
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des notes
@@ -164,7 +164,7 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.notes = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des étudiants
@@ -185,11 +185,11 @@ export class NotesComponent implements OnInit {
             });
 
           }),
-          ((error) => { console.log(error); })
+          ((error) => { console.error(error); })
         );
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -222,11 +222,11 @@ export class NotesComponent implements OnInit {
 
           }),
           (error) => {
-            console.log(error);
+            console.error(error);
           };
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -345,7 +345,7 @@ export class NotesComponent implements OnInit {
         this.showFormSelectExam = true;
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
   }
@@ -364,7 +364,7 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.notesByClasseBySemestre = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.showTableAddnotes = true;
@@ -401,7 +401,6 @@ export class NotesComponent implements OnInit {
 
           this.noteService.verifNoteByIdBySemestreByExam(etudiant_id, this.semestreSelected, this.examSelected._id).subscribe(
             ((response) => {
-              console.log(response);
               if (response.error) {
 
                 this.messageService.add({
@@ -426,7 +425,7 @@ export class NotesComponent implements OnInit {
                       ((response) => {
                         this.notes = response;
                       }),
-                      ((error) => { console.log(error); })
+                      ((error) => { console.error(error); })
                     );
 
                     this.showFormAddNote = false;
@@ -442,12 +441,12 @@ export class NotesComponent implements OnInit {
                 );
               }
             }),
-            ((error) => { console.log(error); })
+            ((error) => { console.error(error); })
           );
 
         }
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -500,7 +499,7 @@ export class NotesComponent implements OnInit {
                 ((response) => {
                   this.notes = response;
                 }),
-                ((error) => { console.log(error); })
+                ((error) => { console.error(error); })
               );
 
               this.showFormAddNote = false;
@@ -516,7 +515,7 @@ export class NotesComponent implements OnInit {
           );
         }
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -560,7 +559,7 @@ export class NotesComponent implements OnInit {
                 ((response) => {
                   this.notes = response;
                 }),
-                ((error) => { console.log(error); })
+                ((error) => { console.error(error); })
               );
 
               this.showFormUpdateNote = false;
@@ -582,7 +581,7 @@ export class NotesComponent implements OnInit {
           });
         }
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -635,7 +634,7 @@ export class NotesComponent implements OnInit {
       ((response) => {
         this.classeForBGenerateBulletin = response;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -643,13 +642,12 @@ export class NotesComponent implements OnInit {
     this.etudiantService.getAllByClasseId(this.formGenerateBulletin.get('classe').value.value).subscribe(
       ((response) => {
         this.etudiantFromClasse = response;
-        console.log(response)
         this.semestreForGenerateBulletin = this.formGenerateBulletin.get('semestre').value.value;
 
         this.showFormGenerateBulletin = false;
         this.showGenerateBulletin = true;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -698,27 +696,24 @@ export class NotesComponent implements OnInit {
               this.notesForGenerateBulletin.push({ '_id': notefromdb._id, 'note_val': notefromdb.note_val, 'semestre': notefromdb.semestre, 'etudiant_id': notefromdb.etudiant_id, 'examen_id': notefromdb.examen_id, 'appreciation': notefromdb.appreciation, 'moyPromo': sum / cpt, 'maxPromo': Math.max(...noteTab), 'minPromo': Math.min(...noteTab) });
 
             }),
-            ((error) => { console.log(error); })
+            ((error) => { console.error(error); })
           );
 
         });
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
   }
 
   GenerateBulletin2(etudiant_id, semestre) {
     //Par Morgan
-    console.log(etudiant_id, semestre)
     this.notesForGenerateBulletin = []
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      console.log(data)
       data.listMatiere.forEach(matiere => {
         this.notesForGenerateBulletin.push({ 'note_val': data.MoyenneEtudiant[matiere], 'semestre': semestre, 'etudiant_id': etudiant_id, "matiere_id": matiere, /*'appreciation': notefromdb.appreciation,*/ 'moyPromo': this.avg(data.dicMoyMatiere[matiere]), 'maxPromo': Math.max(data.dicMoyMatiere[matiere]), 'minPromo': Math.min(data.dicMoyMatiere[matiere]) });
       })
-      console.log(this.notesForGenerateBulletin)
     }, error => {
       console.error(error)
     })
@@ -766,7 +761,7 @@ export class NotesComponent implements OnInit {
         this.showFormAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
   }
@@ -787,7 +782,7 @@ export class NotesComponent implements OnInit {
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -796,7 +791,6 @@ export class NotesComponent implements OnInit {
   onGetAppreciationGenerale() {
     this.appreciationService.get(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((response) => {
-        console.log(response);
         if (response != null) {
           this.appreciationGenerale = response;
           this.showAppreciationGenerale = true;
@@ -806,7 +800,7 @@ export class NotesComponent implements OnInit {
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 

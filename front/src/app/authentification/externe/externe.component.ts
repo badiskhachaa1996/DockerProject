@@ -58,7 +58,7 @@ export class ExterneComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: "Authentification", detail: "Email ou Mot de passe Incorrect" });
       }
 
-      console.log(error)
+      console.error(error)
     })
 
   }

@@ -117,7 +117,7 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log(this.RegisterForm.value)
+
   }
 
 
@@ -127,7 +127,6 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   
   submitForm() {   
-    console.log("ok")
     if (this.passwordCorrect()) {
       let u = new User(
         null,
@@ -179,11 +178,10 @@ export class PartenaireInscriptionComponent implements OnInit {
       this.PartenaireService.inscription(u, p, c).subscribe(data => {
         this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' }); 
       }, error => {
-        console.log(error)
+        console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
       })
     } else {
-      console.log()
       this.messageService.add({ severity: 'error', summary: 'Mot de passe incorrect', detail: "Les mots de passe ne correspondent pas" });
     }
 

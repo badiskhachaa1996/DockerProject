@@ -22,13 +22,11 @@ export class ProspectGuard implements CanActivate {
 
         if (localStorage.getItem('ProspectConected')) {
 
-            console.log("Prospect Connecté");
             return true;
            
           }
           else {
-            
-            console.log("Prospect non authentifier");
+        
             this.router.navigate(['/#/login']);
             return false;
           }

@@ -60,13 +60,12 @@ export class ListCollaborateurComponent implements OnInit {
     //Recuperation des infos du partenaire
     this.partenaireService.getById(this.activatedRoute.snapshot.params['id']).subscribe(
       ((response) => { this.partenaire = response; }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Initialisation des formulaires
     this.onInitFormAddCommercial();
     this.onInitFormUpdateCommercial();
-    console.log(this.commercialPartenaires);
   }
 
 
@@ -127,7 +126,7 @@ export class ListCollaborateurComponent implements OnInit {
       }),
       ((error) => {
         this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout, veuillez contacter un administrateur' });
-        console.log(error);
+        console.error(error);
       })
     );
   }
@@ -153,11 +152,11 @@ export class ListCollaborateurComponent implements OnInit {
             });
 
           }),
-          ((error) => { console.log(error); })
+          ((error) => { console.error(error); })
         );
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -214,7 +213,7 @@ export class ListCollaborateurComponent implements OnInit {
       }),
       ((error) => {
         this.messageService.add({ severity: 'error', summary: 'Erreur lors de la modification, veuillez contacter un administrateur' });
-        console.log(error);
+        console.error(error);
       })
     );
 
@@ -233,19 +232,19 @@ export class ListCollaborateurComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des commercials
     if (this.idPartenaire) {
       this.commercialPartenaireService.getAllByPartenaireID(this.idPartenaire).subscribe(
         ((response) => { this.commercialPartenaires = response; }),
-        ((error) => { console.log(error); })
+        ((error) => { console.error(error); })
       );
     } else {
       this.commercialPartenaireService.getAll().subscribe(
         ((response) => { this.commercialPartenaires = response; }),
-        ((error) => { console.log(error); })
+        ((error) => { console.error(error); })
       );
     }
 

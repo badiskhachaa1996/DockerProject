@@ -74,7 +74,6 @@ export class AddCampusComponent implements OnInit {
 
   saveCampus() {
     let campus = new Campus(null, this.addcampusForm.value.libelle, this.addcampusForm.value.ecole_id.value, this.addcampusForm.value.ville, this.addcampusForm.value.pays, this.addcampusForm.value.email, this.addcampusForm.value.adresse, this.addcampusForm.value.site)
-    console.log(campus)
     this.campusService.createCampus(campus).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
       this.campuss.push(data)

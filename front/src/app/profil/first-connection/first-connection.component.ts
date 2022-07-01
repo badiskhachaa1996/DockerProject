@@ -95,7 +95,7 @@ export class FirstConnectionComponent implements OnInit {
            });
   
          }),
-         ((error) => { console.log(error), console.log("pb ici") })
+         ((error) => { console.error(error), console.error(error) })
        );
 
 
@@ -108,7 +108,7 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.log(error), console.log("pb ici") })
+      ((error) => { console.error(error), console.error(error) })
     );
   }
 
@@ -197,7 +197,6 @@ export class FirstConnectionComponent implements OnInit {
           null,
           this.RegisterForm.value.entreprise,
         )
-        console.log(etudiant);
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           localStorage.removeItem('modify')

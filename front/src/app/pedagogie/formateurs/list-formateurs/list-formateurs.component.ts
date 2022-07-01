@@ -88,7 +88,7 @@ export class ListFormateursComponent implements OnInit {
 
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
-      (data) => { this.formateurs = data; console.log(data) },
+      (data) => { this.formateurs = data;},
       (error) => { console.error(error) }
     );
 
@@ -158,7 +158,6 @@ export class ListFormateursComponent implements OnInit {
           })
         }
         if (this.formateurToUpdate.tuesday_available) {
-          console.log(this.formateurToUpdate.tuesday_available)
           this.formUpdateFormateur.patchValue({
             tuesday_available: this.formateurToUpdate.tuesday_available.state,
             tuesday_h_debut: this.formateurToUpdate.tuesday_available.h_debut,

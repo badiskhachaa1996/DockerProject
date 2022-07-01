@@ -108,7 +108,7 @@ export class ListEtudiantComponent implements OnInit {
           this.entreprises[entreprise._id] = entreprise;
         })
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
@@ -142,10 +142,8 @@ export class ListEtudiantComponent implements OnInit {
         this.code = data.data.code_partenaire
       }
       if (this.code) {
-        console.log(this.code)
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            console.log(responseEtu)
             this.etudiants = [];
             //Recuperation de la liste des users
             this.userService.getAll().subscribe(
@@ -264,7 +262,6 @@ export class ListEtudiantComponent implements OnInit {
     let classe_id = this.formUpdateEtudiant.get('classe_id')?.value.value;
     let statut = this.formUpdateEtudiant.get('statut')?.value.value;
     let date_naissance = this.formUpdateEtudiant.get('date_naissance')?.value;
-    console.log(date_naissance)
     let nationalite = this.formUpdateEtudiant.get('nationalite')?.value.value;
 
     let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
@@ -305,7 +302,7 @@ export class ListEtudiantComponent implements OnInit {
         this.showFormUpdateEtudiant = false;
         //this.resetForms();
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -327,7 +324,7 @@ export class ListEtudiantComponent implements OnInit {
           entreprise: this.etudiantToUpdate.entreprise,
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -337,7 +334,6 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   FileUploadPC(event) {
-    console.log("FileUploadPC")
     if (event && event.length > 0 && this.uploadUser != null) {
       const formData = new FormData();
       formData.append('id', this.uploadUser.user_id)

@@ -25,7 +25,6 @@ app.get("/getAll", (req, res, next) => {
 
 //Recupère la liste d'un formateur via un id formateur
 app.get("/getById/:id", (req, res, next) => {
-    console.log(req.params.id)
     Formateur.findById(req.params.id)
         .then((formateurFromDb) => { res.status(200).send(formateurFromDb) })
         .catch((error) => { res.status(400).json({ error: "Impossible de recuperer ce formateur via son id " + error }) });
@@ -54,12 +53,12 @@ app.get("/getAllUser", (req, res, next) => {
                 })
                 res.status(200).send(dicformateur)
             }).catch((error) => {
-                console.log(error)
+                console.error(error)
                 res.status(400).json({ error: "Impossible de recuperer les users" + error.message })
             });
         })
         .catch((error) => {
-            console.log(error)
+            console.error(error)
             res.status(400).json({ error: "Impossible de recuperer les users" + error.message })
         });
 })
@@ -132,13 +131,12 @@ app.post("/create", (req, res, next) => {
 
 //Modification d'un formateur via son id formateur
 app.post('/updateById/:id', (req, res, next) => {
-    console.log(req.body)
     Formateur.findOneAndUpdate({ _id: req.params.id },
         {
             ...req.body
         }, { new: true }, (err, formateurUpdated) => {
             if (err) {
-                console.log(err)
+                console.error(err)
                 res.send(err)
             }
             else {
@@ -197,7 +195,6 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
             }
             console.log("SEND TO", mailList)
         });
-        console.log("DONE")
         res.status(201).send(mailList)
     })
 });
@@ -215,7 +212,7 @@ app.get("/getFiles/:id", (req, res) => {
             });
         }
         res.status(200).send(filesTosend);
-    }, (error) => (console.log(error)))
+    }, (error) => (console.error(error)))
 })
 
 app.get("/downloadFile/:id/:filename", (req, res) => {
@@ -245,8 +242,6 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
-
-        console.log(req.body.document)
         if (!fs.existsSync('storage/formateur/' + req.body.id + '/')) {
             fs.mkdirSync('storage/formateur/' + req.body.id + '/', { recursive: true })
         }
@@ -260,8 +255,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
 
 app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
-
-    console.log(req.params.id)
     const file = req.file;
     if (!file) {
         const error = new Error('No File')

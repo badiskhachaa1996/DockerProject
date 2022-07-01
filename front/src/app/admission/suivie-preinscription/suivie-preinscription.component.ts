@@ -71,7 +71,6 @@ export class SuiviePreinscriptionComponent implements OnInit {
     this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
 
       (data) => {
-        console.log(data)
         this.ListDocuments = data
 
         for (let doc of this.ListDocuments) {
@@ -102,7 +101,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
         }
       },
-      (error) => { console.log(error) }
+      (error) => { console.error(error) }
     );
 
 
@@ -122,7 +121,6 @@ export class SuiviePreinscriptionComponent implements OnInit {
     formData.append('id', this.ProspectConnected._id);
     formData.append('document', doc);
     formData.append('file', event.files[0]);
-    console.log(this.ProspectConnected._id)
     this.admissionService.uploadFile(formData, this.ProspectConnected._id).subscribe(res => {
       this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
       if (doc.includes('diplome')) {

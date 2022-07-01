@@ -80,7 +80,7 @@ app.use('/', function (req, res, next) {
         if (token && token.id && token.role) {
             User.findOne({ _id: token.id, role: token.role }, (err, user) => {
                 if (err) {
-                    console.log(err)
+                    console.error(err)
                     res.status(403).send("Accès non autorisé")
                 }
                 else if (user) {
@@ -190,7 +190,6 @@ io.on("connection", (socket) => {
 
     //Si un agent répond à un ticket --> refresh les messages du ticket de l'user et le ticket (à cause du statut) + AllTickets du service et des admins
     socket.on('NewMessageByAgent', (data) => {
-        console.log("SOC NMBA")
         //Refresh du message de l'user et des tickets (à cause du statut)
         io.to(data.user_id).emit('refreshMessage')
         //Refresh du 3ème tableau du service (à cause du Tableau)

@@ -72,7 +72,7 @@ export class ExamenComponent implements OnInit {
         this.examens = response;
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -98,11 +98,11 @@ export class ExamenComponent implements OnInit {
             });
           }),
           (error) => {
-            console.log(error);
+            console.error(error);
           };
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -115,7 +115,7 @@ export class ExamenComponent implements OnInit {
           this.matieres[matiere._id] = matiere;
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -127,7 +127,7 @@ export class ExamenComponent implements OnInit {
           this.classes[classe._id] = classe;
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Initialisation des formulaires
@@ -188,7 +188,7 @@ export class ExamenComponent implements OnInit {
             this.examens = responseE;
           },
           (error) => {
-            console.log(error);
+            console.error(error);
           }
         );
 
@@ -246,7 +246,7 @@ export class ExamenComponent implements OnInit {
         });
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
   }

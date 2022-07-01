@@ -59,7 +59,6 @@ export class FirstInscriptionService {
 
   }
   downloadFile(id,filename:string){
-    console.log("filename: ",filename)
     let registreUrl=this.apiUrl+"downloadFile/"+id+"/"+filename;
     return this.httpClient.post<any>(registreUrl,filename,this.httpOptions1);
   }

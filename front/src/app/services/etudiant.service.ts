@@ -27,6 +27,11 @@ export class EtudiantService {
       let registreUrl = this.apiUrl + "getAll";
       return this.httpClient.get<any[]>(registreUrl, this.httpOptions1);
     }
+
+    getAllWait(){
+      let registreUrl = this.apiUrl + "getAllWait";
+      return this.httpClient.get<any[]>(registreUrl, this.httpOptions1);
+    }
   
     //Recuperation d'un etudiant via son identifiant
     getById(id: string)
@@ -46,7 +51,7 @@ export class EtudiantService {
     update(etudiant: Etudiant)
     {
       let registreUrl = this.apiUrl + "update";
-      return this.httpClient.put<Etudiant>(registreUrl, etudiant, this.httpOptions1);
+      return this.httpClient.post<Etudiant>(registreUrl, etudiant, this.httpOptions1);
     }
 
     //recuperation des étudiants via un id de classe

@@ -46,7 +46,7 @@ export class SeanceService {
     let seanceFromDb = this.getAll();
     seanceFromDb.subscribe(
       (data) => { listeSeance = data; },
-      (error) => { console.log(error) }
+      (error) => { console.error(error) }
     );
 
     return listeSeance;

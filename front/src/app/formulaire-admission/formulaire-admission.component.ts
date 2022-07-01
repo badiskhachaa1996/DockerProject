@@ -25,7 +25,7 @@ import { AdmissionService } from '../services/admission.service';
   selector: 'app-formulaire-admission',
   templateUrl: './formulaire-admission.component.html',
   styleUrls: ['./formulaire-admission.component.scss'],
-  
+
 })
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
@@ -134,12 +134,12 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     ];
 
-    typeFormationDropdown = [
-      { value: "Intiale" },
-      { value: "Alternance" }
-    ];
+  typeFormationDropdown = [
+    { value: "Intiale" },
+    { value: "Alternance" }
+  ];
 
-    form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
@@ -168,16 +168,16 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', ),
+      numero_whatsapp: new FormControl('',),
       indicatif_whatsapp: new FormControl('',),
 
-       //******* Parcours académiques et professionnel *******
+      //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
       statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
       other: new FormControl(''),
       languages: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       is_professional_experience: new FormControl(false, [Validators.required]),
-      professional_experience: new FormControl('', Validators.required), 
+      professional_experience: new FormControl('', Validators.required),
 
       //******* Choix du pays de destination, du programme et de la formation  *******
       campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
@@ -187,7 +187,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-       //****** Notre partenaire d'accompagnement Eduhorizons *******
+      //****** Notre partenaire d'accompagnement Eduhorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -220,15 +220,13 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   verifEmailInBD() {
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
-      console.log(dataMail)
       if (dataMail) {
         this.emailExist = true
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
       }
     },
       (error) => {
-        console.log(this.emailExist + '151')
-        console.log("Email unique")
+        console.error(error)
       })
   }
 
@@ -283,13 +281,11 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
 
-  
+
   loadDiplome() {
 
     for (let diplome of this.diplomes) {
       if (diplome.campus_id = this.campus) {
-
-        console.log(diplome)
         this.diplomesOfCampus.push(diplome)
       }
 
@@ -298,15 +294,14 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.diplomeService.getAllByCampus(this.RegisterForm.value.campus._id).subscribe(
       (data) => {
         this.diplomesOfCampus = data;
-        console.log(this.diplomesOfCampus)
       },
-      (error) => { console.log(error) }
+      (error) => { console.error(error) }
     );
   }
 
 
-   //Methode d'ajout d'un nouveau prospect
-   onAddProspect() {
+  //Methode d'ajout d'un nouveau prospect
+  onAddProspect() {
     //recuperation des données du formulaire
     let civilite = this.RegisterForm.get('civilite').value.value;
     let lastname = this.RegisterForm.get('lastname').value;

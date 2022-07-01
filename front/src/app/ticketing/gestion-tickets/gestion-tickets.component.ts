@@ -356,19 +356,19 @@ export class GestionTicketsComponent implements OnInit {
     // Récuperation du nombre du ticket en file d'attente
     this.TicketService.getCountWaiting().subscribe(
       ((response) => {this.numberTicketWaiting = response; } ),
-      ((error) => { console.log(error) } )
+      ((error) => { console.error(error) } )
     );
 
     // Récupération du nombre de ticket en cours de traitement
     this.TicketService.getCountTraitement().subscribe(
       ((response) => { this.numberTicketCours = response; }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Récupération du nombre de ticket traités
     this.TicketService.getCountTraite().subscribe(
       ((response) => { this.numberTicketTraite = response; }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
 

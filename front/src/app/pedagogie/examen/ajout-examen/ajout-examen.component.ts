@@ -71,11 +71,11 @@ export class AjoutExamenComponent implements OnInit {
             });
           }),
           (error) => {
-            console.log(error);
+            console.error(error);
           };
       },
       (error) => {
-        console.log(error);
+        console.error(error);
       }
     );
 
@@ -88,7 +88,7 @@ export class AjoutExamenComponent implements OnInit {
           this.matieres[matiere._id] = matiere;
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
 
@@ -100,7 +100,7 @@ export class AjoutExamenComponent implements OnInit {
           this.classes[classe._id] = classe;
         });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Initialisation des formulaires

@@ -199,7 +199,6 @@ app.post("/updateById/:id", (req, res) => {
 
 app.post("/ValidateEmail/:email", (req, res) => {
 
-    console.log(req)
     User.findOneAndUpdate({ email: req.params.email },
         {
             verifedEmail: true,
@@ -251,7 +250,7 @@ app.post("/updatePreInscrit/:id", (req, res) => {
                                 date_naissance: req.body.inscription.date_naissance
                             }, (err3, InscriptionUpdate) => {
                                 if (errInscription) {
-                                    console.log(errInscription)
+                                    console.error(errInscription)
                                     res.send(errInscription)
                                 }
                                 else {
@@ -499,14 +498,12 @@ app.get("/WhatTheRole/:id", (req, res) => {
                         }
                         else {
                             CommercialPartenaire.findOne({ user_id: id }).then(p => {
-                                console.log(p)
                                 if (p && p.length != 0) {
                                     res.status(200).send({ data: p, type: "Commercial" })
                                 }
 
                                 else {
                                     Prospect.findOne({ user_id: id }).then(p => {
-                                        console.log(p)
                                         if (p && p.length != 0) {
                                             let Ptoken = jwt.sign({ p }, 'ptoken')
                                             res.status(200).send({ data: p, type: "Prospect", Ptoken })
@@ -539,7 +536,7 @@ app.post("/verifyUserPassword", (req, res) => {
                     }
                         res.status(200).json({ success: 'OK' });
                   })
-                  .catch((error) => console.log(error));
+                  .catch((error) => console.error(error));
                             
         })
         .catch((error) => {res.status(500).send("Impossible de modifier votre mot de passe, veuillez contacter un administrateur")})

@@ -91,12 +91,12 @@ export class AddEtudiantComponent implements OnInit {
           this.entreprises[entreprise._id] = entreprise;
         })
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormAddEtudiant();
-    
+
   }
 
 
@@ -126,10 +126,8 @@ export class AddEtudiantComponent implements OnInit {
         this.code = data.data.code_partenaire
       }
       if (this.code) {
-        console.log(this.code)
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            console.log(responseEtu)
             this.etudiants = [];
             //Recuperation de la liste des users
             this.userService.getAll().subscribe(
@@ -198,7 +196,7 @@ export class AddEtudiantComponent implements OnInit {
       nationalite: [this.nationList[0], Validators.required],
       date_naissance: [null, Validators.required],
       isAlternant: [false],
-     
+
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
       adresse_tuteur: [""],
@@ -230,7 +228,7 @@ export class AddEtudiantComponent implements OnInit {
     this.formAddEtudiant.reset()
     this.formAddEtudiant.patchValue({
       civilite: this.civiliteList[0], statut: this.statutList[0],
-      pays_adresse : this.paysList[0],
+      pays_adresse: this.paysList[0],
       nationalite: this.nationList[0], date_naissance: null
     })
   }
@@ -301,16 +299,15 @@ export class AddEtudiantComponent implements OnInit {
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
-   
+
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, '', 'user', null, null, civilite, null, null, null, '', pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(null, '', classe_id, statut, nationalite, date_naissance, null, null, null, null, custom_id,
-      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value,  nom_tuteur, prenom_tuteur
-      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped,entreprise);
-    console.log(newEtudiant, newUser)
+      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value, nom_tuteur, prenom_tuteur
+      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise);
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
@@ -321,7 +318,7 @@ export class AddEtudiantComponent implements OnInit {
         this.resetAddEtudiant();
       }),
       ((error) => {
-        console.log(error)
+        console.error(error)
         this.messageService.add({ severity: 'error', summary: error.error });
       })
     );
@@ -344,7 +341,6 @@ export class AddEtudiantComponent implements OnInit {
   }
 
   FileUploadPC(event) {
-    console.log("FileUploadPC")
     if (event && event.length > 0 && this.uploadUser != null) {
       const formData = new FormData();
       formData.append('id', this.uploadUser.user_id)
@@ -429,7 +425,6 @@ export class AddEtudiantComponent implements OnInit {
 
   generateCustomCode() {
     let code = this.generateCode(this.formAddEtudiant.value.lastname)
-    console.log(code)
     this.formAddEtudiant.patchValue({ custom_id: code })
   }
 

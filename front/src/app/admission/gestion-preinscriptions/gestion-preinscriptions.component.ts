@@ -140,7 +140,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
   expandRow(prospect: Prospect) {
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
-        console.log(data)
         this.ListDocuments = data
         this.ListPiped = []
         data.forEach(doc => {
@@ -183,7 +182,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
                   this.prospects.push(p)
                 })
               }),
-              ((error) => { console.log(error); })
+              ((error) => { console.error(error); })
             );
           } else {
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
@@ -203,7 +202,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
                   this.prospects.push(p)
                 })
               }),
-              ((error) => { console.log(error); })
+              ((error) => { console.error(error); })
             );
           }
 
@@ -228,12 +227,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
                   }
                 })
               }),
-              ((error) => { console.log(error); })
+              ((error) => { console.error(error); })
             );
           }
         }
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -262,7 +261,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
   }
 
   changeStateBtn() {
-    console.log(this.changeStateForm.value.statut.value)
     let p = {
       _id: this.inscriptionSelected._id,
       statut_dossier: this.changeStateForm.value.statut.value,
@@ -321,8 +319,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
   }
 
   FileUpload(event) {
-    console.log(event)
-    console.log(this.uploadFileForm.value.typeDoc)
     if (this.uploadFileForm.value.typeDoc != null && event.files != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
       const formData = new FormData();

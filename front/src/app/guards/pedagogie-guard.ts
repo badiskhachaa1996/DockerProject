@@ -26,7 +26,6 @@ export class PedagogieGuardService implements CanActivate {
     let serviceName
 
     if (role == 'Admin') {
-      console.log(role)
       console.log("accés autorisé")
       return true;
     }

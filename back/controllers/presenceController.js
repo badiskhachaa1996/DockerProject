@@ -76,7 +76,7 @@ app.post("/create", (req, res) => {
     presence.save((err, data) => {
         //Sauvegarde de la signature si il y en a une
         if (err) {
-            console.log(err)
+            console.error(err)
             res.send(err)
         } else {
             res.send(data);
@@ -141,12 +141,11 @@ app.post("/addSignature/:id", (req, res) => {
 
 //Mets un étudiant en présent
 app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
-    console.log(req.params)
+    
     Presence.findOneAndUpdate({ user_id: req.params.user_id,seance_id:req.params.seance_id },
         {
             justificatif: true
         }, { new: true }, (err, data) => {
-            console.log(data)
             if (err) {
                 res.send(err)
             }
@@ -276,12 +275,11 @@ app.get("/getPDF/:id", (req, res) => {
                     })
                     fs.writeFileSync("storage/"+pdfName, buff, function (err) {
                         if (err) {
-                            console.log("ERROR DANS WRITEFILE")
+                            console.error(err)
                         }
                     })
                     let base64PDF = fs.readFileSync("storage/"+pdfName, { encoding: 'base64' }, (err) => {
                         if (err) {
-                            console.log("ERROR DANS READFILESYNV")
                             console.error(err);
                         }
                     });

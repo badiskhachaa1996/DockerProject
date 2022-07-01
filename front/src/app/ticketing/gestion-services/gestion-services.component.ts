@@ -58,7 +58,7 @@ export class GestionServicesComponent implements OnInit {
       ((response) => {
         this.ServiceService.getAll().subscribe(
           ((data) => { this.services = data; this.showFormAddService = false;}),
-          ((error) => { console.log(error) })
+          ((error) => { console.error(error) })
         );
       }), 
       ((error) => { this.messageService.add({ severity: 'error', summary: 'Gestion de service', detail: 'Impossible d\'ajouter votre service.' }); })

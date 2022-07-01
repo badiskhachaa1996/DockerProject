@@ -17,11 +17,7 @@ compteStatut:boolean=false;
   constructor(private router: Router, private admissionService: AdmissionService,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-
-  
-
     this.admissionService.ValidateEmail(this.EmailToValidate).subscribe((result)=>{
-      console.log("Compte Activé");
       this.compteStatut=true;
     })
    

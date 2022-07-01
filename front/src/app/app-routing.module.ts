@@ -77,6 +77,7 @@ import { EtudiantGuardService } from './guards/etudiant-guard';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { ProspectGuard } from './guards/prospect-guard';
+import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 
 
 @NgModule({
@@ -136,6 +137,7 @@ import { ProspectGuard } from './guards/prospect-guard';
                     { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'prospects', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },

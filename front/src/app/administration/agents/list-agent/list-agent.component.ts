@@ -53,22 +53,12 @@ export class ListAgentComponent implements OnInit {
     let token = null
     try {
       token = jwt_decode(localStorage.getItem("token"))
-      console.log(token)
     } catch (e) {
       token = null
       console.error(e)
     }
-    if (token == null) {
-      console.log("hay")
-      this.router.navigate(["/login"])
-    } else if (token["role"] != "Admin") {
-      console.log("hii")
-      this.messageService.add({ severity: 'error', summary: 'Pas la permission', detail: "Vous n'avez pas la permission d'accèder à la liste du staff" });
-      this.router.navigate(["/ticket/suivi"])
-    }
     this.authService.getAllAgent().subscribe((users) => {
       this.tabUser = users;
-      console.log(this.tabUser)
     })
     this.servService.getAll().subscribe((services) => {
       services.forEach(serv => {

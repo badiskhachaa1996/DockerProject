@@ -41,14 +41,14 @@ export class MatieresComponent implements OnInit {
     , private ClasseService: ClasseService) { }
 
   ngOnInit(): void {
-    
+
     //Initialisation du formulaire de mdification d'une matière
     this.onInitFormModifMatiere();
 
     //recuperation de la liste des Matières
     this.matiereService.getAll().subscribe(
       ((response) => { this.matieres = response; }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     this.diplomeService.getAll().subscribe(data => {
@@ -86,7 +86,7 @@ export class MatieresComponent implements OnInit {
 
   resetAddMatiere() {
     this.formAddMatiere.reset()
-    this.formAddMatiere.patchValue({ formation_id: this.formationList[0], volume: 0,classe_id: this.classeList[0], seance_max: 0 })
+    this.formAddMatiere.patchValue({ formation_id: this.formationList[0], volume: 0, classe_id: this.classeList[0], seance_max: 0 })
   }
 
   //methode d'ajout d'une matiere
@@ -106,33 +106,31 @@ export class MatieresComponent implements OnInit {
 
         //Création de la matière
         let matiere = new Matiere(
-          null, 
-          nom, 
-          formation_id, 
+          null,
+          nom,
+          formation_id,
           volume,
           abbrv,
           classe_id,
           seance_max,
-          );
+        );
+        //Envoi vers la BD
+        this.matiereService.create(matiere).subscribe(
+          ((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Ajout de matière', detail: 'Cette matière a bien été ajoutée' });
+            //recuperation de la liste des Matières
+            this.matiereService.getAll().subscribe(
+              ((responseM) => { this.matieres = responseM; }),
+              ((error) => { console.error(error) })
+            );
+          }),
+          ((error) => { console.error(error) })
+        );
 
-          console.log(matiere);
-          //Envoi vers la BD
-          this.matiereService.create(matiere).subscribe(
-            ((response) => {
-              this.messageService.add({ severity: 'success', summary: 'Ajout de matière', detail: 'Cette matière a bien été ajoutée' });
-              //recuperation de la liste des Matières
-              this.matiereService.getAll().subscribe(
-                ((responseM) => { this.matieres = responseM; }),
-                ((error) => { console.log(error) })
-              );
-            }),
-            ((error) => { console.log(error) })
-          );
-
-       }),
-      ((error) => { console.log(error); })
+      }),
+      ((error) => { console.error(error); })
     );
-    
+
 
     this.onInitFormAddMatiere();
     this.showFormAddMatiere = false;
@@ -142,7 +140,7 @@ export class MatieresComponent implements OnInit {
 
   //Methode de recuperation de la matière à modifier
   onGetbyId(rowData: Matiere) {
-    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init,abbrv:rowData.abbrv,seance_max:rowData.seance_max });
+    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max });
     this.diplomeService.getById(rowData.formation_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ formation_id: data._id });
@@ -186,14 +184,14 @@ export class MatieresComponent implements OnInit {
         let formation_id = response.diplome_id;
 
         this.matiereToUpdate = new Matiere(
-                  this.idMatiereToUpdate, 
-                  nom, 
-                  formation_id, 
-                  volume,
-                  abbrv,
-                  classe_id,
-                  seance_max,
-                  ); 
+          this.idMatiereToUpdate,
+          nom,
+          formation_id,
+          volume,
+          abbrv,
+          classe_id,
+          seance_max,
+        );
 
 
         this.matiereService.updateById(this.matiereToUpdate).subscribe(
@@ -202,15 +200,15 @@ export class MatieresComponent implements OnInit {
             //recuperation de la liste des Matières
             this.matiereService.getAll().subscribe(
               ((responseM) => { this.matieres = responseM; }),
-              ((error) => { console.log(error) })
+              ((error) => { console.error(error) })
             );
           }),
-          ((error) => { console.log(error) })
+          ((error) => { console.error(error) })
         );
 
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.formModifMatiere.reset();
