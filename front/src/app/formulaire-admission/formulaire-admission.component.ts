@@ -143,8 +143,6 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    console.log(this.form_origin);
-
     if (this.form_origin == "eduhorizons") 
     { 
       this.campusDropdown = [
