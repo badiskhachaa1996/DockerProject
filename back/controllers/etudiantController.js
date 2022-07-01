@@ -115,8 +115,10 @@ app.post("/createfromPreinscrit", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAll", (req, res, next) => {
-    Etudiant.find()
-        .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
+    Etudiant.find({ classe_id: { $ne: null } })
+        .then((etudiantsFromDb) => {
+            res.status(200).send(etudiantsFromDb);
+        })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
@@ -294,7 +296,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find().then(result => {
+    Etudiant.find({ classe_id: { $ne: null } }).then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
