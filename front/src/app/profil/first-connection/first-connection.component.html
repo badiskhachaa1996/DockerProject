@@ -49,9 +49,9 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Classe :</label>
-                    <p-dropdown formControlName="classe_id" [options]="dropdownClasse" optionLabel="nom"
-                    filterPlaceholder="Groupe" filter="true" emptyFilterMessage="Pas de groupe trouvé" ></p-dropdown>
+                    <label>Formation desiré :</label>
+                    <p-dropdown formControlName="diplome" [options]="programeFrDropdown" optionLabel="value"
+                    filterPlaceholder="Diplome" filter="true" emptyFilterMessage="Pas de diplome trouvé" ></p-dropdown>
                     <!-- <p-dropdown *ngIf="dropdownClasse && dropdownClasse[0]!=null" formControlName="classe_id"
                         [options]="dropdownClasse" optionLabel="libelle"
                         emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe" filter="true">
