@@ -18,7 +18,6 @@ export class FormAdmissionGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> | boolean | UrlTree {
 
-        console.log(route.params)
         if (route.params.ecole.toLowerCase() =="espic" || route.params.ecole.toLowerCase() == "estya" || route.params.ecole.toLowerCase() == "eduhorizons" || route.params.ecole.toLowerCase() == "adg") {
             return true
         }
