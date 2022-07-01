@@ -107,4 +107,9 @@ export class AddAnneeScolaireComponent implements OnInit {
 
   }
 
+  rangedatechange($event){
+    var str = String(this.anneeScolaireForm.value.libelle)
+    var splited=str.split(',').join('/');
+  }
+
 }
