@@ -7,16 +7,16 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageModule } from 'primeng/message';
-import { AnneeScolaireService } from '../services/annee-scolaire.service';
-import { CampusService } from '../services/campus.service';
-import { DiplomeService } from '../services/diplome.service';
+import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
+import { CampusService } from 'src/app/services/campus.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 
-import { Inscription } from '../models/Inscription';
-import { FirstInscriptionService } from '../services/first-inscription.service';
+import { Inscription } from 'src/app/models/Inscription';
+import { FirstInscriptionService } from 'src/app/services/first-inscription.service';
 import { MessageService } from 'primeng/api';
-import { Diplome } from '../models/Diplome';
-import { Prospect } from '../models/Prospect';
-import { AdmissionService } from '../services/admission.service';
+import { Diplome } from 'src/app/models/Diplome';
+import { Prospect } from 'src/app/models/Prospect';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 
 
@@ -25,7 +25,7 @@ import { AdmissionService } from '../services/admission.service';
   selector: 'app-formulaire-admission',
   templateUrl: './formulaire-admission.component.html',
   styleUrls: ['./formulaire-admission.component.scss'],
-
+  
 })
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
@@ -41,9 +41,6 @@ export class FormulaireAdmissionComponent implements OnInit {
   civiliteList = environment.civilite;
   diplomes = [];
   diplomesOfCampus = [];
-  programeFrDropdown = environment.programeFrDropdown;
-  programEnDropdown = environment.programEnDropdown;
-  ADGprogrameFrDropdown = environment.ADGprogrameFrDropdown;
   userConnected: User;
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 50
@@ -52,13 +49,12 @@ export class FormulaireAdmissionComponent implements OnInit {
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   token = localStorage.getItem('token')
 
-  itemsFormulaire =
-    [
-      { label: "Infos", etat: true },
-      { label: "Parcours", etat: false },
-      { label: "Programme", etat: false },
-      { label: "Partenaires", etat: false },
-      { label: "Dernière étape", etat: false },
+  formSteps: any[] = [
+      "Infos",
+      "Parcours",
+      "Programme",
+      "Partenaires",
+      "Fin",
     ];
 
   academicList =
@@ -96,12 +92,53 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
     ];
 
-  typeFormationDropdown = [
-    { value: "Intiale" },
-    { value: "Alternance" }
-  ];
+  programeFrDropdown =
+    [
+      { value: "BTS MCO - Management Commercial Opérationnel" },
+      { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+      { value: "BTS CG - Comptabilité et Gestion" },
+      { value: "RNCP CI - Commerce International" },
+      { value: "RNCP NTC - Négociateur Technico-Commercial" },
+      { value: "RNCP - Chargé de Développement Marketing et Commercial" },
+      { value: "RNCP - IA - Ingénieur d'Affaires" },
+      { value: "RNCP Management et Commerce International" },
+      { value: "BTS Services Informatique aux Organisations - SISR" },
+      { value: "BTS Services Informatique aux Organisations - SLAM" },
+      { value: "RNCP TSSR - Technicien Supérieur Systèmes et Réseaux" },
+      { value: "RNCP DWWM - Développeur Web & Web Mobile" },
+      { value: "RNCP AIS - Administrateur d'Infrastructures Sécurisées" },
+      { value: "RNCP CDA - Concepteur Développeur d'Applications" },
+      { value: "RNCP MPI Big Data - Expert IT – Applications Intelligentes & Big Data" },
+      { value: "RNCP MPI CyberSecurité - Expert IT – Cybersécurité et Haute Disponibilité" },
+      { value: "BTS Collaborateur Juriste Notarial" },
+      { value: "RNCP - Assistant Ressources Humaines" },
+      { value: "RNCP- Management des Ressources Humaines" },
+      { value: "BTS SPSSS - Services et Prestations des Secteurs Sanitaire et Social" },
+      { value: "RNCP - BIM modeleur du Bâtiement" },
+      { value: "RNCP - BIM modeleur du Coordinateur BIM du Bâtiment" },
+    ];
 
-  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  programEnDropdown =
+    [
+      { value: "Level 3 - Foundation Diploma for Higher Education Studies" },
+      { value: "Level 4 - Business Management " },
+      { value: "Level 4 - Information Technology " },
+      { value: "Level 4 - Tourism and Hospitality Management" },
+      { value: "Level 4 - Health and Social care Management" },
+      { value: "Level 5 - Business Management" },
+      { value: "Level 5 - Information Technology" },
+      { value: "Level 7 - Project Management" },
+      { value: "Level 7 - Tourism and Hospitality Management" },
+      { value: "Level 7 - Health and Social care Management", }
+
+    ];
+
+    typeFormationDropdown = [
+      { value: "Intiale" },
+      { value: "Alternance" }
+    ];
+
+    form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
@@ -130,26 +167,26 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('',),
+      numero_whatsapp: new FormControl('', ),
       indicatif_whatsapp: new FormControl('',),
 
-      //******* Parcours académiques et professionnel *******
+       //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
       statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
       other: new FormControl(''),
       languages: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       is_professional_experience: new FormControl(false, [Validators.required]),
-      professional_experience: new FormControl('', Validators.required),
+      professional_experience: new FormControl('', Validators.required), 
 
       //******* Choix du pays de destination, du programme et de la formation  *******
       campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
-      campusChoix2: new FormControl(this.campusDropdown[0], [Validators.required]),
-      campusChoix3: new FormControl(this.campusDropdown[0], [Validators.required]),
+      campusChoix2: new FormControl(this.campusDropdown[1], [Validators.required]),
+      campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
       formation: new FormControl(this.programeFrDropdown[0], [Validators.required]),
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-      //****** Notre partenaire d'accompagnement Eduhorizons *******
+       //****** Notre partenaire d'accompagnement Eduhorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -169,26 +206,24 @@ export class FormulaireAdmissionComponent implements OnInit {
   };
 
   nextPage() {
-    this.itemsFormulaire[this.ActiveIndex].etat = false
     this.ActiveIndex++
-    this.itemsFormulaire[this.ActiveIndex].etat = true
   }
 
   previousPage() {
-    this.itemsFormulaire[this.ActiveIndex].etat = false
     this.ActiveIndex--
-    this.itemsFormulaire[this.ActiveIndex].etat = true
   }
 
   verifEmailInBD() {
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
+      console.log(dataMail)
       if (dataMail) {
         this.emailExist = true
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
       }
     },
       (error) => {
-        console.error(error)
+        console.log(this.emailExist + '151')
+        console.log("Email unique")
       })
   }
 
@@ -243,11 +278,13 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
 
-
+  
   loadDiplome() {
 
     for (let diplome of this.diplomes) {
       if (diplome.campus_id = this.campus) {
+
+        console.log(diplome)
         this.diplomesOfCampus.push(diplome)
       }
 
@@ -256,14 +293,15 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.diplomeService.getAllByCampus(this.RegisterForm.value.campus._id).subscribe(
       (data) => {
         this.diplomesOfCampus = data;
+        console.log(this.diplomesOfCampus)
       },
-      (error) => { console.error(error) }
+      (error) => { console.log(error) }
     );
   }
 
 
-  //Methode d'ajout d'un nouveau prospect
-  onAddProspect() {
+   //Methode d'ajout d'un nouveau prospect
+   onAddProspect() {
     //recuperation des données du formulaire
     let civilite = this.RegisterForm.get('civilite').value.value;
     let lastname = this.RegisterForm.get('lastname').value;

@@ -6,7 +6,13 @@
                 obligatoires</small><br>
         </div>
         <br>
-        <p-steps [model]="itemsFormulaire" [readonly]="false"></p-steps><br>
+        
+        <p-timeline [value]="formSteps" layout="horizontal">
+            <ng-template pTemplate="content" let-event>
+                {{event}}
+            </ng-template>
+        </p-timeline>
+
         <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
             <div *ngIf="ActiveIndex==0">
                 <div style="text-align: center;">
@@ -17,7 +23,7 @@
                     <img src="assets/images/infoPerso.jpg" style="width: 220px; height: 220px; text-align: center;">
                 </div>
                 <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
-                    <div class="grid" style="color: black;font-weight:normal">
+                    <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-2">
                                 <label For="civilite">Civilité<span style="color: red;"> * </span></label>
@@ -77,22 +83,22 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="field col-6 md:col-4">
+                            <div class="field col-5 md:col-3">
                                 <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
                                 <input pInputText id="indicatif" type="text" placeholder="+33"
                                     formControlName="indicatif" />
                             </div>
-                            <div class="field col-6 md:col-8">
+                            <div class="field col-7 md:col-9">
                                 <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
                                 <input pInputText id="telephone" type="text"
                                     placeholder="Entrez votre numéro de téléphone" formControlName="phone" />
                             </div>
-                            <div class="field col-6 md:col-4">
+                            <div class="field col-5 md:col-3">
                                 <label For="indicatif">Indicatif WhatsApp</label>
                                 <input pInputText id="indicatif" type="text" placeholder="+33"
                                     formControlName="indicatif_whatsapp" />
                             </div>
-                            <div class="field col-6 md:col-8">
+                            <div class="field col-7 md:col-9">
                                 <label For="telephone">Numéro WhatsApp </label>
                                 <input pInputText id="telephone" type="text"
                                     placeholder="Entrez votre numéro de téléphone" formControlName="numero_whatsapp" />
@@ -101,8 +107,8 @@
                     </div>
                     <div>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null || 
-                        pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid" style="float: right;"
+                        style="float: right;" [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null ||
+                        pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid"
                             (click)="nextPage();verifEmailInBD();"></button>
                     </div>
                 </p-fieldset>
@@ -118,39 +124,38 @@
                 </div>
                 <p-fieldset legend="Parcours académique et professionnel"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
-                    <div class="grid" style="color: black;font-weight:normal">
+                    <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-5">
                                 <label>Dernier niveau académique validé <span style="color: red;"> * </span></label>
                                 <p-dropdown [options]="academicList" optionLabel="value"
                                     placeholder="Choissisez un niveau" formControlName="validated_academic_level">
                                 </p-dropdown>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-7">
                                 <label>Votre statut actuel <span style="color: red;"> * </span></label>
                                 <p-dropdown [options]="statutList" optionLabel="value"
                                     placeholder="Choissisez votre statut" formControlName="statut_actuel">
                                 </p-dropdown>
                             </div>
-                            <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.statut_actuel.value=='Autre'">
+                            <div class="field col-12" *ngIf="RegisterForm.value.statut_actuel.value=='Autre'">
                                 <label For="autre">Si "Autre", veuillez mentionner <span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="autre" type="text" placeholder="Autre" formControlName="other" />
+                                <textarea pInputTextarea id="autre" type="text" placeholder="Autre" formControlName="other" ></textarea>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12">
                                 <label For="langue">Quelles sont les langues que vous maitrisez <span
                                         style="color: red;"> * </span></label>
-                                <input pInputText id="langue" type="text" placeholder="Langues maîtrisées" formControlName="languages"
-                                    pInputText>
+                                <textarea pInputTextarea id="langue" type="text" placeholder="Langues maîtrisées" formControlName="languages"></textarea>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-2">
                                 <label>Avez-vous des expériences professionnelles ?:<span style="color:red">
                                         *</span></label><br>
                                 <p-toggleButton onLabel="Oui" offLabel="Non"
                                     formControlName="is_professional_experience">
                                 </p-toggleButton>
                             </div>
-                            <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.is_professional_experience">
+                            <div class="field col-12 md:col-10" *ngIf="RegisterForm.value.is_professional_experience">
                                 <label For="oui">Si <span style="font-weight: bold;">Oui</span>, décrivez nous vos
                                     expériences <span style="color: red;"> *
                                     </span></label>
@@ -163,8 +168,7 @@
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid || languages.invalid || is_professional_experience.invalid"
-                            style="float: right;" (click)="nextPage()"></button>
+                            style="float: right;" (click)="nextPage()" [disabled]="validated_academic_level.invalid || statut_actuel.invalid || other.invalid || languages.invalid || is_professional_experience.invalid"></button>
                     </div>
                 </p-fieldset>
             </div>
@@ -176,70 +180,59 @@
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <img src="assets/images/destination.jpg" style="width: 280px; height: 220px; text-align: center;">
                 </div>
-                <p-fieldset legend="Choix du pays de destination, du programme et de la formation"
+                <p-fieldset class="col-12" legend="Choix du pays de destination, du programme et de la formation"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
-                    <div class="grid" style="color: black;font-weight:normal">
+                    <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12 md:col-12">
-                                <p-fieldset legend="Veuillez choisir votre campus de destination">
-                                    <div class="mb-2">
-                                        <p-dropdown [options]="campusDropdown" optionLabel="value"
-                                            formControlName="campusChoix1" [style]="{'width':'260px'}">
-                                        </p-dropdown>
-                                    </div>
-                                    <div class="mb-2">
-                                        <p-dropdown [options]="campusDropdown" optionLabel="value"
-                                            formControlName="campusChoix2" [style]="{'width':'260px'}">
-                                        </p-dropdown>
-                                    </div>
-                                    <div class="mb-2">
-                                        <p-dropdown [options]="campusDropdown" optionLabel="value"
-                                            formControlName="campusChoix3" [style]="{'width':'260px'}">
-                                        </p-dropdown>
-                                    </div>
-                                    <small style="color: red; font-weight: bold" *ngIf="VerifCampus()">Les trois
-                                        choix doivent être différents </small>
-                                </p-fieldset>
+                            <div class="field col-12">
+                                <h6>Veuillez choisir votre campus de destination <span style="color: red;">*</span> </h6>
+                                <p-message severity="info" text="Le 1er choix sera le plus pertinents"></p-message>
                             </div>
-                            <div class="field col-12 md:col-12">
-                                <label>Veuillez choisir un programme <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="programList" optionLabel="value"
-                                    placeholder="Choissisez un programme" formControlName="programme">
+                            
+                            <div class="field col-12 md:col-4">
+                                <p-dropdown [options]="campusDropdown" optionLabel="value"
+                                    formControlName="campusChoix1">
                                 </p-dropdown>
                             </div>
-                            <div *ngIf="RegisterForm.value.programme.value=='Programme Anglais'">
-                                <div class="field col-12 md:col-12">
-                                    <label For="formation">Liste des formations du programme anglais <span
-                                            style="color: red;"> *
-                                        </span></label>
-                                    <p-dropdown [options]="programEnDropdown" optionLabel="value"
-                                    pInputText id="formation"  formControlName="formation">
-                                    </p-dropdown>
-                                </div>
+                            <div class="field col-12 md:col-4">
+                                <p-dropdown [options]="campusDropdown" optionLabel="value"
+                                    formControlName="campusChoix2">
+                                </p-dropdown>
                             </div>
-                            <div *ngIf="RegisterForm.value.programme.value=='Programme Français'">
-                                <div class="field col-12 md:col-12">
-                                    <label For="programme_fr">Liste des formations du programme français <span
-                                            style="color: red;"> * </span></label>
-                                    <p-dropdown [options]="programeFrDropdown" optionLabel="value"
-                                    pInputText id="programme_fr" formControlName="formation">
-                                    </p-dropdown>
-                                </div>
+                            <div class="field col-12 md:col-4">
+                                <p-dropdown [options]="campusDropdown" optionLabel="value"
+                                    formControlName="campusChoix3">
+                                </p-dropdown>
+                            </div>
+
+                            <div class="field col-12" *ngIf="VerifCampus()">
+                                <p-message severity="error" text="Vous ne pouvez pas choisir le même campus plusieurs fois"></p-message>
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label>Choix du programme <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="programList" optionLabel="value" formControlName="programme"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-8" *ngIf="RegisterForm.value.programme.value=='Programme Anglais'">
+                                <label For="formation">Choix de la formation <span style="color: red;"> *</span></label>
+                                <p-dropdown [options]="programEnDropdown" optionLabel="value" formControlName="formation"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-8" *ngIf="RegisterForm.value.programme.value=='Programme Français'">
+                                <label For="programme_fr">Choix de la formation <span
+                                        style="color: red;"> * </span></label>
+                                <p-dropdown [options]="programeFrDropdown" optionLabel="value" formControlName="formation"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label For="rythme">Rythme de la formation <span style="color: red;"> *
                                     </span></label>
-                                <p-dropdown [options]="typeFormationDropdown" optionLabel="value"
-                                pInputText id="rythme" formControlName="rythme_formation">
-                                </p-dropdown>
+                                <p-dropdown [options]="typeFormationDropdown" optionLabel="value" formControlName="rythme_formation"></p-dropdown>
                             </div>
                         </div>
                     </div>
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant"
-                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "
+                        <button pButton type="button" label="Suivant"[disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "                            
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
@@ -260,84 +253,79 @@
                     <div class="grid" style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-12">
-                                <p-fieldset legend="De quels services avez-vous besoins ?">
-                                    <div>
-                                        <input type="checkbox" formControlName="servicesEh_4" name="Logement">
-                                        <label style="font-size: 14px;" for="Logement">Logement</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" formControlName="servicesEh_1"
-                                            name="Orientation et accompagnement à l'admission">
-                                        <label style="font-size: 14px;"
-                                            for="Orientation et accompagnement à l'admission">Orientation et
-                                            accompagnement
-                                            à l'admission</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" formControlName="servicesEh_2" name="Prépa
-                                            internationale : formation d'orientation de 3 mois">
-                                        <label style="font-size: 14px;"
-                                            for="Prépa internationale : formation d'orientation de 3 mois">Prépa
-                                            internationale : formation d'orientation de 3 mois</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" formControlName="servicesEh_3"
-                                            name="Accompagnement dossier consulaire">
-                                        <label style="font-size: 14px;"
-                                            for="Accompagnement dossier consulaire">Accompagnement dossier visa</label>
-                                    </div>
-                                    <div>
-                                        <input type="checkbox" formControlName="servicesEh_5"
-                                            name="Attestation de virement irrévocable (AVI)">
-                                        <label style="font-size: 14px;"
-                                            for="Attestation de virement irrévocable (AVI)">Attestation de virement
-                                            irrévocable (AVI)</label>
-                                    </div>
-                                </p-fieldset>
+                                <h6>De quels services avez-vous besoin ?</h6>
+                                <div>
+                                    <input type="checkbox" formControlName="servicesEh_4" name="Logement">
+                                    <label style="font-size: 14px;" for="Logement">Logement</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" formControlName="servicesEh_1"
+                                        name="Orientation et accompagnement à l'admission">
+                                    <label style="font-size: 14px;"
+                                        for="Orientation et accompagnement à l'admission">Orientation et
+                                        accompagnement
+                                        à l'admission</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" formControlName="servicesEh_2" name="Prépa
+                                        internationale : formation d'orientation de 3 mois">
+                                    <label style="font-size: 14px;"
+                                        for="Prépa internationale : formation d'orientation de 3 mois">Prépa
+                                        internationale : formation d'orientation de 3 mois</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" formControlName="servicesEh_3"
+                                        name="Accompagnement dossier consulaire">
+                                    <label style="font-size: 14px;"
+                                        for="Accompagnement dossier consulaire">Accompagnement dossier visa</label>
+                                </div>
+                                <div>
+                                    <input type="checkbox" formControlName="servicesEh_5"
+                                        name="Attestation de virement irrévocable (AVI)">
+                                    <label style="font-size: 14px;"
+                                        for="Attestation de virement irrévocable (AVI)">Attestation de virement
+                                        irrévocable (AVI)</label>
+                                </div>
                             </div>
                             <br>
-                            <div class="field col-12 md:col-6">
-                                <label For="garant">Avez-vous un garant financier ? <span style="color: red;"> *
-                                    </span></label>
-                                <p-toggleButton pInputText id="garant"  onLabel="Oui" offLabel="Non" formControlName="isGarant">
-                                </p-toggleButton>
+                            <div class="field col-12 md:col-4">
+                                <label For="garant">Avez-vous un garant financier ?</label>
+                                <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="isGarant"></p-toggleButton>
                             </div>
-                            <div *ngIf="RegisterForm.value.isGarant">
-                                <div class="field col-12 md:col-12">
-                                    <label For="nom_garant">Nom du garant <span style="color: red;"> *
-                                        </span></label>
-                                    <input pInputText id="nom_garant" type="text"
-                                        placeholder="Expériences professionnel" formControlName="nomGarant" />
-                                    <div *ngIf="nomGarant.invalid && (nomGarant.touched || nomGarant.dirty)">
-                                        <span *ngIf="nomGarant.errors?.pattern" style="color: red;">
-                                            Le nom n'est pas dans le bon format
-                                        </span>
-                                    </div>
+                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant">
+                                <label For="nom_garant">Nom du garant <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="nom_garant" type="text"
+                                    placeholder="Nom du garant" formControlName="nomGarant" />
+                                <div *ngIf="nomGarant.invalid && (nomGarant.touched || nomGarant.dirty)">
+                                    <span *ngIf="nomGarant.errors?.pattern" style="color: red;">
+                                        Le nom n'est pas dans le bon format
+                                    </span>
                                 </div>
-                                <div class="field col-12 md:col-12">
-                                    <label For="prenom_garant">Prénom du garant <span style="color: red;"> *
-                                        </span></label>
-                                    <input pInputText id="prenom_garant" type="text"
-                                        placeholder="Expériences professionnel" formControlName="prenomGarant" />
-                                    <div *ngIf="prenomGarant.invalid && (prenomGarant.touched || prenomGarant.dirty)">
-                                        <span *ngIf="prenomGarant.errors?.pattern" style="color: red;">
-                                            Le prénom n'est pas dans le bon format
-                                        </span>
-                                    </div>
+                            </div>
+                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant">
+                                <label For="prenom_garant">Prénom du garant <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="prenom_garant" type="text"
+                                    placeholder="Prénom du garant" formControlName="prenomGarant" />
+                                <div *ngIf="prenomGarant.invalid && (prenomGarant.touched || prenomGarant.dirty)">
+                                    <span *ngIf="prenomGarant.errors?.pattern" style="color: red;">
+                                        Le prénom n'est pas dans le bon format
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         <div class="col-10 col-offset-1 flex justify-content-center flex-wrap card-container grid row">
-                            <button pButton type="button" href="assets/document/catalogue_edu_horizon.pdf"
-                                download="Catalogue Edu Horizon.pdf" label="Télécharger la brochure"></button>
+                            <a href="assets/document/catalogue_edu_horizon.pdf"
+                                download="Catalogue Edu Horizon.pdf" title="Cliquez pour télécharger" style="border: 2px solid #6361F1; border-radius: 30px; padding: 10px; background-color: #6361F1; color: white;">Télécharger la brochure</a>
                         </div>
                     </div>
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="isGarant.invalid || nomGarant.invalid || prenomGarant.invalid"
-                            style="float: right;" (click)="nextPage()"></button>
+                        [disabled]="isGarant.invalid || nomGarant.invalid || prenomGarant.invalid"
+                        style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
             </div>
@@ -357,8 +345,7 @@
                                 <label For="agence">Etes-vous passé par une agence d'orientation ? <span
                                         style="color: red;"> *
                                     </span></label>
-                                <p-toggleButton pInputText id="agence" onLabel="Oui" offLabel="Non" formControlName="agence">
-                                </p-toggleButton>
+                                <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="agence"></p-toggleButton>
                             </div>
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                 <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
@@ -366,35 +353,30 @@
                                 <input pInputText id="oui_agence" type="text"
                                     placeholder="Expériences professionnel" />
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-12">
                                 <label For="code_commercial">Code commercial<span style="color: red;"> * </span></label>
                                 <input pInputText id="code_commercial" type="text"
                                     placeholder="Expériences professionnel" formControlName="nomAgence" />
                             </div>
                             <div class="ui-g-12 ui-md-12">
-                                <p-fieldset legend="Acceptez-vous que vos données soient
-                                utiliseés dans le cadre de votre accompagnement et dans le traitement de
-                                votre demande ?">
-                                    <div>
-                                        <p-radioButton value=true name="donneePerso" formControlName="donneePerso">
-                                        </p-radioButton>
-                                        <label for="oui">Oui</label>
-                                    </div>
-                                    <div>
-                                        <p-radioButton value=false name="donneePerso" formControlName="donneePerso">
-                                        </p-radioButton>
-                                        <label for="non">Non</label>
-                                    </div>
-                                </p-fieldset>
+                                <h6>Acceptez-vous que vos données soient utiliseés dans le cadre de votre accompagnement et dans le traitement de votre demande ?</h6>
+                                <div>
+                                    <p-radioButton value=true name="donneePerso" formControlName="donneePerso"></p-radioButton>
+                                    <label for="oui"> Oui</label>
+                                </div>
+                                <div style="margin-top: 2px;">
+                                    <p-radioButton value=false name="donneePerso" formControlName="donneePerso"></p-radioButton>
+                                    <label for="non"> Non</label>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div><br>
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
-                            type="submit" style="float: right;"></button>
+                                [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
+                                type="submit" style="float: right;"></button>
                     </div>
                 </p-fieldset>
             </div>
