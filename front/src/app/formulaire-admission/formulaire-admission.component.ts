@@ -138,7 +138,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     { value: "Alternance" }
   ];
 
-  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin: string = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
@@ -236,10 +236,10 @@ export class FormulaireAdmissionComponent implements OnInit {
       nationalite: new FormControl(this.nationList[0], [Validators.required]),
       pays_adresse: new FormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('',),
-      indicatif_whatsapp: new FormControl('',),
+      numero_whatsapp: new FormControl('',[Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+      indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
 
       //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),

@@ -79,6 +79,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { ProspectGuard } from './guards/prospect-guard';
 import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { LoginGuard } from './guards/login-guard';
+import { FormAdmissionGuard } from './guards/formAdmission-guard';
 
 
 @NgModule({
@@ -154,8 +155,8 @@ import { LoginGuard } from './guards/login-guard';
 
                 ],
             },
-            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent },
-            { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
+            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent,  canActivate: [FormAdmissionGuard] },
+            { path: 'partenaireInscription', component: PartenaireInscriptionComponent },   
             { path: 'login', component: ExterneComponent , canActivate : [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate : [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
