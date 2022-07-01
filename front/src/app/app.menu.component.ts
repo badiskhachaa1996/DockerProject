@@ -52,20 +52,32 @@ export class AppMenuComponent implements OnInit {
                 else if (data != null && this.token.role == "user" && data.type != "Formateur" && data.type != "Commercial" && data.type != "Partenaire" && data.type != 'Prospect') 
                 {
                     //Etudiant
-                    this.model = [
-                        {
-                            label: 'Ticketing',
-                            items: [
-                                {label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket']},
-                            ]
-                        },
-                        {
-                            label: "Pédagogie", 
-                            items: [
-                                { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + data.data.classe_id },
-                            ]
-                        }
-                    ];
+                    if(data.data.classe_id)
+                    {
+                        this.model = [
+                            {
+                                label: 'Ticketing',
+                                items: [
+                                    {label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket']},
+                                ]
+                            },
+                            {
+                                label: "Pédagogie", 
+                                items: [
+                                    { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + data.data.classe_id },
+                                ]
+                            }
+                        ];
+                    } else {
+                        this.model = [
+                            {
+                                label: 'Ticketing',
+                                items: [
+                                    {label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket']},
+                                ]
+                            }
+                        ];
+                    }
                 }
 
                 else if (data != null && (this.token.role == "Responsable" || this.token.role == "Agent") && data.type != "Commercial" && data.type != "Partenaire") 
