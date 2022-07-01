@@ -20,7 +20,7 @@
                         <a class="font-medium no-underline ml-2 text-right cursor-pointer"
                             style="color: var(--primary-color)" href="mailto:support@estya.com">Mot de passe oublié ?</a>
                     </div>
-                    <button pButton pRipple label="Se connecter via votre adresse email" icon="pi pi-envelope" class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                    <button pButton pRipple label="Se connecter via votre adresse email" icon="pi pi-envelope" (click)="Login()"class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
                     <br><br>
                     <p style="text-align: center;">Ou</p>
                     <button pButton pRipple label="Se connecter via Microsoft" icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-3 text-xl p-button-primary p-button-raised"></button>        

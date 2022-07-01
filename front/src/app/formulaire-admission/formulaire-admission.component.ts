@@ -288,13 +288,15 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
       console.log(dataMail)
       if (dataMail) {
-        this.emailExist = true
+        this.emailExist = true    
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        return true
       }
     },
       (error) => {
         console.log(this.emailExist + '151')
         console.log("Email unique")
+        return false
       })
   }
 
