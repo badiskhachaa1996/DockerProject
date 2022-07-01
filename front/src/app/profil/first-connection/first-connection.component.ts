@@ -12,6 +12,8 @@ import { Etudiant } from 'src/app/models/Etudiant';
 import { EventEmitterService } from 'src/app/services/event-emitter.service';
 import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { Diplome } from 'src/app/models/Diplome';
 
 @Component({
   selector: 'app-first-connection',
@@ -20,14 +22,17 @@ import { Entreprise } from 'src/app/models/Entreprise';
 })
 export class FirstConnectionComponent implements OnInit {
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService:DiplomeService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
   dropdownEntreprise: any[] = [];
+  dropdownDiplome: any[] = [];
   userConnected: User;
   nationList = environment.nationalites;
   paysList = environment.pays;
+  programeFrDropdown = environment.programeFrDropdown;
+  programEnDropdown = environment.programEnDropdown;
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -40,6 +45,7 @@ export class FirstConnectionComponent implements OnInit {
   classes: Classe[] = [];
   entreprises : Entreprise[] = [];
   RegisterForm: FormGroup;
+  diplomes: Diplome[] = [];
 
   onInitRegisterForm() {
     this.RegisterForm = this.formBuilder.group({
@@ -58,7 +64,8 @@ export class FirstConnectionComponent implements OnInit {
       classe_id: new FormControl(this.dropdownClasse[0]),
       nationalite: new FormControl(this.nationList[0]),
       date_naissance: new FormControl(""),
-      entreprise: new FormControl("")
+      entreprise: new FormControl(""),
+      diplome : new FormControl(this.programeFrDropdown[0]),
     });
   }
 
@@ -78,6 +85,9 @@ export class FirstConnectionComponent implements OnInit {
           localStorage.removeItem("modify")
           this.router.navigateByUrl('/ticket/suivi')
         }
+        if (this.userConnected.email.endsWith("@adgeducation.com")) {
+          this.programeFrDropdown = environment.ADGprogrameFrDropdown;
+        }
       })
     } else {
       this.router.navigateByUrl('/login')
@@ -86,6 +96,8 @@ export class FirstConnectionComponent implements OnInit {
   }
 
   onGetAllClasses() {
+
+
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
          ((response) => {
@@ -109,6 +121,18 @@ export class FirstConnectionComponent implements OnInit {
 
       }),
       ((error) => { console.error(error), console.error(error) })
+    );
+
+     //Recuperation de la liste des diplome
+     this.diplomeService.getAll().subscribe(
+      ((response) => {
+        response.forEach(item => {
+          this.dropdownDiplome.push({ nom: item.titre, value: item._id });
+          this.diplomes[item._id] = item;
+        });
+
+      }),
+      ((error) => { console.log(error), console.log("pb ici") })
     );
   }
 
@@ -167,7 +191,7 @@ export class FirstConnectionComponent implements OnInit {
         let etudiant = new Etudiant(
           null,
           this.userConnected._id,
-          this.RegisterForm.get('classe_id')?.value.value,
+          null,
           "Etudiant", //statut
           this.RegisterForm.value.nationalite.value,
           this.RegisterForm.value.date_naissance,
@@ -196,6 +220,7 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           this.RegisterForm.value.entreprise,
+          this.RegisterForm.value.diplome.value
         )
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
@@ -207,6 +232,8 @@ export class FirstConnectionComponent implements OnInit {
         }, (error) => {
           if (error.status == 500) {
             //Bad Request (Champ non fourni)
+            console.log("problème ici")
+            console.error(error)
             this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
           } else {
             console.error(error)
@@ -240,5 +267,6 @@ export class FirstConnectionComponent implements OnInit {
   get nationalite() { return this.RegisterForm.get('nationalite').value; }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
   get entreprise() { return this.RegisterForm.get('entreprise'); }
+  get diplome() { return this.RegisterForm.get('diplome');}
 
 }

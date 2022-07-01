@@ -1,10 +1,5 @@
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
-import { environment } from 'src/environments/environment';
-import { io } from 'socket.io-client';
-import { EventEmitterService } from '../services/event-emitter.service';
 import { Injectable } from "@angular/core";
 import { ServService } from "../services/service.service";
 
@@ -14,10 +9,9 @@ import { ServService } from "../services/service.service";
 
 export class ProspectGuard implements CanActivate {
  
-    constructor(private router: Router,
-        private serv: ServService) { }
+    constructor(private router: Router) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(): boolean {
 
 
         if (localStorage.getItem('ProspectConected')) {
@@ -26,8 +20,9 @@ export class ProspectGuard implements CanActivate {
            
           }
           else {
-        
-            this.router.navigate(['/#/login']);
+            
+            console.log("Prospect non authentifier");
+            this.router.navigate(['/login']);
             return false;
           }
       
