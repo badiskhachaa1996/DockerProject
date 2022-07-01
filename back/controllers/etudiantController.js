@@ -33,8 +33,7 @@ app.post("/create", (req, res, next) => {
         {
             ...etudiantData
         });
-
-    //Creation du nouveau user
+        console.log(etudiant, etudiantData)  //Creation du nouveau user
     let userData = req.body.newUser;
     let user = new User(
         {
@@ -48,13 +47,14 @@ app.post("/create", (req, res, next) => {
             role: userData.role,
             service_id: userData.service_id,
             type: "Etudiant",
-            entreprise: userData.entreprise,
+            
             pays_adresse: userData.pays_adresse,
             ville_adresse: userData.ville_adresse,
             rue_adresse: userData.rue_adresse,
             numero_adresse: userData.numero_adresse,
             postal_adresse: userData.postal_adresse,
             date_creation: new Date()
+            
         });
 
     //Verification de l'existence de l'Utilisateur
@@ -68,6 +68,7 @@ app.post("/create", (req, res, next) => {
                         } else {
                             etudiant.user_id = userFromDb._id;
                             etudiant.save()
+                                
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
 
