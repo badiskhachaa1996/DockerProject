@@ -1,5 +1,9 @@
-<div class="col-12">
+
+<div class="col-12 flex justify-content-center flex-wrap card-container">
     <div class="card">
+        <div class="col-12 flex justify-content-center flex-wrap card-container">
+            <img src="assets/images/logo.png" style="width: 250px; height: 100px; text-align: center;">
+        </div>
         <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
         <div style="text-align: center;">
             <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
@@ -21,35 +25,34 @@
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-2">
                                 <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="civiliteList" optionLabel="value"
-                                    placeholder="Choissisez une civilité" formControlName="civilite">
-                                </p-dropdown>
+                                <p-dropdown [options]="civiliteList" optionLabel="value"placeholder="Choissisez une civilité" formControlName="civilite"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-5">
                                 <label For="nom">Nom <span style="color: red;"> * </span></label>
-                                <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
-                                    formControlName="lastname" />
+                                <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="lastname" />
                                 <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                    <span *ngIf="lastname.errors?.pattern" style="color: red;">
-                                        Le nom n'est pas dans le bon format
-                                    </span>
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.pattern">* Seul les lettres sont acceptés</span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-5">
                                 <label For="prenom">Prénom <span style="color: red;"> * </span></label>
-                                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
-                                    formControlName="firstname" />
+                                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom" formControlName="firstname" />
                                 <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                    <span *ngIf="firstname.errors?.pattern" style="color: red;">
-                                        Le prénom n'est pas dans le bon format
-                                    </span>
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le prénom est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les lettres sont acceptés.</span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="date_naissance">Date de naissance <span style="color: red;"> *
-                                    </span></label>
-                                <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_naissance">
-                                </p-calendar>
+                                <label For="date_naissance">Date de naissance <span style="color: red;"> * </span></label>
+                                <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy"
+                                [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
+                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                [yearRange]="rangeYear"></p-calendar>
+                                <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.required">* La date de naissance est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.pattern">* Le format ne correspond pas à une date dd/MM/YYYY.</span>
+                                </div>  
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
@@ -63,39 +66,49 @@
                                     optionLabel="value" emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
                                     filter="true"></p-dropdown>
                                 <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
-                                    <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
-                                        Le pays de résidence n'est pas dans le bon format
-                                    </span>
+                                    <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.required" style="color: red;">* Le pays est obligatoire </span>
+                                    <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.pattern" style="color: red;">* Le pays de résidence n'est pas dans le bon format </span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label>Adresse mail :<span style="color:red"> *</span></label>
                                 <input type="email" formControlName="email" placeholder="Email" pInputText>
                                 <div *ngIf="email.invalid && (email.touched || email.dirty)">
-                                    <span *ngIf="email.errors?.pattern" style="color: red;">
-                                        L'email n'est pas dans le bon format
-                                    </span>
+                                    <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'email est obligatoire </span>
+                                    <span  style="color: red;" class="error" *ngIf="email.errors?.email" style="color: red;">* L'email n'est pas dans le bon format </span>
                                 </div>
                             </div>
                             <div class="field col-6 md:col-4">
                                 <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
-                                <input pInputText id="indicatif" type="text" placeholder="+33"
-                                    formControlName="indicatif" />
+                                <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
+                                <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* L'indicatif est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern">* Seul les chiffres sont acceptés</span>
+                                </div>
                             </div>
                             <div class="field col-6 md:col-8">
                                 <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
-                                <input pInputText id="telephone" type="text"
-                                    placeholder="Entrez votre numéro de téléphone" formControlName="phone" />
+                                <input pInputText id="telephone" type="number" placeholder="Entrez votre numéro de téléphone" formControlName="phone" />
+                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le téléphone est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les chiffres sont acceptés</span>
+                                </div>
                             </div>
                             <div class="field col-6 md:col-4">
                                 <label For="indicatif">Indicatif WhatsApp</label>
-                                <input pInputText id="indicatif" type="text" placeholder="+33"
-                                    formControlName="indicatif_whatsapp" />
+                                <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif_whatsapp" />
+                                <div *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif_whatsapp.errors?.required">* L'indicatif est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatif_whatsapp.errors?.pattern">* Seul les chiffres sont acceptés</span>
+                                </div>
                             </div>
                             <div class="field col-6 md:col-8">
                                 <label For="telephone">Numéro WhatsApp </label>
-                                <input pInputText id="telephone" type="text"
-                                    placeholder="Entrez votre numéro de téléphone" formControlName="numero_whatsapp" />
+                                <input pInputText id="telephone" type="text" placeholder="Entrez votre numéro de téléphone" formControlName="numero_whatsapp" />
+                                <div *ngIf="numero_whatsapp.invalid && (numero_whatsapp.touched || numero_whatsapp.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="numero_whatsapp.errors?.required">* Le numéro whatsApp est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="numero_whatsapp.errors?.pattern">* Seul les chiffres sont acceptés</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -116,46 +129,32 @@
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <img src="assets/images/formation.jpg" style="width: 280px; height: 220px; text-align: center;">
                 </div>
-                <p-fieldset legend="Parcours académique et professionnel"
-                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                <p-fieldset legend="Parcours académique et professionnel" [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div class="grid" style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-6">
                                 <label>Dernier niveau académique validé <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="academicList" optionLabel="value"
-                                    placeholder="Choissisez un niveau" formControlName="validated_academic_level">
-                                </p-dropdown>
+                                <p-dropdown [options]="academicList" optionLabel="value" formControlName="validated_academic_level"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label>Votre statut actuel <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="statutList" optionLabel="value"
-                                    placeholder="Choissisez votre statut" formControlName="statut_actuel">
-                                </p-dropdown>
+                                <p-dropdown [options]="statutList" optionLabel="value" formControlName="statut_actuel"> </p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.statut_actuel.value=='Autre'">
-                                <label For="autre">Si "Autre", veuillez mentionner <span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="autre" type="text" placeholder="Autre" formControlName="other" />
+                                <label For="autre">Si "Autre", veuillez mentionner <span style="color: red;"> * </span></label>
+                                <input pInputText id="autre" type="text" formControlName="other" />
+                            </div> 
+                            <div class="field col-12 md:col-6">
+                                <label For="langue">Quelles sont les langues que vous maitrisez <span style="color: red;"> * </span></label>
+                                <input pInputText id="langue" type="text" placeholder="Langues maîtrisées" formControlName="languages" pInputText>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="langue">Quelles sont les langues que vous maitrisez <span
-                                        style="color: red;"> * </span></label>
-                                <input pInputText id="langue" type="text" placeholder="Langues maîtrisées" formControlName="languages"
-                                    pInputText>
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <label>Avez-vous des expériences professionnelles ?:<span style="color:red">
-                                        *</span></label><br>
-                                <p-toggleButton onLabel="Oui" offLabel="Non"
-                                    formControlName="is_professional_experience">
-                                </p-toggleButton>
+                                <label>Avez-vous des expériences professionnelles ?:<span style="color:red"> *</span></label><br>
+                                <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="is_professional_experience"> </p-toggleButton>
                             </div>
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.is_professional_experience">
-                                <label For="oui">Si <span style="font-weight: bold;">Oui</span>, décrivez nous vos
-                                    expériences <span style="color: red;"> *
-                                    </span></label>
-                                <textarea formControlName="professional_experience" pInputText id="oui"
-                                    placeholder="Décrivez nous vos expériences" pInputText></textarea>
+                                <label For="oui">Si <span style="font-weight: bold;">Oui</span>, décrivez nous vos expériences <span style="color: red;"> * </span></label>
+                                <textarea formControlName="professional_experience" pInputText id="oui" placeholder="Décrivez nous vos expériences" pInputText></textarea>
                             </div>
                         </div>
                     </div>
@@ -176,8 +175,8 @@
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <img src="assets/images/destination.jpg" style="width: 280px; height: 220px; text-align: center;">
                 </div>
-                <p-fieldset legend="Choix du pays de destination, du programme et de la formation"
-                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                <p-fieldset legend="Choix du pays de destination, du programme et de la formation" 
+                [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div class="grid" style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-12">
@@ -209,11 +208,8 @@
                             </div>
                             <div *ngIf="RegisterForm.value.programme.value=='Programme Anglais'">
                                 <div class="field col-12 md:col-12">
-                                    <label For="formation">Liste des formations du programme anglais <span
-                                            style="color: red;"> *
-                                        </span></label>
-                                    <p-dropdown [options]="programEnDropdown" optionLabel="value"
-                                    pInputText id="formation"  formControlName="formation">
+                                    <label For="formation">Liste des formations du programme anglais <span style="color: red;"> * </span></label>
+                                    <p-dropdown [options]="programEnDropdown" optionLabel="value" pInputText id="formation" formControlName="formation">
                                     </p-dropdown>
                                 </div>
                             </div>
@@ -274,8 +270,7 @@
                                             à l'admission</label>
                                     </div>
                                     <div>
-                                        <input type="checkbox" formControlName="servicesEh_2" name="Prépa
-                                            internationale : formation d'orientation de 3 mois">
+                                        <input type="checkbox" formControlName="servicesEh_2" name="Prépa internationale : formation d'orientation de 3 mois">
                                         <label style="font-size: 14px;"
                                             for="Prépa internationale : formation d'orientation de 3 mois">Prépa
                                             internationale : formation d'orientation de 3 mois</label>

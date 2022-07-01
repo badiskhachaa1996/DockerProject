@@ -160,14 +160,15 @@
                                     <input pInputText id="whatsApp" type="number" formControlName="whatsApp" placeholder="Numéro whatsApp du réprésentant" />
                                     <div *ngIf="whatsApp.invalid && (whatsApp.touched || whatsApp.dirty)">
                                         <span style="color: red;" class="error" *ngIf="whatsApp.errors?.required">* Le numéro WhatsApp est obligatoire.</span>
-                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">*Le numéro WhatsApp doit être composé: 0612345678.</span>
+                                        <span style="color: red;" class="error" *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">* Le numéro WhatsApp doit être composé: 0612345678.</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="email">Email : <span style="color: red;"> * </span></label>
                                     <input pInputText id="email" type="email" formControlName="email" placeholder="Adresse email du représentant" />
                                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="email.errors">* L'email est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="email.errors?.required">* L'email est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="email.errors?.pattern">* L'email n'est pas dans le bon format.</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">

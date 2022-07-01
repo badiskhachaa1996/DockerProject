@@ -151,7 +151,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 
                 ],
             },
-            { path: 'formulaire-admission', component: FormulaireAdmissionComponent },
+            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent },
