@@ -3,14 +3,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
-const httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 @Injectable({
   providedIn: 'root'
 })
 export class SujetService {
-  createServices(value: any) {
-    throw new Error('Method not implemented.');
-  }
+
+  httpOptions1={​​​​​​​​ headers :new HttpHeaders({'Access-Control-Allow-Origin':'*'}).append('token', localStorage.getItem('token')) }​​​​​​​​;
 
   apiUrl =environment.origin+ "sujet/"
   constructor(private http : HttpClient, private _router: Router) { }
@@ -18,28 +16,28 @@ export class SujetService {
 
   public addSujet(sujet: any){
     let add_sujet=this.apiUrl+"addsujet";
-    return this.http.post<any>(add_sujet,sujet,httpOptions1);
+    return this.http.post<any>(add_sujet,sujet,this.httpOptions1);
   }
 
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, httpOptions1);
+    return this.http.get<any>(loginUrl, this.httpOptions1);
   }
 
   update(sujet :any){
     let registreUrl=this.apiUrl+"updateById/"+sujet.id;
-    return this.http.post<any>(registreUrl,sujet,httpOptions1);
+    return this.http.post<any>(registreUrl,sujet,this.httpOptions1);
   }
 
   delete(id:string){
     let registreUrl=this.apiUrl+"deleteById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.get<any>(registreUrl,this.httpOptions1);
   }
 
   getASujetByid(id:string){
     let registreUrl=this.apiUrl+"getById/"+id;
-    return this.http.get<any>(registreUrl,httpOptions1);
+    return this.http.get<any>(registreUrl,this.httpOptions1);
   }
 
 

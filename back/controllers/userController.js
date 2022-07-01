@@ -291,7 +291,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
             role: req.body.user.role,
             service_id: req.body?.user.service_id,
             entreprise: req.body.user.entreprise,
-            type: "Etudiant",
+            isAlternant:req.body.user.type,
             pays_adresse: req.body.user.pays_adresse,
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
@@ -307,11 +307,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
                 let date = new Date(etudiantData.date_naissance)
                 let etudiant = new Etudiant(
                     {
-                        user_id: etudiantData.user_id,
-                        classe_id: etudiantData.classe_id,
-                        statut: etudiantData.statut,
-                        nationalite: etudiantData.nationalite,
-                        date_naissance: date
+                        ...etudiantData
                     });
                 etudiant.save()
                     .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })

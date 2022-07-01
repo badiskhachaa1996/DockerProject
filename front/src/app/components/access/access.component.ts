@@ -17,4 +17,8 @@ export class AccessComponent {
    
   }
 
+  redirection(){
+    this.router.navigate(['/login'])
+  }
+
 }

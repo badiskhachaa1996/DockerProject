@@ -21,55 +21,55 @@ app.post('/create', (req, res, next) => {
         salle_name: req.body.salle_name,
         isPlanified: req.body.isPlanified,
         campus_id: req.body.campus_id,
-        nbseance :req.body.nbseance
+        nbseance: req.body.nbseance
     });
 
     Seance.find()
         .then(data => {
-        let text = null
-        let error = false
-        data.forEach(temp => {
-            if (temp.formateur_id == req.body.formateur_id) {
-                text = "Le formateur est déjà assigné à une séance :\n"
-            } else if (temp.classe_id == req.body.classe_id) {
-                text = "La classe est déjà assigné à une séance :\n"
-            } else {
-                text = null
-            }
-            if (text && !error) {
-                let s = temp.date_debut.getTime() // debut = temp.date_debut
-                let e = temp.date_fin.getTime() // fin = temp.date_fin
-                let cs = new Date(req.body.date_debut).getTime() //date to check = req.body.date_debut
-                let ce = new Date(req.body.date_fin).getTime() //date to check = req.body.date_fin
+            let text = null
+            let error = false
+            data.forEach(temp => {
+                if (temp.formateur_id == req.body.formateur_id) {
+                    text = "Le formateur est déjà assigné à une séance :\n"
+                } else if (temp.classe_id == req.body.classe_id) {
+                    text = "La classe est déjà assigné à une séance :\n"
+                } else {
+                    text = null
+                }
+                if (text && !error) {
+                    let s = temp.date_debut.getTime() // debut = temp.date_debut
+                    let e = temp.date_fin.getTime() // fin = temp.date_fin
+                    let cs = new Date(req.body.date_debut).getTime() //date to check = req.body.date_debut
+                    let ce = new Date(req.body.date_fin).getTime() //date to check = req.body.date_fin
 
-                //Si une séance existante se trouve pendant la séance
-                if (cs < s && e < cs) {
-                    error = true
-                    res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier les deux dates", temp })
-                    return false
-                } else if (cs > s && cs < e) {
-                    //Si la date de debut de la nouvelle séance est entre une existante
-                    error = true
-                    res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de début", temp })
-                    return false
+                    //Si une séance existante se trouve pendant la séance
+                    if (cs < s && e < cs) {
+                        error = true
+                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier les deux dates", temp })
+                        return false
+                    } else if (cs > s && cs < e) {
+                        //Si la date de debut de la nouvelle séance est entre une existante
+                        error = true
+                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de début", temp })
+                        return false
+                    }
+                    //Si la date de fin de la nouvelle séance est entre une existante
+                    else if (ce > s && ce < e) {
+                        error = true
+                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de fin", temp })
+                        return false
+                    }
                 }
-                //Si la date de fin de la nouvelle séance est entre une existante
-                else if (ce > s && ce < e) {
-                    error = true
-                    res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de fin", temp })
-                    return false
-                }
+            })
+            if (new Date(req.body.date_debut).getTime() > new Date(req.body.fin).getTime() && !error) {
+                res.status(400).send("La date de début est supérieur à la date de fin")
+            } else if (!error) {
+                //Envoi vers la BD
+                seance.save()
+                    .then((saveSeance) => res.status(201).send(saveSeance))
+                    .catch(error2 => res.status(400).send(error2));
             }
         })
-        if (new Date(req.body.date_debut).getTime() > new Date(req.body.fin).getTime() && !error) {
-            res.status(400).send("La date de début est supérieur à la date de fin")
-        } else if (!error) {
-            //Envoi vers la BD
-            seance.save()
-                .then((saveSeance) => res.status(201).send(saveSeance))
-                .catch(error2 => res.status(400).send(error2));
-        }
-    })
 });
 
 
@@ -90,7 +90,7 @@ app.post('/edit/:id', (req, res, next) => {
             salle_name: req.body.salle_name,
             isPlanified: req.body.isPlanified,
             campus_id: req.body.campus_id,
-            nbseance :req.body.nbseance
+            nbseance: req.body.nbseance
         }
     ).then((Seancefromdb) => res.status(201).send(Seancefromdb))
         .catch(error => res.status(400).send(error));
@@ -115,9 +115,9 @@ app.get('/getById/:id', (req, res, next) => {
 
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByClasseId/:id', (req, res, next) => {
-    Seance.find({ classe_id: req.params.id })
+    Seance.find({ classe_id: { $in: req.params.id } })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(400).send(error), console.log('le pb est ici'));
 });
 
 
@@ -140,16 +140,16 @@ app.get("/convertAllPlanified", (req, res) => {
 
 //Recuperation de toutes les s
 app.get('/getPlanified', (req, res, next) => {
-    Seance.find({isPlanified:true})
+    Seance.find({ isPlanified: true })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
 
-app.get('/getNb/:c_id/:f_id',(req,res)=>{
-    Seance.find({classe_id:req.params.c_id,formateur_id:req.params}).then(
-        data=>res.status(200).send(data.length)
+app.get('/getNb/:c_id/:f_id', (req, res) => {
+    Seance.find({ classe_id: req.params.c_id, formateur_id: req.params }).then(
+        data => res.status(200).send(data.length)
     ).catch(
-        error=>res.status(400).send(error)
+        error => res.status(400).send(error)
     )
 })
 
