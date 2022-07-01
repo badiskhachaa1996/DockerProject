@@ -11,7 +11,7 @@ export class ProspectGuard implements CanActivate {
  
     constructor(private router: Router) { }
 
-    canActivate(): boolean {
+    canActivate(): boolean | UrlTree{
 
 
         if (localStorage.getItem('ProspectConected')) {
@@ -19,11 +19,14 @@ export class ProspectGuard implements CanActivate {
             return true;
            
           }
-          else {
+          else if(localStorage.getItem("modify")) {
+            console.log(localStorage.getItem("modify"))
+          }
+          else{
             
             console.log("Prospect non authentifier");
-            this.router.navigate(['/login']);
-            return false;
+           
+            return  this.router.createUrlTree(['/login']);;
           }
       
 
