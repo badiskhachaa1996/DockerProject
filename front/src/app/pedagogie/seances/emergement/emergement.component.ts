@@ -182,7 +182,7 @@ export class EmergementComponent implements OnInit {
         console.error(err)
       })
     } else {
-
+      this.MessageService.add({ severity: 'error', summary: 'Vous êtes déjà noté présent ou Absent' })
     }
 
   }
