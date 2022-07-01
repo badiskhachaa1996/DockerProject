@@ -25,9 +25,6 @@
                     <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
                         minutes.</small><br>
                 </div>
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/infoPerso.jpg" style="width: 220px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
-                </div>
                 <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
@@ -134,9 +131,6 @@
                     <small>Pour mieux évaluer votre candidature, nous avons besoins de connaître votre parcours
                         académique.</small><br>
                 </div>
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/formation.jpg" style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
-                </div>
                 <p-fieldset legend="Parcours académique et professionnel"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
@@ -187,9 +181,6 @@
             <div *ngIf="ActiveIndex==2">
                 <div style="text-align: center;">
                     <small>Maintenant, l'étape la plus importante, que voulez-vous étudiez avec nous ?</small><br>
-                </div>
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/destination.jpg" style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset class="col-12" legend="Choix du pays de destination, du programme et de la formation"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
@@ -254,10 +245,6 @@
                     <small>Etudier à l'étranger est une procédure compliquée, notre partenaire peut vous accompagner
                         tout au
                         long de la procédure</small><br>
-                </div>
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/accompagnement.jpg"
-                        style="width: 280px; height: 220px; text-align: center;" *ngIf="form_origin=='estya'">
                 </div>
                 <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
@@ -345,9 +332,6 @@
                 <div style="text-align: center;">
                     <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
                 </div>
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/agence.jpg" style="width: 280px; height: 220px; text-align: center;">
-                </div>
                 <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div class="grid" style="color: black;font-weight:normal">
@@ -396,7 +380,7 @@
                 <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
                     Votre candidature a été envoyé !</h2>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;" *ngIf="form_origin=='estya'">
+                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
                 </div>
                 <div class="col-12 flex justify-content-center flex-wrap card-container">
                     <p>Vos identifiants viennent de vous être envoyés par mail, merci de bien lire les
