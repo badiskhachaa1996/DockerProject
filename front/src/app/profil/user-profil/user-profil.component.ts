@@ -147,13 +147,13 @@ export class UserProfilComponent implements OnInit {
     let password = this.passwordForm.get('password').value;
     let verifypassword = this.passwordForm.get('verifypassword').value;
 
-    //Verification du mot de passe
+    //TODO Verification du mot de passe
     this.AuthService.verifPassword({id: this.decodeToken.id, password: passwordactual}).subscribe(
       ((responseV) => {
         console.log(responseV);
       }),
       ((error) => {
-        console.log(error)
+        console.error(error)
       })
     );
 
@@ -232,7 +232,6 @@ export class UserProfilComponent implements OnInit {
     }, false);
 
     this.token = jwt_decode(localStorage.getItem("token"))
-
     if (this.token["role"].includes("user")) {
       this.retour = true;
     }
@@ -247,7 +246,6 @@ export class UserProfilComponent implements OnInit {
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
 
       this.userco = jwt_decode(data['userToken'])['userFromDb']
-      console.log(this.userco)
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
         this.InfoUser = data?.data
         let date = new Date(this.InfoUser?.date_naissance)

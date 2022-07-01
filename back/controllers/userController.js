@@ -199,7 +199,6 @@ app.post("/updateById/:id", (req, res) => {
 
 app.post("/ValidateEmail/:email", (req, res) => {
 
-    console.log(req)
     User.findOneAndUpdate({ email: req.params.email },
         {
             verifedEmail: true,
@@ -251,7 +250,7 @@ app.post("/updatePreInscrit/:id", (req, res) => {
                                 date_naissance: req.body.inscription.date_naissance
                             }, (err3, InscriptionUpdate) => {
                                 if (errInscription) {
-                                    console.log(errInscription)
+                                    console.error(errInscription)
                                     res.send(errInscription)
                                 }
                                 else {
@@ -291,12 +290,13 @@ app.post("/updateEtudiant/:id", (req, res) => {
             role: req.body.user.role,
             service_id: req.body?.user.service_id,
             entreprise: req.body.user.entreprise,
-            type: "Etudiant",
+            isAlternant:req.body.user.type,
             pays_adresse: req.body.user.pays_adresse,
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
             postal_adresse: req.body.user.postal_adresse
+            // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {
             if (err || !user) {
@@ -304,14 +304,9 @@ app.post("/updateEtudiant/:id", (req, res) => {
                 res.send(err)
             } else {
                 let etudiantData = req.body.newEtudiant;
-                let date = new Date(etudiantData.date_naissance)
                 let etudiant = new Etudiant(
                     {
-                        user_id: etudiantData.user_id,
-                        classe_id: etudiantData.classe_id,
-                        statut: etudiantData.statut,
-                        nationalite: etudiantData.nationalite,
-                        date_naissance: date
+                        ...etudiantData
                     });
                 etudiant.save()
                     .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
@@ -503,14 +498,12 @@ app.get("/WhatTheRole/:id", (req, res) => {
                         }
                         else {
                             CommercialPartenaire.findOne({ user_id: id }).then(p => {
-                                console.log(p)
                                 if (p && p.length != 0) {
                                     res.status(200).send({ data: p, type: "Commercial" })
                                 }
 
                                 else {
                                     Prospect.findOne({ user_id: id }).then(p => {
-                                        console.log(p)
                                         if (p && p.length != 0) {
                                             let Ptoken = jwt.sign({ p }, 'ptoken')
                                             res.status(200).send({ data: p, type: "Prospect", Ptoken })
@@ -543,7 +536,7 @@ app.post("/verifyUserPassword", (req, res) => {
                     }
                         res.status(200).json({ success: 'OK' });
                   })
-                  .catch((error) => console.log(error));
+                  .catch((error) => console.error(error));
                             
         })
         .catch((error) => {res.status(500).send("Impossible de modifier votre mot de passe, veuillez contacter un administrateur")})

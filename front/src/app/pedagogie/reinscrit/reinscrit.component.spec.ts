@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InterneComponent } from './interne.component';
+import { ReinscritComponent } from './reinscrit.component';
 
-describe('InterneComponent', () => {
-  let component: InterneComponent;
-  let fixture: ComponentFixture<InterneComponent>;
+describe('ReinscritComponent', () => {
+  let component: ReinscritComponent;
+  let fixture: ComponentFixture<ReinscritComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InterneComponent ]
+      declarations: [ ReinscritComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InterneComponent);
+    fixture = TestBed.createComponent(ReinscritComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

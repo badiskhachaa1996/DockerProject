@@ -81,7 +81,7 @@ export class ListSeancesComponent implements OnInit {
           this.dropdownMatiere.push({ nom: item.nom, value: item._id });
         })
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     this.classeService.getAll().subscribe(
@@ -92,7 +92,7 @@ export class ListSeancesComponent implements OnInit {
           this.classes[response[classeID]._id] = response[classeID];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Remplissage de la liste des formateurs
@@ -103,7 +103,7 @@ export class ListSeancesComponent implements OnInit {
           this.formateurs[response[formateurId]._id] = response[formateurId];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -170,11 +170,9 @@ export class ListSeancesComponent implements OnInit {
   }
 
   showModify(rowData: Seance) {
-    // console.log(this.classes)
     this.showFormUpdateSeance = rowData;
 
     let classeList = [];
-    console.log(rowData.classe_id)
     rowData.classe_id.forEach(classeID => {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });

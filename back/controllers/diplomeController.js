@@ -33,11 +33,10 @@ app.post("/creatediplome", (req, res) => {
         code_diplome: data?.code_diplome,
         formateur_id: data?.formateur_id
     });
-    console.log(diplome)
     diplome.save().then((diplomeFromDB) => {
         res.status(200).send(diplomeFromDB);
     }).catch((error) => {
-        console.log(error)
+        console.error(error)
         res.status(404).send(error);
     })
 });

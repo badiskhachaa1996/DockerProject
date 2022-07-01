@@ -116,7 +116,6 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   seeUnderPartenaire(rowData) {
-    console.log(rowData)
     this.router.navigate(["/collaborateur/" + rowData._id])
   }
 

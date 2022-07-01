@@ -146,7 +146,7 @@ app.post("/firstInscription", (req, res) => {
                                     console.error(error);
                                     
                                 }
-                                console.log('email sent!!!')
+                                console.log("Email inscription envoyé à"+userCreated.email_perso)
                                
                             });
                             res.status(201).json({ success: 'Inscription crée' })
@@ -193,7 +193,7 @@ app.post("/editStatutById/:id", (req, res) => {
             res.status(201).send(inscriptionupd);
 
         }).catch((error) => {
-            console.log(error)
+            console.error(error)
             res.status(400).send(error);
         });
 })
@@ -244,7 +244,6 @@ app.get("/getByUserId/:user_id", (req, res) => {
 app.get("/getByEmail/:email", (req, res) => {
 
     Inscription.findOne({ email_perso: req.params.email }).then((dataInscription) => {
-        console.log(req.params.email)
         res.status(200).send(dataInscription);
     })
         .catch(err => {

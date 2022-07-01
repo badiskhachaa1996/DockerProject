@@ -118,8 +118,6 @@ app.put("/update", (req, res, next) => {
     //Recuperation des infos user
     const userData = req.body.userToUpdate;
 
-    console.log(userData);
-
     //D'abord on met à jour le commercial
     CommercialPartenaire.findOneAndUpdate({ _id: commercialData._id },
     {

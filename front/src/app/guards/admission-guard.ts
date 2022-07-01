@@ -26,7 +26,7 @@ export class AdmissionGuardService implements CanActivate {
     let serviceName
 
     if (role == 'Admin') {
-      console.log(role)
+      console.log("Accés autorisé")
       return true;
     }
     else {
@@ -35,7 +35,7 @@ export class AdmissionGuardService implements CanActivate {
         map(service => {
           serviceName = service.dataService.label
           if (serviceName.includes("Admission")) {
-            console.log("accés autorisé: " + role)
+            console.log("Accés autorisé: (" + role + ")")
             return true
           }
           else {

@@ -92,7 +92,6 @@ export class ListCampusComponent implements OnInit {
 
   editCampus() {
     let campus = new Campus(this.campusToUpdate._id, this.campusFormUpdate.value.libelle, this.campusFormUpdate.value.ecole_id.value, this.campusFormUpdate.value.ville, this.campusFormUpdate.value.pays, this.campusFormUpdate.value.email, this.campusFormUpdate.value.adresse, this.campusFormUpdate.value.site)
-    console.log(campus)
     this.campusService.edit(campus).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
 

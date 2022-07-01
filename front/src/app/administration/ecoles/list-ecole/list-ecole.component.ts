@@ -67,7 +67,6 @@ export class ListEcoleComponent implements OnInit {
       }, (error) => {
         console.error(error)
       });
-      console.log(this.annees)
     })
     this.anneeScolaireService.getByID(id).subscribe((data) => {
       this.AnneeSelected = data.dataAnneeScolaire
@@ -94,11 +93,8 @@ export class ListEcoleComponent implements OnInit {
   editEcole() {
 
     let ecoleupdated = new Ecole(this.ecoleToUpdate._id, this.ecoleFormUpdate.value.libelle, this.ecoleFormUpdate.value.annee_id.value, this.ecoleFormUpdate.value.ville, this.ecoleFormUpdate.value.pays, this.ecoleFormUpdate.value.adresse, this.ecoleFormUpdate.value.email, this.ecoleFormUpdate.value.site, this.ecoleFormUpdate.value.telephone)
-    console.log(ecoleupdated)
     this.EcoleService.edit(ecoleupdated).subscribe((data2) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été modifié' });
-      console.log("console.log(data);");
-      console.log(data2);
       this.updateList();
       this.showFormUpdateEcole = false;
 
@@ -109,8 +105,6 @@ export class ListEcoleComponent implements OnInit {
   }
 
   showModify(rowData: Ecole) {
-    console.log("rowdata:")
-    console.log(rowData)
     this.ecoleToUpdate = rowData
     this.showFormAddEcole = false;
 

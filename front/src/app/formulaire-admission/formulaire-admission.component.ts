@@ -7,16 +7,16 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageModule } from 'primeng/message';
-import { AnneeScolaireService } from '../services/annee-scolaire.service';
-import { CampusService } from '../services/campus.service';
-import { DiplomeService } from '../services/diplome.service';
+import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
+import { CampusService } from 'src/app/services/campus.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 
-import { Inscription } from '../models/Inscription';
-import { FirstInscriptionService } from '../services/first-inscription.service';
+import { Inscription } from 'src/app/models/Inscription';
+import { FirstInscriptionService } from 'src/app/services/first-inscription.service';
 import { MessageService } from 'primeng/api';
-import { Diplome } from '../models/Diplome';
-import { Prospect } from '../models/Prospect';
-import { AdmissionService } from '../services/admission.service';
+import { Diplome } from 'src/app/models/Diplome';
+import { Prospect } from 'src/app/models/Prospect';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 
 
@@ -25,7 +25,7 @@ import { AdmissionService } from '../services/admission.service';
   selector: 'app-formulaire-admission',
   templateUrl: './formulaire-admission.component.html',
   styleUrls: ['./formulaire-admission.component.scss'],
-  
+
 })
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
@@ -49,14 +49,13 @@ export class FormulaireAdmissionComponent implements OnInit {
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   token = localStorage.getItem('token')
 
-  itemsFormulaire =
-    [
-      { label: "Infos", etat: true },
-      { label: "Parcours", etat: false },
-      { label: "Programme", etat: false },
-      { label: "Partenaires", etat: false },
-      { label: "Dernière étape", etat: false },
-    ];
+  formSteps: any[] = [
+    "Infos",
+    "Parcours",
+    "Programme",
+    "Partenaires",
+    "Fin",
+  ];
 
   academicList =
     [
@@ -134,15 +133,86 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     ];
 
-    typeFormationDropdown = [
-      { value: "Intiale" },
-      { value: "Alternance" }
-    ];
+  typeFormationDropdown = [
+    { value: "Intiale" },
+    { value: "Alternance" }
+  ];
 
-    form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
 
 
   ngOnInit(): void {
+
+    if (this.form_origin == "eduhorizons") 
+    { 
+      this.campusDropdown = [
+        { value: "Campus France - Paris" }, 
+        { value: "Campus France - Montpellier" }, 
+        { value: "Campus Valence - Espagne" }, 
+        { value: "Campus Florence - Italie" }, 
+        { value: "Campus UAE - Dubai" }, 
+        { value: "Campus Tunisie - Tunis" }, 
+        { value: "Campus Montréal - Canada" }, 
+        { value: "Campus Malte " }, 
+        { value: "Campus Congo" }, 
+        { value: "Campus Maroc" }, 
+        { value: "Campus USA" }, 
+        { value: "Campus En ligne" }
+      ]  
+      } else if (this.form_origin == "estya") 
+      { 
+        this.campusDropdown = [
+          { value: "Campus Paris - France" }, 
+          { value: "Campus Montpellier - France" }, 
+          { value: "Campus Brazzaville - Congo" }, 
+          { value: "Campus Rabat - Maroc " }, 
+          { value: "Campus Malte" }, 
+          { value: "Campus En ligne" }
+        ] 
+      } else if (this.form_origin == "adg") 
+      { 
+        this.campusDropdown = [
+          { value: "Campus Paris - France" }, 
+          { value: "Campus Montpellier - France" }, 
+          { value: "Campus En ligne" }
+        ]      
+          
+        this.programeFrDropdown = [
+          { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" }, 
+          { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" }, 
+          { value: "GM - Gouvernant(e) de maison - Diplôme maison" }, 
+          { value: "BTS MCO - Management Commercial Operationnel" }, 
+          { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+          { value: "BTS GPME" }, 
+          { value: "BTS CI - Commerce International" }, 
+          { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" }, 
+          { value: "Chargé de gestion commerciale - Spécialité service commercial" }, 
+          { value: "IA - Ingénieur d'Affaires" }, 
+          { value: "Management et Stratégie d’Entreprise " }, 
+          { value: "BTS SIO - Services Informatiques aux Organisations" }, 
+          { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" }, 
+          { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" }, 
+          { value: "AIS - Administrateur d’Infrastructures Sécurisées" }, 
+          { value: "CDA - Concepteur Développeur d’Applications" }, 
+          { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " }, 
+          { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " }, 
+          { value: "BTS CJN  - Collaborateur Juriste Notarial" }, 
+          { value: "BTS CG - Comptabilité et Gestion" }, 
+          { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" }, 
+          { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" }, 
+          { value: "Coordinateur BIM du Bâtiment" }, 
+          { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" }, 
+          { value: "Formations continues IPERIA" }
+        ] 
+      } else if (this.form_origin == "espic") { 
+        this.campusDropdown = [
+          { value: "Campus France - Paris" }, 
+          { value: "Campus Athène - Grèce" }, 
+          { value: "Campus En ligne" }
+        ] 
+        
+      }
+
 
     this.onInitRegisterForm();
 
@@ -171,23 +241,23 @@ export class FormulaireAdmissionComponent implements OnInit {
       numero_whatsapp: new FormControl('',[Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
       indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
 
-       //******* Parcours académiques et professionnel *******
+      //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
       statut_actuel: new FormControl(this.statutList[0], [Validators.required]),
       other: new FormControl(''),
       languages: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       is_professional_experience: new FormControl(false, [Validators.required]),
-      professional_experience: new FormControl('', Validators.required), 
+      professional_experience: new FormControl('', Validators.required),
 
       //******* Choix du pays de destination, du programme et de la formation  *******
       campusChoix1: new FormControl(this.campusDropdown[0], [Validators.required]),
-      campusChoix2: new FormControl(this.campusDropdown[0], [Validators.required]),
-      campusChoix3: new FormControl(this.campusDropdown[0], [Validators.required]),
+      campusChoix2: new FormControl(this.campusDropdown[1], [Validators.required]),
+      campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
       formation: new FormControl(this.programeFrDropdown[0], [Validators.required]),
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-       //****** Notre partenaire d'accompagnement Eduhorizons *******
+      //****** Notre partenaire d'accompagnement Eduhorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -207,15 +277,11 @@ export class FormulaireAdmissionComponent implements OnInit {
   };
 
   nextPage() {
-    this.itemsFormulaire[this.ActiveIndex].etat = false
     this.ActiveIndex++
-    this.itemsFormulaire[this.ActiveIndex].etat = true
   }
 
   previousPage() {
-    this.itemsFormulaire[this.ActiveIndex].etat = false
     this.ActiveIndex--
-    this.itemsFormulaire[this.ActiveIndex].etat = true
   }
 
   verifEmailInBD() {
@@ -283,7 +349,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get campus() { return this.RegisterForm.get('campus'); }
   get diplome() { return this.RegisterForm.get('diplome'); }
 
-  
+
   loadDiplome() {
 
     for (let diplome of this.diplomes) {
@@ -305,8 +371,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   }
 
 
-   //Methode d'ajout d'un nouveau prospect
-   onAddProspect() {
+  //Methode d'ajout d'un nouveau prospect
+  onAddProspect() {
     //recuperation des données du formulaire
     let civilite = this.RegisterForm.get('civilite').value.value;
     let lastname = this.RegisterForm.get('lastname').value;
@@ -359,7 +425,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       ((response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-          this.nextPage()
+          this.getFilesAccess(response.dataUser._id)
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)
@@ -371,9 +437,25 @@ export class FormulaireAdmissionComponent implements OnInit {
         console.error(error);
       })
     );
-  
-    console.log(prospect)
   }
+
+  getFilesAccess(ID) {
+    this.AuthService.WhatTheRole(ID).subscribe(data => {
+      localStorage.setItem("ProspectConected", data.Ptoken)
+      if (this.token == null) {
+        localStorage.setItem("token", this.token)
+      }
+      this.router.navigateByUrl('/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
+        if (this.token == null) {
+          localStorage.setItem("token", this.token)
+        }
+        localStorage.setItem("ProspectConected", data.Ptoken)
+        localStorage.setItem("token", this.token)
+        this.router.navigate(["/suivre-ma-preinscription"]);
+      });
+    })
+  }
+
 
 
 

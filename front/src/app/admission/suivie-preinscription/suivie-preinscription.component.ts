@@ -15,9 +15,9 @@ import { AdmissionService } from 'src/app/services/admission.service';
   styleUrls: ['./suivie-preinscription.component.scss']
 })
 export class SuiviePreinscriptionComponent implements OnInit {
-  
+
   @ViewChild('fileInput') fileInput: FileUpload;
- 
+
   ecoleProspect: any;
   subscription: Subscription;
   ListDocuments: String[] = [];
@@ -58,20 +58,19 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (localStorage.getItem('ProspectConected')) {
 
-      this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
-  
-      this.ecoleProspect = this.ProspectConnected.type_form
-    }
-    else {
-      this.router.navigate(['/loginExterne'])
-    }
+
+    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
+
+    this.ecoleProspect = this.ProspectConnected.type_form
+
+
+    this.router.navigate(['/login'])
+
 
     this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
 
       (data) => {
-        console.log(data)
         this.ListDocuments = data
 
         for (let doc of this.ListDocuments) {
@@ -102,10 +101,10 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
         }
       },
-      (error) => { console.log(error) }
+      (error) => { console.error(error) }
     );
 
- 
+
   }
 
   resetAuth() {
@@ -122,7 +121,6 @@ export class SuiviePreinscriptionComponent implements OnInit {
     formData.append('id', this.ProspectConnected._id);
     formData.append('document', doc);
     formData.append('file', event.files[0]);
-    console.log(this.ProspectConnected._id)
     this.admissionService.uploadFile(formData, this.ProspectConnected._id).subscribe(res => {
       this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
       if (doc.includes('diplome')) {
@@ -146,7 +144,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
       else if (doc.includes('TCF')) {
         this.TCFTest = true;
       }
-      if(this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest){
+      if (this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest) {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
     },
@@ -160,5 +158,5 @@ export class SuiviePreinscriptionComponent implements OnInit {
     event.target = null;
   }
 
-  
+
 }

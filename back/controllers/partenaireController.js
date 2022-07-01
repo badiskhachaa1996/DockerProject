@@ -44,7 +44,7 @@ app.post("/create", (req, res, next) => {
 //création d'un nouvel étudiant
 app.post("/inscription", (req, res, next) => {
     //creation du nouvel étudiant
-    console.log(req.body)
+    
     let partenaireData = req.body.newPartenaire;
     let partenaire = new Partenaire(
         {
@@ -102,7 +102,6 @@ app.post("/inscription", (req, res, next) => {
     User.findOne({ email: userData.email })
         .then((userFromDb) => {
             if (userFromDb) {
-                console.log("USERTRUE")
                 Partenaire.findOne({ user_id: userFromDb._id })
                     .then((partenaireFromDb) => {
                         if (partenaireFromDb) {

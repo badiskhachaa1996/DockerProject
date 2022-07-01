@@ -73,7 +73,6 @@ app.post("/create", (req, res, next) => {
         ...prospectData
     });
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
-    console.log("random", r);
     const user = new User(
         {
             civilite: userData.civilite,
@@ -124,13 +123,10 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         prospect.user_id = userCreated._id;
-                        console.log(userCreated)
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "mykey")
-                        console.log(token)
                         prospect.save()
                             .then((prospectSaved) => {
                                 res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
-                                console.log(prospectSaved.type_form)
 
                                 if (prospectSaved.type_form == "estya") {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
@@ -159,7 +155,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        console.log(info)
+                                        
 
 
                                     });
@@ -201,7 +197,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        console.log(info)
+                                        
 
 
                                     });
@@ -241,7 +237,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        console.log(info)
+                                        
 
 
                                     });
@@ -292,7 +288,6 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        console.log('email sent!!!')
 
 
                                     });
@@ -419,7 +414,7 @@ app.post("/updateStatut/:id", (req, res, next) => {
 
 app.get("/ValidateEmail/:email", (req, res) => {
 
-    console.log(origin);
+    ;
     User.findOneAndUpdate({ email: req.params.email },
         {
             verifedEmail: true,
@@ -439,7 +434,7 @@ app.get("/ValidateEmail/:email", (req, res) => {
 
 app.get("/getFilesInscri/:id", (req, res) => {
     // recupére*
-    console.log(origin)
+    
     let filesTosend = [];
     fs.readdir('./storage/prospect/' + req.params.id + "/", (err, files) => {
 
@@ -459,7 +454,7 @@ app.get("/getFilesInscri/:id", (req, res) => {
             });
         }
         res.status(200).send(filesTosend);
-    }, (error) => (console.log(error)))
+    }, (error) => (console.error(error)))
 })
 
 app.get("/downloadFile/:id/:directory/:filename", (req, res) => {
@@ -492,8 +487,6 @@ app.get("/deleteFile/:id/:directory/:filename", (req, res) => {
 
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
-
-        console.log(req.body.document)
         if (!fs.existsSync('storage/prospect/' + req.body.id + '/' + req.body.document + '/')) {
             fs.mkdirSync('storage/prospect/' + req.body.id + '/' + req.body.document + '/', { recursive: true })
         }
@@ -508,7 +501,6 @@ const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
 
 app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 
-    console.log(req.params.id)
     const file = req.file;
     if (!file) {
         const error = new Error('No File')
@@ -566,7 +558,6 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
-    console.log(req.params.code_partenaire)
     Prospect.find({ code_commercial: req.params.code_partenaire }).then(prospects => {
         prospects.forEach(function (element, index) {
             let nb = 0

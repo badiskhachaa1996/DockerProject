@@ -105,7 +105,6 @@ export class AddFormateurComponent implements OnInit {
     })
 
     this.CampusService.getAll().subscribe((cData) => {
-      console.log(cData)
       cData.forEach(c => {
         this.dropdownCampus.push({ label: c.libelle, value: c._id })
       });
@@ -254,7 +253,7 @@ export class AddFormateurComponent implements OnInit {
       }),
       ((error) => {
         this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
-        console.log(error);
+        console.error(error);
       })
     );
     this.onInitFormAddFormateur();
@@ -319,10 +318,5 @@ export class AddFormateurComponent implements OnInit {
     })
     this.formAddFormateur.setControl('volume_h', this.formBuilder.array([]))
   }
-  test(date) {
-    let d = date["date"]
-    let de = date["debut"]
-    let f = date["fin"]
-    console.log(new Date(d + " " + de))
-  }
+
 }

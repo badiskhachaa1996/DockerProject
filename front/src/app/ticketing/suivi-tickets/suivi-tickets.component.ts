@@ -206,7 +206,6 @@ export class SuiviTicketsComponent implements OnInit {
     })
 
     this.socket.on("refreshMessage", () => {
-      console.log("SOC RM")
       if (this.comments && this.comments.length > 0) {
         this.MsgServ.getAllByTicketID(this.comments[0].ticket_id)
           .subscribe(
@@ -224,19 +223,19 @@ export class SuiviTicketsComponent implements OnInit {
     //Recuperation des tickets en cours de traitement
     this.TicketService.getCountTicketUserInWaiting(this.token.id).subscribe(
       ((response) => {this.ticketUserInWaiting = response;}),
-      ((error) => {console.log(error)})
+      ((error) => {console.error(error)})
     );
 
     //Recuperation des tickets traité
     this.TicketService.getCountTicketUserTraite(this.token.id).subscribe(
       ((response) => {this.ticketUserTraite = response;}),
-      ((error) => {console.log(error)})
+      ((error) => {console.error(error)})
     );
 
     //Recuperation des tickets en queue d'entrée
     this.TicketService.getCountTicketUserQueue(this.token.id).subscribe(
       ((response) => {this.ticketUserInQueue = response;}),
-      ((error) => {console.log(error)})
+      ((error) => {console.error(error)})
     );
 
   }

@@ -11,7 +11,6 @@ app.post("/create", (req, res) =>{
         libelle: data.libelle,
         etat: data.etat,
     });
-    console.log(data)
     anneeScolaire.save().then((anneeScolaireFromDB) =>{
         res.status(200).send(anneeScolaireFromDB);
     }).catch((error) => {

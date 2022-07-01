@@ -170,7 +170,6 @@ import { FormulaireAdmissionComponent } from './formulaire-admission/formulaire-
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NotesComponent } from './pedagogie/notes/notes.component';
 import { ExterneComponent } from './authentification/externe/externe.component';
-import { InterneComponent } from './authentification/interne/interne.component';
 import { SuiviePreinscriptionComponent } from './admission/suivie-preinscription/suivie-preinscription.component';
 
 import { ListSeancesComponent } from './pedagogie/seances/list-seances/list-seances.component';
@@ -189,6 +188,7 @@ import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-exam
 import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
+import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -352,7 +352,6 @@ import { FirstConnectionComponent } from './profil/first-connection/first-connec
         FormulaireAdmissionComponent,
         NotesComponent,
         ExterneComponent,
-        InterneComponent,
         SuiviePreinscriptionComponent,
         ListSeancesComponent,
         AddSeanceComponent,
@@ -364,7 +363,8 @@ import { FirstConnectionComponent } from './profil/first-connection/first-connec
         AjoutExamenComponent,
         PartenaireInscriptionComponent,
         FirstConnectionComponent,
-        ProspectsComponent
+        ProspectsComponent,
+        ReinscritComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -13,7 +13,6 @@ app.post("/create", (req, res) => {
         program: data.programme,
         calendar: data.calendar,
     });
-    console.log(data)
     ressource.save().then((ressourceFromDB) => {
         res.status(200).send(ressourceFromDB);
     }).catch((error) => {

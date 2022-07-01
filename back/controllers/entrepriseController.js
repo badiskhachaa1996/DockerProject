@@ -21,7 +21,6 @@ app.post("/create", (req, res, next) => {
     //Création d'une nouvelle entreprise
     entreprise.save()
         .then((entrepriseSaved) => { 
-            console.log(entrepriseSaved)
             res.status(201).send(entrepriseSaved); })
         .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter une nouvelle entreprise " + error.message }); })
 

@@ -110,17 +110,16 @@ export class AddDiplomeComponent implements OnInit {
     if (this.campusId) {
       this.diplomeService.getAllByCampus(this.campusId).subscribe(
         (data) => { this.diplomes = data; },
-        (error) => { console.log(error) }
+        (error) => { console.error(error) }
       );
     } else
       this.diplomeService.getAll().subscribe(
         (data) => { this.diplomes = data; },
-        (error) => { console.log(error) }
+        (error) => { console.error(error) }
       );
     this.campusService.getAll().subscribe(
       (data) => {
         this.campusList = data;
-        console.log(this.campusList)
         this.onInitFormAddDiplome();
         data.forEach(d => {
           this.dicCampus[d._id] = d
@@ -129,7 +128,6 @@ export class AddDiplomeComponent implements OnInit {
     )
     this.matiereService.getVolume().subscribe(data => {
       this.matiereVolume = data
-      console.log(data)
     })
     this.formateurService.getAll().subscribe(data => {
       data.forEach(d => {
@@ -225,16 +223,15 @@ export class AddDiplomeComponent implements OnInit {
       code_RNCP, nb_heure, date_debut, date_fin, rythme, frais, frais_en_ligne,
       isCertified, date_debut_examen, date_fin_examen, date_debut_stage, date_fin_stage, code_diplome, null, null, formateur_id
     );
-    console.log(newDiplome)
     this.diplomeService.create(newDiplome).subscribe(
       (() => {
         this.messageService.add({ key: 'tst', severity: 'success', summary: 'Ajout de diplôme', detail: 'Ce diplôme a bien été ajouté' });
         this.diplomeService.getAll().subscribe(
           (data) => { this.diplomes = data; },
-          (error) => { console.log(error) }
+          (error) => { console.error(error) }
         );
       }),
-      ((error) => { console.log("impossible d'ajouter le diplome " + error.message); })
+      ((error) => { console.error(error); })
     );
     this.showFormAddDiplome = false;
     this.resetAddDiplome()
@@ -334,10 +331,10 @@ export class AddDiplomeComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
         this.diplomeService.getAll().subscribe(
           (data) => { this.diplomes = data; },
-          (error) => { console.log(error) }
+          (error) => { console.error(error) }
         );
       }),
-      ((error) => { console.log("Modification du diplome impossible " + error.message); })
+      ((error) => { console.error(error); })
     );
 
     this.showFormUpdateDiplome = false;
@@ -363,12 +360,12 @@ export class AddDiplomeComponent implements OnInit {
         if (this.campusId) {
           this.diplomeService.getAllByCampus(this.campusId).subscribe(
             (data) => { this.diplomes = data; },
-            (error) => { console.log(error) }
+            (error) => { console.error(error) }
           );
         } else
           this.diplomeService.getAll().subscribe(
             (data) => { this.diplomes = data; },
-            (error) => { console.log(error) }
+            (error) => { console.error(error) }
           );
       }, (error) => {
         console.error(error)
@@ -378,7 +375,6 @@ export class AddDiplomeComponent implements OnInit {
 
   downloadFile(rowData, name) {
     this.diplomeService.getFile(rowData._id, name).subscribe(data => {
-      console.log(data)
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), name)
     })

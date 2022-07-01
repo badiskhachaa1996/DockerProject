@@ -70,7 +70,7 @@ export class AddSeanceComponent implements OnInit {
           this.matieres[item._id] = item;
         })
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
 
     //Remplissage de la liste des formateurs
@@ -81,7 +81,7 @@ export class AddSeanceComponent implements OnInit {
           this.formateurs[response[formateurId]._id] = response[formateurId];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
     this.CampusService.getAll().subscribe(
       data => {
@@ -99,7 +99,7 @@ export class AddSeanceComponent implements OnInit {
           this.classes[response[classeID]._id] = response[classeID];
         }
       }),
-      ((error) => { console.log(error) })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -184,7 +184,7 @@ export class AddSeanceComponent implements OnInit {
         this.seanceService.create(seance).subscribe((data) => {
           this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
         }, (error) => {
-          console.log(error)
+          console.error(error)
           let serror: Seance = error.error.seance
           this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
           let classeStr = ""

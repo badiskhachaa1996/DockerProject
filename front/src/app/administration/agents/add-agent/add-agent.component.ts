@@ -163,7 +163,7 @@ export class AddAgentComponent implements OnInit {
         console.error(err2)
       })
     }, (error) => {
-      console.log(error)
+      console.error(error)
       if (error.status == 400 || error.includes("400") || error.keyValue.includes("email")) {
         //Bad Request (Email déjà utilisé)
         this.messageService.add({ severity: 'error', summary:  'Erreur d\'inscription', detail: 'Email déjà utilisé' });

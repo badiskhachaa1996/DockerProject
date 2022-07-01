@@ -109,12 +109,12 @@ export class ListDiplomeComponent implements OnInit {
     if (this.campusId) {
       this.diplomeService.getAllByCampus(this.campusId).subscribe(
         (data) => { this.diplomes = data; },
-        (error) => { console.log(error) }
+        (error) => { console.error(error) }
       );
     } else
       this.diplomeService.getAll().subscribe(
         (data) => { this.diplomes = data; },
-        (error) => { console.log(error) }
+        (error) => { console.error(error) }
       );
     this.campusService.getAll().subscribe(
       (data) => {
@@ -126,7 +126,6 @@ export class ListDiplomeComponent implements OnInit {
     )
     this.matiereService.getVolume().subscribe(data => {
       this.matiereVolume = data
-      console.log(data)
     })
     this.formateurService.getAll().subscribe(data => {
       data.forEach(d => {
@@ -265,11 +264,11 @@ export class ListDiplomeComponent implements OnInit {
             this.diplomes = data; 
             this.showFormUpdateDiplome = false;
           },
-          (error) => { console.log(error) }
+          (error) => { console.error(error) }
         );
       }),
       ((error) => { 
-        console.log("Modification du diplome impossible " + error.message); 
+        console.error(error); 
         this.messageService.add({ key: 'tst', severity: 'error', summary: 'Modification de diplôme', detail: 'Impossible de modifier cet diplôme, veuillez contacter un administrateur' });
       })
     );
@@ -296,12 +295,12 @@ export class ListDiplomeComponent implements OnInit {
         if (this.campusId) {
           this.diplomeService.getAllByCampus(this.campusId).subscribe(
             (data) => { this.diplomes = data; },
-            (error) => { console.log(error) }
+            (error) => { console.error(error) }
           );
         } else
           this.diplomeService.getAll().subscribe(
             (data) => { this.diplomes = data; },
-            (error) => { console.log(error) }
+            (error) => { console.error(error) }
           );
       }, (error) => {
         console.error(error)

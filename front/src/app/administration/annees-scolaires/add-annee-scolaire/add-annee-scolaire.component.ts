@@ -60,7 +60,6 @@ export class AddAnneeScolaireComponent implements OnInit {
   saveAnneeScolaire() {
     var str = String(this.anneeScolaireForm.value.libelle)
     var splited = str.split(',').join('/');
-    console.log(splited)
     let anneeScolaire = new AnneeScolaire(null, splited, String(this.anneeScolaireForm.value.etat.value))
 
     this.ASService.create(anneeScolaire).subscribe((data) => {
@@ -81,14 +80,13 @@ export class AddAnneeScolaireComponent implements OnInit {
     this.showFormAddAnneeScolaire = false
     let anneeScolaire = this.showFormUpdateAnneeScolaire
     anneeScolaire._id = this.showFormUpdateAnneeScolaire._id
-    console.log(anneeScolaire._id)
     this.ASService.archivee(anneeScolaire._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des anneeScolaires', detail: 'année scolaire a bien été archivé' });
       this.updateList()
       this.showFormUpdateAnneeScolaire = null;
       this.anneeScolaireFormUpdate.reset();
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
@@ -104,16 +102,14 @@ export class AddAnneeScolaireComponent implements OnInit {
       this.showFormUpdateAnneeScolaire = null;
       this.anneeScolaireFormUpdate.reset();
     }, (error) => {
-      console.log(error)
+      console.error(error)
     });
 
   }
 
-  rangedatechange($event) {
-    console.log('label' + this.rangedate)
+  rangedatechange($event){
     var str = String(this.anneeScolaireForm.value.libelle)
-    var splited = str.split(',').join('/');
-    console.log(splited)
+    var splited=str.split(',').join('/');
   }
 
 }

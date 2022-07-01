@@ -26,13 +26,12 @@ export class EtudiantGuardService implements CanActivate {
         let role: string = currenttoken.role;
         let serviceName: string
         if (role == 'Admin') {
-            console.log("accés autorisé:" + role)
+            console.log("Accés autorisé: (" + role + ")")
             return true;
         } else {
 
             return this.etudiantService.getByUser_id(currenttoken.id).pipe(
                 map(data => {
-                    console.log(data)
                     if (data) {
                         console.log("accés autorisé : étudiant")
                         return true

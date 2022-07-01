@@ -32,6 +32,7 @@ export class AppMenuComponent implements OnInit {
             ((data) => {
                 if(data != null && data.type == "Formateur")
                 {
+                    //Formateur
                     this.model = [
                         {
                             label: 'Ticketing',
@@ -48,8 +49,9 @@ export class AppMenuComponent implements OnInit {
                     ];
                 }
 
-                else if (data != null && this.token.role == "user" && data.type != "Formateur" && data.type != "Commercial" && data.type != "Partenaire") 
+                else if (data != null && this.token.role == "user" && data.type != "Formateur" && data.type != "Commercial" && data.type != "Partenaire" && data.type != 'Prospect') 
                 {
+                    //Etudiant
                     this.model = [
                         {
                             label: 'Ticketing',
@@ -68,6 +70,7 @@ export class AppMenuComponent implements OnInit {
 
                 else if (data != null && (this.token.role == "Responsable" || this.token.role == "Agent") && data.type != "Commercial" && data.type != "Partenaire") 
                 {
+                    //Agent
                     this.model = [
                         {
                             label: 'Accueil',
@@ -86,7 +89,7 @@ export class AppMenuComponent implements OnInit {
                         {  
                             label: "Pédagogie", 
                             items: [
-                                {label : 'Gestions des matières', icon: 'pi pi-tags', routerLink: ['/matières']},
+                                {label : 'Gestions des matières', icon: 'pi pi-tags', routerLink: ['/matieres']},
                                 {
                                     label : 'Gestions des séances', icon: 'pi pi-video',
                                     items: [
@@ -115,7 +118,10 @@ export class AppMenuComponent implements OnInit {
                                             {label: 'Ajouter une entreprise', icon: 'pi pi-user-plus', routerLink: ['/ajout-entreprise']},
                                             {label: 'Liste des entreprises', icon: 'pi pi-sort-alpha-down', routerLink: ['/entreprises']},
                                     ]
-                                }
+                                },
+                                {label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit']},
+                                {label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects']}
+
                             ]
             
                         },
@@ -177,6 +183,7 @@ export class AppMenuComponent implements OnInit {
 
                 else 
                 {
+                    //Commercial
                     if (data != null && data.type == "Partenaire" || data.type == "Commercial" && this.token.role != "Admin")
                     {
                         if (data.data.statut != "Admin")
@@ -261,6 +268,7 @@ export class AppMenuComponent implements OnInit {
                                             ]
                                         },
                                         {label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects']},
+                                        {label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit']},
                                         {
                                             label: 'Gestions des étudiants', icon: 'pi pi-users',
                                             items: [
@@ -358,7 +366,7 @@ export class AppMenuComponent implements OnInit {
                 }
 
             }),
-            ((error) => { console.log(error); })
+            ((error) => { console.error(error); })
         );
 
         // this.model = [

@@ -48,7 +48,7 @@ export class ListGroupeComponent implements OnInit {
 
     this.classeService.getAll().subscribe(
       ((response) => { this.classes = response; }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.EtudiantService.getAll().subscribe(
@@ -70,7 +70,7 @@ export class ListGroupeComponent implements OnInit {
           this.diplomes[diplome._id] = diplome;
         })
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.onInitFormUpdateClasse();
@@ -99,7 +99,7 @@ export class ListGroupeComponent implements OnInit {
 
         this.classeService.getAll().subscribe(
           ((responseC) => { this.classes = responseC; }),
-          ((error) => { console.log(error); })
+          ((error) => { console.error(error); })
         );
 
         this.showFormUpdateClasse = false;
@@ -117,7 +117,7 @@ export class ListGroupeComponent implements OnInit {
         this.classeToUpdate = response;
         this.formUpdateClasse.patchValue({ libelle: this.classeToUpdate.nom, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id },abbrv:this.classeToUpdate.abbrv });
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
   }
 
@@ -131,7 +131,7 @@ export class ListGroupeComponent implements OnInit {
 
       this.classeService.getAll().subscribe(
         ((response) => { this.classes = response; }),
-        ((error) => { console.log(error); })
+        ((error) => { console.error(error); })
       );
 
     }, (error) => {
@@ -145,7 +145,7 @@ export class ListGroupeComponent implements OnInit {
 
       this.classeService.getAll().subscribe(
         ((response) => { this.classes = response; }),
-        ((error) => { console.log(error); })
+        ((error) => { console.error(error); })
       );
 
     }, (error) => {

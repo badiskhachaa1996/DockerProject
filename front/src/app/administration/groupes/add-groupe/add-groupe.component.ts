@@ -46,7 +46,7 @@ export class AddGroupeComponent implements OnInit {
 
     this.classeService.getAll().subscribe(
       ((response) => { this.classes = response; }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.EtudiantService.getAll().subscribe(
@@ -68,7 +68,7 @@ export class AddGroupeComponent implements OnInit {
           this.diplomes[diplome._id] = diplome;
         })
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
     this.onInitFormAddClasse();
@@ -95,7 +95,7 @@ export class AddGroupeComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Classe ajouté' });
         this.classeService.getAll().subscribe(
           ((responseC) => { this.classes = responseC; }),
-          ((error) => { console.log(error); })
+          ((error) => { console.error(error); })
         );
       }),
       ((error) => { this.messageService.add({ severity: 'error', summary: 'Ajout impossible' }); })

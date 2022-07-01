@@ -1,37 +1,37 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { FileUpload } from 'primeng/fileupload';
-import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
-import { Prospect } from 'src/app/models/Prospect';
-import { User } from 'src/app/models/User';
-import { AdmissionService } from 'src/app/services/admission.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
-import jwt_decode from "jwt-decode";
-import { saveAs as importedSaveAs } from "file-saver";
-import { ClasseService } from 'src/app/services/classe.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Etudiant } from 'src/app/models/Etudiant';
+import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import jwt_decode from "jwt-decode";
+import { ClasseService } from 'src/app/services/classe.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { FileUpload } from 'primeng/fileupload';
+import { MessageService } from 'primeng/api';
+import { saveAs as importedSaveAs } from "file-saver";
 
 @Component({
-  selector: 'app-prospects',
-  templateUrl: './prospects.component.html',
-  styleUrls: ['./prospects.component.scss']
+  selector: 'app-reinscrit',
+  templateUrl: './reinscrit.component.html',
+  styleUrls: ['./reinscrit.component.scss']
 })
-export class ProspectsComponent implements OnInit {
+export class ReinscritComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
-  code = this.ActiveRoute.snapshot.paramMap.get('code');
+  showUploadFile: Etudiant;
+  etudiants: Etudiant[]= [];
   users: User[] = [];
-  prospects: any[] = [];
-  inscriptionSelected: Prospect;
-  showUploadFile: Prospect;
-  ListDocuments: String[] = []
   token;
-  dataCommercial: CommercialPartenaire;
-  infoCommercialExpand: CommercialPartenaire;
+  imageToShow;
+
+  genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+
+  statutList = [
+    { value: "Etudiant" },
+    { value: "Alternant" }
+  ]
+
+  ListDocuments: String[] = []
   ListPiped: String[] = []
   DocTypes: any[] = [
     { value: null, label: "Choississez le type de fichier", },
@@ -42,23 +42,7 @@ export class ProspectsComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  showAssignForm: Prospect = null;
-
-  groupeList = [];
-
-  statutList = [
-    { value: "Etudiant" },
-    { value: "Alternant" }
-  ]
-
-  constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService,
-    private messageService: MessageService, private commercialService: CommercialPartenaireService, private classeService: ClasseService,
-    private etudiantService: EtudiantService, private formBuilder: FormBuilder) { }
-
-
-  uploadFileForm: FormGroup = new FormGroup({
-    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
-  })
+  showAssignForm: Etudiant = null;
 
   AssignForm: FormGroup = this.formBuilder.group({
     groupe: ["", Validators.required],
@@ -79,16 +63,25 @@ export class ProspectsComponent implements OnInit {
     email_tuteur: [''],
     phone_tuteur: [''],
     indicatif_tuteur: [''],
+    custom_id:['',Validators.required]
   })
+
+  initForm(etudiant:Etudiant){
+    this.AssignForm.patchValue({
+      customid:etudiant.custom_id
+    })
+  }
+
+  uploadFileForm: FormGroup = new FormGroup({
+    typeDoc: new FormControl(this.DocTypes[0], Validators.required)
+  })
+
+  groupeList = [];
+  constructor(public etudiantService: EtudiantService, private messageService:MessageService, 
+    private formBuilder: FormBuilder,public classeService:ClasseService, public userService:AuthService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
-    this.userService.WhatTheRole(this.token.id).subscribe(data => {
-      if (data.type == 'Commercial' && data.data.statut == 'Admin') {
-        this.dataCommercial = data.data
-      }
-      this.refreshProspect()
-    })
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
         this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
@@ -97,6 +90,7 @@ export class ProspectsComponent implements OnInit {
         groupe: this.groupeList[0].value
       })
     })
+    this.refreshEtudiant()
   }
 
   onAddEtudiant() {
@@ -107,24 +101,38 @@ export class ProspectsComponent implements OnInit {
       this.AssignForm.value.statut.value,
       this.users[this.showAssignForm.user_id].nationalite,
       this.showAssignForm.date_naissance,
-      this.showAssignForm.code_commercial,
-      null, null, null, this.showAssignForm.customid,
+      this.showAssignForm.code_partenaire,
+      null, null, null, this.AssignForm.value.custom_id,
       this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
-      this.showAssignForm.validated_academic_level,
+      this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
-      this.AssignForm.value.entreprise, this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur,//A faire pour Alternant
-      null, null//A faire pour PMR
+      this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
+      ,this.showAssignForm.isHandicaped,this.showAssignForm.suivi_handicaped,this.showAssignForm.entreprise
     )
-    this.etudiantService.createfromPreinscris(etd).subscribe(data => {
-      this.refreshProspect()
+    this.etudiantService.update(etd).subscribe(data => {
+      this.refreshEtudiant()
+      this.messageService.add({severity:"success",summary:"Etudiant réinscrit avec succès"})
       this.showAssignForm=null
     }, err => {
+      this.messageService.add({severity:"error",summary:"Problème avec la réinscription",detail:err})
       console.error(err)
     })
   }
+  refreshEtudiant(){
+    this.etudiantService.getAllWait().subscribe(data => {
+      this.etudiants = data
+    })
+    this.userService.getAll().subscribe(
+      ((response) => {
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        });
+      })
+    );
+  }
 
-  expandRow(prospect: Prospect) {
-    this.admissionService.getFiles(prospect?._id).subscribe(
+  expandRow(etu: Etudiant) {
+    this.etudiantService.getFiles(etu?._id).subscribe(
       (data) => {
         this.ListDocuments = data
         this.ListPiped = []
@@ -135,32 +143,10 @@ export class ProspectsComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    if (prospect.code_commercial) {
-      this.commercialService.getCommercialDataFromCommercialCode(prospect.code_commercial).subscribe(data => {
-        this.infoCommercialExpand = data
-      },
-        (error) => { console.error(error) })
-    } else {
-      this.infoCommercialExpand = null
-    }
-  }
-
-  refreshProspect() {
-    //Recuperation de la liste des utilisateurs
-    this.userService.getAll().subscribe(
-      ((response) => {
-        response.forEach((user) => {
-          this.users[user._id] = user;
-        });
-        this.admissionService.getAllWait().subscribe(d => {
-          this.prospects = d
-        })
-      })
-    );
   }
 
   downloadFile(id, i) {
-    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+    this.etudiantService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
     }, (error) => {
@@ -171,7 +157,7 @@ export class ProspectsComponent implements OnInit {
 
   deleteFile(id, i) {
     if (confirm("Voulez-vous vraiment supprimer le fichier " + this.ListPiped[i] + " ?")) {
-      this.admissionService.deleteFile(id, this.ListDocuments[i]).subscribe((data) => {
+      this.etudiantService.deleteFile(id, this.ListDocuments[i]).subscribe((data) => {
         this.messageService.add({ severity: "success", summary: "Le fichier a bien été supprimé" })
         this.ListDocuments.splice(i, 1)
         this.ListPiped.splice(i, 1)
@@ -189,7 +175,7 @@ export class ProspectsComponent implements OnInit {
       formData.append('id', this.showUploadFile._id)
       formData.append('document', this.uploadFileForm.value.typeDoc)
       formData.append('file', event.files[0])
-      this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
+      this.etudiantService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.expandRow(this.showUploadFile)
         event.target = null;
@@ -201,26 +187,53 @@ export class ProspectsComponent implements OnInit {
     }
   }
 
-  //Verification si le prospect est mineure ou majeur
-  onIsMinor(): boolean 
-  {
-    let result: boolean = false;
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
 
-    //recuperation de l'année actuelle
-    let anneeActuel = new Date().getFullYear();
-    //recuperation de l'année de naissance du prospect
-    let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
-
-    //Calcule de la difference
-    if(anneeActuel - anneeDeNaissance >= 18)
-    {
-      result = false;
-    } else
-    {
-      result = true;
-    }
-
-    return result;
+    })
+    this.etudiantService.getFiles(rowData?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+      },
+      (error) => { console.error(error) }
+    );
   }
+
+    //Verification si le prospect est mineure ou majeur
+    onIsMinor(): boolean 
+    {
+      let result: boolean = false;
+  
+      //recuperation de l'année actuelle
+      let anneeActuel = new Date().getFullYear();
+      //recuperation de l'année de naissance du prospect
+      let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
+  
+      //Calcule de la difference
+      if(anneeActuel - anneeDeNaissance >= 18)
+      {
+        result = false;
+      } else
+      {
+        result = true;
+      }
+  
+      return result;
+    }
 
 }

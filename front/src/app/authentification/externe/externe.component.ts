@@ -21,10 +21,11 @@ export class ExterneComponent implements OnInit {
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
   })
 
+  token: any;
   constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
 
   ngOnInit(): void {
-    
+   
   }
 
   Login() {
@@ -36,7 +37,7 @@ export class ExterneComponent implements OnInit {
         if (roleConnected.type == "Prospect") {
           localStorage.setItem('ProspectConected', roleConnected.Ptoken)
           this.router.navigate(['/suivre-ma-preinscription'])
-        } else if (roleConnected.type == "Commercial" || roleConnected.type == "Partenaire") {
+        } else{
           this.router.navigateByUrl('/ticket/suivi', { skipLocationChange: true })
         }
 
@@ -49,7 +50,7 @@ export class ExterneComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: "Authentification", detail: "Email ou Mot de passe Incorrect" });
       }
 
-      console.log(error)
+      console.error(error)
     })
 
   }
@@ -63,9 +64,10 @@ export class ExterneComponent implements OnInit {
           if (response.account) {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
               localStorage.setItem("token", data.token)
+              this.socket.isAuth()
               if (data.message) {
                 localStorage.setItem("modify", "true")
-                window.location.reload()
+                window.location.reload(); 
               }else{
                 this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
                   this.ss.connected()

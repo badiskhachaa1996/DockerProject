@@ -33,8 +33,8 @@ export class ListEntrepriseComponent implements OnInit {
     }
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
-      ((response) => { this.entreprises = response; console.log(this.entreprises) }),
-      ((error) => { console.log(error); })
+      ((response) => { this.entreprises = response;}),
+      ((error) => { console.error(error); })
     );
 
     this.onInitFormUpdateEntreprise();
@@ -169,12 +169,12 @@ export class ListEntrepriseComponent implements OnInit {
         //Recuperation de la liste des entreprises
         this.entrepriseService.getAll().subscribe(
           ((entreprisesFromDb) => { this.entreprises = entreprisesFromDb; }),
-          ((error) => { console.log(error); })
+          ((error) => { console.error(error); })
         );
         this.showFormUpdateEntreprise = null;
 
       }),
-      ((error) => { console.log(error); })
+      ((error) => { console.error(error); })
     );
 
   }
