@@ -114,12 +114,11 @@ app.get('/getById/:id', (req, res, next) => {
 
 
 //Recuperation de toute les s selon l'id d'une classe
-app.get('/getAllByClasseId/:id', (req, res, next) => {
-    Seance.find({ : { classe_id: req.params[id] } })
-        .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
-        .catch(error => res.status(400).send(error), console.log('le pb est ici'));
-});
-
+app.get('/getAllByClasseId/:id', (req, res, next) => {       
+     Seance.find({ classe_id: { $in: req.params.id } })
+            .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+            .catch(error => res.status(400).send(error), console.log('le pb est ici'));
+    });
 
 //Recuperation de toute les s selon l'identifiant du formateur
 app.get('/getAllbyFormateur/:id', (req, res, next) => {
