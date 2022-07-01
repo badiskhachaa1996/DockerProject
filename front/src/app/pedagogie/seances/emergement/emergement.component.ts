@@ -44,7 +44,7 @@ export class EmergementComponent implements OnInit {
   presence = null;
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
-  date = new Date().getTime()
+  date = 1656323520002 //new Date().getTime()
   date_debut; date_fin;
 
   @ViewChild("canva") myCanvas: ElementRef;
@@ -69,7 +69,6 @@ export class EmergementComponent implements OnInit {
         x = e.offsetX;
         y = e.offsetY;
       }
-      this.showCanvas = false
     });
 
     window.addEventListener('mouseup', e => {
@@ -102,6 +101,7 @@ export class EmergementComponent implements OnInit {
           this.presence = element
         }
       });
+      this.showCanvas = this.showCanvas && this.presence == null
     }, error => console.error(error))
   }
 
@@ -110,9 +110,6 @@ export class EmergementComponent implements OnInit {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
       this.token = null
-    }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
     }
     this.reloadPresence();
     this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
@@ -137,6 +134,7 @@ export class EmergementComponent implements OnInit {
       this.seance = dataS
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = new Date(dataS.date_fin).getTime()
+      this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
     })
     this.DiplomeService.getAll().subscribe(diplomes => {
       diplomes.forEach(diplome => {
@@ -144,7 +142,7 @@ export class EmergementComponent implements OnInit {
       })
       if (this.seance) {
         this.seance.classe_id.forEach((cid, index) => {
-          if (this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
+          if (this.classeList[cid] && this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
             if (index == 0) {
               this.affichageDiplome = this.diplomeList[this.classeList[cid].diplome_id].titre
             } else if (this.affichageDiplome.includes(this.diplomeList[this.classeList[cid].diplome_id].titre) == false) {
@@ -160,28 +158,33 @@ export class EmergementComponent implements OnInit {
   }
 
   getSignature() {
-    var canvasContents = this.myCanvas.nativeElement.toDataURL();
-    var data = { a: canvasContents };
-    var string = JSON.stringify(data);
-    var signature = string.substring(6, string.length - 2);
-    var sign = signature.substring(signature.indexOf(",") + 1)
-    let presence = new Presence(null, this.ID, this.token.id, true, sign)
+    if (this.date > this.date_debut && this.date_fin > this.date && this.presence == null) {
+      var canvasContents = this.myCanvas.nativeElement.toDataURL();
+      var data = { a: canvasContents };
+      var string = JSON.stringify(data);
+      var signature = string.substring(6, string.length - 2);
+      var sign = signature.substring(signature.indexOf(",") + 1)
+      let presence = new Presence(null, this.ID, this.token.id, true, sign)
 
-    this.PresenceService.create(presence).subscribe((data) => {
-      this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-      this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
-        if (dataWTR.type == "Formateur") {
-          this.FormateurService.updateMatiere(dataWTR.data, this.seance).subscribe(dataVH => {
-            this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-          })
-        }
+      this.PresenceService.create(presence).subscribe((data) => {
+        this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
+        this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
+          if (dataWTR.type == "Formateur") {
+            this.FormateurService.updateMatiere(dataWTR.data, this.seance).subscribe(dataVH => {
+              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
+            })
+          }
+        })
+        this.SocketService.addPresence();
+        this.reloadPresence()
+      }, err => {
+        this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
+        console.error(err)
       })
-      this.SocketService.addPresence();
-      this.reloadPresence()
-    }, err => {
-      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
-      console.error(err)
-    })
+    } else {
+      this.MessageService.add({ severity: 'error', summary: 'Vous êtes déjà noté présent ou Absent' })
+    }
+
   }
 
   getPDF() {
@@ -236,8 +239,8 @@ export class EmergementComponent implements OnInit {
   colorDate(rowData: Presence) {
     let date_seance: Date = new Date(this.seance.date_debut)
     let date_sign: Date = new Date(rowData.date_signature)
-    if(date_seance.getHours()==date_sign.getHours()){
-      if((date_seance.getMinutes()+15)>date_seance.getMinutes()){
+    if (date_seance.getHours() == date_sign.getHours()) {
+      if ((date_seance.getMinutes() + 15) > date_seance.getMinutes()) {
         return "color:black;"
       }
     }

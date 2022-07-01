@@ -456,7 +456,7 @@ app.post('/AuthMicrosoft', (req, res) => {
         if (user) {
 
             let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
-            if (user.type == null || user.phone == null) {
+            if (user.civilite == null) {
                 res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
             } else {
                 res.status(200).send({ token });

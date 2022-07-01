@@ -1,23 +1,26 @@
-<div class="grid"
-    *ngIf="showCanvas || (token.role=='user' || (dataRole!=null && dataRole.type == 'Formateur')) && ((presence==null || showCanvas) || (presence && presence.justificatif))">
-    <div class="col-10 col-offset-1 card shadow-lg ">
+<div class="grid">
+    <div class="col-10 col-offset-1 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div *ngIf="(presence==null && (seance && date> date_debut && date_fin> date)) || showCanvas"
-            class="col-12 my-5 ">
-            <p>
-                <canvas #canva width="300" height="100"></canvas>
-            </p>
+        <div class="col-12" *ngIf="showCanvas">
+            <canvas class="col-12" class="card" #canva width="300" height="100"></canvas><br>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
         </div>
-        <div class="grid">
-            <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
-                chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
-                maxFileSize="20000000" [auto]="true" class="col-5">
-            </p-fileUpload>
-            <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem" aria-hidden="true"></i>
-            <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-                class="ui-button-raised ui-button-success col-2" label="Envoyer" (click)="sendJustif();"></button>
+        <div class="p-grid"  *ngIf="!showCanvas && presence==null">
+            <h4>Fournir un justificatif d'absence</h4>
+            <div class="col-12">
+                <div class="md:col-offset-5">
+                    <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
+                        chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
+                        maxFileSize="20000000" [auto]="true" >
+                    </p-fileUpload>
+                </div>
+                <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
+                    aria-hidden="true"></i><br>
+                <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
+                    class="ui-button-raised ui-button-success col-12 md:col-6 md:col-offset-3" label="Envoyer"
+                    (click)="sendJustif();"></button>
+            </div>
         </div>
         <div *ngIf="presence && presence.justificatif">
             <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
@@ -54,8 +57,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-12 md:col-6 grid"
-                *ngIf="seance.classe_id && diplomeList">
+            <div class="col-12 md:col-6 grid" *ngIf="seance.classe_id && diplomeList">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Diplome :</strong>
                 </div>
@@ -64,15 +66,16 @@
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="classeList && seance.classe_id">
-                    <div class="col-6 md:col-6">
-                        <strong style="text-align:left !important;">Groupe :</strong>
-                    </div>
-                    <div class="col-6 md:col-6" style="text-align:left !important;">
-                        <span style="color: black;" *ngFor="let cid of seance.classe_id; let index = index">
-                            <span *ngIf="classeList[cid] && classeList[cid].nom && index==0">{{classeList[cid].nom}}</span>
-                            <span *ngIf="classeList[cid] && classeList[cid].nom && index!=0">,<br>{{classeList[cid].nom}}</span>
-                        </span>
-                    </div>
+                <div class="col-6 md:col-6">
+                    <strong style="text-align:left !important;">Groupe :</strong>
+                </div>
+                <div class="col-6 md:col-6" style="text-align:left !important;">
+                    <span style="color: black;" *ngFor="let cid of seance.classe_id; let index = index">
+                        <span *ngIf="classeList[cid] && classeList[cid].nom && index==0">{{classeList[cid].nom}}</span>
+                        <span
+                            *ngIf="classeList[cid] && classeList[cid].nom && index!=0">,<br>{{classeList[cid].nom}}</span>
+                    </span>
+                </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="matiereList && matiereList[seance.matiere_id]">
                 <div class="col-6 md:col-6">

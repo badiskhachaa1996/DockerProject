@@ -67,7 +67,7 @@ export class ExterneComponent implements OnInit {
               this.socket.isAuth()
               if (data.message) {
                 localStorage.setItem("modify", "true")
-                window.location.reload(); 
+                this.router.navigate(['completion-profil'])
               }else{
                 this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
                   this.ss.connected()
