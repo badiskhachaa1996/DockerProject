@@ -31,6 +31,7 @@ export class Etudiant {
         public indicatif_tuteur?: string,
         public isHandicaped?: boolean,
         public suivi_handicaped?:string,
-        public entreprise?:string
+        public entreprise?:string,
+        public diplome?: string
     ) { }
 }

@@ -177,6 +177,7 @@ app.put("/update", (req, res, next) => {
             entreprise: req.body?.entreprise,
             isHandicaped: req.body?.isHandicaped,
             suivi_handicaped: req.body?.suivi_handicaped,
+            diplome: req.body?.diplome
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);

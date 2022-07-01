@@ -835,6 +835,77 @@ export const environment = {
     { label: "Archivée", value: 'Archivée' },
 
   ],
+
+  programeFrDropdown:
+  [
+    { value: "BTS MCO - Management Commercial Opérationnel" },
+    { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+    { value: "BTS CG - Comptabilité et Gestion" },
+    { value: "RNCP CI - Commerce International" },
+    { value: "RNCP NTC - Négociateur Technico-Commercial" },
+    { value: "RNCP - Chargé de Développement Marketing et Commercial" },
+    { value: "RNCP - IA - Ingénieur d'Affaires" },
+    { value: "RNCP Management et Commerce International" },
+    { value: "BTS Services Informatique aux Organisations - SISR" },
+    { value: "BTS Services Informatique aux Organisations - SLAM" },
+    { value: "RNCP TSSR - Technicien Supérieur Systèmes et Réseaux" },
+    { value: "RNCP DWWM - Développeur Web & Web Mobile" },
+    { value: "RNCP AIS - Administrateur d'Infrastructures Sécurisées" },
+    { value: "RNCP CDA - Concepteur Développeur d'Applications" },
+    { value: "RNCP MPI Big Data - Expert IT – Applications Intelligentes & Big Data" },
+    { value: "RNCP MPI CyberSecurité - Expert IT – Cybersécurité et Haute Disponibilité" },
+    { value: "BTS Collaborateur Juriste Notarial" },
+    { value: "RNCP - Assistant Ressources Humaines" },
+    { value: "RNCP- Management des Ressources Humaines" },
+    { value: "BTS SPSSS - Services et Prestations des Secteurs Sanitaire et Social" },
+    { value: "RNCP - BIM modeleur du Bâtiement" },
+    { value: "RNCP - BIM modeleur du Coordinateur BIM du Bâtiment" },
+  ],
+
+programEnDropdown:
+  [
+    { value: "Level 3 - Foundation Diploma for Higher Education Studies" },
+    { value: "Level 4 - Business Management " },
+    { value: "Level 4 - Information Technology " },
+    { value: "Level 4 - Tourism and Hospitality Management" },
+    { value: "Level 4 - Health and Social care Management" },
+    { value: "Level 5 - Business Management" },
+    { value: "Level 5 - Information Technology" },
+    { value: "Level 7 - Project Management" },
+    { value: "Level 7 - Tourism and Hospitality Management" },
+    { value: "Level 7 - Health and Social care Management", }
+
+  ],
+
+  ADGprogrameFrDropdown:
+  [
+        { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" },
+        { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" },
+        { value: "GM - Gouvernant(e) de maison - Diplôme maison" },
+        { value: "BTS MCO - Management Commercial Operationnel" },
+        { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+        { value: "BTS GPME" },
+        { value: "BTS CI - Commerce International" },
+        { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
+        { value: "Chargé de gestion commerciale - Spécialité service commercial" },
+        { value: "IA - Ingénieur d'Affaires" },
+        { value: "Management et Stratégie d’Entreprise " },
+        { value: "BTS SIO - Services Informatiques aux Organisations" },
+        { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
+        { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
+        { value: "AIS - Administrateur d’Infrastructures Sécurisées" },
+        { value: "CDA - Concepteur Développeur d’Applications" },
+        { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " },
+        { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " },
+        { value: "BTS CJN  - Collaborateur Juriste Notarial" },
+        { value: "BTS CG - Comptabilité et Gestion" },
+        { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" },
+        { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" },
+        { value: "Coordinateur BIM du Bâtiment" },
+        { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
+        { value: "Formations continues IPERIA" }
+
+  ],
 };
 /*
  * For easier debugging in development mode, you can import the following file

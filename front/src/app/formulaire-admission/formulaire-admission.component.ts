@@ -41,6 +41,9 @@ export class FormulaireAdmissionComponent implements OnInit {
   civiliteList = environment.civilite;
   diplomes = [];
   diplomesOfCampus = [];
+  programeFrDropdown = environment.programeFrDropdown;
+  programEnDropdown = environment.programEnDropdown;
+  ADGprogrameFrDropdown = environment.ADGprogrameFrDropdown;
   userConnected: User;
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 50
@@ -93,47 +96,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
     ];
 
-  programeFrDropdown =
-    [
-      { value: "BTS MCO - Management Commercial Opérationnel" },
-      { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-      { value: "BTS CG - Comptabilité et Gestion" },
-      { value: "RNCP CI - Commerce International" },
-      { value: "RNCP NTC - Négociateur Technico-Commercial" },
-      { value: "RNCP - Chargé de Développement Marketing et Commercial" },
-      { value: "RNCP - IA - Ingénieur d'Affaires" },
-      { value: "RNCP Management et Commerce International" },
-      { value: "BTS Services Informatique aux Organisations - SISR" },
-      { value: "BTS Services Informatique aux Organisations - SLAM" },
-      { value: "RNCP TSSR - Technicien Supérieur Systèmes et Réseaux" },
-      { value: "RNCP DWWM - Développeur Web & Web Mobile" },
-      { value: "RNCP AIS - Administrateur d'Infrastructures Sécurisées" },
-      { value: "RNCP CDA - Concepteur Développeur d'Applications" },
-      { value: "RNCP MPI Big Data - Expert IT – Applications Intelligentes & Big Data" },
-      { value: "RNCP MPI CyberSecurité - Expert IT – Cybersécurité et Haute Disponibilité" },
-      { value: "BTS Collaborateur Juriste Notarial" },
-      { value: "RNCP - Assistant Ressources Humaines" },
-      { value: "RNCP- Management des Ressources Humaines" },
-      { value: "BTS SPSSS - Services et Prestations des Secteurs Sanitaire et Social" },
-      { value: "RNCP - BIM modeleur du Bâtiement" },
-      { value: "RNCP - BIM modeleur du Coordinateur BIM du Bâtiment" },
-    ];
-
-  programEnDropdown =
-    [
-      { value: "Level 3 - Foundation Diploma for Higher Education Studies" },
-      { value: "Level 4 - Business Management " },
-      { value: "Level 4 - Information Technology " },
-      { value: "Level 4 - Tourism and Hospitality Management" },
-      { value: "Level 4 - Health and Social care Management" },
-      { value: "Level 5 - Business Management" },
-      { value: "Level 5 - Information Technology" },
-      { value: "Level 7 - Project Management" },
-      { value: "Level 7 - Tourism and Hospitality Management" },
-      { value: "Level 7 - Health and Social care Management", }
-
-    ];
-
+ 
     typeFormationDropdown = [
       { value: "Intiale" },
       { value: "Alternance" }

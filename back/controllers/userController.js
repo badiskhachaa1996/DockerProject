@@ -297,6 +297,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
             postal_adresse: req.body.user.postal_adresse
+            // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {
             if (err || !user) {
@@ -304,7 +305,6 @@ app.post("/updateEtudiant/:id", (req, res) => {
                 res.send(err)
             } else {
                 let etudiantData = req.body.newEtudiant;
-                let date = new Date(etudiantData.date_naissance)
                 let etudiant = new Etudiant(
                     {
                         ...etudiantData
