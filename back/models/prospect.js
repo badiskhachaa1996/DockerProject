@@ -114,9 +114,20 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         default: "Aucun"
     },
-    archived:{
-        type:Boolean,
-        default:false
+    archived: {
+        type: Boolean,
+        default: false
+    },
+    validated_cf: {
+        type: Boolean,
+        default: false
+    },
+    payement: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    },
+    avancement_visa:{
+        type:Boolean
     }
 });
 

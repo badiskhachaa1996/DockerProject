@@ -16,27 +16,27 @@ export class ForfeitFormService {
   //Methode de recuperation de la liste des formateurs
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
-    return this.httpClient.get<ForfeitForm[]>(registreUrl, this.httpOptions);
+    return this.httpClient.get<ForfeitForm[]>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   //Methode de recuperation d'un formateur via son id formateur
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
-    return this.httpClient.get<ForfeitForm>(registreUrl, this.httpOptions);
+    return this.httpClient.get<ForfeitForm>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   updateById(forfeitForm:ForfeitForm) {
     let registreUrl = this.apiUrl + "updateById";
-    return this.httpClient.post<ForfeitForm>(registreUrl,forfeitForm, this.httpOptions);
+    return this.httpClient.post<ForfeitForm>(registreUrl,forfeitForm, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   create(forfeitForm:ForfeitForm) {
     let registreUrl = this.apiUrl + "create";
-    return this.httpClient.post<ForfeitForm>(registreUrl,forfeitForm, this.httpOptions);
+    return this.httpClient.post<ForfeitForm>(registreUrl,forfeitForm, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   delete(id:string){
     let registreUrl = this.apiUrl + "delete/" + id;
-    return this.httpClient.get<ForfeitForm>(registreUrl, this.httpOptions);
+    return this.httpClient.get<ForfeitForm>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 }

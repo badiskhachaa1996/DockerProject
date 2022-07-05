@@ -44,7 +44,7 @@ export class EmergementComponent implements OnInit {
   presence = null;
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
-  date = 1656323520002 //new Date().getTime()
+  date = new Date().getTime()
   date_debut; date_fin;
 
   @ViewChild("canva") myCanvas: ElementRef;
@@ -52,10 +52,15 @@ export class EmergementComponent implements OnInit {
   loading: boolean = false;
   affichageDiplome = ""
 
+  clearCanvas(){
+    var context = this.myCanvas.nativeElement.getContext('2d');
+    context.clearRect(0,0,500,500)
+  }
+
   ngAfterViewInit(): void {
     let isDrawing = false;
-    let x = 0;
-    let y = 0;
+    let x = 0;//-15
+    let y = 0;//-20
     var context = this.myCanvas.nativeElement.getContext('2d');
     this.myCanvas.nativeElement.addEventListener('mousedown', e => {
       x = e.offsetX;
@@ -83,6 +88,10 @@ export class EmergementComponent implements OnInit {
     });
 
     function drawLine(ctxt, x1, y1, x2, y2) {
+      x1-=15
+      y1-=20
+      x2-=15
+      y2-=20
       ctxt.beginPath();
       ctxt.strokeStyle = 'black';
       ctxt.lineWidth = 1;

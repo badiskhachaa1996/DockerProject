@@ -34,7 +34,10 @@ export class Prospect {
         public statut_payement?:string,
         public phase_complementaire?:string,
         public customid?:string,
-        public traited_by?:string     
+        public traited_by?:string,
+        public validated_cf?:boolean,
+        public payement?:[],
+        public avancement_visa?:boolean
     ) { }
 
 }

@@ -8,11 +8,14 @@ import { AuthService } from 'src/app/services/auth.service';
 import { saveAs as importedSaveAs } from "file-saver";
 import { FileUpload } from 'primeng/fileupload';
 import jwt_decode from "jwt-decode";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
+
+import { SelectButtonModule } from 'primeng/selectbutton';
+
 
 @Component({
   selector: 'app-gestion-preinscriptions',
@@ -32,6 +35,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   dataCommercial: CommercialPartenaire;
   infoCommercialExpand: CommercialPartenaire;
   ListPiped: String[] = []
+  showPayement: Prospect
   DocTypes: any[] = [
     { value: null, label: "Choississez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -83,6 +87,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Non Retenu", label: "Non Retenu" },
     { value: "Validé", label: "Validé" },
+    { value: "Payée", label: "Payée" },
+
   ]
 
   phaseComplementaire = [
@@ -120,11 +126,51 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "SLIM" },
     { value: "Achraf" },
   ]
+
+  stat_cf = [
+    { label: "Oui", value: true },
+    { label: "Non", value: false }
+  ]
+
+  payementList = []
+
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
 
-  constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
+
+  onAddPayement() {
+    this.payementList.push({ type: "", montant: 0 })
+  }
+
+  changeMontant(i, event, type) {
+    if (type == "montant") {
+      this.payementList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementList[i][type] = event.target.value;
+    }
+  }
+
+  deletePayement(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le payement ?")) {
+      this.payementList.splice(i)
+    }
+  }
+
+  addNewPayment() {
+    console.log(this.payementList)
+    this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.refreshProspect()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: "error", summary: "Erreur" })
+    })
+  }
+
+  constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private formBuilder: FormBuilder,
+    private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -244,7 +290,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     phase_complementaire: new FormControl(this.phaseComplementaire[0]),
     statut_payement: new FormControl(this.statutPayement[0]),
     customid: new FormControl("", Validators.required),
-    traited_by: new FormControl(this.listAgent[0])
+    traited_by: new FormControl(this.listAgent[0]),
+    validated_cf: new FormControl(false),
+    avancement_visa: new FormControl(false)
   })
 
 
@@ -257,6 +305,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
       statut_payement: { value: prospect.statut_payement },
       customid: prospect.customid,
       traited_by: { value: prospect.traited_by },
+      validated_cf: prospect.validated_cf,
+      avancement_visa: prospect.avancement_visa
     })
   }
 
@@ -271,9 +321,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
       phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
       statut_payement: this.changeStateForm.value.statut_payement.value,
       customid: this.changeStateForm.value.customid,
-      traited_by: this.changeStateForm.value.traited_by.value
+      traited_by: this.changeStateForm.value.traited_by.value,
+      validated_cf: this.changeStateForm.value.validated_cf,
+      avancement_visa: this.changeStateForm.value.avancement_visa
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
+
+      this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
       this.refreshProspect()
       this.inscriptionSelected = null
     }, (error) => {
@@ -373,6 +427,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut Payement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
+      t['Confirmation CF'] = p.validated_cf
       if (p.agent_id) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }

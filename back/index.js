@@ -143,8 +143,6 @@ app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
 
-
-
 app.use('/soc/prestataire', prestataireController);
 
 app.use('/soc/historique', historiqueController);

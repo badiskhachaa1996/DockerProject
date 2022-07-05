@@ -28,83 +28,84 @@ export class AuthService {
 
   registerAdmin(user: any) {
     let API_URL = this.apiUrl + "registre";
-    return this.http.post(API_URL, user, this.httpOptions1)
+    return this.http.post(API_URL, user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   login(user: any) {
     let loginUrl = this.apiUrl + "login";
-    return this.http.post<any>(loginUrl, user, this.httpOptions);
+    return this.http.post<any>(loginUrl, user, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getAll() {
     let loginUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(loginUrl, this.httpOptions1);
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getById(id) {
     let loginUrl = this.apiUrl + "getById/" + id;
-    return this.http.get<any>(loginUrl, this.httpOptions1);
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }
+    );
   }
 
   //Recuperation des infos du user
   getInfoById(id: string) {
     let url = this.apiUrl + 'getInfoById/' + id;
-    return this.http.get<User>(url, this.httpOptions1);
+    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getByEmail(email: string) {
     let registreUrl = this.apiUrl + "getByEmail/" + email;
-    return this.http.get<any>(registreUrl, this.httpOptions);
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   update(user: User) {
     let registreUrl = this.apiUrl + "updateById/" + user._id;
-    return this.http.post<any>(registreUrl, { user }, this.httpOptions1);
+    return this.http.post<any>(registreUrl, { user }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 
   updateEtudiant(user: User, etudiant: Etudiant) {
     let registreUrl = this.apiUrl + "updateEtudiant/" + user._id;
-    return this.http.post<any>(registreUrl, { user, newEtudiant: etudiant }, this.httpOptions1);
+    return this.http.post<any>(registreUrl, { user, newEtudiant: etudiant }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   /*updateAlternant(user:User,alternant:Alternant){
     let registreUrl=this.apiUrl+"updateAlternant/"+user._id;
-    return this.http.post<any>(registreUrl,{user,newAlternant:alternant},this.this.httpOptions1);
+    return this.http.post<any>(registreUrl,{user,newAlternant:alternant},this.{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }*/
 
 
 
   getAllByService(id) {
     let loginUrl = this.apiUrl + "getAllbyService/" + id;
-    return this.http.get<any>(loginUrl, this.httpOptions1)
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
       ;
   }
   getAllByemailPerso(id) {
     let loginUrl = this.apiUrl + "getAllbyEmailPerso/" + id;
-    return this.http.get<any>(loginUrl, this.httpOptions1)
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
       ;
   }
 
 
   getAllAgent() {
     let loginUrl = this.apiUrl + "getAllAgent/";
-    return this.http.get<any>(loginUrl, this.httpOptions1)
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   uploadimageprofile(data: FormData) {
     let url = this.apiUrl + "file";
-    return this.http.post<any>(url, data, this.httpOptions1)
+    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   getProfilePicture(id) {
     let url = this.apiUrl + "getProfilePicture/" + id;
-    return this.http.get<any>(url, this.httpOptions1)
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   updatePassword(id: string, data) {
     let url = this.apiUrl + "updatePassword/" + id;
-    return this.http.post<any>(url, data, this.httpOptions1);
+    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   reloadImage(data) {
@@ -113,22 +114,22 @@ export class AuthService {
 
   AuthMicrosoft(email, name) {
     let url = this.apiUrl + "AuthMicrosoft";
-    return this.http.post<any>(url, { email, name }, this.httpOptions);
+    return this.http.post<any>(url, { email, name }, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   WhatTheRole(id) {
     let url = this.apiUrl + "WhatTheRole/" + id;
-    return this.http.get<any>(url, this.httpOptions)
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
 
   verifPassword(tbObj: any) {
     let url = this.apiUrl + "verifyUserPassword";
-    return this.http.post(url, tbObj, this.httpOptions1);
+    return this.http.post(url, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   updatePwd(id: string, pwd: string) {
     let url = this.apiUrl + "udpatePwd/" + id;
-    return this.http.post<any>(url, pwd, this.httpOptions1);
+    return this.http.post<any>(url, pwd, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

@@ -150,11 +150,10 @@ import { FormAdmissionGuard } from './guards/formAdmission-guard';
                     { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
-                    { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-                    { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent }
-
+                    { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] }
                 ],
             },
+            { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent,  canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },   
             { path: 'login', component: ExterneComponent , canActivate : [LoginGuard] },

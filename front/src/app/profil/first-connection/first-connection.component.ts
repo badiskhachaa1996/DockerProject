@@ -56,14 +56,14 @@ export class FirstConnectionComponent implements OnInit {
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       entreprise_id: new FormControl(this.dropdownEntreprise[0]),
       type: new FormControl(this.statutList[0], [Validators.required]),
-      pays_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
+      pays_adresse: new FormControl(this.paysList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
       ville_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
       rue_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
       numero_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       classe_id: new FormControl(this.dropdownClasse[0]),
       nationalite: new FormControl(this.nationList[0]),
-      date_naissance: new FormControl(""),
+      date_naissance: new FormControl("",Validators.required),
       entreprise: new FormControl(""),
       diplome : new FormControl(this.programeFrDropdown[0]),
     });
@@ -74,8 +74,11 @@ export class FirstConnectionComponent implements OnInit {
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
     if (token) {
+      console.log(token)
       this.AuthService.getById(token['id']).subscribe((data) => {
+        console.log(data)
         this.userConnected = jwt_decode(data.userToken)['userFromDb']
+        console.log(jwt_decode(data.userToken))
         if (this.userConnected.phone == null || this.userConnected.civilite == null || this.userConnected.type == null) {
           this.RegisterForm.patchValue({
             lastname: this.userConnected.lastname,
@@ -107,7 +110,7 @@ export class FirstConnectionComponent implements OnInit {
            });
   
          }),
-         ((error) => { console.error(error), console.error(error) })
+         ((error) => { console.error(error)})
        );
 
 
@@ -120,7 +123,7 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.error(error), console.error(error) })
+      ((error) => { console.error(error)})
     );
 
      //Recuperation de la liste des diplome
@@ -132,7 +135,7 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.log(error), console.log("pb ici") })
+      ((error) => { console.error(error) })
     );
   }
 
@@ -199,7 +202,7 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          "TDO",
+          "",
           null,
           null,
           null,

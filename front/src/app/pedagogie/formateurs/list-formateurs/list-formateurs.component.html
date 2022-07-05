@@ -158,9 +158,11 @@
 						<p style="font-style:italic">Matière n°{{i+1}}</p>
 						<div>
 							<div class="field">
+								<label>Matière:</label>
 								<p-dropdown [options]="matiereList" [group]="true" formControlName="i"></p-dropdown>
 							</div>
 							<div class="field">
+								<label>Volume Prévue:</label>
 								<input type="number" (change)="changeVolumeH(i,$event)" [(value)]="volumeHList[i]"
 									placeholder="Volume horaire" value="0" pInputText>
 							</div>

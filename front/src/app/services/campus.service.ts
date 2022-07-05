@@ -14,26 +14,26 @@ export class CampusService {
 
   getAll() {
     let campusUrl = this.apiUrl + "getAll";
-    return this.http.get<any>(campusUrl, this.httpOptions1);
+    return this.http.get<any>(campusUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getByID(Campus: any) {
     let campusUrl = this.apiUrl + "getById/" + Campus;
-    return this.http.get<any>(campusUrl, this.httpOptions1);
+    return this.http.get<any>(campusUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   createCampus(campus: any) {
     let campusUrl = this.apiUrl + "createcampus";
-    return this.http.post<any>(campusUrl, campus, this.httpOptions1);
+    return this.http.post<any>(campusUrl, campus, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
   edit(Campus: any) {
     let campusUrl = this.apiUrl + "editById/" + Campus._id;
-    return this.http.post<any>(campusUrl, Campus, this.httpOptions1);
+    return this.http.post<any>(campusUrl, Campus, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
   getAllByEcole(id: any) {
     let campusUrl = this.apiUrl + "getAllByEcole/" + id;
-    return this.http.get<any>(campusUrl, this.httpOptions1);
+    return this.http.get<any>(campusUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 
