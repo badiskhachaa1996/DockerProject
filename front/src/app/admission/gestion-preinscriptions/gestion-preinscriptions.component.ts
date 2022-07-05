@@ -338,15 +338,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   //Methode de redirection vers la page d'ajout d'une nouvelle admission
   onGetFormAdmissionESTYA() {
-    this.router.navigate(['demande-admission', 'estya']);
+    this.router.navigate(['formulaire-admission', 'estya']);
   }
 
   onGetFormAdmissionADG() {
-    this.router.navigate(['demande-admission', 'adg']);
+    this.router.navigate(['formulaire-admission', 'adg']);
   }
 
   onGetFormAdmissionESPIC() {
-    this.router.navigate(['demande-admission', 'espic']);
+    this.router.navigate(['formulaire-admission', 'espic']);
   }
 
   downloadFile(id, i) {
