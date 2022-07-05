@@ -117,6 +117,10 @@ const prospect_schema = new mongoose.Schema({
     archived:{
         type:Boolean,
         default:false
+    },
+    validated_cf:{
+        type:Boolean,
+        default:false
     }
 });
 

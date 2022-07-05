@@ -45,7 +45,13 @@
                     <label>Attestation traité par: </label>
                     <p-dropdown [options]="listAgent" optionLabel="value" formControlName="traited_by"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-4 md:col-offset-4">
+                <div class="field col-12 md:col-4">
+                    <label>Confirmation campus france: </label>
+                    <p-selectButton [options]="stat_cf" formControlName="validated_cf" 
+                         optionLabel="label" optionValue="value">
+                    </p-selectButton>
+                </div>
+                <div class="field col-12 md:col-4">
                     <label>Code étudiant: </label>
                     <input pInputText type="text" formControlName="customid" placeholder="DUSB010199"
                         class="form-control">
