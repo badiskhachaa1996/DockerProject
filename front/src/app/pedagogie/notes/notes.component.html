@@ -28,7 +28,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Semestre</label>
                     <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
-                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -62,13 +62,10 @@
         <div class="card">
             <h3>Ajouter une note</h3>
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormAddNoteByClasseByExam = false; formAddNoteByClasseByExam.reset()" aria-hidden="true"></i>
-
-            <form [formGroup]="formAddNoteByClasseByExam" (ngSubmit)="onAddNoteByClasseByExam()" class="p-fluid p-formgrid grid">
-                
+            <form [formGroup]="formAddNoteByClasseByExam" (ngSubmit)="onAddNoteByClasseByExam()" class="p-fluid p-formgrid grid">             
                 <div class="field col-12 md:col-12">
                     <label For="note">Note</label>
                     <input pInputText id="note" formControlName="note_val" placeholder="Veuillez saisir la note" type="text" />
-
                     <div *ngIf="note_val_esm.invalid && (note_val_esm.touched || note_val_esm.dirty)">
                         <span *ngIf="note_val_esm.errors?.pattern" style="color: red;">
                             La valeur de la note n'est pas dans le bon format
@@ -130,7 +127,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Semestre</label>
                     <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
-                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif" filter="true" >
                     </p-dropdown>
                 </div>
 
@@ -176,7 +173,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="semestre">Semestre</label>
                     <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
-                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif" filter="true">
                     </p-dropdown>
                 </div>
                 
@@ -225,7 +222,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="semestre">Semestre</label>
                     <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
-                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" filter="true">
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif" filter="true">
                     </p-dropdown>
                 </div>
                 

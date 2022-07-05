@@ -49,32 +49,32 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Campus</label>
-                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id"></p-dropdown>
+                    <p-dropdown [options]="campusList" optionLabel="libelle" placeholder="Choissisez le campus" formControlName="campus_id"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-3">
                     <label>Type de diplôme</label>
-                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
+                    <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome" optionDisabled="actif"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-3">
                     <label>Type d'étude</label>
-                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude"></p-dropdown>
+                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude" optionDisabled="actif"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Domaine</label>
-                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
+                    <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine" optionDisabled="actif"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Niveau d'étude</label>
-                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"></p-dropdown>
+                    <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau" optionDisabled="actif"></p-dropdown>
                 </div>
 
                 <div class="field col-12">
                     <label>Cette formation est-elle diplômante ?</label>
-                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified"></p-dropdown>
+                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified" ></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-8">
@@ -104,7 +104,7 @@
 
                 <div class="field col-12 md:col-4">
                     <label>Rythme de la formation</label>
-                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"></p-dropdown>
+                    <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme" optionDisabled="actif"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-4">

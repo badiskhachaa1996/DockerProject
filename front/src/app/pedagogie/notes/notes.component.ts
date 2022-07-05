@@ -42,7 +42,7 @@ export class NotesComponent implements OnInit {
   userList: any[] = [];
 
   etudiants: Etudiant[] = [];
-  dropdownEtudiant: any[] = [{ libelle: '', value: '' }];
+  dropdownEtudiant: any[] = [];
 
   examens: Examen[] = [];
   dropdownExamen: any[] = [{ libelle: '', value: '' }];
@@ -52,10 +52,10 @@ export class NotesComponent implements OnInit {
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
-    { libelle: '', value: '' },
-    { libelle: 'Semestre 1', value: 'Semestre 1' },
-    { libelle: 'Semestre 2', value: 'Semestre 2' },
-    { libelle: 'Semestre 3', value: 'Semestre 3' }
+    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif:true },
+    { libelle: 'Semestre 1', value: 'Semestre 1', actif:false },
+    { libelle: 'Semestre 2', value: 'Semestre 2', actif:false },
+    { libelle: 'Semestre 3', value: 'Semestre 3', actif:false }
   ];
 
   //Données liées à la saisie de notes

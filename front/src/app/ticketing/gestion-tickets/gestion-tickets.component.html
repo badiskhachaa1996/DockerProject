@@ -79,12 +79,12 @@
 			<form class="p-fluid p-formgrid grid" [formGroup]="TicketFormAdd" (ngSubmit)="addTicket()">
 				<div class="field col-12 md:col-6">
 					<label For="service">Service</label>
-					<p-dropdown [options]="listServices" optionLabel="label" formControlName="service" (change)="onChangeAdd()"></p-dropdown>
+					<p-dropdown [options]="listServices" optionLabel="label" formControlName="service" placeholder="Choissisez un service" (change)="onChangeAdd()"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-6">
 					<!-- Liste à changer dans le ts-->
 					<label For="sujet">Sujet</label>
-					<p-dropdown [options]="listSujetSelected[TicketFormAdd.value.service._id]" optionLabel="label" formControlName="sujet"></p-dropdown>
+					<p-dropdown [options]="listSujetSelected[TicketFormAdd.value.service._id]" optionLabel="label" placeholder="Choissisez un sujet" formControlName="sujet"></p-dropdown>
 				</div>
 				<div class="field col-12">
 					<label For="description">Description</label>
@@ -97,7 +97,7 @@
 				</div>
 				<div class="field col-12">
 					<label For="email_user">Adresse email de l'utilisateur</label>
-					<input pInputText id="email_user" formControlName="email" type="email" />
+					<input pInputText id="email_user" formControlName="email" type="email" placeholder="Adresse email de l'utilisateur (@estya.com)"/>
 					<div *ngIf="(email.invalid) && (email.touched || email.dirty)">
 						<span class="error" style="color: red;" *ngIf="email.errors?.required">* L'adresse mail est
 							obligatoire.</span>

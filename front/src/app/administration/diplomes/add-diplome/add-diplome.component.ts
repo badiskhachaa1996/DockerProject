@@ -26,35 +26,40 @@ import { Ecole } from 'src/app/models/Ecole';
 export class AddDiplomeComponent implements OnInit {
 
   rythmeList = [
-    { value: "2 jours par semaine" },
-    { value: "1 semaine sur 3" },
-    { value: "1 jour par semaine" }
+    {value: "Choissisez le rythme de la formmation", actif: true},
+    { value: "2 jours par semaine", actif: false },
+    { value: "1 semaine sur 3", actif: false },
+    { value: "1 jour par semaine", actif: false }
   ]
 
   domaineEtude = [
-    { value: "Commerce" },
-    { value: "RH" },
-    { value: "Informatique" },
-    { value: "Gestion" },
-    { value: "Construction" },
-    { value: "Santé, Sanitaire et Social" }
+    {value: "Choissisez le type du diplôme", actif: true},
+    { value: "Commerce", actif: false },
+    { value: "RH", actif: false },
+    { value: "Informatique", actif: false },
+    { value: "Gestion", actif: false },
+    { value: "Construction", actif: false },
+    { value: "Santé, Sanitaire et Social", actif: false }
   ]
 
   typeDiplome = [
-    { value: "BTS" },
-    { value: "RNCP" }
+    {value: "Choissisez le type du diplôme", actif: true},
+    { value: "BTS", actif: false },
+    { value: "RNCP", actif: false }
   ]
 
   typeEtude = [
-    { value: "Initial" },
-    { value: "Apprentissage" },
-    { value: "Continu" }
+    {value: "Choissisez le type d'étude", actif: true},
+    { value: "Initial", actif: false },
+    { value: "Apprentissage", actif: false },
+    { value: "Continu", actif: false }
   ]
 
   niveauEtude = [
-    { value: "Niveau 5" },
-    { value: "Niveau 6" },
-    { value: "Niveau 7" }
+    {value: "Choissisez le type d'étude", actif: true},
+    { value: "Niveau 5", actif: false },
+    { value: "Niveau 6", actif: false },
+    { value: "Niveau 7", actif: false }
   ]
 
   choiceList = [

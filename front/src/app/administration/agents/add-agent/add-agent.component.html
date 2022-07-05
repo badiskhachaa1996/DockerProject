@@ -28,7 +28,7 @@
             <form class="p-fluid p-formgrid grid"   (ngSubmit)="saveUser();RegisterForm.reset()" [formGroup]="RegisterForm">
                 <div class="field col-12 md:col-4">
                     <label For="libelle">Civilité</label>
-                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value" optionDisabled="actif"></p-dropdown>
 
                 </div>
                 <div class="field col-12 md:col-4">
@@ -73,26 +73,26 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="campus">Campus</label>
-                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus"></p-dropdown>
+                    <p-dropdown [options]="campusList" optionLabel="libelle" placeholder="Choissisez un campus" formControlName="campus"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="groupe">Groupe</label>
                     <!--liste à changer dans le ts-->
-                    <p-dropdown [options]="formationList" optionLabel="libelle" formControlName="formation"></p-dropdown>
+                    <p-dropdown [options]="formationList" optionLabel="libelle" placeholder="Choissisez un groupe" formControlName="formation"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="entreprise">Entreprise</label>
                     <!--liste à changer dans le ts-->
-                    <p-dropdown [options]="entreprisesList" optionLabel="libelle" formControlName="entreprise"></p-dropdown>
+                    <p-dropdown [options]="entreprisesList" optionLabel="libelle" placeholder="Choissisez une entreprise" formControlName="entreprise"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="role">Rôle</label>
-                    <p-dropdown [options]="roleList" optionLabel="value"formControlName="role"></p-dropdown>
+                    <p-dropdown [options]="roleList" optionLabel="value" placeholder="Choissisez un rôle"formControlName="role"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="service">Service</label>
                     <!--liste à changer dans le ts-->
-                    <p-dropdown [options]="serviceList" optionLabel="label" formControlName="service_id"></p-dropdown>
+                    <p-dropdown [options]="serviceList" optionLabel="label" placeholder="Choissisez un service" formControlName="service_id"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton type="submit" label="Ajouter"  [disabled]="RegisterForm.invalid"></button>
