@@ -89,10 +89,10 @@
         <div class="card">
             <div style="float: right;">
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
-                    label="Nouvelle demande ESPIC"></button>
+                    label="Nouvelle demande ESPIC" (click)="onGetFormAdmissionESTYA()"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
-                    label="Nouvelle demande ADG"></button>
-                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
+                    label="Nouvelle demande ADG" (click)="onGetFormAdmissionADG()"></button>
+                <button style="margin-left: 2px;" (click)="onGetFormAdmissionESPIC()" pButton icon="pi pi-plus-circle"
                     label="Nouvelle demande ESTYA"></button>
             </div>
             <h5>Liste des pre-inscriptions</h5>
