@@ -4,31 +4,29 @@ import { Injectable } from "@angular/core";
 import { ServService } from "../services/service.service";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 
 export class ProspectGuard implements CanActivate {
- 
-    constructor(private router: Router) { }
 
-    canActivate(): boolean | UrlTree{
+  constructor(private router: Router) { }
+
+  canActivate(): boolean | UrlTree {
 
 
-        if (localStorage.getItem('ProspectConected')) {
+    if (localStorage.getItem('ProspectConected')) {
 
-            return true;
-           
-          }
-          else if(localStorage.getItem("modify")) {
-            console.log(localStorage.getItem("modify"))
-          }
-          else{
-            
-            console.log("Prospect non authentifier");
-           
-            return  this.router.createUrlTree(['/login']);;
-          }
-      
+      return true;
 
-          }
+    }
+
+    else {
+
+      console.log("Prospect non authentifier");
+
+      return this.router.createUrlTree(['/login']);;
+    }
+
+
+  }
 }

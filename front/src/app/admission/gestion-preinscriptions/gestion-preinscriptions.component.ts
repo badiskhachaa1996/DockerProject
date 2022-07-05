@@ -14,6 +14,9 @@ import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
 
+import {SelectButtonModule} from 'primeng/selectbutton';
+
+
 @Component({
   selector: 'app-gestion-preinscriptions',
   templateUrl: './gestion-preinscriptions.component.html',
@@ -83,6 +86,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Non Retenu", label: "Non Retenu" },
     { value: "Validé", label: "Validé" },
+    { value: "Payée", label: "Payée" },
+
   ]
 
   phaseComplementaire = [
@@ -120,6 +125,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "SLIM" },
     { value: "Achraf" },
   ]
+
+  stat_cf =[
+      { label: "Oui", value: true },
+      { label: "Non", value: false }
+    ]
+
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
@@ -244,7 +255,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
     phase_complementaire: new FormControl(this.phaseComplementaire[0]),
     statut_payement: new FormControl(this.statutPayement[0]),
     customid: new FormControl("", Validators.required),
-    traited_by: new FormControl(this.listAgent[0])
+    traited_by: new FormControl(this.listAgent[0]),
+    validated_cf: new FormControl(''),
   })
 
 
@@ -257,10 +269,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
       statut_payement: { value: prospect.statut_payement },
       customid: prospect.customid,
       traited_by: { value: prospect.traited_by },
+      validated_cf: { value: prospect.validated_cf }
     })
   }
 
   changeStateBtn() {
+    console.log(this.changeStateForm.value.validated_cf)
     let p = {
       _id: this.inscriptionSelected._id,
       statut_dossier: this.changeStateForm.value.statut.value,
@@ -271,10 +285,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
       phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
       statut_payement: this.changeStateForm.value.statut_payement.value,
       customid: this.changeStateForm.value.customid,
-      traited_by: this.changeStateForm.value.traited_by.value
+      traited_by: this.changeStateForm.value.traited_by.value,
+      validated_cf: this.changeStateForm.value.validated_cf,
     }
+    console.log(p.validated_cf)
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
+     
+      console.log(dataUpdated)
       this.refreshProspect()
+      console.log(dataUpdated)
       this.inscriptionSelected = null
     }, (error) => {
       console.error(error)
@@ -373,6 +392,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut Payement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
+      t['Confirmation CF'] = p.validated_cf
       if (p.agent_id) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }

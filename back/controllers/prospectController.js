@@ -403,7 +403,9 @@ app.post("/updateStatut/:id", (req, res, next) => {
         phase_complementaire: req.body.phase_complementaire,
         statut_payement: req.body.statut_payement,
         customid: req.body.customid,
-        traited_by: req.body.traited_by
+        traited_by: req.body.traited_by,
+        validated_cf: req.body.validated_cf
+    
     }).then(newProspect => {
         res.status(200).send(newProspect)
     }).catch((error) => { res.status(400).send(error); });
