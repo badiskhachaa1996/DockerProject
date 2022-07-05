@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
+const scrypt_Mail = require("./middleware/scrypt_Mail");
+var CronJob = require('cron').CronJob;
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
@@ -16,7 +18,7 @@ app.use(cors({ origin: origin }));
 const httpServer = require("http").createServer(app);
 const options = {
     cors: {
-        origin: origin,     
+        origin: origin,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
@@ -33,6 +35,21 @@ mongoose
     })
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
+
+
+        var CronJob = require('cron').CronJob;
+var job = new CronJob(
+	'*/5 * 15 */1 * *',
+	function() {
+		console.log('You will see this message two time in month');
+        scrypt_Mail.smail();
+	},
+	null,
+	true,
+	'local'
+);
+     
+
     })
     .catch(err => {
         console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
@@ -70,6 +87,7 @@ const appreciationController = require('./controllers/appreciationController');
 const historiqueEchangeController = require('./controllers/historiqueEchangeController')
 const forfeitFormController = require('./controllers/forfeitFormController')
 const { User } = require("./models/user");
+const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
 

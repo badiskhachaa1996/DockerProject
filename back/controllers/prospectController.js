@@ -307,6 +307,7 @@ app.post("/create", (req, res, next) => {
 app.get("/getAll", (req, res, next) => {
     Prospect.find({ archived: [false,null] })//.populate('user_id')
         .then((prospectsFromDb) => {
+            
             prospectsFromDb.forEach(function (element, index) {
                 let nb = 0
                 try {
@@ -329,6 +330,7 @@ app.get("/getAll", (req, res, next) => {
                 }
                 prospectsFromDb[index]["nbDoc"] = nb
             });
+            exports(prospectsFromDb);
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -372,6 +374,7 @@ app.put("/update", (req, res, next) => {
                     numero_adresse: userData.numero_adresse,
                     postal_adresse: userData.postal_adresse,
                     nationalite: userData.nationalite,
+
                 })
                 .then((userUpdated) => { res.status(200).send(userUpdated) })
                 .catch((error) => { res.status(400).send(error); });
