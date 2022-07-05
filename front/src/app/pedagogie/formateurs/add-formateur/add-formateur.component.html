@@ -51,7 +51,7 @@
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddFormateur" (ngSubmit)="onAddFormateur()">
                     <div class="field col-5 md:col-4">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite">
+                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif" formControlName="civilite">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -137,8 +137,8 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="contrat">Type de contract<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
+                        <label For="contrat">Type de contrat<span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat" optionDisabled="actif">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
@@ -307,7 +307,7 @@
                     <div class="field col-12 md:col-6">
                         <label>Campus</label><br>
                         <p-dropdown formControlName="campus" [options]="dropdownCampus"
-                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true" placeholder="Choissisez un campus">
                         </p-dropdown>
                     </div>
 

@@ -40,7 +40,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Etat</label>
-                    <p-dropdown formControlName="etat" [options]="etat_annee" optionLabel="value"></p-dropdown>
+                    <p-dropdown formControlName="etat" [options]="etat_annee" optionLabel="value" optionDisabled="actif"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit"[disabled]="anneeScolaireForm.invalid" ></button>

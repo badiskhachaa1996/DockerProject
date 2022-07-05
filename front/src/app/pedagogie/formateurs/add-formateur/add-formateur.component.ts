@@ -34,17 +34,16 @@ export class AddFormateurComponent implements OnInit {
   civiliteList = environment.civilite;
 
   typeContratList = [
-    { label: 'CDI', value: 'CDI' },
-    { label: 'CDD', value: 'CDD' },
-    { label: 'Prestation et Vacation', value: 'Prestation et Vacation' },
-    //{ label: 'Vacation', value: 'Vacation' },
-    { label: 'Sous-traitance', value: 'Sous-traitance' },
-    /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
-    { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
+    { label: "Choissisez un type de contrat", actif:true},
+    { label: 'CDI', value: 'CDI', actif:false },
+    { label: 'CDD', value: 'CDD', actif:false },
+    { label: 'Prestation et Vacation', value: 'Prestation et Vacation', actif:false },
+    { label: 'Sous-traitance', value: 'Sous-traitance', actif:false },
   ];
+
   prestataireList = [
-    { label: 'EliteLabs', value: 'EliteLabs' },
-    { label: 'Autre', value: 'Autre' }
+    { label: 'EliteLabs', value: 'EliteLabs', actif:false },
+    { label: 'Autre', value: 'Autre', actif:false }
   ];
   matiereList = [];
   matiereDic = {};

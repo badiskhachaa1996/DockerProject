@@ -48,11 +48,11 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Type</label>
-                    <p-dropdown [options]="typeSoc" optionLabel="value" formControlName="type"></p-dropdown>
+                    <p-dropdown [options]="typeSoc" optionLabel="value" filterPlaceholder="Choissisez le type de la societe" formControlName="type" optionDisabled="actif"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Format juridique</label>
-                    <p-dropdown [options]="formatJuridique" optionLabel="value" formControlName="format_juridique"></p-dropdown>
+                    <p-dropdown [options]="formatJuridique" optionLabel="value" formControlName="format_juridique" optionDisabled="actif"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-2">
                     <label For="Indicatif">Indicatif</label>

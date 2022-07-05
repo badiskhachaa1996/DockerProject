@@ -25,7 +25,7 @@ import { Historique } from 'src/app/models/Historique';
 export class AddAgentComponent implements OnInit {
 
   serviceList: any[];
- display: Boolean= false;
+  display: Boolean= false;
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
   User_role: String;
