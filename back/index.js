@@ -39,16 +39,15 @@ mongoose
 
         var CronJob = require('cron').CronJob;
 var job = new CronJob(
-	'*/5 * 15 */1 * *',
+	'11 11 12 */1 * *',
 	function() {
-		console.log('You will see this message two time in month');
         scrypt_Mail.smail();
 	},
 	null,
 	true,
 	'local'
 );
-     
+
 
     })
     .catch(err => {

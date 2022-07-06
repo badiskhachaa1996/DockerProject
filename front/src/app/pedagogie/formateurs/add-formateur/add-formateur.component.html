@@ -141,11 +141,7 @@
                         <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="isInterne">Interne ou Externe ?<span style="color: red;"> * </span></label>
-                        <p-selectButton [options]="[{label:'Interne',value:true},{label:'Externe',value:false}]"
-                            formControlName="isInterne"></p-selectButton>
-                    </div>
+                   
                     <div class="field col-12 md:col-12" *ngIf="onGetStatut()=='Prestation et Vacation'">
                         <label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
                         <p-tabView>
@@ -291,7 +287,8 @@
                                         value="0" pInputText>
                                 </div>
                                 <div class="field">
-                                    <i style="cursor: pointer;"class="pi pi-trash" (click)="deleteMatiereAdd(i)" aria-hidden="true"></i>
+                                    <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteMatiereAdd(i)"
+                                        aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -309,6 +306,12 @@
                         <p-dropdown formControlName="campus" [options]="dropdownCampus"
                             emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
                         </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="nda">Numéro de Déclaration d'Activité </label>
+                        <input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
+                            formControlName="nda" />
                     </div>
 
                     <div class="field col-12 md:col-12">

@@ -6,7 +6,6 @@ const formateurSchema = mongoose.Schema({
     type_contrat: { type: String, required: true },
     taux_h: { type: Number, required: true },
     taux_j: { type: Number, required: false },
-    isInterne: { type: Boolean, required: true },
     prestataire_id: { type: String, required: false },
     volume_h: { type: mongoose.Schema.Types.Mixed, required: false },
     volume_h_consomme: { type: mongoose.Schema.Types.Mixed, required: false },
@@ -16,7 +15,9 @@ const formateurSchema = mongoose.Schema({
     thursday_available: { type: mongoose.Schema.Types.Mixed, default: { state: false, h_debut: null, h_fin: null, remarque: "" } },
     friday_available: { type: mongoose.Schema.Types.Mixed, default: { state: false, h_debut: null, h_fin: null, remarque: "" } },
     remarque: { type: String },
-    campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Campus' }
+    campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Campus' },
+    nda      : {type:String, required:false},
+    IsJury: { type: mongoose.Schema.Types.Mixed,  required: false, default: { diplome_id: "", cout_h: null, cout_j: null, remarque: "" } },
 });
 
 //Création de la table formateur via le schema de données

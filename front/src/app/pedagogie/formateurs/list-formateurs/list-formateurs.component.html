@@ -15,11 +15,7 @@
 					<p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
 					</p-dropdown>
 				</div>
-				<div class="field col-12 md:col-4">
-					<label for="isInterne">Type formateur<span style="color: red;"> * </span></label>
-					<p-selectButton [options]="[{label:'Interne',value:true},{label:'Externe',value:false}]"
-						formControlName="isInterne"></p-selectButton>
-				</div>
+				
 				<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation'">
 					<label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
 					<p-tabView>
@@ -223,7 +219,7 @@
 		<div class="card">
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
-			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'isInterne']"
+			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda']"
 				[totalRecords]="formateurs.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
 				styleClass="p-datatable-gridlines" [value]="formateurs" dataKey="_id" responsiveLayout="scroll">
 
@@ -256,7 +252,7 @@
 							{{userList[formateur._id].firstname | titlecase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
-						<td style="min-width: 10rem;">{{ formateur.isInterne?'Interne':"Externe" }}</td>
+						
 						<!--<td style="min-width: 10rem;">{{ formateur.taux_h }} €</td>-->
 						<td>{{campusList[formateur?.campus_id]?.libelle}}</td>
 						<td>

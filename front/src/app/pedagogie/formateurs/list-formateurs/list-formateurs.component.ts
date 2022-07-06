@@ -144,7 +144,7 @@ export class ListFormateursComponent implements OnInit {
         this.tempVolumeCons = response.volume_h_consomme
 
         this.formUpdateFormateur.patchValue({
-          type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h,
+          type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
           remarque: this.formateurToUpdate.remarque,
           campus: this.formateurToUpdate?.campus_id,
@@ -211,7 +211,6 @@ export class ListFormateursComponent implements OnInit {
       type_contrat: ['', Validators.required],
       taux_h: ['', Validators.required],
       taux_j: [''],
-      isInterne: [false, Validators.required],
       prestataire_id: [''],
       volume_h: this.formBuilder.array([]),
       monday_available: [false],
@@ -246,7 +245,6 @@ export class ListFormateursComponent implements OnInit {
     this.formateurToUpdate.type_contrat = this.formUpdateFormateur.get('type_contrat')?.value.value;
     this.formateurToUpdate.taux_h = this.formUpdateFormateur.get('taux_h')?.value;
     this.formateurToUpdate.taux_j = this.formUpdateFormateur.get('taux_j')?.value;
-    this.formateurToUpdate.isInterne = this.formUpdateFormateur.get('isInterne')?.value;
     this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value.value;
     this.formateurToUpdate.remarque = this.formUpdateFormateur.get('remarque')?.value;
     let tempVH = this.formUpdateFormateur.get('volume_h').value ? this.formUpdateFormateur.get('volume_h').value : [];

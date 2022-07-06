@@ -330,7 +330,7 @@ app.get("/getAll", (req, res, next) => {
                 }
                 prospectsFromDb[index]["nbDoc"] = nb
             });
-            exports(prospectsFromDb);
+          
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
