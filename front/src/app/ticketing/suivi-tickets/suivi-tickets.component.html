@@ -85,11 +85,11 @@
                 <form [formGroup]="TicketForm" (ngSubmit)="addTicket()" class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
                         <label For="service">Service</label>
-                        <p-dropdown [options]="filterService" formControlName="service" optionLabel="label" (change)="onChange()"></p-dropdown>
+                        <p-dropdown [options]="filterService" formControlName="service" optionLabel="label" placeholder="Choissisez un service" (change)="onChange()"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="sujet">Sujet</label>
-                        <p-dropdown [options]="listSujets[TicketForm.value.service._id]" formControlName="sujet" optionLabel="label"></p-dropdown>
+                        <p-dropdown [options]="listSujets[TicketForm.value.service._id]" formControlName="sujet" optionLabel="label" placeholder="Choissisez un sujet"></p-dropdown>
                     </div>
                     <div class="field col-12">
                         <label For="description">Description du ticket</label>

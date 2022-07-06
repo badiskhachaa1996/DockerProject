@@ -18,19 +18,21 @@ export class AddPartenaireComponent implements OnInit {
   display: boolean;
 
   typeSoc = [
-    { value: "Professionel (Société)" },
-    { value: "Particulier (Personne)" }
+    { value: "Choissiez le type de la société", actif:true},
+    { value: "Professionel (Société)", actif:false},
+    { value: "Particulier (Personne)", actif:false},
   ];
 
   formatJuridique = [
-    { value: "EIRL" },
-    { value: "EURL" },
-    { value: "SARL" },
-    { value: "SA" },
-    { value: "SAS" },
-    { value: "SNC" },
-    { value: "Etudiant IMS" },
-    { value: "Individuel" }
+    { value: "Choissiez le type de la société", actif:true},
+    { value: "EIRL", actif:false },
+    { value: "EURL", actif:false },
+    { value: "SARL", actif:false },
+    { value: "SA", actif:false },
+    { value: "SAS", actif:false },
+    { value: "SNC", actif:false },
+    { value: "Etudiant IMS", actif:false },
+    { value: "Individuel", actif:false }
   ];
 
 

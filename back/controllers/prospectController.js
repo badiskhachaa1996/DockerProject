@@ -155,7 +155,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        
+
 
 
                                     });
@@ -197,7 +197,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        
+
 
 
                                     });
@@ -237,7 +237,7 @@ app.post("/create", (req, res, next) => {
                                             console.error(error);
 
                                         }
-                                        
+
 
 
                                     });
@@ -305,7 +305,7 @@ app.post("/create", (req, res, next) => {
 
 //Recuperation de la liste des prospect
 app.get("/getAll", (req, res, next) => {
-    Prospect.find({ archived: [false,null] })//.populate('user_id')
+    Prospect.find({ archived: [false, null] })//.populate('user_id')
         .then((prospectsFromDb) => {
             
             prospectsFromDb.forEach(function (element, index) {
@@ -407,8 +407,9 @@ app.post("/updateStatut/:id", (req, res, next) => {
         statut_payement: req.body.statut_payement,
         customid: req.body.customid,
         traited_by: req.body.traited_by,
-        validated_cf: req.body.validated_cf
-    
+        validated_cf: req.body.validated_cf,
+        avancement_visa:req.body.avancement_visa
+
     }).then(newProspect => {
         res.status(200).send(newProspect)
     }).catch((error) => { res.status(400).send(error); });
@@ -439,7 +440,7 @@ app.get("/ValidateEmail/:email", (req, res) => {
 
 app.get("/getFilesInscri/:id", (req, res) => {
     // recupére*
-    
+
     let filesTosend = [];
     fs.readdir('./storage/prospect/' + req.params.id + "/", (err, files) => {
 
@@ -591,7 +592,7 @@ app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: "Payée", archived: [false,null] }).then(prospects => {
+    Prospect.find({ decision_admission: "Payée", archived: [false, null] }).then(prospects => {
         prospects.forEach(function (element, index) {
             let nb = 0
             try {
@@ -615,6 +616,12 @@ app.get('/getAllWait', (req, res, next) => {
             prospects[index]["nbDoc"] = nb
         });
         res.send(prospects)
+    }).catch((error) => { res.status(500).send(error); });
+})
+
+app.post('/updatePayement/:id', (req, res) => {
+    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }).then(data => {
+        res.status(200).send(data)
     }).catch((error) => { res.status(500).send(error); });
 })
 

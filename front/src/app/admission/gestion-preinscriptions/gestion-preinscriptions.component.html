@@ -46,15 +46,20 @@
                     <p-dropdown [options]="listAgent" optionLabel="value" formControlName="traited_by"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label>Confirmation campus france: </label>
-                    <p-selectButton [options]="stat_cf" formControlName="validated_cf" 
-                         optionLabel="label" optionValue="value">
+                    <label>Confirmation Campus FRANCE: </label>
+                    <p-selectButton [options]="stat_cf" formControlName="validated_cf">
                     </p-selectButton>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Code étudiant: </label>
                     <input pInputText type="text" formControlName="customid" placeholder="DUSB010199"
                         class="form-control">
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Avancement Visa: </label>
+                    <p-selectButton [options]="[{value:true,label:'Accepté'},{value:false,label:'Refusé'}]"
+                        formControlName="avancement_visa">
+                    </p-selectButton>
                 </div>
 
                 <button pButton [disabled]="changeStateForm.invalid" label="Changer le statut"></button>
@@ -88,16 +93,53 @@
             </form>
         </div>
     </div>
+    <!-- partie Voir/Ajouter des payements -->
+    <div class="col-12" *ngIf="showPayement!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showPayement = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showPayement.user_id && users[showPayement.user_id]" class="text-center"
+                style="font-weight: bold;">Ajouter un payement de : {{
+                users[showPayement.user_id]?.firstname }} {{
+                users[showPayement.user_id]?.lastname | uppercase }}
+            </h3>
+            <div class="p-fluid p-formgrid grid">
+                <div class="col-12" *ngFor="let data of payementList; let i = index">
+                    <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                    <div class="field col-12 md:col-4">
+                        <label>Type de payement:</label><br>
+                        <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label>Montant:</label><br>
+                        <input type="number" (change)="changeMontant(i,$event,'montant')"
+                            [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-2">
+                        <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+                </div>
+                <div class="col-6">
+                    <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
     <!-- Table d'affichage de la liste des preinscription -->
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
-                    label="Nouvelle demande ESPIC" (click)="onGetFormAdmissionESTYA()"></button>
-                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle"
-                    label="Nouvelle demande ADG" (click)="onGetFormAdmissionADG()"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
+                    (click)="onGetFormAdmissionESTYA()"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ADG"
+                    (click)="onGetFormAdmissionADG()"></button>
                 <button style="margin-left: 2px;" (click)="onGetFormAdmissionESPIC()" pButton icon="pi pi-plus-circle"
                     label="Nouvelle demande ESTYA"></button>
             </div>
@@ -192,6 +234,8 @@
                                 (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
+                            <i pTooltip="Mettre à jour les payements" tooltipPosition="bottom" class="pi pi-money-bill"
+                                (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -390,6 +434,13 @@
             </ul>
 
             <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
+
+            <h5 style="color: red; text-align: center;">Payements</h5>
+            <ul>
+                <li *ngFor="let payement of prospect.payement; index as i">
+                    <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>
+                </li>
+            </ul>
 
         </div>
         </td>

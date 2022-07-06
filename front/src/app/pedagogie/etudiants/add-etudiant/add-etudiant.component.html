@@ -35,7 +35,7 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddEtudiant" (ngSubmit)="onAddEtudiant()">
                 <div class="field col-5 md:col-4">
                     <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="civiliteList" optionLabel="value" placeholder="Choissisez une civilité" formControlName="civilite"></p-dropdown>
+                    <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif" formControlName="civilite"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-4">
@@ -121,8 +121,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="ville">Pays<span style="color: red;"> * </span></label>
-                    <!-- <input pInputText id="ville" type="text" placeholder="Ville" formControlName="pays_adresse" /> -->
-                    <p-dropdown [options]="paysList" optionLabel="value" placeholder="France" formControlName="pays_adresse"></p-dropdown>
+                    <p-dropdown [options]="paysList" optionLabel="value" optionDisabled="actif" formControlName="pays_adresse"></p-dropdown>
                     <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                         <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
                             Le nom du pays n'est pas dans le bon format
@@ -132,7 +131,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="statut">Statut<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutList" optionLabel="viewValue" placeholder="Choissisez un statut" formControlName="statut"></p-dropdown>
+                    <p-dropdown [options]="statutList" optionLabel="viewValue" optionDisabled="actif" formControlName="statut"></p-dropdown>
                 </div> 
 
                 <!-- liste à retirer car récupérer -->
