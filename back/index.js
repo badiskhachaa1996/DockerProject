@@ -36,10 +36,12 @@ mongoose
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
 
+/* 
+//Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
 
         var CronJob = require('cron').CronJob;
 var job = new CronJob(
-	'11 11 12 */1 * *',
+	'11 11 12 *'/1 * *',
 	function() {
         scrypt_Mail.smail();
 	},
@@ -47,7 +49,7 @@ var job = new CronJob(
 	true,
 	'local'
 );
-
+*/
 
     })
     .catch(err => {

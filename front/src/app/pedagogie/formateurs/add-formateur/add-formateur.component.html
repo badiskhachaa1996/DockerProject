@@ -318,25 +318,31 @@
                     </div>
 
 
-                    <div class="field col-12 md:col-12" formArrayName="IsJury">
-                        <label>Liste des diplomes auquels l'enseignant peut étre Jury :</label>
-                        <div *ngFor="let tempControl of getIsJury().controls; let ind = index">
-                            <p style="font-style:italic; color: red;">Diplomes n°{{ind+1}}</p>
-                            <div>
-                                <div class="field">
-                                    <p-dropdown [options]="DiplomeList"  optionLabel="titre"  formControlName="ind"></p-dropdown>
-                                </div>
-                                <div class="field">
-                                    <input type="number" (change)="changeCout_h(ind,$event)" placeholder="Cout Journalier"
-                                        value="0" pInputText>
-                                </div>
-                                <div class="field">
-                                    <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteDiplomeJury(ind)"
-                                        aria-hidden="true"></i>
-                                </div>
+                    <div class="field col-12 md:col-12">
+
+                        <div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
+                            <h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
+                            <div class=" col-12 md:col-12">
+                                <label>Diplome:</label><br>
+                                <p-dropdown formControlName="IsJury" [options]="diplomesListe" 
+                                    optionLabel="titre" (onChange)="changeCout(i, $event,'titre')"
+                                    [(value)]="jury_diplomesList[i]['titre']" placeholder="Titre diplome"
+                                    class="form-control"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-12">
+                                <label>Cout Horaire:</label><br>
+                                <input type="number" (change)="changeCout(i,$event,'cout_h')"
+                                    [(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <i class="pi pi-trash" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
                             </div>
                         </div>
-                        <button type="button" (click)="addDiplomeJury()" pButton label="Ajouter un diplome"></button>
+                        <div class="field col-12 md:col-12">
+                            <button type="button" (click)="onAddJ_diplome()" pButton
+                                label="Ajouter un diplome"></button>
+                        </div>
+
                     </div>
 
                     <div class="field col-12 md:col-12">

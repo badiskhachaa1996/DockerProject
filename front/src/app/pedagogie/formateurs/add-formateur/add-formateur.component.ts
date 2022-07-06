@@ -56,27 +56,47 @@ export class AddFormateurComponent implements OnInit {
   userList: any = {};
   serviceDic = []
   seanceNB = {};
+  jury_diplomesList = []
 
-  
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
-  diplomesListe:[];
+  diplomesListe = [];
+
+  onAddJ_diplome() {
+    console.log(this.jury_diplomesList)
+    this.jury_diplomesList.push({ titre: "", cout_h: 0 })
+  }
+
+  changeCout(i, event, type) {
+
+    if (type == "cout_h") {
+      this.jury_diplomesList[i][type] = parseInt(event.target.value);
+    } else {
+      this.jury_diplomesList[i][type] = event.value.titre;
+    }
+    console.log(this.jury_diplomesList)
+  }
+  deleteJ_diplome(i) {
+
+    this.jury_diplomesList.splice(i)
+
+  }
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
     private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
-    
+
 
     this.diplomeService.getAll().subscribe(data => {
-  
+      this.diplomesListe = data
       data.forEach(formation => {
- 
+
         this.diplomesListe[formation._id] = formation;
       })
- 
-    console.log(this.diplomesListe)
+
+      console.log(this.diplomesListe)
     })
     this.getUserList()
 
@@ -159,7 +179,7 @@ export class AddFormateurComponent implements OnInit {
       wednesday_remarque: [""],
       thursday_remarque: [""],
       friday_remarque: [""],
-      nda:[""],
+      nda: [""],
       IsJury: [""],
     });
   }
@@ -245,20 +265,14 @@ export class AddFormateurComponent implements OnInit {
       remarque: this.formAddFormateur.get('friday_remarque').value,
     }
 
-    let IsJury = {
-      diplomeid: this.formAddFormateur.get('J_diplomeid')?.value,
-      cout_h:  this.formAddFormateur.get('J_cout_h')?.value,
-      cout_j:this.formAddFormateur.get('J_cout_j')?.value,
-      remarque:this.formAddFormateur.get('J_remarque')?.value,
 
-    }
 
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet formateur
-    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus,nda, IsJury);
+    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda, this.jury_diplomesList);
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
         if (response.success) {
