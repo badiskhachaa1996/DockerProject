@@ -51,7 +51,8 @@
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddFormateur" (ngSubmit)="onAddFormateur()">
                     <div class="field col-5 md:col-4">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif" formControlName="civilite">
+                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                            formControlName="civilite">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -138,10 +139,11 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="contrat">Type de contrat<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat" optionDisabled="actif">
+                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat"
+                            optionDisabled="actif">
                         </p-dropdown>
                     </div>
-                   
+
                     <div class="field col-12 md:col-12" *ngIf="onGetStatut()=='Prestation et Vacation'">
                         <label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
                         <p-tabView>
@@ -304,7 +306,8 @@
                     <div class="field col-12 md:col-6">
                         <label>Campus</label><br>
                         <p-dropdown formControlName="campus" [options]="dropdownCampus"
-                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true" placeholder="Choissisez un campus">
+                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
+                            placeholder="Choissisez un campus">
                         </p-dropdown>
                     </div>
 
@@ -312,6 +315,28 @@
                         <label For="nda">Numéro de Déclaration d'Activité </label>
                         <input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
                             formControlName="nda" />
+                    </div>
+
+
+                    <div class="field col-12 md:col-12" formArrayName="IsJury">
+                        <label>Liste des diplomes auquels l'enseignant peut étre Jury :</label>
+                        <div *ngFor="let tempControl of getIsJury().controls; let ind = index">
+                            <p style="font-style:italic; color: red;">Diplomes n°{{ind+1}}</p>
+                            <div>
+                                <div class="field">
+                                    <p-dropdown [options]="DiplomeList"  optionLabel="titre"  formControlName="ind"></p-dropdown>
+                                </div>
+                                <div class="field">
+                                    <input type="number" (change)="changeCout_h(ind,$event)" placeholder="Cout Journalier"
+                                        value="0" pInputText>
+                                </div>
+                                <div class="field">
+                                    <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteDiplomeJury(ind)"
+                                        aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" (click)="addDiplomeJury()" pButton label="Ajouter un diplome"></button>
                     </div>
 
                     <div class="field col-12 md:col-12">

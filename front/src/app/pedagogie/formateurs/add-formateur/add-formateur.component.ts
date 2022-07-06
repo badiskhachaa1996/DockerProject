@@ -35,16 +35,17 @@ export class AddFormateurComponent implements OnInit {
   civiliteList = environment.civilite;
 
   typeContratList = [
-    { label: "Choissisez un type de contrat", actif:true},
-    { label: 'CDI', value: 'CDI', actif:false },
-    { label: 'CDD', value: 'CDD', actif:false },
-    { label: 'Prestation et Vacation', value: 'Prestation et Vacation', actif:false },
-    { label: 'Sous-traitance', value: 'Sous-traitance', actif:false },
+    { label: 'CDI', value: 'CDI' },
+    { label: 'CDD', value: 'CDD' },
+    { label: 'Prestation et Vacation', value: 'Prestation et Vacation' },
+    //{ label: 'Vacation', value: 'Vacation' },
+    { label: 'Sous-traitance', value: 'Sous-traitance' },
+    /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
+    { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
   ];
-
   prestataireList = [
-    { label: 'EliteLabs', value: 'EliteLabs', actif:false },
-    { label: 'Autre', value: 'Autre', actif:false }
+    { label: 'EliteLabs', value: 'EliteLabs' },
+    { label: 'Autre', value: 'Autre' }
   ];
   matiereList = [];
   matiereDic = {};
@@ -55,13 +56,12 @@ export class AddFormateurComponent implements OnInit {
   userList: any = {};
   serviceDic = []
   seanceNB = {};
-  DiplomeJuryList = []
 
   
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
-  diplomesListe: import("c:/EMSV2.1/ims/front/src/app/models/Diplome").Diplome[];
+  diplomesListe:[];
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
     private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
@@ -70,10 +70,10 @@ export class AddFormateurComponent implements OnInit {
     
 
     this.diplomeService.getAll().subscribe(data => {
-      this.diplomesListe=data
+  
       data.forEach(formation => {
-        console.log(formation)
-        this.diplomesListe[formation?._id] = formation;
+ 
+        this.diplomesListe[formation._id] = formation;
       })
  
     console.log(this.diplomesListe)
@@ -160,7 +160,7 @@ export class AddFormateurComponent implements OnInit {
       thursday_remarque: [""],
       friday_remarque: [""],
       nda:[""],
-      IsJury: this.formBuilder.array([]),
+      IsJury: [""],
     });
   }
 
@@ -244,7 +244,14 @@ export class AddFormateurComponent implements OnInit {
       h_fin: this.formAddFormateur.get('friday_h_fin').value,
       remarque: this.formAddFormateur.get('friday_remarque').value,
     }
-    let IsJury = this.formAddFormateur.get('IsJury').value ? this.formAddFormateur.get('IsJury').value : [];
+
+    let IsJury = {
+      diplomeid: this.formAddFormateur.get('J_diplomeid')?.value,
+      cout_h:  this.formAddFormateur.get('J_cout_h')?.value,
+      cout_j:this.formAddFormateur.get('J_cout_j')?.value,
+      remarque:this.formAddFormateur.get('J_remarque')?.value,
+
+    }
 
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
@@ -282,10 +289,6 @@ export class AddFormateurComponent implements OnInit {
     return this.formAddFormateur.get('volume_h') as FormArray;
   }
 
-  getIsJury(){
-    return this.formAddFormateur.get('IsJury') as FormArray;
-  }
-
   onAddMatiere() {
     const tempControl = this.formBuilder.control('', Validators.required);
     this.getVolumeH().push(tempControl);
@@ -295,29 +298,11 @@ export class AddFormateurComponent implements OnInit {
     this.volumeHList[i] = parseInt(event.target.value);
   }
 
- 
-
   deleteMatiereAdd(i) {
     this.volumeHList.splice(i, 1)
     let FArray: [] = this.formAddFormateur.get('volume_h').value;
     FArray.splice(i, 1)
     this.formAddFormateur.setControl('volume_h', this.formBuilder.array(FArray))
-  }
-
-  addDiplomeJury() {
-    const tempControl = this.formBuilder.control('', Validators.required);
-    this.getIsJury().push(tempControl);
-  }
-
-  changeCout_h(i, event){
-    this.DiplomeJuryList[i]= parseInt(event.target.value)
-  }
-
-  deleteDiplomeJury(i){
-    this.DiplomeJuryList.splice(i, 1)
-    let d_array : [] = this.formAddFormateur.get('IsJury').value;
-    d_array.splice(i, 1)
-    this.formAddFormateur.setControl('IsJury', this.formBuilder.array(d_array))
   }
 
   getUserList() {
@@ -348,7 +333,6 @@ export class AddFormateurComponent implements OnInit {
       remarque: ""
     })
     this.formAddFormateur.setControl('volume_h', this.formBuilder.array([]))
-    this.formAddFormateur.setControl('IsJury', this.formBuilder.array([]))
   }
 
 }
