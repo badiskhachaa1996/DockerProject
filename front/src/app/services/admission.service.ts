@@ -92,8 +92,13 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  addNewPayment(id,body){
+  addNewPayment(id, body) {
     let url = this.apiUrl + "updatePayement/" + id
-    return this.httpClient.post<Prospect>(url,body, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+    return this.httpClient.post<Prospect>(url, body, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+  }
+
+  changeEtatTraitement(id, etat = "Vu") {
+    let url = this.apiUrl + "etatTraitement/" + id + "/" + etat
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
   }
 }
