@@ -154,7 +154,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le payement ?")) {
-      this.payementList.splice(i)
+      this.payementList.splice(i,1)
     }
   }
 

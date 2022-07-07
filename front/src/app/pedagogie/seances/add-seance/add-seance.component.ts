@@ -93,11 +93,25 @@ export class AddSeanceComponent implements OnInit {
     )
     this.classeService.getAll().subscribe(
       ((response) => {
-        for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].nom, value: response[classeID]._id });
-          this.dropdownClasse[response[classeID]._id] = response[classeID];
-          this.classes[response[classeID]._id] = response[classeID];
-        }
+        let diplomeDic = {}
+        let campusDic = {}
+        this.DiplomeService.getAll().subscribe(diplomes => {
+          diplomes.forEach(diplome => {
+            diplomeDic[diplome._id] = diplome
+          })
+          this.CampusService.getAll().subscribe(campus => {
+            campus.forEach(campus => {
+              campusDic[campus._id] = campus
+            })
+            for (let classeID in response) {
+              let label = response[classeID].nom + " - " + campusDic[diplomeDic[response[classeID]?.diplome_id]?.campus_id]?.libelle
+              this.dropdownClasse.push({ nom: label, value: response[classeID]._id });
+              this.dropdownClasse[response[classeID]._id] = response[classeID];
+              this.classes[response[classeID]._id] = response[classeID];
+            }
+          })
+        })
+
       }),
       ((error) => { console.error(error) })
     );

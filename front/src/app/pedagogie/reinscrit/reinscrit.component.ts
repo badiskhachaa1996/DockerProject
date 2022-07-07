@@ -23,6 +23,7 @@ export class ReinscritComponent implements OnInit {
   users: User[] = [];
   token;
   imageToShow;
+  parcoursList = []
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -63,7 +64,8 @@ export class ReinscritComponent implements OnInit {
     email_tuteur: [''],
     phone_tuteur: [''],
     indicatif_tuteur: [''],
-    custom_id: ['', Validators.required]
+    custom_id: ['', Validators.required],
+    remarque: ['']
   })
 
   initForm(etudiant: Etudiant) {
@@ -125,12 +127,12 @@ export class ReinscritComponent implements OnInit {
       this.users[this.showAssignForm.user_id].nationalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_partenaire,
-      null, null, null, this.AssignForm.value.custom_id,
+      null , null, null, this.AssignForm.value.custom_id,
       this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
       this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
-      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise
+      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise, this.showAssignForm.diplome, this.parcoursList,this.AssignForm.value.remarque
     )
     this.etudiantService.update(etd).subscribe(data => {
       this.refreshEtudiant()
@@ -254,6 +256,26 @@ export class ReinscritComponent implements OnInit {
     }
 
     return result;
+  }
+
+  onAddParcours() {
+    this.parcoursList.push({ diplome: "", date: new Date() })
+  }
+
+  /*onChangeParcours(i, event, type) {
+    console.log(event.target.value)
+    if (type == "date") {
+      this.parcoursList[i][type] = new Date(event.target.value);
+    } else {
+      this.parcoursList[i][type] = event.target.value;
+    }
+  }*/
+
+  onRemoveParcours(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le parcours ?")) {
+      this.parcoursList.splice(i)
+    }
   }
 
 }

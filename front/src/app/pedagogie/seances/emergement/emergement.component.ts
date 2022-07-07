@@ -52,9 +52,9 @@ export class EmergementComponent implements OnInit {
   loading: boolean = false;
   affichageDiplome = ""
 
-  clearCanvas(){
+  clearCanvas() {
     var context = this.myCanvas.nativeElement.getContext('2d');
-    context.clearRect(0,0,500,500)
+    context.clearRect(0, 0, 500, 500)
   }
 
   ngAfterViewInit(): void {
@@ -88,10 +88,10 @@ export class EmergementComponent implements OnInit {
     });
 
     function drawLine(ctxt, x1, y1, x2, y2) {
-      x1-=15
-      y1-=20
-      x2-=15
-      y2-=20
+      x1 -= 15
+      y1 -= 20
+      x2 -= 15
+      y2 -= 20
       ctxt.beginPath();
       ctxt.strokeStyle = 'black';
       ctxt.lineWidth = 1;
@@ -142,7 +142,7 @@ export class EmergementComponent implements OnInit {
     this.SeanceService.getById(this.ID).subscribe(dataS => {
       this.seance = dataS
       this.date_debut = new Date(dataS.date_debut).getTime()
-      this.date_fin = new Date(dataS.date_fin).getTime()
+      this.date_fin = this.date_debut + (15 * 60)//15 minutes max
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
     })
     this.DiplomeService.getAll().subscribe(diplomes => {
@@ -196,8 +196,10 @@ export class EmergementComponent implements OnInit {
 
   }
 
-  getPDF() {
-    this.PresenceService.getPDF(this.ID).subscribe((data) => {
+  showPdf = false
+
+  getPDF(classe_id) {
+    this.PresenceService.getPDF(this.ID,classe_id).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), this.ID + ".pdf")

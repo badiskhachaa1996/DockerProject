@@ -32,6 +32,8 @@ export class Etudiant {
         public isHandicaped?: boolean,
         public suivi_handicaped?:string,
         public entreprise?:string,
-        public diplome?: string
+        public diplome?: string,
+        public parcours?: any,
+        public remarque?:string
     ) { }
 }

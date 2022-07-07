@@ -2,18 +2,19 @@
     <div class="col-10 col-offset-1 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
         <div class="col-12" *ngIf="showCanvas">
-            <i class="pi pi-times" style="font-size: 20px;" (click)="clearCanvas()" aria-hidden="true" pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
+            <i class="pi pi-times" style="font-size: 20px;" (click)="clearCanvas()" aria-hidden="true"
+                pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
             <canvas class="card" #canva></canvas><br>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
         </div>
-        <div class="p-grid"  *ngIf="!showCanvas && presence==null">
+        <div class="p-grid" *ngIf="!showCanvas && presence==null">
             <h4>Fournir un justificatif d'absence</h4>
             <div class="col-12">
                 <div class="md:col-offset-5">
                     <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
                         chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
-                        maxFileSize="20000000" [auto]="true" >
+                        maxFileSize="20000000" [auto]="true">
                     </p-fileUpload>
                 </div>
                 <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
@@ -118,10 +119,17 @@
 </div>
 
 <div class="col-12" *ngIf="token.role!='user'">
-
+    <div class="grid col-12 card" *ngIf="showPdf">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPdf = false"
+            aria-hidden="true"> </i>
+        <h5 class="col-12 text-center">Générer la feuille d'emergement du groupe:</h5>
+        <div class="col-6 md:col-4" *ngFor="let cid of seance.classe_id; i as index">
+            <button pButton (click)="getPDF(cid)" label="{{classeList[cid].nom}}"> </button>
+        </div>
+    </div>
     <div class="card">
         <button *ngIf="token.role!='user'" pButton class="ui-button-raised ui-button-success" label="Export en PDF"
-            style="float:right;" (click)="getPDF();"></button>
+            style="float:right;" (click)="showPdf=true"></button>
         <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}
         </h3>
         <div class="col-12 card shadow-lg my-5 ">
