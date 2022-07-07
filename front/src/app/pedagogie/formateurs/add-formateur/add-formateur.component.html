@@ -282,7 +282,7 @@
                             <p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
                             <div>
                                 <div class="field">
-                                    <p-dropdown [options]="matiereList" [group]="true" formControlName="i"></p-dropdown>
+                                    <p-dropdown [options]="matiereList" [group]="true" ></p-dropdown>
                                 </div>
                                 <div class="field">
                                     <input type="number" (change)="changeVolumeH(i,$event)" placeholder="Volume horaire"
@@ -297,7 +297,7 @@
                         <button type="button" (click)="onAddMatiere()" pButton label="Ajouter une matière"></button>
                     </div>
 
-                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation'">
+                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation' ||onGetStatut()=='Sous-traitance' ">
                         <label For="isPrestataire">Entreprise</label>
                         <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
                         </p-dropdown>
