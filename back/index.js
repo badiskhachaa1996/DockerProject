@@ -4,8 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
-const scrypt_Mail = require("./middleware/scrypt_Mail");
-var CronJob = require('cron').CronJob;
+//const scrypt_Mail = require("./middleware/scrypt_Mail");
+// var CronJob = require('cron').CronJob;
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
