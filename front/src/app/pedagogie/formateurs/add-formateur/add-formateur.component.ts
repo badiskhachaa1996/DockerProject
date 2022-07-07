@@ -11,6 +11,7 @@ import { SeanceService } from 'src/app/services/seance.service';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { CampusService } from 'src/app/services/campus.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
 
 @Component({
   selector: 'app-add-formateur',
@@ -34,16 +35,17 @@ export class AddFormateurComponent implements OnInit {
   civiliteList = environment.civilite;
 
   typeContratList = [
-    { label: "Choissisez un type de contrat", actif:true},
-    { label: 'CDI', value: 'CDI', actif:false },
-    { label: 'CDD', value: 'CDD', actif:false },
-    { label: 'Prestation et Vacation', value: 'Prestation et Vacation', actif:false },
-    { label: 'Sous-traitance', value: 'Sous-traitance', actif:false },
+    { label: 'CDI', value: 'CDI' },
+    { label: 'CDD', value: 'CDD' },
+    { label: 'Prestation et Vacation', value: 'Prestation et Vacation' },
+    //{ label: 'Vacation', value: 'Vacation' },
+    { label: 'Sous-traitance', value: 'Sous-traitance' },
+    /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
+    { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
   ];
-
   prestataireList = [
-    { label: 'EliteLabs', value: 'EliteLabs', actif:false },
-    { label: 'Autre', value: 'Autre', actif:false }
+    { label: 'EliteLabs', value: 'EliteLabs' },
+    { label: 'Autre', value: 'Autre' }
   ];
   matiereList = [];
   matiereDic = {};
@@ -54,24 +56,48 @@ export class AddFormateurComponent implements OnInit {
   userList: any = {};
   serviceDic = []
   seanceNB = {};
+  jury_diplomesList = []
+
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
+  diplomesListe = [];
+
+  onAddJ_diplome() {
+    console.log(this.jury_diplomesList)
+    this.jury_diplomesList.push({ titre: "", cout_h: 0 })
+  }
+
+  changeCout(i, event, type) {
+
+    if (type == "cout_h") {
+      this.jury_diplomesList[i][type] = parseInt(event.target.value);
+    } else {
+      this.jury_diplomesList[i][type] = event.value.titre;
+    }
+    console.log(this.jury_diplomesList)
+  }
+  deleteJ_diplome(i) {
+
+    this.jury_diplomesList.splice(i)
+
+  }
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
-    private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
+    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
 
   ngOnInit(): void {
-    try {
-      this.token = jwt_decode(localStorage.getItem("token"))
-    } catch (e) {
-      this.token = null
-    }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+
+
+    this.diplomeService.getAll().subscribe(data => {
+      this.diplomesListe = data
+      data.forEach(formation => {
+
+        this.diplomesListe[formation._id] = formation;
+      })
+
+      console.log(this.diplomesListe)
+    })
     this.getUserList()
 
     //Initialisation du formulaire d'ajout de formateur
@@ -129,7 +155,6 @@ export class AddFormateurComponent implements OnInit {
       type_contrat: [this.typeContratList[0], Validators.required],
       taux_h: ['', Validators.required],
       taux_j: [''],
-      isInterne: [true, Validators.required],
       prestataire_id: [this.prestataireList[0]],
       volume_h: this.formBuilder.array([]),
       remarque: [''],
@@ -154,6 +179,8 @@ export class AddFormateurComponent implements OnInit {
       wednesday_remarque: [""],
       thursday_remarque: [""],
       friday_remarque: [""],
+      nda: [""],
+      IsJury: [""],
     });
   }
 
@@ -173,8 +200,9 @@ export class AddFormateurComponent implements OnInit {
   get type_contrat() { return this.formAddFormateur.get('type_contrat'); };
   get taux_h() { return this.formAddFormateur.get('taux_h'); };
   get prestataire_id() { return this.formAddFormateur.get('prestataire_id'); };
-  get isInterne() { return this.formAddFormateur.get('isInterne'); };
   get campus() { return this.formAddFormateur.get('campus'); };
+  get nda() { return this.formAddFormateur.get('nda'); };
+  get IsJury() { return this.formAddFormateur.get('IsJury'); };
 
   //Methode d'ajout du nouveau formateur dans la base de données
   onAddFormateur() {
@@ -194,12 +222,12 @@ export class AddFormateurComponent implements OnInit {
     let type_contrat = this.formAddFormateur.get('type_contrat')?.value.value;
     let taux_h = this.formAddFormateur.get('taux_h')?.value;
     let taux_j = this.formAddFormateur.get('taux_j')?.value;
-    let isInterne = this.formAddFormateur.get('isInterne')?.value;
     let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
     let tempVH = this.formAddFormateur.get('volume_h').value ? this.formAddFormateur.get('volume_h').value : [];
     let volumeH = {};
     let volumeH_ini = {};
     let campus = this.campus.value
+    let nda = this.formAddFormateur.get('nda')?.value;
     this.volumeHList.forEach((VH, index) => {
       volumeH[tempVH[index]] = VH
       volumeH_ini[tempVH[index]] = 0;
@@ -237,11 +265,14 @@ export class AddFormateurComponent implements OnInit {
       remarque: this.formAddFormateur.get('friday_remarque').value,
     }
 
+
+
+
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet formateur
-    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, isInterne, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus);
+    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda, this.jury_diplomesList);
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
         if (response.success) {
@@ -312,7 +343,7 @@ export class AddFormateurComponent implements OnInit {
     this.formAddFormateur.reset()
     this.formAddFormateur.patchValue({
       civilite: this.civiliteList[0], type_contrat: this.typeContratList[0],
-      isInterne: false, prestataire_id: this.prestataireList[0], volume_h: [],
+      prestataire_id: this.prestataireList[0], volume_h: [],
       remarque: ""
     })
     this.formAddFormateur.setControl('volume_h', this.formBuilder.array([]))

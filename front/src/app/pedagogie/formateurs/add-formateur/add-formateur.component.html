@@ -51,7 +51,8 @@
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddFormateur" (ngSubmit)="onAddFormateur()">
                     <div class="field col-5 md:col-4">
                         <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif" formControlName="civilite">
+                        <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                            formControlName="civilite">
                         </p-dropdown>
                     </div>
                     <div class="field col-12 md:col-4">
@@ -138,14 +139,11 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="contrat">Type de contrat<span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat" optionDisabled="actif">
+                        <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat"
+                            optionDisabled="actif">
                         </p-dropdown>
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label for="isInterne">Interne ou Externe ?<span style="color: red;"> * </span></label>
-                        <p-selectButton [options]="[{label:'Interne',value:true},{label:'Externe',value:false}]"
-                            formControlName="isInterne"></p-selectButton>
-                    </div>
+
                     <div class="field col-12 md:col-12" *ngIf="onGetStatut()=='Prestation et Vacation'">
                         <label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
                         <p-tabView>
@@ -291,7 +289,8 @@
                                         value="0" pInputText>
                                 </div>
                                 <div class="field">
-                                    <i style="cursor: pointer;"class="pi pi-trash" (click)="deleteMatiereAdd(i)" aria-hidden="true"></i>
+                                    <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteMatiereAdd(i)"
+                                        aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -307,8 +306,43 @@
                     <div class="field col-12 md:col-6">
                         <label>Campus</label><br>
                         <p-dropdown formControlName="campus" [options]="dropdownCampus"
-                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true" placeholder="Choissisez un campus">
+                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
+                            placeholder="Choissisez un campus">
                         </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="nda">Numéro de Déclaration d'Activité </label>
+                        <input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
+                            formControlName="nda" />
+                    </div>
+
+
+                    <div class="field col-12 md:col-12">
+
+                        <div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
+                            <h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
+                            <div class=" col-12 md:col-12">
+                                <label>Diplome:</label><br>
+                                <p-dropdown formControlName="IsJury" [options]="diplomesListe" 
+                                    optionLabel="titre" (onChange)="changeCout(i, $event,'titre')"
+                                    [(value)]="jury_diplomesList[i]['titre']" placeholder="Titre diplome"
+                                    class="form-control"></p-dropdown>
+                            </div>
+                            <div class="col-12 md:col-12">
+                                <label>Cout Horaire:</label><br>
+                                <input type="number" (change)="changeCout(i,$event,'cout_h')"
+                                    [(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <i class="pi pi-trash" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                        <div class="field col-12 md:col-12">
+                            <button type="button" (click)="onAddJ_diplome()" pButton
+                                label="Ajouter un diplome"></button>
+                        </div>
+
                     </div>
 
                     <div class="field col-12 md:col-12">
