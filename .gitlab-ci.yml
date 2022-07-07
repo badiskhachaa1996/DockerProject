@@ -14,7 +14,7 @@ node_dependencies:
       - back/node_modules/
   script:
     - cd back
-    - npm ci
+    - npm install
   only:
     changes:
       - back/package-lock.json
@@ -82,7 +82,7 @@ deploy_node_todev:
   script:
     - cd back
     - ln -s ~/storage storage
-    - npm ci
+    - npm install
     - pm2 delete index
     - pm2 start index.js
    # - pm2 logs index
