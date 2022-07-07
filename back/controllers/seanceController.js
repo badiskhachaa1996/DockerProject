@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
 app.disable("x-powered-by");
+const fs = require("fs")
 
 //Creation d'une nouvelle 
 app.post('/create', (req, res, next) => {
@@ -156,5 +157,72 @@ app.get('/getNb/:c_id/:f_id', (req, res) => {
     )
 })
 
+const multer = require('multer');
+
+
+app.get("/getFiles/:id", (req, res) => {
+    let filesTosend = [];
+    fs.readdir('./storage/seance/' + req.params.id + "/", (err, files) => {
+
+        if (!err) {
+            files.forEach(file => {
+                filesTosend.push(file)
+            });
+        }
+        res.status(200).send(filesTosend);
+    }, (error) => (console.error(error)))
+})
+
+app.get("/downloadFile/:id/:filename", (req, res) => {
+    let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+
+});
+
+
+app.get("/deleteFile/:id/:filename", (req, res) => {
+    let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    try {
+        fs.unlinkSync(pathFile)
+    } catch (err) {
+        console.error(err)
+        res.status(400).send(err)
+    }
+    res.status(200).send()
+
+});
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        if (!fs.existsSync('storage/seance/' + req.body.id + '/')) {
+            fs.mkdirSync('storage/seance/' + req.body.id + '/', { recursive: true })
+        }
+        callBack(null, 'storage/seance/' + req.body.id + '/')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
+
+app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+
+        res.status(201).json({ dossier: "dossier mise à jour" });
+    }
+
+}, (error) => { res.status(500).send(error); })
 
 module.exports = app;

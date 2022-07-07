@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 // création du schéma de la table etudiant 
 const etudiantSchema = mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: false, default: null },
     statut: { type: String, required: true },
     nationalite: { type: String },
@@ -34,7 +34,9 @@ const etudiantSchema = mongoose.Schema({
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
     entreprise: { type: String, required: false },
-    diplome: { type: String, required: false }
+    diplome: { type: String, required: false },
+    parcours: { type: mongoose.Schema.Types.Mixed, required: false }, // diplome: String, date: Date
+    remarque: {type:String}
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

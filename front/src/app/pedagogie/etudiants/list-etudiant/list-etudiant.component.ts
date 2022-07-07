@@ -23,7 +23,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ListEtudiantComponent implements OnInit {
 
   expandedRows = {};
-  
+
   etudiants: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
@@ -182,7 +182,7 @@ export class ListEtudiantComponent implements OnInit {
                     etu.lastname = this.users[etu.user_id].lastname
                   if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
                     etu.firstname = this.users[etu.user_id].firstname
-                  if(etu.classe_id!=null)
+                  if (etu.classe_id != null)
                     this.etudiants.push(etu)
                 })
               }),
@@ -253,7 +253,8 @@ export class ListEtudiantComponent implements OnInit {
       email_rl: ["", Validators.email],
       adresse_rl: [""],
       isHandicaped: [false],
-      suivi_handicaped: ['']
+      suivi_handicaped: [''],
+      remarque: ['']
     });
   }
 
@@ -291,8 +292,8 @@ export class ListEtudiantComponent implements OnInit {
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
 
     let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
-      null,null,null,null,custom_id,numero_INE,numero_NIR,sos_email,sos_phone,nom_rl,prenom_rl,phone_rl,email_rl,adresse_rl,dernier_diplome,
-      isAlternant,entreprise,nom_tuteur,prenom_tuteur,adresse_tuteur,email_tuteur,phone_tuteur,indicatif_tuteur,isHandicaped,suivi_handicaped);
+      null, null, null, null, custom_id, numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, phone_rl, email_rl, adresse_rl, dernier_diplome,
+      isAlternant, entreprise, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped);
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -316,14 +317,15 @@ export class ListEtudiantComponent implements OnInit {
       ((response) => {
         this.etudiantToUpdate = response;
         let date = new Date(this.etudiantToUpdate.date_naissance)
+        this.parcoursList = this.etudiantToUpdate.parcours
         this.formUpdateEtudiant.patchValue({
-          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1),date.getDate()),
+          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
           isAlternant: this.etudiantToUpdate.isAlternant, nom_tuteur: this.etudiantToUpdate.nom_tuteur, prenom_tuteur: this.etudiantToUpdate.prenom_tuteur, adresse_tuteur: this.etudiantToUpdate.adresse_tuteur,
           email_tuteur: this.etudiantToUpdate.email_tuteur, phone_tuteur: this.etudiantToUpdate.phone_tuteur, indicatif_tuteur: this.etudiantToUpdate.indicatif_tuteur,
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          entreprise: this.etudiantToUpdate.entreprise,
+          entreprise: this.etudiantToUpdate.entreprise, remarque: this.etudiantToUpdate.remarque
         });
       }),
       ((error) => { console.error(error); })
@@ -421,6 +423,28 @@ export class ListEtudiantComponent implements OnInit {
   generateCustomCode() {
     let code = this.generateCode(this.formUpdateEtudiant.value.lastname)
     this.formUpdateEtudiant.patchValue({ custom_id: code })
+  }
+
+  parcoursList = []
+
+  onAddParcours() {
+    this.parcoursList.push({ diplome: "", date: new Date() })
+  }
+
+  /*onChangeParcours(i, event, type) {
+    console.log(event.target.value)
+    if (type == "date") {
+      this.parcoursList[i][type] = new Date(event.target.value);
+    } else {
+      this.parcoursList[i][type] = event.target.value;
+    }
+  }*/
+
+  onRemoveParcours(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le parcours ?")) {
+      this.parcoursList.splice(i)
+    }
   }
 
 }

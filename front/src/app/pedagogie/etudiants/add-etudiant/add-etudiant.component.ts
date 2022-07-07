@@ -62,7 +62,7 @@ export class AddEtudiantComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   ListDocuments = []
   showUploadFile;
-
+  parcoursList = []
   isMinor = false;
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService, private router: Router) { }
@@ -218,7 +218,8 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      entreprise: ['']
+      entreprise: [''],
+      remarque: ['']
 
 
     });
@@ -307,7 +308,7 @@ export class AddEtudiantComponent implements OnInit {
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(null, '', classe_id, statut, nationalite, date_naissance, null, null, null, null, custom_id,
       numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value, nom_tuteur, prenom_tuteur
-      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise);
+      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList, this.formAddEtudiant.get('remarque').value);
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
@@ -325,6 +326,7 @@ export class AddEtudiantComponent implements OnInit {
   }
 
   isMinorFC() {
+    console.log("IW AS HERE")
     var today = new Date();
     var birthDate = new Date(this.formAddEtudiant.value.date_naissance);
     var age = today.getFullYear() - birthDate.getFullYear();
@@ -332,7 +334,8 @@ export class AddEtudiantComponent implements OnInit {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    this.isMinor = !(age < 18);
+    console.log(age)
+    this.isMinor = age < 18;
   }
 
   clickFile(rowData) {
@@ -426,6 +429,26 @@ export class AddEtudiantComponent implements OnInit {
   generateCustomCode() {
     let code = this.generateCode(this.formAddEtudiant.value.lastname)
     this.formAddEtudiant.patchValue({ custom_id: code })
+  }
+
+  onAddParcours() {
+    this.parcoursList.push({ diplome: "", date: new Date() })
+  }
+
+  /*onChangeParcours(i, event, type) {
+    console.log(event.target.value)
+    if (type == "date") {
+      this.parcoursList[i][type] = new Date(event.target.value);
+    } else {
+      this.parcoursList[i][type] = event.target.value;
+    }
+  }*/
+
+  onRemoveParcours(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le parcours ?")) {
+      this.parcoursList.splice(i)
+    }
   }
 
 }

@@ -146,6 +146,31 @@
                 <label for="custom_id">Code Etudiant<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="custom_id" placeholder="SBDU201286">
             </div>
+            <!-- Parcous Etudiant-->
+            <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
+                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <div class="field col-12 md:col-4">
+                    <label>Diplome du parcours:</label><br>
+                    <input pInputText type="text"
+                        [(value)]="parcoursList[i]['diplome']" placeholder="BTS" class="form-control">
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Date du parcours:</label><br>
+                    <input type="date" [(value)]="parcoursList[i]['date']"
+                        pInputText>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <i class="pi pi-trash" (click)="onRemoveParcours(i)" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" (click)="onAddParcours()" pButton label="Ajouter un parcours"></button>
+            </div>
+
+            <div class="field col-12">
+                <label for="remarque">Remarque</label>
+                <textarea pInputTextarea formControlName="remarque" placeholder="Remarque"></textarea>
+            </div>
 
             <div>
                 <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>

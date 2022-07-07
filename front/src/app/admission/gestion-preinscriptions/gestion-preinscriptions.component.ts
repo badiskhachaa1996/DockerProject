@@ -154,7 +154,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le payement ?")) {
-      this.payementList.splice(i)
+      this.payementList.splice(i,1)
     }
   }
 
@@ -338,15 +338,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   //Methode de redirection vers la page d'ajout d'une nouvelle admission
   onGetFormAdmissionESTYA() {
-    this.router.navigate(['demande-admission', 'estya']);
+    this.router.navigate(['formulaire-admission', 'estya']);
   }
 
   onGetFormAdmissionADG() {
-    this.router.navigate(['demande-admission', 'adg']);
+    this.router.navigate(['formulaire-admission', 'adg']);
   }
 
   onGetFormAdmissionESPIC() {
-    this.router.navigate(['demande-admission', 'espic']);
+    this.router.navigate(['formulaire-admission', 'espic']);
   }
 
   downloadFile(id, i) {

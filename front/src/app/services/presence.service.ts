@@ -64,8 +64,8 @@ export class PresenceService {
     return this.http.get<any>(registreUrl,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getPDF(id:string){
-    let registreUrl=this.apiUrl+"getPDF/"+id;
+  getPDF(id:string,classe_id:string){
+    let registreUrl=this.apiUrl+"getPDF/"+id+"/"+classe_id;
     return this.http.get<any>(registreUrl,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
