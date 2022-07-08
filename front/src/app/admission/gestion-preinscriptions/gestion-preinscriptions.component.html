@@ -4,10 +4,8 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="inscriptionSelected = null" aria-hidden="true"> </i>
-            <h3 *ngIf="inscriptionSelected.user_id && users[inscriptionSelected.user_id]"
-                style="font-weight: bold; text-align: center;">Changer le statut de : {{
-                users[inscriptionSelected.user_id]?.firstname }} {{
-                users[inscriptionSelected.user_id]?.lastname | uppercase }}
+            <h3 *ngIf="inscriptionSelected.user_id" style="font-weight: bold; text-align: center;">Changer le statut de
+                : {{inscriptionSelected.user_id?.firstname }} {{inscriptionSelected.user_id?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm" (ngSubmit)="changeStateBtn()">
@@ -73,10 +71,10 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showUploadFile = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
+            <h3 *ngIf="showUploadFile.user_id" class="text-center"
                 style="font-weight: bold;">Ajouter un document à : {{
-                users[showUploadFile.user_id]?.firstname }} {{
-                users[showUploadFile.user_id]?.lastname | uppercase }}
+                    showUploadFile.user_id?.firstname }} {{
+                        showUploadFile.user_id?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
@@ -98,10 +96,10 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showPayement = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showPayement.user_id && users[showPayement.user_id]" class="text-center"
+            <h3 *ngIf="showPayement.user_id" class="text-center"
                 style="font-weight: bold;">Ajouter un payement de : {{
-                users[showPayement.user_id]?.firstname }} {{
-                users[showPayement.user_id]?.lastname | uppercase }}
+                    showPayement.user_id?.firstname }} {{
+                        showPayement.user_id?.lastname | uppercase }}
             </h3>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12" *ngFor="let data of payementList; let i = index">
@@ -266,13 +264,13 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{users[prospect.user_id].nationnalite}}</td>
-                        <td>{{users[prospect.user_id].pays_adresse}}</td>
-                        <td>{{users[prospect.user_id].email}}</td>
+                        <td>{{prospect.user_id.nationnalite}}</td>
+                        <td>{{prospect.user_id.pays_adresse}}</td>
+                        <td>{{prospect.user_id.email}}</td>
                         <td>{{prospect.statut_actuel}}</td>
                         <td>
-                            {{ users[prospect.user_id].indicatif }}
-                            {{ users[prospect.user_id].phone }}
+                            {{ prospect.user_id.indicatif }}
+                            {{ prospect.user_id.phone }}
                         </td>
                     </tr>
                 </ng-template>
@@ -414,10 +412,10 @@
                     <tr>
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
-                        <td>
-                            {{ users[prospect.agent_id].civilite }}
-                            {{ users[prospect.agent_id].lastname | titlecase }}
-                            {{ users[prospect.agent_id].firstname | titlecase }}
+                        <td *ngIf="prospect.agent_id">
+                            {{ prospect.agent_id.civilite }}
+                            {{ prospect.agent_id.lastname | titlecase }}
+                            {{ prospect.agent_id.firstname | titlecase }}
                         </td>
                         <td>{{prospect.decision_admission}}</td>
                         <td>{{prospect.phase_complementaire}}</td>
