@@ -88,7 +88,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Non Retenu", label: "Non Retenu" },
     { value: "Payée", label: "Payée" },
+  ]
 
+  filterTraitement = [
+    { value: null, label: "Tous les états" },
+    { value: "Nouvelle", label: "Nouvelle" },
+    { value: "Retour Etudiant", label: "Retour Etudiant" },
+    { value: "Vu", label: "Vu" },
+    { value: "Traité", label: "Traité" },
   ]
 
   phaseComplementaire = [
@@ -204,7 +211,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.infoCommercialExpand = null
     }
     this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
-      this.prospects[this.prospects.indexOf(prospect)].etat_traitement="Vu"
+      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
     })
   }
 
@@ -301,7 +308,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       console.log(dataUpdated)
       this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
       this.refreshProspect()
-      this.prospects[this.prospects.indexOf(this.inscriptionSelected)]=dataUpdated
+      this.prospects[this.prospects.indexOf(this.inscriptionSelected)] = dataUpdated
       this.inscriptionSelected = null
     }, (error) => {
       console.error(error)

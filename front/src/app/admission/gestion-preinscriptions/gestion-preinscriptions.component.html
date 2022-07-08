@@ -162,6 +162,11 @@
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
+                    <p-dropdown filter="true" placeholder="Tous" [options]="filterTraitement"
+                        (onChange)="dt1.filter($event.value, 'etat_traitement', 'equals')"
+                        emptyFilterMessage="Pas de traitement trouvé" filterPlaceholder="Etat Traitement"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
                     <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
                         style="float: right;margin-left:2%" *ngIf="!code">
                     </button>
