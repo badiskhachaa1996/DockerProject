@@ -305,7 +305,7 @@
                         <button type="button" (click)="onAddMatiere()" pButton label="Ajouter une matière"></button>
                     </div>
 
-                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation' ||onGetStatut()=='Sous-traitance' ">
+                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="isPrestataire">Entreprise</label>
                         <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
                         </p-dropdown>

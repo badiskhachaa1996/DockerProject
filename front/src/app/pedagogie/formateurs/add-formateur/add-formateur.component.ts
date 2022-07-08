@@ -96,7 +96,6 @@ export class AddFormateurComponent implements OnInit {
         this.diplomesListe[formation._id] = formation;
       })
 
-      console.log(this.diplomesListe)
     })
     this.getUserList()
 

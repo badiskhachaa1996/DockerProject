@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
+const { Prospect } = require('./models/prospect');
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
 
@@ -36,20 +37,20 @@ mongoose
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
 
-/* 
-//Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
-
-        var CronJob = require('cron').CronJob;
-var job = new CronJob(
-	'11 11 12 *'/1 * *',
-	function() {
-        scrypt_Mail.smail();
-	},
-	null,
-	true,
-	'local'
-);
-*/
+        /* 
+        //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
+        
+                var CronJob = require('cron').CronJob;
+        var job = new CronJob(
+            '11 11 12 *'/1 * *',
+            function() {
+                scrypt_Mail.smail();
+            },
+            null,
+            true,
+            'local'
+        );
+        */
 
     })
     .catch(err => {
@@ -232,6 +233,37 @@ io.on("connection", (socket) => {
 
     socket.on('isAuth', (b) => {
         io.emit('isAuth', b)
+    })
+    socket.on('TraitementProspect', (prospect) => {
+        prospect.enTraitement = true;
+       
+                io.emit('TraitementProspect', prospect)
+                console.log('traitement', prospect._id, prospect.enTraitement)
+
+                setTimeout(function(){
+                    prospect.enTraitement = false;
+                    console.log('traitement', prospect._id, prospect.enTraitement)
+                    io.emit('TraitementProspect', prospect)
+                }, 30000);
+
+                
+
+    })
+
+    socket.on('UpdatedProspect', (prospect) => {
+
+        prospect.enTraitement = false;
+        Prospect.findOneAndUpdate({ _id: prospect._id },
+            {
+                enTraitement: false
+            })
+            .then((prospectUpdated) => {
+                io.emit('UpdatedProspect', prospectUpdated)
+                console.log('UpdatedProspect', prospectUpdated._id, prospectUpdated.enTraitement)
+            }).catch((error) => { res.status(400).send(error); })
+
+
+        console.log('Mise a jour Prospect faite : ', prospect._id, prospect.enTraitement)
     })
 });
 

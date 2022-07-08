@@ -126,6 +126,13 @@ const prospect_schema = new mongoose.Schema({
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
+    avancement_visa:{
+        type:Boolean
+    },
+    enTraitement: {
+        type: Boolean,
+        default: false
+    },
     avancement_visa: {
         type: Boolean
     },

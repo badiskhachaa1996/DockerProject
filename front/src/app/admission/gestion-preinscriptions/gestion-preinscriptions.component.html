@@ -4,10 +4,10 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="inscriptionSelected = null" aria-hidden="true"> </i>
-            <h3 *ngIf="inscriptionSelected.user_id && inscriptionSelected.user_id.firstname"
+            <h3 *ngIf="inscriptionSelected.user_id && users[inscriptionSelected.user_id]"
                 style="font-weight: bold; text-align: center;">Changer le statut de : {{
-                inscriptionSelected.user_id.firstname }} {{
-                inscriptionSelected.user_id.lastname | uppercase }}
+                users[inscriptionSelected.user_id]?.firstname }} {{
+                users[inscriptionSelected.user_id]?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm" (ngSubmit)="changeStateBtn()">
@@ -73,10 +73,10 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showUploadFile = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showUploadFile.user_id && showUploadFile.user_id.firstname" class="text-center"
+            <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
                 style="font-weight: bold;">Ajouter un document à : {{
-                showUploadFile.user_id.firstname }} {{
-                showUploadFile.user_id.lastname | uppercase }}
+                users[showUploadFile.user_id]?.firstname }} {{
+                users[showUploadFile.user_id]?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
@@ -98,10 +98,10 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showPayement = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showPayement.user_id && showPayement.user_id.firstname" class="text-center"
+            <h3 *ngIf="showPayement.user_id && users[showPayement.user_id]" class="text-center"
                 style="font-weight: bold;">Ajouter un payement de : {{
-                showPayement.user_id.firstname }} {{
-                showPayement.user_id.lastname | uppercase }}
+                users[showPayement.user_id]?.firstname }} {{
+                users[showPayement.user_id]?.lastname | uppercase }}
             </h3>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12" *ngFor="let data of payementList; let i = index">
@@ -147,7 +147,7 @@
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
-                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','etat_traitement']"
+                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3']"
                 responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
@@ -159,12 +159,7 @@
                     </span>
                     <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
                         (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
-                        [style]="{'margin':'5px'}">
-                    </p-dropdown>
-                    <p-dropdown filter="true" placeholder="Tous" [options]="filterTraitement"
-                        (onChange)="dt1.filter($event.value, 'etat_traitement', 'equals')"
-                        emptyFilterMessage="Pas de traitement trouvé" filterPlaceholder="Etat Traitement"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
@@ -197,16 +192,14 @@
                         <th pSortableColumn="statut_dossier" scope="col">
                             Statut Dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="etat_traitement" scope="col">
-                            Etat du traitement<p-sortIcon field="etat_traitement"></p-sortIcon>
-                        </th>
                         <th pSortableColumn="action" scope="col">
                             Action
                         </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                    <tr>
+                    <tr [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="prospect"
                                 class="p-button-text p-button-rounded p-button-plain"
@@ -220,7 +213,7 @@
                             {{ prospect.user_id.civilite }}
                             {{ prospect.user_id.lastname | uppercase }}
                             {{ prospect.user_id.firstname | titlecase }}
-                        </td> <!---->
+                        </td>
                         <td>
                             {{ prospect.type_form | titlecase }}
                         </td>
@@ -236,16 +229,17 @@
                         <td>
                             {{ prospect.statut_dossier }}
                         </td>
-                        <td>
-                            {{ prospect.etat_traitement }}
-                        </td>
-                        <td>
+                        <td *ngIf=" prospect.enTraitement == false">
                             <i pTooltip="Changer le statut du dossier" tooltipPosition="bottom" class="pi pi-bookmark"
                                 (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
                             <i pTooltip="Mettre à jour les payements" tooltipPosition="bottom" class="pi pi-money-bill"
                                 (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf=" prospect.enTraitement == true">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
+                                pTooltip="Dossier en cours de traitement"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -270,13 +264,13 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{prospect.user_id.nationnalite}}</td>
-                        <td>{{prospect.user_id.pays_adresse}}</td>
-                        <td>{{prospect.user_id.email}}</td>
+                        <td>{{users[prospect.user_id].nationnalite}}</td>
+                        <td>{{users[prospect.user_id].pays_adresse}}</td>
+                        <td>{{users[prospect.user_id].email}}</td>
                         <td>{{prospect.statut_actuel}}</td>
                         <td>
-                            {{ prospect.user_id.indicatif }}
-                            {{ prospect.user_id.phone }}
+                            {{ users[prospect.user_id].indicatif }}
+                            {{ users[prospect.user_id].phone }}
                         </td>
                     </tr>
                 </ng-template>
@@ -419,9 +413,9 @@
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
                         <td>
-                            {{ prospect.agent_id.civilite }}
-                            {{ prospect.agent_id.lastname | titlecase }}
-                            {{ prospect.agent_id.firstname | titlecase }}
+                            {{ users[prospect.agent_id].civilite }}
+                            {{ users[prospect.agent_id].lastname | titlecase }}
+                            {{ users[prospect.agent_id].firstname | titlecase }}
                         </td>
                         <td>{{prospect.decision_admission}}</td>
                         <td>{{prospect.phase_complementaire}}</td>
