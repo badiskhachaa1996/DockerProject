@@ -193,7 +193,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       }
       this.refreshProspect()
       this.socket.on("TraitementProspect", (prospect) => {
-
+console.log("soc prospectform")
         this.prospects.forEach((pros) => {
           if (pros.user_id == prospect.user_id) {
             console.log(this.prospects.indexOf(pros))
@@ -207,6 +207,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
           if (pros.user_id == prospect.user_id) {
             console.log(this.prospects.indexOf(pros))
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+
           }
         })
 
@@ -340,9 +341,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
       this.prospects[this.prospects.indexOf(this.inscriptionSelected)] = dataUpdated
-      
+
       this.inscriptionSelected = null
-      
+
     }, (error) => {
       console.error(error)
     })

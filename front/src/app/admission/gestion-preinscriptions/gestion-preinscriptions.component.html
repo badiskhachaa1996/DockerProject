@@ -199,7 +199,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                    <tr >
+                    <tr [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
 
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="prospect"
