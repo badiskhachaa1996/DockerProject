@@ -144,7 +144,7 @@
                     label="Nouvelle demande ESTYA"></button>
             </div>
             <h5>Liste des pre-inscriptions</h5>
-            {{prospects|json}}
+          
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
