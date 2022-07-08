@@ -236,17 +236,15 @@ io.on("connection", (socket) => {
     })
     socket.on('TraitementProspect', (prospect) => {
         prospect.enTraitement = true;
-       
-                io.emit('TraitementProspect', prospect)
-                console.log('traitement', prospect._id, prospect.enTraitement)
 
-                setTimeout(function(){
-                    prospect.enTraitement = false;
-                    console.log('traitement', prospect._id, prospect.enTraitement)
-                    io.emit('TraitementProspect', prospect)
-                }, 30000);
+        io.emit('TraitementProspect', prospect)
+        console.log('traitement', prospect._id, prospect.enTraitement)
 
-                
+        setTimeout(function () {
+            prospect.enTraitement = false;
+            console.log('traitement', prospect._id, prospect.enTraitement)
+            io.emit('TraitementProspect', prospect)
+        }, 20000);
 
     })
 
