@@ -13,7 +13,8 @@ export class Seance {
         public salle_name?: string,
         public isPlanified?: Boolean,
         public campus_id?: string,
-        public nbseance?: number
+        public nbseance?: number,
+        public fileRight?: any[]
     ) { }
 }
 

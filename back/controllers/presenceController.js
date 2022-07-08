@@ -6,7 +6,7 @@ var fs = require('fs')
 var Canvas = require('canvas');
 const { User } = require("../models/user");
 const { Seance } = require("../models/seance");
-const { Etudiant } =require("../models/etudiant")
+const { Etudiant } = require("../models/etudiant")
 
 //Récuperer une présence
 app.post("/getById/:id", (req, res) => {
@@ -142,8 +142,8 @@ app.post("/addSignature/:id", (req, res) => {
 
 //Mets un étudiant en présent
 app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
-    
-    Presence.findOneAndUpdate({ user_id: req.params.user_id,seance_id:req.params.seance_id },
+
+    Presence.findOneAndUpdate({ user_id: req.params.user_id, seance_id: req.params.seance_id },
         {
             justificatif: true
         }, { new: true }, (err, data) => {
@@ -151,6 +151,7 @@ app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
                 res.send(err)
             }
             else {
+                console.log(data)
                 res.send(data)
                 if (req.body.justificatif && req.body.justificatif != null && req.body.justificatif != '') {
                     fs.mkdir("./storage/justificatif/",
@@ -211,7 +212,7 @@ app.get("/getPDF/:id/:groupe_id", (req, res) => {
                 Etudiant.find().populate("user_id").then(userList => {
                     let UserDic = [];
                     userList.forEach(user => {
-                        if(user.user_id!=null && user.classe_id==req.params.groupe_id){
+                        if (user.user_id != null && user.classe_id == req.params.groupe_id) {
                             UserDic[user.user_id._id] = user
                         }
                     })
@@ -225,7 +226,7 @@ app.get("/getPDF/:id/:groupe_id", (req, res) => {
                     //Date 85 130 412-85 
                     ctx.fillText(dateFormat(seance.date_debut), 85, 130, (412 - 85))
                     //Heure 488 130
-                    ctx.fillText(heureFormat(seance.date_debut)+" - "+heureFormat(seance.date_fin), 488, 130, (412 - 85))
+                    ctx.fillText(heureFormat(seance.date_debut) + " - " + heureFormat(seance.date_fin), 488, 130, (412 - 85))
                     let x = 253
                     data.forEach(file => {
                         //PREMIER Eleve 30 253 350
@@ -252,7 +253,7 @@ app.get("/getPDF/:id/:groupe_id", (req, res) => {
                                 ctx.drawImage(img, 583, x - 23, (793 - 583), 50)
                             }
                             //+0 +30 max 1034
-    
+
                             if (x == 1034 || x > 1034) {
                                 ctx.addPage()
                                 ctx.drawImage(bg, 0, 0)
@@ -262,7 +263,7 @@ app.get("/getPDF/:id/:groupe_id", (req, res) => {
                                 ctx.fillText(dateFormat(seance.date_debut), 85, 130, (412 - 85))
                                 //Heure 488 130
                                 ctx.fillText(heureFormat(seance.date_debut), 488, 130, (412 - 85))
-                                x=253-57
+                                x = 253 - 57
                             }
                             x += 57
                         }
@@ -278,17 +279,17 @@ app.get("/getPDF/:id/:groupe_id", (req, res) => {
                         subject: 'Feuille de présence du ' + dateFormat(seance.date_debut),
                         modDate: new Date()
                     })
-                    fs.writeFileSync("storage/"+pdfName, buff, function (err) {
+                    fs.writeFileSync("storage/" + pdfName, buff, function (err) {
                         if (err) {
                             console.error(err)
                         }
                     })
-                    let base64PDF = fs.readFileSync("storage/"+pdfName, { encoding: 'base64' }, (err) => {
+                    let base64PDF = fs.readFileSync("storage/" + pdfName, { encoding: 'base64' }, (err) => {
                         if (err) {
                             console.error(err);
                         }
                     });
-                    res.status(200).send({file:base64PDF})
+                    res.status(200).send({ file: base64PDF })
                 }).catch((error) => {
                     console.error(error)
                     res.status(500).send(error);
