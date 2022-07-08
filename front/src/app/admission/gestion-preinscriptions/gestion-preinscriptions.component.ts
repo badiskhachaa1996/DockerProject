@@ -193,10 +193,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       }
       this.refreshProspect()
       this.socket.on("TraitementProspect", (prospect) => {
-console.log("soc prospectform")
+
         this.prospects.forEach((pros) => {
-          if (pros.user_id == prospect.user_id) {
-            console.log(this.prospects.indexOf(pros))
+          console.log("pros:", pros.enTraitement)
+          console.log("prospectFromS:", prospect.enTraitement)
+          if (pros.user_id._id == prospect.user_id._id) {
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
           }
         })
@@ -204,10 +205,8 @@ console.log("soc prospectform")
       })
       this.socket.on("UpdatedProspect", (prospect) => {
         this.prospects.forEach((pros) => {
-          if (pros.user_id == prospect.user_id) {
-            console.log(this.prospects.indexOf(pros))
+          if (pros.user_id._id == prospect.user_id._id) {
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
-
           }
         })
 
