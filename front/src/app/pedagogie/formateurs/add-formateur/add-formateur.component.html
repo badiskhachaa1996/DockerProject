@@ -290,7 +290,7 @@
                             <p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
                             <div>
                                 <div class="field">
-                                    <p-dropdown [options]="matiereList" [group]="true" ></p-dropdown>
+                                    <p-dropdown [options]="matiereList" [group]="true"></p-dropdown>
                                 </div>
                                 <div class="field">
                                     <input type="number" (change)="changeVolumeH(i,$event)" placeholder="Volume horaire"
@@ -305,7 +305,8 @@
                         <button type="button" (click)="onAddMatiere()" pButton label="Ajouter une matière"></button>
                     </div>
 
-                    <div class="field col-12 md:col-6" *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
+                    <div class="field col-12 md:col-6"
+                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="isPrestataire">Entreprise</label>
                         <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
                         </p-dropdown>
@@ -327,15 +328,14 @@
 
 
                     <div class="field col-12 md:col-12">
-
                         <div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
+
                             <h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
                             <div class=" col-12 md:col-12">
                                 <label>Diplome:</label><br>
-                                <p-dropdown formControlName="IsJury" [options]="diplomesListe" 
-                                    optionLabel="titre" (onChange)="changeCout(i, $event,'titre')"
-                                    [(value)]="jury_diplomesList[i]['titre']" placeholder="Titre diplome"
-                                    class="form-control"></p-dropdown>
+                                <p-dropdown  [options]="diplomesListe" optionLabel="titre"
+                                    (onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
+                                    placeholder="Titre diplome" class="form-control"></p-dropdown>
                             </div>
                             <div class="col-12 md:col-12">
                                 <label>Cout Horaire:</label><br>

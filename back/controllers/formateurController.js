@@ -109,7 +109,7 @@ app.post("/create", (req, res, next) => {
                             formateur.user_id = userFromDb._id;
                             formateur.save()
                                 .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved }) })
-                                .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce formateur " + error }) });
+                                .catch((error) => { res.status(400).json({ msg: "Impossible d'ajouter ce formateur ", error }) });
 
                         }
                     })

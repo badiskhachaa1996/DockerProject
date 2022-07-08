@@ -69,13 +69,11 @@ export class AddFormateurComponent implements OnInit {
   }
 
   changeCout(i, event, type) {
-
     if (type == "cout_h") {
       this.jury_diplomesList[i][type] = parseInt(event.target.value);
     } else {
       this.jury_diplomesList[i][type] = event.value.titre;
     }
-    console.log(this.jury_diplomesList)
   }
   deleteJ_diplome(i) {
 
@@ -145,9 +143,9 @@ export class AddFormateurComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
+      email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@estya+\\.com$")]],
       pays_adresse: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      ville_adresse: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
+      ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       rue_adresse: ['', Validators.required],
       numero_adresse: ['', Validators.required],
       postal_adresse: ['', Validators.required],
@@ -226,7 +224,7 @@ export class AddFormateurComponent implements OnInit {
     let tempVH = this.formAddFormateur.get('volume_h').value ? this.formAddFormateur.get('volume_h').value : [];
     let volumeH = {};
     let volumeH_ini = {};
-    let campus = this.campus.value
+    let campus = this.formAddFormateur.get('campus')?.value;
     let nda = this.formAddFormateur.get('nda')?.value;
     this.volumeHList.forEach((VH, index) => {
       volumeH[tempVH[index]] = VH
@@ -277,6 +275,9 @@ export class AddFormateurComponent implements OnInit {
       ((response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+          this.onInitFormAddFormateur();
+          this.showFormAddFormateur = false;
+          this.resetAddFormateur();
         } else {
           this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
         }
@@ -286,9 +287,6 @@ export class AddFormateurComponent implements OnInit {
         console.error(error);
       })
     );
-    this.onInitFormAddFormateur();
-    this.showFormAddFormateur = false;
-    this.resetAddFormateur();
 
   }
 
