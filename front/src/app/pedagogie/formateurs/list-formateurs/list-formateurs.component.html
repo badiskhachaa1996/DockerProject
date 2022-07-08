@@ -16,7 +16,8 @@
 					</p-dropdown>
 				</div>
 
-				<!--<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Prestation et Vacation'">
+				<div class="field col-12 md:col-12"
+					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Prestation et Vacation'">
 					<label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
 					<p-tabView>
 						<p-tabPanel header="Lundi">
@@ -134,8 +135,16 @@
 								</div>
 							</div>
 						</p-tabPanel>
+						<p-tabPanel header="Absence">
+							<div class="grid">
+								<div class="col-12">
+									<label>Absence exceptionnel :</label>
+									<p-calendar selectionMode="multiple" formControlName="absences"></p-calendar>
+								</div>
+							</div>
+						</p-tabPanel>
 					</p-tabView>
-				</div> -->
+				</div>
 
 				<div class="field col-12 md:col-6">
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
@@ -155,7 +164,8 @@
 						<div>
 							<div class="field">
 								<label>Matière:</label>
-								<p-dropdown [options]="matiereList" [group]="true" formControlName="volume_h"></p-dropdown>
+								<p-dropdown [options]="matiereList" [group]="true" formControlName="volume_h">
+								</p-dropdown>
 							</div>
 							<div class="field">
 								<label>Volume Prévue:</label>
@@ -170,7 +180,8 @@
 					<button type="button" (click)="onUpdateMatiere()" pButton label="Ajouter une matière"></button>
 				</div>
 
-				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance'">
+				<div class="field col-12 md:col-6"
+					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
 					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
 					</p-dropdown>
