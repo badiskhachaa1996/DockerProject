@@ -3,7 +3,7 @@
     <div class="col-12" *ngIf="inscriptionSelected!=null">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                (click)="inscriptionSelected = null" aria-hidden="true"> </i>
+                (click)="closeformUpdate()" aria-hidden="true"> </i>
             <h3 *ngIf="inscriptionSelected.user_id && users[inscriptionSelected.user_id]"
                 style="font-weight: bold; text-align: center;">Changer le statut de : {{
                 users[inscriptionSelected.user_id]?.firstname }} {{
