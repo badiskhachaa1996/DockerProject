@@ -424,12 +424,9 @@ app.post("/updateStatut/:id", (req, res, next) => {
 
 
 app.get("/ValidateEmail/:email", (req, res) => {
-
-    ;
     User.findOneAndUpdate({ email: req.params.email },
         {
             verifedEmail: true,
-
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);

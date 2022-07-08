@@ -8,6 +8,7 @@ import { FileUpload } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { Prospect } from 'src/app/models/Prospect';
 
 @Component({
   selector: 'app-suivie-preinscription',
@@ -23,7 +24,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   ListDocuments: String[] = [];
   ListPiped: String[] = [];
 
-  ProspectConnected: any = {};
+  ProspectConnected: Prospect = {};
 
   diplomeTest: boolean = false;
   piece_identiteTest: boolean = false;
@@ -146,6 +147,9 @@ export class SuiviePreinscriptionComponent implements OnInit {
       }
       if (this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest) {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
+      }
+      if(this.ProspectConnected.etat_traitement!="Nouvelle"){
+        this.admissionService.changeEtatTraitement(this.ProspectConnected._id,"Retour Etudiant")
       }
     },
       (error) => {
