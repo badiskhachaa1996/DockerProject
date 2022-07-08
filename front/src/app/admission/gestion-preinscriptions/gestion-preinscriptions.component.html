@@ -199,12 +199,12 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
                     <tr [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
-                       
-                        <td  >
-                        <button type="button" pButton pRipple [pRowToggler]="prospect"
-                            class="p-button-text p-button-rounded p-button-plain"
-                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                            (click)="expandRow(prospect)"></button>
+
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="prospect"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="expandRow(prospect)"></button>
                         </td>
                         <td>
                             {{ prospect.customid }}
@@ -239,7 +239,8 @@
                                 (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
                         </td>
                         <td *ngIf=" prospect.enTraitement == true">
-                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem" pTooltip="Dossier en cours de traitement"></i>
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
+                                pTooltip="Dossier en cours de traitement"></i>
                         </td>
                     </tr>
                 </ng-template>

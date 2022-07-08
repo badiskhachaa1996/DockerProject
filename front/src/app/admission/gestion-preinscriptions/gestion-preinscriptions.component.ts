@@ -87,14 +87,21 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Payée" },
   ]
   dropdownDecision = [
-    { value: null, label: "Toute" },
+    { value: null, label: "Decision Admission" },
     { value: "Suspendu", label: "Suspendu" },
+    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Non Retenu", label: "Non Retenu" },
-    { value: "Validé", label: "Validé" },
     { value: "Payée", label: "Payée" },
+  ]
 
+  filterTraitement = [
+    { value: null, label: "Tous les états" },
+    { value: "Nouvelle", label: "Nouvelle" },
+    { value: "Retour Etudiant", label: "Retour Etudiant" },
+    { value: "Vu", label: "Vu" },
+    { value: "Traité", label: "Traité" },
   ]
 
   phaseComplementaire = [
@@ -229,6 +236,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     } else {
       this.infoCommercialExpand = null
     }
+    this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
+      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+    })
   }
 
   refreshProspect() {
@@ -239,40 +249,20 @@ export class GestionPreinscriptionsComponent implements OnInit {
           if (this.token != null && this.dataCommercial != null) {
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  p['lastname'] = this.users[p.user_id].lastname
-                  p['firstname'] = this.users[p.user_id].firstname
-                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                  p['nationnalite'] = this.users[p.user_id].nationnalite
-                  p['email'] = this.users[p.user_id].email_perso
-                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                  this.prospects.push(p)
-                })
               }),
               ((error) => { console.error(error); })
             );
           } else {
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  p['lastname'] = this.users[p.user_id].lastname
-                  p['firstname'] = this.users[p.user_id].firstname
-                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                  p['nationnalite'] = this.users[p.user_id].nationnalite
-                  p['email'] = this.users[p.user_id].email_perso
-                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                  this.prospects.push(p)
-                })
               }),
               ((error) => { console.error(error); })
             );
@@ -282,22 +272,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
           if (this.dataCommercial && this.dataCommercial.statut == "Admin" || this.token.role == "Admin") {
             this.admissionService.getAll().subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  if (this.users[p.user_id]) {
-                    p['lastname'] = this.users[p.user_id].lastname
-                    p['firstname'] = this.users[p.user_id].firstname
-                    p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                    p['nationnalite'] = this.users[p.user_id].nationnalite
-                    p['email'] = this.users[p.user_id].email_perso
-                    p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                    this.prospects.push(p)
-                  }
-                })
               }),
               ((error) => { console.error(error); })
             );
@@ -353,13 +331,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
       customid: this.changeStateForm.value.customid,
       traited_by: this.changeStateForm.value.traited_by.value,
       validated_cf: this.changeStateForm.value.validated_cf,
-      avancement_visa: this.changeStateForm.value.avancement_visa
+      avancement_visa: this.changeStateForm.value.avancement_visa,
+      etat_traitement: "Traité"
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
-
+      console.log(dataUpdated)
       this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
       this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
+      this.prospects[this.prospects.indexOf(this.inscriptionSelected)] = dataUpdated
       this.inscriptionSelected = null
     }, (error) => {
       console.error(error)

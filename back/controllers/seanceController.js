@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
 app.disable("x-powered-by");
+const path = require('path');
+var mime = require('mime-types')
 const fs = require("fs")
 
 //Creation d'une nouvelle 
@@ -175,6 +177,7 @@ app.get("/getFiles/:id", (req, res) => {
 
 app.get("/downloadFile/:id/:filename", (req, res) => {
     let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    console.log(pathFile)
     let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
         if (err) {
             return console.error(err);
@@ -188,14 +191,33 @@ app.get("/downloadFile/:id/:filename", (req, res) => {
 
 app.get("/deleteFile/:id/:filename", (req, res) => {
     let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    let errG = null
     try {
         fs.unlinkSync(pathFile)
     } catch (err) {
         console.error(err)
+        errG = err
         res.status(400).send(err)
     }
-    res.status(200).send()
+    if (errG == null) {
+        Seance.findById(req.params.id).then(data => {
+            let arr = []
+            data.fileRight.forEach(file => {
+                if (file.name != req.params.filename) {
+                    arr.push(file)
+                }
+            })
+            Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).json({ dossier: "Fichier Supprimé", data });
+                }
 
+            })
+        })
+    }
 });
 
 const storage = multer.diskStorage({
@@ -219,8 +241,19 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
+        Seance.findById(req.params.id).then(data => {
+            let arr = data.fileRight
+            arr.push({ name: file.filename, right: req.body.etat, upload_by: req.body.user })
+            Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).json({ dossier: "Fichier Upload", data });
+                }
 
-        res.status(201).json({ dossier: "dossier mise à jour" });
+            })
+        })
     }
 
 }, (error) => { res.status(500).send(error); })

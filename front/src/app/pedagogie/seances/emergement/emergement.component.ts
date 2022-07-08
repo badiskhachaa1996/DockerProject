@@ -15,6 +15,8 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Seance } from 'src/app/models/Seance';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Formateur } from 'src/app/models/Formateur';
 const io = require("socket.io-client");
 
 @Component({
@@ -27,7 +29,7 @@ export class EmergementComponent implements OnInit {
   matiereList = {};
 
   constructor(private MatiereService: MatiereService, private ClasseService: ClasseService, private PresenceService: PresenceService, private router: Router, private FormateurService: FormateurService, private route: ActivatedRoute,
-    private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService, private DiplomeService: DiplomeService) { }
+    private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService, private DiplomeService: DiplomeService, private formBuilder: FormBuilder) { }
   socket = io(environment.origin.replace('/soc', ''));
   token;
   justif_file_value;
@@ -46,6 +48,7 @@ export class EmergementComponent implements OnInit {
   seance: Seance;
   date = new Date().getTime()
   date_debut; date_fin;
+  formateurInfo: Formateur = null;
 
   @ViewChild("canva") myCanvas: ElementRef;
   @ViewChild('justificatif') fileInput: FileUpload;
@@ -121,6 +124,9 @@ export class EmergementComponent implements OnInit {
       this.token = null
     }
     this.reloadPresence();
+    this.FormateurService.getByUserId(this.token.id).subscribe(data => {
+      this.formateurInfo = data
+    })
     this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
       this.dataRole = data
     })
@@ -199,7 +205,7 @@ export class EmergementComponent implements OnInit {
   showPdf = false
 
   getPDF(classe_id) {
-    this.PresenceService.getPDF(this.ID,classe_id).subscribe((data) => {
+    this.PresenceService.getPDF(this.ID, classe_id).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), this.ID + ".pdf")
@@ -256,5 +262,60 @@ export class EmergementComponent implements OnInit {
       }
     }
     return "color:red;"
+  }
+  showUploadFile = false
+
+  formUploadFile = this.formBuilder.group({
+    etat: [null]
+  });
+  FileUpload(event) {
+    if (event.files != null) {
+      if (this.formUploadFile.value.etat == null) {
+        this.formUploadFile.patchValue(
+          { etat: confirm("Voulez-vous que le fichier sois visible par les étudiants ?") }
+        )
+      }
+      this.MessageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('id', this.ID)
+      formData.append('etat', this.formUploadFile.value.etat)
+      formData.append('user', this.token.id)
+      formData.append('file', event.files[0])
+      this.SeanceService.uploadFile(formData, this.ID).subscribe(res => {
+        this.MessageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        event.target = null;
+        console.log(res)
+        if (res.data) {
+          this.seance = res.data
+        }
+        this.showUploadFile = false;
+      }, error => {
+        this.MessageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+  downloadFileCours(file) {
+    this.SeanceService.downloadFileCours(file.name, this.ID).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.fileType }), file.name)
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
+  }
+
+  deleteFile(file) {
+    this.SeanceService.deleteFile(file.name, this.ID).subscribe(data => {
+      if (data.data) {
+        this.seance = data.data
+      }
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
+  }
+
+  addEtudiant(){
+    
   }
 }
