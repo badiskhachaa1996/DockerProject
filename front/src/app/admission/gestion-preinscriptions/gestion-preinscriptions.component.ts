@@ -13,8 +13,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
+import { io } from 'socket.io-client';
+import { SocketService } from 'src/app/services/socket.service';
 
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -26,6 +29,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   code = this.ActiveRoute.snapshot.paramMap.get('code');
+
+  socket = io(environment.origin.replace('/soc', ''));
+
   users: User[] = [];
   prospects: any[] = [];
   inscriptionSelected: Prospect;
@@ -154,7 +160,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le payement ?")) {
-      this.payementList.splice(i,1)
+      this.payementList.splice(i, 1)
     }
   }
 
@@ -179,11 +185,31 @@ export class GestionPreinscriptionsComponent implements OnInit {
         this.dataCommercial = data.data
       }
       this.refreshProspect()
+      this.socket.on("TraitementProspect", (prospect) => {
+
+        this.prospects.forEach((pros) => {
+          if (pros.user_id == prospect.user_id) {
+            console.log(this.prospects.indexOf(pros))
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
+      this.socket.on("UpdatedProspect", (prospect) => {
+        this.prospects.forEach((pros) => {
+          if (pros.user_id == prospect.user_id) {
+            console.log(this.prospects.indexOf(pros))
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
     })
 
   }
 
   expandRow(prospect: Prospect) {
+
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -297,6 +323,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
 
   initStatutForm(prospect: Prospect) {
+
+    this.socket.emit("TraitementProspect", this.inscriptionSelected)
+
+
     this.changeStateForm.patchValue({
       statut: { value: prospect.statut_dossier },
       statut_fr: { value: prospect.tcf },
@@ -328,6 +358,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
 
       this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
+      this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
       this.inscriptionSelected = null
     }, (error) => {
@@ -381,6 +412,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.socket.emit("UpdatedProspect", this.inscriptionSelected);
         this.expandRow(this.showUploadFile)
         event.target = null;
         this.showUploadFile = null;

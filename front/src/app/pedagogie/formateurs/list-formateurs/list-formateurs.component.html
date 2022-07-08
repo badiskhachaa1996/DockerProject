@@ -16,7 +16,7 @@
 					</p-dropdown>
 				</div>
 
-				<!--<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Prestation et Vacation'">
+				<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Prestation et Vacation'">
 					<label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
 					<p-tabView>
 						<p-tabPanel header="Lundi">
@@ -135,7 +135,7 @@
 							</div>
 						</p-tabPanel>
 					</p-tabView>
-				</div> -->
+				</div>
 
 				<div class="field col-12 md:col-6">
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
@@ -196,13 +196,13 @@
 						<h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
 						<div class=" col-12 md:col-12">
 							<label>Diplome:</label><br>
-							<p-dropdown formControlName="IsJury" [options]="diplomesListe" optionLabel="titre"
+							<p-dropdown formControlName="IsJuryT{{i}}" [options]="diplomesListe" optionLabel="titre"
 								(onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
 								placeholder="Titre diplome" class="form-control"></p-dropdown>
 						</div>
 						<div class="col-12 md:col-12">
 							<label>Cout Horaire:</label><br>
-							<input type="number" (change)="changeCout(i,$event,'cout_h')"
+							<input type="number" (change)="changeCout(i,$event,'cout_h')" formControlName="IsJuryC{{i}}"
 								[(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
 						</div>
 						<div class="field col-12 md:col-2">

@@ -128,6 +128,10 @@ const prospect_schema = new mongoose.Schema({
     },
     avancement_visa:{
         type:Boolean
+    },
+    enTraitement: {
+        type: Boolean,
+        default: false
     }
 });
 

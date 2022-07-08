@@ -14,6 +14,8 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { CampusService } from 'src/app/services/campus.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { concat } from 'rxjs';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-list-formateurs',
@@ -214,11 +216,25 @@ export class ListFormateursComponent implements OnInit {
             friday_remarque: this.formateurToUpdate.friday_available.remarque
           })
         }
+       
         if (this.formateurToUpdate.IsJury) {
-          this.formUpdateFormateur.patchValue({
-
-          })
+          
+          this.formateurToUpdate.IsJury.forEach((diplome,index) => {
+            
+            console.log('titre:', diplome.titre, 'cout_h:', diplome.cout_h)
+            this.jury_diplomesList.push({ titre: diplome.titre, cout_h: diplome.cout_h })
+            let frmTitre = "IsjuryT".concat(index)
+            let frmCout = "IsjuryC".concat(index)
+            console.log(frmTitre)
+            this.formUpdateFormateur.patchValue({
+              frmTitre: diplome.titre,
+              frmCout: diplome.cout_h
+            })
+          });
+    
         }
+
+        
 
         let dic = response.volume_h
         let k = [];
@@ -267,11 +283,14 @@ export class ListFormateursComponent implements OnInit {
       remarque: [''],
       campus: [''],
       nda: [""],
-      IsJury: [""],
+    
     });
+
+
+   
   }
 
-  
+
 
   //Methode d'ajout du nouveau formateur dans la base de données
   onUpdateFormateur() {
@@ -333,7 +352,8 @@ export class ListFormateursComponent implements OnInit {
       h_fin: this.formUpdateFormateur.get('friday_h_fin').value,
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
-    if(this.jury_diplomesList.length > 0) {
+    if (this.jury_diplomesList.length > 0) {
+     
       this.formateurToUpdate.IsJury = this.jury_diplomesList
     }
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
@@ -356,6 +376,8 @@ export class ListFormateursComponent implements OnInit {
     );
 
     this.showFormUpdateFormateur = false;
+    this.jury_diplomesList = []
+ 
   }
 
   onGetStatutToUpdate() {
