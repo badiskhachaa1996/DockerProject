@@ -340,7 +340,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
       this.prospects[this.prospects.indexOf(this.inscriptionSelected)] = dataUpdated
+      
       this.inscriptionSelected = null
+      
     }, (error) => {
       console.error(error)
     })
