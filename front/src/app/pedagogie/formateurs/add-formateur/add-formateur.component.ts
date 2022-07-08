@@ -178,6 +178,7 @@ export class AddFormateurComponent implements OnInit {
       wednesday_remarque: [""],
       thursday_remarque: [""],
       friday_remarque: [""],
+      absences: [''],
       nda: [""],
       IsJury: [""],
     });
@@ -264,14 +265,14 @@ export class AddFormateurComponent implements OnInit {
       remarque: this.formAddFormateur.get('friday_remarque').value,
     }
 
-
-
+    let absences = this.formAddFormateur.get('absences').value
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet formateur
-    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda, this.jury_diplomesList);
+    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
+      this.jury_diplomesList, absences);
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
         if (response.success) {

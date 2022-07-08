@@ -168,13 +168,18 @@ export class ListFormateursComponent implements OnInit {
       ((response) => {
         this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
-
+        console.log(this.formateurToUpdate?.absences)
+        let arr = []
+        this.formateurToUpdate?.absences.forEach(date=>{
+          arr.push(new Date(date))
+        })
         this.formUpdateFormateur.patchValue({
           type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
           remarque: this.formateurToUpdate.remarque,
           campus: this.formateurToUpdate?.campus_id,
           nda: this.formateurToUpdate?.nda,
+          absences:arr
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -283,7 +288,8 @@ export class ListFormateursComponent implements OnInit {
       remarque: [''],
       campus: [''],
       nda: [""],
-    
+      IsJury: [""],
+      absences: [""]
     });
 
 
@@ -356,6 +362,7 @@ export class ListFormateursComponent implements OnInit {
      
       this.formateurToUpdate.IsJury = this.jury_diplomesList
     }
+    this.formateurToUpdate.absences=this.formUpdateFormateur.get('absences').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
         if (data.error) {
