@@ -90,11 +90,7 @@ export class ListEtudiantComponent implements OnInit {
     } catch (e) {
       this.token = null
     }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
 
@@ -254,7 +250,8 @@ export class ListEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      remarque: ['']
+      remarque: [''],
+      isOnStage: [''],
     });
   }
 
@@ -269,7 +266,7 @@ export class ListEtudiantComponent implements OnInit {
 
     let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
     let isAlternant = this.formUpdateEtudiant.get('isAlternant')?.value;
-
+    let isOnStage = this.formUpdateEtudiant.get('isOnStage')?.value;
     let nom_tuteur = this.formUpdateEtudiant.get('nom_tuteur')?.value;
     let prenom_tuteur = this.formUpdateEtudiant.get('prenom_tuteur')?.value;
     let adresse_tuteur = this.formUpdateEtudiant.get('adresse_tuteur')?.value;
@@ -287,13 +284,13 @@ export class ListEtudiantComponent implements OnInit {
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
     let entreprise = this.formUpdateEtudiant.get('entreprise')?.value;
-
+    let remarque = entreprise = this.formUpdateEtudiant.get('remeraque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
 
     let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
       null, null, null, null, custom_id, numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, phone_rl, email_rl, adresse_rl, dernier_diplome,
-      isAlternant, entreprise, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped);
+      isAlternant, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList,remarque, isOnStage);
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -325,7 +322,7 @@ export class ListEtudiantComponent implements OnInit {
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          entreprise: this.etudiantToUpdate.entreprise, remarque: this.etudiantToUpdate.remarque
+          entreprise: this.etudiantToUpdate.entreprise, remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage,
         });
       }),
       ((error) => { console.error(error); })

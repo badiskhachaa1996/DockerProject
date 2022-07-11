@@ -35,6 +35,6 @@ export class Etudiant {
         public diplome?: string,
         public parcours?: any,
         public remarque?:string,
-        public isOnstage?:boolean,
+        public isOnStage?:boolean,
     ) { }
 }
