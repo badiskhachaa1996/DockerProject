@@ -236,33 +236,27 @@ io.on("connection", (socket) => {
     })
     socket.on('TraitementProspect', (prospect) => {
         prospect.enTraitement = true;
-
         io.emit('TraitementProspect', prospect)
-        console.log('traitement', prospect._id, prospect.enTraitement)
-
         setTimeout(function () {
             prospect.enTraitement = false;
-            console.log('traitement', prospect._id, prospect.enTraitement)
             io.emit('TraitementProspect', prospect)
         }, 20000);
-
     })
 
     socket.on('UpdatedProspect', (prospect) => {
-
         prospect.enTraitement = false;
-        Prospect.findOneAndUpdate({ _id: prospect._id },
-            {
-                enTraitement: false
-            })
-            .then((prospectUpdated) => {
-                io.emit('UpdatedProspect', prospectUpdated)
-                console.log('UpdatedProspect', prospectUpdated._id, prospectUpdated.enTraitement)
-            }).catch((error) => { res.status(400).send(error); })
 
+        io.emit('UpdatedProspect', prospect)
 
-        console.log('Mise a jour Prospect faite : ', prospect._id, prospect.enTraitement)
     })
+    socket.on('CloseUpdProspect', (prospect) => {
+        prospect.enTraitement = false;
+
+        io.emit('CloseUpdProspect', prospect)
+
+    })
+
+
 });
 
 httpServer.listen(3000, () => {

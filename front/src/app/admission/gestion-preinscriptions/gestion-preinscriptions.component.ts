@@ -181,7 +181,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.messageService.add({ severity: "error", summary: "Erreur" })
     })
   }
+  closeformUpdate() {
 
+    this.socket.emit("CloseUpdProspect", this.inscriptionSelected);
+    this.inscriptionSelected = null;
+  }
   constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private formBuilder: FormBuilder,
     private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
 
@@ -195,8 +199,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.socket.on("TraitementProspect", (prospect) => {
 
         this.prospects.forEach((pros) => {
-          console.log("pros:", pros.enTraitement)
-          console.log("prospectFromS:", prospect.enTraitement)
+
           if (pros.user_id._id == prospect.user_id._id) {
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
           }
@@ -211,6 +214,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
         })
 
       })
+      this.socket.on("CloseUpdProspect", (prospect) => {
+        this.prospects.forEach((pros) => {
+          if (pros.user_id._id == prospect.user_id._id) {
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
+
+      
+
     })
 
   }
@@ -335,7 +349,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       etat_traitement: "Traité"
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
-      console.log(dataUpdated)
+
       this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
       this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
