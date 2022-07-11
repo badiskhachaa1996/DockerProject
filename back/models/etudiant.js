@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 // création du schéma de la table etudiant 
 const etudiantSchema = mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
-    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: false, default: null },
+    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: false, default: null },
     statut: { type: String, required: true },
     nationalite: { type: String },
     date_naissance: { type: Date, required: true },
