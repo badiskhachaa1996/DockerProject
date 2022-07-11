@@ -218,7 +218,7 @@
                         formControlName="isHandicaped"></p-selectButton>
                 </div>
 
-                <div class="field col-12">
+                <div class="field col-12" *ngIf="formUpdateEtudiant.value.isHandicaped" >
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>

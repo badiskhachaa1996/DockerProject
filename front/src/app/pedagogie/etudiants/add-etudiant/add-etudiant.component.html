@@ -229,8 +229,8 @@
                 </div>
 
 
-                <div class="grid field col-12" *ngIf="isMinor">
-                    <hr>
+                <div class="grid field col-12" *ngIf="isMinorFC()">
+                   
 
                     <div class="field col-12 md:col-6">
                         <label For="nrl">Nom du représentant légal</label>
@@ -263,7 +263,7 @@
                 <div class="col-12" *ngIf="!formAddEtudiant.value.isAlternant">
                     <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
                         formControlName="isOnStage" (onChange)="changestage()"></p-selectButton>
-               
+
 
                 </div>
 

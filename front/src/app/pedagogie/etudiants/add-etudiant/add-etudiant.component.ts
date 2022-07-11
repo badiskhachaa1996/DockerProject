@@ -332,8 +332,10 @@ export class AddEtudiantComponent implements OnInit {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
+    
     console.log(age)
-    this.isMinor = age < 18;
+   return age < 18;
+    
   }
 
   clickFile(rowData) {
