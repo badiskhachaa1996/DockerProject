@@ -1,5 +1,4 @@
 <div class="grid" *ngIf="presence==null || showCanvas">
-    <!--  -->
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
         <div class="col-12" *ngIf="showCanvas || (presence && presence.signature==false && presence.isPresent==false)">
@@ -20,15 +19,14 @@
                 </div>
                 <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
                     aria-hidden="true"></i><br>
+                <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
                 <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-                    class="ui-button-raised ui-button-success col-12 md:col-6 md:col-offset-3" label="Envoyer"
+                    class="ui-button-raised ui-button-success col-12 md:col-6" label="Envoyer le justificatif"
                     (click)="sendJustif();"></button>
+                <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
+                    class="ui-button-raised ui-button-success col-12 md:col-6" label="Télécharger votre justificatif"
+                    (click)="downloadFile(presence);"></button>
             </div>
-        </div>
-        <div *ngIf="presence && presence.justificatif">
-            <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
-            <button pButton [disabled]="loadingFile" class="ui-button-raised ui-button-success"
-                label="Télécharger votre justificatif" (click)="downloadFile(presence);"></button>
         </div>
     </div>
 </div>
@@ -88,23 +86,22 @@
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
         <div class="col-12">
-            <div class="md:col-offset-5">
+            <div class="md:col-offset-5 col-12">
                 <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
                     chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
                     maxFileSize="20000000" [auto]="true">
                 </p-fileUpload>
             </div>
             <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
-                aria-hidden="true"></i><br>
-            <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-                class="ui-button-raised ui-button-success col-12 md:col-6 md:col-offset-3" label="Envoyer"
-                (click)="sendJustif();"></button>
-        </div>
-    </div>
-    <div *ngIf="presence && presence.justificatif">
+            aria-hidden="true"></i><br>
         <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
-        <button pButton [disabled]="loadingFile" class="ui-button-raised ui-button-success"
-            label="Télécharger votre justificatif" (click)="downloadFile(presence);"></button>
+        <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
+            class="ui-button-raised ui-button-success col-12 md:col-5 mb-2" label="Envoyer le justificatif"
+            (click)="sendJustif();"></button>
+        <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
+            class="ui-button-raised ui-button-success col-12 md:col-5 md:col-offset-2 mb-2" label="Télécharger votre justificatif"
+            (click)="downloadFile(presence);"></button>
+        </div>
     </div>
 </div>
 <div class="grid">

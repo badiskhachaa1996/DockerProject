@@ -152,8 +152,25 @@ app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
                 res.send(err)
             }
             else {
-                console.log(data)
-                res.send(data)
+                if (data != null) {
+                    res.send(data)
+                } else {
+                    let p = new Presence({
+                        user_id: req.params.user_id,
+                        seance_id: req.params.seance_id,
+                        isPresent: false,
+                        signature: false,
+                        justificatif: true
+                    })
+                    p.save((err2,data)=>{
+                        if(err2){
+                            res.status(500).send(err2)
+                        }else{
+                            res.status(200).send(data)
+                        }
+                    })
+                }
+
                 if (req.body.justificatif && req.body.justificatif != null && req.body.justificatif != '') {
                     fs.mkdir("./storage/justificatif/",
                         { recursive: true }, (err3) => {

@@ -314,10 +314,14 @@ export class EmergementComponent implements OnInit {
 
   sendJustif() {
     this.uploadFile = true
-    this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
-      this.uploadFile = false;
-      this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
-    }, error => console.error(error))
+    if(this.presence){
+      this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
+        this.uploadFile = false;
+        this.reloadPresence()
+        this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
+      }, error => console.error(error))
+    }
+
   }
 
   downloadFile(rowData) {
