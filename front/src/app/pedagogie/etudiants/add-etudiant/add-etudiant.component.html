@@ -160,7 +160,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="date_naissance">Date de naissance<span style="color: red;"> * </span></label>
-                    <input formControlName="date_naissance" pInputText (change)="isMinorFC()" type="date"/>
+                    <input formControlName="date_naissance" pInputText (change)="isMinorFC()" type="date" />
                 </div>
 
 
@@ -229,8 +229,8 @@
                 </div>
 
 
-                <div class="grid field col-12" *ngIf="isMinor">
-                    <hr>
+                <div class="grid field col-12" *ngIf="isMinorFC()">
+                   
 
                     <div class="field col-12 md:col-6">
                         <label For="nrl">Nom du représentant légal</label>
@@ -260,8 +260,14 @@
                     <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                         formControlName="isAlternant"></p-selectButton>
                 </div>
+                <div class="col-12" *ngIf="!formAddEtudiant.value.isAlternant">
+                    <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
+                        formControlName="isOnStage" (onChange)="changestage()"></p-selectButton>
 
-                <div class="col-12" *ngIf="formAddEtudiant.value.isAlternant">
+
+                </div>
+
+                <div class="col-12" *ngIf="formAddEtudiant.value.isAlternant || formAddEtudiant.value.isOnStage ">
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
                         <!-- <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"

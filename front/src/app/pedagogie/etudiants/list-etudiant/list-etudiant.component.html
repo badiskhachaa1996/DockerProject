@@ -59,7 +59,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="date_naissance">Date de naissance<span style="color: red;"> * </span></label>
-                    <input formControlName="date_naissance" pInputText (onChange)="isMinorFC()" type="date"/>
+                    <input formControlName="date_naissance" pInputText (onChange)="isMinorFC()" type="date" />
                 </div>
 
                 <div class="field col-12">
@@ -158,8 +158,16 @@
                     <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                         formControlName="isAlternant"></p-selectButton>
                 </div>
+                <div class="col-12" *ngIf="!formUpdateEtudiant.value.isAlternant">
+                    <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
+                        formControlName="isOnStage" (onChange)="changestage()"></p-selectButton>
 
-                <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant">
+
+                </div>
+
+
+
+                <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant || formUpdateEtudiant.value.isOnStage">
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
                         <!-- <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
@@ -210,7 +218,7 @@
                         formControlName="isHandicaped"></p-selectButton>
                 </div>
 
-                <div class="field col-12">
+                <div class="field col-12" *ngIf="formUpdateEtudiant.value.isHandicaped" >
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
