@@ -1,7 +1,8 @@
-<div class="grid" *ngIf="presence==null || presence.justificatif">
-    <div class="col-10 col-offset-1 card shadow-lg">
+<div class="grid" *ngIf="presence==null || showCanvas">
+    <!--  -->
+    <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div class="col-12" *ngIf="showCanvas">
+        <div class="col-12" *ngIf="showCanvas || (presence && presence.signature==false && presence.isPresent==false)">
             <i class="pi pi-times" style="font-size: 20px;" (click)="clearCanvas()" aria-hidden="true"
                 pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
             <canvas class="card" #canva></canvas><br>
@@ -51,8 +52,8 @@
         </div>
     </form>
 </div>
-<div class="grid" *ngIf="presence && seance ">
-    <div class="col-12 card shadow-lg" [ngStyle]="{'background-color': presence.isPresent ? 'white' : 'tomato'}">
+<div class="card" *ngIf="presence && seance " [ngStyle]="{'background-color': presence.isPresent ? 'white' : 'tomato'}">
+    <div class="grid">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
         <div *ngIf="!presence.isPresent">
             <p>Vous avez été noté absent lors de cette séance</p>
@@ -81,6 +82,29 @@
 
             <p *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</p>
         </div>
+    </div>
+</div>
+<div class="card" *ngIf="presence==null || !presence.isPresent">
+    <div class="p-grid">
+        <h4>Fournir un justificatif d'absence</h4>
+        <div class="col-12">
+            <div class="md:col-offset-5">
+                <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
+                    chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
+                    maxFileSize="20000000" [auto]="true">
+                </p-fileUpload>
+            </div>
+            <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
+                aria-hidden="true"></i><br>
+            <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
+                class="ui-button-raised ui-button-success col-12 md:col-6 md:col-offset-3" label="Envoyer"
+                (click)="sendJustif();"></button>
+        </div>
+    </div>
+    <div *ngIf="presence && presence.justificatif">
+        <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
+        <button pButton [disabled]="loadingFile" class="ui-button-raised ui-button-success"
+            label="Télécharger votre justificatif" (click)="downloadFile(presence);"></button>
     </div>
 </div>
 <div class="grid">
@@ -157,6 +181,24 @@
         </div>
     </p-fieldset>
 </div>
+<p-toast></p-toast>
+<div class="card" *ngIf="showAddEtudiant">
+    <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showAddEtudiant = false" aria-hidden="true">
+    </i>
+    <h3 class="text-center" style="font-weight: bold;">
+        Ajouter un étudiant à : {{ seance.libelle }}</h3>
+    <form class="col-12" [formGroup]="formAddEtudiant">
+        <div class="grid">
+            <div class="col-12">
+                <p-dropdown [options]="dropdownEtudiant" formControlName="etudiant_id"></p-dropdown>
+            </div>
+            <div class="col-12">
+                <button pButton class="ui-button-raised ui-button-success" label="Autorisez cette étudiant"
+                    (click)="addEtudiant();"></button>
+            </div>
+        </div>
+    </form>
+</div>
 
 <div class="col-12" *ngIf="token.role!='user'  || formateurInfo">
     <div class="grid col-12 card" *ngIf="showPdf">
@@ -170,8 +212,8 @@
     <div class="card">
         <button pButton class="ui-button-raised ui-button-success" label="Export en PDF" style="float:right;"
             (click)="showPdf=true"></button>
-        <button pButton class="ui-button-raised ui-button-success" label="Ajouter un étudiant" style="float:right;"
-            (click)="addEtudiant()"></button>
+        <button pButton class="ui-button-raised ui-button-success" label="Ajouter un étudiant"
+            style="float:right;margin-right: 2px;" (click)="showAddEtudiant=true"></button>
         <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date :
             "dd/MM"}}
         </h3>
@@ -216,7 +258,9 @@
                                 tooltipPosition="bottom" class="pi pi-download" (click)="downloadFile(rowData)"
                                 aria-hidden="true"></i>
                             <i *ngIf="!rowData.isPresent" pTooltip="Marquer comme présent" tooltipPosition="bottom"
-                                class="pi pi-check" (click)="acceptJustif(rowData)" aria-hidden="true"></i>
+                                class="pi pi-check" (click)="acceptJustif(rowData,true)" aria-hidden="true"></i>
+                            <i *ngIf="rowData.isPresent" pTooltip="Marquer comme absent" tooltipPosition="bottom"
+                                class="pi pi-times" (click)="acceptJustif(rowData,false)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

@@ -13,6 +13,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
+import { PresenceService } from 'src/app/services/presence.service';
+import { Presence } from 'src/app/models/Presence';
 
 @Component({
   selector: 'app-list-etudiant',
@@ -81,7 +83,11 @@ export class ListEtudiantComponent implements OnInit {
 
   isMinor = false;
 
-  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService, private router: Router) { }
+  absences: Presence[] = []
+
+  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
+    private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
+    private router: Router, private presenceService: PresenceService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -377,6 +383,9 @@ export class ListEtudiantComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
+    this.presenceService.getAllAbsences(rowData?.user_id).subscribe(data => {
+      this.absences = data
+    })
   }
 
   downloadFile(id, i) {

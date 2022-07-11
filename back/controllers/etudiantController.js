@@ -383,4 +383,10 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     }
 
 }, (error) => { res.status(500).send(error); })
+
+app.post('/getAllByMultipleClasseID', (req, res) => {
+    Etudiant.find({ classe_id: { $in: req.body.classe_id } }).populate("user_id").populate("classe_id").then(result => {
+        res.send(result)
+    })
+});
 module.exports = app;

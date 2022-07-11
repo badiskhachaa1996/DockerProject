@@ -303,6 +303,7 @@
                         <th>Téléphone d'urgence</th>
                         <th>Numéro INE</th>
                         <th>Numéro NIR </th>
+                        <th>NB Absences</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -313,7 +314,7 @@
                         <td>
                             <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
                         </td>
-                        <td>
+                        <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
                             {{ users[etudiant.user_id].numero_adresse }} {{ users[etudiant.user_id].rue_adresse }} {{
                             users[etudiant.user_id].postal_adresse }} <br> {{ users[etudiant.user_id].ville_adresse }}
                             {{ users[etudiant.user_id].pays_adresse }}
@@ -321,7 +322,7 @@
                         <td>
                             {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
                         </td>
-                        <td>
+                        <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
                             {{ users[etudiant.user_id]?.phone }}
                         </td>
                         <td>
@@ -338,6 +339,9 @@
                         </td>
                         <td>
                             {{ etudiant.numero_NIR }}
+                        </td>
+                        <td>
+                            {{absences.length}}
                         </td>
                     </tr>
                 </ng-template>

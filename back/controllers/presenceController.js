@@ -47,10 +47,10 @@ app.get("/getAllBySeance/:id", (req, res) => {
 });
 
 //Mets un étudiant en présent
-app.get("/isPresent/:id", (req, res) => {
-    Presence.findOneAndUpdate({ _id: req.params.id },
+app.post("/isPresent/:id", (req, res) => {
+    Presence.findByIdAndUpdate(req.params.id,
         {
-            isPresent: true
+            isPresent: req.body.isPresent
         }, { new: true }, (err, campus) => {
             if (err) {
                 res.send(err)
@@ -72,7 +72,7 @@ app.post("/create", (req, res) => {
         isPresent: req.body.isPresent,
         signature: (req.body.signature) ? true : false,
         justificatif: false,
-        date_signature: Date.now()
+        date_signature: (req.body.signature) ? Date.now() : null
     });
     presence.save((err, data) => {
         //Sauvegarde de la signature si il y en a une
@@ -100,13 +100,14 @@ app.post("/create", (req, res) => {
 
 //Mets un étudiant en présent
 app.post("/addSignature/:id", (req, res) => {
-    Presence.findOneAndUpdate(req.params.id,
+    Presence.findByIdAndUpdate(req.params.id,
         {
             signature: true,
             isPresent: true,
             date_signature: Date.now()
         }, { new: true }, (err, data) => {
             if (err) {
+                console.error(err)
                 res.send(err)
             }
             else {
@@ -344,4 +345,10 @@ app.get("/getJustificatif/:id", (req, res) => {
     })
 })
 
+
+app.get("/getAllAbsences/:user_id", (req, res) => {
+    Presence.find({ user_id: req.params.user_id, isPresent: false }).then(result => {
+        res.status(201).send(result.length > 0 ? result : [])
+    })
+})
 module.exports = app;
