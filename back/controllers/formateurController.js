@@ -4,7 +4,9 @@ const nodemailer = require('nodemailer');
 app.disable("x-powered-by");
 const { Formateur } = require('./../models/formateur');
 const { User } = require('./../models/user');
-const fs = require("fs")
+const fs = require("fs");
+const path = require('path');
+var mime = require('mime-types');
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
