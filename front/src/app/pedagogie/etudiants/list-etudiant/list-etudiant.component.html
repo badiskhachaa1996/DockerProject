@@ -218,7 +218,7 @@
                         formControlName="isHandicaped"></p-selectButton>
                 </div>
 
-                <div class="field col-12" *ngIf="formUpdateEtudiant.value.isHandicaped" >
+                <div class="field col-12" *ngIf="formUpdateEtudiant.value.isHandicaped">
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
@@ -423,20 +423,35 @@
             <!-- Partie dedié à l'affichage des documents -->
 
             <div class="col-12">
-                <div class="col-12" *ngFor="let file of ListDocuments; index as i">
-                    <div class="box">
-                        <i class="pi pi-times" style="float:right; font-size: 20px;"
-                            (click)="deleteFile(etudiant._id,i)" aria-hidden="true"> </i>
-                        <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(etudiant._id,i)"></i>
-                        <em (click)="downloadFile(etudiant._id,i)" [id]="i" class="docDownload">
-                            {{ ListDocuments[i] }}</em>
-                    </div>
-                    <div class="col-2"></div>
-                </div>
+
 
                 <div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
                                         width: auto;">
                     <h4>Aucun document n'a été chargé !</h4>
+                </div>
+
+
+                <div *ngFor="let file of ListDocuments; index as i" class="grid">
+
+                    <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                        <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                            pTooltip="Visualiser dans un nouvel onglet" (click)="VisualiserFichier(etudiant._id,i)"></i>
+                        <em (click)="VisualiserFichier(etudiant._id,i)" [id]="i" style="cursor: pointer;"
+                            pTooltip=" Visualiser dans un nouvel onglet">
+                            {{ ListDocuments[i] }}
+                        </em>
+                    </div>
+                    <div class="field col-1">
+                        <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                            (click)="downloadFile(etudiant._id,i)"></i>
+                    </div>
+                    <div class="field col-1">
+                        <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                            pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(etudiant._id,i)"
+                            aria-hidden="true"> </i>
+                    </div>
+
                 </div>
             </div>
         </div>

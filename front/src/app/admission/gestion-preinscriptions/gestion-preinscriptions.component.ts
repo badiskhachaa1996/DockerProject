@@ -223,7 +223,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
       })
 
-      
+
 
     })
 
@@ -379,7 +379,20 @@ export class GestionPreinscriptionsComponent implements OnInit {
   downloadFile(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+     
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
+  VisualiserFichier(id, i) {
+    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
     }, (error) => {
       console.error(error)
     })
@@ -408,7 +421,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        this.socket.emit("UpdatedProspect", this.inscriptionSelected);
+        this.socket.emit("UpdatedProspect", this.prospects[this.inscriptionSelected._id]);
         this.expandRow(this.showUploadFile)
         event.target = null;
         this.showUploadFile = null;
