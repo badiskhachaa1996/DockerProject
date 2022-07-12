@@ -5,7 +5,7 @@ const ressource_schema = mongoose.Schema({
     edt: { type: String, required: true },
     program : { type: String, required: true},
     calendar : { type: String, required: true},
-    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: true },
+    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: true },
 });
 
 //creation de la table ressource avec le nom Ressource ( model/classe) à l'aide de la biblio mongoose et son schema

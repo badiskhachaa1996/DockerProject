@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //creation du schema de la table diplome
 const Schema = mongoose.Schema({
     name: { type: String },
-    agent_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    agent_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     detail: { type: String },
     date_creation:{type:Date,default:new Date()}
 });

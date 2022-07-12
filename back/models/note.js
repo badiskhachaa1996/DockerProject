@@ -4,8 +4,8 @@ const mongoose = require('mongoose');
 const noteSchema = mongoose.Schema({
     note_val: { type: String, required: true },
     semestre: { type: String, required: true},
-    etudiant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Etudiant', required: true },
-    examen_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Examen', required: true },
+    etudiant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'etudiant', required: true },
+    examen_id: { type: mongoose.Schema.Types.ObjectId, ref: 'examen', required: true },
     appreciation: { type: String, required: true },
     classe_id: { type: String, required: true },
     matiere_id: { type: String, required: true },

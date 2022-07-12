@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 //creation du schema de table campus
 const campus_schema = mongoose.Schema({
     libelle: { type: String, required: true },
-    ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "Ecole", required: true },
+    ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "ecole", required: true },
     ville: { type: String, required: true },
     pays: { type: String, required: true },
     email: { type: String, required: true },

@@ -287,6 +287,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
                             }
 
                         })
+                        //                      Moyenne Classe, Moyenne Etudiant, 
                         res.status(200).send({ dicMoyMatiere, MoyenneEtudiant, listeNotesEleves, listMatiere: listMatierev2 })
                     })
                 })
