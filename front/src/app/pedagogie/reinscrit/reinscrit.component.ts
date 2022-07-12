@@ -179,6 +179,18 @@ export class ReinscritComponent implements OnInit {
     })
 
   }
+  VisualiserFichier(id, i) {
+    this.etudiantService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
+
 
   deleteFile(id, i) {
     if (confirm("Voulez-vous vraiment supprimer le fichier " + this.ListPiped[i] + " ?")) {

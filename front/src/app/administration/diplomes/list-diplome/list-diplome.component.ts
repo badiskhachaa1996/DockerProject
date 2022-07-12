@@ -70,7 +70,7 @@ export class ListDiplomeComponent implements OnInit {
 
 
 
-  
+
   diplomes: Diplome[] = [];
 
   showFormAddDiplome: boolean = false;
@@ -164,7 +164,7 @@ export class ListDiplomeComponent implements OnInit {
         })
       })
     }
-  
+
   }
 
 
@@ -260,19 +260,19 @@ export class ListDiplomeComponent implements OnInit {
       ((response) => {
         this.messageService.add({ key: 'tst', severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
         this.diplomeService.getAll().subscribe(
-          (data) => { 
-            this.diplomes = data; 
+          (data) => {
+            this.diplomes = data;
             this.showFormUpdateDiplome = false;
           },
           (error) => { console.error(error) }
         );
       }),
-      ((error) => { 
-        console.error(error); 
+      ((error) => {
+        console.error(error);
         this.messageService.add({ key: 'tst', severity: 'error', summary: 'Modification de diplôme', detail: 'Impossible de modifier cet diplôme, veuillez contacter un administrateur' });
       })
     );
- 
+
   }
 
   clickFile(rowData) {
@@ -315,7 +315,19 @@ export class ListDiplomeComponent implements OnInit {
     })
   }
 
-  
+  VisualiserFichier(id, name) {
+    this.diplomeService.getFile(id, name).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
+
+
 
   // expandAll() {
   //   if(!this.isExpanded){
