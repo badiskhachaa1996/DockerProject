@@ -70,7 +70,7 @@ export class EtudiantService {
   }
 
   getBulletin(etudiant_id, semestre) {
-    let registreUrl = this.apiUrl + "getBulletin/" + etudiant_id + "/" + semestre;
+    let registreUrl = this.apiUrl + "getBulletinV3/" + etudiant_id + "/" + semestre;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
