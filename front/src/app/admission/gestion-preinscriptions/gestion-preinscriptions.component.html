@@ -2,8 +2,8 @@
     <!-- Partie changement de statut -->
     <div class="col-12" *ngIf="inscriptionSelected!=null">
         <div class="card">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                (click)="closeformUpdate()" aria-hidden="true"> </i>
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="closeformUpdate()"
+                aria-hidden="true"> </i>
             <h3 *ngIf="inscriptionSelected.user_id" style="font-weight: bold; text-align: center;">Changer le statut de
                 : {{inscriptionSelected.user_id?.firstname }} {{inscriptionSelected.user_id?.lastname | uppercase }}
             </h3>
@@ -426,12 +426,30 @@
             <h5 style="color: red; text-align: center;">Documents</h5>
             <ul>
                 <li *ngFor="let file of ListDocuments; index as i">
-                    <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer"
-                        (click)="deleteFile(prospect._id,i)" aria-hidden="true"> </i>
-                    <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(prospect._id,i)"></i>
-                    <em (click)="downloadFile(prospect._id,i)" [id]="i" style="cursor: pointer;">
-                        {{ ListPiped[i] }}
-                    </em>
+                    <div class="grid">
+
+                        <div class="field col-10 "
+                            style="border-style: 2;border: 2em;border-bottom: red;">
+                            <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                pTooltip="Visualiser dans un nouvel onglet"
+                                (click)="VisualiserFichier(prospect._id,i)"></i>
+                            <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
+                                pTooltip=" Visualiser dans un nouvel onglet">
+                                {{ ListPiped[i] }}
+                            </em>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                (click)="downloadFile(prospect._id,i)"></i>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                                pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
+                                aria-hidden="true"> </i>
+                        </div>
+                        
+                    </div>
                 </li>
             </ul>
 
