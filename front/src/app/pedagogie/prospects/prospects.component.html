@@ -1,3 +1,25 @@
+  <!-- Partie ajout de documents -->
+  <div class="col-12" *ngIf="showUploadFile!=null">
+    <div class="card">
+        <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
+            style="font-weight: bold;">Ajouter un document à : {{
+            users[showUploadFile.user_id]?.firstname }} {{
+            users[showUploadFile.user_id]?.lastname | uppercase }}</h3>
+        <form class="col-8 col-offset-2">
+            <div class="p-grid">
+                <div style="margin-left: 32%;">
+                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic"
+                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
+                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true" #fileInput>
+                    </p-fileUpload>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- partie Assignation à un Groupe -->
 <div class="col-12" *ngIf="showAssignForm!=null">
     <div class="card">
@@ -43,7 +65,8 @@
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="entreprise">Entreprise</label>
-                <input pInputText type="text" formControlName="entreprise" placeholder="Veuillez saisir le nom de l'entreprise">
+                <input pInputText type="text" formControlName="entreprise"
+                    placeholder="Veuillez saisir le nom de l'entreprise">
             </div>
 
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
@@ -53,17 +76,20 @@
 
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="prenom_tuteur">Prenom du tuteur</label>
-                <input pInputText type="text" formControlName="prenom_tuteur" placeholder="Prenom du tuteur d'alternance">
+                <input pInputText type="text" formControlName="prenom_tuteur"
+                    placeholder="Prenom du tuteur d'alternance">
             </div>
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="adresse_tuteur">Adresse du tuteur</label>
-                <textarea pInputText type="text" formControlName="adresse_tuteur" placeholder="Adresse du tuteur d'alternance"></textarea>
+                <textarea pInputText type="text" formControlName="adresse_tuteur"
+                    placeholder="Adresse du tuteur d'alternance"></textarea>
             </div>
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="email_tuteur">Adresse email du tuteur</label>
-                <input pInputText type="email" formControlName="email_tuteur" placeholder="Adresse email du tuteur d'alternance">
+                <input pInputText type="email" formControlName="email_tuteur"
+                    placeholder="Adresse email du tuteur d'alternance">
             </div>
 
             <div class="field col-4 md:col-3" *ngIf="AssignForm.value.statut.value == 'Alternant'">
@@ -88,7 +114,7 @@
                 <label for="sos_phone">Téléphone d'urgence</label>
                 <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
             </div>
-                        
+
             <!-- Si c'est un étudiant mineur -->
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
                 <label for="nom_rl">Nom du répresentant légal</label>
@@ -102,7 +128,8 @@
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
                 <label for="phone_rl">Numéro de téléphone du répresentant légal</label>
-                <input pInputText type="text" formControlName="phone_rl" placeholder="Numéro de téléphone du répresentant légal">
+                <input pInputText type="text" formControlName="phone_rl"
+                    placeholder="Numéro de téléphone du répresentant légal">
             </div>
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
@@ -112,7 +139,8 @@
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
                 <label for="adresse_rl">Email du répresentant légal</label>
-                <textarea pInputTextarea formControlName="adresse_rl" placeholder="Adresse du répresentant légal"></textarea>
+                <textarea pInputTextarea formControlName="adresse_rl"
+                    placeholder="Adresse du répresentant légal"></textarea>
             </div>
             <!-- End -->
 
@@ -399,22 +427,42 @@
         </p-table>
 
         <h5 style="color: red; text-align: center;">Documents</h5>
-        <ul>
-            <li *ngFor="let file of ListDocuments; index as i">
-                <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer"
-                    (click)="deleteFile(prospect._id,i)" aria-hidden="true"> </i>
-                <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(prospect._id,i)"></i>
-                <em (click)="downloadFile(prospect._id,i)" [id]="i" style="cursor: pointer;">
-                    {{ ListPiped[i] }}
-                </em>
-            </li>
-        </ul>
+        <div class="col-12">
 
-        <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
 
+            <div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
+                                    width: auto;">
+                <h4>Aucun document n'a été chargé !</h4>
+            </div>
+
+
+            <div *ngFor="let file of ListDocuments; index as i" class="grid">
+
+                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                        pTooltip="Visualiser dans un nouvel onglet" (click)="VisualiserFichier(prospect._id,i)"></i>
+                    <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
+                        pTooltip=" Visualiser dans un nouvel onglet">
+                        {{ ListDocuments[i] }}
+                    </em>
+                </div>
+                <div class="field col-1">
+                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                        (click)="downloadFile(prospect._id,i)"></i>
+                </div>
+                <div class="field col-1">
+                    <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                        pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
+                        aria-hidden="true"> </i>
+                </div>
+
+            </div>
+        </div>
     </div>
     </td>
     </tr>
     </ng-template>
     </p-table>
 </div>
+ 
