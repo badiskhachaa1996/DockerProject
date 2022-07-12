@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const paiement_schema = new mongoose.Schema({
     inscriptionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Inscription",
+        ref: "prospect",
         required: true
     },
     typePaiement: {

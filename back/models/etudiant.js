@@ -9,7 +9,7 @@ const etudiantSchema = mongoose.Schema({
     date_naissance: { type: Date, required: true },
     code_partenaire: { type: String },
     hasBeenBought: { type: Boolean, default: false },
-    examenBought: { type: mongoose.Schema.Types.ObjectId, ref: "Examen" },
+    examenBought: { type: mongoose.Schema.Types.ObjectId, ref: "examen" },
     howMuchBought: { type: Number },
     custom_id: { type: String },
     numero_INE: { type: String },
