@@ -92,7 +92,7 @@
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['libelle', 'classe_id', 'matiere_id', 'note_max', 'coef']" [rows]="5"
-                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length">
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
 
@@ -172,7 +172,7 @@
                     <tr>
                         <td colspan="9">
                             <div class="p-3">
-                                <p-table responsiveLayout="scroll">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
                         <th>Type d'examen:</th>

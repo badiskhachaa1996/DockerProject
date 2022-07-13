@@ -7,7 +7,8 @@ export class Matiere {
         public volume_init?:number,
         public abbrv?: string,
         public classe_id?:string,
-        public seance_max?:number
+        public seance_max?:number,
+        public coeff?:number
     ) { };
 
 }

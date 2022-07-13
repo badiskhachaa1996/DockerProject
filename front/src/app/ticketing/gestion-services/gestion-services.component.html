@@ -76,7 +76,7 @@
                      (onRowUnselect)="onRowUnselect($event)"
                      [rowHover]="true" [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['label']"
-                     responsiveLayout="scroll">
+                     responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -88,21 +88,13 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Service
-							</div>
-						</th>
-                        <th>
-							<div class="flex justify-content-between align-items-center">
-								Action
-							</div>
-                        </th>    
+						<th style="text-align:center">Service</th>
+                        <th style="text-align:center">Action</th>    
 				</ng-template>
                 <ng-template pTemplate="body" let-rowData>
                     <tr>
                         <td [ngStyle]="{color: getColor(rowData.active)}" [pSelectableRow]="rowData"
-                        [pSelectableRowIndex]="columns" title="Vous pouvez cliquer sur moi :)">
+                        [pSelectableRowIndex]="columns" title="Vous pouvez cliquer sur moi">
                             {{rowData.label}}
                         </td>
                         <td>
@@ -166,7 +158,7 @@
                      dataKey="_id" [rows]="10" 
                      [rowHover]="true" [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['label']"
-                     responsiveLayout="scroll">
+                     responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">

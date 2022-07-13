@@ -176,6 +176,11 @@ export class ListSeancesComponent implements OnInit {
     rowData.classe_id.forEach(classeID => {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });
+    let c = []
+    rowData.campus_id.forEach(cid=>{
+      c.push({ libelle: this.dicCampus[cid]?.nom, value: this.dicCampus[cid]?._id })
+    })
+    this.seanceFormUpdate.patchValue({ campus_id: c })
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
       matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
@@ -185,13 +190,10 @@ export class ListSeancesComponent implements OnInit {
       formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
       isPresentiel: new FormControl(rowData.isPresentiel),
       salle_name: new FormControl({ value: rowData.salle_name }),
-      campus_id: new FormControl(this.dropdownCampus[0]),
+      campus_id: new FormControl(c),
       isPlanified: new FormControl(rowData.isPlanified),
       nbseance: new FormControl(rowData.nbseance)
     });
-    if (rowData.campus_id && rowData.campus_id != null) {
-      this.seanceFormUpdate.patchValue({ campus_id: { libelle: this.dicCampus[rowData.campus_id].libelle, value: rowData.campus_id } })
-    }
   }
 
   get isPresentielUpdated() { return this.seanceFormUpdate.get('isPresentiel'); }
@@ -200,11 +202,15 @@ export class ListSeancesComponent implements OnInit {
     let seance: Seance
 
     let classeList = []
+    let campusList = []
     this.seanceFormUpdate.value.classe.forEach(c=>{
       classeList.push(c.value)
     })
+    this.seanceFormUpdate.value.campus_id.forEach(c=>{
+      campusList.push(c.value)
+    })
     seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
-    this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
+    this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, campusList);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
       this.seanceFormUpdate.value.classe.forEach(c => {

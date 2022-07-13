@@ -1,6 +1,6 @@
 const express = require('express');
 const { Diplome } = require('../models/diplome');
-const { Seance } = require('../models/seance')
+const { Seance } = require('../models/seance');
 const app = express();
 app.disable("x-powered-by");
 const { Matiere } = require('./../models/matiere');
@@ -21,7 +21,8 @@ app.post("/create", (req, res, next) => {
         volume_init: req.body.volume_init,
         abbrv: req.body.abbrv,
         classe_id: req.body.classe_id,
-        seance_max: req.body.seance_max
+        seance_max: req.body.seance_max,
+        coeff: req.body.coeff,
     });
 
     matiere.save()
@@ -48,7 +49,8 @@ app.post("/updateById", (req, res, next) => {
             volume_init: req.body.volume_init,
             abbrv: req.body.abbrv,
             classe_id: req.body.classe_id,
-            seance_max: req.body.seance_max
+            seance_max: req.body.seance_max,
+            coeff: req.body.coeff,
         })
         .then((matiereUpdated) => { res.status(200).send(matiereUpdated) })
         .catch((error) => { res.status(500).send(error) })

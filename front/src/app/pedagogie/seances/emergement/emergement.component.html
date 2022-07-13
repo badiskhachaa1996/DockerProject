@@ -1,32 +1,12 @@
-<div class="grid" *ngIf="presence==null || showCanvas">
+<div class="grid" *ngIf="showCanvas || (presence && presence.allowedByFormateur && presence.signature==false)">
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div class="col-12" *ngIf="showCanvas || (presence && presence.signature==false && presence.isPresent==false)">
+        <div class="col-12">
             <i class="pi pi-times" style="font-size: 20px;" (click)="clearCanvas()" aria-hidden="true"
                 pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
             <canvas class="card" #canva></canvas><br>
             <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
-        </div>
-        <div class="p-grid" *ngIf="!showCanvas && presence==null">
-            <h4>Fournir un justificatif d'absence</h4>
-            <div class="col-12">
-                <div class="md:col-offset-5">
-                    <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
-                        chooseLabel="Joindre un fichier" customUpload="true" fileLimit="1" accept=".pdf,.jpg,.png,.jpeg"
-                        maxFileSize="20000000" [auto]="true">
-                    </p-fileUpload>
-                </div>
-                <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
-                    aria-hidden="true"></i><br>
-                <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
-                <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-                    class="ui-button-raised ui-button-success col-12 md:col-6" label="Envoyer le justificatif"
-                    (click)="sendJustif();"></button>
-                <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
-                    class="ui-button-raised ui-button-success col-12 md:col-6" label="Télécharger votre justificatif"
-                    (click)="downloadFile(presence);"></button>
-            </div>
         </div>
     </div>
 </div>
@@ -203,7 +183,7 @@
             aria-hidden="true"> </i>
         <h5 class="col-12 text-center">Générer la feuille d'emergement du groupe:</h5>
         <div class="col-6 md:col-4" *ngFor="let cid of seance.classe_id; i as index">
-            <button pButton (click)="getPDF(cid)" label="{{classeList[cid].nom}}"> </button>
+            <button pButton (click)="getPDF(cid)" label="{{classeList[cid].abbrv}} - {{campusDic[cid]}}"> </button>
         </div>
     </div>
     <div class="card">

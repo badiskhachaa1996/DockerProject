@@ -81,6 +81,8 @@ import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { LoginGuard } from './guards/login-guard';
 import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
+import { NotificationComponent } from './notification/notification.component';
+
 
 @NgModule({
     imports: [
@@ -88,7 +90,7 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
             {
                 path: '', component: AppMainComponent,
                 children: [
-                    { path: '', component: DashboardComponent ,canActivate: [AuthGuardService]},
+                    { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
                     { path: 'uikit/formlayout', component: FormLayoutComponent },
                     { path: 'uikit/input', component: InputComponent },
                     { path: 'uikit/floatlabel', component: FloatLabelComponent },
@@ -148,21 +150,22 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
                     { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'emploi-du-temps', component: EmploiDuTempsComponent},
+                    { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
                     { path: 'emploi-du-temps/:type/:id', component: EmploiDuTempsComponent },
                     { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-                   
+
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
+                    { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                 ],
             },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
-            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent,  canActivate: [FormAdmissionGuard] },
-            { path: 'partenaireInscription', component: PartenaireInscriptionComponent },   
-            { path: 'login', component: ExterneComponent , canActivate : [LoginGuard] },
-            { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate : [ProspectGuard] },
+            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+            { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
+            { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
+            { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },

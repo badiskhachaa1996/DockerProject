@@ -72,7 +72,8 @@ app.post("/create", (req, res) => {
         isPresent: req.body.isPresent,
         signature: (req.body.signature) ? true : false,
         justificatif: false,
-        date_signature: (req.body.signature) ? Date.now() : null
+        date_signature: (req.body.signature) ? Date.now() : null,
+        allowedByFormateur: req.body.allowedByFormateur
     });
     presence.save((err, data) => {
         //Sauvegarde de la signature si il y en a une
@@ -154,6 +155,30 @@ app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
             else {
                 if (data != null) {
                     res.send(data)
+                    if (req.body.justificatif && req.body.justificatif != null && req.body.justificatif != '') {
+                        fs.mkdir("./storage/justificatif/",
+                            { recursive: true }, (err3) => {
+                                if (err3) {
+                                    console.error(err3);
+                                }
+                            });
+                        var files = fs.readdirSync("storage/justificatif/");
+                        files.forEach(file => {
+                            if (file.includes(data._id)) {
+                                try {
+                                    fs.unlinkSync('storage/justificatif/' + file)
+                                    //file removed
+                                } catch (errFile) {
+                                    console.error(errFile)
+                                }
+                            }
+                        });
+                        fs.writeFile("storage/justificatif/" + data._id + "." + req.body.name.split('.').pop(), req.body.justificatif, 'base64', function (err2) {
+                            if (err2) {
+                                console.error(err2);
+                            }
+                        });
+                    }
                 } else {
                     let p = new Presence({
                         user_id: req.params.user_id,
@@ -162,41 +187,39 @@ app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
                         signature: false,
                         justificatif: true
                     })
-                    p.save((err2,data)=>{
-                        if(err2){
+                    p.save((err2, data) => {
+                        if (err2) {
                             res.status(500).send(err2)
-                        }else{
+                        } else {
                             res.status(200).send(data)
+                        }
+                        if (req.body.justificatif && req.body.justificatif != null && req.body.justificatif != '') {
+                            fs.mkdir("./storage/justificatif/",
+                                { recursive: true }, (err3) => {
+                                    if (err3) {
+                                        console.error(err3);
+                                    }
+                                });
+                            var files = fs.readdirSync("storage/justificatif/");
+                            files.forEach(file => {
+                                if (file.includes(data._id)) {
+                                    try {
+                                        fs.unlinkSync('storage/justificatif/' + file)
+                                        //file removed
+                                    } catch (errFile) {
+                                        console.error(errFile)
+                                    }
+                                }
+                            });
+                            fs.writeFile("storage/justificatif/" + data._id + "." + req.body.name.split('.').pop(), req.body.justificatif, 'base64', function (err2) {
+                                if (err2) {
+                                    console.error(err2);
+                                }
+                            });
                         }
                     })
                 }
-
-                if (req.body.justificatif && req.body.justificatif != null && req.body.justificatif != '') {
-                    fs.mkdir("./storage/justificatif/",
-                        { recursive: true }, (err3) => {
-                            if (err3) {
-                                console.error(err3);
-                            }
-                        });
-                    var files = fs.readdirSync("storage/justificatif/");
-                    files.forEach(file => {
-                        if (file.includes(data._id)) {
-                            try {
-                                fs.unlinkSync('storage/justificatif/' + file)
-                                //file removed
-                            } catch (errFile) {
-                                console.error(errFile)
-                            }
-                        }
-                    });
-                    fs.writeFile("storage/justificatif/" + data._id + "." + req.body.name.split('.').pop(), req.body.justificatif, 'base64', function (err2) {
-                        if (err2) {
-                            console.error(err2);
-                        }
-                    });
-                }
             }
-
         });
 });
 

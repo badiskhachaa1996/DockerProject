@@ -52,10 +52,10 @@ export class NotesComponent implements OnInit {
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
-    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif:true },
-    { libelle: 'Semestre 1', value: 'Semestre 1', actif:false },
-    { libelle: 'Semestre 2', value: 'Semestre 2', actif:false },
-    { libelle: 'Semestre 3', value: 'Semestre 3', actif:false }
+    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
+    { libelle: 'Semestre 1', value: 'Semestre 1', actif: false },
+    { libelle: 'Semestre 2', value: 'Semestre 2', actif: false },
+    { libelle: 'Semestre 3', value: 'Semestre 3', actif: false }
   ];
 
   //Données liées à la saisie de notes
@@ -711,10 +711,9 @@ export class NotesComponent implements OnInit {
     //Par Morgan
     this.notesForGenerateBulletin = []
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      data.listMatiere.forEach(matiere => {
-        console.log(matiere)
-        this.notesForGenerateBulletin.push({ 'note_val': data.MoyenneEtudiant[matiere], 'semestre': semestre, 'etudiant_id': etudiant_id, "matiere_id": matiere, /*'appreciation': notefromdb.appreciation,*/ 'moyPromo': this.avg(data.dicMoyMatiere[matiere]), 'maxPromo': Math.max(data.dicMoyMatiere[matiere]), 'minPromo': Math.min(data.dicMoyMatiere[matiere]) });
-      })
+      this.moyEtudiant = data.moyenneEtudiant
+      this.notesForGenerateBulletin = data.data
+      this.showBulletin = true
     }, error => {
       console.error(error)
     })

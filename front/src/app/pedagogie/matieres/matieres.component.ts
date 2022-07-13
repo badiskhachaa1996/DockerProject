@@ -80,7 +80,8 @@ export class MatieresComponent implements OnInit {
       volume: [''],
       abbrv: ['', Validators.required],
       classe_id: [this.classeList[0], Validators.required],
-      seance_max: ['', Validators.required]
+      seance_max: ['', Validators.required],
+      coeff: ['', Validators.required],
     })
   }
 
@@ -97,6 +98,7 @@ export class MatieresComponent implements OnInit {
     let abbrv = this.formAddMatiere.get("abbrv").value;
     let classe_id = this.formAddMatiere.get("classe_id").value;
     let seance_max = this.formAddMatiere.get("seance_max").value;
+    let coeff = this.formAddMatiere.get("coeff").value;
 
 
     //Recuperation de la formation_id
@@ -113,6 +115,8 @@ export class MatieresComponent implements OnInit {
           abbrv,
           classe_id,
           seance_max,
+          coeff,
+
         );
         //Envoi vers la BD
         this.matiereService.create(matiere).subscribe(
@@ -160,7 +164,8 @@ export class MatieresComponent implements OnInit {
       volume: [''],
       abbrv: ['', Validators.required],
       classe_id: ['', Validators.required],
-      seance_max: ['', Validators.required]
+      seance_max: ['', Validators.required],
+      coeff: ['', Validators.required],
     });
   }
 
@@ -177,6 +182,7 @@ export class MatieresComponent implements OnInit {
     let abbrv = this.formModifMatiere.get("abbrv").value;
     let classe_id = this.formModifMatiere.get("classe_id").value;
     let seance_max = this.formModifMatiere.get("seance_max").value;
+    let coeff = this.formModifMatiere.get("coeff").value;
 
     //Recuperation de la formation_id
     this.ClasseService.get(this.formModifMatiere.get("classe_id").value).subscribe(
@@ -191,6 +197,7 @@ export class MatieresComponent implements OnInit {
           abbrv,
           classe_id,
           seance_max,
+          coeff,
         );
 
 

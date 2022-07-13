@@ -70,11 +70,15 @@ export class EmploiDuTempsComponent implements OnInit {
   eventClickFC(col) {
     if (this.type == null) {
       this.seanceService.getById(col.event.id).subscribe(rowData => {
-        this.SeanceToUpdate = rowData
         let classeList = [];
         rowData.classe_id.forEach(classeID => {
           classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
         });
+        let c = []
+        rowData.campus_id.forEach(cid => {
+          c.push({ libelle: this.dicCampus[cid]?.nom, value: this.dicCampus[cid]?._id })
+        })
+        this.seanceFormUpdate.patchValue({ campus_id: c })
         this.seanceFormUpdate = new FormGroup({
           classe: new FormControl(classeList),
           matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
@@ -84,13 +88,10 @@ export class EmploiDuTempsComponent implements OnInit {
           formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
           isPresentiel: new FormControl(rowData.isPresentiel),
           salle_name: new FormControl({ value: rowData.salle_name }),
-          campus_id: new FormControl(this.dropdownCampus[0]),
+          campus_id: new FormControl(c),
           isPlanified: new FormControl(rowData.isPlanified),
           nbseance: new FormControl(rowData.nbseance)
         });
-        if (rowData.campus_id && rowData.campus_id != null) {
-          this.seanceFormUpdate.patchValue({ campus_id: { libelle: this.dicCampus[rowData.campus_id].libelle, value: rowData.campus_id } })
-        }
       })
     } else {
       this.router.navigate(['/emergement/' + col.event.id])

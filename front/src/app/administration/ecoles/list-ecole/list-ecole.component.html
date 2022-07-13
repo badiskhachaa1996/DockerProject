@@ -52,7 +52,7 @@
                      dataKey="_id" [rows]="10" rowExpandMode="single" [rows]="5"
                      [rowHover]="true" [paginator]="true" [pageLinks]="5" [totalRecords]="ecoles.length"
                      [globalFilterFields]="['libelle','email','site']"
-                     responsiveLayout="scroll" [filterDelay]="0">
+                     responsiveLayout="scroll" [filterDelay]="0" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -64,31 +64,11 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Libéllé
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Année scolaire 
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Email
-							</div>
-						</th>
-                        <th>
-							<div class="flex justify-content-between align-items-center">
-								Site Web
-							</div>
-						</th>
-                        <th>
-							<div class="flex justify-content-between align-items-center">
-								Ville
-							</div>
-						</th>
+						<th pSortableColumn="libelle" style="text-align: center;"> Libéllé <p-sortIcon field="libelle"></p-sortIcon></th>
+						<th pSortableColumn="annee_scolaire" style="text-align: center;"> Année scolaire <p-sortIcon field="annee_scolaire"></p-sortIcon></th>
+						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
+                        <th pSortableColumn="site_web" style="text-align: center;"> Site Web <p-sortIcon field="site_web"></p-sortIcon></th>
+                        <th pSortableColumn="ville" style="text-align: center;"> Ville <p-sortIcon field="ville"></p-sortIcon></th>
                         <th>
 							<div class="flex justify-content-between align-items-center">
 								Action

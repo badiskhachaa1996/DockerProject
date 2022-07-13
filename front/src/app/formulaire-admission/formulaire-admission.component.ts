@@ -10,14 +10,14 @@ import { MessageModule } from 'primeng/message';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
-
 import { Inscription } from 'src/app/models/Inscription';
 import { FirstInscriptionService } from 'src/app/services/first-inscription.service';
 import { MessageService } from 'primeng/api';
 import { Diplome } from 'src/app/models/Diplome';
 import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
-
+import { Notification } from 'src/app/models/notification';
+import { NotificationService } from 'src/app/services/notification.service';
 
 
 
@@ -30,7 +30,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
 
-  constructor(private route: ActivatedRoute, private diplomeService: DiplomeService, private campusService: CampusService, private fInscriptionService: FirstInscriptionService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService) { }
+  constructor(private route: ActivatedRoute, private diplomeService: DiplomeService, private campusService: CampusService, private fInscriptionService: FirstInscriptionService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
 
   routeItems: MenuItem[];
   nationList = environment.nationalites;
@@ -426,6 +426,8 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
+          //Envoie de notif TODO
+          this.NotifService.create(new Notification)
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
           this.getFilesAccess(response.dataUser._id)
         } else {

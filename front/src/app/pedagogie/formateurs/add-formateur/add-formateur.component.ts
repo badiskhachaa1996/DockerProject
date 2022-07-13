@@ -150,7 +150,7 @@ export class AddFormateurComponent implements OnInit {
       numero_adresse: ['', Validators.required],
       postal_adresse: ['', Validators.required],
       type_contrat: [this.typeContratList[0], Validators.required],
-      taux_h: ['', Validators.required],
+      taux_h: [''],
       taux_j: [''],
       prestataire_id: [this.prestataireList[0]],
       volume_h: this.formBuilder.array([]),

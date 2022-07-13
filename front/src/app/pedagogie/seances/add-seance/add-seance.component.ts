@@ -119,14 +119,12 @@ export class AddSeanceComponent implements OnInit {
 
   saveSeance() {
     //TODO get nbSeance
-    if (this.seanceForm.value.libelle == "") {
-      let classeStr = ""
-      this.seanceForm.value.classe.forEach(c => {
-        classeStr = classeStr + c.value.abbrv + ","
-      })
-      classeStr.slice(classeStr.lastIndexOf(','))
-      this.seanceForm.value.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")"
-    }
+    let classeStr = ""
+    this.seanceForm.value.classe.forEach(c => {
+      classeStr = classeStr + c.value.abbrv + ","
+    })
+    classeStr.slice(classeStr.lastIndexOf(','))
+    this.seanceForm.value.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.remarque.value
 
     let classeList = []
     this.seanceForm.value.classe.forEach(c => {
@@ -134,7 +132,7 @@ export class AddSeanceComponent implements OnInit {
     })
 
     let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom,
-      this.seanceForm.value.isPresentiel.value, this.seanceForm.value.salle_name.value, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id.value, this.seanceForm.value.nbseance);
+      this.seanceForm.value.isPresentiel.value, this.seanceForm.value.salle_name.value, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id.value, this.seanceForm.value.nbseance, null, this.seanceForm.value.remarque.value);
 
     let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
@@ -192,6 +190,10 @@ export class AddSeanceComponent implements OnInit {
             txt = "\nRemarque: " + rmq
           }
           choice = confirm("Le formateur n'est pas disponible pour toute la séance à cause de ses jours de disponibilité\nVoulez-vous quand même créer cette séance ?" + txt)
+        }
+      } else if (choice) {
+        if (this.matieres[seance.matiere_id].seance_max < seance.nbseance) {
+          choice = confirm("Le nombre de séance prévu pour cette matière va être depassé\nVoulez-vous quand même créer cette séance ?")
         }
       }
       if (choice)

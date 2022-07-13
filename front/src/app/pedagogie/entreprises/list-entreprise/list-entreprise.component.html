@@ -260,62 +260,25 @@
             <p-toast></p-toast>
             <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret', 'isInterne', 'website', 'vip']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
-                responsiveLayout="scroll" [rows]="10">
+                responsiveLayout="scroll" [rows]="10" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
 
-                <!--<ng-template pTemplate="caption 
-                    <div class="flex table-header">
-                    </div>
-                </ng-template>-->
                 <ng-template pTemplate="header">
                     <tr>
-                        <!--<th id="expandBtn" style="width: 3rem"></th>
-                        <th id="r_social" pSortableColumn="r_sociale">Raison sociale <p-sortIcon field="r_sociale">
-                            </p-sortIcon>
-                        </th>
-                        <th id="fm_juridique" pSortableColumn="fm_juridique">Forme juridique <p-sortIcon
-                                field="fm_juridique"></p-sortIcon>
-                        </th>
-                        <th id="siret" pSortableColumn="siret">Siret <p-sortIcon field="siret"></p-sortIcon>
-                        </th>
-                        <th id="website" pSortableColumn="phone"> Téléphone <p-sortIcon field="website">
-                            </p-sortIcon>
-                        </th>
-                        <th id="vip" pSortableColumn="vip">VIP <p-sortIcon field="vip"></p-sortIcon>
-                        </th>
-                        <th id="action">Action</th>-->
-                        <th style="width: 3rem;">
-
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Raison sociale
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Forme juridique
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Siret
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Téléphone
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                VIP
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Action
-                            </div>
-                        </th>
+                        <th style="width: 3rem;"></th>
+                        <th pSortableColumn="raison_sociale"> Raison sociale <p-sortIcon field="raison_sociale"></p-sortIcon></th>
+                        <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique"></p-sortIcon></th>
+                        <th pSortableColumn="siret"> Siret <p-sortIcon field ="siret"></p-sortIcon></th>
+                        <th pSortableColumn="telephone"> Téléphone <p-sortIcon field="telephone"></p-sortIcon></th>
+                        <th pSortableColumn="vip"> VIP  <p-sortIcon field="vip"></p-sortIcon></th>
+                        <th>Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-entreprise>
@@ -340,7 +303,7 @@
                     <tr>
                         <td colspan="7">
                             <div class="p-3">
-                                <p-table responsiveLayout="scroll">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
                         <th>Type Entreprise</th>
@@ -366,7 +329,7 @@
                 </ng-template>
             </p-table>
             <h5 *ngIf="entreprise.ville_adresse" style="text-align:center;">Adresse de l'entreprise</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.ville_adresse">
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.ville_adresse" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Pays</th>
@@ -391,7 +354,7 @@
             </p-table>
 
             <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du 1er contact</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact">
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nom</th>
@@ -412,7 +375,7 @@
                 </ng-template>
             </p-table>
             <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">Informations du 2ème contact</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd">
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nom</th>
