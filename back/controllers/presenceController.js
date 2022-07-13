@@ -72,7 +72,8 @@ app.post("/create", (req, res) => {
         isPresent: req.body.isPresent,
         signature: (req.body.signature) ? true : false,
         justificatif: false,
-        date_signature: (req.body.signature) ? Date.now() : null
+        date_signature: (req.body.signature) ? Date.now() : null,
+        allowedByFormateur: req.body.allowedByFormateur
     });
     presence.save((err, data) => {
         //Sauvegarde de la signature si il y en a une
@@ -162,10 +163,10 @@ app.post("/addJustificatif/:user_id/:seance_id", (req, res) => {
                         signature: false,
                         justificatif: true
                     })
-                    p.save((err2,data)=>{
-                        if(err2){
+                    p.save((err2, data) => {
+                        if (err2) {
                             res.status(500).send(err2)
-                        }else{
+                        } else {
                             res.status(200).send(data)
                         }
                     })

@@ -74,10 +74,10 @@ export class EmergementComponent implements OnInit {
     let isDrawing = false;
     let x = 0;//-15
     let y = 0;//-20
-    let canvas  = this.myCanvas.nativeElement
+    let canvas = this.myCanvas.nativeElement
     var context = canvas.getContext('2d');
-    let scrollX=window.scrollX || document.documentElement.scrollLeft;
-    let scrollY=window.scrollY || document.documentElement.scrollTop;
+    let scrollX = window.scrollX || document.documentElement.scrollLeft;
+    let scrollY = window.scrollY || document.documentElement.scrollTop;
 
     //Base PC Canvas 
     canvas.addEventListener('mousedown', e => {
@@ -96,7 +96,7 @@ export class EmergementComponent implements OnInit {
 
     window.addEventListener('mouseup', e => {
       if (e.target !== canvas) // Compliant
-          return;
+        return;
       if (isDrawing === true) {
         drawLine(context, x, y, e.offsetX, e.offsetY);
         x = 0;
@@ -314,7 +314,7 @@ export class EmergementComponent implements OnInit {
 
   sendJustif() {
     this.uploadFile = true
-    if(this.presence){
+    if (this.presence) {
       this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
         this.uploadFile = false;
         this.reloadPresence()
@@ -416,7 +416,8 @@ export class EmergementComponent implements OnInit {
       user_id: id,
       isPresent: false,
       signature: null,
-      seance_id: this.ID
+      seance_id: this.ID,
+      allowedByFormateur: true
     }).subscribe(data => {
       this.showAddEtudiant = false
       console.log(data)
