@@ -269,18 +269,22 @@
 				[value]="formateurs" dataKey="_id" responsiveLayout="scroll">
 
 				<ng-template pTemplate="caption">
-					<div class="flex table-header">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
 					</div>
 				</ng-template>
+
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="width: 3rem"></th>
-						<th>Nom & Prénom</th>
-						<th>Type de contrat</th>
-						<!--<th>Type de formateur</th>-->
-						<!--<th>Coût/heure</th>-->
-						<th>Campus</th>
-						<th>Action</th>
+						<th pSortableColumn="nom_prenom" style="text-align: center;">Nom & Prénom <p-sortIcon field="nom_prenom"></p-sortIcon></th>
+						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon field="type_contrat"></p-sortIcon></th>
+						<th pSortableColumn="type_formateur" style="text-align: center;">Type de formateur <p-sortIcon field="type_formateur"></p-sortIcon></th>
+						<th pSortableColumn="campus" style="text-align: center;">Campus <p-sortIcon field="campus"></p-sortIcon></th>
+						<th style="text-align: center;">Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-formateur let-expanded="expanded">
@@ -292,9 +296,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;" *ngIf="userList">
-							{{userList[formateur._id].civilite | i18nSelect: genderMap}}
 							{{userList[formateur._id].lastname | titlecase}}
-							{{userList[formateur._id].firstname | titlecase}}
+							{{userList[formateur._id].firstname | titlecase | uppercase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
@@ -321,6 +324,7 @@
 								<p-table responsiveLayout="scroll">
 									<ng-template pTemplate="header">
 					<tr>
+						<th>Civiliité</th>
 						<th>Service</th>
 						<th>Role</th>
 						<th>Email</th>
@@ -333,6 +337,7 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
+						<td *ngIf="userList[formateur._id].civilite"> {{userList[formateur._id].civilite }}</td>
 						<td *ngIf="userList[formateur._id].service_id">{{
 							serviceDic[userList[formateur._id].service_id].label }}</td>
 						<td *ngIf="!userList[formateur._id].service_id">Sans service</td>

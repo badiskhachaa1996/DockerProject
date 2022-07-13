@@ -401,6 +401,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.router.navigate(['formulaire-admission', 'espic']);
   }
 
+  onGetFormAdmissionEDUHORIZONS() {
+    this.router.navigate(['formulaire-admission','eduhorizons']);
+  }
+
   downloadFile(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));

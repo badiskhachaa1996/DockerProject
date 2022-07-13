@@ -8,7 +8,7 @@
                      [totalRecords]="partenaires.length"
                      [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['libelle','email','site','ville','pays']"
-                     responsiveLayout="scroll" selectionMode="single">
+                     responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -20,25 +20,9 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Société
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Code
-							</div>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Email
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Action
-							</div>
-						</th>
+						<th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe"></p-sortIcon></th>
+						<th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code"></p-sortIcon></th>
+						<th style="text-align: center;">Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-rowData>

@@ -390,7 +390,7 @@ export const environment = {
   ],
 
   pays: [ //default [76]
-  { value: "Choissiez le pays", actif:true},
+  { value: "Choissiez le pays de résidence", actif:true},
   { value: 'Aruba', viewValue: 'Aruba', actif:false },
   { value: 'Afghanistan', viewValue: 'Afghanistan', actif:false },
   { value: 'Angola', viewValue: 'Angola', actif:false},

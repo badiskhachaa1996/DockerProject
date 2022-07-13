@@ -149,15 +149,15 @@
         <div class="card">
             <h5>Liste des diplômes</h5>
             <p-toast></p-toast>
-            <p-table #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id" [expandedRowKeys]="expandedRows"
+            <p-table class="p-datatable-gridlines" #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id" [expandedRowKeys]="expandedRows"
                 responsiveLayout="scroll" [globalFilterFields]="['niveau', 'titre_long', 'domaine', 'code_RNCP']"
-                [rows]="15" [pageLinks]="5" [paginator]="true" [totalRecords]="diplomes.length">
+                [rows]="15" [pageLinks]="5" [paginator]="true" [totalRecords]="diplomes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
 
                     <div class="col-12 mb-2 lg:col-4 lg:mb-0">
                         <span class="p-input-icon-right">
                             <input pInputText type="text" placeholder="Recherche"
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Filtrer" />
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                             <i class="pi pi-search"></i>
                         </span>
                     </div>
@@ -168,16 +168,16 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th pSortableColumn="niveau">Niveau <p-sortIcon field="niveau"></p-sortIcon>
+                        <th pSortableColumn="niveau" style="text-align: center;">Niveau <p-sortIcon field="niveau"></p-sortIcon>
                         </th>
-                        <th>Titre</th>
-                        <th>Domaine</th>
-                        <th pSortableColumn="code_RNCP">Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
+                        <th style="text-align: center;">Titre</th>
+                        <th style="text-align: center;">Domaine</th>
+                        <th style="text-align: center;" pSortableColumn="code_RNCP">Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="certificateur">Certificateur <p-sortIcon field="certificateur">
+                        <th style="text-align: center;" pSortableColumn="certificateur">Certificateur <p-sortIcon field="certificateur">
                             </p-sortIcon>
                         </th>
-                        <th>Action </th>
+                        <th style="text-align: center;">Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-diplome let-expanded="expanded">
@@ -205,7 +205,7 @@
                     <tr>
                         <td colspan="8">
                             <div class="p-3">
-                                <p-table responsiveLayout="scroll">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
                         <th>Titre RNCP</th>

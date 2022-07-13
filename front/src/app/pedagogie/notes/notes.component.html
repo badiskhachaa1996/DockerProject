@@ -355,7 +355,7 @@
 
 
                 <p style="text-align:center;">AUCUN DUPLICATA NE SERA DELIVRE</p>
-                <p-table [value]="notesForGenerateBulletin" class="bulletin" responsiveLayout="scroll">
+                <p-table [value]="notesForGenerateBulletin" class="bulletin" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
                             <th></th>
@@ -440,10 +440,10 @@
             <h3>Notes par classe: {{ classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="5" [pageLinks]="5"
-                [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
+                     [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="5" [pageLinks]="5"
+                     [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length" styleClass="p-datatable-gridlines">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter
@@ -512,10 +512,10 @@
             </p>
 
             <p-table #dt1 [value]="notesByClasseBySemestre" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['note_val', 'semestre']" [rows]="10" [pageLinks]="10" [paginator]="true"
-                rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
+                     [globalFilterFields]="['note_val', 'semestre']" [rows]="10" [pageLinks]="10" [paginator]="true"
+                     rowExpandMode="single" [totalRecords]="notesByClasseBySemestre.length" styleClass="p-datatable-gridlines">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter
@@ -585,47 +585,37 @@
             </div>
 
             <h5>Notes par étudiants</h5>
-            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [pageLinks]="5"
-                [paginator]="true" [globalFilterFields]="['note_val', 'semestre']" responsiveLayout="scroll"
-                rowExpandMode="single" [totalRecords]="notes.length">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
+            <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" 
+                     [rowHover]="true" [paginator]="true" [pageLinks]="5" [paginator]="true"
+                     [globalFilterFields]="['note_val', 'semestre']" responsiveLayout="scroll"
+                     rowExpandMode="single" [totalRecords]="notes.length" styleClass="p-datatable-gridlines">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown filter="true" [options]="dropdownClasse"
-                            (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')" optionLabel="libelle"
-                            emptyFilterMessage="Pas de classe trouvé">
-                        </p-dropdown> <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Nom et prénom
-                            </div>
-                        </th>
-                        <th>
-                            <div pSortableColumn="classe_id" class="flex justify-content-between align-items-center">
-                                Classe
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Matière
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Évaluation
-                            </div>
-                        </th>
-                        <th>
-                            <div class="flex justify-content-between align-items-center">
-                                Note
+                            (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')"
+                            optionLabel="libelle" emptyFilterMessage="Pas de classe trouvé">
+                        </p-dropdown>						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon></th>
+						<th pSortableColumn="classe"> Classe <p-sortIcon field="classe"></p-sortIcon></th>
+						<th pSortableColumn="matiere"> Matière <p-sortIcon field="matiere"></p-sortIcon></th>
+						<th pSortableColumn="evaluation"> Evaluation <p-sortIcon field="evaluation"></p-sortIcon></th>
+						<th pSortableColumn="note"> Note <p-sortIcon field="note"></p-sortIcon></th>
+						<th pSortableColumn="semestre"> Semestre <p-sortIcon field="semestre"></p-sortIcon></th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Appreciation
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
                             </div>
                         </th>
                         <th>

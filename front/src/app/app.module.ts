@@ -189,6 +189,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
+import { NotificationComponent } from './notification/notification.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -364,7 +365,8 @@ import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
         PartenaireInscriptionComponent,
         FirstConnectionComponent,
         ProspectsComponent,
-        ReinscritComponent
+        ReinscritComponent,
+        NotificationComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
