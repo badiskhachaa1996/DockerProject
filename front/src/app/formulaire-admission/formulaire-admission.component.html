@@ -30,7 +30,7 @@
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-2">
                                 <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="civiliteList" optionLabel="value"placeholder="Choissisez une civilité" formControlName="civilite"></p-dropdown>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif" formControlName="civilite" ></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-5">
                                 <label For="nom">Nom <span style="color: red;"> * </span></label>
@@ -62,14 +62,14 @@
                             <div class="field col-12 md:col-6">
                                 <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
                                 <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
-                                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" 
                                     filter="true"></p-dropdown>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label>Pays de résidence :<span style="color:red"> *</span></label><br>
                                 <p-dropdown formControlName="pays_adresse" [options]="paysList" placeholder="Pays"
                                     optionLabel="value" emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
-                                    filter="true"></p-dropdown>
+                                    filter="true" optionDisabled="actif"></p-dropdown>
                                 <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                                     <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.required" style="color: red;">* Le pays est obligatoire </span>
                                     <span style="color: red;" class="error" *ngIf="pays_adresse.errors?.pattern" style="color: red;">* Le pays de résidence n'est pas dans le bon format </span>

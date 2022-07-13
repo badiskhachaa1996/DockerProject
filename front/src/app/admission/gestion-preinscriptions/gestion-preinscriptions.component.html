@@ -136,19 +136,21 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESTYA"
                     (click)="onGetFormAdmissionESTYA()"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ADG"
                     (click)="onGetFormAdmissionADG()"></button>
-                <button style="margin-left: 2px;" (click)="onGetFormAdmissionESPIC()" pButton icon="pi pi-plus-circle"
-                    label="Nouvelle demande ESTYA"></button>
+                <button style="margin-left: 2px;"  pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
+                     (click)="onGetFormAdmissionESPIC()"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande EH"
+                    (click)="onGetFormAdmissionEDUHORIZONS()"></button>
             </div>
             <h5>Liste des pre-inscriptions</h5>
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3']"
-                responsiveLayout="scroll">
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left mb-2">
@@ -171,28 +173,28 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
-                        <th pSortableColumn="customid" scope="col">
+                        <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="lastname" scope="col">
+                        <th pSortableColumn="lastname" scope="col" style="text-align: center;">
                             Nom & Prénom: <p-sortIcon field="lastname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="type_form" scope="col">
+                        <th pSortableColumn="type_form" scope="col" style="text-align: center;">
                             Etablissement <p-sortIcon field="type_form"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="formation" scope="col">
+                        <th pSortableColumn="formation" scope="col" style="text-align: center;">
                             Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="campus_choix_1" scope="col">
+                        <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nbDoc" scope="col">
+                        <th pSortableColumn="nbDoc" scope="col" style="text-align: center;">
                             Nombre de documents<p-sortIcon field="nbDoc"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut_dossier" scope="col">
+                        <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
                             Statut Dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="action" scope="col">
+                        <th pSortableColumn="action" scope="col" style="text-align: center;">
                             Action
                         </th>
                     </tr>
@@ -210,7 +212,6 @@
                         </td>
                         <td
                             *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
-                            {{ users[prospect.user_id].civilite }}
                             {{ users[prospect.user_id].lastname | uppercase }}
                             {{ users[prospect.user_id].firstname | titlecase }}
                         </td>
@@ -243,9 +244,10 @@
                     <tr>
                         <td colspan="9">
                             <div class="p-3">
-                                <p-table responsiveLayout="scroll">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
+                        <th>Civilité</th>
                         <th>Date de naissance</th>
                         <th>Nationnalité</th>
                         <th>Pays de résidence</th>
@@ -259,6 +261,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
+                        <td>{{users[prospect.user_id].civilite}}</td>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
                         <td>{{users[prospect.user_id].nationnalite}}</td>
                         <td>{{users[prospect.user_id].pays_adresse}}</td>
@@ -274,7 +277,7 @@
 
             <br>
 
-            <p-table responsiveLayout="scroll">
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Numéro whatsapp</th>
@@ -303,7 +306,7 @@
             </p-table>
 
 
-            <p-table responsiveLayout="scroll">
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Campus Choix 1</th>
@@ -346,7 +349,7 @@
 
             <h5 style="text-align: center; color: red;">Commercial</h5>
 
-            <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial">
+            <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Code commercial</th>
@@ -389,7 +392,7 @@
 
             <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
 
-            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement">
+            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Date du dernier traitement</th>

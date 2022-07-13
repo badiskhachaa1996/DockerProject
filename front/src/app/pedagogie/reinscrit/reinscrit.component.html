@@ -159,7 +159,7 @@
         <p-toast></p-toast>
         <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
-            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length">
+            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <span class="p-input-icon-left mb-2">
@@ -172,13 +172,13 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
-                    <th>ID </th>
-                    <th>Nom et prénom </th>
-                    <th>Statut</th>
-                    <th>Formation </th>
-                    <th>Email </th>
-                    <th>Nationnalitée </th>
-                    <th>Entreprise</th>
+                    <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon> </th>
+                    <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon> </th>
+                    <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon></th>
+                    <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon> </th>
+                    <th pSortableColumn="email"> Email <p-sortIcon field="email"></p-sortIcon> </th>
+                    <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon> </th>
+                    <th pSortableColumn="entreprise"> Entreprise <p-sortIcon field="entreprise"></p-sortIcon></th>
                     <th>Action </th>
                 </tr>
             </ng-template>
@@ -191,8 +191,7 @@
                             (click)="loadPP(etudiant)"></button>
                     </td>
                     <td>{{ etudiant.custom_id }}</td>
-                    <td style="min-width: 10rem;">
-                        {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{
+                    <td style="min-width: 10rem;"> {{
                         users[etudiant.user_id]?.lastname | uppercase
                         }} {{ users[etudiant.user_id]?.firstname }}
                     </td>
@@ -215,7 +214,7 @@
                 <tr>
                     <td colspan="8">
                         <div class="p-3">
-                            <p-table responsiveLayout="scroll">
+                            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                 <tr>
                     <th></th>
@@ -267,7 +266,7 @@
             </ng-template>
         </p-table>
 
-        <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant">
+        <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Tuteur </th>
@@ -301,7 +300,7 @@
             </ng-template>
         </p-table>
 
-        <p-table responsiveLayout="scroll" *ngIf="nom_rl">
+        <p-table responsiveLayout="scroll" *ngIf="nom_rl" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Représentant légal </th>
@@ -317,7 +316,7 @@
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td>
-                        {{ etudiant.nom_rl }} {{ etudiant.prenom_rl }}
+                        {{ etudiant.nom_rl | uppercase }} {{ etudiant.prenom_rl }}
                     </td>
                     <td>
                         {{ etudiant.adresse_rl }}

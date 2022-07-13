@@ -217,14 +217,14 @@
 			</div>
 			<h5>File d'attente des tickets</h5>
 			<p-toast></p-toast>
-			<p-table #dt1 *ngIf="queueList"
+			<p-table class="p-datatable-gridlines" #dt1 *ngIf="queueList"
                      dataKey="_id" [rows]="10" 
                      [rowHover]="true"
 					 [paginator]="true" [pageLinks]="5"
 					 rowExpandMode="single"
 					 [globalFilterFields]="['customid','description']"
                      [value]="queueList" (sortFunction)="customSort($event)" [customSort]="true"
-                     [expandedRowKeys]="expandedRows" responsiveLayout="scroll">
+                     [expandedRowKeys]="expandedRows" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -251,11 +251,11 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="width: 3rem"></th>
-						<th>Service</th>
-						<th>Sujet</th>
-						<th>Date de création</th>
-						<th>Temps d'attente</th>
-						<th>Action</th>
+						<th pSortableColumn="service" style="text-align:center"> Service <p-sortIcon field="service"></p-sortIcon></th>
+						<th pSortableColumn="sujet" style="text-align:center"> Sujet <p-sortIcon field="sujet"></p-sortIcon></th>
+						<th pSortableColumn="date_creation" style="text-align:center"> Date de création <p-sortIcon field="date_creation"></p-sortIcon></th>
+						<th pSortableColumn="temps_attente" style="text-align:center"> Temps d'attente <p-sortIcon field="temps_attente"></p-sortIcon></th>
+						<th style="text-align:center">Action</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-rowData let-expanded="expanded">
@@ -287,7 +287,7 @@
 					<tr>
 						<td colspan="6">
 							<div class="p-3">
-								<p-table responsiveLayout="scroll">
+								<p-table class="p-datatable-gridlines" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Numéro </th>
@@ -305,7 +305,7 @@
 									</ng-template>
 								</p-table>
 								<h5 style="text-align: center; color: red;">Créateur du ticket</h5>
-								<p-table responsiveLayout="scroll">
+								<p-table class="p-datatable-gridlines"responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Nom Prénom </th>
@@ -327,7 +327,7 @@
 										<tr>
 											<td>
 												{{userDic[rowData.createur_id].firstname | titlecase }} 
-												{{userDic[rowData.createur_id].lastname | titlecase }}
+												{{userDic[rowData.createur_id].lastname | titlecase | uppercase  }}
 											</td>
 											<td *ngIf="userDic[rowData.createur_id].phone">{{userDic[rowData.createur_id].phone}}</td>
 											<td>{{userDic[rowData.createur_id].email}}</td>
@@ -344,7 +344,7 @@
 									</ng-template>
 								</p-table>
 								<h5 *ngIf="rowData.isReverted" style="text-align: center; color: red;">Informations du renvoie</h5>
-								<p-table *ngIf="rowData.isReverted" responsiveLayout="scroll">
+								<p-table *ngIf="rowData.isReverted" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Envoyeur </th>
@@ -359,7 +359,7 @@
 										<tr>
 											<td>
 												{{userDic[rowData.user_revert].firstname | titlecase }}
-												{{userDic[rowData.user_revert].lastname | titlecase}}
+												{{userDic[rowData.user_revert].lastname | titlecase | uppercase}}
 											</td>
 											<td>{{rowData.justificatif}}</td>
 											<td>{{rowData.date_revert | date:'dd/MM/yyyy HH:mm'}}</td>
@@ -384,7 +384,7 @@
 					 rowExpandMode="single"
 					 [globalFilterFields]="['customid','description']"
                      [value]="AccAffList" (sortFunction)="customSort($event)" [customSort]="true"
-                     [expandedRowKeys]="expandedTraitement" responsiveLayout="scroll">
+                     [expandedRowKeys]="expandedTraitement" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -451,7 +451,7 @@
 					<tr>
 						<td colspan="8">
 							<div class="p-3">
-								<p-table responsiveLayout="scroll">
+								<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Statut</th>
@@ -475,7 +475,7 @@
 								</p-table>
 
 								<h5 style="text-align: center; color: red;">Créateur du ticket</h5>
-								<p-table responsiveLayout="scroll">
+								<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Nom Prénom</th>
@@ -497,7 +497,7 @@
 										<tr>
 											<td>
 												{{userDic[rowData.createur_id].firstname | titlecase }}
-                                                {{userDic[rowData.createur_id].lastname | titlecase}}
+                                                {{userDic[rowData.createur_id].lastname | titlecase | uppercase}}
 											</td>
 											<td *ngIf="userDic[rowData.createur_id].phone">{{userDic[rowData.createur_id].phone}}</td>
 											<td *ngIf="userDic[rowData.createur_id].email">{{userDic[rowData.createur_id].email}}</td>
@@ -514,7 +514,7 @@
 								</p-table>
 
 								<h5 *ngIf="comments && comments.length!=0" style="text-align: center; color: red;">Messages</h5>
-								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll">
+								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Nom prénom</th>
@@ -529,7 +529,7 @@
 									</ng-template>
 									<ng-template pTemplate="emptymessage">
 										<tr *ngIf="message.user_id!=token['id']">
-											<td>{{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}}</td>
+											<td>{{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname | uppercase}}</td>
 											<td>{{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}</td>
 											<td>{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
 											<td>
@@ -541,7 +541,7 @@
 											<td>{{message.description}}</td>
 										</tr>
 										<tr *ngIf="message.user_id==token['id']">
-											<td>{{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname}}</td>
+											<td>{{userDic[message.user_id].firstname}} {{userDic[message.user_id].lastname | uppercase}</td>
 											<td>{{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}</td>
 											<td>{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
 											<td>
@@ -558,7 +558,7 @@
 								</p-table>
 
 								<h5 *ngIf="comments && comments.length!=0" style="text-align: center; color: red;">Liste des fichiers</h5>
-								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll">
+								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr *ngIf="message.document">
 											<th>Documents</th>
@@ -595,7 +595,7 @@
 					 [totalRecords]="allTickets.length"
                 	 (sortFunction)="customSort($event)" [customSort]="true"
                      [globalFilterFields]="['customid','description']"
-                     responsiveLayout="scroll" [expandedRowKeys]="expandedAll">
+                     responsiveLayout="scroll" [expandedRowKeys]="expandedAll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -668,7 +668,7 @@
 					<tr>
 						<td colspan="10">
 							<div class="p-3">
-								<p-table responsiveLayout="scroll">
+								<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Statut</th>
@@ -691,7 +691,7 @@
 								</p-table>
 
 								<h5 style="text-align:center; color: red;">Créateur du ticket</h5>
-								<p-table responsiveLayout="scroll">
+								<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Nom Prénom</th>
@@ -712,7 +712,7 @@
 										<tr>
 											<td>
 												{{userDic[rowData.createur_id].firstname | titlecase }}
-                                                {{userDic[rowData.createur_id].lastname | titlecase}}
+                                                {{userDic[rowData.createur_id].lastname | titlecase | uppercase}}
 											</td>
 											<td *ngIf="userDic[rowData.createur_id].phone">{{userDic[rowData.createur_id].phone}}</td>
 											<td *ngIf="userDic[rowData.createur_id].email">{{userDic[rowData.createur_id].email}}</td>
@@ -728,7 +728,7 @@
 								</p-table>
 
 								<h5 style="text-align:center; color: red;">Agent du ticket</h5>
-								<p-table responsiveLayout="scroll">
+								<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr>
 											<th>Nom Prénom</th>
@@ -749,7 +749,7 @@
 										<tr>
 											<td>
 												{{userDic[rowData.agent_id].firstname | titlecase }}
-                                                {{userDic[rowData.agent_id].lastname | titlecase}}
+                                                {{userDic[rowData.agent_id].lastname | titlecase | uppercase}}
 											</td>
 											<td *ngIf="userDic[rowData.agent_id].phone">{{userDic[rowData.agent_id].phone}}</td>
 											<td *ngIf="userDic[rowData.agent_id].email">{{userDic[rowData.agent_id].email}}</td>
@@ -765,7 +765,7 @@
 								</p-table>
 
 								<h5 *ngIf="comments && comments.length!=0" style="text-align:center; color: red;">Messages</h5>
-								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll">
+								<p-table *ngIf="comments && comments.length!=0" [value]="comments" dataKey="id" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 									<ng-template pTemplate="header">
 										<tr *ngIf="message.user_id==rowData.createur_id">
 											<th>Nom Prénom</th>
@@ -787,7 +787,7 @@
 										<tr *ngIf="message.user_id==rowData.createur_id">
 											<td>
 												{{userDic[message.user_id].firstname}} 
-												{{userDic[message.user_id].lastname}}
+												{{userDic[message.user_id].lastname | uppercase}}
 											</td>
 											<td>{{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}</td>
 											<td>{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>
@@ -800,7 +800,7 @@
 										<tr *ngIf="message.user_id!=rowData.createur_id">
 											<td>
 												{{userDic[message.user_id].firstname}}
-												{{userDic[message.user_id].lastname}}
+												{{userDic[message.user_id].lastname | uppercase}}
 											</td>
 											<td>{{(userDic[message.user_id].role=='user')?'Utilisateur':userDic[message.user_id].role}}</td>
 											<td>{{message.date_ajout | date:'dd/MM/yyyy HH:mm'}}</td>

@@ -100,7 +100,7 @@
                      [paginator]="true" [pageLinks]="5"
                      [globalFilterFields]="['code_commercial_partenaire', 'statut']"
 					 [totalRecords]="commercialPartenaires.length"
-                     responsiveLayout="scroll">
+                     responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -112,30 +112,11 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Nom & Prénom
-							</div>
-						</th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Email
-							</div>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Téléphone
-							</div>
-						</th>
-                        <th>
-							<div class="flex justify-content-between align-items-center">
-								Statut
-							</div>
-						</th>
-                        <th>
-							<div class="flex justify-content-between align-items-center">
-								Code
-							</div>
-						</th>
+						<th pSortableColumn="nom_prenom" style="text-align: center;"> Nom & Prénom	<p-sortIcon field="nom_prenom"></p-sortIcon></th>
+						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>	
+						<th pSortableColumn="telephone" style="text-align: center;"> Téléphone <p-sortIcon field="telephone"></p-sortIcon></th>
+                        <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut"></p-sortIcon></th>
+                        <th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code"></p-sortIcon></th>
 						<th>
 							<div class="flex justify-content-between align-items-center">
 								Action
@@ -146,8 +127,7 @@
 				<ng-template pTemplate="body" let-commercial>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{ users[commercial.user_id]?.civilite }}
-                            {{ users[commercial.user_id]?.lastname | titlecase }}
+                            {{ users[commercial.user_id]?.lastname | uppercase}}
                             {{ users[commercial.user_id]?.firstname | titlecase }}
 						</td>
 						<td style="min-width: 12rem;">

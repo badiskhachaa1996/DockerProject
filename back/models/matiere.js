@@ -7,7 +7,8 @@ const matiereSchema = mongoose.Schema({
     volume_init: { type: Number, default: 0 },
     abbrv:{type:String,required:true},
     classe_id:{ type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: true },
-    seance_max:{type:Number,required:true}
+    seance_max:{type:Number,required:true},
+    coeff:{type:Number,required:true},
 });
 
 //creation de la table matiere

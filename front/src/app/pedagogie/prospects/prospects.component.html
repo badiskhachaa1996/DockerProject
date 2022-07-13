@@ -131,13 +131,12 @@
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"
-            responsiveLayout="scroll">
+            responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
             <ng-template pTemplate="caption">
                 <span class="p-input-icon-left mb-2">
                     <i class="pi pi-search"></i>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                        placeholder="Recherche" class="w-full" />
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full" />
                 </span>
                 <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
                     (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
@@ -153,25 +152,25 @@
                 <tr>
                     <th style="width: 3rem" scope="col"></th>
                     <th pSortableColumn="customid" scope="col">
-                        ID Etudiant
+                        ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
                     </th>
                     <th pSortableColumn="lastname" scope="col">
-                        Nom & Prénom
+                        Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
                     </th>
                     <th pSortableColumn="type_form" scope="col">
-                        Etablissement
+                        Etablissement <p-sortIcon field="type_form"></p-sortIcon>
                     </th>
                     <th pSortableColumn="formation" scope="col">
-                        Formation
+                        Formation <p-sortIcon field="formation"></p-sortIcon>
                     </th>
                     <th pSortableColumn="campus_choix_1" scope="col">
-                        Campus Choix 1
+                        Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
                     </th>
                     <th pSortableColumn="nbDoc" scope="col">
-                        Nombre de documents
+                        Nombre de documents <p-sortIcon field="nbDoc"></p-sortIcon>
                     </th>
                     <th pSortableColumn="statut_dossier" scope="col">
-                        Statut Dossier
+                        Statut Dossier <p-sortIcon field="statut_dossier"></p-sortIcon>
                     </th>
                     <th pSortableColumn="action" scope="col">
                         Action
@@ -191,7 +190,6 @@
                     </td>
                     <td
                         *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
-                        {{ users[prospect.user_id].civilite }}
                         {{ users[prospect.user_id].lastname | uppercase }}
                         {{ users[prospect.user_id].firstname | titlecase }}
                     </td>
@@ -222,7 +220,7 @@
                 <tr>
                     <td colspan="9">
                         <div class="p-3">
-                            <p-table responsiveLayout="scroll">
+                            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
                 <tr>
                     <th>Date de naissance</th>
@@ -253,7 +251,7 @@
 
         <br>
 
-        <p-table responsiveLayout="scroll">
+        <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Numéro whatsapp</th>
@@ -282,7 +280,7 @@
         </p-table>
 
 
-        <p-table responsiveLayout="scroll">
+        <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Campus Choix 1</th>
@@ -325,7 +323,7 @@
 
         <h5 style="text-align: center; color: red;">Commercial</h5>
 
-        <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial">
+        <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Code commercial</th>
@@ -344,7 +342,7 @@
                     <td
                         *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
                         {{ users[infoCommercialExpand.user_id].civilite }}
-                        {{ users[infoCommercialExpand.user_id].lastname | titlecase }}
+                        {{ users[infoCommercialExpand.user_id].lastname | titlecase | uppercase }}
                         {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
                     </td>
                     <td *ngIf="!infoCommercialExpand"></td>
@@ -368,7 +366,7 @@
 
         <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
 
-        <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement">
+        <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
                     <th>Date du dernier traitement</th>
@@ -388,7 +386,7 @@
                     <td>{{ prospect.tcf }}</td>
                     <td>
                         {{ users[prospect.agent_id].civilite }}
-                        {{ users[prospect.agent_id].lastname | titlecase }}
+                        {{ users[prospect.agent_id].lastname | titlecase | uppercase}}
                         {{ users[prospect.agent_id].firstname | titlecase }}
                     </td>
                     <td>{{prospect.phase_complementaire}}</td>

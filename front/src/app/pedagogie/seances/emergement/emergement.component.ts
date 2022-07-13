@@ -46,6 +46,7 @@ export class EmergementComponent implements OnInit {
   seance: Seance;
   date = new Date().getTime()
   date_debut; date_fin;
+  dropdownCampus : any[] = [{ label: "Tous les campus", value: null }];
 
   @ViewChild("canva") myCanvas: ElementRef;
   @ViewChild('justificatif') fileInput: FileUpload;
@@ -233,7 +234,7 @@ export class EmergementComponent implements OnInit {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.fileType }), data.fileName)
     }, (error) => {
-      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: rowData._id })
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: rowData._id })
       console.error(error)
     })
   }

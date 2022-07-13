@@ -75,7 +75,7 @@
             <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="5"
                 responsiveLayout="scroll" [paginator]="true" [pageLinks]="5" [responsive]="true"
                 [totalRecords]="seances.length" [filterDelay]="0"
-                [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']">
+                [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -95,29 +95,29 @@
 
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th pSortableColumn="classe_id" scope="col">
+                        <th pSortableColumn="classe_id" scope="col" style="text-align:center">
                             Groupe <p-sortIcon field="classe_id"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="libelle" scope="col">
+                        <th pSortableColumn="libelle" scope="col" style="text-align:center">
                             Libelle <p-sortIcon field="libelle"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="abbrv" scope="col" *ngIf="type!='classe'">
+                        <th pSortableColumn="abbrv" scope="col" *ngIf="type!='classe'" style="text-align:center">
                             Code Grp <p-sortIcon field="abbrv"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="matiere" scope="col">
+                        <th pSortableColumn="matiere" scope="col" style="text-align:center">
                             Matière <p-sortIcon field="matiere"></p-sortIcon>
                         </th>
 
-                        <th pSortableColumn="date_debut" scope="col">
+                        <th pSortableColumn="date_debut" scope="col" style="text-align:center">
                             Début <p-sortIcon field="date_debut"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="date_fin" scope="col">
+                        <th pSortableColumn="date_fin" scope="col" style="text-align:center">
                             Fin <p-sortIcon field="date_fin"></p-sortIcon>
                         </th>
-                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col">
+                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col" style="text-align:center">
                             Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
-                        <th scope="col">
+                        <th scope="col" style="text-align:center">
                             Action
                         </th>
                     </tr>
