@@ -4,7 +4,9 @@ const nodemailer = require('nodemailer');
 app.disable("x-powered-by");
 const { Formateur } = require('./../models/formateur');
 const { User } = require('./../models/user');
-const fs = require("fs")
+const fs = require("fs");
+const path = require('path');
+var mime = require('mime-types');
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -109,7 +111,7 @@ app.post("/create", (req, res, next) => {
                             formateur.user_id = userFromDb._id;
                             formateur.save()
                                 .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved }) })
-                                .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce formateur " + error }) });
+                                .catch((error) => { res.status(400).json({ msg: "Impossible d'ajouter ce formateur ", error }) });
 
                         }
                     })

@@ -2,12 +2,10 @@
     <!-- Partie changement de statut -->
     <div class="col-12" *ngIf="inscriptionSelected!=null">
         <div class="card">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-                (click)="inscriptionSelected = null" aria-hidden="true"> </i>
-            <h3 *ngIf="inscriptionSelected.user_id && users[inscriptionSelected.user_id]"
-                style="font-weight: bold; text-align: center;">Changer le statut de : {{
-                users[inscriptionSelected.user_id]?.firstname }} {{
-                users[inscriptionSelected.user_id]?.lastname | uppercase }}
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="closeformUpdate()"
+                aria-hidden="true"> </i>
+            <h3 *ngIf="inscriptionSelected.user_id" style="font-weight: bold; text-align: center;">Changer le statut de
+                : {{inscriptionSelected.user_id?.firstname }} {{inscriptionSelected.user_id?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm" (ngSubmit)="changeStateBtn()">
@@ -73,10 +71,9 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showUploadFile = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
-                style="font-weight: bold;">Ajouter un document à : {{
-                users[showUploadFile.user_id]?.firstname }} {{
-                users[showUploadFile.user_id]?.lastname | uppercase }}
+            <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+                showUploadFile.user_id?.firstname }} {{
+                showUploadFile.user_id?.lastname | uppercase }}
             </h3>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="uploadFileForm">
@@ -98,10 +95,9 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showPayement = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showPayement.user_id && users[showPayement.user_id]" class="text-center"
-                style="font-weight: bold;">Ajouter un payement de : {{
-                users[showPayement.user_id]?.firstname }} {{
-                users[showPayement.user_id]?.lastname | uppercase }}
+            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+                showPayement.user_id?.firstname }} {{
+                showPayement.user_id?.lastname | uppercase }}
             </h3>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12" *ngFor="let data of payementList; let i = index">
@@ -146,6 +142,7 @@
                     (click)="onGetFormAdmissionEDUHORIZONS()"></button>
             </div>
             <h5>Liste des pre-inscriptions</h5>
+
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
@@ -200,13 +197,15 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                    <tr>
+                    <tr [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="prospect"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)="expandRow(prospect)"></button>
                         </td>
+
                         <td>
                             {{ prospect.customid }}
                         </td>
@@ -230,13 +229,17 @@
                         <td>
                             {{ prospect.statut_dossier }}
                         </td>
-                        <td>
+                        <td *ngIf=" prospect.enTraitement == false">
                             <i pTooltip="Changer le statut du dossier" tooltipPosition="bottom" class="pi pi-bookmark"
                                 (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
                             <i pTooltip="Mettre à jour les payements" tooltipPosition="bottom" class="pi pi-money-bill"
                                 (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf=" prospect.enTraitement == true">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
+                                pTooltip="Dossier en cours de traitement"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -263,13 +266,13 @@
                     <tr>
                         <td>{{users[prospect.user_id].civilite}}</td>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{users[prospect.user_id].nationnalite}}</td>
-                        <td>{{users[prospect.user_id].pays_adresse}}</td>
-                        <td>{{users[prospect.user_id].email}}</td>
+                        <td>{{prospect.user_id.nationnalite}}</td>
+                        <td>{{prospect.user_id.pays_adresse}}</td>
+                        <td>{{prospect.user_id.email}}</td>
                         <td>{{prospect.statut_actuel}}</td>
                         <td>
-                            {{ users[prospect.user_id].indicatif }}
-                            {{ users[prospect.user_id].phone }}
+                            {{ prospect.user_id.indicatif }}
+                            {{ prospect.user_id.phone }}
                         </td>
                     </tr>
                 </ng-template>
@@ -411,10 +414,10 @@
                     <tr>
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
-                        <td>
-                            {{ users[prospect.agent_id].civilite }}
-                            {{ users[prospect.agent_id].lastname | titlecase }}
-                            {{ users[prospect.agent_id].firstname | titlecase }}
+                        <td *ngIf="prospect.agent_id">
+                            {{ prospect.agent_id.civilite }}
+                            {{ prospect.agent_id.lastname | titlecase }}
+                            {{ prospect.agent_id.firstname | titlecase }}
                         </td>
                         <td>{{prospect.decision_admission}}</td>
                         <td>{{prospect.phase_complementaire}}</td>
@@ -427,12 +430,30 @@
             <h5 style="color: red; text-align: center;">Documents</h5>
             <ul>
                 <li *ngFor="let file of ListDocuments; index as i">
-                    <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer"
-                        (click)="deleteFile(prospect._id,i)" aria-hidden="true"> </i>
-                    <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFile(prospect._id,i)"></i>
-                    <em (click)="downloadFile(prospect._id,i)" [id]="i" style="cursor: pointer;">
-                        {{ ListPiped[i] }}
-                    </em>
+                    <div class="grid">
+
+                        <div class="field col-10 "
+                            style="border-style: 2;border: 2em;border-bottom: red;">
+                            <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                pTooltip="Visualiser dans un nouvel onglet"
+                                (click)="VisualiserFichier(prospect._id,i)"></i>
+                            <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
+                                pTooltip=" Visualiser dans un nouvel onglet">
+                                {{ ListPiped[i] }}
+                            </em>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                (click)="downloadFile(prospect._id,i)"></i>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                                pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
+                                aria-hidden="true"> </i>
+                        </div>
+                        
+                    </div>
                 </li>
             </ul>
 

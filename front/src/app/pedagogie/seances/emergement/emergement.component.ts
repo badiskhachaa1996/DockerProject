@@ -15,19 +15,26 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Seance } from 'src/app/models/Seance';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Formateur } from 'src/app/models/Formateur';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 const io = require("socket.io-client");
 
 @Component({
   selector: 'app-emergement',
   templateUrl: './emergement.component.html',
-  styleUrls: ['./emergement.component.scss']
+  styleUrls: ['./emergement.component.scss'],
+  providers: [
+    { provide: Window, useValue: window }
+  ]
 })
 export class EmergementComponent implements OnInit {
 
   matiereList = {};
 
   constructor(private MatiereService: MatiereService, private ClasseService: ClasseService, private PresenceService: PresenceService, private router: Router, private FormateurService: FormateurService, private route: ActivatedRoute,
-    private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService, private DiplomeService: DiplomeService) { }
+    private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService,
+    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService) { }
   socket = io(environment.origin.replace('/soc', ''));
   token;
   justif_file_value;
@@ -41,35 +48,45 @@ export class EmergementComponent implements OnInit {
   diplomeList = {};
   dataRole = { data: "", type: "" };
   showCanvas = true;
-  presence = null;
+  presence: any = null;
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
   date = new Date().getTime()
   date_debut; date_fin;
-  dropdownCampus : any[] = [{ label: "Tous les campus", value: null }];
+  formateurInfo: Formateur = null;
+  dropdownEtudiant = []
 
   @ViewChild("canva") myCanvas: ElementRef;
   @ViewChild('justificatif') fileInput: FileUpload;
   loading: boolean = false;
   affichageDiplome = ""
 
-  clearCanvas(){
+  formAddEtudiant = this.formBuilder.group({
+    etudiant_id: [null]
+  });
+
+  clearCanvas() {
     var context = this.myCanvas.nativeElement.getContext('2d');
-    context.clearRect(0,0,500,500)
+    context.clearRect(0, 0, 500, 500)
   }
 
   ngAfterViewInit(): void {
     let isDrawing = false;
     let x = 0;//-15
     let y = 0;//-20
-    var context = this.myCanvas.nativeElement.getContext('2d');
-    this.myCanvas.nativeElement.addEventListener('mousedown', e => {
+    let canvas  = this.myCanvas.nativeElement
+    var context = canvas.getContext('2d');
+    let scrollX=window.scrollX || document.documentElement.scrollLeft;
+    let scrollY=window.scrollY || document.documentElement.scrollTop;
+
+    //Base PC Canvas 
+    canvas.addEventListener('mousedown', e => {
       x = e.offsetX;
       y = e.offsetY;
       isDrawing = true;
     });
 
-    this.myCanvas.nativeElement.addEventListener('mousemove', e => {
+    canvas.addEventListener('mousemove', e => {
       if (isDrawing === true) {
         drawLine(context, x, y, e.offsetX, e.offsetY);
         x = e.offsetX;
@@ -78,8 +95,8 @@ export class EmergementComponent implements OnInit {
     });
 
     window.addEventListener('mouseup', e => {
-      /*if (e.origin !== environment.origin) // Compliant
-          return;*/
+      if (e.target !== canvas) // Compliant
+          return;
       if (isDrawing === true) {
         drawLine(context, x, y, e.offsetX, e.offsetY);
         x = 0;
@@ -89,10 +106,10 @@ export class EmergementComponent implements OnInit {
     });
 
     function drawLine(ctxt, x1, y1, x2, y2) {
-      x1-=15
-      y1-=20
-      x2-=15
-      y2-=20
+      x1 -= 15
+      y1 -= 20
+      x2 -= 15
+      y2 -= 20
       ctxt.beginPath();
       ctxt.strokeStyle = 'black';
       ctxt.lineWidth = 1;
@@ -101,7 +118,46 @@ export class EmergementComponent implements OnInit {
       ctxt.stroke();
       ctxt.closePath();
     }
+
+    //Base Mobile Canvas
+    function getTouchPos(canvasDom, touchEvent) {
+      var rect = canvasDom.getBoundingClientRect();
+      return {
+        x: touchEvent.touches[0].clientX - rect.left,
+        y: touchEvent.touches[0].clientY - rect.top
+      };
+    }
+
+    canvas.addEventListener("touchstart", function (e) {
+      window.scrollTo(scrollX, scrollY);
+      let t = getTouchPos(this, e);
+      x = t.x
+      y = t.y
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousedown", {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      this.dispatchEvent(mouseEvent);
+    }, { passive: false });
+
+    canvas.addEventListener("touchend", function (e) {
+      var mouseEvent = new MouseEvent("mouseup", {});
+      this.dispatchEvent(mouseEvent);
+    }, { passive: false });
+
+    canvas.addEventListener("touchmove", function (e) {
+      window.scrollTo(scrollX, scrollY);
+      var touch = e.touches[0];
+      var mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      this.dispatchEvent(mouseEvent);
+    }, { passive: false });
   }
+
+
 
   reloadPresence() {
     this.PresenceService.getAllBySeance(this.ID).subscribe(data => {
@@ -122,6 +178,9 @@ export class EmergementComponent implements OnInit {
       this.token = null
     }
     this.reloadPresence();
+    this.FormateurService.getByUserId(this.token.id).subscribe(data => {
+      this.formateurInfo = data
+    })
     this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
       this.dataRole = data
     })
@@ -143,8 +202,23 @@ export class EmergementComponent implements OnInit {
     this.SeanceService.getById(this.ID).subscribe(dataS => {
       this.seance = dataS
       this.date_debut = new Date(dataS.date_debut).getTime()
-      this.date_fin = new Date(dataS.date_fin).getTime()
+      this.date_fin = this.date_debut + (15 * 60)//15 minutes max
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
+      this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(data => {
+        console.log(data)
+        data.forEach(etu => {
+          if (etu.user_id != null && etu.classe_id != null) {
+            let temp = {
+              label: etu.user_id.lastname + " " + etu.user_id.firstname + " - " + etu.classe_id.nom,
+              value: etu.user_id._id
+            }
+            if (!this.customIncludes(this.dropdownEtudiant, temp)) {
+              this.dropdownEtudiant.push(temp)
+            }
+          }
+        })
+        this.formAddEtudiant.patchValue({ etudiant_id: this.dropdownEtudiant[0] })
+      })
     })
     this.DiplomeService.getAll().subscribe(diplomes => {
       diplomes.forEach(diplome => {
@@ -168,14 +242,13 @@ export class EmergementComponent implements OnInit {
   }
 
   getSignature() {
-    if (this.date > this.date_debut && this.date_fin > this.date && this.presence == null) {
-      var canvasContents = this.myCanvas.nativeElement.toDataURL();
-      var data = { a: canvasContents };
-      var string = JSON.stringify(data);
-      var signature = string.substring(6, string.length - 2);
-      var sign = signature.substring(signature.indexOf(",") + 1)
-      let presence = new Presence(null, this.ID, this.token.id, true, sign)
-
+    var canvasContents = this.myCanvas.nativeElement.toDataURL();
+    var data = { a: canvasContents };
+    var string = JSON.stringify(data);
+    var signature = string.substring(6, string.length - 2);
+    var sign = signature.substring(signature.indexOf(",") + 1)
+    let presence = new Presence(null, this.ID, this.token.id, true, sign)
+    if (!this.presence) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
@@ -192,13 +265,31 @@ export class EmergementComponent implements OnInit {
         console.error(err)
       })
     } else {
-      this.MessageService.add({ severity: 'error', summary: 'Vous êtes déjà noté présent ou Absent' })
+      presence._id = this.presence._id
+      this.PresenceService.addSignature(presence).subscribe(data => {
+        this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
+        this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
+          if (dataWTR.type == "Formateur") {
+            this.FormateurService.updateMatiere(dataWTR.data, this.seance).subscribe(dataVH => {
+              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
+            })
+          }
+        })
+        this.SocketService.addPresence();
+        this.reloadPresence()
+      }, err => {
+        this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: err })
+        console.error(err)
+      })
     }
+
 
   }
 
-  getPDF() {
-    this.PresenceService.getPDF(this.ID).subscribe((data) => {
+  showPdf = false
+
+  getPDF(classe_id) {
+    this.PresenceService.getPDF(this.ID, classe_id).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), this.ID + ".pdf")
@@ -223,10 +314,14 @@ export class EmergementComponent implements OnInit {
 
   sendJustif() {
     this.uploadFile = true
-    this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
-      this.uploadFile = false;
-      this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
-    }, error => console.error(error))
+    if(this.presence){
+      this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
+        this.uploadFile = false;
+        this.reloadPresence()
+        this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
+      }, error => console.error(error))
+    }
+
   }
 
   downloadFile(rowData) {
@@ -239,8 +334,8 @@ export class EmergementComponent implements OnInit {
     })
   }
 
-  acceptJustif(rowData) {
-    this.PresenceService.isPresent(rowData._id).subscribe((data) => {
+  acceptJustif(rowData, bool) {
+    this.PresenceService.isPresent(rowData._id, bool).subscribe((data) => {
       this.reloadPresence();
     }, (error) => {
       console.error(error)
@@ -255,5 +350,90 @@ export class EmergementComponent implements OnInit {
       }
     }
     return "color:red;"
+  }
+  showUploadFile = false
+
+  formUploadFile = this.formBuilder.group({
+    etat: [null]
+  });
+  FileUpload(event) {
+    if (event.files != null) {
+      if (this.formUploadFile.value.etat == null) {
+        this.formUploadFile.patchValue(
+          { etat: confirm("Voulez-vous que le fichier sois visible par les étudiants ?") }
+        )
+      }
+      this.MessageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('id', this.ID)
+      formData.append('etat', this.formUploadFile.value.etat)
+      formData.append('user', this.token.id)
+      formData.append('file', event.files[0])
+      this.SeanceService.uploadFile(formData, this.ID).subscribe(res => {
+        this.MessageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        event.target = null;
+        console.log(res)
+        if (res.data) {
+          this.seance = res.data
+        }
+        this.showUploadFile = false;
+      }, error => {
+        this.MessageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+  downloadFileCours(file) {
+    this.SeanceService.downloadFileCours(file.name, this.ID).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.fileType }), file.name)
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
+  }
+
+  deleteFile(file) {
+    this.SeanceService.deleteFile(file.name, this.ID).subscribe(data => {
+      if (data.data) {
+        this.seance = data.data
+      }
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
+  }
+
+  showAddEtudiant = false
+
+  addEtudiant() {
+    let id = this.formAddEtudiant.value.etudiant_id
+    if (this.formAddEtudiant.value.etudiant_id?.value != null) {
+      id = this.formAddEtudiant.value.etudiant_id.value
+    }
+    console.log(this.formAddEtudiant.value.etudiant_id, this.formAddEtudiant.value.etudiant_id?.value, id)
+    this.PresenceService.create({
+      _id: null,
+      user_id: id,
+      isPresent: false,
+      signature: null,
+      seance_id: this.ID
+    }).subscribe(data => {
+      this.showAddEtudiant = false
+      console.log(data)
+      this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
+    }, error => {
+      console.error(error)
+      this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error })
+    })
+  }
+
+  customIncludes(l: any, d: { label: string, value: string }) {
+    let r = false
+    l.forEach(e => {
+      if (e.label == d.label && e.value == d.value) {
+        r = true
+      }
+    })
+    return r
   }
 }

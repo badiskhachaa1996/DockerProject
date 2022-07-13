@@ -4,6 +4,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
+const { Prospect } = require('./models/prospect');
+//const scrypt_Mail = require("./middleware/scrypt_Mail");
+// var CronJob = require('cron').CronJob;
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
@@ -16,7 +19,7 @@ app.use(cors({ origin: origin }));
 const httpServer = require("http").createServer(app);
 const options = {
     cors: {
-        origin: origin,     
+        origin: origin,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
@@ -33,6 +36,22 @@ mongoose
     })
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
+
+        /* 
+        //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
+        
+                var CronJob = require('cron').CronJob;
+        var job = new CronJob(
+            '11 11 12 *'/1 * *',
+            function() {
+                scrypt_Mail.smail();
+            },
+            null,
+            true,
+            'local'
+        );
+        */
+
     })
     .catch(err => {
         console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
@@ -70,6 +89,7 @@ const appreciationController = require('./controllers/appreciationController');
 const historiqueEchangeController = require('./controllers/historiqueEchangeController')
 const forfeitFormController = require('./controllers/forfeitFormController')
 const { User } = require("./models/user");
+const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
 
@@ -214,6 +234,29 @@ io.on("connection", (socket) => {
     socket.on('isAuth', (b) => {
         io.emit('isAuth', b)
     })
+    socket.on('TraitementProspect', (prospect) => {
+        prospect.enTraitement = true;
+        io.emit('TraitementProspect', prospect)
+        setTimeout(function () {
+            prospect.enTraitement = false;
+            io.emit('TraitementProspect', prospect)
+        }, 20000);
+    })
+
+    socket.on('UpdatedProspect', (prospect) => {
+        prospect.enTraitement = false;
+
+        io.emit('UpdatedProspect', prospect)
+
+    })
+    socket.on('CloseUpdProspect', (prospect) => {
+        prospect.enTraitement = false;
+
+        io.emit('CloseUpdProspect', prospect)
+
+    })
+
+
 });
 
 httpServer.listen(3000, () => {

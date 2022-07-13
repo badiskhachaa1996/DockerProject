@@ -62,7 +62,7 @@ export class SeanceService {
     return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  convertAllPlanified(){
+  convertAllPlanified() {
     let registreUrl = this.apiUrl + "convertAllPlanified";
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
@@ -70,6 +70,21 @@ export class SeanceService {
   getPlanified() {
     let registreUrl = this.apiUrl + "getPlanified";
     return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  uploadFile(formData, id) {
+    let url = this.apiUrl + "uploadFile/" + id
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
+
+  deleteFile(filename, id) {
+    let url = this.apiUrl + "deleteFile/" + id + "/" + filename
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
+
+  downloadFileCours(filename, id) {
+    let url = this.apiUrl + "downloadFile/" + id + "/" + filename
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
   }
 
 }

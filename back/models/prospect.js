@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const prospect_schema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true,
     },
     date_naissance: {
@@ -81,7 +81,7 @@ const prospect_schema = new mongoose.Schema({
     tcf: { type: String },
     agent_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
     },
     indicatif_whatsapp: {
         type: String,
@@ -128,6 +128,17 @@ const prospect_schema = new mongoose.Schema({
     },
     avancement_visa:{
         type:Boolean
+    },
+    enTraitement: {
+        type: Boolean,
+        default: false
+    },
+    avancement_visa: {
+        type: Boolean
+    },
+    etat_traitement: {
+        type: String,
+        default: "Nouvelle"
     }
 });
 

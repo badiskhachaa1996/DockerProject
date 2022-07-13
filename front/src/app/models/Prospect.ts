@@ -37,7 +37,8 @@ export class Prospect {
         public traited_by?:string,
         public validated_cf?:boolean,
         public payement?:[],
-        public avancement_visa?:boolean
+        public avancement_visa?:boolean,
+        public etat_traitement?:string,
     ) { }
 
 }

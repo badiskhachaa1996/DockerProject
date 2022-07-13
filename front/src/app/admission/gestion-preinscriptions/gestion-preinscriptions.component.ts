@@ -13,8 +13,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Prospect } from 'src/app/models/Prospect';
 import { User } from 'src/app/models/User';
 import { MessageService } from 'primeng/api';
+import { io } from 'socket.io-client';
+import { SocketService } from 'src/app/services/socket.service';
 
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -26,6 +29,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   code = this.ActiveRoute.snapshot.paramMap.get('code');
+
+  socket = io(environment.origin.replace('/soc', ''));
+
   users: User[] = [];
   prospects: any[] = [];
   inscriptionSelected: Prospect;
@@ -81,14 +87,21 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Payée" },
   ]
   dropdownDecision = [
-    { value: null, label: "Toute" },
+    { value: null, label: "Decision Admission" },
     { value: "Suspendu", label: "Suspendu" },
+    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
     { value: "Non Retenu", label: "Non Retenu" },
-    { value: "Validé", label: "Validé" },
     { value: "Payée", label: "Payée" },
+  ]
 
+  filterTraitement = [
+    { value: null, label: "Tous les états" },
+    { value: "Nouvelle", label: "Nouvelle" },
+    { value: "Retour Etudiant", label: "Retour Etudiant" },
+    { value: "Vu", label: "Vu" },
+    { value: "Traité", label: "Traité" },
   ]
 
   phaseComplementaire = [
@@ -154,7 +167,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
     if (confirm("Voulez-vous supprimer le payement ?")) {
-      this.payementList.splice(i)
+      this.payementList.splice(i, 1)
     }
   }
 
@@ -168,7 +181,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       this.messageService.add({ severity: "error", summary: "Erreur" })
     })
   }
+  closeformUpdate() {
 
+    this.socket.emit("CloseUpdProspect", this.inscriptionSelected);
+    this.inscriptionSelected = null;
+  }
   constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private formBuilder: FormBuilder,
     private admissionService: AdmissionService, private router: Router, private messageService: MessageService, private commercialService: CommercialPartenaireService) { }
 
@@ -179,11 +196,41 @@ export class GestionPreinscriptionsComponent implements OnInit {
         this.dataCommercial = data.data
       }
       this.refreshProspect()
+      this.socket.on("TraitementProspect", (prospect) => {
+
+        this.prospects.forEach((pros) => {
+
+          if (pros.user_id._id == prospect.user_id._id) {
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
+      this.socket.on("UpdatedProspect", (prospect) => {
+        this.prospects.forEach((pros) => {
+          if (pros.user_id._id == prospect.user_id._id) {
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
+      this.socket.on("CloseUpdProspect", (prospect) => {
+        this.prospects.forEach((pros) => {
+          if (pros.user_id._id == prospect.user_id._id) {
+            this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
+          }
+        })
+
+      })
+
+
+
     })
 
   }
 
   expandRow(prospect: Prospect) {
+
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -203,6 +250,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     } else {
       this.infoCommercialExpand = null
     }
+    this.admissionService.changeEtatTraitement(prospect._id).subscribe(data => {
+      this.prospects[this.prospects.indexOf(prospect)].etat_traitement = "Vu"
+    })
   }
 
   refreshProspect() {
@@ -213,40 +263,20 @@ export class GestionPreinscriptionsComponent implements OnInit {
           if (this.token != null && this.dataCommercial != null) {
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  p['lastname'] = this.users[p.user_id].lastname
-                  p['firstname'] = this.users[p.user_id].firstname
-                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                  p['nationnalite'] = this.users[p.user_id].nationnalite
-                  p['email'] = this.users[p.user_id].email_perso
-                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                  this.prospects.push(p)
-                })
               }),
               ((error) => { console.error(error); })
             );
           } else {
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  p['lastname'] = this.users[p.user_id].lastname
-                  p['firstname'] = this.users[p.user_id].firstname
-                  p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                  p['nationnalite'] = this.users[p.user_id].nationnalite
-                  p['email'] = this.users[p.user_id].email_perso
-                  p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                  this.prospects.push(p)
-                })
               }),
               ((error) => { console.error(error); })
             );
@@ -256,22 +286,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
           if (this.dataCommercial && this.dataCommercial.statut == "Admin" || this.token.role == "Admin") {
             this.admissionService.getAll().subscribe(
               ((responseAdmission) => {
-                this.prospects = []
+                this.prospects = responseAdmission
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
-                //Recuperation de la liste des prospect
-                responseAdmission.forEach(p => {
-                  if (this.users[p.user_id]) {
-                    p['lastname'] = this.users[p.user_id].lastname
-                    p['firstname'] = this.users[p.user_id].firstname
-                    p['pays_de_residence'] = this.users[p.user_id].pays_adresse
-                    p['nationnalite'] = this.users[p.user_id].nationnalite
-                    p['email'] = this.users[p.user_id].email_perso
-                    p['telephone'] = this.users[p.user_id].indicatif + this.users[p.user_id].phone
-                    this.prospects.push(p)
-                  }
-                })
               }),
               ((error) => { console.error(error); })
             );
@@ -297,6 +315,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
 
   initStatutForm(prospect: Prospect) {
+
+    this.socket.emit("TraitementProspect", this.inscriptionSelected)
+
+
     this.changeStateForm.patchValue({
       statut: { value: prospect.statut_dossier },
       statut_fr: { value: prospect.tcf },
@@ -323,13 +345,18 @@ export class GestionPreinscriptionsComponent implements OnInit {
       customid: this.changeStateForm.value.customid,
       traited_by: this.changeStateForm.value.traited_by.value,
       validated_cf: this.changeStateForm.value.validated_cf,
-      avancement_visa: this.changeStateForm.value.avancement_visa
+      avancement_visa: this.changeStateForm.value.avancement_visa,
+      etat_traitement: "Traité"
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
 
       this.messageService.add({ severity: "success", summary: "Le statut du prospect a été mis à jour" })
+      this.socket.emit("UpdatedProspect", this.inscriptionSelected);
       this.refreshProspect()
+      this.prospects[this.prospects.indexOf(this.inscriptionSelected)] = dataUpdated
+
       this.inscriptionSelected = null
+
     }, (error) => {
       console.error(error)
     })
@@ -356,7 +383,20 @@ export class GestionPreinscriptionsComponent implements OnInit {
   downloadFile(id, i) {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+     
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
+    }, (error) => {
+      console.error(error)
+    })
+
+  }
+  VisualiserFichier(id, i) {
+    this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
     }, (error) => {
       console.error(error)
     })
@@ -385,6 +425,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        this.socket.emit("UpdatedProspect", this.prospects[this.inscriptionSelected._id]);
         this.expandRow(this.showUploadFile)
         event.target = null;
         this.showUploadFile = null;

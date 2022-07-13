@@ -305,8 +305,9 @@ app.post("/create", (req, res, next) => {
 
 //Recuperation de la liste des prospect
 app.get("/getAll", (req, res, next) => {
-    Prospect.find({ archived: [false, null] })//.populate('user_id')
+    Prospect.find({ archived: [false, null] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
+            
             prospectsFromDb.forEach(function (element, index) {
                 let nb = 0
                 try {
@@ -329,6 +330,7 @@ app.get("/getAll", (req, res, next) => {
                 }
                 prospectsFromDb[index]["nbDoc"] = nb
             });
+          
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -372,6 +374,7 @@ app.put("/update", (req, res, next) => {
                     numero_adresse: userData.numero_adresse,
                     postal_adresse: userData.postal_adresse,
                     nationalite: userData.nationalite,
+
                 })
                 .then((userUpdated) => { res.status(200).send(userUpdated) })
                 .catch((error) => { res.status(400).send(error); });
@@ -405,23 +408,25 @@ app.post("/updateStatut/:id", (req, res, next) => {
         customid: req.body.customid,
         traited_by: req.body.traited_by,
         validated_cf: req.body.validated_cf,
-        avancement_visa:req.body.avancement_visa
+        avancement_visa:req.body.avancement_visa,
+        etat_traitement:req.body.etat_traitement
 
-    }).then(newProspect => {
-        res.status(200).send(newProspect)
-    }).catch((error) => { res.status(400).send(error); });
+    }, {new: true}).populate('user_id').populate('agent_id').exec(function (err, results) {
+        if(err){
+            res.status(500).send(err)
+        }else{
+            res.status(200).send(results)
+        }
+   });
 })
 
 //
 
 
 app.get("/ValidateEmail/:email", (req, res) => {
-
-    ;
     User.findOneAndUpdate({ email: req.params.email },
         {
             verifedEmail: true,
-
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
@@ -517,7 +522,7 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
-    Partenaire.findOne({ _id: req.params.id_partenaire })
+    Partenaire.findOne({ _id: req.params.id_partenaire }).populate("user_id").populate('agent_id')
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
                 Prospect.find().then(prospects => {
@@ -561,7 +566,8 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
-    Prospect.find({ code_commercial: req.params.code_partenaire }).then(prospects => {
+    Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
+    .then(prospects => {
         prospects.forEach(function (element, index) {
             let nb = 0
             try {
@@ -617,7 +623,18 @@ app.get('/getAllWait', (req, res, next) => {
 })
 
 app.post('/updatePayement/:id', (req, res) => {
-    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }).then(data => {
+    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement },function(err,data){
+        if(err){
+            console.error(err)
+            res.status(500).send(err)
+        }else{
+            res.status(201).send(data)
+        }
+    })
+})
+
+app.get('/etatTraitement/:id/:etat', (req, res) => {
+    Prospect.findByIdAndUpdate(req.params.id, { etat_traitement: req.params.etat }).then(data => {
         res.status(200).send(data)
     }).catch((error) => { res.status(500).send(error); });
 })

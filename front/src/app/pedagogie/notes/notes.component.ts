@@ -712,6 +712,7 @@ export class NotesComponent implements OnInit {
     this.notesForGenerateBulletin = []
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
       data.listMatiere.forEach(matiere => {
+        console.log(matiere)
         this.notesForGenerateBulletin.push({ 'note_val': data.MoyenneEtudiant[matiere], 'semestre': semestre, 'etudiant_id': etudiant_id, "matiere_id": matiere, /*'appreciation': notefromdb.appreciation,*/ 'moyPromo': this.avg(data.dicMoyMatiere[matiere]), 'maxPromo': Math.max(data.dicMoyMatiere[matiere]), 'minPromo': Math.min(data.dicMoyMatiere[matiere]) });
       })
     }, error => {

@@ -13,6 +13,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
+import { PresenceService } from 'src/app/services/presence.service';
+import { Presence } from 'src/app/models/Presence';
 
 @Component({
   selector: 'app-list-etudiant',
@@ -23,7 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ListEtudiantComponent implements OnInit {
 
   expandedRows = {};
-  
+
   etudiants: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
@@ -81,7 +83,11 @@ export class ListEtudiantComponent implements OnInit {
 
   isMinor = false;
 
-  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService, private router: Router) { }
+  absences: Presence[] = []
+
+  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
+    private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
+    private router: Router, private presenceService: PresenceService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -90,11 +96,7 @@ export class ListEtudiantComponent implements OnInit {
     } catch (e) {
       this.token = null
     }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
 
@@ -182,7 +184,7 @@ export class ListEtudiantComponent implements OnInit {
                     etu.lastname = this.users[etu.user_id].lastname
                   if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
                     etu.firstname = this.users[etu.user_id].firstname
-                  if(etu.classe_id!=null)
+                  if (etu.classe_id != null)
                     this.etudiants.push(etu)
                 })
               }),
@@ -253,7 +255,9 @@ export class ListEtudiantComponent implements OnInit {
       email_rl: ["", Validators.email],
       adresse_rl: [""],
       isHandicaped: [false],
-      suivi_handicaped: ['']
+      suivi_handicaped: [''],
+      remarque: [''],
+      isOnStage: [''],
     });
   }
 
@@ -268,7 +272,7 @@ export class ListEtudiantComponent implements OnInit {
 
     let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
     let isAlternant = this.formUpdateEtudiant.get('isAlternant')?.value;
-
+    let isOnStage = this.formUpdateEtudiant.get('isOnStage')?.value;
     let nom_tuteur = this.formUpdateEtudiant.get('nom_tuteur')?.value;
     let prenom_tuteur = this.formUpdateEtudiant.get('prenom_tuteur')?.value;
     let adresse_tuteur = this.formUpdateEtudiant.get('adresse_tuteur')?.value;
@@ -286,13 +290,13 @@ export class ListEtudiantComponent implements OnInit {
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
     let entreprise = this.formUpdateEtudiant.get('entreprise')?.value;
-
+    let remarque = entreprise = this.formUpdateEtudiant.get('remeraque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
 
     let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
-      null,null,null,null,custom_id,numero_INE,numero_NIR,sos_email,sos_phone,nom_rl,prenom_rl,phone_rl,email_rl,adresse_rl,dernier_diplome,
-      isAlternant,entreprise,nom_tuteur,prenom_tuteur,adresse_tuteur,email_tuteur,phone_tuteur,indicatif_tuteur,isHandicaped,suivi_handicaped);
+      null, null, null, null, custom_id, numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, phone_rl, email_rl, adresse_rl, dernier_diplome,
+      isAlternant, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList,remarque, isOnStage);
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -316,14 +320,15 @@ export class ListEtudiantComponent implements OnInit {
       ((response) => {
         this.etudiantToUpdate = response;
         let date = new Date(this.etudiantToUpdate.date_naissance)
+        this.parcoursList = this.etudiantToUpdate.parcours
         this.formUpdateEtudiant.patchValue({
-          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1),date.getDate()),
+          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
           isAlternant: this.etudiantToUpdate.isAlternant, nom_tuteur: this.etudiantToUpdate.nom_tuteur, prenom_tuteur: this.etudiantToUpdate.prenom_tuteur, adresse_tuteur: this.etudiantToUpdate.adresse_tuteur,
           email_tuteur: this.etudiantToUpdate.email_tuteur, phone_tuteur: this.etudiantToUpdate.phone_tuteur, indicatif_tuteur: this.etudiantToUpdate.indicatif_tuteur,
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          entreprise: this.etudiantToUpdate.entreprise,
+          entreprise: this.etudiantToUpdate.entreprise, remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage,
         });
       }),
       ((error) => { console.error(error); })
@@ -375,6 +380,9 @@ export class ListEtudiantComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
+    this.presenceService.getAllAbsences(rowData?.user_id).subscribe(data => {
+      this.absences = data
+    })
   }
 
   downloadFile(id, i) {
@@ -385,6 +393,17 @@ export class ListEtudiantComponent implements OnInit {
     }, (error) => {
       console.error(error)
       this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+
+  }
+  VisualiserFichier(id, i) {
+    this.etudiantService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      console.error(error)
     })
 
   }
@@ -421,6 +440,28 @@ export class ListEtudiantComponent implements OnInit {
   generateCustomCode() {
     let code = this.generateCode(this.formUpdateEtudiant.value.lastname)
     this.formUpdateEtudiant.patchValue({ custom_id: code })
+  }
+
+  parcoursList = []
+
+  onAddParcours() {
+    this.parcoursList.push({ diplome: "", date: new Date() })
+  }
+
+  /*onChangeParcours(i, event, type) {
+    console.log(event.target.value)
+    if (type == "date") {
+      this.parcoursList[i][type] = new Date(event.target.value);
+    } else {
+      this.parcoursList[i][type] = event.target.value;
+    }
+  }*/
+
+  onRemoveParcours(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le parcours ?")) {
+      this.parcoursList.splice(i)
+    }
   }
 
 }

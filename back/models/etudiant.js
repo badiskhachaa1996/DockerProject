@@ -2,14 +2,14 @@
 const mongoose = require("mongoose");
 // création du schéma de la table etudiant 
 const etudiantSchema = mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "Classe", required: false, default: null },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: false, default: null },
     statut: { type: String, required: true },
     nationalite: { type: String },
     date_naissance: { type: Date, required: true },
     code_partenaire: { type: String },
     hasBeenBought: { type: Boolean, default: false },
-    examenBought: { type: mongoose.Schema.Types.ObjectId, ref: "Examen" },
+    examenBought: { type: mongoose.Schema.Types.ObjectId, ref: "examen" },
     howMuchBought: { type: Number },
     custom_id: { type: String },
     numero_INE: { type: String },
@@ -34,7 +34,10 @@ const etudiantSchema = mongoose.Schema({
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
     entreprise: { type: String, required: false },
-    diplome: { type: String, required: false }
+    diplome: { type: String, required: false },
+    parcours: { type: mongoose.Schema.Types.Mixed, required: false }, // diplome: String, date: Date
+    remarque: {type:String},
+    isOnStage: { type: Boolean, default: false },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const inscriptionSchema= new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: "user",
         required: true
     },
     
@@ -14,7 +14,7 @@ const inscriptionSchema= new mongoose.Schema({
     },
     diplome: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Diplome",
+        ref: "diplome",
         default: null
     },
     date_naissance: {

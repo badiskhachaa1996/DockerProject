@@ -13,6 +13,9 @@ import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { CampusService } from 'src/app/services/campus.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { concat } from 'rxjs';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-list-formateurs',
@@ -31,7 +34,8 @@ export class ListFormateursComponent implements OnInit {
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];
-
+  diplomesListe = [];
+  jury_diplomesList = []
   formUpdateFormateur: FormGroup;
   showFormUpdateFormateur: boolean = false;
   formateurToUpdate: Formateur = new Formateur();
@@ -70,27 +74,40 @@ export class ListFormateursComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
 
-  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
+  onAddJ_diplome() {
+    console.log(this.jury_diplomesList)
+    this.jury_diplomesList.push({ titre: "", cout_h: 0 })
+  }
+
+  changeCout(i, event, type) {
+
+    if (type == "cout_h") {
+      this.jury_diplomesList[i][type] = parseInt(event.target.value);
+    } else {
+      this.jury_diplomesList[i][type] = event.value.titre;
+    }
+    console.log(this.jury_diplomesList)
+  }
+  deleteJ_diplome(i) {
+
+    this.jury_diplomesList.splice(i)
+
+  }
+
+  constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private diplomeService: DiplomeService,
     private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService, private EntrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
-    try {
-      this.token = jwt_decode(localStorage.getItem("token"))
-    } catch (e) {
-      this.token = null
-    }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+
     this.getUserList()
+
 
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
-      (data) => { this.formateurs = data;},
+      (data) => { this.formateurs = data; },
       (error) => { console.error(error) }
     );
+
 
     //Initialisation du formulaire de modification de formateur
     this.onInitFormUpdateFormateur();
@@ -101,6 +118,15 @@ export class ListFormateursComponent implements OnInit {
       data.forEach(m => {
         this.matiereDic[m._id] = m
       });
+    })
+
+    this.diplomeService.getAll().subscribe(data => {
+      this.diplomesListe = data
+      data.forEach(formation => {
+
+        this.diplomesListe[formation._id] = formation;
+      })
+
     })
 
     this.ServService.getAll().subscribe((services) => {
@@ -142,12 +168,18 @@ export class ListFormateursComponent implements OnInit {
       ((response) => {
         this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
-
+        console.log(this.formateurToUpdate?.absences)
+        let arr = []
+        this.formateurToUpdate?.absences.forEach(date=>{
+          arr.push(new Date(date))
+        })
         this.formUpdateFormateur.patchValue({
-          type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, isInterne: this.formateurToUpdate.isInterne, taux_h: this.formateurToUpdate.taux_h,
+          type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
           remarque: this.formateurToUpdate.remarque,
           campus: this.formateurToUpdate?.campus_id,
+          nda: this.formateurToUpdate?.nda,
+          absences:arr
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -189,6 +221,26 @@ export class ListFormateursComponent implements OnInit {
             friday_remarque: this.formateurToUpdate.friday_available.remarque
           })
         }
+       
+        if (this.formateurToUpdate.IsJury) {
+          
+          this.formateurToUpdate.IsJury.forEach((diplome,index) => {
+            
+            console.log('titre:', diplome.titre, 'cout_h:', diplome.cout_h)
+            this.jury_diplomesList.push({ titre: diplome.titre, cout_h: diplome.cout_h })
+            let frmTitre = "IsjuryT".concat(index)
+            let frmCout = "IsjuryC".concat(index)
+            console.log(frmTitre)
+            this.formUpdateFormateur.patchValue({
+              frmTitre: diplome.titre,
+              frmCout: diplome.cout_h
+            })
+          });
+    
+        }
+
+        
+
         let dic = response.volume_h
         let k = [];
         this.volumeHList = [];
@@ -211,7 +263,6 @@ export class ListFormateursComponent implements OnInit {
       type_contrat: ['', Validators.required],
       taux_h: ['', Validators.required],
       taux_j: [''],
-      isInterne: [false, Validators.required],
       prestataire_id: [''],
       volume_h: this.formBuilder.array([]),
       monday_available: [false],
@@ -235,9 +286,17 @@ export class ListFormateursComponent implements OnInit {
       thursday_remarque: [""],
       friday_remarque: [""],
       remarque: [''],
-      campus: ['']
+      campus: [''],
+      nda: [""],
+      IsJury: [""],
+      absences: [""]
     });
+
+
+   
   }
+
+
 
   //Methode d'ajout du nouveau formateur dans la base de données
   onUpdateFormateur() {
@@ -246,12 +305,13 @@ export class ListFormateursComponent implements OnInit {
     this.formateurToUpdate.type_contrat = this.formUpdateFormateur.get('type_contrat')?.value.value;
     this.formateurToUpdate.taux_h = this.formUpdateFormateur.get('taux_h')?.value;
     this.formateurToUpdate.taux_j = this.formUpdateFormateur.get('taux_j')?.value;
-    this.formateurToUpdate.isInterne = this.formUpdateFormateur.get('isInterne')?.value;
     this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value.value;
     this.formateurToUpdate.remarque = this.formUpdateFormateur.get('remarque')?.value;
+    this.formateurToUpdate.nda = this.formUpdateFormateur.get('nda')?.value;
     let tempVH = this.formUpdateFormateur.get('volume_h').value ? this.formUpdateFormateur.get('volume_h').value : [];
 
     this.formateurToUpdate.campus_id = this.formUpdateFormateur.get('campus')?.value
+
     let volumeH = {};
     let volumeH_ini = {};
 
@@ -264,6 +324,7 @@ export class ListFormateursComponent implements OnInit {
       }
 
     });
+
 
     this.formateurToUpdate.volume_h = volumeH;
     this.formateurToUpdate.volume_h_consomme = volumeH_ini;
@@ -297,7 +358,11 @@ export class ListFormateursComponent implements OnInit {
       h_fin: this.formUpdateFormateur.get('friday_h_fin').value,
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
-
+    if (this.jury_diplomesList.length > 0) {
+     
+      this.formateurToUpdate.IsJury = this.jury_diplomesList
+    }
+    this.formateurToUpdate.absences=this.formUpdateFormateur.get('absences').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
         if (data.error) {
@@ -318,6 +383,8 @@ export class ListFormateursComponent implements OnInit {
     );
 
     this.showFormUpdateFormateur = false;
+    this.jury_diplomesList = []
+ 
   }
 
   onGetStatutToUpdate() {
@@ -359,6 +426,11 @@ export class ListFormateursComponent implements OnInit {
   showCalendar(rowData) {
     this.router.navigate(['/emploi-du-temps/formateur/' + rowData.user_id])
   }
+  onGetStatut() {
+    //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
+    return this.formUpdateFormateur.get('type_contrat').value.value;
+  }
+
 
   sendCalendar(rowData) {
     this.formateurService.sendEDT(rowData._id).subscribe(data => {
@@ -386,6 +458,17 @@ export class ListFormateursComponent implements OnInit {
     }, (error) => {
       console.error(error)
       this.messageService.add({ severity: 'error', summary: 'Téléchargement du Fichier', detail: 'Une erreur est survenu' });
+    })
+
+  }
+  VisualiserFichier(id, i) {
+    this.formateurService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.documentType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      console.error(error)
     })
 
   }

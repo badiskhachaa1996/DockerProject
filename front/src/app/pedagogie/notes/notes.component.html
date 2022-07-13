@@ -312,7 +312,7 @@
 
             <div id="content">
                 <div style="float: right; margin-top: 80px; margin-right: 20px;">
-                    <p>
+                    <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin du {{ semestreForGenerateBulletin }} <br>
                         <strong>{{ classeForBGenerateBulletin.nom }}</strong> <br>
@@ -518,7 +518,7 @@
 				</ng-template>
 				<ng-template pTemplate="body" let-note>
 					<tr>
-						<td>{{ users[etudiants[note.etudiant_id]?.user_id]?.firstname }} {{
+						<td *ngIf="note && users[etudiants[note.etudiant_id]?.user_id]">{{ users[etudiants[note.etudiant_id]?.user_id]?.firstname }} {{
                             users[etudiants[note.etudiant_id]?.user_id]?.lastname }} </td>
                         <td>{{ note.note_val | number : '0.2-9' }} </td>
                         <td>{{ note.appreciation }} </td>

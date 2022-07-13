@@ -6,7 +6,6 @@ export class Formateur {
         public type_contrat?: string,
         public taux_h?: number,
         public taux_j?: number,
-        public isInterne?: boolean,
         public prestataire_id?: string,
         public volume_h?: any,
         public volume_h_consomme?: any,
@@ -16,7 +15,10 @@ export class Formateur {
         public thursday_available?: any,
         public friday_available?: any,
         public remarque?: string,
-        public campus_id?: string
+        public campus_id?: string,
+        public nda?: string,
+        public IsJury?: any,
+        public absences?: Date[]
     ) { }
 
 }

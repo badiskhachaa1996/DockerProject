@@ -287,6 +287,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
                             }
 
                         })
+                        //                      Moyenne Classe, Moyenne Etudiant, 
                         res.status(200).send({ dicMoyMatiere, MoyenneEtudiant, listeNotesEleves, listMatiere: listMatierev2 })
                     })
                 })
@@ -383,4 +384,10 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     }
 
 }, (error) => { res.status(500).send(error); })
+
+app.post('/getAllByMultipleClasseID', (req, res) => {
+    Etudiant.find({ classe_id: { $in: req.body.classe_id } }).populate("user_id").populate("classe_id").then(result => {
+        res.send(result)
+    })
+});
 module.exports = app;

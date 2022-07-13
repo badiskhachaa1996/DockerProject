@@ -3,6 +3,9 @@ const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
 app.disable("x-powered-by");
+const path = require('path');
+var mime = require('mime-types')
+const fs = require("fs")
 
 //Creation d'une nouvelle 
 app.post('/create', (req, res, next) => {
@@ -156,5 +159,103 @@ app.get('/getNb/:c_id/:f_id', (req, res) => {
     )
 })
 
+const multer = require('multer');
+
+
+app.get("/getFiles/:id", (req, res) => {
+    let filesTosend = [];
+    fs.readdir('./storage/seance/' + req.params.id + "/", (err, files) => {
+
+        if (!err) {
+            files.forEach(file => {
+                filesTosend.push(file)
+            });
+        }
+        res.status(200).send(filesTosend);
+    }, (error) => (console.error(error)))
+})
+
+app.get("/downloadFile/:id/:filename", (req, res) => {
+    let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    console.log(pathFile)
+    let file = fs.readFileSync(pathFile, { encoding: 'base64' }, (err) => {
+        if (err) {
+            return console.error(err);
+        }
+    });
+
+    res.status(200).send({ file: file, documentType: mime.contentType(path.extname(pathFile)) })
+
+});
+
+
+app.get("/deleteFile/:id/:filename", (req, res) => {
+    let pathFile = "storage/seance/" + req.params.id + "/" + req.params.filename
+    let errG = null
+    try {
+        fs.unlinkSync(pathFile)
+    } catch (err) {
+        console.error(err)
+        errG = err
+        res.status(400).send(err)
+    }
+    if (errG == null) {
+        Seance.findById(req.params.id).then(data => {
+            let arr = []
+            data.fileRight.forEach(file => {
+                if (file.name != req.params.filename) {
+                    arr.push(file)
+                }
+            })
+            Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).json({ dossier: "Fichier Supprimé", data });
+                }
+
+            })
+        })
+    }
+});
+
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        if (!fs.existsSync('storage/seance/' + req.body.id + '/')) {
+            fs.mkdirSync('storage/seance/' + req.body.id + '/', { recursive: true })
+        }
+        callBack(null, 'storage/seance/' + req.body.id + '/')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, `${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
+
+app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        res.status(400).send(error)
+    } else {
+        Seance.findById(req.params.id).then(data => {
+            let arr = data.fileRight
+            arr.push({ name: file.filename, right: req.body.etat, upload_by: req.body.user })
+            Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).json({ dossier: "Fichier Upload", data });
+                }
+
+            })
+        })
+    }
+
+}, (error) => { res.status(500).send(error); })
 
 module.exports = app;
