@@ -86,8 +86,8 @@ const prospectController = require('./controllers/prospectController');
 const partenaireController = require('./controllers/partenaireController');
 const commercialPartenaireController = require('./controllers/commercialPartenaireController');
 const appreciationController = require('./controllers/appreciationController');
-const historiqueEchangeController = require('./controllers/historiqueEchangeController')
-const forfeitFormController = require('./controllers/forfeitFormController')
+const historiqueEchangeController = require('./controllers/historiqueEchangeController');
+const forfeitFormController = require('./controllers/forfeitFormController');
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 

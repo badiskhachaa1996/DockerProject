@@ -1,6 +1,6 @@
 const express = require('express');
 const { Diplome } = require('../models/diplome');
-const { Seance } = require('../models/seance')
+const { Seance } = require('../models/seance');
 const app = express();
 app.disable("x-powered-by");
 const { Matiere } = require('./../models/matiere');
