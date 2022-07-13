@@ -18,6 +18,7 @@ import { Seance } from 'src/app/models/Seance';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Formateur } from 'src/app/models/Formateur';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { CampusService } from 'src/app/services/campus.service';
 const io = require("socket.io-client");
 
 @Component({
@@ -34,7 +35,7 @@ export class EmergementComponent implements OnInit {
 
   constructor(private MatiereService: MatiereService, private ClasseService: ClasseService, private PresenceService: PresenceService, private router: Router, private FormateurService: FormateurService, private route: ActivatedRoute,
     private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService,
-    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService) { }
+    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService, private CampusService: CampusService) { }
   socket = io(environment.origin.replace('/soc', ''));
   token;
   justif_file_value;
@@ -45,6 +46,7 @@ export class EmergementComponent implements OnInit {
   presences;
   userList = [];
   classeList = [{}];
+  campusDic = {}
   diplomeList = {};
   dataRole = { data: "", type: "" };
   showCanvas = true;
@@ -193,6 +195,22 @@ export class EmergementComponent implements OnInit {
       dataU.forEach(classe => {
         this.classeList[classe._id] = classe;
       });
+      this.CampusService.getAll().subscribe(dataC => {
+        let dicCampus = {}
+        let dicDiplome = {}
+        dataC.forEach(c => {
+          dicCampus[c._id] = c
+        })
+        this.DiplomeService.getAll().subscribe(dataD => {
+          dataD.forEach(d => {
+            dicDiplome[d._id] = d
+          })
+          dataU.forEach(c => {
+            this.campusDic[c._id] = dicCampus[dicDiplome[c.diplome_id]?.campus_id]?.libelle
+          })
+        })
+
+      })
     })
     this.MatiereService.getAll().subscribe((dataU) => {
       dataU.forEach(mat => {
@@ -314,13 +332,11 @@ export class EmergementComponent implements OnInit {
 
   sendJustif() {
     this.uploadFile = true
-    if (this.presence) {
-      this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
-        this.uploadFile = false;
-        this.reloadPresence()
-        this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
-      }, error => console.error(error))
-    }
+    this.PresenceService.addJustificatif({ justificatif: this.justif_file_value, name: this.justif_file_name, user_id: this.token.id, seance_id: this.ID }).subscribe((data) => {
+      this.uploadFile = false;
+      this.reloadPresence()
+      this.MessageService.add({ severity: 'success', summary: 'Justification', detail: "Votre justification a été enregistré" })
+    }, error => console.error(error))
 
   }
 

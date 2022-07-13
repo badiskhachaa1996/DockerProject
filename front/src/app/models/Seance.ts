@@ -12,9 +12,10 @@ export class Seance {
         public isPresentiel?: Boolean,
         public salle_name?: string,
         public isPlanified?: Boolean,
-        public campus_id?: string,
+        public campus_id?: string[],
         public nbseance?: number,
-        public fileRight?: any[]
+        public fileRight?: any[],
+        public remarque?: string
     ) { }
 }
 

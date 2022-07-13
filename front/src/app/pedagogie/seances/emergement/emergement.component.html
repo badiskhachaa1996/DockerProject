@@ -183,7 +183,7 @@
             aria-hidden="true"> </i>
         <h5 class="col-12 text-center">Générer la feuille d'emergement du groupe:</h5>
         <div class="col-6 md:col-4" *ngFor="let cid of seance.classe_id; i as index">
-            <button pButton (click)="getPDF(cid)" label="{{classeList[cid].nom}}"> </button>
+            <button pButton (click)="getPDF(cid)" label="{{classeList[cid].abbrv}} - {{campusDic[cid]}}"> </button>
         </div>
     </div>
     <div class="card">
