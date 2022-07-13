@@ -1,0 +1,58 @@
+<div class="grid">
+
+
+    <div class="card col-12 md:col-6 ">
+        Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
+        {{Etudiant_userdata?.lastname
+        }}
+        <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+
+
+    </div>
+
+    <div class="card col-12 md:col-6 ">
+    </div>
+    <div class="card col-12">
+
+        <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['isPresent', 'date_signature', 'seance_id', 'justificatif']" [rows]="15"
+            [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
+            <ng-template pTemplate="caption">
+                <h5>Listes des seances</h5>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="niveau">Date de la seance <p-sortIcon field="signature_date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="certificateur">seance_id <p-sortIcon field="seance_id">
+                        </p-sortIcon>
+                    </th>
+                    <th>Present/Absent</th>
+                    <th>Justitificatif </th>
+
+
+                    <th>Action </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-Assiduit>
+                <tr>
+
+                    <td style="min-width: 12rem;">
+                     {{ ListeSeanceDIC[Assiduit.seance_id]?.date_debut | date : "dd/MM/yyyy hh:mm:ss" }} </td>
+                    <td style="min-width: 8rem;">{{ ListeSeanceDIC[Assiduit.seance_id]?.libelle}}</td>
+                    <td style="min-width: 8rem;">{{ (Assiduit.isPresent) ? 'Present':'Absent' }}</td>
+                    <td style="min-width: 10rem;">{{ (Assiduit.isPresent) ? '--': (Assiduit.Justitificatif) ?
+                        'Justifié':'Non justifé' }}</td>
+
+                    <td>
+                        <i style="margin-left: 2%;" class="pi pi-pencil" aria-hidden="true"></i>
+                        <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                            style="margin-left: 2%;" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+    </div>
+
+</div>

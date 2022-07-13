@@ -180,6 +180,9 @@
 					<button type="button" (click)="onUpdateMatiere()" pButton label="Ajouter une matière"></button>
 				</div>
 
+
+
+
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
@@ -201,19 +204,20 @@
 				</div>
 
 
-				<div class="field col-12 md:col-12">
+				<!--<div class="field col-12 md:col-12">
+					Liste des diplomes sur lesquelles il peut étre jury:
 
 					<div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
 						<h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
 						<div class=" col-12 md:col-12">
 							<label>Diplome:</label><br>
 							<p-dropdown formControlName="IsJuryT{{i}}" [options]="diplomesListe" optionLabel="titre"
-								(onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
+								(onChange)="changeCout(i, $event,'titre')" 
 								placeholder="Titre diplome" class="form-control"></p-dropdown>
 						</div>
 						<div class="col-12 md:col-12">
 							<label>Cout Horaire:</label><br>
-							<input type="number" (change)="changeCout(i,$event,'cout_h')" formControlName="IsJuryC{{i}}"
+							<input type="number" (change)="changeCout(i,$event,'cout_h')" formControlName="IsJuryC{{ i }}"
 								[(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
 						</div>
 						<div class="field col-12 md:col-2">
@@ -225,6 +229,7 @@
 					</div>
 
 				</div>
+			-->
 
 				<div class="field col-12 md:col-12">
 					<label For="remarque">Remarque</label>
@@ -385,13 +390,15 @@
 				<ng-template pTemplate="emptymessage">
 					<tr>
 						<td>
-							<p *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
+							<ul>
+							<li *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
 								<span> {{matiere.value}} : <span
 										[ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}
 										: </span><span
 										*ngIf="seanceNB[formateur._id]">{{seanceNB[formateur._id]}}</span><span
 										*ngIf="!seanceNB[formateur._id]">0</span></span>
-							</p>
+							</li>
+						</ul>
 						</td>
 					</tr>
 				</ng-template>
@@ -491,37 +498,54 @@
 
 			<!-- Partie dedié à l'affichage des documents -->
 
-			
-			<div class="col-12">
-                <div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
-                                        width: auto;">
-                    <h4>Aucun document n'a été chargé !</h4>
-                </div>
+			<p-table responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Dossier Formateur</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-order>
+
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td>
+							<div class="col-12">
+								<div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
+                                        width: auto;text-align: center;">
+									<h4>Aucun document n'a été chargé !</h4>
+								</div>
 
 
-                <div *ngFor="let file of ListDocuments; index as i" class="grid">
+								<div *ngFor="let file of ListDocuments; index as i" class="grid">
 
-                    <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
-                        <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
-                            pTooltip="Visualiser dans un nouvel onglet" (click)="VisualiserFichier(formateur._id,i)"></i>
-                        <em (click)="VisualiserFichier(formateur._id,i)" [id]="i" style="cursor: pointer;"
-                            pTooltip=" Visualiser dans un nouvel onglet">
-                            {{ ListDocuments[i] }}
-                        </em>
-                    </div>
-                    <div class="field col-1">
-                        <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
-                            (click)="downloadFile(formateur._id,i)"></i>
-                    </div>
-                    <div class="field col-1">
-                        <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
-                            pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(formateur._id,i)"
-                            aria-hidden="true"> </i>
-                    </div>
+									<div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+										<i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+											pTooltip="Visualiser dans un nouvel onglet"
+											(click)="VisualiserFichier(formateur._id,i)"></i>
+										<em (click)="VisualiserFichier(formateur._id,i)" [id]="i"
+											style="cursor: pointer;" pTooltip=" Visualiser dans un nouvel onglet">
+											{{ ListDocuments[i] }}
+										</em>
+									</div>
+									<div class="field col-1">
+										<i class="pi pi-download" pTooltip="Télécharger le fichier"
+											style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+											(click)="downloadFile(formateur._id,i)"></i>
+									</div>
+									<div class="field col-1">
+										<i class="pi pi-times"
+											style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+											pTooltip="Supprimer le fichier du dossier"
+											(click)="deleteFile(formateur._id,i)" aria-hidden="true"> </i>
+									</div>
 
-                </div>
-            </div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
 		</div>
 		</td>
 		</tr>

@@ -80,7 +80,7 @@ import { ProspectGuard } from './guards/prospect-guard';
 import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { LoginGuard } from './guards/login-guard';
 import { FormAdmissionGuard } from './guards/formAdmission-guard';
-
+import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 
 @NgModule({
     imports: [
@@ -153,7 +153,9 @@ import { FormAdmissionGuard } from './guards/formAdmission-guard';
                     { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
-                    { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] }
+                    { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
+                   
+                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                 ],
             },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
