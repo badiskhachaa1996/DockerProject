@@ -30,30 +30,40 @@ export class DetailsEtudiantComponent implements OnInit {
   ListeSeance: any[];
   barDataAJ: any;
   barData: any = {
-    labels: ['Assiduité au seances de cours'],
+    labels: [""],
     datasets: [
       {
-        label: 'abscence',
+        label: 'Abscence',
         backgroundColor: 'red',
         hoverBackgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56"
+          "#FF6384"
+         
       ],
         data: []
       },
       {
         label: 'Présence',
-        backgroundColor: 'blue',
+        backgroundColor: '#22C20E',
         hoverBackgroundColor: [
-          "#FF6384",
-          "#36A2EB",
-          "#FFCE56"
+          "#22C55E",
+       
+          
+      ],
+        data: []
+      },
+      {
+        label: 'Absence non justifié',
+        backgroundColor: '#730e0e',
+        hoverBackgroundColor: [
+          "#781d1d",
+       
+          
       ],
         data: []
       }
     ]
   };
+  horizontalOptions:any;
   barOptions: any;
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
@@ -90,6 +100,9 @@ export class DetailsEtudiantComponent implements OnInit {
           if (item.isPresent != true) {
             console.log(" presnet +1")
             this.barData.datasets['0'].data.push(1)
+            if(item.justificatif != true) {
+              this.barData.datasets[2].data.push(1)
+            }
           }
           else {
             console.log(item)
@@ -149,6 +162,35 @@ export class DetailsEtudiantComponent implements OnInit {
         },
       }
     };
+    this.horizontalOptions = {
+      indexAxis: 'y',
+      
+      plugins: {
+          legend: {
+              labels: {
+                  color: '#red'
+              }
+          }
+      },
+      scales: {
+          x: {
+              ticks: {
+                  color: '#495057'
+              },
+              grid: {
+                  color: '#ebedef'
+              }
+          },
+          y: {
+              ticks: {
+                  color: '#495057'
+              },
+              grid: {
+                  color: '#ebedef'
+              }
+          }
+      }
+  };
 
   }
   ngAfterViewInit() {

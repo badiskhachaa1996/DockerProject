@@ -6,7 +6,8 @@
         <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions"></p-chart>
     </div>
     <div class="card col-12 md:col-6 ">
-
+        <p-chart #chart type="bar" [data]="barDataAJ" [options]="horizontalOptions"></p-chart>
+        
     </div>
     <div class="card col-12">
         <p-toast></p-toast>
@@ -51,8 +52,12 @@
                     <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "hh:mm:ss":'locale' ) :'--' }}
                     </td>
                     <td *ngIf="Assiduit.isPresent">--</td>
-                    <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">  <p-tag severity="success">Justifié</p-tag></td>
-                    <td *ngIf="!Assiduit.isPresent && !Assiduit.justificatif">  <p-tag severity="error">Non Justifié</p-tag></td>
+                    <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">
+                        <p-tag severity="success">Justifié</p-tag>
+                    </td>
+                    <td *ngIf="!Assiduit.isPresent && !Assiduit.justificatif">
+                        <p-tag severity="error">Non Justifié</p-tag>
+                    </td>
                     <td>
 
                         <i *ngIf="Assiduit.justificatif" pTooltip="Voir le justificatif" tooltipPosition="bottom"
