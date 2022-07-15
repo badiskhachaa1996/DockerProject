@@ -10,6 +10,7 @@ export class Examen {
         public note_max?: string,
         public coef?: string,
         public libelle?: string,
+        public niveau?: string
     ){};
 
 }

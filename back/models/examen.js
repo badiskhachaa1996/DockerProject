@@ -10,6 +10,7 @@ const examenSchema = mongoose.Schema({
     note_max: { type: String, required: true },
     coef: { type: String, required: true },
     libelle: { type: String, required: true },
+    niveau:  { type: String }
 });
 
 //Création de la table examen via le schema de données

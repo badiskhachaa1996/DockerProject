@@ -40,17 +40,11 @@ app.post("/create", (req, res, next) => {
 
     //creation du nouvel objet examen
     let data = req.body;
+    console.log(data)
 
     let examen = new Examen(
         {
-            classe_id: data.classe_id,
-            matiere_id: data.matiere_id,
-            formateur_id: data.formateur_id,
-            date: data.date,
-            type: data.type,
-            note_max: data.note_max,
-            coef: data.coef,
-            libelle: data.libelle,
+            ...data
         });
 
         examen.save()

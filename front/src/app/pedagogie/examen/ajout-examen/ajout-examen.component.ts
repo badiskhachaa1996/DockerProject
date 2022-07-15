@@ -30,16 +30,22 @@ export class AjoutExamenComponent implements OnInit {
 
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: "Toutes les classes", value: null }];
- 
+
 
   dropdownFormateur: any[] = [{ libelle: "", value: "" }];
 
 
+  dropdownNiveau: any[] = [
+    { label: "Évaluation", value: "Évaluation" },
+    { label: "Examen finale", value: "Examen finale" },
+    { label: "Soutenance", value: "Soutenance" }
+  ]
+
   dropdownType: any[] = [
-    { libelle: "Tout les types", value: null },
-    { libelle: "Évaluation", value: "Évaluation" },
-    { libelle: "Examen finale", value: "Examen finale" },
-    { libelle: "Soutenance", value: "Soutenance" }
+    { label: "Ponctuelle orale", value: "Ponctuelle orale" },
+    { label: "Ponctuelle écrite", value: "Ponctuelle écrite" },
+    { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
+    { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
   ]
 
 
@@ -111,16 +117,13 @@ export class AjoutExamenComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout
   onInitFormAddExamen() {
     this.formAddExamen = this.formBuilder.group({
-      classe_id: [
-        "", Validators.required
-      ],
-      matiere_id: [
-        "", Validators.required
-      ],
+      classe_id: ["", Validators.required],
+      matiere_id: ["", Validators.required],
       libelle: ["", Validators.required],
       formateur_id: ["", Validators.required],
       date: ["", Validators.required],
-      type: ["", Validators.required],
+      type: [this.dropdownType[0].value, Validators.required],
+      niveau: [this.dropdownNiveau[0].value, Validators.required],
       note_max: ["", [Validators.required, Validators.pattern("^[0-9.]+$")]],
       coef: ["", Validators.required],
     });
@@ -134,22 +137,23 @@ export class AjoutExamenComponent implements OnInit {
     let formateur_id = this.formAddExamen.get("formateur_id")?.value.value;
     let libelle = this.formAddExamen.get("libelle")?.value;
     let date = this.formAddExamen.get("date")?.value;
-    let type = this.formAddExamen.get("type")?.value.value;
+    let type = this.formAddExamen.get("type")?.value;
     let note_max = this.formAddExamen.get("note_max")?.value;
     let coef = this.formAddExamen.get("coef")?.value;
+    let niveau = this.formAddExamen.get("niveau")?.value;
 
-    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle);
-
+    let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau);
+    console.log(examen)
     this.examenService.create(examen).subscribe(
       (response) => {
         this.messageService.add({
           severity: "success",
           summary: "Nouvel examen ajouté",
         });
-
-       
+        this.onInitFormAddExamen()
       },
       (error) => {
+        console.error(error)
         this.messageService.add({
           severity: "error",
           summary:
@@ -165,7 +169,7 @@ export class AjoutExamenComponent implements OnInit {
     return this.formAddExamen.get("note_max");
   }
 
-  
+
 
 
 }
