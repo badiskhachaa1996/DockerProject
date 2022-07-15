@@ -1,8 +1,7 @@
 <div class="grid">
     <div class="col-12">
-        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
-            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
-            [breakpoints]="{'960px': '75vw'}">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
+            modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
                 dolore magna aliqua. Ut enim ad minim veniam,
@@ -32,15 +31,16 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="addcampusForm" (ngSubmit)="saveCampus()">
                 <div class="field col-12 md:col-6">
                     <label for="libelle">Libellé</label>
-                    <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Nom du campus" />
+                    <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="ESTYA - Paris" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="email">Email</label>
-                    <input pInputText id="email" type="email" formControlName="email" placeholder="email du siége du campus" />
+                    <input pInputText id="email" type="email" formControlName="email"
+                        placeholder="estya@estya.com" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="site">Site Web</label>
-                    <input pInputText id="site" type="text" formControlName="site" placeholder="site web du campus" />
+                    <input pInputText id="site" type="text" formControlName="site" placeholder="estya.com" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="ecole">Ecole</label>
@@ -48,15 +48,31 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="adress">Adresse</label>
-                    <input pInputText id="adress" type="text" formControlName="adresse" placeholder="adresse du siége du campus" />
+                    <input pInputText id="adress" type="text" formControlName="adresse"
+                        placeholder="15 Rue du louvre 75001" />
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="ville">Ville</label>
-                    <input pInputText id="ville" type="text" formControlName="ville" placeholder="ville du siége du campus" />
+                    <input pInputText id="ville" type="text" formControlName="ville"
+                        placeholder="Paros" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="ville">Pays</label>
-                    <input pInputText id="ville" type="text" formControlName="pays" placeholder="pays du siége du campus" />
+                    <label for="pays">Pays</label>
+                    <input pInputText id="pays" type="text" formControlName="pays"
+                        placeholder="France" />
+                </div>
+                <div class="field col-12 md:col-12 grid">
+                    <div class="field col-12 md:col-6 grid" *ngFor="let data of salles; let i = index">
+                        <h5> Salle n°{{i+1}}: </h5>
+                        <div class="col-11">
+                            <label>Nom de la salle:</label><br>
+                            <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]" placeholder="Salle {{i+1}}" pInputText>
+                        </div>
+                        <div class="col-1">
+                            <i class="pi pi-trash" (click)="salles.splice(i,1)" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <button type="button" (click)="onAddSalle()" pButton label="Ajouter une salle"></button>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit" [disabled]="addcampusForm.invalid"></button>

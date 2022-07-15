@@ -155,7 +155,7 @@ export class AddFormateurComponent implements OnInit {
       prestataire_id: [this.prestataireList[0]],
       volume_h: this.formBuilder.array([]),
       remarque: [''],
-      campus: [""],
+      campus: [null],
       monday_available: [false],
       tuesday_available: [false],
       wednesday_available: [false],
@@ -266,7 +266,7 @@ export class AddFormateurComponent implements OnInit {
     let absences = this.formAddFormateur.get('absences').value
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
-    let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
+    let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'Formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
 
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH, volumeH_ini, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
@@ -302,7 +302,7 @@ export class AddFormateurComponent implements OnInit {
   }
 
   onAddMatiere() {
-    const tempControl = this.formBuilder.control('', Validators.required);
+    const tempControl = this.formBuilder.control('');
     this.getVolumeH().push(tempControl);
   }
 

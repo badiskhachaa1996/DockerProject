@@ -123,7 +123,7 @@ app.post("/create", (req, res, next) => {
                         formateur.user_id = userCreated._id;
                         formateur.save()
                             .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée' }) })
-                            .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce formateur' }) });
+                            .catch((error) => { res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }

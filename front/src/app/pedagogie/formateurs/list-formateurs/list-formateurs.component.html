@@ -277,7 +277,9 @@
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+							<input pInputText type="text" #filter
+								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+								class="w-full" />
 						</span>
 					</div>
 				</ng-template>
@@ -285,10 +287,18 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th style="width: 3rem"></th>
-						<th pSortableColumn="nom_prenom" style="text-align: center;">Nom & Prénom <p-sortIcon field="nom_prenom"></p-sortIcon></th>
-						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon field="type_contrat"></p-sortIcon></th>
-						<th pSortableColumn="type_formateur" style="text-align: center;">Type de formateur <p-sortIcon field="type_formateur"></p-sortIcon></th>
-						<th pSortableColumn="campus" style="text-align: center;">Campus <p-sortIcon field="campus"></p-sortIcon></th>
+						<th pSortableColumn="nom_prenom" style="text-align: center;">Nom & Prénom <p-sortIcon
+								field="nom_prenom"></p-sortIcon>
+						</th>
+						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon
+								field="type_contrat"></p-sortIcon>
+						</th>
+						<th pSortableColumn="type_formateur" style="text-align: center;">Type de formateur <p-sortIcon
+								field="type_formateur"></p-sortIcon>
+						</th>
+						<th pSortableColumn="campus" style="text-align: center;">Campus <p-sortIcon field="campus">
+							</p-sortIcon>
+						</th>
 						<th style="text-align: center;">Action</th>
 					</tr>
 				</ng-template>
@@ -329,7 +339,7 @@
 								<p-table responsiveLayout="scroll">
 									<ng-template pTemplate="header">
 					<tr>
-						<th>Civiliité</th>
+						<th>Civilité</th>
 						<th>Service</th>
 						<th>Role</th>
 						<th>Email</th>
@@ -359,7 +369,7 @@
 			<p-table responsiveLayout="scroll" *ngIf="formateur.IsJury && formateur.IsJury.length!=0">
 				<ng-template pTemplate="header">
 					<tr>
-						<th>Peut étre Jury</th>
+						<th>Jury</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-order>
@@ -368,7 +378,6 @@
 				<ng-template pTemplate="emptymessage">
 					<tr>
 						<td>
-
 							<p *ngFor="let Jury of formateur.IsJury | keyvalue ;let index = index">
 								<li>
 									<span>Diplome: {{ Jury.value.titre }} ||</span>
@@ -387,23 +396,18 @@
 						<th>Matières</th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-order>
-
-				</ng-template>
-				<ng-template pTemplate="emptymessage">
-				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
 						<td>
 							<ul>
-							<li *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
-								<span> {{matiere.value}} : <span
-										[ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}
-										: </span><span
-										*ngIf="seanceNB[formateur._id]">{{seanceNB[formateur._id]}}</span><span
-										*ngIf="!seanceNB[formateur._id]">0</span></span>
-							</li>
-						</ul>
+								<li *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
+									<span> {{matiere.value}} : <span
+											[ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}
+											: </span><span
+											*ngIf="seanceNB[formateur._id]">{{seanceNB[formateur._id]}}</span><span
+											*ngIf="!seanceNB[formateur._id]">0</span></span>
+								</li>
+							</ul>
 						</td>
 					</tr>
 				</ng-template>
@@ -475,34 +479,14 @@
 						</div>
 					</div>
 				</p-tabPanel>
+				<p-tabPanel header="Absences" *ngIf="formateur.absences.length!=0 && formateur.absences[0]!=null">
+					<div class="grid">
+						<div *ngFor="let absc of formateur.absences" class="field col-6 md:col-3">
+							<p>{{absc| date:'dd/MM/yyyy'}}</p>
+						</div>
+					</div>
+				</p-tabPanel>
 			</p-tabView>
-
-			<!--<p-table responsiveLayout="scroll" *ngIf="formateur.availableDates && formateur.availableDates.length!=0">
-				<ng-template pTemplate="header">
-					<tr>
-						<th>Date</th>
-						<th>Debut</th>
-						<th>Fin</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-order>
-
-				</ng-template>
-				<ng-template pTemplate="emptymessage">
-					<tr>
-						<td>
-							<p *ngFor="let date of formateur.availableDates;let index=index">
-								<span>{{date["date"]}}</span>
-								<span>{{date["debut"]}}</span>
-								<span>{{date["fin"]}}</span>
-							</p>
-						</td>
-					</tr>
-				</ng-template>
-			</p-table>-->
-
-			<!-- Partie dedié à l'affichage des documents -->
-
 			<p-table responsiveLayout="scroll">
 				<ng-template pTemplate="header">
 					<tr>

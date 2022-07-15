@@ -8,10 +8,11 @@ const campus_schema = mongoose.Schema({
     pays: { type: String, required: true },
     email: { type: String, required: true },
     adresse: { type: String, required: true },
-    site: { type: String, required: false }
+    site: { type: String, required: false },
+    salles: { type: [String], default: [] }
 });
 
 //creation de la table avec le nom Campus ( model/classe) à l'aide de la biblio mongoose et son schema
-const Campus= mongoose.model("campus",campus_schema);
+const Campus = mongoose.model("campus", campus_schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
-module.exports={ Campus };
+module.exports = { Campus };

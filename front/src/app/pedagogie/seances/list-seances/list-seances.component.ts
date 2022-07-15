@@ -40,17 +40,10 @@ export class ListSeancesComponent implements OnInit {
   showFormUpdateSeance: Seance;
 
   salleNames = [
-    { value: "Salle 1 RDC" },
-    { value: "Salle 2 RDC" },
-    { value: "Salle 1" },
-    { value: "Salle 2" },
-    { value: "Salle 3" },
-    { value: "Salle 4" },
-    { value: "Salle 5" }
   ]
-  dropdownFormateur: any[] = [{ nom: '', value: '' }];
-  dropdownMatiere: any[] = [{ nom: '', value: '' }];
-  dropdownCampus: any[] = [{ libelle: 'Choissisez un campus', value: null }]
+  dropdownFormateur: any[] = [];
+  dropdownMatiere: any[] = [];
+  dropdownCampus: any[] = []
   dropdownClasse: any[] = [];
   constructor(public DiplomeService: DiplomeService, public seanceService: SeanceService, public matiereService: MatiereService, public classeService: ClasseService,
     public formateurService: FormateurService, public CampusService: CampusService, private messageService: MessageService, private EtudiantService: EtudiantService) { }
@@ -64,7 +57,7 @@ export class ListSeancesComponent implements OnInit {
 
     this.CampusService.getAll().subscribe(
       data => {
-        this.dropdownCampus = [{ libelle: 'Choissisez un campus', value: null }]
+        this.dropdownCampus = []
         this.dicCampus = []
         data.forEach(item => {
           this.dropdownCampus.push({ libelle: item.libelle, value: item._id });
@@ -177,10 +170,9 @@ export class ListSeancesComponent implements OnInit {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });
     let c = []
-    rowData.campus_id.forEach(cid=>{
+    rowData.campus_id.forEach(cid => {
       c.push({ libelle: this.dicCampus[cid]?.nom, value: this.dicCampus[cid]?._id })
     })
-    this.seanceFormUpdate.patchValue({ campus_id: c })
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
       matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
@@ -198,19 +190,26 @@ export class ListSeancesComponent implements OnInit {
 
   get isPresentielUpdated() { return this.seanceFormUpdate.get('isPresentiel'); }
 
+  showSalles(value) {
+    this.salleNames = []
+    this.dicCampus[value].salles.forEach(s => {
+      this.salleNames.push({ value: s, label: s })
+    })
+  }
+
   modifySeance() {
     let seance: Seance
 
     let classeList = []
     let campusList = []
-    this.seanceFormUpdate.value.classe.forEach(c=>{
+    this.seanceFormUpdate.value.classe.forEach(c => {
       classeList.push(c.value)
     })
-    this.seanceFormUpdate.value.campus_id.forEach(c=>{
+    this.seanceFormUpdate.value.campus_id.forEach(c => {
       campusList.push(c.value)
     })
     seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
-    this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, campusList);
+      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, campusList);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
       this.seanceFormUpdate.value.classe.forEach(c => {
