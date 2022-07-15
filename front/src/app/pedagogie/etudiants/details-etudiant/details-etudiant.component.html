@@ -3,11 +3,13 @@
         Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
         {{Etudiant_userdata?.lastname
         }}
-        <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" responsive="true"></p-chart>
+        <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions"></p-chart>
     </div>
     <div class="card col-12 md:col-6 ">
+
     </div>
     <div class="card col-12">
+        <p-toast></p-toast>
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['isPresent', 'date_signature', 'seance_id', 'justificatif']" [rows]="15"
             [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
@@ -34,18 +36,28 @@
             <ng-template pTemplate="body" let-Assiduit>
                 <tr>
                     <td>{{matiereDic[ ListeSeanceDIC[Assiduit.seance_id]?.matiere_id]?.abbrv}}</td>
+
                     <td>
                         {{ ListeSeanceDIC[Assiduit.seance_id]?.date_debut | date : "dd/MM/yyyy hh:mm:ss" }} </td>
                     <td> {{ ListeSeanceDIC[Assiduit.seance_id]?.libelle}}</td>
-                    <td>{{ (Assiduit.isPresent) ? 'Present':'Absent' }}</td>
-                    <td>{{ (Assiduit.isPresent) ? (Assiduit.date_signature | date : "hh:mm:ss" ) :'--' }}</td>
-                    <td>{{ (Assiduit.isPresent) ? '--': (Assiduit.Justitificatif) ?
-                        'Justifié':'Non justifé' }}</td>
 
+                    <td *ngIf="Assiduit.isPresent">
+                        <p-tag severity="success">Present</p-tag>
+                    </td>
+                    <td *ngIf="!Assiduit.isPresent">
+                        <p-tag severity="warning">Absent</p-tag>
+                    </td>
+
+                    <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "hh:mm:ss":'locale' ) :'--' }}
+                    </td>
+                    <td *ngIf="Assiduit.isPresent">--</td>
+                    <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">  <p-tag severity="success">Justifié</p-tag></td>
+                    <td *ngIf="!Assiduit.isPresent && !Assiduit.justificatif">  <p-tag severity="error">Non Justifié</p-tag></td>
                     <td>
 
-                        <i *ngIf="Assiduit.Justitificatif" pTooltip="Voir le justificatif" tooltipPosition="bottom"
-                            class="pi pi-file" style="margin-left: 2%;" aria-hidden="true"></i>
+                        <i *ngIf="Assiduit.justificatif" pTooltip="Voir le justificatif" tooltipPosition="bottom"
+                            class="pi pi-file" style="margin-left: 2%;" (click)="VoirJustificatif(Assiduit._id)"
+                            aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>

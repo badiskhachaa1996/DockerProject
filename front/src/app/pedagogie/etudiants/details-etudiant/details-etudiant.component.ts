@@ -9,6 +9,9 @@ import { PresenceService } from 'src/app/services/presence.service';
 import { SeanceService } from 'src/app/services/seance.service';
 import { UIChart } from 'primeng/chart';
 import { MatiereService } from 'src/app/services/matiere.service';
+import { MessageService } from 'primeng/api';
+import { TagModule } from 'primeng/tag';
+
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
@@ -20,6 +23,7 @@ export class DetailsEtudiantComponent implements OnInit {
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
+ 
   AssiduiteListe: any[];
   ListeSeanceDIC: any[] = [];
   matiereDic: any[] = [];
@@ -31,18 +35,38 @@ export class DetailsEtudiantComponent implements OnInit {
       {
         label: 'abscence',
         backgroundColor: 'red',
+        hoverBackgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56"
+      ],
         data: []
       },
       {
         label: 'Présence',
         backgroundColor: 'blue',
+        hoverBackgroundColor: [
+          "#FF6384",
+          "#36A2EB",
+          "#FFCE56"
+      ],
         data: []
       }
     ]
   };
   barOptions: any;
-
-  constructor(private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+  VoirJustificatif(rowData) {
+    this.PresenceService.getJustificatif(rowData).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      var blob = new Blob([byteArray], { type: data.fileType });
+      var blobURL = URL.createObjectURL(blob);
+      window.open(blobURL);
+    }, (error) => {
+      this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: rowData._id })
+      console.error(error)
+    })
+  }
+  constructor(private messageService : MessageService, private PresenceService: PresenceService ,private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
   ngOnInit(): void {
 
