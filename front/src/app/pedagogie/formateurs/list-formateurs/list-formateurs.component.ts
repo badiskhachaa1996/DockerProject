@@ -228,6 +228,7 @@ export class ListFormateursComponent implements OnInit {
             
             console.log('titre:', diplome.titre, 'cout_h:', diplome.cout_h)
             this.jury_diplomesList.push({ titre: diplome.titre, cout_h: diplome.cout_h })
+
             let frmTitre = "IsjuryT".concat(index)
             let frmCout = "IsjuryC".concat(index)
             console.log(frmTitre)
@@ -235,6 +236,7 @@ export class ListFormateursComponent implements OnInit {
               frmTitre: diplome.titre,
               frmCout: diplome.cout_h
             })
+            console.log(this.formUpdateFormateur)
           });
     
         }
@@ -289,7 +291,7 @@ export class ListFormateursComponent implements OnInit {
       campus: [''],
       nda: [""],
       IsJury: [""],
-      absences: [""]
+      absences: [""],  
     });
 
 
@@ -393,11 +395,11 @@ export class ListFormateursComponent implements OnInit {
   }
 
   getVolumeHUpdate() {
-    return this.formUpdateFormateur.get('volume_h') as FormArray;
+    return this.formUpdateFormateur.get('volume_h') as FormArray  ;
   }
 
   onUpdateMatiere() {
-    const tempControl = this.formBuilder.control('', Validators.required);
+    const tempControl = this.formBuilder.control('');
     this.getVolumeHUpdate().push(tempControl);
   }
 

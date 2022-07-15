@@ -218,6 +218,7 @@ export class EmergementComponent implements OnInit {
       });
     })
     this.SeanceService.getById(this.ID).subscribe(dataS => {
+      console.log(dataS)
       this.seance = dataS
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = this.date_debut + (15 * 60)//15 minutes max

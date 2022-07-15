@@ -233,42 +233,50 @@
     </div>
 
     <div class="col-12">
-		<div class="card">
-			<h5>Liste des étudiants</h5>
-			<p-toast></p-toast>
-			<p-table  #dt1 [value]="etudiants" dataKey="_id"
-                      [expandedRowKeys]="expandedRows" responsiveLayout="scroll"[globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
-                      [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length" styleClass="p-datatable-gridlines">
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
+        <div class="card">
+            <h5>Liste des étudiants</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th style="width: 3rem"></th>
-                        <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon></th>
-						<th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon></th>
-						<th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon></th>
-						<th pSortableColumn="groupe"> Groupe <p-sortIcon field="groupe"></p-sortIcon></th>
-						<th pSortableColumn="email"> Email <p-sortIcon field="email"></p-sortIcon></th>
-						<th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon></th>
-						<th>Action </th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-etudiant let-expanded="expanded">
-					<tr>
-						<td>
-							<button type="button" pButton pRipple [pRowToggler]="etudiant" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" (click)="loadPP(etudiant)"></button>
-						</td>
-						<td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
-						<td>
-                            {{ etudiant?.lastname | uppercase }} {{ etudiant?.firstname }}
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="groupe"> Groupe <p-sortIcon field="groupe"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email"> Email <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
+                        </th>
+                        <th>Action </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-etudiant let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="etudiant"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="loadPP(etudiant)"></button>
                         </td>
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
+
                         <td>
                             {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname |
                             uppercase }} {{ etudiant?.firstname }}
@@ -292,6 +300,10 @@
                                 (click)="showUploadFile=etudiant" aria-hidden="true"></i>
                             <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
                                 (click)="clickFile(etudiant)" aria-hidden="true"></i>
+                            <i (click)="router.navigate(['/details/'+etudiant._id])"
+                                pTooltip="Suivie assiduité" tooltipPosition="bottom" class="pi pi-chart-bar"
+                                aria-hidden="true">
+                            </i>
                         </td>
                     </tr>
                 </ng-template>
