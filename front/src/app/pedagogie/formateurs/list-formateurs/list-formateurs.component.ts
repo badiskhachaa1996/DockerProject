@@ -329,7 +329,7 @@ export class ListFormateursComponent implements OnInit {
     let volumeH = {};
     let volumeH_ini = {};
 
-    this.volumeHList.forEach((VH, index) => {
+    /*this.volumeHList.forEach((VH, index) => {
       volumeH[tempVH[index]] = VH
       if (this.tempVolumeCons[tempVH[index]]) {
         volumeH_ini[tempVH[index]] = this.tempVolumeCons[tempVH[index]];
@@ -341,7 +341,7 @@ export class ListFormateursComponent implements OnInit {
 
 
     this.formateurToUpdate.volume_h = volumeH;
-    this.formateurToUpdate.volume_h_consomme = volumeH_ini;
+    this.formateurToUpdate.volume_h_consomme = volumeH_ini;TODO*/
     this.formateurToUpdate.monday_available = {
       state: this.formUpdateFormateur.get('monday_available').value,
       h_debut: this.formUpdateFormateur.get('monday_h_debut').value,
@@ -456,7 +456,6 @@ export class ListFormateursComponent implements OnInit {
   }
 
   expandFc(rowData: Formateur) {
-    console.log(rowData.absences)
     this.formateurService.getFiles(rowData?._id).subscribe(
       (data) => {
         this.ListDocuments = data

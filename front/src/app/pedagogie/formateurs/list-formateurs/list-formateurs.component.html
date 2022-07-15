@@ -293,9 +293,9 @@
 						<th pSortableColumn="type_contrat" style="text-align: center;">Type de contrat <p-sortIcon
 								field="type_contrat"></p-sortIcon>
 						</th>
-						<th pSortableColumn="type_formateur" style="text-align: center;">Type de formateur <p-sortIcon
+						<!--<th pSortableColumn="type_formateur" style="text-align: center;">Type de formateur <p-sortIcon
 								field="type_formateur"></p-sortIcon>
-						</th>
+						</th>-->
 						<th pSortableColumn="campus" style="text-align: center;">Campus <p-sortIcon field="campus">
 							</p-sortIcon>
 						</th>
@@ -394,20 +394,20 @@
 				<ng-template pTemplate="header">
 					<tr>
 						<th>Matières</th>
+						<th>Volume initiale</th>
+						<th>Volume consommé</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
-					<tr>
+					<tr *ngFor="let fvh of formateur.volume_h |keyvalue">
 						<td>
-							<ul>
-								<li *ngFor="let matiere of formateur.volume_h | keyvalue ;let index = index">
-									<span> {{matiere.value}} : <span
-											[ngStyle]="{'color':(formateur.volume_h_consomme[matiere.key]>matiere.value)?'red':'black'}">{{formateur.volume_h_consomme[matiere.key]}}
-											: </span><span
-											*ngIf="seanceNB[formateur._id]">{{seanceNB[formateur._id]}}</span><span
-											*ngIf="!seanceNB[formateur._id]">0</span></span>
-								</li>
-							</ul>
+							{{matiereDic[fvh.key].nom}}
+						</td>
+						<td>
+							{{fvh.value}}
+						</td>
+						<td>
+							{{formateur.volume_h_consomme[fvh.key]}}
 						</td>
 					</tr>
 				</ng-template>
