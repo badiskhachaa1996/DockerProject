@@ -12,7 +12,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Matière</label><br>
-                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"  placeholder="Choissisez une matière"
                         emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
                     </p-dropdown>
                 </div>
@@ -33,25 +33,28 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Nom du formateur</label><br>
-                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"  placeholder="Choissisez un formateur"
                         emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus</label><br>
                     <p-multiSelect formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
-                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
+                        (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
+                        filterPlaceholder="Nom du campus" filter="true">
                     </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
-                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+                    <p-selectButton
+                        [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
+                        formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
                 </div>
-                <div class="field col-12 md:col-12" *ngIf="isPresentielUpdated.value==true">
+                <div class="field col-12 md:col-12"
+                    *ngIf="isPresentielUpdated.value!='Distanciel' && salleNames.length!=0">
                     <label>Salle Présentiel:</label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
                     </p-dropdown>

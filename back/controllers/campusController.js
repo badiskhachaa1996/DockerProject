@@ -7,13 +7,7 @@ app.post("/createcampus", (req, res) => {
     //Ajout d'un campus
     let data = req.body;
     let campus = new Campus ({
-        libelle: data.libelle,
-        ecole_id: data.ecole_id,
-        ville: data.ville,
-        pays: data.pays,
-        email: data.email,
-        adresse: data.adresse,
-        site: data.site,
+        ...data
     });
     campus.save().then((campusFromDB) => {
         res.status(200).send(campusFromDB);

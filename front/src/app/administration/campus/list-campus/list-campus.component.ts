@@ -32,14 +32,20 @@ export class ListCampusComponent implements OnInit {
 
     libelle: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ- ]+$')]),
     ecole_id: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required,Validators.pattern('[^0-9]+')]),
-    pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
+    ville: new FormControl('PARIS', [Validators.required, Validators.pattern('[^0-9]+')]),
+    pays: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     email: new FormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
     adresse: new FormControl('', Validators.required),
     site: new FormControl(''),
   })
-  columns = [
-  ]
+  salles = []
+
+  onAddSalle() {
+    this.salles.push("")
+  }
+  changeValue(i, value) {
+    this.salles[i] = value
+  }
   token;
 
   constructor(private ecoleService: EcoleService, private messageService: MessageService, private campusService: CampusService, private route: ActivatedRoute, private router: Router, private anneeScolaireService: AnneeScolaireService) { }
@@ -91,7 +97,7 @@ export class ListCampusComponent implements OnInit {
   }
 
   editCampus() {
-    let campus = new Campus(this.campusToUpdate._id, this.campusFormUpdate.value.libelle, this.campusFormUpdate.value.ecole_id.value, this.campusFormUpdate.value.ville, this.campusFormUpdate.value.pays, this.campusFormUpdate.value.email, this.campusFormUpdate.value.adresse, this.campusFormUpdate.value.site)
+    let campus = new Campus(this.campusToUpdate._id, this.campusFormUpdate.value.libelle, this.campusFormUpdate.value.ecole_id.value, this.campusFormUpdate.value.ville, this.campusFormUpdate.value.pays, this.campusFormUpdate.value.email, this.campusFormUpdate.value.adresse, this.campusFormUpdate.value.site,this.salles)
     this.campusService.edit(campus).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
 
@@ -106,6 +112,7 @@ export class ListCampusComponent implements OnInit {
   showModify(rowData: Campus) {
     this.campusToUpdate = rowData;
     this.showFormUpdateCampus = true;
+    this.salles = rowData.salles
     this.campusFormUpdate.setValue({ libelle: rowData.libelle, ecole_id: rowData.ecole_id, email: rowData.email, site: rowData.site, pays: rowData.pays, adresse: rowData.adresse, ville: rowData.ville })
   }
 

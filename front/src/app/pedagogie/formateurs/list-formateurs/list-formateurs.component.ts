@@ -104,7 +104,19 @@ export class ListFormateursComponent implements OnInit {
 
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
-      (data) => { this.formateurs = data; },
+      (data) => { 
+        this.formateurs = [];
+        data.forEach(f=>{
+          let abscList = []
+          f.absences.forEach(a=>{
+            if(a!=null){
+              abscList.push(new Date(a))
+            }
+          })
+          f.absences=abscList
+          this.formateurs.push(f)
+        })
+      },
       (error) => { console.error(error) }
     );
 
@@ -444,6 +456,7 @@ export class ListFormateursComponent implements OnInit {
   }
 
   expandFc(rowData: Formateur) {
+    console.log(rowData.absences)
     this.formateurService.getFiles(rowData?._id).subscribe(
       (data) => {
         this.ListDocuments = data
