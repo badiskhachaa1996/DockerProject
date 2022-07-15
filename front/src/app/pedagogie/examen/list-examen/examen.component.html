@@ -29,7 +29,7 @@
                     </span>
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-12">
                     <label>Libellé*:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
                         placeholder="Intitulé de l'examen/ évaluation" pInputText>
@@ -70,7 +70,15 @@
                 <div class="field col-12 md:col-6">
                     <label>Type d'examen*:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownType" optionLabel="libelle" formControlName="type">
+                        <p-dropdown [options]="dropdownType" formControlName="type">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Niveau d'examen*:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownNiveau" formControlName="niveau">
                         </p-dropdown>
                     </span>
                 </div>

@@ -42,13 +42,19 @@ export class ExamenComponent implements OnInit {
   dropdownFormateur: any[] = [{ libelle: "", value: "" }];
   formateurToUpdate: Formateur;
 
-  dropdownType: any[] = [
-                          { libelle: "Tout les types", value: null},
-                          { libelle: "Évaluation", value: "Évaluation" },
-                          { libelle: "Examen finale", value: "Examen finale" },
-                          { libelle: "Soutenance", value: "Soutenance" }
-                        ]
 
+  dropdownNiveau: any[] = [
+    { label: "Évaluation", value: "Évaluation" },
+    { label: "Examen finale", value: "Examen finale" },
+    { label: "Soutenance", value: "Soutenance" }
+  ]
+
+  dropdownType: any[] = [
+    { label: "Ponctuelle orale", value: "Ponctuelle orale" },
+    { label: "Ponctuelle écrite", value: "Ponctuelle écrite" },
+    { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
+    { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
+  ]
   //Données liées à la modification d'examens
   examenToUpdate: Examen;
   idExamenToUpdate: string;
@@ -58,10 +64,10 @@ export class ExamenComponent implements OnInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private formateurService: FormateurService,
-    private examenService: ExamenService, 
+    private examenService: ExamenService,
     private matiereService: MatiereService,
     private classeService: ClasseService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -76,7 +82,7 @@ export class ExamenComponent implements OnInit {
       }
     );
 
-    
+
     //Recuperation de la liste des formateurs
     //On recupère la liste des utilisateurs
     this.userService.getAll().subscribe(
@@ -111,7 +117,7 @@ export class ExamenComponent implements OnInit {
     this.matiereService.getAll().subscribe(
       ((response) => {
         response.forEach((matiere) => {
-          this.dropdownMatiere.push({libelle: matiere.nom, value: matiere._id});
+          this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
           this.matieres[matiere._id] = matiere;
         });
       }),
@@ -123,7 +129,7 @@ export class ExamenComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach((classe) => {
-          this.dropdownClasse.push({libelle: classe.nom, value: classe._id});
+          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
           this.classes[classe._id] = classe;
         });
       }),
@@ -131,7 +137,7 @@ export class ExamenComponent implements OnInit {
     );
 
     //Initialisation des formulaires
-  
+
     this.onInitFormUpdateExamen();
   }
 
@@ -141,13 +147,14 @@ export class ExamenComponent implements OnInit {
       classe_id: [
         "", Validators.required],
       matiere_id: [
-          "", Validators.required],
+        "", Validators.required],
       formateur_id: ["", Validators.required],
       libelle: ["", Validators.required],
       date: ["", Validators.required],
       type: ["", Validators.required],
       note_max: ["", [Validators.required, Validators.pattern("^[0-9.]+$")]],
       coef: ["", Validators.required],
+      niveau: ["",Validators.required]
     });
   }
 
@@ -159,9 +166,10 @@ export class ExamenComponent implements OnInit {
     let formateur_id = this.formUpdateExamen.get("formateur_id")?.value.value;
     let libelle = this.formUpdateExamen.get("libelle")?.value;
     let date = this.formUpdateExamen.get("date")?.value;
-    let type = this.formUpdateExamen.get("type")?.value.value;
+    let type = this.formUpdateExamen.get("type")?.value;
     let note_max = this.formUpdateExamen.get("note_max")?.value;
     let coef = this.formUpdateExamen.get("coef")?.value;
+    let niveau = this.formUpdateExamen.get("niveau")?.value;
 
     let examen = new Examen(
       this.examenToUpdate._id,
@@ -173,6 +181,7 @@ export class ExamenComponent implements OnInit {
       note_max,
       coef,
       libelle,
+      niveau
     );
 
     this.examenService.update(examen).subscribe(
@@ -205,7 +214,7 @@ export class ExamenComponent implements OnInit {
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
- 
+
   get note_max_m() {
     return this.formUpdateExamen.get("note_max");
   }
@@ -225,7 +234,7 @@ export class ExamenComponent implements OnInit {
         }
 
         this.formUpdateExamen.patchValue({
-         
+
           classe_id: {
             libelle: this.nomClasseToUpdate,
             value: this.idClasseToUpdate
@@ -243,6 +252,8 @@ export class ExamenComponent implements OnInit {
           type: this.examenToUpdate.type,
           note_max: this.examenToUpdate.note_max,
           coef: this.examenToUpdate.coef,
+          niveau: this.examenToUpdate.niveau,
+          libelle: this.examenToUpdate.libelle
         });
       },
       (error) => {
