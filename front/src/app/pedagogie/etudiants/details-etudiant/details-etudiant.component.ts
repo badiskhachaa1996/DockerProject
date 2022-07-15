@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { User } from 'src/app/models/User';
@@ -7,24 +7,29 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
 import { PresenceService } from 'src/app/services/presence.service';
 import { SeanceService } from 'src/app/services/seance.service';
+import { UIChart } from 'primeng/chart';
+import { MatiereService } from 'src/app/services/matiere.service';
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
   styleUrls: ['./details-etudiant.component.scss']
 })
 export class DetailsEtudiantComponent implements OnInit {
+  @ViewChild('chart') chart: UIChart;
+
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
   AssiduiteListe: any[];
-  ListeSeanceDIC :any[] = [];
+  ListeSeanceDIC: any[] = [];
+  matiereDic: any[] = [];
   ListeSeance: any[];
   barDataAJ: any;
   barData: any = {
     labels: ['Assiduité au seances de cours'],
     datasets: [
       {
-        label: 'abscence' ,
+        label: 'abscence',
         backgroundColor: 'red',
         data: []
       },
@@ -36,7 +41,8 @@ export class DetailsEtudiantComponent implements OnInit {
     ]
   };
   barOptions: any;
-  constructor(private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+
+  constructor(private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -70,11 +76,17 @@ export class DetailsEtudiantComponent implements OnInit {
           this.ListeSeance = seanceData
 
           this.ListeSeance.forEach(seance => {
-            console.log(seance)
-  
-            this.ListeSeanceDIC[seance._id]=seance;
-            console.log(this.ListeSeanceDIC[seance._id])
+
+
+            this.ListeSeanceDIC[seance._id] = seance;
+
           });
+
+          this.matiereService.getAll().subscribe(data => {
+            data.forEach(m => {
+              this.matiereDic[m._id] = m
+            });
+          })
         })
 
       }),
@@ -84,13 +96,11 @@ export class DetailsEtudiantComponent implements OnInit {
     }),
       ((error) => { console.error(error); })
 
-
-
-
-    this.barDataAJ = this.barData;
     this.barOptions = {
       plugins: {
+        animation: false,
         legend: {
+          display: true,
           labels: {
             color: '#495057'
           }
@@ -116,6 +126,11 @@ export class DetailsEtudiantComponent implements OnInit {
       }
     };
 
+  }
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.barDataAJ = { ...this.barData };
 
+    }, 1000);
   }
 }
