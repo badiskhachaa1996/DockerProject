@@ -11,6 +11,7 @@ import { UIChart } from 'primeng/chart';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
+import { pipe } from 'rxjs';
 
 @Component({
   selector: 'app-details-etudiant',
@@ -19,7 +20,7 @@ import { TagModule } from 'primeng/tag';
 })
 export class DetailsEtudiantComponent implements OnInit {
   @ViewChild('chart') chart: UIChart;
-
+  @ViewChild('chart2') chart2: UIChart;
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
@@ -29,8 +30,32 @@ export class DetailsEtudiantComponent implements OnInit {
   matiereDic: any[] = [];
   ListeSeance: any[];
   barDataAJ: any;
+  barDataHorAJ: any;
+  barDataHor: any = {
+
+    labels: ['Assiduite'],
+    datasets: [
+      {
+        label: 'Absences',
+        backgroundColor: 'red',
+        data: []
+      },
+      {
+        label: 'Présences',
+        backgroundColor: '#22C20E',
+        data: []
+      },
+       {
+        label: 'Absences non justifiées',
+        backgroundColor: '#730e0e',
+        data: []
+      }
+    ]
+
+  };
+
   barData: any = {
-    labels: [""],
+    labels: ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'],
     datasets: [
       {
         label: 'Abscence',
@@ -39,7 +64,7 @@ export class DetailsEtudiantComponent implements OnInit {
           "#FF6384"
 
         ],
-        data: []
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       {
         label: 'Présence',
@@ -49,22 +74,21 @@ export class DetailsEtudiantComponent implements OnInit {
 
 
         ],
-        data: []
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       {
         label: 'Absence non justifié',
         backgroundColor: '#730e0e',
         hoverBackgroundColor: [
           "#781d1d",
-
-
         ],
-        data: []
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
     ]
   };
   horizontalOptions: any;
   barOptions: any;
+
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -95,22 +119,6 @@ export class DetailsEtudiantComponent implements OnInit {
       this.presenceService.getAllByUser(this.EtudiantDetail.user_id).subscribe((presenceData) => {
         this.AssiduiteListe = presenceData
         console.log(this.AssiduiteListe)
-        // boucle liste des presences totales de l'étudiants.
-        this.AssiduiteListe.forEach(item => {
-
-          if (item.isPresent != true) {
-            // abscense ++1
-            this.barData.datasets['0'].data.push(1)
-            if (item.justificatif != true) {
-              // abscense non justifié ++1
-              this.barData.datasets[2].data.push(1)
-            }
-          }
-          else {
-            //presence ++1
-            this.barData.datasets[1].data.push(1)
-          }
-        });
         this.seanceService.getAllByClasseId(this.EtudiantDetail.classe_id).subscribe((seanceData) => {
           this.ListeSeance = seanceData
 
@@ -126,7 +134,40 @@ export class DetailsEtudiantComponent implements OnInit {
               this.matiereDic[m._id] = m
             });
           })
+
+
+
+          // boucle liste des presences totales de l'étudiants.
+          this.AssiduiteListe.forEach(item => {
+
+            if (item.isPresent != true) {
+              // abscense ++1
+              let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+              console.log(month)
+              this.barData.datasets[0].data[Number(month) - 1]++
+              this.barDataHor.datasets[0].data.push(1)
+              if (item.justificatif != true) {
+                // abscense non justifié ++1
+                let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+                console.log(month)
+                this.barData.datasets[2].data[Number(month) - 1]++
+
+                this.barDataHor.datasets[2].data.push(1)
+              }
+            }
+            else {
+              //presence ++1
+              let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+              console.log(month)
+              this.barData.datasets[1].data[Number(month) - 1]++
+              this.barDataHor.datasets[1].data.push(1)
+
+            }
+          });
+
         })
+
+
 
       }),
         ((error) => { console.error(error); })
@@ -192,13 +233,16 @@ export class DetailsEtudiantComponent implements OnInit {
           }
         }
       }
+
     };
 
   }
+
   ngAfterViewInit() {
     setTimeout(() => {
-      this.barDataAJ = { ...this.barData };
-
-    }, 1000);
+      this.chart2.data = this.barDataHor
+      this.chart.data = this.barData
+    this.barDataHorAJ=  this.barDataHor
+    }, 2000);
   }
 }
