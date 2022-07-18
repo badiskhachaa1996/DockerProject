@@ -23,7 +23,7 @@ export class DetailsEtudiantComponent implements OnInit {
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
- 
+
   AssiduiteListe: any[];
   ListeSeanceDIC: any[] = [];
   matiereDic: any[] = [];
@@ -37,8 +37,8 @@ export class DetailsEtudiantComponent implements OnInit {
         backgroundColor: 'red',
         hoverBackgroundColor: [
           "#FF6384"
-         
-      ],
+
+        ],
         data: []
       },
       {
@@ -46,9 +46,9 @@ export class DetailsEtudiantComponent implements OnInit {
         backgroundColor: '#22C20E',
         hoverBackgroundColor: [
           "#22C55E",
-       
-          
-      ],
+
+
+        ],
         data: []
       },
       {
@@ -56,14 +56,14 @@ export class DetailsEtudiantComponent implements OnInit {
         backgroundColor: '#730e0e',
         hoverBackgroundColor: [
           "#781d1d",
-       
-          
-      ],
+
+
+        ],
         data: []
       }
     ]
   };
-  horizontalOptions:any;
+  horizontalOptions: any;
   barOptions: any;
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
@@ -76,7 +76,7 @@ export class DetailsEtudiantComponent implements OnInit {
       console.error(error)
     })
   }
-  constructor(private messageService : MessageService, private PresenceService: PresenceService ,private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+  constructor(private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -95,17 +95,19 @@ export class DetailsEtudiantComponent implements OnInit {
       this.presenceService.getAllByUser(this.EtudiantDetail.user_id).subscribe((presenceData) => {
         this.AssiduiteListe = presenceData
         console.log(this.AssiduiteListe)
+        // boucle liste des presences totales de l'étudiants.
         this.AssiduiteListe.forEach(item => {
 
           if (item.isPresent != true) {
-            console.log(" presnet +1")
+            // abscense ++1
             this.barData.datasets['0'].data.push(1)
-            if(item.justificatif != true) {
+            if (item.justificatif != true) {
+              // abscense non justifié ++1
               this.barData.datasets[2].data.push(1)
             }
           }
           else {
-            console.log(item)
+            //presence ++1
             this.barData.datasets[1].data.push(1)
           }
         });
@@ -164,33 +166,33 @@ export class DetailsEtudiantComponent implements OnInit {
     };
     this.horizontalOptions = {
       indexAxis: 'y',
-      
+
       plugins: {
-          legend: {
-              labels: {
-                  color: '#red'
-              }
+        legend: {
+          labels: {
+            color: '#red'
           }
+        }
       },
       scales: {
-          x: {
-              ticks: {
-                  color: '#495057'
-              },
-              grid: {
-                  color: '#ebedef'
-              }
+        x: {
+          ticks: {
+            color: '#495057'
           },
-          y: {
-              ticks: {
-                  color: '#495057'
-              },
-              grid: {
-                  color: '#ebedef'
-              }
+          grid: {
+            color: '#ebedef'
           }
+        },
+        y: {
+          ticks: {
+            color: '#495057'
+          },
+          grid: {
+            color: '#ebedef'
+          }
+        }
       }
-  };
+    };
 
   }
   ngAfterViewInit() {
