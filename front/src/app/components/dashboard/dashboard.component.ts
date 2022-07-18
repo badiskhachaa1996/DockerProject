@@ -26,6 +26,8 @@ export class DashboardComponent implements OnInit {
 
     constructor(private productService: ProductService, public configService: ConfigService, private router:Router) {}
 
+    now=new Date()
+
     testForScience(){
         this.router.navigate(['/'])
     }

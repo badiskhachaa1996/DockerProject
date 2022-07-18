@@ -75,23 +75,33 @@ export class ListFormateursComponent implements OnInit {
   token;
 
   onAddJ_diplome() {
-    console.log(this.jury_diplomesList)
-    this.jury_diplomesList.push({ titre: "", cout_h: 0 })
+    this.jury_diplomesList.push({ diplome_id: "", cout_h: 0 })
   }
 
   changeCout(i, event, type) {
-
     if (type == "cout_h") {
       this.jury_diplomesList[i][type] = parseInt(event.target.value);
     } else {
-      this.jury_diplomesList[i][type] = event.value.titre;
+      this.jury_diplomesList[i][type] = event.value._id;
     }
-    console.log(this.jury_diplomesList)
   }
   deleteJ_diplome(i) {
-
     this.jury_diplomesList.splice(i)
+  }
 
+  onAddMatiere() {
+    this.volumeHList.push({ volume_init: 0, matiere_id: this.matiereList[0].items[0].value })
+  }
+
+  changeVolumeH(i, event, type) {
+    if (type == "volume_init")
+      this.volumeHList[i][type] = parseInt(event.target.value);
+    else if (type == "matiere_id")
+      this.volumeHList[i][type] = event.value;
+  }
+
+  deleteMatiereAdd(i) {
+    this.volumeHList.splice(i, 1)
   }
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router, private diplomeService: DiplomeService,
@@ -104,16 +114,16 @@ export class ListFormateursComponent implements OnInit {
 
     //Recuperation de la liste des formateurs
     this.formateurService.getAll().subscribe(
-      (data) => { 
+      (data) => {
         this.formateurs = [];
-        data.forEach(f=>{
+        data.forEach(f => {
           let abscList = []
-          f.absences.forEach(a=>{
-            if(a!=null){
+          f.absences.forEach(a => {
+            if (a != null) {
               abscList.push(new Date(a))
             }
           })
-          f.absences=abscList
+          f.absences = abscList
           this.formateurs.push(f)
         })
       },
@@ -182,7 +192,7 @@ export class ListFormateursComponent implements OnInit {
         this.tempVolumeCons = response.volume_h_consomme
         console.log(this.formateurToUpdate?.absences)
         let arr = []
-        this.formateurToUpdate?.absences.forEach(date=>{
+        this.formateurToUpdate?.absences.forEach(date => {
           arr.push(new Date(date))
         })
         this.formUpdateFormateur.patchValue({
@@ -191,7 +201,7 @@ export class ListFormateursComponent implements OnInit {
           remarque: this.formateurToUpdate.remarque,
           campus: this.formateurToUpdate?.campus_id,
           nda: this.formateurToUpdate?.nda,
-          absences:arr
+          absences: arr
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -233,11 +243,11 @@ export class ListFormateursComponent implements OnInit {
             friday_remarque: this.formateurToUpdate.friday_available.remarque
           })
         }
-       
+
         if (this.formateurToUpdate.IsJury) {
-          
-          this.formateurToUpdate.IsJury.forEach((diplome,index) => {
-            
+          //TODO
+          this.formateurToUpdate.IsJury.forEach((diplome, index) => {
+
             console.log('titre:', diplome.titre, 'cout_h:', diplome.cout_h)
             this.jury_diplomesList.push({ titre: diplome.titre, cout_h: diplome.cout_h })
 
@@ -248,12 +258,11 @@ export class ListFormateursComponent implements OnInit {
               frmTitre: diplome.titre,
               frmCout: diplome.cout_h
             })
-            console.log(this.formUpdateFormateur)
           });
-    
+
         }
 
-        
+
 
         let dic = response.volume_h
         let k = [];
@@ -303,11 +312,8 @@ export class ListFormateursComponent implements OnInit {
       campus: [''],
       nda: [""],
       IsJury: [""],
-      absences: [""],  
+      absences: [""],
     });
-
-
-   
   }
 
 
@@ -322,26 +328,21 @@ export class ListFormateursComponent implements OnInit {
     this.formateurToUpdate.prestataire_id = this.formUpdateFormateur.get('prestataire_id')?.value.value;
     this.formateurToUpdate.remarque = this.formUpdateFormateur.get('remarque')?.value;
     this.formateurToUpdate.nda = this.formUpdateFormateur.get('nda')?.value;
-    let tempVH = this.formUpdateFormateur.get('volume_h').value ? this.formUpdateFormateur.get('volume_h').value : [];
 
     this.formateurToUpdate.campus_id = this.formUpdateFormateur.get('campus')?.value
 
-    let volumeH = {};
-    let volumeH_ini = {};
+    let volumeH_i = {};
+    let volumeH_consomme = {};
 
-    /*this.volumeHList.forEach((VH, index) => {
-      volumeH[tempVH[index]] = VH
-      if (this.tempVolumeCons[tempVH[index]]) {
-        volumeH_ini[tempVH[index]] = this.tempVolumeCons[tempVH[index]];
-      } else {
-        volumeH_ini[tempVH[index]] = 0;
-      }
+    this.volumeHList.forEach((VH, index) => {
+      volumeH_i[VH["matiere_id"]] = VH["volume_init"]
+      volumeH_consomme[VH["matiere_id"]] = 0
 
     });
 
 
-    this.formateurToUpdate.volume_h = volumeH;
-    this.formateurToUpdate.volume_h_consomme = volumeH_ini;TODO*/
+    this.formateurToUpdate.volume_h = volumeH_i;
+    this.formateurToUpdate.volume_h_consomme = volumeH_consomme;
     this.formateurToUpdate.monday_available = {
       state: this.formUpdateFormateur.get('monday_available').value,
       h_debut: this.formUpdateFormateur.get('monday_h_debut').value,
@@ -372,11 +373,15 @@ export class ListFormateursComponent implements OnInit {
       h_fin: this.formUpdateFormateur.get('friday_h_fin').value,
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
-    if (this.jury_diplomesList.length > 0) {
-     
-      this.formateurToUpdate.IsJury = this.jury_diplomesList
-    }
-    this.formateurToUpdate.absences=this.formUpdateFormateur.get('absences').value
+    this.volumeHList.forEach((VH, index) => {
+      volumeH_i[VH["matiere_id"]] = VH["volume_init"]
+      volumeH_consomme[VH["matiere_id"]] = 0
+    });
+    let jury = {}
+    this.jury_diplomesList.forEach((VH, index) => {
+      jury[VH["titre"]] = VH["cout_h"]
+    });
+    this.formateurToUpdate.absences = this.formUpdateFormateur.get('absences').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
         if (data.error) {
@@ -398,35 +403,12 @@ export class ListFormateursComponent implements OnInit {
 
     this.showFormUpdateFormateur = false;
     this.jury_diplomesList = []
- 
+
   }
 
   onGetStatutToUpdate() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
     return this.formUpdateFormateur.get('type_contrat').value.value;
-  }
-
-  getVolumeHUpdate() {
-    return this.formUpdateFormateur.get('volume_h') as FormArray  ;
-  }
-
-  onUpdateMatiere() {
-    const tempControl = this.formBuilder.control('');
-    this.getVolumeHUpdate().push(tempControl);
-  }
-
-  changeVolumeH(i, event) {
-    this.volumeHList[i] = parseInt(event.target.value);
-  }
-
-  deleteMatiereUpdate(i) {
-    let temp = (this.volumeHList[i]) ? this.volumeHList[i] + " " : ""
-    if (confirm("Voulez-vous supprimer la matière " + temp + "avec son volume horaire ET son volume réalisé ?")) {
-      this.volumeHList.splice(i)
-      let FArray: [] = this.formUpdateFormateur.get('volume_h').value;
-      FArray.splice(i)
-      this.formUpdateFormateur.setControl('volume_h', this.formBuilder.array(FArray))
-    }
   }
 
   getUserList() {

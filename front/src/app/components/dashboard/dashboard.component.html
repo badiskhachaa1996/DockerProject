@@ -1,4 +1,6 @@
     <button label="SCIENCE" pButton (click)="testForScience()"></button>
+    <p>Local timezone: {{now|date:"long"}}</p>
+    <p>Local timezone +2: {{now|date:'long':'+2'}}</p>
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-3">
             <div class="card mb-0">

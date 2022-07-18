@@ -75,7 +75,6 @@ export class AddFormateurComponent implements OnInit {
     }
   }
   deleteJ_diplome(i) {
-
     this.jury_diplomesList.splice(i)
   }
 
@@ -230,8 +229,8 @@ export class AddFormateurComponent implements OnInit {
     let taux_h = this.formAddFormateur.get('taux_h')?.value;
     let taux_j = this.formAddFormateur.get('taux_j')?.value;
     let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
-    let volumeH_i = [];
-    let volumeH_consomme = [];
+    let volumeH_i = {};
+    let volumeH_consomme = {};
     let campus = this.formAddFormateur.get('campus')?.value;
     let nda = this.formAddFormateur.get('nda')?.value;
     this.volumeHList.forEach((VH, index) => {
