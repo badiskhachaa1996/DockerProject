@@ -498,7 +498,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
       t['Confirmation CF'] = p.validated_cf
-      if (p.agent_id) {
+      if (p.agent_id &&  this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }
       dataExcel.push(t)

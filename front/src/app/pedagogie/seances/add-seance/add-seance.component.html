@@ -61,6 +61,12 @@
                     <input pInputText type="text" formControlName="libelle" placeholder="Examen"
                         class="form-control col-12">
                 </div>
+                <p class="col-12 md:col-12" *ngIf="seanceForm.value.date_debut">
+                    {{seanceForm.value.date_debut | date:"long"}}<br>
+                    {{seanceForm.value.date_debut | json}}<br>
+                    {{testAffichage(seanceForm.value.date_debut)| json}}<br>
+                    {{testAffichage(seanceForm.value.date_debut)| date:"long"}}<br>
+                </p>
                 <div class="field col-12 md:col-6">
                     <label>Début:</label>
                     <input type="datetime-local" formControlName="date_debut" class="form-control col-12"

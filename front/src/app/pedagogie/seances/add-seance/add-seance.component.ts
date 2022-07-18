@@ -14,6 +14,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -124,11 +125,25 @@ export class AddSeanceComponent implements OnInit {
     })
   }
 
+  testAffichage(date) {
+    var targetTime = new Date(date);
+    //get the timezone offset from local time in minutes
+    var tzDifference = targetTime.getTimezoneOffset();
+    //convert the offset to milliseconds, add to targetTime, and make a new Date
+    var offsetTime = new Date(targetTime.getTime() + tzDifference * 60000);
+    console.log(offsetTime)
+    return offsetTime
+  }
+
+  /*convertDatetoUTC0(date,tz="Africa/Dakar"){
+    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tz}));   
+  }*/
+
   saveSeance() {
     //TODO get nbSeance
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
-    this.seanceForm.value.classe.forEach((c,index) => {
-      if(index!= 0)
+    this.seanceForm.value.classe.forEach((c, index) => {
+      if (index != 0)
         classeStr = classeStr + "," + this.dicClasse[c.value].abbrv
     })
     classeStr.slice(classeStr.lastIndexOf(',') - 1)
