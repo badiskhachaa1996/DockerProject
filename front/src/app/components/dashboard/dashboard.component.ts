@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
     now=new Date()
 
     testForScience(){
-        this.router.navigate(['/'])
+        return new Date().getTimezoneOffset()
     }
 
     ngOnInit() {
