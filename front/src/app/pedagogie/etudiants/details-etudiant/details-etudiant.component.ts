@@ -31,6 +31,9 @@ export class DetailsEtudiantComponent implements OnInit {
   ListeSeance: any[];
   barDataAJ: any;
   barDataHorAJ: any;
+  nb_absences = 0;
+  nb_absencesNJ = 0;
+  nb_presences = 0;
   barDataHor: any = {
 
     labels: ['Assiduite'],
@@ -45,7 +48,7 @@ export class DetailsEtudiantComponent implements OnInit {
         backgroundColor: '#22C20E',
         data: []
       },
-       {
+      {
         label: 'Absences non justifiées',
         backgroundColor: '#730e0e',
         data: []
@@ -139,32 +142,37 @@ export class DetailsEtudiantComponent implements OnInit {
 
           // boucle liste des presences totales de l'étudiants.
           this.AssiduiteListe.forEach(item => {
-
+          
             if (item.isPresent != true) {
               // abscense ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
               console.log(month)
+              this.  nb_absences++
               this.barData.datasets[0].data[Number(month) - 1]++
-              this.barDataHor.datasets[0].data.push(1)
+             
               if (item.justificatif != true) {
                 // abscense non justifié ++1
-                let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+                let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
                 console.log(month)
+                this.nb_absencesNJ++
                 this.barData.datasets[2].data[Number(month) - 1]++
 
-                this.barDataHor.datasets[2].data.push(1)
+               
               }
             }
             else {
               //presence ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id].date_debut.slice(5, 7)
+              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
               console.log(month)
+             this. nb_presences++;
               this.barData.datasets[1].data[Number(month) - 1]++
-              this.barDataHor.datasets[1].data.push(1)
+              
 
             }
           });
-
+          this.barDataHor.datasets[1].data.push(this.nb_presences)
+          this.barDataHor.datasets[2].data.push(this.nb_absencesNJ)
+          this.barDataHor.datasets[0].data.push(this.nb_absences)
         })
 
 
@@ -242,7 +250,7 @@ export class DetailsEtudiantComponent implements OnInit {
     setTimeout(() => {
       this.chart2.data = this.barDataHor
       this.chart.data = this.barData
-    this.barDataHorAJ=  this.barDataHor
+      this.barDataHorAJ = this.barDataHor
     }, 2000);
   }
 }

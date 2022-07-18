@@ -3,12 +3,14 @@
         Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
         {{Etudiant_userdata?.lastname
         }}
-        <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions"></p-chart>
+        <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" width="full-vw" height="40vh"></p-chart>
     </div>
-    <div class="card col-12 md:col-6 ">
-        <p-chart #chart2 type="bar" [data]="barDataHorAJ" [options]="horizontalOptions" ></p-chart>
-        
+
+    <div class="card col-12 md:col-6  ">
+        <p-chart #chart2 type="bar" [data]="barDataHorAJ" [options]="horizontalOptions" width="full-vw" height="40vh">
+        </p-chart>
     </div>
+
     <div class="card col-12">
         <p-toast></p-toast>
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll"
