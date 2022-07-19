@@ -10,14 +10,35 @@
 					style="color: red;"> * </span> sont obligatoires</p>
 
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateFormateur" (ngSubmit)="onUpdateFormateur()">
-				<div class="field col-12 md:col-4">
+				<div class="field col-12 md:col-6">
 					<label For="contrat">Type de contract<span style="color: red;"> * </span></label>
 					<p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat">
 					</p-dropdown>
 				</div>
 
-				<div class="field col-12 md:col-12"
-					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Prestation et Vacation'">
+				
+				<div class="field col-12 md:col-6"
+					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
+					<label For="isPrestataire">Entreprise</label>
+					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+					</p-dropdown>
+				</div>
+
+				<div class="field col-12 md:col-6">
+					<label>Campus</label><br>
+					<p-dropdown formControlName="campus" [options]="dropdownCampus"
+						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
+						placeholder="Choissisez un campus">
+					</p-dropdown>
+				</div>
+
+				<div class="field col-12 md:col-6">
+					<label For="nda">Numéro de Déclaration d'Activité </label>
+					<input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
+						formControlName="nda" />
+				</div>
+
+				<div class="field col-12 md:col-12" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation'">
 					<label>Horaire de disponibilité<span style="color: red;"> * </span>:</label>
 					<p-tabView>
 						<p-tabPanel header="Lundi">
@@ -146,90 +167,76 @@
 					</p-tabView>
 				</div>
 
-				<div class="field col-12 md:col-6">
+				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
 						formControlName="taux_h" />
 				</div>
-				<div class="field col-12 md:col-6">
+				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
 						formControlName="taux_j" />
 				</div>
 
-				<div class="field col-12 md:col-12" formArrayName="volume_h">
-					<label>Liste des matières sur lesquelles il est rattaché:</label>
-					<div *ngFor="let tempControl of getVolumeHUpdate().controls; let i = index">
-						<p style="font-style:italic">Matière n°{{i+1}}</p>
-						<div>
-							<div class="field">
-								<label>Matière:</label>
-								<p-dropdown [options]="matiereList" [group]="true" formControlName="volume_h">
-								</p-dropdown>
+				<div class="field col-12 md:col-12">
+					<h3>Liste des modules sur lesquelles il est rattaché:</h3>
+					<div *ngFor="let m of volumeHList; let i = index">
+						<p style="font-style:italic; color: red;">Module n°{{i+1}}</p>
+						<div class="grid">
+							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==true">
+								<label>Module: </label>
+								<p-dropdown [options]="matiereList" (onChange)="changeVolumeH(i,$event,'matiere_id')"
+									[group]="true"></p-dropdown>
 							</div>
-							<div class="field">
-								<label>Volume Prévue:</label>
-								<input type="number" (change)="changeVolumeH(i,$event)" [(value)]="volumeHList[i]"
-									placeholder="Volume horaire" value="0" pInputText>
+							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==false">
+								<label>Module: </label>
+								<p>{{matiereDic[volumeHList[i]['matiere_id']].nom}}</p>
 							</div>
-							<div class="field">
-								<i class="pi pi-trash" (click)="deleteMatiereUpdate(i)" aria-hidden="true"></i>
+							<div class="col-6 md:col-4">
+								<label>Volume Horaire: </label>
+								<input type="number" [value]="volumeHList[i]['volume_init']"
+									(change)="changeVolumeH(i,$event,'volume_init')" placeholder="Volume horaire"
+									pInputText>
+							</div>
+							<div class="col-12 md:col-2">
+								<i style="cursor: pointer;" class="pi pi-trash" (click)="deleteMatiereAdd(i)"
+									aria-hidden="true"></i>
 							</div>
 						</div>
 					</div>
-					<button type="button" (click)="onUpdateMatiere()" pButton label="Ajouter une matière"></button>
+					<button type="button" (click)="onAddMatiere()" pButton
+						label="Ajouter un module enseigné"></button>
 				</div>
 
-
-
-
-				<div class="field col-12 md:col-6"
-					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance'">
-					<label For="isPrestataire">Entreprise</label>
-					<p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
-					</p-dropdown>
-				</div>
-
-				<div class="field col-12 md:col-6">
-					<label>Campus</label><br>
-					<p-dropdown formControlName="campus" [options]="dropdownCampus"
-						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
-					</p-dropdown>
-				</div>
-
-				<div class="field col-12 md:col-6">
-					<label For="nda">Numéro de Déclaration d'Activité </label>
-					<input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
-						formControlName="nda" />
-				</div>
-
-
-				<!--<div class="field col-12 md:col-12">
-					Liste des diplomes sur lesquelles il peut étre jury:
-
+				<div class="field col-12 md:col-12">
 					<div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
+
 						<h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
-						<div class=" col-12 md:col-12">
-							<label>Diplome:</label><br>
-							<p-dropdown formControlName="IsJuryT{{i}}" [options]="diplomesListe" optionLabel="titre"
-								(onChange)="changeCout(i, $event,'titre')" 
-								placeholder="Titre diplome" class="form-control"></p-dropdown>
-						</div>
-						<div class="col-12 md:col-12">
-							<label>Cout Horaire:</label><br>
-							<input type="number" (change)="changeCout(i,$event,'cout_h')" formControlName="IsJuryC{{ i }}"
-								[(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
-						</div>
-						<div class="field col-12 md:col-2">
-							<i class="pi pi-trash" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
+						<div class="grid">
+							<div class="col-12 md:col-6" *ngIf="jury_diplomesList[i]['isNew']==true">
+								<label>Diplome:</label><br>
+								<p-dropdown [options]="diplomesListe" optionLabel="titre"
+									(onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
+									placeholder="Choissisez un Diplome" class="form-control"></p-dropdown>
+							</div>
+							<div class="col-12 md:col-6" *ngIf="jury_diplomesList[i]['isNew']==false">
+								<label>Diplome:</label><br>
+								<p>{{diplomesListe[jury_diplomesList[i]['titre']].titre}}</p>
+							</div>
+							<div class="col-12 md:col-4">
+								<label>Cout Horaire:</label><br>
+								<input type="number" (change)="changeCout(i,$event,'cout_h')"
+									[(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
+							</div>
+							<div class="field col-12 md:col-2">
+								<i class="pi pi-trash" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
+							</div>
 						</div>
 					</div>
-					<div class="field col-12 md:col-12">
-						<button type="button" (click)="onAddJ_diplome()" pButton label="Ajouter un diplome"></button>
-					</div>
+					<button type="button" (click)="onAddJ_diplome()" pButton
+						label="Ajouter une disponibilité de jury"></button>
 
 				</div>
-			-->
 
 				<div class="field col-12 md:col-12">
 					<label For="remarque">Remarque</label>
@@ -365,35 +372,34 @@
 					</tr>
 				</ng-template>
 			</p-table>
-
+			<br>
 			<p-table responsiveLayout="scroll" *ngIf="formateur.IsJury && formateur.IsJury.length!=0">
 				<ng-template pTemplate="header">
 					<tr>
-						<th>Jury</th>
+						<th>Diplome pour Jury</th>
+						<th>Coût Horaire</th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-order>
 
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
-					<tr>
+					<tr *ngFor="let fvh of formateur.IsJury |keyvalue">
 						<td>
-							<p *ngFor="let Jury of formateur.IsJury | keyvalue ;let index = index">
-								<li>
-									<span>Diplome: {{ Jury.value.titre }} ||</span>
-									<span> Cout Horaire: {{Jury.value.cout_h}} €</span>
-								</li>
-							</p>
+							{{diplomesListe[fvh.key].titre}}
+						</td>
+						<td>
+							{{fvh.value}}
 						</td>
 					</tr>
 
 				</ng-template>
 			</p-table>
-
+			<br>
 			<p-table responsiveLayout="scroll" *ngIf="formateur.volume_h && formateur.volume_h.length!=0">
 				<ng-template pTemplate="header">
 					<tr>
-						<th>Matières</th>
+						<th>Modules</th>
 						<th>Volume initiale</th>
 						<th>Volume consommé</th>
 					</tr>

@@ -78,6 +78,29 @@ export class NotesComponent implements OnInit {
 
   dropdownExamByClasse: any[] = [{ libelle: '', value: '' }];
 
+  appreciationModules = {}
+
+  initAppreciation(mode) {
+    if (mode == "set") {
+      this.notesForGenerateBulletin.forEach(n => {
+        this.appreciationModules[n.matiere_id] = ""
+      })
+    } else {
+      console.log(this.appreciationToUpdate.appreciation_matiere)
+      this.notesForGenerateBulletin.forEach(n => {
+        if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
+          this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
+        } else {
+          this.appreciationModules[n.matiere_id] = ""
+        }
+      })
+    }
+  }
+  changeAppreciation(m_id, value) {
+    console.log(value)
+    this.appreciationModules[m_id] = value
+  }
+
 
   //Données liées à la modification d'une note
   noteToUpdate: Note;
@@ -405,7 +428,7 @@ export class NotesComponent implements OnInit {
 
                 this.messageService.add({
                   severity: "error",
-                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour cette matière durant ce sémestre",
+                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour ce module durant ce sémestre",
                 });
 
               }
@@ -654,6 +677,7 @@ export class NotesComponent implements OnInit {
 
   onGetNotes() {
     //Recuperation de la liste des notes d'un etudiant Par Idrissa
+    this.notesForGenerateBulletin=[]
     this.noteService.getAllByIdBySemestre(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((responseNoteEtudiant) => {
         // Récuperation du campus actuelle
@@ -674,7 +698,7 @@ export class NotesComponent implements OnInit {
         for (let note in responseNoteEtudiant) {
           sumEtu += parseFloat(responseNoteEtudiant[note].note_val) * parseFloat(this.examens[responseNoteEtudiant[note].examen_id].coef);
           sumCoef += parseFloat(this.examens[responseNoteEtudiant[note].examen_id].coef);
-        }
+        } 
 
         responseNoteEtudiant.forEach(notefromdb => {
 
@@ -711,6 +735,7 @@ export class NotesComponent implements OnInit {
     //Par Morgan
     this.notesForGenerateBulletin = []
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
+      console.log(data.moyenneEtudiant)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
@@ -749,7 +774,7 @@ export class NotesComponent implements OnInit {
     let appr = this.formAppreciationGenerale.get('appreciation').value;
 
     //Stockage de l'appreciation dans la BD
-    let appreciation = new Appreciation(null, appr, this.semestreForGenerateBulletin, this.etudiantToGenerateBulletin._id);
+    let appreciation = new Appreciation(null, appr, this.semestreForGenerateBulletin, this.etudiantToGenerateBulletin._id, this.appreciationModules);
 
     this.appreciationService.create(appreciation).subscribe(
       ((response) => {
@@ -760,6 +785,7 @@ export class NotesComponent implements OnInit {
         this.showGenerateBulletin = true;
         this.showFormAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
+        this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -771,7 +797,7 @@ export class NotesComponent implements OnInit {
   onUpdateAppreciationGenerale() {
     let appr = this.formUpdateAppreciationGenerale.get('appreciation').value;
 
-    let appreciation = new Appreciation(this.appreciationToUpdate._id, appr, this.appreciationToUpdate.semestre, this.appreciationToUpdate.etudiant_id);
+    let appreciation = new Appreciation(this.appreciationToUpdate._id, appr, this.appreciationToUpdate.semestre, this.appreciationToUpdate.etudiant_id, this.appreciationModules);
 
     this.appreciationService.update(appreciation).subscribe(
       ((response) => {
@@ -781,6 +807,7 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
+        this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -796,7 +823,7 @@ export class NotesComponent implements OnInit {
           this.showAppreciationGenerale = true;
           this.showBtnAddAppreciationGenerale = false;
           this.showBtnUpdateAppreciationGenerale = true;
-
+          this.appreciationModules = response.appreciation_matiere
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
       }),

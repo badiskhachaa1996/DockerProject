@@ -2,32 +2,32 @@
 <div class="grid">
     <div *ngIf="!showFormAddFormateur">
         <div class="col-12">
-            <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle matière"
+            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module"
                 [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
                 [breakpoints]="{'960px': '75vw'}">
                 <p class="line-height-3 m-0">
                     Voici les informationns à savoir pour ajouter une nouveau formateur:
                 </p>
                 <ul>
-                    <li><span style="color: red;">Nom de la matière</span> : Entrez le nom de la matiere. </li>
+                    <li><span style="color: red;">Nom de la module</span> : Entrez le nom du module. </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation de la matière. </li>
+                    <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation du module. </li>
                 </ul>
                 <ul>
                     <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans
-                        laquelle vous voulez ajoutez la matière. </li>
+                        laquelle vous voulez ajoutez la module. </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum de la matière.
+                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum du module.
                     </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire de la matière. </li>
+                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire du module. </li>
                 </ul>
                 <p class="line-height-3 m-0">
-                    Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter la
-                        matière"</span> pour finaliser l'ajout de la matiere.
+                    Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter le
+                        module"</span> pour finaliser l'ajout du module.
                 </p>
                 <ng-template pTemplate="footer">
                     <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -308,12 +308,12 @@
                     </div>
 
                     <div class="field col-12 md:col-12">
-                        <h3>Liste des matières sur lesquelles il est rattaché:</h3>
+                        <h3>Liste des modules sur lesquelles il est rattaché:</h3>
                         <div *ngFor="let m of volumeHList; let i = index">
-                            <p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
+                            <p style="font-style:italic; color: red;">Module n°{{i+1}}</p>
                             <div class="grid">
                                 <div class="col-6 md:col-6">
-                                    <label>Matière: </label>
+                                    <label>Module: </label>
                                     <p-dropdown [options]="matiereList"
                                         (onChange)="changeVolumeH(i,$event,'matiere_id')" [group]="true"></p-dropdown>
                                 </div>
@@ -329,7 +329,7 @@
                             </div>
                         </div>
                         <button type="button" (click)="onAddMatiere()" pButton
-                            label="Ajouter une matière enseigné"></button>
+                            label="Ajouter un module enseigné"></button>
                     </div>
 
                     <div class="field col-12 md:col-12">

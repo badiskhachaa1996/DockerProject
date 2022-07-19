@@ -97,7 +97,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: "Pédagogie",
                             items: [
-                                { label: 'Gestions des matières', icon: 'pi pi-tags', routerLink: ['/matieres'] },
+                                { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
                                 {
                                     label: 'Gestions des séances', icon: 'pi pi-video',
                                     items: [
@@ -253,7 +253,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Gestions des matières', icon: 'pi pi-tags', routerLink: ['/matieres'] },
+                                        { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
                                         {
                                             label: 'Gestions des séances', icon: 'pi pi-video',
                                             items: [
