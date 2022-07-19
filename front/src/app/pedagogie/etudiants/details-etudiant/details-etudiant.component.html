@@ -1,16 +1,19 @@
 <div class="grid">
-    <div class="card col-12 md:col-6 ">
-        Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
-        {{Etudiant_userdata?.lastname
-        }}
-        <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" width="full-vw" height="40vh"></p-chart>
+    <div class="grid card col-12 ">
+        <div class=" col-12 md:col-6 ">
+            Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
+            {{Etudiant_userdata?.lastname
+            }}
+            <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" width="full-vw" height="40vh">
+            </p-chart>
+        </div>
+        <p-divider class="col-1" layout="vertical"></p-divider>
+        <div class=" col-12 md:col-5">
+            <p-chart #chart2 type="pie" [data]="barDataHorAJ" [options]="horizontalOptions" width="full-vw"
+                height="40vh">
+            </p-chart>
+        </div>
     </div>
-
-    <div class="card col-12 md:col-6  ">
-        <p-chart #chart2 type="bar" [data]="barDataHorAJ" [options]="horizontalOptions" width="full-vw" height="40vh">
-        </p-chart>
-    </div>
-
     <div class="card col-12">
         <p-toast></p-toast>
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll"
@@ -25,10 +28,10 @@
 
                     </div>
                     <div class="p-inputgroup col-3">
-                        <span class="p-inputgroup-addon"> <i  pTooltip="Telecharger Assiduite en PDF" tooltipPosition="bottom"
-                            class="pi pi-file" style="margin-left: 2%;" (click)="getAssiduitePDF(EtudiantDetail.user_id)"
-                            aria-hidden="true"></i></span>
-                       
+                        <span class="p-inputgroup-addon"> <i pTooltip="Telecharger Assiduite en PDF"
+                                tooltipPosition="bottom" class="pi pi-file" style="margin-left: 2%;"
+                                (click)="getAssiduitePDF(EtudiantDetail.user_id)" aria-hidden="true"></i></span>
+
                     </div>
                 </div>
             </ng-template>

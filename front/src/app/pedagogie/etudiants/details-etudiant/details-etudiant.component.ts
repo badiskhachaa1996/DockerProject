@@ -37,25 +37,23 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   barDataHor: any = {
 
-    labels: ['Assiduite'],
+    labels: ['Presences', 'Absences', 'Absences non justifiées'],
     datasets: [
       {
-        label: 'Absences',
-        backgroundColor: 'red',
-        data: []
-      },
-      {
-        label: 'Présences',
-        backgroundColor: '#22C20E',
-        data: []
-      },
-      {
-        label: 'Absences non justifiées',
-        backgroundColor: '#730e0e',
-        data: []
+        data: [0, 0, 0],
+        backgroundColor: [
+          '#22C20E',
+          "#FF6384",
+          '#730e0e',
+
+        ],
+        hoverBackgroundColor: [
+          "#22C55E",
+          "#FF6384",
+          "#781d1d",
+        ]
       }
     ]
-
   };
 
   barData: any = {
@@ -171,9 +169,11 @@ export class DetailsEtudiantComponent implements OnInit {
 
             }
           });
-          this.barDataHor.datasets[1].data.push(this.nb_presences)
-          this.barDataHor.datasets[2].data.push(this.nb_absencesNJ)
+          this.barDataHor.datasets[0].data.push(this.nb_presences)
+          console.log(this.barDataHor)
           this.barDataHor.datasets[0].data.push(this.nb_absences)
+
+          this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
         })
 
 
@@ -215,35 +215,14 @@ export class DetailsEtudiantComponent implements OnInit {
       }
     };
     this.horizontalOptions = {
-      indexAxis: 'y',
-
       plugins: {
         legend: {
           labels: {
-            color: '#red'
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
-          }
-        },
-        y: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
+            color: 'black'
           }
         }
       }
-
-    };
+    }
 
   }
   getAssiduitePDF() {
