@@ -405,7 +405,7 @@ export class NotesComponent implements OnInit {
 
                 this.messageService.add({
                   severity: "error",
-                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour cette matière durant ce sémestre",
+                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour ce module durant ce sémestre",
                 });
 
               }

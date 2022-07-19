@@ -161,10 +161,10 @@ export class AddSeanceComponent implements OnInit {
     let choice = true
     this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
       if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
-        choice = confirm("Le formateur n'a pas de volume horaire pour cette matière\nVoulez-vous quand même créer cette séance ?")
+        choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
       } else {
         if (data.hasOwnProperty("volume_h_consomme") && data.volume_h_consomme[this.seanceForm.value.matiere.value] == Number && data.volume_h_consomme[this.seanceForm.value.matiere.value] + calc > data.volume_h[this.seanceForm.value.matiere.value]) {
-          choice = confirm("Le volume horaire de ce formateur sera dépassé pour cette matière.\nVoulez-vous quand même créer cette séance ?")
+          choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
         }
       }
       if (choice && data.type_contrat == "Prestation et Vacation") {
@@ -222,7 +222,7 @@ export class AddSeanceComponent implements OnInit {
         }
       } else if (choice) {
         if (this.matieres[seance.matiere_id].seance_max < seance.nbseance) {
-          choice = confirm("Le nombre de séance prévu pour cette matière va être depassé\nVoulez-vous quand même créer cette séance ?")
+          choice = confirm("Le nombre de séance prévu pour ce module va être depassé\nVoulez-vous quand même créer cette séance ?")
         }
       }
       if (choice)
@@ -243,7 +243,7 @@ export class AddSeanceComponent implements OnInit {
             "Debut: " + this.convertDate(new Date(serror.date_debut)) +
             "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
             "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
-            "\nMatière: " + this.matieres[serror.matiere_id].nom +
+            "\nModule: " + this.matieres[serror.matiere_id].nom +
             "\nClasse: " + classeStr
         })
 

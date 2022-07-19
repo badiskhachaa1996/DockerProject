@@ -1,27 +1,27 @@
 <div class="grid">
     <div *ngIf="showFormAddMatiere">
         <div class="col-12">
-                <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle matière" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+                <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
                     <p class="line-height-3 m-0">
-                        Voici les informationns à savoir pour créer une nouvelle matière: 
+                        Voici les informationns à savoir pour créer un nouveau module: 
                     </p>
                     <ul>
-                        <li><span style="color: red;">Nom de la matière</span> : Entrez le nom de la matiere. </li>
+                        <li><span style="color: red;">Nom du module</span> : Entrez le nom du module. </li>
                     </ul>
                     <ul>
-                        <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation de la matière. </li>
+                        <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation du module. </li>
                     </ul>
                     <ul>
-                        <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans laquelle vous voulez ajoutez la matière. </li>
+                        <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans laquelle vous voulez ajoutez le modulee. </li>
                     </ul>
                     <ul>
-                        <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum de la matière. </li>
+                        <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum du modulee. </li>
                     </ul>
                     <ul>
-                        <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire de la matière. </li>
+                        <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire du module. </li>
                     </ul>
                     <p class="line-height-3 m-0">
-                        Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter la matière"</span> pour finaliser l'ajout de la matiere.
+                        Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter le module"</span> pour finaliser l'ajout du module.
                     </p>
                     <ng-template pTemplate="footer">
                             <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
@@ -37,12 +37,12 @@
         <div class="col-12">
             <div class="card">
                 <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormAddMatiere = false; resetAddMatiere()" aria-hidden="true"> </i>
-                <h4 style="text-align: center;">Créer une matière </h4>
+                <h4 style="text-align: center;">Créer un module </h4>
                 <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
                 
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddMatiere" (ngSubmit)="onAddMatiere();">
                     <div class="field col-12 md:col-8">
-                        <label For="matiere">Nom de la matière <span style="color: red;"> * </span></label>
+                        <label For="matiere">Nom de la module <span style="color: red;"> * </span></label>
                         <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
                         <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
                             <span *ngIf="nom.errors?.pattern" style="color: red;">
@@ -71,7 +71,7 @@
                         <input pInputText id="coeff" type="number" formControlName="coeff" placeholder="0" />
                     </div>
                     <div>
-                        <button pButton label="Ajouter la matière" type="submit" [disabled]="formAddMatiere.invalid"></button>
+                        <button pButton label="Ajouter le module" type="submit" [disabled]="formAddMatiere.invalid"></button>
                     </div>
                 </form>
             </div>
@@ -82,12 +82,12 @@
     <div *ngIf="showFormModifMatiere" class="col-12">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormModifMatiere = false;formModifMatiere.reset()" aria-hidden="true"> </i>
-            <h4 style="text-align: center;">Modifier cette matière </h4>
+            <h4 style="text-align: center;">Modifier ce module </h4>
             <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
             
             <form class="p-fluid p-formgrid grid" [formGroup]="formModifMatiere" (ngSubmit)="onModifMatiere()">
                 <div class="field col-12 md:col-8">
-                    <label For="matiere">Nom de la matière <span style="color: red;"> * </span></label>
+                    <label For="matiere">Nom du module <span style="color: red;"> * </span></label>
                     <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
                 </div>
                 <div class="field col-12 md:col-4">
@@ -111,7 +111,7 @@
                     <input pInputText id="coeff" type="number" formControlName="coeff" placeholder="0" />
                 </div>
                 <div>
-                    <button pButton label="Ajouter la matière" type="submit" [disabled]="formModifMatiere.invalid"></button>
+                    <button pButton label="Ajouter le module" type="submit" [disabled]="formModifMatiere.invalid"></button>
                 </div>
             </form>
         </div>
@@ -122,9 +122,9 @@
     <div class="col-12">
 		<div class="card">
             <div style="float: right;">
-                <button pButton label="Ajouter une matière" (click)="showFormAddMatiere = true; showFormModifMatiere = false;" ></button>
+                <button pButton label="Ajouter un module" (click)="showFormAddMatiere = true; showFormModifMatiere = false;" ></button>
             </div>
-			<h5>Liste des matières</h5>
+			<h5>Liste des modules</h5>
 			<p-table #dt1 rowExpandMode="single" [value]="matieres"
                      dataKey="_id" [rows]="10" 
                      [rowHover]="true" [totalRecords]="matieres.length"

@@ -121,7 +121,7 @@ export class MatieresComponent implements OnInit {
         //Envoi vers la BD
         this.matiereService.create(matiere).subscribe(
           ((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Ajout de matière', detail: 'Cette matière a bien été ajoutée' });
+            this.messageService.add({ severity: 'success', summary: 'Ajout du module', detail: 'Ce module a bien été ajoutée' });
             //recuperation de la liste des Matières
             this.matiereService.getAll().subscribe(
               ((responseM) => { this.matieres = responseM; }),
@@ -203,7 +203,7 @@ export class MatieresComponent implements OnInit {
 
         this.matiereService.updateById(this.matiereToUpdate).subscribe(
           ((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Modification de la matière', detail: 'Cette matière a bien été modifiée' });
+            this.messageService.add({ severity: 'success', summary: 'Modification du module', detail: 'Ce module a bien été modifiée' });
             //recuperation de la liste des Matières
             this.matiereService.getAll().subscribe(
               ((responseM) => { this.matieres = responseM; }),

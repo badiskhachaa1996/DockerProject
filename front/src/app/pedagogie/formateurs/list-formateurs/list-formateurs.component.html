@@ -179,17 +179,17 @@
 				</div>
 
 				<div class="field col-12 md:col-12">
-					<h3>Liste des matières sur lesquelles il est rattaché:</h3>
+					<h3>Liste des modules sur lesquelles il est rattaché:</h3>
 					<div *ngFor="let m of volumeHList; let i = index">
-						<p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
+						<p style="font-style:italic; color: red;">Module n°{{i+1}}</p>
 						<div class="grid">
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==true">
-								<label>Matière: </label>
+								<label>Module: </label>
 								<p-dropdown [options]="matiereList" (onChange)="changeVolumeH(i,$event,'matiere_id')"
 									[group]="true"></p-dropdown>
 							</div>
 							<div class="col-6 md:col-6" *ngIf="volumeHList[i]['isNew']==false">
-								<label>Matière: </label>
+								<label>Module: </label>
 								<p>{{matiereDic[volumeHList[i]['matiere_id']].nom}}</p>
 							</div>
 							<div class="col-6 md:col-4">
@@ -205,7 +205,7 @@
 						</div>
 					</div>
 					<button type="button" (click)="onAddMatiere()" pButton
-						label="Ajouter une matière enseigné"></button>
+						label="Ajouter un module enseigné"></button>
 				</div>
 
 				<div class="field col-12 md:col-12">
@@ -399,7 +399,7 @@
 			<p-table responsiveLayout="scroll" *ngIf="formateur.volume_h && formateur.volume_h.length!=0">
 				<ng-template pTemplate="header">
 					<tr>
-						<th>Matières</th>
+						<th>Modules</th>
 						<th>Volume initiale</th>
 						<th>Volume consommé</th>
 					</tr>
