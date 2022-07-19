@@ -12,6 +12,7 @@ import { MatiereService } from 'src/app/services/matiere.service';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import { pipe } from 'rxjs';
+import { saveAs as importedSaveAs } from "file-saver";
 
 @Component({
   selector: 'app-details-etudiant',
@@ -142,31 +143,31 @@ export class DetailsEtudiantComponent implements OnInit {
 
           // boucle liste des presences totales de l'étudiants.
           this.AssiduiteListe.forEach(item => {
-          
+
             if (item.isPresent != true) {
               // abscense ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+              let month: string = item.seance_id?.date_debut.slice(5, 7)
               console.log(month)
-              this.  nb_absences++
+              this.nb_absences++
               this.barData.datasets[0].data[Number(month) - 1]++
-             
+
               if (item.justificatif != true) {
                 // abscense non justifié ++1
-                let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+                let month: string = item.seance_id?.date_debut.slice(5, 7)
                 console.log(month)
                 this.nb_absencesNJ++
                 this.barData.datasets[2].data[Number(month) - 1]++
 
-               
+
               }
             }
             else {
               //presence ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+              let month: string = item.seance_id?.date_debut.slice(5, 7)
               console.log(month)
-             this. nb_presences++;
+              this.nb_presences++;
               this.barData.datasets[1].data[Number(month) - 1]++
-              
+
 
             }
           });
@@ -245,7 +246,14 @@ export class DetailsEtudiantComponent implements OnInit {
     };
 
   }
-
+  getAssiduitePDF() {
+    this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id).subscribe((data) => {
+      if (data) {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), (this.EtudiantDetail.user_id + ".pdf"))
+      }
+    })
+  }
   ngAfterViewInit() {
     setTimeout(() => {
       this.chart2.data = this.barDataHor

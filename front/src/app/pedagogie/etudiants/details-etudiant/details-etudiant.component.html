@@ -17,7 +17,20 @@
             [globalFilterFields]="['isPresent', 'date_signature', 'seance_id', 'justificatif']" [rows]="15"
             [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
             <ng-template pTemplate="caption">
-                <h5>Listes des seances</h5>
+                <div class="grid p-fluid">
+                    <div class=" p-inputgroup col-3 ">
+                        <h5>Listes des seances</h5>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                    <div class="p-inputgroup col-3">
+                        <span class="p-inputgroup-addon"> <i  pTooltip="Telecharger Assiduite en PDF" tooltipPosition="bottom"
+                            class="pi pi-file" style="margin-left: 2%;" (click)="getAssiduitePDF(EtudiantDetail.user_id)"
+                            aria-hidden="true"></i></span>
+                       
+                    </div>
+                </div>
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
@@ -38,11 +51,11 @@
             </ng-template>
             <ng-template pTemplate="body" let-Assiduit>
                 <tr>
-                    <td>{{matiereDic[ ListeSeanceDIC[Assiduit.seance_id]?.matiere_id]?.abbrv}}</td>
+                    <td>{{matiereDic[Assiduit.seance_id.matiere_id]?.abbrv}}</td>
 
                     <td>
-                        {{ ListeSeanceDIC[Assiduit.seance_id]?.date_debut | date : "dd/MM/yyyy hh:mm:ss" }} </td>
-                    <td> {{ ListeSeanceDIC[Assiduit.seance_id]?.libelle}}</td>
+                        {{ Assiduit.seance_id.date_debut | date : "dd/MM/yyyy hh:mm:ss"}} </td>
+                    <td> {{ Assiduit.seance_id.libelle}}</td>
 
                     <td *ngIf="Assiduit.isPresent">
                         <p-tag severity="success">Present</p-tag>
