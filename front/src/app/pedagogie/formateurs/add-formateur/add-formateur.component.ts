@@ -75,7 +75,7 @@ export class AddFormateurComponent implements OnInit {
     }
   }
   deleteJ_diplome(i) {
-    this.jury_diplomesList.splice(i)
+    this.jury_diplomesList.splice(i,1)
   }
 
   onAddMatiere() {

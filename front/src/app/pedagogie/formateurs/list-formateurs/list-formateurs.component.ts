@@ -75,7 +75,7 @@ export class ListFormateursComponent implements OnInit {
   token;
 
   onAddJ_diplome() {
-    this.jury_diplomesList.push({ diplome_id: "", cout_h: 0 })
+    this.jury_diplomesList.push({ diplome_id: "", cout_h: 0, isNew: true })
   }
 
   changeCout(i, event, type) {
@@ -86,11 +86,11 @@ export class ListFormateursComponent implements OnInit {
     }
   }
   deleteJ_diplome(i) {
-    this.jury_diplomesList.splice(i)
+    this.jury_diplomesList.splice(i, 1)
   }
 
   onAddMatiere() {
-    this.volumeHList.push({ volume_init: 0, matiere_id: this.matiereList[0].items[0].value })
+    this.volumeHList.push({ volume_init: 0, matiere_id: this.matiereList[0].items[0].value, isNew: true })
   }
 
   changeVolumeH(i, event, type) {
@@ -190,7 +190,6 @@ export class ListFormateursComponent implements OnInit {
       ((response) => {
         this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
-        console.log(this.formateurToUpdate?.absences)
         let arr = []
         this.formateurToUpdate?.absences.forEach(date => {
           arr.push(new Date(date))
@@ -243,26 +242,15 @@ export class ListFormateursComponent implements OnInit {
             friday_remarque: this.formateurToUpdate.friday_available.remarque
           })
         }
-
-        if (this.formateurToUpdate.IsJury) {
-          //TODO
-          this.formateurToUpdate.IsJury.forEach((diplome, index) => {
-
-            console.log('titre:', diplome.titre, 'cout_h:', diplome.cout_h)
-            this.jury_diplomesList.push({ titre: diplome.titre, cout_h: diplome.cout_h })
-
-            let frmTitre = "IsjuryT".concat(index)
-            let frmCout = "IsjuryC".concat(index)
-            console.log(frmTitre)
-            this.formUpdateFormateur.patchValue({
-              frmTitre: diplome.titre,
-              frmCout: diplome.cout_h
-            })
+        let dicF = response.IsJury
+        let kF = [];
+        this.jury_diplomesList = [];
+        if (response.IsJury) {
+          kF = Object.keys(dicF)
+          kF.forEach(key => {
+            this.jury_diplomesList.push({ titre: key, cout_h: parseInt(response.IsJury[key]), isNew: false })
           });
-
         }
-
-
 
         let dic = response.volume_h
         let k = [];
@@ -270,11 +258,9 @@ export class ListFormateursComponent implements OnInit {
         if (response.volume_h) {
           k = Object.keys(dic)
           k.forEach(key => {
-            this.volumeHList.push(parseInt(dic[key]))
+            this.volumeHList.push({ matiere_id: key, volume_init: parseInt(response.volume_h[key]), isNew: false })
           });
         }
-
-        this.formUpdateFormateur.setControl('volume_h', this.formBuilder.array(k))
       }),
       ((error) => { console.error(error); })
     );
@@ -284,7 +270,7 @@ export class ListFormateursComponent implements OnInit {
   onInitFormUpdateFormateur() {
     this.formUpdateFormateur = this.formBuilder.group({
       type_contrat: ['', Validators.required],
-      taux_h: ['', Validators.required],
+      taux_h: [''],
       taux_j: [''],
       prestataire_id: [''],
       volume_h: this.formBuilder.array([]),
@@ -332,17 +318,18 @@ export class ListFormateursComponent implements OnInit {
     this.formateurToUpdate.campus_id = this.formUpdateFormateur.get('campus')?.value
 
     let volumeH_i = {};
-    let volumeH_consomme = {};
 
     this.volumeHList.forEach((VH, index) => {
       volumeH_i[VH["matiere_id"]] = VH["volume_init"]
-      volumeH_consomme[VH["matiere_id"]] = 0
-
     });
 
+    let jury = {}
+    this.jury_diplomesList.forEach((VH, index) => {
+      jury[VH["titre"]] = VH["cout_h"]
+    });
 
+    this.formateurToUpdate.IsJury = jury
     this.formateurToUpdate.volume_h = volumeH_i;
-    this.formateurToUpdate.volume_h_consomme = volumeH_consomme;
     this.formateurToUpdate.monday_available = {
       state: this.formUpdateFormateur.get('monday_available').value,
       h_debut: this.formUpdateFormateur.get('monday_h_debut').value,
@@ -373,14 +360,6 @@ export class ListFormateursComponent implements OnInit {
       h_fin: this.formUpdateFormateur.get('friday_h_fin').value,
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
-    this.volumeHList.forEach((VH, index) => {
-      volumeH_i[VH["matiere_id"]] = VH["volume_init"]
-      volumeH_consomme[VH["matiere_id"]] = 0
-    });
-    let jury = {}
-    this.jury_diplomesList.forEach((VH, index) => {
-      jury[VH["titre"]] = VH["cout_h"]
-    });
     this.formateurToUpdate.absences = this.formUpdateFormateur.get('absences').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
