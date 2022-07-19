@@ -4,5 +4,6 @@ export class Appreciation{
         public appreciation?:   string,
         public semestre?:       string,
         public etudiant_id?:    string,
+        public appreciation_matiere?: any
     ){}; 
 }

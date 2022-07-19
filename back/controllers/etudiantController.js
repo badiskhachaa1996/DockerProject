@@ -303,7 +303,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
-    // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test" }
+    // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
     let r = []
     let moy_tt = 0
     Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
@@ -356,7 +356,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     })
                 })
                 listMatiereNOM.forEach(m_nom => {
-                    r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), appreciation: "WIP" })
+                    r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id:dicMatiere[m_nom]._id })
                     moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                 })
                 moy_tt = moy_tt / Object.keys(listMoyenneEtudiants[req.params.etudiant_id]).length
