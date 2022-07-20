@@ -12,6 +12,7 @@ import { MatiereService } from 'src/app/services/matiere.service';
 import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import { pipe } from 'rxjs';
+import { saveAs as importedSaveAs } from "file-saver";
 
 @Component({
   selector: 'app-details-etudiant',
@@ -36,25 +37,23 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   barDataHor: any = {
 
-    labels: ['Assiduite'],
+    labels: ['Presences', 'Absences', 'Absences non justifiées'],
     datasets: [
       {
-        label: 'Absences',
-        backgroundColor: 'red',
-        data: []
-      },
-      {
-        label: 'Présences',
-        backgroundColor: '#22C20E',
-        data: []
-      },
-      {
-        label: 'Absences non justifiées',
-        backgroundColor: '#730e0e',
-        data: []
+        data: [0, 0, 0],
+        backgroundColor: [
+          '#22C20E',
+          "#FF6384",
+          '#730e0e',
+
+        ],
+        hoverBackgroundColor: [
+          "#22C55E",
+          "#FF6384",
+          "#781d1d",
+        ]
       }
     ]
-
   };
 
   barData: any = {
@@ -142,37 +141,39 @@ export class DetailsEtudiantComponent implements OnInit {
 
           // boucle liste des presences totales de l'étudiants.
           this.AssiduiteListe.forEach(item => {
-          
+
             if (item.isPresent != true) {
               // abscense ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+              let month: string = item.seance_id?.date_debut.slice(5, 7)
               console.log(month)
-              this.  nb_absences++
+              this.nb_absences++
               this.barData.datasets[0].data[Number(month) - 1]++
-             
+
               if (item.justificatif != true) {
                 // abscense non justifié ++1
-                let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+                let month: string = item.seance_id?.date_debut.slice(5, 7)
                 console.log(month)
                 this.nb_absencesNJ++
                 this.barData.datasets[2].data[Number(month) - 1]++
 
-               
+
               }
             }
             else {
               //presence ++1
-              let month: string = this.ListeSeanceDIC[item.seance_id]?.date_debut.slice(5, 7)
+              let month: string = item.seance_id?.date_debut.slice(5, 7)
               console.log(month)
-             this. nb_presences++;
+              this.nb_presences++;
               this.barData.datasets[1].data[Number(month) - 1]++
-              
+
 
             }
           });
-          this.barDataHor.datasets[1].data.push(this.nb_presences)
-          this.barDataHor.datasets[2].data.push(this.nb_absencesNJ)
+          this.barDataHor.datasets[0].data.push(this.nb_presences)
+          console.log(this.barDataHor)
           this.barDataHor.datasets[0].data.push(this.nb_absences)
+
+          this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
         })
 
 
@@ -214,38 +215,24 @@ export class DetailsEtudiantComponent implements OnInit {
       }
     };
     this.horizontalOptions = {
-      indexAxis: 'y',
-
       plugins: {
         legend: {
           labels: {
-            color: '#red'
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
-          }
-        },
-        y: {
-          ticks: {
-            color: '#495057'
-          },
-          grid: {
-            color: '#ebedef'
+            color: 'black'
           }
         }
       }
-
-    };
+    }
 
   }
-
+  getAssiduitePDF() {
+    this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id).subscribe((data) => {
+      if (data) {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), (this.EtudiantDetail.user_id + ".pdf"))
+      }
+    })
+  }
   ngAfterViewInit() {
     setTimeout(() => {
       this.chart2.data = this.barDataHor
