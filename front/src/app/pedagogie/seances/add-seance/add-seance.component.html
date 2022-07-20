@@ -79,10 +79,11 @@
                 </div>
                 <div class="field col-12 md:col-12">
                     <label>Campus</label><br>
-                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus"
+                    {{seanceForm.value.campus_id|json}}
+                    <p-multiSelect formControlName="campus_id" [options]="dropdownCampus"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
-                    </p-dropdown>
+                    </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
                     <label>Nom du formateur</label><br>
