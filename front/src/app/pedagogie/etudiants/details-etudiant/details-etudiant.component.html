@@ -17,21 +17,26 @@
     <div class="card col-12">
         <p-toast></p-toast>
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['isPresent', 'date_signature', 'seance_id', 'justificatif']" [rows]="15"
+            [globalFilterFields]="[]" [rows]="12"
             [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
             <ng-template pTemplate="caption">
                 <div class="grid p-fluid">
-                    <div class=" p-inputgroup col-3 ">
-                        <h5>Listes des seances</h5>
+                    <div class="col-5 ">
+                        <h4>Listes des seances</h4>
                     </div>
-                    <div class="col-6">
+                    <div class="col-3 sd:col-1">
+                    </div>
+                    <div class="p-inputgroup col-2 sd:col:6">
+                        <p-calendar [(ngModel)]="RangeDateForPDF" showIcon=true view="month"
+                            onClickOutside="console.log(RangeDateForPDF)" selectionMode="range" dateFormat="mm/yy">
+                        </p-calendar>
 
                     </div>
-                    <div class="p-inputgroup col-3">
-                        <span class="p-inputgroup-addon"> <i pTooltip="Telecharger Assiduite en PDF"
-                                tooltipPosition="bottom" class="pi pi-file" style="margin-left: 2%;"
-                                (click)="getAssiduitePDF(EtudiantDetail.user_id)" aria-hidden="true"></i></span>
-
+                    <div class="p-inputgroup col-2 sd:col-6">
+                        <p-button label="Telecharger en PDF" pTooltip="Telecharger Assiduite en PDF"
+                            tooltipPosition="bottom"
+                            (click)="getAssiduitePDF(EtudiantDetail.user_id, RangeDateForPDF);load()" aria-hidden="true"
+                            [loading]="PDFisLoading" [disabled]="!RangeDateForPDF"></p-button>
                     </div>
                 </div>
             </ng-template>
@@ -61,20 +66,25 @@
                     <td> {{ Assiduit.seance_id.libelle}}</td>
 
                     <td *ngIf="Assiduit.isPresent">
-                        <p-tag severity="success">Present</p-tag>
+                        <p-tag class="p-tag-icon" icon="pi pi-plus" severity="success" value="Present"
+                            icon="pi pi-check"></p-tag>
                     </td>
                     <td *ngIf="!Assiduit.isPresent">
-                        <p-tag severity="warning">Absent</p-tag>
+                        <p-tag class="p-tag-icon" *ngIf="!Assiduit.justificatif" severity="danger" value="Absent"
+                            icon="pi pi-exclamation-circle"></p-tag>
+                        <p-tag class="p-tag-icon" *ngIf="Assiduit.justificatif" severity="warning" value="Absent"
+                            icon="pi pi-exclamation-circle"></p-tag>
                     </td>
 
                     <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "hh:mm:ss":'locale' ) :'--' }}
                     </td>
                     <td *ngIf="Assiduit.isPresent">--</td>
                     <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">
-                        <p-tag severity="success">Justifié</p-tag>
+                        <p-tag value="Justifié" icon="pi pi-check" class="p-tag-icon" severity="success"></p-tag>
                     </td>
                     <td *ngIf="!Assiduit.isPresent && !Assiduit.justificatif">
-                        <p-tag severity="error">Non Justifié</p-tag>
+                        <p-tag class="p-tag-icon" value="Non Justifié" icon="pi pi-exclamation-circle"
+                            severity="danger"></p-tag>
                     </td>
                     <td>
 
