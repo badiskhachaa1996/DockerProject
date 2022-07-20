@@ -7,8 +7,8 @@ const examenSchema = mongoose.Schema({
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'formateur', required: true },
     date: { type: String, required: true },
     type: { type: String, required: true },
-    note_max: { type: String, required: true },
-    coef: { type: String, required: true },
+    note_max: { type: Number, required: true },
+    coef: { type: Number, required: true },
     libelle: { type: String, required: true },
     niveau:  { type: String }
 });

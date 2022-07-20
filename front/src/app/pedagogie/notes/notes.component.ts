@@ -22,6 +22,8 @@ import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Appreciation } from 'src/app/models/Appreciation';
 import { AppreciationService } from 'src/app/services/appreciation.service';
+import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service';
+import { RachatBulletin } from 'src/app/models/RachatBulletin';
 
 @Component({
   selector: 'app-notes',
@@ -86,7 +88,6 @@ export class NotesComponent implements OnInit {
         this.appreciationModules[n.matiere_id] = ""
       })
     } else {
-      console.log(this.appreciationToUpdate.appreciation_matiere)
       this.notesForGenerateBulletin.forEach(n => {
         if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
           this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
@@ -97,8 +98,76 @@ export class NotesComponent implements OnInit {
     }
   }
   changeAppreciation(m_id, value) {
-    console.log(value)
     this.appreciationModules[m_id] = value
+  }
+  showFormRacheter = false;
+  rachatEtudiant = []
+  matiereRachat = []
+
+  initRachatEtudiant() {
+    this.rachatEtudiant = []
+    this.matiereRachat = []
+    this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
+      rbs.forEach(rb => {
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy, isNew: false, _id: rb._id })
+      })
+    })
+    this.notesForGenerateBulletin.forEach(n => {
+      this.matiereRachat.push({ label: n.matiere_name, value: n.matiere_id })
+    })
+  }
+  addRachatEtudiant() {
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true })
+  }
+
+  updateRachatEtudiant(i, value, type) {
+    this.rachatEtudiant[i][type] = value
+  }
+
+  deleteRachatEtudiant(i, isNew) {
+    if (!isNew && confirm("Ce rachat sera supprimé totalement (même sans enregistrer le formulaire)\nEtes-vous sûr de vouloir faire cela ?")) {
+      this.RBService.delete(this.rachatEtudiant[i]._id)
+      this.rachatEtudiant.splice(i, 1)
+    }
+    if (isNew) {
+      this.rachatEtudiant.splice(i, 1)
+    }
+  }
+
+  onSubmitRachat() {
+    let problem: RachatBulletin = null
+    this.rachatEtudiant.forEach(rb => {
+      if (!rb.isNew) {
+        //Update
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        this.RBService.update(RBU).subscribe(data => {
+          testlast(rb, this)
+        }, err => {
+          problem = RBU
+          console.error(err)
+        })
+      } else {
+        //Create
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        this.RBService.create(RBC).subscribe(data => {
+          testlast(rb, this)
+        }, err => {
+          problem = RBC
+          console.error(err)
+        })
+      }
+    })
+    function testlast(rb, t) {
+      if (rb == t.rachatEtudiant[t.rachatEtudiant.length - 1]) {
+        //Dernier
+        if (problem != null) {
+          t.messageService.add({ severity: "error", summary: "Un problème est arrivé avec " + t.matieres[problem.matiere_id].nom })
+        } else {
+          this.showFormRacheter = false
+          t.messageService.add({ severity: "success", summary: "Le rachat a été enregistré avec succès" })
+        }
+      }
+    }
   }
 
 
@@ -117,6 +186,7 @@ export class NotesComponent implements OnInit {
   classeForBGenerateBulletin: Classe;
   etudiantFromClasse: Etudiant[] = [];
   etudiantToGenerateBulletin: Etudiant;
+  semestreChoose: string;
   notesForGenerateBulletin: any[] = [];
   notesBySemestre: Note[] = [];
   matiere_id: string;
@@ -145,7 +215,10 @@ export class NotesComponent implements OnInit {
 
   @ViewChild('content', { static: false }) el!: ElementRef;
 
-  constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService, private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService, private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService, private noteService: NoteService) { }
+  constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService,
+    private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService,
+    private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService,
+    private noteService: NoteService, private RBService: RachatBulletinService) { }
 
   ngOnInit(): void {
     //Recuperation de l'année scolaire en cours
@@ -677,7 +750,7 @@ export class NotesComponent implements OnInit {
 
   onGetNotes() {
     //Recuperation de la liste des notes d'un etudiant Par Idrissa
-    this.notesForGenerateBulletin=[]
+    this.notesForGenerateBulletin = []
     this.noteService.getAllByIdBySemestre(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((responseNoteEtudiant) => {
         // Récuperation du campus actuelle
@@ -698,7 +771,7 @@ export class NotesComponent implements OnInit {
         for (let note in responseNoteEtudiant) {
           sumEtu += parseFloat(responseNoteEtudiant[note].note_val) * parseFloat(this.examens[responseNoteEtudiant[note].examen_id].coef);
           sumCoef += parseFloat(this.examens[responseNoteEtudiant[note].examen_id].coef);
-        } 
+        }
 
         responseNoteEtudiant.forEach(notefromdb => {
 
@@ -734,6 +807,7 @@ export class NotesComponent implements OnInit {
   GenerateBulletin2(etudiant_id, semestre) {
     //Par Morgan
     this.notesForGenerateBulletin = []
+    this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
       console.log(data.moyenneEtudiant)
       this.moyEtudiant = data.moyenneEtudiant
@@ -741,6 +815,9 @@ export class NotesComponent implements OnInit {
       this.showBulletin = true
     }, error => {
       console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
     })
   }
 
