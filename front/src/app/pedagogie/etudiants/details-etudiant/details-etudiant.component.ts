@@ -13,6 +13,7 @@ import { MessageService } from 'primeng/api';
 import { TagModule } from 'primeng/tag';
 import { pipe } from 'rxjs';
 import { saveAs as importedSaveAs } from "file-saver";
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-details-etudiant',
@@ -25,7 +26,7 @@ export class DetailsEtudiantComponent implements OnInit {
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
-
+  RangeDateForPDF:any;
   AssiduiteListe: any[];
   ListeSeanceDIC: any[] = [];
   matiereDic: any[] = [];
@@ -90,6 +91,7 @@ export class DetailsEtudiantComponent implements OnInit {
   };
   horizontalOptions: any;
   barOptions: any;
+  PDFisLoading: boolean;
 
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
@@ -101,6 +103,18 @@ export class DetailsEtudiantComponent implements OnInit {
       this.messageService.add({ severity: 'error', summary: 'Contacté un administrateur', detail: rowData._id })
       console.error(error)
     })
+  }
+  load() {
+    console.log(this.RangeDateForPDF)
+    this.messageService.add({ severity: 'info', summary: 'Telechargement du Fichier', detail: 'Telechargement en cours, veuillez patienter ...' });
+
+    this.PDFisLoading = true;
+    setTimeout(() => {
+      this.PDFisLoading = false,
+
+      this.messageService.add({ severity: "success", summary: "Fichier téléchargé" })
+    }
+      , 2000);
   }
   constructor(private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
@@ -225,8 +239,8 @@ export class DetailsEtudiantComponent implements OnInit {
     }
 
   }
-  getAssiduitePDF() {
-    this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id).subscribe((data) => {
+  getAssiduitePDF(RangeDateForPDF) {
+    this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id, this.RangeDateForPDF).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), (this.EtudiantDetail.user_id + ".pdf"))

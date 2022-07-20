@@ -44,7 +44,10 @@ app.get("/getAllByUser/:id", (req, res) => {
 });
 
 
-app.get("/getAssiduitePDF/:id", (req, res) => {
+app.post("/getAssiduitePDF/:id", (req, res) => {
+
+    let rangDate = req.body
+    console.log(rangDate[0], "--", rangDate[0])
     let dataTosend = [];
     etudiantData: Etudiant;
     const pdfName = 'Ass_' + req.params.id + ".pdf"
@@ -86,9 +89,11 @@ app.get("/getAssiduitePDF/:id", (req, res) => {
             yif = 0;
             const signForImage = new Canvas.Image()
             const signImage = new Canvas.Image()
+            ctx.fillText(etudiantData.classe_id.nom, 400, 368, (414 - 131));
+            ctx.fillText((etudiantData?.entreprise ? etudiantData?.entreprise : '--'), 400, 420, (414 - 131));
             data.forEach(seance => {
 
-                if (new Date("2022/05/1") <= new Date(seance.seance_id.date_debut.toISOString().split('T')[0]) && new Date(seance.seance_id.date_debut.toISOString().split('T')[0]) <= new Date("2022/08/1")) {
+                if (new Date(rangDate[0]) <= new Date(seance.seance_id.date_debut.toISOString().split('T')[0]) && new Date(seance.seance_id.date_debut.toISOString().split('T')[0]) <= new Date(rangDate[1])) {
                     dataTosend.push(seance)
 
                     ctx.fillText(dateFormat(new Date(seance.seance_id.date_debut.toISOString().split('T')[0])), 460, 730 + yi, (414 - 131));
@@ -97,14 +102,12 @@ app.get("/getAssiduitePDF/:id", (req, res) => {
                     if (new Date(seance.seance_id.date_debut).getHours() < 13) {
                         if (seance.isPresent) {
 
-
-
                             signImage.src = "storage/signature/" + seance._id + ".png";
                             ctx.drawImage(signImage, 655, 665 + yi, (680 - 332), 50)
                         }
                         else {
                             ctx.fillStyle = 'red';
-                            ctx.fillText(' ABSENT ', 690, 715 + yi, (414 - 131));
+                            ctx.fillText(' ABSENT ', 670, 705 + yi, (414 - 131));
                             ctx.fillStyle = 'black';
                         }
                     }
@@ -118,7 +121,7 @@ app.get("/getAssiduitePDF/:id", (req, res) => {
                         }
                         else {
                             ctx.fillStyle = 'red';
-                            ctx.fillText(' ABSENT ', 1000, 715 + yi, (414 - 131));
+                            ctx.fillText(' ABSENT ', 980, 705 + yi, (414 - 131));
                             ctx.fillStyle = 'black';
                         }
                     }
@@ -129,7 +132,7 @@ app.get("/getAssiduitePDF/:id", (req, res) => {
                     Presence.find({ seance_id: seance.seance_id._id, user_id: seance.seance_id.formateur_id.user_id._id }).then(
                         async dataForPresData => {
                             dataForPres = dataForPresData
-                            
+
                             if (dataForPres[0]) {
                                 console.log(yif + "*******yi****yi****yi****yi******yi****yi*****")
                                 let srx = "storage/signature/" + dataForPres[0]._id + ".png"
@@ -138,18 +141,28 @@ app.get("/getAssiduitePDF/:id", (req, res) => {
                                 ctx.drawImage(signForImage, 1648, 670 + yif, (680 - 332), 50);
                                 console.log(yif + "**drawed")
                             }
-                           
-                            yi = await yif + 85;
+
+                            yif = await yif + 81;
                         })
 
+
+
+                    yi = yi + 81;
+                    if ( yi == 810 || yi > 810) {
+                        ctx.addPage()
+                        ctx.drawImage(bg, 0, 0)
+                        yi = 0
+
+                        ctx.fillText(etudiantData.classe_id.nom, 400, 368, (414 - 131));
+                        ctx.fillText((etudiantData?.entreprise ? etudiantData?.entreprise : '--'), 400, 420, (414 - 131));
+
+                    }
                 }
-                yi = yi + 85;
+
             })
             setTimeout(function () {
 
 
-                ctx.fillText(etudiantData.classe_id.nom, 400, 368, (414 - 131));
-                ctx.fillText(etudiantData.entreprise, 400, 420, (414 - 131));
 
                 console.log("etape executé")
                 ctx.addPage()
