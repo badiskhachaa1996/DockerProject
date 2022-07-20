@@ -169,9 +169,16 @@ export class ListSeancesComponent implements OnInit {
     rowData.classe_id.forEach(classeID => {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });
+    console.log(rowData.campus_id)
     let c = []
     rowData.campus_id.forEach(cid => {
-      c.push({ libelle: this.dicCampus[cid]?.nom, value: this.dicCampus[cid]?._id })
+      c.push({ libelle: this.dicCampus[cid]?.libelle, value: this.dicCampus[cid]?._id })
+    })
+    this.salleNames = []
+    rowData.campus_id.forEach(cid => {
+      this.dicCampus[cid].salles.forEach(s => {
+        this.salleNames.push({ value: s, label: s })
+      })
     })
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
@@ -181,7 +188,7 @@ export class ListSeancesComponent implements OnInit {
       date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
       formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
       isPresentiel: new FormControl(rowData.isPresentiel),
-      salle_name: new FormControl({ value: rowData.salle_name }),
+      salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
       campus_id: new FormControl(c),
       isPlanified: new FormControl(rowData.isPlanified),
       nbseance: new FormControl(rowData.nbseance)
@@ -192,9 +199,12 @@ export class ListSeancesComponent implements OnInit {
 
   showSalles(value) {
     this.salleNames = []
-    this.dicCampus[value].salles.forEach(s => {
-      this.salleNames.push({ value: s, label: s })
+    value.forEach(cid => {
+      this.dicCampus[cid].salles.forEach(s => {
+        this.salleNames.push({ value: s, label: s })
+      })
     })
+    this.seanceFormUpdate.patchValue({ salle_name: this.salleNames[0].value })
   }
 
   modifySeance() {

@@ -194,11 +194,15 @@ export class ListFormateursComponent implements OnInit {
         this.formateurToUpdate?.absences.forEach(date => {
           arr.push(new Date(date))
         })
+        let c = []
+        response.campus_id.forEach(cid => {
+          c.push(this.campusList[cid]?._id)
+        })
         this.formUpdateFormateur.patchValue({
           type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
           remarque: this.formateurToUpdate.remarque,
-          campus: this.formateurToUpdate?.campus_id,
+          campus: c,
           nda: this.formateurToUpdate?.nda,
           absences: arr
         });
@@ -245,7 +249,7 @@ export class ListFormateursComponent implements OnInit {
         let dicF = response.IsJury
         let kF = [];
         this.jury_diplomesList = [];
-        if (response.IsJury) {
+        if (response.IsJury && response.IsJury.keys().length!=0) {
           kF = Object.keys(dicF)
           kF.forEach(key => {
             this.jury_diplomesList.push({ titre: key, cout_h: parseInt(response.IsJury[key]), isNew: false })

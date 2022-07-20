@@ -15,7 +15,7 @@ export class Formateur {
         public thursday_available?: any,
         public friday_available?: any,
         public remarque?: string,
-        public campus_id?: string,
+        public campus_id?: string[],
         public nda?: string,
         public IsJury?: any,
         public absences?: Date[]
