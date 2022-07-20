@@ -15,9 +15,9 @@ const formateurSchema = mongoose.Schema({
     thursday_available: { type: mongoose.Schema.Types.Mixed, default: { state: false, h_debut: null, h_fin: null, remarque: "" } },
     friday_available: { type: mongoose.Schema.Types.Mixed, default: { state: false, h_debut: null, h_fin: null, remarque: "" } },
     remarque: { type: String },
-    campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'campus', default: null },
+    campus_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'campus', default: [] },
     nda: { type: String, required: false },
-    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: { diplome_id: "", cout_h: null, cout_j: null, remarque: "" } },
+    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {  } },
     absences: { type: [Date], default: [] }
 });
 

@@ -16,7 +16,7 @@
 					</p-dropdown>
 				</div>
 
-				
+
 				<div class="field col-12 md:col-6"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance'">
 					<label For="isPrestataire">Entreprise</label>
@@ -26,10 +26,10 @@
 
 				<div class="field col-12 md:col-6">
 					<label>Campus</label><br>
-					<p-dropdown formControlName="campus" [options]="dropdownCampus"
+					<p-multiSelect formControlName="campus" [options]="dropdownCampus"
 						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
 						placeholder="Choissisez un campus">
-					</p-dropdown>
+					</p-multiSelect>
 				</div>
 
 				<div class="field col-12 md:col-6">
@@ -167,12 +167,14 @@
 					</p-tabView>
 				</div>
 
-				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
+				<div class="field col-12 md:col-6"
+					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
 						formControlName="taux_h" />
 				</div>
-				<div class="field col-12 md:col-6" *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
+				<div class="field col-12 md:col-6"
+					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
 						formControlName="taux_j" />
@@ -204,8 +206,7 @@
 							</div>
 						</div>
 					</div>
-					<button type="button" (click)="onAddMatiere()" pButton
-						label="Ajouter un module enseigné"></button>
+					<button type="button" (click)="onAddMatiere()" pButton label="Ajouter un module enseigné"></button>
 				</div>
 
 				<div class="field col-12 md:col-12">
@@ -324,7 +325,14 @@
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
 						<!--<td style="min-width: 10rem;">{{ formateur.taux_h }} €</td>-->
-						<td>{{campusList[formateur?.campus_id]?.libelle}}</td>
+						<td>
+							<span *ngFor="let cid of formateur?.campus_id; let index = index">
+								<span
+									*ngIf="campusList[cid] && campusList[cid].libelle && index==0">{{campusList[cid]?.libelle}}</span>
+								<span
+									*ngIf="campusList[cid] && campusList[cid].libelle && index!=0">,<br>{{campusList[cid]?.libelle}}</span>
+							</span>
+						</td>
 						<td>
 							<i style="margin-left: 2%;"
 								(click)="showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"

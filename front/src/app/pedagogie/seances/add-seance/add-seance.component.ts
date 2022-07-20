@@ -121,7 +121,6 @@ export class AddSeanceComponent implements OnInit {
   showSalles(value) {
     this.salleNames = []
     value.forEach(cid=>{
-      console.log(cid)
       this.campus[cid].salles.forEach(s => {
         this.salleNames.push({ value: s, label: s })
       })
