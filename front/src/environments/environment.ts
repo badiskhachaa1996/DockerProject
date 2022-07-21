@@ -828,16 +828,16 @@ export const environment = {
 
   ],
   status: [
-    { label: "À traiter", value: 'À traiter' },
-    { label: "En cours de traitement", value: 'En cours de traitement' },
-    { label: "En attente de retour", value: 'En attente de retour' },
-    { label: "Clôturé", value: 'Clôturé' }
+    { value: 'À traiter' },
+    { value: 'En cours de traitement' },
+    { value: 'En attente de retour' },
+    { value: 'Clôturé' },
   ],
   etat_annee: [
-    { label: "Choissisez un état", value: "Choissis ez un état", actif:true},
-    { label: "Nouvelle", value: 'Nouvelle', actif:false },
-    { label: "Active", value: 'Active', actif:false },
-    { label: "Archivée", value: 'Archivée', actif:false },
+    { value: "Choissisez un état", actif:true},
+    { value: 'Nouvelle', actif:false },
+    { value: 'Active', actif:false },
+    { value: 'Archivée', actif:false },
 
   ],
 

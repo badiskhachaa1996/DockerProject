@@ -44,9 +44,8 @@
                     <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="lastname" />
 
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                        <span *ngIf="lastname.errors?.pattern" style="color: red;">
-                            Le nom n'est pas dans le bon format
-                        </span>
+                        <span  style="color: red;" class="error" *ngIf="lastname.errors?.required" style="color: red;">* Le nom est obligatoire </span>
+                        <span *ngIf="lastname.errors?.pattern" style="color: red;">Le nom n'est pas dans le bon format</span>
                     </div>
                 </div>
 
@@ -56,15 +55,18 @@
                         formControlName="firstname" />
 
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                        <span *ngIf="firstname.errors?.pattern" style="color: red;">
-                            Le prénom n'est pas dans le bon format
-                        </span>
+                        <span  style="color: red;" class="error" *ngIf="firstname.errors?.required" style="color: red;">* Le prénom est obligatoire </span>
+                        <span *ngIf="firstname.errors?.pattern" style="color: red;"> Le prénom n'est pas dans le bon format </span>
                     </div>
                 </div>
 
                 <div class="field col-4 md:col-2">
                     <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
-                    <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
+                    <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
+
+                    <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">* L'indicatif téléphone est obligatoire </span>
+                    </div>
                 </div>
 
                 <div class="field col-8 md:col-4">
@@ -73,21 +75,19 @@
                         formControlName="phone" />
 
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                        <span *ngIf="phone.errors?.pattern" style="color: red;">
-                            Le numéro de téléphone n'est pas dans le bon format
-                        </span>
+                        <span  style="color: red;" class="error" *ngIf="phone.errors?.required" style="color: red;">* Le numéro de téléphone est obligatoire </span>
+                        <span *ngIf="phone.errors?.pattern" style="color: red;"> Le numéro de téléphone n'est pas dans le bon format</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label For="mail">Adresse email <span style="color: red;"> * </span></label>
-                    <input pInputText id="mail" type="email" placeholder="Entrez votre adresse mail"
+                    <input pInputText id="mail" type="email" placeholder="Entrez votre adresse mail (@estya.com)"
                         formControlName="email" />
 
                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
-                        <span *ngIf="email.errors?.pattern" style="color: red;">
-                            L'email' n'est pas dans le bon format, 'xxx@estya.com'
-                        </span>
+                        <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'email est obligatoire </span>
+                        <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon format, 'xxx@estya.com'</span>
                     </div>
                 </div>
 
@@ -230,7 +230,7 @@
 
 
                 <div class="grid field col-12" *ngIf="isMinorFC()">
-                   
+
 
                     <div class="field col-12 md:col-6">
                         <label For="nrl">Nom du représentant légal</label>

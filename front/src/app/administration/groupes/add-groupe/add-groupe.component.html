@@ -30,24 +30,27 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Ajouter un groupe</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
+            </div>
+            <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddClasse" (ngSubmit)="saveClasse()">
                 <div class="field col-12">
-                    <label For="libelle">Diplôme</label>
+                    <label For="libelle">Diplôme <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id" (onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
 
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="nom_groupe">Nom du groupe</label>
+                    <label For="nom_groupe">Nom du groupe <span style="color: red;"> * </span></label>
                     <input pInputText id="nom_groupe" placeholder="Nom du groupe" type="text" formControlName="libelle" />
 
                     <div *ngIf="libelle.invalid && (libelle.touched || libelle.dirty)">
-                        <span *ngIf="libelle.errors?.pattern" style="color: red;">
-                            Le nom du groupe n'est pas dans le bon format
-                        </span>
-                    </div>
+                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.required" style="color: red;">* Le nom du groupe est obligatoire </span>
+                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.pattern" style="color: red;">* Le nom du groupe n'est pas dans le bon format </span>
+                    </div> 
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="abreviation">Abréviation</label>
+                    <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
                     <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="MCI A" />
                 </div>
                 <div style="justify-content: right;">

@@ -19,7 +19,7 @@ import { Campus } from 'src/app/models/Campus';
 export class AddCampusComponent implements OnInit {
 
   ecoles: Ecole[] = []
-  dropdownEcole: any[] = [{ libelle: "Toutes les Ecoles", value: null }];
+  dropdownEcole: any[] = [{ label: "Toutes les écoles", value: null }];
   campuss: Campus[] = [];
   ecoleid: String;
   AnneeSelected: any;
@@ -31,7 +31,7 @@ export class AddCampusComponent implements OnInit {
     ecole_id: new FormControl('', Validators.required),
     ville: new FormControl('PARIS', [Validators.required,Validators.pattern('[^0-9]+')]),
     pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
+    email: new FormControl('', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com))$")]),
     adresse: new FormControl('', Validators.required),
     site: new FormControl(''),
   });
@@ -48,15 +48,11 @@ export class AddCampusComponent implements OnInit {
     } catch (e) {
       this.token = null
     }
-    if (this.token == null) {
-      this.router.navigate(["/login"])
-    } else if (this.token["role"].includes("user")) {
-      this.router.navigate(["/ticket/suivi"])
-    }
+  
     this.ecoleid = this.route.snapshot.paramMap.get('id');
     this.ecoleService.getAll().subscribe((data) => {
       data.forEach(ecole => {
-        this.dropdownEcole.push({ libelle: ecole.libelle, value: ecole._id })
+        this.dropdownEcole.push({ label: ecole.libelle, value: ecole._id })
         this.ecoles[ecole._id] = ecole;
       }, (error) => {
         console.error(error)
@@ -72,6 +68,14 @@ export class AddCampusComponent implements OnInit {
     })
   }
 
+  get libelle() { return this.addcampusForm.get('libelle'); }
+  get ecole_id() { return this.addcampusForm.get('ecole_id'); }
+  get ville() { return this.addcampusForm.get('ville'); }
+  get pays() { return this.addcampusForm.get('pays'); }
+  get email() { return this.addcampusForm.get('email'); };
+  get adresse() { return this.addcampusForm.get('adresse'); };
+  get site() { return this.addcampusForm.get('site'); }
+  
   saveCampus() {
     let campus = new Campus(null, this.addcampusForm.value.libelle, this.addcampusForm.value.ecole_id.value, this.addcampusForm.value.ville, this.addcampusForm.value.pays, this.addcampusForm.value.email, this.addcampusForm.value.adresse, this.addcampusForm.value.site)
     this.campusService.createCampus(campus).subscribe((data) => {

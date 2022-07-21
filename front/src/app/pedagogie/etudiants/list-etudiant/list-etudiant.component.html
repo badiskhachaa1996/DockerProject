@@ -27,8 +27,9 @@
         <div class="card">
 
             <h4 style="text-align: center;">Modifier cet étudiant </h4>
-            <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                    style="color: red;"> * </span> sont obligatoires</small>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
+             </div>
 
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showFormUpdateEtudiant = false; formUpdateEtudiant.reset()" aria-hidden="true"></i>
@@ -267,11 +268,6 @@
 						<td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 						<td>
                             {{ etudiant?.lastname | uppercase }} {{ etudiant?.firstname }}
-                        </td>
-                        <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
-                        <td>
-                            {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname |
-                            uppercase }} {{ etudiant?.firstname }}
                         </td>
                         <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
                         <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>

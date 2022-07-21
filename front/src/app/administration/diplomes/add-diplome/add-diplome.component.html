@@ -24,72 +24,114 @@
         <div class="card">
             <p-toast key="tst" [baseZIndex]="99999"></p-toast>
             <h4 style="text-align: center;">Ajouter un diplôme</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
+            </div>
+            <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddDiplome" (ngSubmit)="onAddDiplome()">
 
                 <div class="field col-12 md:col-10">
-                    <label For="titre">Titre RNCP du diplôme</label>
-                    <input pInputText id="titre" type="text" formControlName="titre" />
+                    <label For="titre">Titre RNCP du diplôme <span style="color: red;"> * </span></label>
+                    <input pInputText id="titre" type="text" formControlName="titre" placeholder="Titre RNCP du diplôme" />
+                    <div *ngIf="titre.invalid && (titre.touched || titre.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="titre.errors?.required" style="color: red;">* Le titre RNCP du diplôme est obligatoire </span>
+                    </div>  
                 </div>
 
                 <div class="field col-12 md:col-2">
-                    <label For="code_RNCP">Code RNCP</label>
-                    <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" />
+                    <label For="code_RNCP">Code RNCP <span style="color: red;"> * </span></label>
+                    <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" placeholder="Code RNCP" />
+                    <div *ngIf="code_RNCP.invalid && (code_RNCP.touched || code_RNCP.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="code_RNCP.errors?.required" style="color: red;">* Le Code RNCP est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12">
-                    <label For="titre_long">Titre long du diplôme</label>
-                    <input pInputText id="titre_long" type="text" formControlName="titre_long" />
+                    <label For="titre_long">Titre long du diplôme <span style="color: red;"> * </span></label>
+                    <input pInputText id="titre_long" type="text" formControlName="titre_long" placeholder="Titre long du diplôme" />
+                    <div *ngIf="titre_long.invalid && (titre_long.touched || titre_long.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="titre_long.errors?.required" style="color: red;">* Le titre long du diplôme est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12">
-                    <label For="description">Description</label>
-                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize
-                        rows="3" cols="30" formControlName="description"></textarea>
+                    <label For="description">Description <span style="color: red;"> * </span></label>
+                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize rows="3" cols="30" formControlName="description"></textarea>
+                    <div *ngIf="description.invalid && (description.touched || description.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="description.errors?.required" style="color: red;">* La description est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Campus</label>
+                    <label>Campus <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="campusList" optionLabel="libelle" placeholder="Choissisez le campus" formControlName="campus_id"></p-dropdown>
+                    <div *ngIf="campus_id.invalid && (campus_id.touched || campus_id.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="campus_id.errors?.required" style="color: red;">* Le campus est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-3">
-                    <label>Type de diplôme</label>
+                    <label>Type de diplôme <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="type_diplome.invalid && (type_diplome.touched || type_diplome.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="type_diplome.errors?.required" style="color: red;">* Le type de diplôme est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-3">
-                    <label>Type d'étude</label>
+                    <label>Type d'étude <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="type_etude.invalid && (type_etude.touched || type_etude.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="type_etude.errors?.required" style="color: red;">* Le type d'étude est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Domaine</label>
+                    <label>Domaine <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="domaine.invalid && (domaine.touched || domaine.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="domaine.errors?.required" style="color: red;">* Le domaine est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'étude</label>
+                    <label>Niveau d'étude <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="niveau.invalid && (niveau.touched || niveau.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="niveau.errors?.required" style="color: red;">* Le niveau est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12">
-                    <label>Cette formation est-elle diplômante ?</label>
+                    <label>Cette formation est-elle diplômante ? <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified" ></p-dropdown>
+                    <div *ngIf="isCertified.invalid && (isCertified.touched || isCertified.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="isCertified.errors?.required" style="color: red;">* Choix obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-8">
-                    <label For="certificateur">Certificateur</label>
+                    <label For="certificateur">Certificateur <span style="color: red;"> * </span></label>
                     <input pInputText id="certificateur" type="text" formControlName="certificateur" />
+                    <div *ngIf="certificateur.invalid && (certificateur.touched || certificateur.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="certificateur.errors?.required" style="color: red;">* Le certificateur est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label For="code_diplome">Code diplôme</label>
+                    <label For="code_diplome">Code diplôme <span style="color: red;"> * </span></label>
                     <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
+                    <div *ngIf="code_diplome.invalid && (code_diplome.touched || code_diplome.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="code_diplome.errors?.required" style="color: red;">* Le code diplôme est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-2">
-                    <label For="nb_heure">Durée en heure</label>
+                    <label For="nb_heure">Durée en heure <span style="color: red;"> * </span></label>
                     <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
+                    <div *ngIf="nb_heure.invalid && (nb_heure.touched || nb_heure.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="nb_heure.errors?.required" style="color: red;">* La durée en heure est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-5">
@@ -103,8 +145,11 @@
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label>Rythme de la formation</label>
+                    <label>Rythme de la formation <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="rythme.invalid && (rythme.touched || rythme.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="rythme.errors?.required" style="color: red;">* Le rythme de la formation est obligatoire </span>
+                    </div> 
                 </div>
 
                 <div class="field col-12 md:col-4">

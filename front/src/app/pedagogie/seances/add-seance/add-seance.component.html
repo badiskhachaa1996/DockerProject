@@ -37,61 +37,61 @@
                     style="color: red;"> * </span> sont obligatoires</p>
             <form class="p-fluid p-formgrid grid" [formGroup]="seanceForm" (ngSubmit)="saveSeance()">
                 <div class="field col-12 md:col-6" *ngIf="type!='classe'">
-                    <label>Nom du groupe</label><br>
+                    <label>Nom du groupe <span style="color: red;"> * </span></label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse"
                         defaultLabel="Selection des classes" optionLabel="nom"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Matière</label><br>
+                    <label>Matière <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom" placeholder="Choissisez une matière"
                         emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Libelle</label><br>
+                    <label>Libelle <span style="color: red;"> * </span></label><br>
                     <input pInputText type="text" formControlName="libelle" placeholder="Libelle de la séance"
                         class="form-control col-12">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Début:</label>
+                    <label>Début: <span style="color: red;"> * </span></label>
                     <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
                         placeholder="Début de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Fin:</label>
+                    <label>Fin: <span style="color: red;"> * </span></label>
                     <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
                         placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Campus</label><br>
+                    <label>Campus <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
-                    <label>Nom du formateur</label><br>
+                    <label>Nom du formateur <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom" placeholder="Choissisez un formateur"
                         emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Nombre de séance/Séance Max</label><br>
+                    <label>Nombre de séance/Séance Max <span style="color: red;"> * </span></label><br>
                     <input pInputText type="text" formControlName="nbseance" placeholder="1/9"
                         class="form-control col-8">
                 </div>
                 <div class="field col-12 md:col-6">
-
+                    <small>(Obligatoire) <span style="color: red;"> * </span></small>
                     <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
                         formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
-
+                    <small>(Obligatoire) <span style="color: red;"> * </span></small>
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 
                 </div>
                 <div class="field col-12 md:col-12" *ngIf="isPresentiel.value==true">
-                    <label>Salle Présentiel:</label><br>
+                    <label>Salle Présentiel: <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
                     </p-dropdown>
                 </div>
