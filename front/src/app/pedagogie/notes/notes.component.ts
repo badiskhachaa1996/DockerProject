@@ -109,7 +109,7 @@ export class NotesComponent implements OnInit {
     this.matiereRachat = []
     this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
       rbs.forEach(rb => {
-        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy, isNew: false, _id: rb._id })
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id })
       })
     })
     this.notesForGenerateBulletin.forEach(n => {
@@ -121,6 +121,9 @@ export class NotesComponent implements OnInit {
   }
 
   updateRachatEtudiant(i, value, type) {
+    if (value.value) {
+      value = value.value
+    }
     this.rachatEtudiant[i][type] = value
   }
 
@@ -163,7 +166,7 @@ export class NotesComponent implements OnInit {
         if (problem != null) {
           t.messageService.add({ severity: "error", summary: "Un problème est arrivé avec " + t.matieres[problem.matiere_id].nom })
         } else {
-          this.showFormRacheter = false
+          t.showFormRacheter = false
           t.messageService.add({ severity: "success", summary: "Le rachat a été enregistré avec succès" })
         }
       }
@@ -809,7 +812,6 @@ export class NotesComponent implements OnInit {
     this.notesForGenerateBulletin = []
     this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      console.log(data.moyenneEtudiant)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
@@ -915,7 +917,7 @@ export class NotesComponent implements OnInit {
     this.showBtnAddAppreciationGenerale = true;
     this.showBtnUpdateAppreciationGenerale = false;
   }
-
+  hideBtn = false
 
   //Methode de generation du bulletin de note
   onGenerateBulletin() {
@@ -929,6 +931,7 @@ export class NotesComponent implements OnInit {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
+    this.hideBtn = false
 
   }
 

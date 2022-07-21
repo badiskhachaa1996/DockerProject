@@ -1,4 +1,4 @@
-<p>Dab: {{etudiantToGenerateBulletin|json}}</p>
+<p-toast></p-toast>
 <div class="grid">
     <!-- Formulaire d'ajout d'une note -->
     <div class="col-12" *ngIf="showFormAddNote">
@@ -350,6 +350,7 @@
                             <p>{{matieres[rachatEtudiant[i]['matiere_id']].nom}}</p>
                         </div>
                         <div class="col-6 md:col-6">
+                            {{rachatEtudiant[i]['fixed_moy']|json}}
                             <label>Nouvelle Moyenne: </label>
                             <input type="number" step="0.01" [value]="rachatEtudiant[i]['fixed_moy']"
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
@@ -380,20 +381,18 @@
 
             <div style="float: right;">
                 <button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
-                    label="Racheter l'étudiant" class="ml-1">
+                    label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
                 <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
-                    label="Saisir appréciation générale" *ngIf="showBtnAddAppreciationGenerale" class="ml-1">
+                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
                 </button>
 
                 <button pButton (click)="showFormUpdateAppreciationGenerale = true;
                                         appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
-                    class="ml-1" type="button" label="Modifier l'appréciation générale"
-                    *ngIf="showBtnUpdateAppreciationGenerale">
+                    class="ml-1" type="button" label="Modifier l'appréciation générale" *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
                 </button>
 
-                <button pButton class="ml-1"
-                    (click)="onGenerateBulletin(); notesForGenerateBulletin = []; onNullAppreciationGenerale()"
+                <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin();hideBtn = true"
                     type="button" style="float:right;" label="Exporter en pdf">
                 </button>
             </div>
@@ -504,7 +503,8 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
-            <h3>Notes par classe: {{ classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
+            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par classe: {{
+                classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="5" [pageLinks]="5"

@@ -38,7 +38,7 @@ export const environment = {
   ],
 
   typeUser: [
-    { value: "Choissiez un statut", actif:true},
+    { value: "Choissisez un statut", actif:true},
     { value: "Etudiant", actif:false},
     { value: "Salarié", actif:false}, 
     { value: "Alternant/Stagiaire", actif:false},
