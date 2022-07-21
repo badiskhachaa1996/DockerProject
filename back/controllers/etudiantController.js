@@ -175,7 +175,8 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 
     Etudiant.findOne({ _id: req.params.idetudiant })
         .then((etudiantFromDb) => {
-            let filearrayT = etudiantFromDb.fileRight;
+            let filearrayT;
+            filearrayT = (etudiantFromDb.fileRight) ? etudiantFromDb.fileRight : { 'filename': true };
             filearrayT[filename] = req.body[2]
 
             Etudiant.findOneAndUpdate({ _id: req.params.idetudiant },
@@ -191,7 +192,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
                     }
                 })
         })
-        .catch((error) => { res.status(400).json({ error }) });
+
 });
 
 app.get('/sendEDT/:id/:update', (req, res, next) => {
