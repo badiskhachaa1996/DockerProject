@@ -1,4 +1,4 @@
-    <p>Local timezone: {{now|date:"long"}}</p>
+<!--<p>Local timezone: {{now|date:"long"}}</p>
     <p>Local timezone +2: {{now|date:'long':'+2'}}</p>
     <p>Timezone Diff : {{testForScience()}}</p>
     <div class="grid">
@@ -228,7 +228,7 @@
                 </ul>
             </div>
 
-            <!-- <div class="px-4 py-5 shadow-2 flex flex-column md:flex-row md:align-items-center justify-content-between mb-3"
+            <div class="px-4 py-5 shadow-2 flex flex-column md:flex-row md:align-items-center justify-content-between mb-3"
             [ngStyle]="{borderRadius: '1rem', background: 'linear-gradient(0deg, rgba(0, 123, 255, 0.5), rgba(0, 123, 255, 0.5)), linear-gradient(92.54deg, #1C80CF 47.88%, #FFFFFF 100.01%)'}">
            <div>
                <div class="text-blue-100 font-medium text-xl mt-2 mb-3">TAKE THE NEXT STEP</div>
@@ -239,8 +239,12 @@
                    Get Started
                </a>
            </div>
-       </div> -->
+       </div>
         </div>
 
-    </div>
+    </div> -->
 
+<h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
+<h3>Le tableau de bord est actuellement en construction pour votre statut!</h3>
+<h4>Pour naviguer sur l'application, merci d'utiliser le menu à gauche</h4>
+<h5>Merci de votre patience!</h5>

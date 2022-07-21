@@ -169,7 +169,6 @@ export class ListSeancesComponent implements OnInit {
     rowData.classe_id.forEach(classeID => {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });
-    console.log(rowData.campus_id)
     let c = []
     rowData.campus_id.forEach(cid => {
       c.push({ libelle: this.dicCampus[cid]?.libelle, value: this.dicCampus[cid]?._id })

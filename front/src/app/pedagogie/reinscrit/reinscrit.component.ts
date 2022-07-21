@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { FileUpload } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { saveAs as importedSaveAs } from "file-saver";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-reinscrit',
@@ -20,7 +21,7 @@ export class ReinscritComponent implements OnInit {
   @ViewChild('fileInput') fileInput: FileUpload;
   showUploadFile: Etudiant;
   etudiants: Etudiant[] = [];
-  users: User[] = [];
+  users= {};
   token;
   imageToShow;
   parcoursList = []
@@ -64,7 +65,6 @@ export class ReinscritComponent implements OnInit {
     email_tuteur: [''],
     phone_tuteur: [''],
     indicatif_tuteur: [''],
-    custom_id: ['', Validators.required],
     remarque: ['']
   })
 
@@ -127,13 +127,14 @@ export class ReinscritComponent implements OnInit {
       this.users[this.showAssignForm.user_id].nationalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_partenaire,
-      null , null, null, this.AssignForm.value.custom_id,
+      null, null, null, null,
       this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
       this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
-      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise, this.showAssignForm.diplome, this.parcoursList,this.AssignForm.value.remarque
+      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise, this.showAssignForm.diplome, this.parcoursList, this.AssignForm.value.remarque
     )
+    etd.custom_id=this.generateCode(etd)
     this.etudiantService.update(etd).subscribe(data => {
       this.refreshEtudiant()
       this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
@@ -154,6 +155,32 @@ export class ReinscritComponent implements OnInit {
         });
       })
     );
+  }
+
+  generateCode(prospect:Etudiant) {
+    let user: any = prospect.user_id
+    let code_pays = user.nationnalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code=>{
+      if(code[user.nationnalite] && code[user.nationnalite]!=undefined){
+        code_pays=code[user.nationnalite]
+      }
+    })
+    let prenom = user.firstname.substring(0, 1)
+    let nom = user.lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(prospect.date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = Object.keys(this.users).length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
   }
 
   expandRow(etu: Etudiant) {

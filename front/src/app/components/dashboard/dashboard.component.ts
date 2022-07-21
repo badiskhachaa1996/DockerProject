@@ -6,7 +6,10 @@ import { Subscription } from 'rxjs';
 import { ConfigService } from '../../service/app.config.service';
 import { AppConfig } from '../../api/appconfig';
 import { Router } from '@angular/router';
- 
+import jwt_decode from "jwt-decode";
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from 'src/app/models/User';
+
 @Component({
     templateUrl: './dashboard.component.html',
 })
@@ -24,25 +27,25 @@ export class DashboardComponent implements OnInit {
 
     config: AppConfig;
 
-    constructor(private productService: ProductService, public configService: ConfigService, private router:Router) {}
+    user: User;
 
-    now=new Date()
-
-    testForScience(){
-        return new Date().getTimezoneOffset()
-    }
+    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService) { }
 
     ngOnInit() {
+        let token: any = jwt_decode(localStorage.getItem("token"))
+        this.UserService.getById(token.id).subscribe(dataUser => {
+            this.user = jwt_decode(dataUser.userToken)['userFromDb']
+        })
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
             this.updateChartOptions();
         });
         this.productService.getProductsSmall().then(data => this.products = data);
-          
+
         this.items = [
-            {label: 'Add New', icon: 'pi pi-fw pi-plus'},
-            {label: 'Remove', icon: 'pi pi-fw pi-minus'}
+            { label: 'Add New', icon: 'pi pi-fw pi-plus' },
+            { label: 'Remove', icon: 'pi pi-fw pi-minus' }
         ];
 
         this.chartData = {
@@ -91,7 +94,7 @@ export class DashboardComponent implements OnInit {
                         color: '#ebedef'
                     },
                     grid: {
-                        color:  'rgba(160, 167, 181, .3)',
+                        color: 'rgba(160, 167, 181, .3)',
                     }
                 },
                 y: {
@@ -99,7 +102,7 @@ export class DashboardComponent implements OnInit {
                         color: '#ebedef'
                     },
                     grid: {
-                        color:  'rgba(160, 167, 181, .3)',
+                        color: 'rgba(160, 167, 181, .3)',
                     }
                 },
             }
@@ -107,7 +110,7 @@ export class DashboardComponent implements OnInit {
     }
 
     applyLightTheme() {
-            this.chartOptions = {
+        this.chartOptions = {
             plugins: {
                 legend: {
                     labels: {
@@ -121,7 +124,7 @@ export class DashboardComponent implements OnInit {
                         color: '#495057'
                     },
                     grid: {
-                        color:  '#ebedef',
+                        color: '#ebedef',
                     }
                 },
                 y: {
@@ -129,7 +132,7 @@ export class DashboardComponent implements OnInit {
                         color: '#495057'
                     },
                     grid: {
-                        color:  '#ebedef',
+                        color: '#ebedef',
                     }
                 },
             }
