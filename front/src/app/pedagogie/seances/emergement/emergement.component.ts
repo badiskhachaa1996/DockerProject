@@ -57,6 +57,7 @@ export class EmergementComponent implements OnInit {
   date_debut; date_fin;
   formateurInfo: Formateur = null;
   dropdownEtudiant = []
+  groupeFilter: [{ label: string, value: string }];
 
   @ViewChild("canva") myCanvas: ElementRef;
   @ViewChild('justificatif') fileInput: FileUpload;
@@ -172,6 +173,7 @@ export class EmergementComponent implements OnInit {
       this.showCanvas = this.showCanvas && this.presence == null
     }, error => console.error(error))
   }
+  
 
   ngOnInit(): void {
     try {

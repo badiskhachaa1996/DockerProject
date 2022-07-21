@@ -91,7 +91,7 @@
                     </div>
                     <div class="field col-12 md:col-6">
                         <label For="mail">Adresse mail <span style="color: red;"> * </span></label>
-                        <input pInputText id="mail" type="email" placeholder="Entrez votre adresse mail"
+                        <input pInputText id="mail" type="email" placeholder="Entrez votre adresse mail (@estya.com)"
                             formControlName="email" />
                         <div *ngIf="email.invalid && (email.touched || email.dirty)">
                             <span *ngIf="email.errors?.pattern" style="color: red;">
@@ -361,7 +361,7 @@
                     </div>
 
                     <div class="field col-12 md:col-12">
-                        <label For="remarque">Remarque</label>
+                        <label For="remarque">Remarque <span style="color: red;"> * </span></label>
                         <textarea pInputText id="remarque" formControlName="remarque"></textarea>
                     </div>
                     <div>

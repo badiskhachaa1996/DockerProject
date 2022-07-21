@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { environment } from 'src/environments/environment';
 import { io } from 'socket.io-client';
 import { EventEmitterService } from '../services/event-emitter.service';
-
+import { User } from '../models/User';
 
 
 @Injectable({
@@ -78,24 +78,50 @@ export class AuthGuardService implements CanActivate {
         private ss: EventEmitterService,
         private router: Router) { }
 
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
         let currenttoken: any = localStorage.getItem("token");
         let role!: string;
         if (currenttoken) {
-            currenttoken=jwt_decode(localStorage.getItem("token"))
+            currenttoken = jwt_decode(localStorage.getItem("token"))
+            console.log(currenttoken)
 
-            role = currenttoken.role;
 
-            return true;
-        } else {
 
-            this.router.navigate(['/pages/access']);
-            
-            return false;
+            if (!localStorage.getItem('token') && !localStorage.getItem('ProspectConected')) {
+                console.log("Login")
+                this.router.navigate(['/login']);
+                return false
+            }
+            else if (localStorage.getItem('ProspectConected')) {
+                console.log("Prospect token")
+                this.router.navigate(['/suivre-ma-preinscription']);
+                return false
+            }
+            else {
+
+                return this.authService.getById(currenttoken.id).pipe(
+                    map(userdata => {
+                        let UserTok: any = jwt_decode(userdata.userToken)
+                        console.log(UserTok.userFromDb)
+
+                        if (UserTok.userFromDb.civilite || state.url == "/completion-profil") {
+                            console.log("accés autorisé: ")
+                            return true
+                        }
+
+                        else {
+                            console.log( "Completer votre profil avant de continuer la navigation")
+                            this.router.navigate(['/completion-profil']);
+
+                            return true
+                        }
+                    }))
+
+            }
         }
-
-
-
+        else{
+            this.router.navigate(['/login']);
+        }
     }
 }

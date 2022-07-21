@@ -33,7 +33,7 @@
                 <h4 style="text-align: center;">Créer un service </h4>
                 <form class="p-fluid p-formgrid grid" [formGroup]="serviceForm" (ngSubmit)="saveService()">
                     <div class="field col-12 md:col-12">
-                        <label For="nom_service">Nom du service</label>
+                        <label For="nom_service">Nom du service <span style="color: red;"> * </span></label>
                         <input pInputText id="nom_service" type="text" formControlName="label" />
                         <div *ngIf="label.invalid && (label.touched || label.dirty)">
                             <span *ngIf="label.errors?.required" style="color: red;">

@@ -14,6 +14,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { ClasseService } from 'src/app/services/classe.service';
 import { AuthService } from 'src/app/services/auth.service';
 
+
 @Component({
   selector: 'app-user-profil',
   templateUrl: './user-profil.component.html',
@@ -310,6 +311,8 @@ export class UserProfilComponent implements OnInit {
     })
 
     this.onInitPasswordForm();
+
+    
 
   }
   clickFile() {

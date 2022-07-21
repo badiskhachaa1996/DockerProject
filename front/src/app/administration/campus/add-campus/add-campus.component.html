@@ -28,51 +28,60 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Ajouter un campus</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
+            </div>
+            <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="addcampusForm" (ngSubmit)="saveCampus()">
                 <div class="field col-12 md:col-6">
-                    <label for="libelle">Libellé</label>
-                    <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="ESTYA - Paris" />
+                    <label for="libelle">Libellé <span style="color: red;"> * </span></label>
+                    <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Nom du campus" />
+                    <div *ngIf="libelle.invalid && ( libelle.touched || libelle.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.required" style="color: red;">* Le nom du campus est obligatoire </span>
+                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.pattern" style="color: red;">* Le nom du campus n'est pas dans le bon format </span>
+                    </div>  
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="email">Email</label>
-                    <input pInputText id="email" type="email" formControlName="email"
-                        placeholder="estya@estya.com" />
+                    <label for="email">Email <span style="color: red;"> * </span></label>
+                    <input pInputText id="email" type="email" formControlName="email" placeholder="Email du siége du campus" />
+                    <div *ngIf="email.invalid && ( email.touched || email.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'email est obligatoire </span>
+                        <span  style="color: red;" class="error" *ngIf="email.errors?.pattern" style="color: red;">* L'email n'est pas dans le bon format (format acccepter : @estya.com, @estyagroup.com, @elitech.education, @eduhorizons.com ou @adgeducation.com) </span>
+                    </div>  
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="site">Site Web</label>
-                    <input pInputText id="site" type="text" formControlName="site" placeholder="estya.com" />
+                    <input pInputText id="site" type="text" formControlName="site" placeholder="Site web du campus" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="ecole">Ecole</label>
-                    <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="libelle"></p-dropdown>
+                    <label for="ecole">Ecole <span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="ecole_id" [options]="dropdownEcole" optionLabel="label"></p-dropdown>
+                    <div *ngIf="ecole_id.invalid && ( ecole_id.touched || ecole_id.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'école est obligatoire </span>
+                    </div>  
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="adress">Adresse</label>
-                    <input pInputText id="adress" type="text" formControlName="adresse"
-                        placeholder="15 Rue du louvre 75001" />
+                    <label for="adress">Adresse <span style="color: red;"> * </span></label>
+                    <input pInputText id="adress" type="text" formControlName="adresse" placeholder="Adresse du siége du campus" />
+                    <div *ngIf="adresse.invalid && ( adresse.touched || adresse.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="adresse.errors?.required" style="color: red;">* L'adresse est obligatoire </span>
+                    </div>  
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="ville">Ville</label>
-                    <input pInputText id="ville" type="text" formControlName="ville"
-                        placeholder="Paros" />
+                    <label for="ville">Ville <span style="color: red;"> * </span></label>
+                    <input pInputText id="ville" type="text" formControlName="ville" placeholder="Ville du siége du campus" />
+                    <div *ngIf="ville.invalid && ( ville.touched || ville.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="ville.errors?.required" style="color: red;">* La ville est obligatoire </span>
+                        <span  style="color: red;" class="error" *ngIf="ville.errors?.pattern" style="color: red;">* La ville n'est pas dans le bon format </span>
+                    </div>  
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="pays">Pays</label>
-                    <input pInputText id="pays" type="text" formControlName="pays"
-                        placeholder="France" />
-                </div>
-                <div class="field col-12 md:col-12 grid">
-                    <div class="field col-12 md:col-6 grid" *ngFor="let data of salles; let i = index">
-                        <h5> Salle n°{{i+1}}: </h5>
-                        <div class="col-11">
-                            <label>Nom de la salle:</label><br>
-                            <input type="text" (change)="changeValue(i, $event.target.value)" [(value)]="salles[i]" placeholder="Salle {{i+1}}" pInputText>
-                        </div>
-                        <div class="col-1">
-                            <i class="pi pi-trash" (click)="salles.splice(i,1)" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                    <button type="button" (click)="onAddSalle()" pButton label="Ajouter une salle"></button>
+                    <label for="ville">Pays <span style="color: red;"> * </span></label>
+                    <input pInputText id="ville" type="text" formControlName="pays" placeholder="Pays du siége du campus" />
+                    <div *ngIf="pays.invalid && ( pays.touched || pays.dirty)">
+                        <span  style="color: red;" class="error" *ngIf="pays.errors?.required" style="color: red;">* Le pays est obligatoire </span>
+                        <span  style="color: red;" class="error" *ngIf="pays.errors?.pattern" style="color: red;">* Le pays n'est pas dans le bon format </span>
+                    </div>  
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit" [disabled]="addcampusForm.invalid"></button>

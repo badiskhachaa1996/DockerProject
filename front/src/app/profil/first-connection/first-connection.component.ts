@@ -75,28 +75,23 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-    if (token) {
-      console.log(token)
-      this.AuthService.getById(token['id']).subscribe((data) => {
-        console.log(data)
-        this.userConnected = jwt_decode(data.userToken)['userFromDb']
-        console.log(jwt_decode(data.userToken))
-        if (this.userConnected.phone == null || this.userConnected.civilite == null || this.userConnected.type == null) {
-          this.RegisterForm.patchValue({
-            lastname: this.userConnected.lastname,
-            firstname: this.userConnected.firstname
-          })
-        } else {
-          localStorage.removeItem("modify")
-          this.router.navigateByUrl('/ticket/suivi')
-        }
-        if (this.userConnected.email.endsWith("@adgeducation.com")) {
-          this.programeFrDropdown = environment.ADGprogrameFrDropdown;
-        }
+
+    console.log(token)
+    this.AuthService.getById(token['id']).subscribe((data) => {
+      console.log(data)
+      this.userConnected = jwt_decode(data.userToken)['userFromDb']
+      console.log(jwt_decode(data.userToken))
+
+      this.RegisterForm.patchValue({
+        lastname: this.userConnected.lastname,
+        firstname: this.userConnected.firstname
       })
-    } else {
-      this.router.navigateByUrl('/login')
-    }
+
+      if (this.userConnected.email.endsWith("@adgeducation.com")) {
+        this.programeFrDropdown = environment.ADGprogrameFrDropdown;
+      }
+    })
+
 
   }
 

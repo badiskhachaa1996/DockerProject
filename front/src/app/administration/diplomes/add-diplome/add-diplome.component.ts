@@ -183,9 +183,25 @@ export class AddDiplomeComponent implements OnInit {
       date_debut_stage: [''],
       date_fin_stage: [''],
       code_diplome: ['', Validators.required],
-      formateur_id: ['']
+      formateur_id: [''],
     });
   }
+
+  get titre () { return this.formAddDiplome.get('titre'); }
+  get titre_long() { return this.formAddDiplome.get('titre_long'); }
+  get campus_id () { return this.formAddDiplome.get('campus_id');}
+  get description () { return this.formAddDiplome.get('description');}
+  get type_diplome () { return this.formAddDiplome.get('type_diplome'); }
+  get type_etude() { return this.formAddDiplome.get('type_etude'); }
+  get domaine () { return this.formAddDiplome.get('domaine'); }
+  get niveau () { return this.formAddDiplome.get('niveau'); }
+  get certificateur () { return this.formAddDiplome.get('certificateur'); }
+  get code_RNCP () { return this.formAddDiplome.get('code_RNCP'); }
+  get nb_heure () { return this.formAddDiplome.get('nb_heure'); }
+  get rythme () { return this.formAddDiplome.get('rythme'); }
+  get isCertified () { return this.formAddDiplome.get('isCertified'); }
+  get code_diplome () { return this.formAddDiplome.get('code_diplome'); }
+
   resetAddDiplome() {
     this.formAddDiplome.reset()
     this.formAddDiplome.patchValue({

@@ -169,6 +169,32 @@ app.post("/update", (req, res, next) => {
         })
 });
 
+// ajouter le droit d'acces au document ajouter 
+app.post("/setFileRight/:idetudiant", (req, res, next) => {
+
+    let filename = req.body[1]
+
+    Etudiant.findOne({ _id: req.params.idetudiant })
+        .then((etudiantFromDb) => {
+            let filearrayT = etudiantFromDb.fileRight;
+            filearrayT[filename] = req.body[2]
+
+            Etudiant.findOneAndUpdate({ _id: req.params.idetudiant },
+                {
+                    fileRight: filearrayT,
+                }, { new: true }, (err, etudiant) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(err)
+                    } else {
+
+                        res.send(etudiant)
+                    }
+                })
+        })
+        .catch((error) => { res.status(400).json({ error }) });
+});
+
 app.get('/sendEDT/:id/:update', (req, res, next) => {
     let msg = "Votre emploi du temps est disponible"
     if (req.params.update == "YES") {
@@ -462,7 +488,30 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
         console.error(err)
         res.status(400).send(err)
     }
-    res.status(200).send()
+
+    Etudiant.findOne({ _id: req.params.id })
+        .then((etudiantFromDb) => {
+            let filearrayT = etudiantFromDb.fileRight;
+
+            delete filearrayT[req.params.filename]
+
+            Etudiant.findOneAndUpdate({ _id: req.params.id },
+                {
+                    fileRight: filearrayT,
+                }, { new: true }, (err, etudiant) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(err)
+                    }
+                    else {
+                        res.status(200).send()
+                    }
+                })
+        })
+        .catch((error) => { res.status(400).json({ error }) });
+
+
+
 
 });
 

@@ -39,6 +39,7 @@ export class Prospect {
         public payement?:[],
         public avancement_visa?:boolean,
         public etat_traitement?:string,
+     
     ) { }
 
 }

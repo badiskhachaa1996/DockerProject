@@ -1,7 +1,8 @@
 <div class="grid">
-
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
     <!-- Partie ajout de documents -->
     <div class="col-12" *ngIf="showUploadFile!=null">
+       
         <div class="card">
             <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
                 aria-hidden="true"> </i>
@@ -27,8 +28,9 @@
         <div class="card">
 
             <h4 style="text-align: center;">Modifier cet étudiant </h4>
-            <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                    style="color: red;"> * </span> sont obligatoires</small>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
+             </div>
 
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showFormUpdateEtudiant = false; formUpdateEtudiant.reset()" aria-hidden="true"></i>
