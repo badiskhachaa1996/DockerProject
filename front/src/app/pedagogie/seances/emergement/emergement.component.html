@@ -30,20 +30,25 @@
         </div>
     </form>
 </div>
-<div class="card" *ngIf="presence && seance " [ngStyle]="{'background-color': presence.isPresent ? 'white' : 'tomato'}">
+<div class="card" *ngIf="presence && seance " [ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}">
     <div class="grid">
-        <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div *ngIf="!presence.isPresent">
-            <p>Vous avez été noté absent lors de cette séance</p>
-            <p *ngIf="presence.justificatif && presence.isPresent">Votre justificatif a été accepté</p>
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <h5 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM/yyyy"}}</h5>
         </div>
-        <div *ngIf="presence.isPresent">
-            <p>Vous avez été noté présent lors de cette séance</p>
-            <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
-                (click)="showUploadFile=true"></button>
-        </div>
-        <div>
-            <h5 style="text-align: center;">Documents</h5>
+        <div class="col-12">
+            <small><span style="font-weight: bold;"> Etat :</span></small><br><br>
+            <div *ngIf="!presence.isPresent">
+                <small> Vous avez été noté absent lors de cette séance</small>
+                <p *ngIf="presence.justificatif && presence.isPresent">Votre justificatif a été accepté</p>
+            </div>
+            <div *ngIf="presence.isPresent">
+                <small>Vous avez été noté présent lors de cette séance</small>
+                <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
+                    (click)="showUploadFile=true"></button>
+            </div>
+        </div>    
+        <div class="col-12">
+            <small> <span style="font-weight: bold;"> Documents : </span></small><br>
             <ul>
                 <li *ngFor="let file of seance.fileRight; index as i">
                     <i *ngIf="token.role!='user' || formateurInfo" class="pi pi-times"
@@ -57,8 +62,7 @@
                     </em>
                 </li>
             </ul>
-
-            <p *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</p>
+            <small *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</small>
         </div>
     </div>
 </div>
@@ -76,10 +80,10 @@
             aria-hidden="true"></i><br>
         <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
         <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-            class="ui-button-raised ui-button-success col-12 md:col-5 mb-2" label="Envoyer le justificatif"
+             label="Envoyer le justificatif"
             (click)="sendJustif();"></button>
         <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
-            class="ui-button-raised ui-button-success col-12 md:col-5 md:col-offset-2 mb-2" label="Télécharger votre justificatif"
+             label="Télécharger votre justificatif"
             (click)="downloadFile(presence);"></button>
         </div>
     </div>
@@ -200,6 +204,18 @@
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" rowExpandMode="single" [rows]="10"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
+                            class="mb-2" (onChange)="dt1.filter($event.value, 'classe_id', 'contains')">
+                        </p-dropdown>
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" />
+                        </span>
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
                         <th pSortableColumn="user_id" scope="col">
@@ -207,6 +223,9 @@
                         </th>
                         <th pSortableColumn="user_id" scope="col">
                             Prénom <p-sortIcon field="user_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="groupe" scope="col">
+                            Groupe <p-sortIcon field="groupe"></p-sortIcon>
                         </th>
                         <th pSortableColumn="isPresent" scope="col">
                             Présent <p-sortIcon field="isPresent"></p-sortIcon>
@@ -226,6 +245,9 @@
                         </td>
                         <td *ngIf="userList[rowData.user_id]">
                             {{userList[rowData.user_id].firstname}}
+                        </td>
+                        <td *ngFor="let cid of seance.classe_id; let index = index">
+                            {{classeList[cid].nom}}
                         </td>
                         <td>
                             {{(rowData.isPresent)?"Oui":"Non"}}

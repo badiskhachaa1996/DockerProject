@@ -30,38 +30,42 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Ajouter une école</h4>
+            <div style="text-align: center;">
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
+            </div>
+            <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="addecoleForm" (ngSubmit)="saveEcole()">
                 <div class="field col-12 md:col-6">
-                    <label For="libelle">Libéllé</label>
+                    <label For="libelle">Libéllé  <span style="color: red;"> * </span></label>
                     <input pInputText id="libelle" type="text" formControlName="libelle" />
 
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="site">Site web</label>
+                    <label For="site">Site web <span style="color: red;"> * </span></label>
                     <input pInputText id="site" type="text" formControlName="site" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="email">Email</label>
+                    <label For="email">Email <span style="color: red;"> * </span></label>
                     <input pInputText id="email" type="email" formControlName="email" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="phone">Téléphone</label>
+                    <label For="phone">Téléphone <span style="color: red;"> * </span></label>
                     <input pInputText id="phone" type="phone" formControlName="telephone" />
                 </div>
                 <div class="field col-12 md:col-3">
-                    <label For="annee_scolaire">Année scolaire</label>
+                    <label For="annee_scolaire">Année scolaire <span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="annee_id" [options]="dropdownAnnee" optionLabel="libelle" ></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-3">
-                    <label For="adress">Adresse</label>
+                    <label For="adress">Adresse <span style="color: red;"> * </span></label>
                     <input pInputText id="adress" type="text" formControlName="adresse" />
                 </div>
                 <div class="field col-12 md:col-3">
-                    <label For="ville">Ville</label>
+                    <label For="ville">Ville <span style="color: red;"> * </span></label>
                     <input pInputText id="ville" type="text" formControlName="ville" />
                 </div>
                 <div class="field col-12 md:col-3">
-                    <label For="pays">Pays</label>
+                    <label For="pays">Pays <span style="color: red;"> * </span></label>
                     <input pInputText id="pays" type="text" formControlName="pays" />
                 </div>
                 <div style="justify-content: right;">

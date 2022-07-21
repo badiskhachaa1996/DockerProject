@@ -84,15 +84,15 @@
                 <h4 style="text-align: center;">Créer un ticket </h4>
                 <form [formGroup]="TicketForm" (ngSubmit)="addTicket()" class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label For="service">Service</label>
+                        <label For="service">Service <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="filterService" formControlName="service" optionLabel="label" placeholder="Choissisez un service" (change)="onChange()"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="sujet">Sujet</label>
+                        <label For="sujet">Sujet <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="listSujets[TicketForm.value.service._id]" formControlName="sujet" optionLabel="label" placeholder="Choissisez un sujet"></p-dropdown>
                     </div>
                     <div class="field col-12">
-                        <label For="description">Description du ticket</label>
+                        <label For="description">Description du ticket <span style="color: red;"> * </span></label>
                         <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize rows="3" cols="30"></textarea>
                         <div *ngIf="description.invalid && (description.touched || description.dirty)">
                             <span *ngIf="description.errors?.required" style="color: red;">
@@ -115,15 +115,15 @@
                 <h4 style="text-align: center;">Créer un ticket </h4>
                 <form [formGroup]="TicketForm1" (ngSubmit)="modifyTicket()" class="p-fluid p-formgrid grid">
                     <div class="field col-12 md:col-6">
-                        <label For="service">Service</label>
+                        <label For="service">Service <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="listServices1" formControlName="service" optionLabel="label"></p-dropdown>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="sujet">Sujet</label>
+                        <label For="sujet">Sujet <span style="color: red;"> * </span></label>
                         <p-dropdown [options]="listSujets1[TicketForm1.value.service._id]" formControlName="sujet" optionLabel="label"></p-dropdown>
                     </div>
                     <div class="field col-12">
-                        <label For="description">Description du ticket</label>
+                        <label For="description">Description du ticket <span style="color: red;"> * </span></label>
                         <textarea pInputTextarea placeholder="Description du ticket" formControlName="description" autoResize rows="3" cols="30"></textarea>
                     </div>
                     <div>

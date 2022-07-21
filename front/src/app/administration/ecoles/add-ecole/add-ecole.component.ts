@@ -26,7 +26,7 @@ export class AddEcoleComponent implements OnInit {
 
   addecoleForm: FormGroup = new FormGroup({
     libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
+    email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
     site: new FormControl('', Validators.required),
     annee_id: new FormControl('', Validators.required),
     telephone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),

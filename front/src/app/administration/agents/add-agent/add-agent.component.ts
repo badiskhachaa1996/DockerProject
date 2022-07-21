@@ -43,7 +43,7 @@ export class AddAgentComponent implements OnInit {
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com))$")]),
-    indicatif: new FormControl('', [Validators.required]),
+    indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.minLength(10), Validators.maxLength(14)]),
     role: new FormControl('user', Validators.required),
     service_id: new FormControl(""),
@@ -100,7 +100,7 @@ export class AddAgentComponent implements OnInit {
     this.entrepriseService.getAll().subscribe(
       ((response) => {
         response.forEach(entreprise => {
-          this.entreprisesList.push({ libelle: entreprise.r_sociale, value: entreprise._id });
+          this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
         })
         this.RegisterForm.patchValue({ entreprise: this.entreprisesList[0] })
       }),
@@ -109,14 +109,14 @@ export class AddAgentComponent implements OnInit {
     this.campusService.getAll().subscribe(data => {
       this.campusList = []
       data.forEach(element => {
-        this.campusList.push({ libelle: element.libelle, value: element._id });
+        this.campusList.push({ label: element.libelle, value: element._id });
       });
       this.RegisterForm.patchValue({ campus: this.campusList[0] })
     })
     this.formationService.getAll().subscribe(data => {
       this.formationList = []
       data.forEach(element => {
-        this.formationList.push({ libelle: element.titre, value: element._id });
+        this.formationList.push({ label: element.titre, value: element._id });
       });
       this.RegisterForm.patchValue({ formation: this.formationList[0] })
     })
