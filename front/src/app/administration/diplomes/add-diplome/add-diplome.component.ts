@@ -26,14 +26,14 @@ import { Ecole } from 'src/app/models/Ecole';
 export class AddDiplomeComponent implements OnInit {
 
   rythmeList = [
-    {value: "Choissisez le rythme de la formmation", actif: true},
+    { value: "Choissisez le rythme de la formmation", actif: true },
     { value: "2 jours par semaine", actif: false },
     { value: "1 semaine sur 3", actif: false },
     { value: "1 jour par semaine", actif: false }
   ]
 
   domaineEtude = [
-    {value: "Choissisez le type du diplôme", actif: true},
+    { value: "Choissisez le type du diplôme", actif: true },
     { value: "Commerce", actif: false },
     { value: "RH", actif: false },
     { value: "Informatique", actif: false },
@@ -43,20 +43,20 @@ export class AddDiplomeComponent implements OnInit {
   ]
 
   typeDiplome = [
-    {value: "Choissisez le type du diplôme", actif: true},
+    { value: "Choissisez le type du diplôme", actif: true },
     { value: "BTS", actif: false },
     { value: "RNCP", actif: false }
   ]
 
   typeEtude = [
-    {value: "Choissisez le type d'étude", actif: true},
+    { value: "Choissisez le type d'étude", actif: true },
     { value: "Initial", actif: false },
     { value: "Apprentissage", actif: false },
     { value: "Continu", actif: false }
   ]
 
   niveauEtude = [
-    {value: "Choissisez le type d'étude", actif: true},
+    { value: "Choissisez le type d'étude", actif: true },
     { value: "Niveau 5", actif: false },
     { value: "Niveau 6", actif: false },
     { value: "Niveau 7", actif: false }
@@ -70,7 +70,7 @@ export class AddDiplomeComponent implements OnInit {
   diplomes: Diplome[] = [];
 
   formAddDiplome: FormGroup;
-  
+
   showFormAddDiplome: boolean = false;
 
   formUpdateDiplome: FormGroup;
@@ -237,7 +237,7 @@ export class AddDiplomeComponent implements OnInit {
     let date_fin_stage = this.formAddDiplome.get('date_fin_stage')?.value;
     let code_diplome = this.formAddDiplome.get('code_diplome')?.value;
     let formateur_id = this.formAddDiplome.get('formateur_id')?.value.value;
-    
+
     //création et envoie du nouvelle objet diplôme
     let newDiplome = new Diplome(
       null, titre, titre_long, campus_id, description, type_diplome, type_etude, domaine, niveau, certificateur,

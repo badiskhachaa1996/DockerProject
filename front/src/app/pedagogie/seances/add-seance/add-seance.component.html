@@ -1,22 +1,30 @@
 <p-toast></p-toast>
 <div class="grid">
     <div class="col-12">
-        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
+            modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Voici les informations à savoir pour créer une nouvelle séance : 
+                Voici les informations à savoir pour créer une nouvelle séance :
             </p>
             <p class="line-height-3 m-0">
-                <span style="color: red;">NB</span> : Avant de créer une séance, merci de bien vouloir vérifier qu'au moins un groupe, une matière, un campus, un formateur soient ajoutés.
+                <span style="color: red;">NB</span> : Avant de créer une séance, merci de bien vouloir vérifier qu'au
+                moins un groupe, une module, un campus, un formateur soient ajoutés.
             </p>
             <ul>
-                <li><span style="color: red;">Nom du groupe</span> : Sélectionner un ou plusieurs groupes pour lesquels vous voulez ajouter une séance.</li>
-                <li><span style="color: red;">Matière</span> : Sélectionner la matière de la séance.</li>
-                <li><span style="color: red;">Début / Fin </span> : Choissisez la date ainsi que l'heure de début et de fin de la séance.</li>
+                <li><span style="color: red;">Nom du groupe</span> : Sélectionner un ou plusieurs groupes pour lesquels
+                    vous voulez ajouter une séance.</li>
+                <li><span style="color: red;">Module</span> : Sélectionner la module de la séance.</li>
+                <li><span style="color: red;">Début / Fin </span> : Choissisez la date ainsi que l'heure de début et de
+                    fin de la séance.</li>
                 <li><span style="color: red;">Campus</span> : Sélectionner le campus où se déroulera la séance.</li>
                 <li><span style="color: red;">Nom du formateur</span> : Sélectionner le formateur de la séance.</li>
-                <li><span style="color: red;">Nombre de séance/séances max</span> : Indiquez le nombre de séances sur le nombre de séance maximum</li>
-                <li><span style="color: red;">Présentiel/Distanciel</span> : Choissisez si la séance est en présentiel ou en distanciel. Si la séance est en présentiel, une liste de choix va apparaître. Elle vous permettra de sélectionner la salle dans laquelle se déroulera la séance.</li>
-                <li><span style="color: red;">Planifiée/Validée</span> : Une séance planifiée est une séance qui est en attente de validation. Une séance validée est une séance validé par l'équipe pédaogique et par le formateur.</li>
+                <li><span style="color: red;">Numéro de séance</span> : Indiquez le numéro de la séance</li>
+                <li><span style="color: red;">Présentiel/Distanciel</span> : Choissisez si la séance est en présentiel
+                    ou en distanciel. Si la séance est en présentiel, une liste de choix va apparaître. Elle vous
+                    permettra de sélectionner la salle dans laquelle se déroulera la séance.</li>
+                <li><span style="color: red;">Planifiée/Validée</span> : Une séance planifiée est une séance qui est en
+                    attente de validation. Une séance validée est une séance validé par l'équipe pédaogique et par le
+                    formateur.</li>
             </ul>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -42,16 +50,23 @@
                         defaultLabel="Selection des classes" optionLabel="nom"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Matière <span style="color: red;"> * </span></label><br>
-                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom" placeholder="Choissisez une matière"
-                        emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                    <label>Module</label><br>
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                        placeholder="Choissisez une module" emptyFilterMessage="Pas de module trouvé"
+                        filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Libelle <span style="color: red;"> * </span></label><br>
-                    <input pInputText type="text" formControlName="libelle" placeholder="Libelle de la séance"
+                    <label>Remarque</label><br>
+                    <input pInputText type="text" formControlName="libelle" placeholder="Examen"
                         class="form-control col-12">
                 </div>
+                <!--<p class="col-12 md:col-12" *ngIf="seanceForm.value.date_debut">
+                    {{seanceForm.value.date_debut | date:"long"}}<br>
+                    {{seanceForm.value.date_debut | json}}<br>
+                    {{testAffichage(seanceForm.value.date_debut)| json}}<br>
+                    {{testAffichage(seanceForm.value.date_debut)| date:"long"}}<br>
+                </p>-->
                 <div class="field col-12 md:col-6">
                     <label>Début: <span style="color: red;"> * </span></label>
                     <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
@@ -63,26 +78,30 @@
                         placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Campus <span style="color: red;"> * </span></label><br>
-                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
-                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
-                    </p-dropdown>
+                    <label>Campus</label><br>
+                    {{seanceForm.value.campus_id|json}}
+                    <p-multiSelect formControlName="campus_id" [options]="dropdownCampus"
+                        (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
+                        filterPlaceholder="Nom du campus" filter="true">
+                    </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
-                    <label>Nom du formateur <span style="color: red;"> * </span></label><br>
-                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom" placeholder="Choissisez un formateur"
-                        emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                    <label>Nom du formateur</label><br>
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
+                        filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Nombre de séance/Séance Max <span style="color: red;"> * </span></label><br>
-                    <input pInputText type="text" formControlName="nbseance" placeholder="1/9"
+                    <label>Numéro de séance</label><br>
+                    <input pInputText type="number" formControlName="nbseance" placeholder="1"
                         class="form-control col-8">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <small>(Obligatoire) <span style="color: red;"> * </span></small>
-                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
-                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+
+                    <p-selectButton
+                        [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
+                        formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
                     <small>(Obligatoire) <span style="color: red;"> * </span></small>
@@ -90,9 +109,9 @@
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 
                 </div>
-                <div class="field col-12 md:col-12" *ngIf="isPresentiel.value==true">
-                    <label>Salle Présentiel: <span style="color: red;"> * </span></label><br>
-                    <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
+                <div class="field col-12 md:col-12" *ngIf="isPresentiel.value!='Distanciel' && salleNames.length!=0">
+                    <label>Salle Présentiel:</label><br>
+                    <p-dropdown formControlName="salle_name" [options]="salleNames">
                     </p-dropdown>
                 </div>
                 <div>

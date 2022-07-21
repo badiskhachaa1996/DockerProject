@@ -36,8 +36,14 @@ export class AddCampusComponent implements OnInit {
     site: new FormControl(''),
   });
 
-  columns = [
-  ]
+  salles = []
+
+  onAddSalle() {
+    this.salles.push("")
+  }
+  changeValue(i, value) {
+    this.salles[i] = value
+  }
   token;
 
   constructor(private ecoleService: EcoleService, private messageService: MessageService, private campusService: CampusService, private route: ActivatedRoute, private router: Router, private anneeScolaireService: AnneeScolaireService) { }
@@ -59,13 +65,16 @@ export class AddCampusComponent implements OnInit {
       });
 
     })
-    this.ecoleService.getByID(this.ecoleid).subscribe((data) => {
-      let idanneeselected = data.dataEcole.annee_id;
-      this.EcoleSelected = data.dataEcole;
-      this.anneeScolaireService.getByID(idanneeselected).subscribe((data2) => {
-        this.AnneeSelected = data2.dataAnneeScolaire;
+    if (this.ecoleid) {
+      this.ecoleService.getByID(this.ecoleid).subscribe((data) => {
+        let idanneeselected = data.dataEcole.annee_id;
+        this.EcoleSelected = data.dataEcole;
+        this.anneeScolaireService.getByID(idanneeselected).subscribe((data2) => {
+          this.AnneeSelected = data2.dataAnneeScolaire;
+        })
       })
-    })
+    }
+
   }
 
   get libelle() { return this.addcampusForm.get('libelle'); }
@@ -77,11 +86,12 @@ export class AddCampusComponent implements OnInit {
   get site() { return this.addcampusForm.get('site'); }
   
   saveCampus() {
-    let campus = new Campus(null, this.addcampusForm.value.libelle, this.addcampusForm.value.ecole_id.value, this.addcampusForm.value.ville, this.addcampusForm.value.pays, this.addcampusForm.value.email, this.addcampusForm.value.adresse, this.addcampusForm.value.site)
+    let campus = new Campus(null, this.addcampusForm.value.libelle, this.addcampusForm.value.ecole_id.value, this.addcampusForm.value.ville, this.addcampusForm.value.pays, this.addcampusForm.value.email, this.addcampusForm.value.adresse, this.addcampusForm.value.site, this.salles)
     this.campusService.createCampus(campus).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
       this.campuss.push(data)
       this.addcampusForm.reset();
+      this.salles = []
     }, (error) => {
       console.error(error)
     });

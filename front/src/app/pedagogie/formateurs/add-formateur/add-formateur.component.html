@@ -2,32 +2,32 @@
 <div class="grid">
     <div *ngIf="!showFormAddFormateur">
         <div class="col-12">
-            <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle matière"
+            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module"
                 [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
                 [breakpoints]="{'960px': '75vw'}">
                 <p class="line-height-3 m-0">
                     Voici les informationns à savoir pour ajouter une nouveau formateur:
                 </p>
                 <ul>
-                    <li><span style="color: red;">Nom de la matière</span> : Entrez le nom de la matiere. </li>
+                    <li><span style="color: red;">Nom de la module</span> : Entrez le nom du module. </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation de la matière. </li>
+                    <li><span style="color: red;">Abréaviation</span> : Entrez l'abréviation du module. </li>
                 </ul>
                 <ul>
                     <li><span style="color: red;">Classe</span> : Choissisez la classe dans la liste déroulante dans
-                        laquelle vous voulez ajoutez la matière. </li>
+                        laquelle vous voulez ajoutez la module. </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum de la matière.
+                    <li><span style="color: red;">Séance max</span> : Entrez le nombre de séances maximum du module.
                     </li>
                 </ul>
                 <ul>
-                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire de la matière. </li>
+                    <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire du module. </li>
                 </ul>
                 <p class="line-height-3 m-0">
-                    Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter la
-                        matière"</span> pour finaliser l'ajout de la matiere.
+                    Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter le
+                        module"</span> pour finaliser l'ajout du module.
                 </p>
                 <ng-template pTemplate="footer">
                     <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -142,6 +142,27 @@
                         <p-dropdown [options]="typeContratList" optionLabel="label" formControlName="type_contrat"
                             optionDisabled="actif">
                         </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6"
+                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
+                        <label For="isPrestataire">Entreprise</label>
+                        <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label>Campus</label><br>
+                        <p-multiSelect formControlName="campus" [options]="dropdownCampus"
+                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
+                            placeholder="Choissisez un campus">
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="nda">Numéro de Déclaration d'Activité </label>
+                        <input pInputText id="nda" type="text" placeholder="Numéro de Déclaration d'Activité "
+                            formControlName="nda" />
                     </div>
 
                     <div class="field col-12 md:col-12" *ngIf="onGetStatut()=='Prestation et Vacation'">
@@ -273,36 +294,40 @@
                         </p-tabView>
                     </div>
 
-                    <div class="field col-12 md:col-6">
+                    <div class="field col-12 md:col-6"
+                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
                         <input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
                             formControlName="taux_h" />
                     </div>
-                    <div class="field col-12 md:col-6">
-                        <label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
+                    <div class="field col-12 md:col-6"
+                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
+                        <label For="cout_journalier">Coût journalier</label>
                         <input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
                             formControlName="taux_j" />
                     </div>
 
                     <div class="field col-12 md:col-12" formArrayName="volume_h">
-                        <label>Liste des matières auxFquelles il est rattaché: <small>(Obligatoire) <span style="color: red;"> * </span></small></label>
+                        <label>Liste des matières auxquelles il est rattaché: <small>(Obligatoire) <span style="color: red;"> * </span></small></label>
                         <div *ngFor="let tempControl of getVolumeH().controls; let i = index">
                             <p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
                             <div>
                                 <div class="field">
                                     <p-dropdown [options]="matiereList" [group]="true"></p-dropdown>
                                 </div>
-                                <div class="field">
-                                    <input type="number" (change)="changeVolumeH(i,$event)" placeholder="Volume horaire"
-                                        value="0" pInputText>
+                                <div class="col-6 md:col-4">
+                                    <label>Volume Horaire: </label>
+                                    <input type="number" (change)="changeVolumeH(i,$event,'volume_init')"
+                                        placeholder="Volume horaire" value="0" pInputText>
                                 </div>
-                                <div class="field">
+                                <div class="col-12 md:col-2">
                                     <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteMatiereAdd(i)"
                                         aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
-                        <button type="button" (click)="onAddMatiere()" pButton label="Ajouter une matière"></button>
+                        <button type="button" (click)="onAddMatiere()" pButton
+                            label="Ajouter un module enseigné"></button>
                     </div>
 
                     <div class="field col-12 md:col-6"
@@ -331,25 +356,28 @@
                         <div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">
 
                             <h5 style="color:red ;"> Jury pour diplome n°{{i+1}}: </h5>
-                            <div class=" col-12 md:col-12">
-                                <label>Diplome:</label><br>
-                                <p-dropdown  [options]="diplomesListe" optionLabel="titre"
-                                    (onChange)="changeCout(i, $event,'titre')" [(value)]="jury_diplomesList[i]['titre']"
-                                    placeholder="Titre diplome" class="form-control"></p-dropdown>
-                            </div>
-                            <div class="col-12 md:col-12">
-                                <label>Cout Horaire:</label><br>
-                                <input type="number" (change)="changeCout(i,$event,'cout_h')"
-                                    [(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0" pInputText>
-                            </div>
-                            <div class="field col-12 md:col-2">
-                                <i class="pi pi-trash" style="cursor: pointer;" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <label>Diplome:</label><br>
+                                    <p-dropdown [options]="diplomesListe" optionLabel="titre"
+                                        (onChange)="changeCout(i, $event,'titre')"
+                                        [(value)]="jury_diplomesList[i]['titre']" placeholder="Choissisez un Diplome"
+                                        class="form-control"></p-dropdown>
+                                </div>
+                                <div class="col-12 md:col-4">
+                                    <label>Cout Horaire:</label><br>
+                                    <input type="number" (change)="changeCout(i,$event,'cout_h')"
+                                        [(value)]="jury_diplomesList[i]['cout_h']" placeholder="20" value="0"
+                                        pInputText>
+                                </div>
+                                <div class="field col-12 md:col-2">
+                                    <i class="pi pi-trash" (click)="deleteJ_diplome(i)" aria-hidden="true"></i>
+                                </div>
                             </div>
                         </div>
-                        <div class="field col-12 md:col-12">
-                            <button type="button" (click)="onAddJ_diplome()" pButton
-                                label="Ajouter un diplome"></button>
-                        </div>
+                        <button type="button" (click)="onAddJ_diplome()" pButton
+                            label="Ajouter une disponibilité de jury"></button>
+
                     </div>
 
                     <div class="field col-12 md:col-12">

@@ -9,12 +9,13 @@ const seanceSchema = mongoose.Schema({
     date_fin: { type: Date, required: true },
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'formateur', required: false },
     infos: { type: String, required: false },
-    isPresentiel: { type: Boolean, default: false },
+    isPresentiel: { type: String, default: false },
     salle_name: { type: String },
     isPlanified: { type: Boolean, default: false },
-    campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'campus', required: false },
+    campus_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'campus', required: false },
     nbseance: { type: Number, required: false },
-    fileRight: { type: [mongoose.Schema.Types.Mixed], default: [] }//{name:"",right:false,upload_by:mongoose.Schema.Types.ObjectId}
+    fileRight: { type: [mongoose.Schema.Types.Mixed], default: [] },//{name:"",right:false,upload_by:mongoose.Schema.Types.ObjectId}
+    remarque: { type: String }
 });
 
 //Creation de la table seance et export du model Seance

@@ -79,6 +79,7 @@ const matiereController = require('./controllers/matiereController');
 const noteController = require('./controllers/noteController');
 const entrepriseController = require('./controllers/entrepriseController');
 const examenController = require('./controllers/examenController');
+const rbc = require('./controllers/rachatBulletinController')
 
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
@@ -120,6 +121,8 @@ app.use('/', function (req, res, next) {
         }
     }
 });
+
+app.use('/soc/rachatBulletin', rbc)
 
 app.use("/soc/user", UserController);
 

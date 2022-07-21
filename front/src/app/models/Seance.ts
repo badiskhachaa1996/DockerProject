@@ -9,12 +9,13 @@ export class Seance {
         public date_fin?: Date,
         public formateur_id?: string,
         public infos?: string,
-        public isPresentiel?: Boolean,
+        public isPresentiel?: string,
         public salle_name?: string,
         public isPlanified?: Boolean,
-        public campus_id?: string,
+        public campus_id?: string[],
         public nbseance?: number,
-        public fileRight?: any[]
+        public fileRight?: any[],
+        public remarque?: string
     ) { }
 }
 

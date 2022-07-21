@@ -22,7 +22,7 @@ import { Diplome } from 'src/app/models/Diplome';
 })
 export class FirstConnectionComponent implements OnInit {
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService:DiplomeService) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
@@ -43,7 +43,7 @@ export class FirstConnectionComponent implements OnInit {
   statutList = [environment.typeUser[0], environment.typeUser[2]]
 
   classes: Classe[] = [];
-  entreprises : Entreprise[] = [];
+  entreprises: Entreprise[] = [];
   RegisterForm: FormGroup;
   diplomes: Diplome[] = [];
 
@@ -63,9 +63,9 @@ export class FirstConnectionComponent implements OnInit {
       postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       classe_id: new FormControl(this.dropdownClasse[0]),
       nationalite: new FormControl(this.nationList[0]),
-      date_naissance: new FormControl("",Validators.required),
+      date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
-      diplome : new FormControl(this.programeFrDropdown[0]),
+      diplome: new FormControl(this.programeFrDropdown[0]),
     });
   }
 
@@ -73,28 +73,23 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-    if (token) {
-      console.log(token)
-      this.AuthService.getById(token['id']).subscribe((data) => {
-        console.log(data)
-        this.userConnected = jwt_decode(data.userToken)['userFromDb']
-        console.log(jwt_decode(data.userToken))
-        if (this.userConnected.phone == null || this.userConnected.civilite == null || this.userConnected.type == null) {
-          this.RegisterForm.patchValue({
-            lastname: this.userConnected.lastname,
-            firstname: this.userConnected.firstname
-          })
-        } else {
-          localStorage.removeItem("modify")
-          this.router.navigateByUrl('/ticket/suivi')
-        }
-        if (this.userConnected.email.endsWith("@adgeducation.com")) {
-          this.programeFrDropdown = environment.ADGprogrameFrDropdown;
-        }
+
+    console.log(token)
+    this.AuthService.getById(token['id']).subscribe((data) => {
+      console.log(data)
+      this.userConnected = jwt_decode(data.userToken)['userFromDb']
+      console.log(jwt_decode(data.userToken))
+
+      this.RegisterForm.patchValue({
+        lastname: this.userConnected.lastname,
+        firstname: this.userConnected.firstname
       })
-    } else {
-      this.router.navigateByUrl('/login')
-    }
+
+      if (this.userConnected.email.endsWith("@adgeducation.com")) {
+        this.programeFrDropdown = environment.ADGprogrameFrDropdown;
+      }
+    })
+
 
   }
 
@@ -103,19 +98,19 @@ export class FirstConnectionComponent implements OnInit {
 
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
-         ((response) => {
-           response.forEach(item => {
-             this.dropdownClasse.push({ nom: item.nom, value: item._id });
-             this.classes[item._id] = item;
-           });
-  
-         }),
-         ((error) => { console.error(error)})
-       );
+      ((response) => {
+        response.forEach(item => {
+          this.dropdownClasse.push({ nom: item.nom, value: item._id });
+          this.classes[item._id] = item;
+        });
+
+      }),
+      ((error) => { console.error(error) })
+    );
 
 
     //Recuperation de la liste des entreprises
-      this.entrepriseService.getAll().subscribe(
+    this.entrepriseService.getAll().subscribe(
       ((response) => {
         response.forEach(item => {
           this.dropdownEntreprise.push({ nom: item.r_sociale, value: item._id });
@@ -123,11 +118,11 @@ export class FirstConnectionComponent implements OnInit {
         });
 
       }),
-      ((error) => { console.error(error)})
+      ((error) => { console.error(error) })
     );
 
-     //Recuperation de la liste des diplome
-     this.diplomeService.getAll().subscribe(
+    //Recuperation de la liste des diplome
+    this.diplomeService.getAll().subscribe(
       ((response) => {
         response.forEach(item => {
           this.dropdownDiplome.push({ nom: item.titre, value: item._id });
@@ -256,7 +251,7 @@ export class FirstConnectionComponent implements OnInit {
   get phone() { return this.RegisterForm.get('phone'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
 
-  
+
   get type() { return this.RegisterForm.get('type').value.value; }
 
   get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
@@ -270,6 +265,6 @@ export class FirstConnectionComponent implements OnInit {
   get nationalite() { return this.RegisterForm.get('nationalite').value; }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
   get entreprise() { return this.RegisterForm.get('entreprise'); }
-  get diplome() { return this.RegisterForm.get('diplome');}
+  get diplome() { return this.RegisterForm.get('diplome'); }
 
 }

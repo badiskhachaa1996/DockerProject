@@ -11,9 +11,9 @@
                         defaultLabel="Selection des classes" optionLabel="nom" filter="true"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Matière</label><br>
-                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
-                        emptyFilterMessage="Pas de matière trouvé" filterPlaceholder="Nom de matière" filter="true">
+                    <label>Module</label><br>
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"  placeholder="Choissisez un module"
+                        emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom du module" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
@@ -33,25 +33,28 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Nom du formateur</label><br>
-                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"  placeholder="Choissisez un formateur"
                         emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus</label><br>
-                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
-                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true">
-                    </p-dropdown>
+                    <p-multiSelect formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
+                        (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
+                        filterPlaceholder="Nom du campus" filter="true">
+                    </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <p-selectButton [options]="[{name:'Présentiel',value:true},{name:'Distanciel',value:false}]"
-                        formControlName="isPresentiel" optionLabel="name" optionValue="value"></p-selectButton>
+                    <p-selectButton
+                        [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
+                        formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
                 </div>
-                <div class="field col-12 md:col-12" *ngIf="isPresentielUpdated.value==true">
+                <div class="field col-12 md:col-12"
+                    *ngIf="isPresentielUpdated.value!='Distanciel' && salleNames.length!=0">
                     <label>Salle Présentiel:</label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames" optionLabel="value">
                     </p-dropdown>
@@ -75,7 +78,8 @@
             <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="5"
                 responsiveLayout="scroll" [paginator]="true" [pageLinks]="5" [responsive]="true"
                 [totalRecords]="seances.length" [filterDelay]="0"
-                [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']" styleClass="p-datatable-gridlines">
+                [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']"
+                styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -95,17 +99,19 @@
 
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th pSortableColumn="classe_id" scope="col" style="text-align:center">
-                            Groupe <p-sortIcon field="classe_id"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="libelle" scope="col" style="text-align:center">
-                            Libelle <p-sortIcon field="libelle"></p-sortIcon>
-                        </th>
                         <th pSortableColumn="abbrv" scope="col" *ngIf="type!='classe'" style="text-align:center">
                             Code Grp <p-sortIcon field="abbrv"></p-sortIcon>
                         </th>
+
                         <th pSortableColumn="matiere" scope="col" style="text-align:center">
-                            Matière <p-sortIcon field="matiere"></p-sortIcon>
+                            Module <p-sortIcon field="matiere"></p-sortIcon>
+                        </th>
+                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col"
+                            style="text-align:center">
+                            Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="libelle" scope="col" style="text-align:center">
+                            Libelle <p-sortIcon field="libelle"></p-sortIcon>
                         </th>
 
                         <th pSortableColumn="date_debut" scope="col" style="text-align:center">
@@ -114,9 +120,7 @@
                         <th pSortableColumn="date_fin" scope="col" style="text-align:center">
                             Fin <p-sortIcon field="date_fin"></p-sortIcon>
                         </th>
-                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col" style="text-align:center">
-                            Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
-                        </th>
+
                         <th scope="col" style="text-align:center">
                             Action
                         </th>
@@ -124,23 +128,25 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr>
-                        <td *ngIf="type!='[classes]'" style="min-width: 12rem;">
+                        <td *ngIf="type!='classe'" style="min-width: 12rem;">
                             <span *ngFor="let cid of rowData.classe_id; let index = index">
-                                <span *ngIf="classes[cid] && classes[cid].nom && index==0">{{classes[cid].nom}}</span>
-                                <span *ngIf="classes[cid] && classes[cid].nom && index!=0">,<br>{{classes[cid].nom}}</span>
+                                <span
+                                    *ngIf="classes[cid] && classes[cid].abbrv && index==0">{{classes[cid].abbrv}}</span>
+                                <span
+                                    *ngIf="classes[cid] && classes[cid].abbrv && index!=0">,<br>{{classes[cid].abbrv}}</span>
                             </span>
+                        </td>
+
+                        <td style="min-width: 12rem;">
+                            {{ matieres[rowData.matiere_id]?.nom }}
+                        </td>
+
+                        <td *ngIf="type!='formateur'" style="min-width: 12rem;">
+                            {{ formateurs[rowData.formateur_id]?.firstname }} {{
+                            formateurs[rowData.formateur_id]?.lastname }}
                         </td>
                         <td style="min-width: 12rem;">
                             {{ rowData.libelle }}
-                        </td>
-                        <td *ngIf="type!='classe'" style="min-width: 12rem;">
-                            <span *ngFor="let cid of rowData.classe_id; let index = index">
-                                <span *ngIf="classes[cid] && classes[cid].abbrv && index==0">{{classes[cid].abbrv}}</span>
-                                <span *ngIf="classes[cid] && classes[cid].abbrv && index!=0">,<br>{{classes[cid].abbrv}}</span>
-                            </span>
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{ matieres[rowData.matiere_id]?.nom }}
                         </td>
 
                         <td style="min-width: 12rem;">
@@ -149,10 +155,7 @@
                         <td style="min-width: 12rem;">
                             {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
                         </td>
-                        <td *ngIf="type!='formateur'" style="min-width: 12rem;">
-                            {{ formateurs[rowData.formateur_id]?.firstname }} {{
-                            formateurs[rowData.formateur_id]?.lastname }}
-                        </td>
+
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData);" aria-hidden="true"></i>

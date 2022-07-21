@@ -22,6 +22,8 @@ import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Appreciation } from 'src/app/models/Appreciation';
 import { AppreciationService } from 'src/app/services/appreciation.service';
+import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service';
+import { RachatBulletin } from 'src/app/models/RachatBulletin';
 
 @Component({
   selector: 'app-notes',
@@ -52,10 +54,10 @@ export class NotesComponent implements OnInit {
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
-    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif:true },
-    { libelle: 'Semestre 1', value: 'Semestre 1', actif:false },
-    { libelle: 'Semestre 2', value: 'Semestre 2', actif:false },
-    { libelle: 'Semestre 3', value: 'Semestre 3', actif:false }
+    { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
+    { libelle: 'Semestre 1', value: 'Semestre 1', actif: false },
+    { libelle: 'Semestre 2', value: 'Semestre 2', actif: false },
+    { libelle: 'Semestre 3', value: 'Semestre 3', actif: false }
   ];
 
   //Données liées à la saisie de notes
@@ -78,6 +80,96 @@ export class NotesComponent implements OnInit {
 
   dropdownExamByClasse: any[] = [{ libelle: '', value: '' }];
 
+  appreciationModules = {}
+
+  initAppreciation(mode) {
+    if (mode == "set") {
+      this.notesForGenerateBulletin.forEach(n => {
+        this.appreciationModules[n.matiere_id] = ""
+      })
+    } else {
+      this.notesForGenerateBulletin.forEach(n => {
+        if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
+          this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
+        } else {
+          this.appreciationModules[n.matiere_id] = ""
+        }
+      })
+    }
+  }
+  changeAppreciation(m_id, value) {
+    this.appreciationModules[m_id] = value
+  }
+  showFormRacheter = false;
+  rachatEtudiant = []
+  matiereRachat = []
+
+  initRachatEtudiant() {
+    this.rachatEtudiant = []
+    this.matiereRachat = []
+    this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
+      rbs.forEach(rb => {
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy, isNew: false, _id: rb._id })
+      })
+    })
+    this.notesForGenerateBulletin.forEach(n => {
+      this.matiereRachat.push({ label: n.matiere_name, value: n.matiere_id })
+    })
+  }
+  addRachatEtudiant() {
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true })
+  }
+
+  updateRachatEtudiant(i, value, type) {
+    this.rachatEtudiant[i][type] = value
+  }
+
+  deleteRachatEtudiant(i, isNew) {
+    if (!isNew && confirm("Ce rachat sera supprimé totalement (même sans enregistrer le formulaire)\nEtes-vous sûr de vouloir faire cela ?")) {
+      this.RBService.delete(this.rachatEtudiant[i]._id)
+      this.rachatEtudiant.splice(i, 1)
+    }
+    if (isNew) {
+      this.rachatEtudiant.splice(i, 1)
+    }
+  }
+
+  onSubmitRachat() {
+    let problem: RachatBulletin = null
+    this.rachatEtudiant.forEach(rb => {
+      if (!rb.isNew) {
+        //Update
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        this.RBService.update(RBU).subscribe(data => {
+          testlast(rb, this)
+        }, err => {
+          problem = RBU
+          console.error(err)
+        })
+      } else {
+        //Create
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        this.RBService.create(RBC).subscribe(data => {
+          testlast(rb, this)
+        }, err => {
+          problem = RBC
+          console.error(err)
+        })
+      }
+    })
+    function testlast(rb, t) {
+      if (rb == t.rachatEtudiant[t.rachatEtudiant.length - 1]) {
+        //Dernier
+        if (problem != null) {
+          t.messageService.add({ severity: "error", summary: "Un problème est arrivé avec " + t.matieres[problem.matiere_id].nom })
+        } else {
+          this.showFormRacheter = false
+          t.messageService.add({ severity: "success", summary: "Le rachat a été enregistré avec succès" })
+        }
+      }
+    }
+  }
+
 
   //Données liées à la modification d'une note
   noteToUpdate: Note;
@@ -94,6 +186,7 @@ export class NotesComponent implements OnInit {
   classeForBGenerateBulletin: Classe;
   etudiantFromClasse: Etudiant[] = [];
   etudiantToGenerateBulletin: Etudiant;
+  semestreChoose: string;
   notesForGenerateBulletin: any[] = [];
   notesBySemestre: Note[] = [];
   matiere_id: string;
@@ -122,7 +215,10 @@ export class NotesComponent implements OnInit {
 
   @ViewChild('content', { static: false }) el!: ElementRef;
 
-  constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService, private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService, private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService, private noteService: NoteService) { }
+  constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService,
+    private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService,
+    private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService,
+    private noteService: NoteService, private RBService: RachatBulletinService) { }
 
   ngOnInit(): void {
     //Recuperation de l'année scolaire en cours
@@ -405,7 +501,7 @@ export class NotesComponent implements OnInit {
 
                 this.messageService.add({
                   severity: "error",
-                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour cette matière durant ce sémestre",
+                  summary: "Impossible d'attribuer une note, l'étudiant possède déjà une note pour ce module durant ce sémestre",
                 });
 
               }
@@ -654,6 +750,7 @@ export class NotesComponent implements OnInit {
 
   onGetNotes() {
     //Recuperation de la liste des notes d'un etudiant Par Idrissa
+    this.notesForGenerateBulletin = []
     this.noteService.getAllByIdBySemestre(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((responseNoteEtudiant) => {
         // Récuperation du campus actuelle
@@ -710,13 +807,17 @@ export class NotesComponent implements OnInit {
   GenerateBulletin2(etudiant_id, semestre) {
     //Par Morgan
     this.notesForGenerateBulletin = []
+    this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      data.listMatiere.forEach(matiere => {
-        console.log(matiere)
-        this.notesForGenerateBulletin.push({ 'note_val': data.MoyenneEtudiant[matiere], 'semestre': semestre, 'etudiant_id': etudiant_id, "matiere_id": matiere, /*'appreciation': notefromdb.appreciation,*/ 'moyPromo': this.avg(data.dicMoyMatiere[matiere]), 'maxPromo': Math.max(data.dicMoyMatiere[matiere]), 'minPromo': Math.min(data.dicMoyMatiere[matiere]) });
-      })
+      console.log(data.moyenneEtudiant)
+      this.moyEtudiant = data.moyenneEtudiant
+      this.notesForGenerateBulletin = data.data
+      this.showBulletin = true
     }, error => {
       console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
     })
   }
 
@@ -750,7 +851,7 @@ export class NotesComponent implements OnInit {
     let appr = this.formAppreciationGenerale.get('appreciation').value;
 
     //Stockage de l'appreciation dans la BD
-    let appreciation = new Appreciation(null, appr, this.semestreForGenerateBulletin, this.etudiantToGenerateBulletin._id);
+    let appreciation = new Appreciation(null, appr, this.semestreForGenerateBulletin, this.etudiantToGenerateBulletin._id, this.appreciationModules);
 
     this.appreciationService.create(appreciation).subscribe(
       ((response) => {
@@ -761,6 +862,7 @@ export class NotesComponent implements OnInit {
         this.showGenerateBulletin = true;
         this.showFormAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
+        this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -772,7 +874,7 @@ export class NotesComponent implements OnInit {
   onUpdateAppreciationGenerale() {
     let appr = this.formUpdateAppreciationGenerale.get('appreciation').value;
 
-    let appreciation = new Appreciation(this.appreciationToUpdate._id, appr, this.appreciationToUpdate.semestre, this.appreciationToUpdate.etudiant_id);
+    let appreciation = new Appreciation(this.appreciationToUpdate._id, appr, this.appreciationToUpdate.semestre, this.appreciationToUpdate.etudiant_id, this.appreciationModules);
 
     this.appreciationService.update(appreciation).subscribe(
       ((response) => {
@@ -782,6 +884,7 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
+        this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -797,7 +900,7 @@ export class NotesComponent implements OnInit {
           this.showAppreciationGenerale = true;
           this.showBtnAddAppreciationGenerale = false;
           this.showBtnUpdateAppreciationGenerale = true;
-
+          this.appreciationModules = response.appreciation_matiere
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
       }),

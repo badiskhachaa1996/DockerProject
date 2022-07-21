@@ -307,7 +307,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
     decision_admission: new FormControl(this.decisionList[0]),
     phase_complementaire: new FormControl(this.phaseComplementaire[0]),
     statut_payement: new FormControl(this.statutPayement[0]),
-    customid: new FormControl("", Validators.required),
     traited_by: new FormControl(this.listAgent[0]),
     validated_cf: new FormControl(false),
     avancement_visa: new FormControl(false)
@@ -332,6 +331,32 @@ export class GestionPreinscriptionsComponent implements OnInit {
     })
   }
 
+  generateCode(prospect: Prospect) {
+    let user: any = prospect.user_id
+    let code_pays = user.nationnalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code=>{
+      if(code[user.nationnalite] && code[user.nationnalite]!=undefined){
+        code_pays=code[user.nationnalite]
+      }
+    })
+    let prenom = user.firstname.substring(0, 1)
+    let nom = user.lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(prospect.date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.prospects.length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
+  }
+
   changeStateBtn() {
     let p = {
       _id: this.inscriptionSelected._id,
@@ -342,7 +367,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       decision_admission: this.changeStateForm.value.decision_admission.value,
       phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
       statut_payement: this.changeStateForm.value.statut_payement.value,
-      customid: this.changeStateForm.value.customid,
+      customid: this.generateCode(this.inscriptionSelected),
       traited_by: this.changeStateForm.value.traited_by.value,
       validated_cf: this.changeStateForm.value.validated_cf,
       avancement_visa: this.changeStateForm.value.avancement_visa,
@@ -384,7 +409,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.admissionService.downloadFile(id, this.ListDocuments[i]).subscribe((data) => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       var blob = new Blob([byteArray], { type: data.documentType });
-     
+
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), this.ListPiped[i])
     }, (error) => {
       console.error(error)
@@ -473,7 +498,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
       t['Confirmation CF'] = p.validated_cf
-      if (p.agent_id) {
+      if (p.agent_id &&  this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }
       dataExcel.push(t)

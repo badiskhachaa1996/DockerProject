@@ -189,6 +189,7 @@ import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
+import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 @NgModule({
     imports: [
@@ -366,6 +367,7 @@ import { NotificationComponent } from './notification/notification.component';
         FirstConnectionComponent,
         ProspectsComponent,
         ReinscritComponent,
+        DetailsEtudiantComponent,
         NotificationComponent
     ],
     providers: [MessageService, ConfirmationService,

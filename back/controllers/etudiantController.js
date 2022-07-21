@@ -223,6 +223,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
                 var dicMoy = {}
                 var dicMoyMatiere = {}
                 var MoyenneEtudiant = {} //[id_matiere:moyenne]
+                let my = 0
                 Examen.find({ classe_id: etudiant.classe_id }).then(listExamen => {
                     let dicNotes = {}
                     Note.find({ semestre: req.params.semestre }).then(n => {
@@ -276,6 +277,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
                             if (etuEx.etudiant == req.params.etudiant_id) {
                                 //5- Récupérer la moyenne de l'étudiant de chaque matière
                                 MoyenneEtudiant[etuEx.matiere] = avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere])
+                                my += MoyenneEtudiant[etuEx.matiere]
                                 if (!listMatierev2.includes(etuEx.matiere)) {
                                     listMatierev2.push(etuEx.matiere)
                                 }
@@ -287,10 +289,79 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
                             }
 
                         })
+                        console.log(MoyenneEtudiant, MoyenneEtudiant.length)
+                        my = my / MoyenneEtudiant.length
                         //                      Moyenne Classe, Moyenne Etudiant, 
-                        res.status(200).send({ dicMoyMatiere, MoyenneEtudiant, listeNotesEleves, listMatiere: listMatierev2 })
+                        res.status(200).send({ dicMoyMatiere, MoyenneEtudiant, listeNotesEleves, listMatiere: listMatierev2, moyenneGeneral: my })
                     })
                 })
+            })
+        })
+    })
+})
+
+app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
+    // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
+    // MOY TT ETU
+    // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
+    let r = []
+    let moy_tt = 0
+    Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
+        Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
+            let listEtudiantID = []
+            etudiants.forEach(etu => {
+                listEtudiantID.push(etu._id)
+            })
+            Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).then(notes => {
+                let listExamenID = []
+                let listMatiereNOM = []
+                let listNotesEtudiants = {} // {etudiant_id:{matiere_id:[number]}}
+                let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
+                let listMoyenne = {} // {matiere_nom:[number]}
+                let dicMatiere = {}
+                notes.forEach(n => {
+                    if (n.examen_id != null && !listExamenID.includes(n.examen_id._id)) {
+                        listExamenID.push(n.examen_id._id)
+                    }
+                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.nom)) {
+                        listMatiereNOM.push(n.examen_id.matiere_id.nom)
+                        dicMatiere[n.examen_id.matiere_id.nom] = n.examen_id.matiere_id
+                    }
+
+                })
+                listEtudiantID.forEach(e_id => {
+                    listNotesEtudiants[e_id] = {}
+                    listMatiereNOM.forEach(m_nom => {
+                        listNotesEtudiants[e_id][m_nom] = []
+                        notes.forEach(note => {
+                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.nom == m_nom) {
+                                listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val))
+                            }
+                        })
+                    })
+                })
+                listEtudiantID.forEach(e_id => {
+                    listMoyenneEtudiants[e_id] = {}
+                    listMatiereNOM.forEach(m_nom => {
+                        listMoyenneEtudiants[e_id][m_nom] = 0
+                        if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
+                            listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
+                        }
+                    })
+                })
+                listMatiereNOM.forEach(m_nom => {
+                    listMoyenne[m_nom] = []
+                    listEtudiantID.forEach(e_id => {
+                        listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
+                    })
+                })
+                listMatiereNOM.forEach(m_nom => {
+                    r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id:dicMatiere[m_nom]._id })
+                    moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom]
+                })
+                moy_tt = moy_tt / Object.keys(listMoyenneEtudiants[req.params.etudiant_id]).length
+                console.log({ data: r, moyenneEtudiant:moy_tt})
+                res.status(201).send({ data: r, moyenneEtudiant:moy_tt})
             })
         })
     })
@@ -314,6 +385,28 @@ function avg(myArray) {
         summ = summ + myArray[i++];
     }
     return summ / ArrayLen;
+}
+
+function min(myArray) {
+    var i = 0, min = myArray[0], ArrayLen = myArray.length;
+    while (i < ArrayLen) {
+        if(myArray[i]<min){
+            min=myArray[i]
+        }
+        i++
+    }
+    return min;
+}
+
+function max(myArray) {
+    var i = 0, min = myArray[0], ArrayLen = myArray.length;
+    while (i < ArrayLen) {
+        if(myArray[i]>min){
+            min=myArray[i]
+        }
+        i++
+    }
+    return min;
 }
 
 const multer = require('multer');
