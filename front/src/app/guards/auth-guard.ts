@@ -111,8 +111,9 @@ export class AuthGuardService implements CanActivate {
                         }
 
                         else {
-                            console.log( state)
+                            console.log( "Completer votre profil avant de continuer la navigation")
                             this.router.navigate(['/completion-profil']);
+
                             return true
                         }
                     }))
