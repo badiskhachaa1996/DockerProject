@@ -91,7 +91,7 @@ import { NotificationComponent } from './notification/notification.component';
                 path: '', component: AppMainComponent,
                 children: [
                     { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
-                    { path: 'uikit/formlayout', component: FormLayoutComponent },
+                    /*{ path: 'uikit/formlayout', component: FormLayoutComponent },
                     { path: 'uikit/input', component: InputComponent },
                     { path: 'uikit/floatlabel', component: FloatLabelComponent },
                     { path: 'uikit/invalidstate', component: InvalidStateComponent },
