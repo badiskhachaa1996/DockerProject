@@ -114,7 +114,6 @@ export const environment = {
   ],
 
   civilite: [
-    { value: "Choissiez une civilité", actif:true},
     { id: 1, value: 'Monsieur', viewValue: 'Mr', actif:false },
     { id: 2, value: 'Madame', viewValue: 'Mme', actif:false },
     { id: 3, value: 'Autre', viewValue: 'Autre', actif:false },
