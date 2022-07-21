@@ -307,13 +307,15 @@
                             formControlName="taux_j" />
                     </div>
 
-                    <div class="field col-12 md:col-12" formArrayName="volume_h">
-                        <label>Liste des matières auxquelles il est rattaché: <small>(Obligatoire) <span style="color: red;"> * </span></small></label>
-                        <div *ngFor="let tempControl of getVolumeH().controls; let i = index">
-                            <p style="font-style:italic; color: red;">Matière n°{{i+1}}</p>
-                            <div>
-                                <div class="field">
-                                    <p-dropdown [options]="matiereList" [group]="true"></p-dropdown>
+                    <div class="field col-12 md:col-12">
+                        <h3>Liste des modules sur lesquelles il est rattaché:</h3>
+                        <div *ngFor="let m of volumeHList; let i = index">
+                            <p style="font-style:italic; color: red;">Module n°{{i+1}}</p>
+                            <div class="grid">
+                                <div class="col-6 md:col-6">
+                                    <label>Module: </label>
+                                    <p-dropdown [options]="matiereList"
+                                        (onChange)="changeVolumeH(i,$event,'matiere_id')" [group]="true"></p-dropdown>
                                 </div>
                                 <div class="col-6 md:col-4">
                                     <label>Volume Horaire: </label>
@@ -329,28 +331,6 @@
                         <button type="button" (click)="onAddMatiere()" pButton
                             label="Ajouter un module enseigné"></button>
                     </div>
-
-                    <div class="field col-12 md:col-6"
-                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
-                        <label For="isPrestataire">Entreprise</label>
-                        <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <label>Campus <span style="color: red;"> * </span></label><br>
-                        <p-dropdown formControlName="campus" [options]="dropdownCampus"
-                            emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Nom du campus" filter="true"
-                            placeholder="Choissisez un campus">
-                        </p-dropdown>
-                    </div>
-
-                    <div class="field col-12 md:col-6">
-                        <label For="nda">Numéro de déclaration d'activité <span style="color: red;"> * </span> </label>
-                        <input pInputText id="nda" type="text" placeholder="Numéro de déclaration d'activité "
-                            formControlName="nda" />
-                    </div>
-
 
                     <div class="field col-12 md:col-12">
                         <div class="field col-12 md:col-12" *ngFor="let data of jury_diplomesList; let i = index">

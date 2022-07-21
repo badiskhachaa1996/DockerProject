@@ -52,7 +52,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
                     <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
-                        placeholder="Choissisez une module" emptyFilterMessage="Pas de module trouvé"
+                        placeholder="Choissisez un module" emptyFilterMessage="Pas de module trouvé"
                         filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>
@@ -79,7 +79,6 @@
                 </div>
                 <div class="field col-12 md:col-12">
                     <label>Campus</label><br>
-                    {{seanceForm.value.campus_id|json}}
                     <p-multiSelect formControlName="campus_id" [options]="dropdownCampus"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
