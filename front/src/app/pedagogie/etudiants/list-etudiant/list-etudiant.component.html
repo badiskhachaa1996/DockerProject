@@ -277,15 +277,12 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)="loadPP(etudiant)"></button>
                         </td>
-<<<<<<< HEAD
-=======
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 
                         <td>
                             {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname |
                             uppercase }} {{ etudiant?.firstname }}
                         </td>
->>>>>>> 0963154b9bc9d55d68af687a30d765a5aac4b8f0
                         <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
                         <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
                         <td style="min-width: 10rem;">{{ classes[etudiant.classe_id]?.nom }}</td>
