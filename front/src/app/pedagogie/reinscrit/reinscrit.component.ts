@@ -158,7 +158,7 @@ export class ReinscritComponent implements OnInit {
   }
 
   generateCode(prospect:Etudiant) {
-    let user: any = prospect.user_id
+    let user: User = this.users[prospect.user_id]
     console.log(user)
     let code_pays = user.nationnalite.substring(0, 3)
     environment.dicNationaliteCode.forEach(code=>{
