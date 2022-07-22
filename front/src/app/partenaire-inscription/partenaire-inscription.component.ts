@@ -44,6 +44,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       { value: "Individuel" },
     ];
 
+  pL: Partenaire[];
 
 
   constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService) { }
@@ -117,7 +118,17 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    try {
+      this.PartenaireService.getAll().subscribe(data => {
+        this.pL = data
+      })
+    } catch (err) {
+      console.error(err)
+      let nb = Math.floor(Math.random() * 500)
+      for (let i = 0; i < nb; i++) {
+        this.pL.push(new Partenaire())
+      }
+    }
   }
 
 
@@ -125,8 +136,8 @@ export class PartenaireInscriptionComponent implements OnInit {
     this.etatForm += val
   }
 
-  
-  submitForm() {   
+
+  submitForm() {
     if (this.passwordCorrect()) {
       let u = new User(
         null,
@@ -156,7 +167,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       let p = new Partenaire(
         null,
         null,
-        this.generateCode(this.RegisterForm.value.nomSoc),
+        this.generateCode(),
         this.RegisterForm.value.nomSoc,
         this.RegisterForm.value.phone_partenaire,
         this.RegisterForm.value.email_partenaire,
@@ -176,7 +187,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       let c = new CommercialPartenaire(null, null, null, p.code_partenaire + "001", "Admin")
 
       this.PartenaireService.inscription(u, p, c).subscribe(data => {
-        this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' }); 
+        this.messageService.add({ severity: 'success', summary: 'Partenaire ajouté' });
       }, error => {
         console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Une erreur a été detecté', detail: error });
@@ -186,12 +197,18 @@ export class PartenaireInscriptionComponent implements OnInit {
     }
 
   }
-  generateCode(firstname) {
-    let random = Math.random().toString(36).substring(0, 3).toUpperCase();
+  generateCode() {
+    /*let random = Math.random().toString(36).substring(0, 3).toUpperCase();
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
 
-    return prenom + random;
+    return prenom + random;*/
+    let n = (this.pL.length + 1).toString().substring(0, 3)
+    while (n.length < 3) {
+      n = "0" + n
+    }
+    let pays = this.RegisterForm.value.Pays.toUpperCase().substring(0, 3)
+    return "EHP" + pays + n
   };
 
   passwordCorrect() {
