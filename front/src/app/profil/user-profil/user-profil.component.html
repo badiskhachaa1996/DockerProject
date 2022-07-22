@@ -12,7 +12,7 @@
                     style="font-size: 15px;" aria-hidden="true"></i>
                 <i pTooltip="Modifier votre photo de profil" class="pi pi-fw pi-image" (click)="clickFile()"
                     style="font-size: 15px;" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
+                <i *ngIf="userco.email_perso" pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
                     style="font-size: 15px;" aria-hidden="true"></i>   
             </div>
             <h2>Profil</h2>
@@ -167,15 +167,18 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
                 <div class="field col-12">
                     <label For="pwd_actu">Mot de passe actuel</label>
-                    <input pInputText id="pwd_actu" type="text" formControlName="passwordactual" />
+                    <p-password id="pwd_actu" formControlName="passwordactual" [feedback]="false"></p-password>
+                    <!--<input pInputText id="pwd_actu" type="text" formControlName="passwordactual" />-->
                 </div>
                 <div class="field col-12">
                     <label For="n_pwd">Nouveau mot de passe</label>
-                    <input pInputText id="n_pwd" type="text" formControlName="password"/>
+                    <p-password pInputText id="n_pwd" formControlName="password"></p-password>
+                    <!--<input pInputText id="n_pwd" type="text" formControlName="password"/>-->
                 </div>
                 <div class="field col-12" >
                     <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
-                    <input pInputText id="confirm_n_pwd" type="text" formControlName="verifypassword">
+                    <p-password pInputText  id="confirm_n_pwd" formControlName="verifypassword"></p-password>
+                    <!--<input pInputText id="confirm_n_pwd" type="text" formControlName="verifypassword">-->
                 </div>
                 <small style="color: red;">{{pwdmsgerr}}</small>
                 <div class="col-4 md:col-2">

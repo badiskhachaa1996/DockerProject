@@ -495,7 +495,7 @@ export class SuiviTicketsComponent implements OnInit {
 
     let campusCustom
 
-    if (campus == null) {
+    if (campus == null || campus == undefined || !campus) {
       campusCustom = "X"
     } else if (campus == "Montréal") {
       campusCustom = "C"
