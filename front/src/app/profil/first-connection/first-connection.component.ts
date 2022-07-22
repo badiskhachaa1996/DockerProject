@@ -160,6 +160,7 @@ export class FirstConnectionComponent implements OnInit {
       this.RegisterForm.value.rue_adresse,
       this.RegisterForm.value.numero_adresse,
       this.RegisterForm.value.postal_adresse,
+      this.RegisterForm.value.nationalite.value,
     )
     /* SAVE PREINSCRIT
     let inscription = new Inscription(null, this.userConnected._id,
