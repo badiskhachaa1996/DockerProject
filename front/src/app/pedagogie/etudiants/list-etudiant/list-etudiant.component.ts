@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
@@ -15,6 +15,10 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
 import { PresenceService } from 'src/app/services/presence.service';
 import { Presence } from 'src/app/models/Presence';
+
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
+
 
 @Component({
   selector: 'app-list-etudiant',
@@ -85,7 +89,7 @@ export class ListEtudiantComponent implements OnInit {
 
   absences: Presence[] = []
 
-  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
+  constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
@@ -115,6 +119,38 @@ export class ListEtudiantComponent implements OnInit {
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormUpdateEtudiant();
+
+  }
+  confirmRighFile(file,etudiant) {
+    console.log("confirme right for ", file)
+    this.confirmationService.confirm({
+      message: 'Voulez vous que ce document soit visible sur le profil de l\'étudiant?',
+      header: 'Visibilité',
+      icon: 'pi pi-eye',
+      accept: () => {
+        this.etudiantService.setFileRight(etudiant._id, file,true).subscribe((dataright) => {
+
+        })
+        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
+
+      },
+      reject: (type) => {
+        switch (type) {
+          case ConfirmEventType.REJECT:
+
+            this.etudiantService.setFileRight(etudiant._id, file,false).subscribe((dataright) => {
+    
+            })
+            break;
+          case ConfirmEventType.CANCEL:
+
+            this.etudiantService.setFileRight(etudiant._id, file,false).subscribe((dataright) => {
+       
+            })
+            break;
+        }
+      }
+    });
 
   }
 
@@ -296,7 +332,7 @@ export class ListEtudiantComponent implements OnInit {
 
     let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
       null, null, null, null, custom_id, numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, phone_rl, email_rl, adresse_rl, dernier_diplome,
-      isAlternant, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList,remarque, isOnStage);
+      isAlternant, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList, remarque, isOnStage);
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -427,14 +463,19 @@ export class ListEtudiantComponent implements OnInit {
       formData.append('id', this.showUploadFile._id)
       formData.append('file', event.files[0])
       this.etudiantService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.confirmRighFile(event.files[0],this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.loadPP(this.showUploadFile)
+        
+      
         event.target = null;
         this.showUploadFile = null;
+
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+
   }
 
   generateCustomCode() {

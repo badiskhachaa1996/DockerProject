@@ -75,7 +75,7 @@ export class AddFormateurComponent implements OnInit {
     }
   }
   deleteJ_diplome(i) {
-    this.jury_diplomesList.splice(i,1)
+    this.jury_diplomesList.splice(i, 1)
   }
 
   onAddMatiere() {
@@ -281,22 +281,24 @@ export class AddFormateurComponent implements OnInit {
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
-    this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
-      ((response) => {
-        if (response.success) {
-          this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
-          this.onInitFormAddFormateur();
-          this.showFormAddFormateur = false;
-          this.resetAddFormateur();
-        } else {
-          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
-        }
-      }),
-      ((error) => {
-        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
-        console.error(error);
-      })
-    );
+      console.log(newUser)
+    /*
+  this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
+    ((response) => {
+      if (response.success) {
+        this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+        this.onInitFormAddFormateur();
+        this.showFormAddFormateur = false;
+        this.resetAddFormateur();
+      } else {
+        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
+      }
+    }),
+    ((error) => {
+      this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
+      console.error(error);
+    })
+  );*/
 
   }
 

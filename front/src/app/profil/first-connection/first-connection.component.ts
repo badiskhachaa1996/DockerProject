@@ -40,7 +40,9 @@ export class FirstConnectionComponent implements OnInit {
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
 
-  statutList = [environment.typeUser[0], environment.typeUser[2]]
+  statutList = [
+    { value: "Etudiant", actif: false },
+    { value: "Alternant", actif: false },]
 
   classes: Classe[] = [];
   entreprises: Entreprise[] = [];

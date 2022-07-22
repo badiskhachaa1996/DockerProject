@@ -131,8 +131,8 @@
                     (click)="onGetFormAdmissionESTYA()"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ADG"
                     (click)="onGetFormAdmissionADG()"></button>
-                <button style="margin-left: 2px;"  pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
-                     (click)="onGetFormAdmissionESPIC()"></button>
+                <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
+                    (click)="onGetFormAdmissionESPIC()"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande EH"
                     (click)="onGetFormAdmissionEDUHORIZONS()"></button>
             </div>
@@ -209,6 +209,15 @@
                             {{ users[prospect.user_id].lastname | uppercase }}
                             {{ users[prospect.user_id].firstname | titlecase }}
                         </td>
+                        <td
+                            *ngIf="prospect.user_id && prospect.user_id.lastname && !users[prospect.user_id] && prospect.user_id.firstname">
+                            {{ prospect.user_id.lastname | uppercase }}
+                            {{ prospect.user_id.firstname | titlecase }}
+                        </td>
+                        <td
+                            *ngIf="!prospect.user_id">
+                            Error Smith
+                        </td>
                         <td>
                             {{ prospect.type_form | titlecase }}
                         </td>
@@ -259,7 +268,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{users[prospect.user_id].civilite}}</td>
+                        <td>{{prospect.user_id.civilite}}</td>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
                         <td>{{prospect.user_id.nationnalite}}</td>
                         <td>{{prospect.user_id.pays_adresse}}</td>
@@ -427,8 +436,7 @@
                 <li *ngFor="let file of ListDocuments; index as i">
                     <div class="grid">
 
-                        <div class="field col-10 "
-                            style="border-style: 2;border: 2em;border-bottom: red;">
+                        <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
                             <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
                                 pTooltip="Visualiser dans un nouvel onglet"
                                 (click)="VisualiserFichier(prospect._id,i)"></i>
@@ -439,7 +447,7 @@
                         </div>
                         <div class="field col-1">
                             <i class="pi pi-download" pTooltip="Télécharger le fichier"
-                            style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
                                 (click)="downloadFile(prospect._id,i)"></i>
                         </div>
                         <div class="field col-1">
@@ -447,7 +455,7 @@
                                 pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
                                 aria-hidden="true"> </i>
                         </div>
-                        
+
                     </div>
                 </li>
             </ul>

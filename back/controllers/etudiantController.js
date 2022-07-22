@@ -6,6 +6,7 @@ const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
+const { RachatBulletin } = require('./../models/RachatBulletin');
 app.disable("x-powered-by");
 const path = require('path');
 var mime = require('mime-types')
@@ -168,6 +169,33 @@ app.post("/update", (req, res, next) => {
         })
 });
 
+// ajouter le droit d'acces au document ajouter 
+app.post("/setFileRight/:idetudiant", (req, res, next) => {
+
+    let filename = req.body[1]
+
+    Etudiant.findOne({ _id: req.params.idetudiant })
+        .then((etudiantFromDb) => {
+            let filearrayT;
+            filearrayT = (etudiantFromDb.fileRight) ? etudiantFromDb.fileRight : { 'filename': true };
+            filearrayT[filename] = req.body[2]
+
+            Etudiant.findOneAndUpdate({ _id: req.params.idetudiant },
+                {
+                    fileRight: filearrayT,
+                }, { new: true }, (err, etudiant) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(err)
+                    } else {
+
+                        res.send(etudiant)
+                    }
+                })
+        })
+
+});
+
 app.get('/sendEDT/:id/:update', (req, res, next) => {
     let msg = "Votre emploi du temps est disponible"
     if (req.params.update == "YES") {
@@ -319,6 +347,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
                 let listMoyenne = {} // {matiere_nom:[number]}
                 let dicMatiere = {}
+                let listMoyChoose = {}
                 notes.forEach(n => {
                     if (n.examen_id != null && !listExamenID.includes(n.examen_id._id)) {
                         listExamenID.push(n.examen_id._id)
@@ -355,13 +384,26 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                         listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
                     })
                 })
-                listMatiereNOM.forEach(m_nom => {
-                    r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id:dicMatiere[m_nom]._id })
-                    moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom]
+                let dicRB = {}
+                RachatBulletin.find({ user_id: chosenOne.user_id, semestre: req.params.semestre }).then(rbs => {
+                    rbs.forEach(rb => {
+                        dicRB[rb.matiere_id] = rb
+                    })
+                    let sumMoy = 0
+                    listMatiereNOM.forEach(m_nom => {
+                        let old_note = null
+                        if (dicRB[dicMatiere[m_nom]._id]) {
+                            old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
+                            listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
+                        }
+                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note })
+                        moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
+                        sumMoy += dicMatiere[m_nom].coeff
+                        listMoyChoose[dicMatiere[m_nom]._id] = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
+                    })
+                    moy_tt = moy_tt / sumMoy
+                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose })
                 })
-                moy_tt = moy_tt / Object.keys(listMoyenneEtudiants[req.params.etudiant_id]).length
-                console.log({ data: r, moyenneEtudiant:moy_tt})
-                res.status(201).send({ data: r, moyenneEtudiant:moy_tt})
             })
         })
     })
@@ -390,8 +432,8 @@ function avg(myArray) {
 function min(myArray) {
     var i = 0, min = myArray[0], ArrayLen = myArray.length;
     while (i < ArrayLen) {
-        if(myArray[i]<min){
-            min=myArray[i]
+        if (myArray[i] < min) {
+            min = myArray[i]
         }
         i++
     }
@@ -401,8 +443,8 @@ function min(myArray) {
 function max(myArray) {
     var i = 0, min = myArray[0], ArrayLen = myArray.length;
     while (i < ArrayLen) {
-        if(myArray[i]>min){
-            min=myArray[i]
+        if (myArray[i] > min) {
+            min = myArray[i]
         }
         i++
     }
@@ -447,7 +489,30 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
         console.error(err)
         res.status(400).send(err)
     }
-    res.status(200).send()
+
+    Etudiant.findOne({ _id: req.params.id })
+        .then((etudiantFromDb) => {
+            let filearrayT = etudiantFromDb.fileRight;
+
+            delete filearrayT[req.params.filename]
+
+            Etudiant.findOneAndUpdate({ _id: req.params.id },
+                {
+                    fileRight: filearrayT,
+                }, { new: true }, (err, etudiant) => {
+                    if (err) {
+                        console.log(err);
+                        res.send(err)
+                    }
+                    else {
+                        res.status(200).send()
+                    }
+                })
+        })
+        .catch((error) => { res.status(400).json({ error }) });
+
+
+
 
 });
 

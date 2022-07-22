@@ -36,5 +36,6 @@ export class Etudiant {
         public parcours?: any,
         public remarque?:string,
         public isOnStage?:boolean,
+        public fileRight?:[]
     ) { }
 }

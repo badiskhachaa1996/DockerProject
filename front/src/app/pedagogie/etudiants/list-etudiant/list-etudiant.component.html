@@ -1,7 +1,8 @@
 <div class="grid">
-
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
     <!-- Partie ajout de documents -->
     <div class="col-12" *ngIf="showUploadFile!=null">
+       
         <div class="card">
             <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
                 aria-hidden="true"> </i>
@@ -276,15 +277,12 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 (click)="loadPP(etudiant)"></button>
                         </td>
-<<<<<<< HEAD
-=======
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 
                         <td>
                             {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname |
                             uppercase }} {{ etudiant?.firstname }}
                         </td>
->>>>>>> 0963154b9bc9d55d68af687a30d765a5aac4b8f0
                         <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
                         <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
                         <td style="min-width: 10rem;">{{ classes[etudiant.classe_id]?.nom }}</td>

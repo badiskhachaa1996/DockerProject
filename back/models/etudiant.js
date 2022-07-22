@@ -36,8 +36,12 @@ const etudiantSchema = mongoose.Schema({
     entreprise: { type: String, required: false },
     diplome: { type: String, required: false },
     parcours: { type: mongoose.Schema.Types.Mixed, required: false }, // diplome: String, date: Date
-    remarque: {type:String},
+    remarque: { type: String },
     isOnStage: { type: Boolean, default: false },
+    fileRight: {
+        type: mongoose.Schema.Types.Mixed, required: false
+        
+    },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
