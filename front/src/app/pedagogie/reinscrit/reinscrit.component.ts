@@ -159,6 +159,7 @@ export class ReinscritComponent implements OnInit {
 
   generateCode(prospect:Etudiant) {
     let user: any = prospect.user_id
+    console.log(user)
     let code_pays = user.nationnalite.substring(0, 3)
     environment.dicNationaliteCode.forEach(code=>{
       if(code[user.nationnalite] && code[user.nationnalite]!=undefined){
@@ -169,15 +170,16 @@ export class ReinscritComponent implements OnInit {
     let nom = user.lastname.substring(0, 1)
     let y = 0
     for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      console.log(nom)
       nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
       y = nom.indexOf(" ", y) + 1
     }
     let dn = new Date(prospect.date_naissance)
+    console.log(dn)
     let jour = dn.getDate()
     let mois = dn.getMonth() + 1
     let year = dn.getFullYear().toString().substring(2)
     let nb = Object.keys(this.users).length.toString()
-    console.log(nb)
     nb = nb.substring(nb.length - 3)
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
