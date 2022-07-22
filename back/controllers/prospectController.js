@@ -58,6 +58,18 @@ let transporterAdg = nodemailer.createTransport({
     },
 });
 
+
+app.get("/getByUserid/:id", (req, res, next) => {
+    console.log(req.params.id);
+    Prospect.findOne({ user_id: req.params.id })
+        .then((prospectFromDb) => {
+           console.log("ass")
+                res.status(201).send(prospectFromDb);
+           
+
+        })
+        .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
+});
 //Creation d'un nouveau prospect
 app.post("/create", (req, res, next) => {
 
@@ -307,7 +319,7 @@ app.post("/create", (req, res, next) => {
 app.get("/getAll", (req, res, next) => {
     Prospect.find({ archived: [false, null] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-            
+
             prospectsFromDb.forEach(function (element, index) {
                 let nb = 0
                 try {
@@ -330,7 +342,7 @@ app.get("/getAll", (req, res, next) => {
                 }
                 prospectsFromDb[index]["nbDoc"] = nb
             });
-          
+
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -408,16 +420,16 @@ app.post("/updateStatut/:id", (req, res, next) => {
         customid: req.body.customid,
         traited_by: req.body.traited_by,
         validated_cf: req.body.validated_cf,
-        avancement_visa:req.body.avancement_visa,
-        etat_traitement:req.body.etat_traitement
+        avancement_visa: req.body.avancement_visa,
+        etat_traitement: req.body.etat_traitement
 
-    }, {new: true}).populate('user_id').populate('agent_id').exec(function (err, results) {
-        if(err){
+    }, { new: true }).populate('user_id').populate('agent_id').exec(function (err, results) {
+        if (err) {
             res.status(500).send(err)
-        }else{
+        } else {
             res.status(200).send(results)
         }
-   });
+    });
 })
 
 //
@@ -567,31 +579,31 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
     Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
-    .then(prospects => {
-        prospects.forEach(function (element, index) {
-            let nb = 0
-            try {
-                let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                fileList.forEach(file => {
-                    if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                        nb += 1
-                    }
-                    else {
-                        let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                        files.forEach(f => {
+        .then(prospects => {
+            prospects.forEach(function (element, index) {
+                let nb = 0
+                try {
+                    let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
+                    fileList.forEach(file => {
+                        if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
                             nb += 1
-                        });
+                        }
+                        else {
+                            let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
+                            files.forEach(f => {
+                                nb += 1
+                            });
+                        }
+                    });
+                } catch (e) {
+                    if (e.code != "ENOENT") {
+                        console.error(e)
                     }
-                });
-            } catch (e) {
-                if (e.code != "ENOENT") {
-                    console.error(e)
                 }
-            }
-            prospects[index]["nbDoc"] = nb
-        });
-        res.send(prospects)
-    }).catch((error) => { res.status(500).send(error); });
+                prospects[index]["nbDoc"] = nb
+            });
+            res.send(prospects)
+        }).catch((error) => { res.status(500).send(error); });
 })
 
 app.get('/getAllWait', (req, res, next) => {
@@ -623,11 +635,11 @@ app.get('/getAllWait', (req, res, next) => {
 })
 
 app.post('/updatePayement/:id', (req, res) => {
-    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement },function(err,data){
-        if(err){
+    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }, function (err, data) {
+        if (err) {
             console.error(err)
             res.status(500).send(err)
-        }else{
+        } else {
             res.status(201).send(data)
         }
     })

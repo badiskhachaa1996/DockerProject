@@ -177,6 +177,7 @@ export class ReinscritComponent implements OnInit {
     let mois = dn.getMonth() + 1
     let year = dn.getFullYear().toString().substring(2)
     let nb = Object.keys(this.users).length.toString()
+    console.log(nb)
     nb = nb.substring(nb.length - 3)
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r

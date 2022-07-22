@@ -13,6 +13,8 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { ClasseService } from 'src/app/services/classe.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { FirstInscriptionService } from 'src/app/services/first-inscription.service';
+import { error } from 'console';
 
 
 @Component({
@@ -42,7 +44,7 @@ export class UserProfilComponent implements OnInit {
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
-
+  typeProfil: string;
   decodeToken: any = jwt_decode(localStorage.getItem("token"))
   token = null;
 
@@ -60,7 +62,7 @@ export class UserProfilComponent implements OnInit {
   infoCommercial: CommercialPartenaire;
 
   pwdmsgerr: string = "";
-  
+
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -126,15 +128,14 @@ export class UserProfilComponent implements OnInit {
     nationalite: new FormControl(null),
     date_naissance: new FormControl("21/12/2000"),
   })
-  
-  onInitPasswordForm()
-  { 
+
+  onInitPasswordForm() {
     this.passwordForm = this.formBuilder.group({
       passwordactual: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      verifypassword: ['', Validators.required], 
+      verifypassword: ['', Validators.required],
     });
-    
+
   }
 
   get passwordactual() { return this.passwordForm.get('passwordactual'); }
@@ -142,14 +143,13 @@ export class UserProfilComponent implements OnInit {
   get verifypassword() { return this.passwordForm.get('verifypassword'); }
 
 
-  onUpdatePassword() 
-  {
+  onUpdatePassword() {
     let passwordactual = this.passwordForm.get('passwordactual').value;
     let password = this.passwordForm.get('password').value;
     let verifypassword = this.passwordForm.get('verifypassword').value;
 
     //TODO Verification du mot de passe
-    this.AuthService.verifPassword({id: this.decodeToken.id, password: passwordactual}).subscribe(
+    this.AuthService.verifPassword({ id: this.decodeToken.id, password: passwordactual }).subscribe(
       ((responseV) => {
         console.log(responseV);
       }),
@@ -225,9 +225,10 @@ export class UserProfilComponent implements OnInit {
   get nationalite() { return this.RegisterForm.get('nationalite'); }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
 
-  constructor(private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder, private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService, private EtudiantService: EtudiantService) { }
+  constructor(private prospectService: FirstInscriptionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder, private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService, private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
+
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
     }, false);
@@ -240,13 +241,24 @@ export class UserProfilComponent implements OnInit {
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
     this.AuthService.WhatTheRole(decodeToken.id).subscribe(data => {
-      if (data.type == "Commercial") {
+      this.typeProfil = data.type
+      if (data.type = "Commercial") {
         this.infoCommercial = data.data
       }
-    })
-    this.AuthService.getById(this.userupdate.id).subscribe((data) => {
 
-      this.userco = jwt_decode(data['userToken'])['userFromDb']
+
+    }), (error => { console.log(error) })
+    this.AuthService.getById(this.userupdate.id).subscribe((userdata) => {
+
+      this.userco = jwt_decode(userdata['userToken'])['userFromDb']
+      if (this.userco.type = "Etudiant") {
+        console.log(this.userco._id)
+        this.prospectService.getByUser(this.userco._id).subscribe((dprospectData) => {
+          console.log(dprospectData)
+        })
+      }
+
+
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
         this.InfoUser = data?.data
         let date = new Date(this.InfoUser?.date_naissance)
@@ -312,7 +324,7 @@ export class UserProfilComponent implements OnInit {
 
     this.onInitPasswordForm();
 
-    
+
 
   }
   clickFile() {
