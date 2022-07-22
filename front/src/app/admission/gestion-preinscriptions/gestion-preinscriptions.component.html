@@ -193,6 +193,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
                     <tr [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="prospect"
                                 class="p-button-text p-button-rounded p-button-plain"
@@ -209,8 +210,13 @@
                             {{ users[prospect.user_id].firstname | titlecase }}
                         </td>
                         <td
-                            *ngIf="!prospect.user_id && !users[prospect.user_id] && !users[prospect.user_id].lastname && !users[prospect.user_id].firstname">
-                            John Smith
+                            *ngIf="prospect.user_id && prospect.user_id.lastname && !users[prospect.user_id] && prospect.user_id.firstname">
+                            {{ prospect.user_id.lastname | uppercase }}
+                            {{ prospect.user_id.firstname | titlecase }}
+                        </td>
+                        <td
+                            *ngIf="!prospect.user_id">
+                            Error Smith
                         </td>
                         <td>
                             {{ prospect.type_form | titlecase }}
@@ -262,7 +268,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{users[prospect.user_id].civilite}}</td>
+                        <td>{{prospect.user_id.civilite}}</td>
                         <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
                         <td>{{prospect.user_id.nationnalite}}</td>
                         <td>{{prospect.user_id.pays_adresse}}</td>
