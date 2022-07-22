@@ -2,7 +2,7 @@
     <!-- Partie dedié à l'upload de photo de profil -->
     <div class="col-12">
         <input type="file" (change)="FileUpload($event.target.files)" id="selectedFile" #selectedFile
-                style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
+            style="display: none;" accept=".png, .jpg, .jpeg, .jfif" pInputFile />
     </div>
 
     <div class="col-12">
@@ -12,22 +12,23 @@
                     style="font-size: 15px;" aria-hidden="true"></i>
                 <i pTooltip="Modifier votre photo de profil" class="pi pi-fw pi-image" (click)="clickFile()"
                     style="font-size: 15px;" aria-hidden="true"></i>
-                <i *ngIf="userco.email_perso" pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
-                    style="font-size: 15px;" aria-hidden="true"></i>   
+                <i pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
+                    style="font-size: 15px;" aria-hidden="true"></i>
             </div>
             <h2>Profil</h2>
             <div style="text-align: center;">
                 <figure>
                     <img [src]="imageToShow" alt="Profil" width="150" height="150" style="border-radius: 50px;" />
                     <figcaption>
-                        {{(userco.civilite=="Monsieur")?'M.':'Mme'}} <strong>{{userco.lastname}}</strong> {{userco.firstname}} <br>
+                        {{(userco.civilite=="Monsieur")?'M.':'Mme'}} <strong>{{userco.lastname}}</strong>
+                        {{userco.firstname}} <br>
                         <span *ngIf="userco.role!=='user'">
                             <strong style="color: red;">{{userco.role}}</strong>
                         </span>
                     </figcaption>
                 </figure>
             </div>
-        
+
             <!-- Info user -->
             <div class="card">
                 <div class="p-fluid p-formgrid grid">
@@ -41,8 +42,8 @@
 
                     <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">
                         <strong>Adresse:</strong> {{userco.numero_adresse}}
-                                                  {{userco.rue_adresse}} {{userco.postal_adresse}}, 
-                                                  {{userco.ville_adresse}}/ {{userco.pays_adresse}}
+                        {{userco.rue_adresse}} {{userco.postal_adresse}},
+                        {{userco.ville_adresse}}/ {{userco.pays_adresse}}
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="InfoUser && InfoUser.date_naissance">
@@ -57,16 +58,20 @@
                         <strong>Statut:</strong> {{userco.type}}
                     </div>
 
-                    <div class="col-12 md:col-4" *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id]">
+                    <div class="col-12 md:col-4"
+                        *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id]">
                         <strong>Groupe:</strong> {{formationDic[InfoUser.classe_id].nom}}
                     </div>
 
-                    <div class="col-12 md:col-4" *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id] && diplomeDic[formationDic[InfoUser.classe_id].diplome_id]">
+                    <div class="col-12 md:col-4"
+                        *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id] && diplomeDic[formationDic[InfoUser.classe_id].diplome_id]">
                         <strong>Diplome:</strong> {{diplomeDic[formationDic[InfoUser.classe_id].diplome_id].titre}}
                     </div>
 
-                    <div class="col-12 md:col-4" *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id] && diplomeDic[formationDic[InfoUser.classe_id].diplome_id] && campusDic[diplomeDic[formationDic[InfoUser.classe_id].diplome_id].campus_id]">
-                        <strong>Campus:</strong> {{campusDic[diplomeDic[formationDic[InfoUser.classe_id].diplome_id].campus_id].libelle}}
+                    <div class="col-12 md:col-4"
+                        *ngIf="InfoUser && InfoUser.classe_id && formationDic[InfoUser.classe_id] && diplomeDic[formationDic[InfoUser.classe_id].diplome_id] && campusDic[diplomeDic[formationDic[InfoUser.classe_id].diplome_id].campus_id]">
+                        <strong>Campus:</strong>
+                        {{campusDic[diplomeDic[formationDic[InfoUser.classe_id].diplome_id].campus_id].libelle}}
                     </div>
 
                     <div class="col-12 md:col-4" *ngIf="InfoUser && userco.entreprise">
@@ -77,88 +82,105 @@
                         <strong>Code commercial:</strong> {{infoCommercial.code_commercial_partenaire}}
                     </div>
                 </div>
-            </div>    
+                <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
+                    <div class="col-12"></div>
+
+
+                    <div *ngIf="PreinscriptionData.formation" class="col-12 md:col-6">
+                        <strong>Formation:</strong> {{PreinscriptionData.formation}}
+
+                    </div>
+                    <div *ngIf="PreinscriptionData.campus_choix_1" class="col-12 md:col-6">
+                        <strong>Choix Campus:</strong> {{PreinscriptionData.campus_choix_1}}
+
+                    </div>
+                    <div *ngIf="PreinscriptionData.etat_traitement && PreinscriptionData.etat_traitement"
+                        class="col-12 md:col-6">
+                        <strong>Traitement du dossier:</strong> {{PreinscriptionData?.etat_traitement}}, Le
+                        {{PreinscriptionData?.date_traitement | date }}
+
+                    </div>
+
+                </div>
+
+            </div>
         </div>
     </div>
 
     <!-- Formulaire de modification des infos -->
     <div class="col-12" *ngIf="toggleUpdate">
-		<div class="card">
-			<h3 style="text-align: center;">Formulaire de modification des informations</h3>
-			<form class="p-fluid p-formgrid grid" [formGroup]="RegisterForm" (ngSubmit)="UpdateUser()">
-				<div class="field col-4 md:col-2">
-					<label For="civilite">Civilité</label>
-					<p-dropdown formControlName="civilite" [options]="civiliteList"
-                        optionLabel="value">
+        <div class="card">
+            <h3 style="text-align: center;">Formulaire de modification des informations</h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="RegisterForm" (ngSubmit)="UpdateUser()">
+                <div class="field col-4 md:col-2">
+                    <label For="civilite">Civilité</label>
+                    <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value">
                     </p-dropdown>
-				</div>
-				<div class="field col-12 md:col-5">
-					<label For="lastname">Nom</label>
-					<input pInputText id="lastname" formControlName="lastname" type="text" />
-				</div>
-				<div class="field col-12 md:col-5">
-					<label For="firstname">Prénom</label>
-					<input pInputText id="firstname" formControlName="firstname" type="text"/>
-				</div>
-				<div class="field col-12 md:col-6">
-					<label For="rue">Nom de la rue</label>
-					<input pInputText id="rue" type="text" formControlName="rue_adresse" />
-				</div>
-				<div class="field col-12 md:col-3">
-					<label For="code_postal">Code postal</label>
-					<input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
-				</div>
-				<div class="field col-6 md:col-3">
-					<label For="ville">Ville</label>
-					<input pInputText id="ville" type="text" formControlName="ville_adresse" />
-				</div>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label For="lastname">Nom</label>
+                    <input pInputText id="lastname" formControlName="lastname" type="text" />
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label For="firstname">Prénom</label>
+                    <input pInputText id="firstname" formControlName="firstname" type="text" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="rue">Nom de la rue</label>
+                    <input pInputText id="rue" type="text" formControlName="rue_adresse" />
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="code_postal">Code postal</label>
+                    <input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
+                </div>
+                <div class="field col-6 md:col-3">
+                    <label For="ville">Ville</label>
+                    <input pInputText id="ville" type="text" formControlName="ville_adresse" />
+                </div>
                 <div class="field col-6 md:col-12">
-					<label For="pays">Pays</label>
-					<input pInputText id="pays" type="text" formControlName="pays_adresse" />
-				</div>
+                    <label For="pays">Pays</label>
+                    <input pInputText id="pays" type="text" formControlName="pays_adresse" />
+                </div>
                 <div class="field col-4 md:col-3">
-					<label For="ind">Indicatif</label>
-					<input pInputText id="ind" type="text" formControlName="indicatif" />
-				</div>
+                    <label For="ind">Indicatif</label>
+                    <input pInputText id="ind" type="text" formControlName="indicatif" />
+                </div>
                 <div class="field col-8 md:col-9">
-					<label For="tel">Téléphone</label>
-					<input pInputText id="tel" type="text" formControlName="phone" />
-				</div>
+                    <label For="tel">Téléphone</label>
+                    <input pInputText id="tel" type="text" formControlName="phone" />
+                </div>
                 <div class="field col-8 md:col-12">
-					<label For="nationnalite">Nationnalité</label>
-					<p-dropdown formControlName="nationalite" [options]="nationList"
-                        optionLabel="viewValue" emptyFilterMessage="Pas de nationalité trouvé"
-                        filterPlaceholder="Nationalité" filter="true">
+                    <label For="nationnalite">Nationnalité</label>
+                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
-				</div>
+                </div>
                 <div class="field col-12 md:col-12">
-					<label For="date">Date de naissance</label>
-					<p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy"
-                        [minDate]="minDateCalendar" [maxDate]="maxDateCalendar"
-                        [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
+                    <label For="date">Date de naissance</label>
+                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
+                        [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear">
                     </p-calendar>
-				</div>
-                <div class="field col-12 md:col-6" *ngIf="IsAdmin" >
-					<label For="role">Rôle</label>
-					<p-dropdown formControlName="role" [options]="Roles"
-                        optionLabel="value">
-                    </p-dropdown>
-				</div>
-                <div class="field col-12 md:col-6" *ngIf="IsAdmin">
-					<label For="service">Service</label>
-					<p-dropdown formControlName="service_id" [options]="Services"
-                        optionLabel="label">
-                    </p-dropdown>
-				</div>
-                
-                <div class="col-4 md:col-2">
-                    <button pButton pRipple label="Modifier" class="mr-2 mb-2" [disabled]="RegisterForm.invalid" type="submit"></button>
                 </div>
-                
-			</form>
-		</div>
-	</div>
+                <div class="field col-12 md:col-6" *ngIf="IsAdmin">
+                    <label For="role">Rôle</label>
+                    <p-dropdown formControlName="role" [options]="Roles" optionLabel="value">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="IsAdmin">
+                    <label For="service">Service</label>
+                    <p-dropdown formControlName="service_id" [options]="Services" optionLabel="label">
+                    </p-dropdown>
+                </div>
+
+                <div class="col-4 md:col-2">
+                    <button pButton pRipple label="Modifier" class="mr-2 mb-2" [disabled]="RegisterForm.invalid"
+                        type="submit"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
 
     <!-- Formulaire de modification du mot de passe -->
     <div class="col-12" *ngIf="toggleUpdatepwd">
@@ -167,24 +189,22 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
                 <div class="field col-12">
                     <label For="pwd_actu">Mot de passe actuel</label>
-                    <p-password id="pwd_actu" formControlName="passwordactual" [feedback]="false"></p-password>
-                    <!--<input pInputText id="pwd_actu" type="text" formControlName="passwordactual" />-->
+                    <input pInputText id="pwd_actu" type="text" formControlName="passwordactual" />
                 </div>
                 <div class="field col-12">
                     <label For="n_pwd">Nouveau mot de passe</label>
-                    <p-password pInputText id="n_pwd" formControlName="password"></p-password>
-                    <!--<input pInputText id="n_pwd" type="text" formControlName="password"/>-->
+                    <input pInputText id="n_pwd" type="text" formControlName="password" />
                 </div>
-                <div class="field col-12" >
+                <div class="field col-12">
                     <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
-                    <p-password pInputText  id="confirm_n_pwd" formControlName="verifypassword"></p-password>
-                    <!--<input pInputText id="confirm_n_pwd" type="text" formControlName="verifypassword">-->
+                    <input pInputText id="confirm_n_pwd" type="text" formControlName="verifypassword">
                 </div>
                 <small style="color: red;">{{pwdmsgerr}}</small>
                 <div class="col-4 md:col-2">
-                    <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid" class="mr-2 mb-2"></button>
+                    <button pButton pRipple label="Enregistrer" type="submit" [disabled]="passwordForm.invalid"
+                        class="mr-2 mb-2"></button>
                 </div>
             </form>
         </div>
-    </div>       
+    </div>
 </div>

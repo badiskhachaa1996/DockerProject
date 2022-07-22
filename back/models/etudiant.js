@@ -40,7 +40,7 @@ const etudiantSchema = mongoose.Schema({
     isOnStage: { type: Boolean, default: false },
     fileRight: {
         type: mongoose.Schema.Types.Mixed, required: false
-        
+
     },
 });
 

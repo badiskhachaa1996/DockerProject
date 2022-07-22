@@ -40,10 +40,11 @@ export class AdmissionService {
   }
 
   //Recuperation d'un prospect via son userId
-  getByUserId(id: string) {
-    let registreurl = this.apiUrl + 'getByUserId/' + id;
+  getByUserId(user_id: string) {
+    let registreurl = this.apiUrl + 'getByUserId/' + user_id;
     return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  
 
   //recuperation de la liste des admissions
   getAll() {
@@ -51,6 +52,8 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+
+  
   updateStatut(id_prospect, p) {
     let url = this.apiUrl + "updateStatut/" + id_prospect
     return this.httpClient.post<Prospect>(url, p, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
