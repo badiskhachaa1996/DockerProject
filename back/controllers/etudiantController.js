@@ -392,10 +392,12 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     let sumMoy = 0
                     listMatiereNOM.forEach(m_nom => {
                         let old_note = null
-                        if (dicRB[dicMatiere[m_nom]._id]) {
+                        if (dicRB[dicMatiere[m_nom]._id] && dicRB[dicMatiere[m_nom]._id]) {
                             old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
+                            
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
+                        console.log(old_note, listMoyenneEtudiants[req.params.etudiant_id][m_nom])
                         r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note })
                         moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
                         sumMoy += dicMatiere[m_nom].coeff

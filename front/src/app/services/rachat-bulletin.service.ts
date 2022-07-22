@@ -37,6 +37,6 @@ export class RachatBulletinService {
 
   delete(_id:string){
     let registreUrl = this.apiUrl + "delete/" + _id;
-    return this.httpClient.delete<RachatBulletin>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<RachatBulletin>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

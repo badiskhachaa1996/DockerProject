@@ -350,7 +350,6 @@
                             <p>{{matieres[rachatEtudiant[i]['matiere_id']].nom}}</p>
                         </div>
                         <div class="col-5 md:col-5">
-                            {{rachatEtudiant[i]['fixed_moy']|json}}
                             <label>Nouvelle Moyenne: </label>
                             <input type="number" step="0.01" [value]="rachatEtudiant[i]['fixed_moy']"
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"

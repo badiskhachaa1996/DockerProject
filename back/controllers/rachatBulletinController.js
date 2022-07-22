@@ -45,13 +45,16 @@ app.get("/getByUserID/:user_id/:semestre", (req, res, next) => {
     })
 });
 
-app.delete("/delete/:id", (req, res, next) => {
-    RachatBulletin.findByIdAndDelete(req.params.id, (err, rbDeleted) => {
+app.get("/delete/:id", (req, res, next) => {
+    console.log(req.params.id)
+    RachatBulletin.findByIdAndDelete(req.params.id,{}, (err, rbDeleted) => {
         if (err) {
             console.error(err)
             res.status(400).send(err)
-        } else
+        } else{
+            console.log(rbDeleted)
             res.status(201).send(rbDeleted)
+        }   
     })
 });
 
