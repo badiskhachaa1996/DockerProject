@@ -43,7 +43,7 @@ export class UserProfilComponent implements OnInit {
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
-
+  typeProfil: string;
   decodeToken: any = jwt_decode(localStorage.getItem("token"))
   token = null;
 
@@ -228,6 +228,7 @@ export class UserProfilComponent implements OnInit {
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder, private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService, private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
+
     this.reader.addEventListener("load", () => {
       this.imageToShow = this.reader.result;
     }, false);
@@ -240,7 +241,8 @@ export class UserProfilComponent implements OnInit {
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
     this.AuthService.WhatTheRole(decodeToken.id).subscribe(data => {
-      if (data.type == "Commercial") {
+      this.typeProfil = data.type
+      if (data.type = "Commercial") {
         this.infoCommercial = data.data
       }
 

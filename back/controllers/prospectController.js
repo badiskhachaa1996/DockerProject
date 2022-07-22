@@ -58,6 +58,18 @@ let transporterAdg = nodemailer.createTransport({
     },
 });
 
+
+app.get("/getByUserid/:id", (req, res, next) => {
+    console.log(req.params.id);
+    Prospect.findOne({ user_id: req.params.id })
+        .then((prospectFromDb) => {
+           console.log("ass")
+                res.status(201).send(prospectFromDb);
+           
+
+        })
+        .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
+});
 //Creation d'un nouveau prospect
 app.post("/create", (req, res, next) => {
 
