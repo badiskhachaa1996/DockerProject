@@ -34,6 +34,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   routeItems: MenuItem[];
   nationList = environment.nationalites;
   calendar: any;
+  fr = environment.fr;
   ActiveIndex = 0;
   RegisterForm: FormGroup;
   paysList = environment.pays;
@@ -41,8 +42,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   diplomes = [];
   diplomesOfCampus = [];
   userConnected: User;
-  maxYear = new Date().getFullYear() - 16
-  minYear = new Date().getFullYear() - 50
+  maxYear = new Date().getFullYear() - 13
+  minYear = new Date().getFullYear() - 80
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
@@ -283,8 +284,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   }
 
   verifEmailInBD() {
+    this.emailExist = false
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
-      console.log(dataMail)
       if (dataMail) {
         this.emailExist = true
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });

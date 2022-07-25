@@ -77,7 +77,7 @@
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label>Adresse mail :<span style="color:red"> *</span></label>
-                                <input type="email" formControlName="email" placeholder="Email"  (blur)="verifEmailInBD()"pInputText>
+                                <input type="email" formControlName="email" placeholder="Email"  (blur)="verifEmailInBD()" pInputText>
                                 <div *ngIf="email.invalid && (email.touched || email.dirty)">
                                     <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'email est obligatoire </span>
                                     <span  style="color: red;" class="error" *ngIf="email.errors?.email" style="color: red;">* L'email n'est pas dans le bon format </span>
@@ -121,7 +121,7 @@
                         <button pButton type="button" label="Suivant"
                         style="float: right;" [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null || 
                         pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid || emailExist "
-                            (click)="nextPage();"></button>
+                            (click)="nextPage();verifEmailInBD()"></button>
                     </div>
                 </p-fieldset>
             </div>
