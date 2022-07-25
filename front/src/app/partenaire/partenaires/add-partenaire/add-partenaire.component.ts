@@ -38,6 +38,8 @@ export class AddPartenaireComponent implements OnInit {
 
   token;
 
+  pL:Partenaire[];
+
   dropdownItems = [
     { name: 'Option 1', code: 'Option 1' },
     { name: 'Option 2', code: 'Option 2' },
@@ -47,7 +49,9 @@ export class AddPartenaireComponent implements OnInit {
   constructor(private messageService: MessageService, private formBuilder: FormBuilder, private partenaireService: PartenaireService, private router: Router) { }
 
   ngOnInit(): void {
-    
+    this.partenaireService.getAll().subscribe(data => {
+      this.pL = data
+    })
     this.onInitRegisterForm();
   }
 
@@ -94,7 +98,7 @@ export class AddPartenaireComponent implements OnInit {
       let p = new Partenaire(
         null,
         null,
-        this.generateCode(this.registerForm.value.nomSoc),
+        this.generateCode(),
         this.registerForm.value.nomSoc,
         this.registerForm.value.indicatif + this.registerForm.value.phonePartenaire,
         this.registerForm.value.emailPartenaire,
@@ -122,11 +126,18 @@ export class AddPartenaireComponent implements OnInit {
 
   }
 
-  //Methode de generation de code partenaire
-  generateCode(lastname) {
-    let random = Math.random().toString(36).substring(8).substr(0, 2).toUpperCase();
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
-    return nom + random;
-  }
+  generateCode() {
+    /*let random = Math.random().toString(36).substring(0, 3).toUpperCase();
+
+    let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
+
+    return prenom + random;*/
+    let n = (this.pL.length + 1).toString().substring(0, 3)
+    while (n.length < 3) {
+      n = "0" + n
+    }
+    let pays = this.registerForm.value.Pays.toUpperCase().substring(0, 3)
+    return "EHP" + pays + n
+  };
 
 }

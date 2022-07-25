@@ -129,7 +129,12 @@ export class NotesComponent implements OnInit {
 
   deleteRachatEtudiant(i, isNew) {
     if (!isNew && confirm("Ce rachat sera supprimé totalement (même sans enregistrer le formulaire)\nEtes-vous sûr de vouloir faire cela ?")) {
-      this.RBService.delete(this.rachatEtudiant[i]._id)
+      this.RBService.delete(this.rachatEtudiant[i]._id).subscribe(data => {
+        this.messageService.add({ severity: "success", summary: "Suppresion du rachat réussi" })
+      }, error => {
+        this.messageService.add({ severity: "error", summary: "Erreur lors de la suppresion du rachat", detail: error.toString() })
+      })
+      this.GenerateBulletin2(this.etudiantToGenerateBulletin._id, this.semestreChoose)
       this.rachatEtudiant.splice(i, 1)
     }
     if (isNew) {
@@ -160,7 +165,7 @@ export class NotesComponent implements OnInit {
         })
       }
     })
-    function testlast(rb, t) {
+    function testlast(rb, t: NotesComponent) {
       if (rb == t.rachatEtudiant[t.rachatEtudiant.length - 1]) {
         //Dernier
         if (problem != null) {
@@ -168,6 +173,7 @@ export class NotesComponent implements OnInit {
         } else {
           t.showFormRacheter = false
           t.messageService.add({ severity: "success", summary: "Le rachat a été enregistré avec succès" })
+          t.GenerateBulletin2(t.etudiantToGenerateBulletin._id, t.semestreChoose)
         }
       }
     }

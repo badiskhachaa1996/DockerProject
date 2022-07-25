@@ -345,16 +345,19 @@
                             <p-dropdown [options]="matiereRachat"
                                 (onChange)="updateRachatEtudiant(i,$event,'matiere_id')"></p-dropdown>
                         </div>
-                        <div class="col-6 md:col-6" *ngIf="rachatEtudiant[i]['isNew']==false">
+                        <div class="col-5 md:col-5" *ngIf="rachatEtudiant[i]['isNew']==false">
                             <label>Module: </label>
                             <p>{{matieres[rachatEtudiant[i]['matiere_id']].nom}}</p>
                         </div>
-                        <div class="col-6 md:col-6">
-                            {{rachatEtudiant[i]['fixed_moy']|json}}
+                        <div class="col-5 md:col-5">
                             <label>Nouvelle Moyenne: </label>
                             <input type="number" step="0.01" [value]="rachatEtudiant[i]['fixed_moy']"
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
                                 pInputText>
+                        </div>
+                        <div class="field col-2 md:col-2">
+                            <i class="pi pi-trash" (click)="deleteRachatEtudiant(i, rachatEtudiant[i]['isNew'])"
+                                aria-hidden="true"></i>
                         </div>
                     </div>
                 </div>
@@ -384,12 +387,14 @@
                     label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
                 <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
-                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
+                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale"
+                    class="ml-1">
                 </button>
 
                 <button pButton (click)="showFormUpdateAppreciationGenerale = true;
                                         appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
-                    class="ml-1" type="button" label="Modifier l'appréciation générale" *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
+                    class="ml-1" type="button" label="Modifier l'appréciation générale"
+                    *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
                 </button>
 
                 <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin();hideBtn = true"

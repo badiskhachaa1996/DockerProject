@@ -52,7 +52,7 @@ export class ListCollaborateurComponent implements OnInit {
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService, private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    
+
 
     //Recuperation des données
     this.onGetData();
@@ -107,7 +107,7 @@ export class ListCollaborateurComponent implements OnInit {
     let newUser = new User(null, firstname, lastname, null, phone, email, email, password, 'Agent', null, null, civilite, null, null, null, null, null, null, null, null, null);
 
     //Pour la creation du nouveau commercial
-    let newCommercialPartenaire = new CommercialPartenaire(null, this.partenaire._id, null, this.partenaire.code_partenaire + Math.floor(Math.random() * 200), statut);
+    let newCommercialPartenaire = new CommercialPartenaire(null, this.partenaire._id, null, this.generateCode(), statut);
 
     this.commercialPartenaireService.create({ 'newUser': newUser, 'newCommercialPartenaire': newCommercialPartenaire }).subscribe(
       ((response) => {
@@ -121,7 +121,8 @@ export class ListCollaborateurComponent implements OnInit {
           this.showFormAddCommercial = false;
 
         } else {
-          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout' });
+          console.error(response)
+          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout', detail: "L'email est peut être déjà utilisé" });
         }
       }),
       ((error) => {
@@ -129,6 +130,13 @@ export class ListCollaborateurComponent implements OnInit {
         console.error(error);
       })
     );
+  }
+  generateCode(): string {
+    let n = (this.commercialPartenaires.length + 1).toString().substring(0, 2)
+    while (n.length < 2) {
+      n = "0" + n
+    }
+    return this.partenaire.code_partenaire + "C" + n
   }
 
 
