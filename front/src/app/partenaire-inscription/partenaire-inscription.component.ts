@@ -203,7 +203,14 @@ export class PartenaireInscriptionComponent implements OnInit {
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
 
     return prenom + random;*/
-    let n = (this.pL.length + 1).toString().substring(0, 3)
+    let nb
+    try{
+      nb = this.pL.length
+    }catch{
+      nb = Math.floor(Math.random() * 900)
+    }
+    
+    let n = (nb + 1).toString().substring(0, 3)
     while (n.length < 3) {
       n = "0" + n
     }
