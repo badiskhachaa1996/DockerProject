@@ -18,7 +18,7 @@ import { Prospect } from 'src/app/models/Prospect';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Notification } from 'src/app/models/notification';
 import { NotificationService } from 'src/app/services/notification.service';
-
+import { ServService } from 'src/app/services/service.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ import { NotificationService } from 'src/app/services/notification.service';
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
 
-  constructor(private route: ActivatedRoute, private diplomeService: DiplomeService, private campusService: CampusService, private fInscriptionService: FirstInscriptionService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
+  constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private fInscriptionService: FirstInscriptionService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
 
   routeItems: MenuItem[];
   nationList = environment.nationalites;
@@ -48,7 +48,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   token = localStorage.getItem('token')
-
+  service_admission_id;
   formSteps: any[] = [
     "Infos",
     "Parcours",
@@ -143,75 +143,74 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (this.form_origin == "eduhorizons") 
-    { 
+
+
+    if (this.form_origin == "eduhorizons") {
       this.campusDropdown = [
-        { value: "Campus France - Paris" }, 
-        { value: "Campus France - Montpellier" }, 
-        { value: "Campus Valence - Espagne" }, 
-        { value: "Campus Florence - Italie" }, 
-        { value: "Campus UAE - Dubai" }, 
-        { value: "Campus Tunisie - Tunis" }, 
-        { value: "Campus Montréal - Canada" }, 
-        { value: "Campus Malte " }, 
-        { value: "Campus Congo" }, 
-        { value: "Campus Maroc" }, 
-        { value: "Campus USA" }, 
+        { value: "Campus France - Paris" },
+        { value: "Campus France - Montpellier" },
+        { value: "Campus Valence - Espagne" },
+        { value: "Campus Florence - Italie" },
+        { value: "Campus UAE - Dubai" },
+        { value: "Campus Tunisie - Tunis" },
+        { value: "Campus Montréal - Canada" },
+        { value: "Campus Malte " },
+        { value: "Campus Congo" },
+        { value: "Campus Maroc" },
+        { value: "Campus USA" },
         { value: "Campus En ligne" }
-      ]  
-      } else if (this.form_origin == "estya") 
-      { 
-        this.campusDropdown = [
-          { value: "Campus Paris - France" }, 
-          { value: "Campus Montpellier - France" }, 
-          { value: "Campus Brazzaville - Congo" }, 
-          { value: "Campus Rabat - Maroc " }, 
-          { value: "Campus Malte" }, 
-          { value: "Campus En ligne" }
-        ] 
-      } else if (this.form_origin == "adg") 
-      { 
-        this.campusDropdown = [
-          { value: "Campus Paris - France" }, 
-          { value: "Campus Montpellier - France" }, 
-          { value: "Campus En ligne" }
-        ]      
-          
-        this.programeFrDropdown = [
-          { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" }, 
-          { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" }, 
-          { value: "GM - Gouvernant(e) de maison - Diplôme maison" }, 
-          { value: "BTS MCO - Management Commercial Operationnel" }, 
-          { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
-          { value: "BTS GPME" }, 
-          { value: "BTS CI - Commerce International" }, 
-          { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" }, 
-          { value: "Chargé de gestion commerciale - Spécialité service commercial" }, 
-          { value: "IA - Ingénieur d'Affaires" }, 
-          { value: "Management et Stratégie d’Entreprise " }, 
-          { value: "BTS SIO - Services Informatiques aux Organisations" }, 
-          { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" }, 
-          { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" }, 
-          { value: "AIS - Administrateur d’Infrastructures Sécurisées" }, 
-          { value: "CDA - Concepteur Développeur d’Applications" }, 
-          { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " }, 
-          { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " }, 
-          { value: "BTS CJN  - Collaborateur Juriste Notarial" }, 
-          { value: "BTS CG - Comptabilité et Gestion" }, 
-          { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" }, 
-          { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" }, 
-          { value: "Coordinateur BIM du Bâtiment" }, 
-          { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" }, 
-          { value: "Formations continues IPERIA" }
-        ] 
-      } else if (this.form_origin == "espic") { 
-        this.campusDropdown = [
-          { value: "Campus France - Paris" }, 
-          { value: "Campus Athène - Grèce" }, 
-          { value: "Campus En ligne" }
-        ] 
-        
-      }
+      ]
+    } else if (this.form_origin == "estya") {
+      this.campusDropdown = [
+        { value: "Campus Paris - France" },
+        { value: "Campus Montpellier - France" },
+        { value: "Campus Brazzaville - Congo" },
+        { value: "Campus Rabat - Maroc " },
+        { value: "Campus Malte" },
+        { value: "Campus En ligne" }
+      ]
+    } else if (this.form_origin == "adg") {
+      this.campusDropdown = [
+        { value: "Campus Paris - France" },
+        { value: "Campus Montpellier - France" },
+        { value: "Campus En ligne" }
+      ]
+
+      this.programeFrDropdown = [
+        { value: "GH - Gouvernant(e) en hôtellerie - Titre RNCP - Niveau 4" },
+        { value: "CAP AEPE – CAP Accompagnant Educatif Petite Enfance" },
+        { value: "GM - Gouvernant(e) de maison - Diplôme maison" },
+        { value: "BTS MCO - Management Commercial Operationnel" },
+        { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+        { value: "BTS GPME" },
+        { value: "BTS CI - Commerce International" },
+        { value: "NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
+        { value: "Chargé de gestion commerciale - Spécialité service commercial" },
+        { value: "IA - Ingénieur d'Affaires" },
+        { value: "Management et Stratégie d’Entreprise " },
+        { value: "BTS SIO - Services Informatiques aux Organisations" },
+        { value: "TSSR - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
+        { value: "DWWM - Développeur Web et Web Mobile (Titre professionnel)" },
+        { value: "AIS - Administrateur d’Infrastructures Sécurisées" },
+        { value: "CDA - Concepteur Développeur d’Applications" },
+        { value: "EXPERT IT - CYBERSÉCURITÉ ET HAUTE DISPONIBILITÉ " },
+        { value: "EXPERT IT - APPLICATIONS INTELLIGENTES & BIG DATA " },
+        { value: "BTS CJN  - Collaborateur Juriste Notarial" },
+        { value: "BTS CG - Comptabilité et Gestion" },
+        { value: "ARH : Assistant Ressources Humaines (Titre Professionnel)" },
+        { value: "BIM Modeleur du Bâtiment (Titre Professionnel)" },
+        { value: "Coordinateur BIM du Bâtiment" },
+        { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
+        { value: "Formations continues IPERIA" }
+      ]
+    } else if (this.form_origin == "espic") {
+      this.campusDropdown = [
+        { value: "Campus France - Paris" },
+        { value: "Campus Athène - Grèce" },
+        { value: "Campus En ligne" }
+      ]
+
+    }
 
 
     this.onInitRegisterForm();
@@ -238,7 +237,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('[^0-9]+')]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('',[Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
       indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
 
       //******* Parcours académiques et professionnel *******
@@ -288,7 +287,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
       console.log(dataMail)
       if (dataMail) {
-        this.emailExist = true    
+        this.emailExist = true
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
         return true
       }
@@ -427,7 +426,17 @@ export class FormulaireAdmissionComponent implements OnInit {
       ((response) => {
         if (response.success) {
           //Envoie de notif TODO
-          this.NotifService.create(new Notification)
+
+
+          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).subscribe((notif) => {
+           console.log(notif)
+            this.NotifService.newNotif(notif)
+
+
+          }, (error) => {
+            console.error(error)
+          });
+
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
           this.getFilesAccess(response.dataUser._id)
         } else {
