@@ -31,6 +31,11 @@ export class PartenaireService {
     return this.httpClient.get<Partenaire[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getNBAll() {
+    let registreUrl = this.apiUrl + "getNBAll";
+    return this.httpClient.get<number>(registreUrl);
+  }
+
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Partenaire>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

@@ -156,6 +156,17 @@ app.get("/getAll", (req, res) => {
         })
 });
 
+app.get("/getNBAll", (req, res) => {
+    Partenaire.find()
+        .then(result => {
+            res.send(result.length);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(404).send(err);
+        })
+});
+
 
 //Recuperation d'un partenaire via son id
 app.get("/getById/:id", (req, res, next) => {
