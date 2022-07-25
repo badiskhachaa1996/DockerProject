@@ -192,8 +192,16 @@ io.on("connection", (socket) => {
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
     socket.on('NewNotif', (data) => {
-        io.to(data.user_id).emit('NewNotif', data)
-        io.emit(data, { NewNotif: data });
+        console.log(data)
+        if (data?.user_id) {
+            io.to(data?.user_id).emit('NewNotif', data)
+            io.emit(data, { NewNotif: data });
+        }
+        else {
+            io.to(data?.service_id).emit('NewNotif', data)
+            io.emit(data, { NewNotif: data });
+        }
+
     })
 
     socket.on('reloadNotif', (data) => {

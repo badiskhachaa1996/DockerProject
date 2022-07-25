@@ -9,7 +9,7 @@
                 <ul>
                     <li *ngFor="let notif of notifications">
                         <div class="grid"
-                            *ngIf="notif && listTicket[notif.ticket_id] && sujetDic[listTicket[notif.ticket_id].sujet_id]">
+                            *ngIf="notif && listTicket[notif.info_id] && sujetDic[listTicket[notif.info_id].sujet_id]">
                             <div class="col-fixed">
                             </div>
                             <div class="col">
@@ -18,9 +18,9 @@
                                         style="font-weight: bold; font-size: 120%;">{{notif.type}}</span>
                                     <div class="timeline-event-message" style="font-size: small;">
                                         Numéro du ticket : <span
-                                            style="font-weight: bold;">{{(listTicket[notif.ticket_id].customid)?listTicket[notif.ticket_id].customid:notif.ticket_id}}
+                                            style="font-weight: bold;">{{(listTicket[notif.info_id].customid)?listTicket[notif.info_id].customid:notif.info_id}}
                                         </span>, Sujet : <span
-                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.ticket_id].sujet_id].label}}</span>
+                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.info_id].sujet_id].label}}</span>
                                     </div>
                                     <div class="timeline-event-time">
                                         {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
