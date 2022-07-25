@@ -819,6 +819,7 @@ export class NotesComponent implements OnInit {
     this.notesForGenerateBulletin = []
     this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
+      console.log(data)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
