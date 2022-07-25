@@ -10,7 +10,8 @@ const origin = require("../config");
 const path = require('path');
 var mime = require('mime-types')
 const jwt = require("jsonwebtoken");
-
+const { Notification } = require("./../models/notification");
+const { Service } = require("./../models/service");
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
@@ -63,9 +64,9 @@ app.get("/getByUserid/:id", (req, res, next) => {
     console.log(req.params.id);
     Prospect.findOne({ user_id: req.params.id })
         .then((prospectFromDb) => {
-           console.log("ass")
-                res.status(201).send(prospectFromDb);
-           
+            console.log("ass")
+            res.status(201).send(prospectFromDb);
+
 
         })
         .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
@@ -305,13 +306,33 @@ app.post("/create", (req, res, next) => {
                                     });
                                 }
                             })
-                            .catch((error) => { res.status(400).send({ message: 'Impossible de créer un nouveau prospect !', error }) });
+
+
                     })
                     .catch((error) => { res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur !', error }) });
             }
         })
-        .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });
+        .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ', error }) });
 
+
+    Service.findOne({ label: "Service Admission" }).then(servAdmission => {
+        let serviceadmission_id = servAdmission._id
+
+        const notif = new Notification({
+            etat: false,
+            type: "nouvelle demande admission",
+            date_ajout: Date.now(),
+            service_id: serviceadmission_id,
+        });
+        notif.save().then((notifCreated) => {
+            console.log("Votre notif a été crée!");
+            console.log(notifCreated);
+
+        }).catch((error) => { res.status(300).send({ message: 'Impossible de créer un nouvelle notif !', error }) });
+    }).catch((error) => {
+        console.error(error)
+        res.status(404).send(error);
+    })
 });
 
 
@@ -363,7 +384,7 @@ app.get("/getByUserId/:user_id", (req, res, next) => {
     let user_id = req.params.user_id;
     Prospect.findOne({ user_id: user_id }).then(prospectFromDb => {
         let prospectR = prospectFromDb
-        res.status(200).send(prospectR );
+        res.status(200).send(prospectR);
     }).catch((error) => {
         console.error(error)
         res.status(404).send(error);

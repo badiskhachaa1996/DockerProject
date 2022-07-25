@@ -38,7 +38,7 @@ export class ExterneComponent implements OnInit {
           localStorage.setItem('ProspectConected', roleConnected.Ptoken)
           this.router.navigate(['/suivre-ma-preinscription'])
         } else{
-          this.router.navigateByUrl('/ticket/suivi', { skipLocationChange: true })
+          this.router.navigateByUrl('/#/', { skipLocationChange: true })
         }
 
       })
