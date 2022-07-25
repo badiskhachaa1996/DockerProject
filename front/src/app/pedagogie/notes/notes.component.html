@@ -361,7 +361,8 @@
                                 [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'dispensed')"></p-selectButton>
                         </div>
-                        <div class="col-5 md:col-4" *ngIf="rachatEtudiant[i]['isNew']==false && rachatEtudiant[i]['dispensed']==true">
+                        <div class="col-5 md:col-4"
+                            *ngIf="rachatEtudiant[i]['isNew']==false && rachatEtudiant[i]['dispensed']==true">
                             <label>Dispenser:</label><br>
                             <p>Cette étudiant est dispensé de cette matière</p>
                         </div>
@@ -467,21 +468,13 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="footer">
-                        <tr *ngIf="showAppreciationGenerale">
-                            <td colspan="2">Appréciation générale</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: center;">{{ appreciationGenerale.appreciation }}</td>
-                        </tr>
                         <tr>
                             <td colspan="2">Moyenne générale</td>
-                            <td *ngIf="moyEtudiant">{{ moyEtudiant | number : '0.1-2' }}</td>
+                            <td>{{ moyEtudiant | number : '0.1-2' }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
+                            <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{ appreciationGenerale.appreciation }}</td>
                         </tr>
 
                         <br>
