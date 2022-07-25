@@ -53,6 +53,13 @@ export class NotificationService {
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  get20AdmissionNotifi() {
+    let registreUrl = this.apiUrl + "get20AdmissionNotifi";
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+
+
   newNotif(Notif) {
     this.socket.emit("NewNotif", (Notif.doc))
   }

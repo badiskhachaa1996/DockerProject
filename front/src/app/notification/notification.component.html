@@ -2,34 +2,28 @@
     <div class="col-12">
         <div class="card">
             <h4 style="text-align: center;">Notification</h4>
-            <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-containe" *ngIf="notifications.length==0 ">
+            <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-containe"
+                *ngIf="notifications.length==0 ">
                 <small>Vous n'avez aucune notifications pour le moment.</small>
             </div>
             <div class="card shadow-lg timeline" *ngIf="notifications.length!==0">
                 <ul>
-                    <li *ngFor="let notif of notifications">
-                        <div class="grid"
-                            *ngIf="notif && listTicket[notif.info_id] && sujetDic[listTicket[notif.info_id].sujet_id]">
+                    <li *ngFor=" let notif of notifications">
+                        <div class="grid">
                             <div class="col-fixed">
                             </div>
                             <div class="col">
                                 <div class="time-line-event">
-                                    <span class="timeline-event-title"
-                                        style="font-weight: bold; font-size: 120%;">{{notif.type}}</span>
-                                    <div class="timeline-event-message" style="font-size: small;">
-                                        Numéro du ticket : <span
-                                            style="font-weight: bold;">{{(listTicket[notif.info_id].customid)?listTicket[notif.info_id].customid:notif.info_id}}
-                                        </span>, Sujet : <span
-                                            style="font-weight: bold;">{{sujetDic[listTicket[notif.info_id].sujet_id].label}}</span>
-                                    </div>
+                                    <span class="timeline-event-title" style="font-weight: bold; font-size: 120%;">{{
+                                        notif.type }}</span>
+
                                     <div class="timeline-event-time">
                                         {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
                                     </div>
                                 </div>
-                                <div class="timeline-event-time">
-                                    {{notif.date_ajout | date:'dd/MM/yyyy HH:mm'}}
-                                </div>
+                              
                             </div>
+
                         </div>
                     </li>
                 </ul>
