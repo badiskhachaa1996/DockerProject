@@ -119,7 +119,7 @@ export class PartenaireInscriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.PartenaireService.getNBAll().subscribe(data => {
-      this.pL = data
+      this.pL = data.nb
     })
   }
 

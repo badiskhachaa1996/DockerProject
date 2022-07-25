@@ -33,7 +33,7 @@ export class PartenaireService {
 
   getNBAll() {
     let registreUrl = this.apiUrl + "getNBAll";
-    return this.httpClient.get<number>(registreUrl);
+    return this.httpClient.get<{ nb: number }>(registreUrl);
   }
 
   getById(id: string) {

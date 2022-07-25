@@ -44,7 +44,7 @@ app.post("/create", (req, res, next) => {
 //création d'un nouvel étudiant
 app.post("/inscription", (req, res, next) => {
     //creation du nouvel étudiant
-    
+
     let partenaireData = req.body.newPartenaire;
     let partenaire = new Partenaire(
         {
@@ -59,10 +59,10 @@ app.post("/inscription", (req, res, next) => {
             APE: partenaireData.APE,
             Services: partenaireData.Services,
             Pays: partenaireData.Pays,
-            type:partenaireData.type,
-            WhatsApp:partenaireData.WhatsApp,
-            indicatifPhone:partenaireData.indicatifPhone,
-            indicatifWhatsApp:partenaireData.indicatifWhatsApp,
+            type: partenaireData.type,
+            WhatsApp: partenaireData.WhatsApp,
+            indicatifPhone: partenaireData.indicatifPhone,
+            indicatifWhatsApp: partenaireData.indicatifWhatsApp,
         });
 
     //Creation du nouveau user
@@ -86,7 +86,7 @@ app.post("/inscription", (req, res, next) => {
             numero_adresse: userData.numero_adresse,
             postal_adresse: userData.postal_adresse,
             date_creation: new Date(),
-            indicatif:userData.indicatif,
+            indicatif: userData.indicatif,
             verifedEmail: true
             //statut_ent:userData?.statut
         });
@@ -159,7 +159,7 @@ app.get("/getAll", (req, res) => {
 app.get("/getNBAll", (req, res) => {
     Partenaire.find()
         .then(result => {
-            res.send(result.length);
+            res.status(201).send({ nb: result.length });
         })
         .catch(err => {
             console.error(err);
