@@ -4,8 +4,21 @@ const { Partenaire } = require("./../models/partenaire");
 const bcrypt = require("bcryptjs");
 const { User } = require("./../models/user");
 const { CommercialPartenaire } = require("./../models/CommercialPartenaire");
+const nodemailer = require('nodemailer');
+const origin = require("../config");
 app.disable("x-powered-by");
 
+
+let transporterEH = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'contact@eduhorizons.com',
+        pass: 'CeHs2022$',
+    },
+});
 //création d'un nouvel étudiant
 app.post("/create", (req, res, next) => {
     //creation du nouvel étudiant
@@ -131,6 +144,39 @@ app.post("/inscription", (req, res, next) => {
                             .then((newPartenaire) => {
                                 commercial.partenaire_id = newPartenaire._id
                                 commercial.save().then((commercialsaved) => {
+
+                                    let htmlmail =
+                                        "<p>Bonjour,</p><p>Votre demarche sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe   sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>"
+                                        + "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
+                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
+                                        " <p>Bien cordialement.</p>" +
+                                        "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
+
+
+                                    let mailOptions = {
+                                        from: "contact@eduhorizons.com",
+                                        to: userCreated.email_perso,
+                                        subject: 'Confirmation de préinscription',
+                                        html: htmlmail,
+                                        attachments: [{
+                                            filename: 'SignatureEmailEH.png',
+                                            path: 'assets/SignatureEmailEH.png',
+                                            cid: 'SignatureEmailEH' //same cid value as in the html img src
+                                        }]
+                                    };
+                                    transporterEH.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.error(error);
+
+                                        }
+
+
+
+                                    });
+
+
+
                                     res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: newPartenaire, commercial: commercialsaved })
                                 })
                             })
