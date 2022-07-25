@@ -8,43 +8,43 @@ const bcrypt = require("bcryptjs");
 //Recuperation de la liste des commerciales
 app.get("/getAll", (req, res, next) => {
     CommercialPartenaire.find()
-                        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
-                        .catch((error) => { res.status(400).send(error.message); })
+        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
+        .catch((error) => { res.status(400).send(error.message); })
 });
 
 //Recuperation de la liste des commerciales
 app.get("/getAllByPartenaireId/:partenaire_id", (req, res, next) => {
-    CommercialPartenaire.find({partenaire_id:req.params.partenaire_id})
-                        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
-                        .catch((error) => { res.status(400).send(error.message); })
+    CommercialPartenaire.find({ partenaire_id: req.params.partenaire_id })
+        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
+        .catch((error) => { res.status(400).send(error.message); })
 });
 
 //Recuperation d'un commercial partenaire via son id
 app.get("/getById/:id", (req, res, next) => {
-    CommercialPartenaire.findOne({ _id:req.params.id })
-                        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
-                        .catch((error) => { res.status(500).send(error.message); })
+    CommercialPartenaire.findOne({ _id: req.params.id })
+        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
+        .catch((error) => { res.status(500).send(error.message); })
 });
 
 //Recuperation d'un commercial partenaire via son code
 app.get("/getCommercialDataFromCommercialCode/:code", (req, res, next) => {
-    CommercialPartenaire.findOne({ code_commercial_partenaire:req.params.code })
-                        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
-                        .catch((error) => { res.status(500).send(error.message); })
+    CommercialPartenaire.findOne({ code_commercial_partenaire: req.params.code })
+        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
+        .catch((error) => { res.status(500).send(error.message); })
 });
 
 //Recuperation d'un commercial via son id user
 app.get("/getByUserId/:id", (req, res, next) => {
-    CommercialPartenaire.findOne({ user_id:req.params.id })
-                        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
-                        .catch((error) => { res.status(500).send(error.message); })
+    CommercialPartenaire.findOne({ user_id: req.params.id })
+        .then((commercialPartenaire) => { res.status(200).send(commercialPartenaire); })
+        .catch((error) => { res.status(500).send(error.message); })
 });
 
 //Creation d'un nouveau commercial
 app.post("/create", (req, res, next) => {
     //Recuperation des données commercial envoyé depuis le front
     const commercialPartenaireData = req.body.newCommercialPartenaire;
-    
+
     //Suppression de l'id envoyé depuis le front
     delete commercialPartenaireData._id;
     //Creation du nouvel objet CommercialPartenaire
@@ -73,36 +73,37 @@ app.post("/create", (req, res, next) => {
             numero_adresse: userData.numero_adresse,
             postal_adresse: userData.postal_adresse,
             date_creation: new Date(),
+            verifedEmail: true
             //statut_ent:userData?.statut
         });
 
     //Verification de l'existence de l'utilisateur
     User.findOne({ email: userData.email })
         .then((userFromDb) => {
-            if(userFromDb){
+            if (userFromDb) {
                 CommercialPartenaire.findOne({ user_id: userFromDb._id })
-                              .then((commercialPartenaireFromDb) => {
-                                  if(commercialPartenaireFromDb){
-                                      res.status(201).json({ error: 'Cet commercial existe déja' });
-                                  } else {
-                                        commercialPartenaire.user_id = userFromDb._id;
-                                        
-                                        commercialPartenaire.save()
-                                                    .then((commercialPartenaireSaved) => { res.status(201).json({ success: 'Commercial ajouté' }); })
-                                                    .catch((error) => { res.status(400).json({ error: 'Impossible d\'ajouter ce commercial'}) });
-                                  }
-                              })
-                              .catch((error) => { res.status(400).json({ error: 'Impossible de verifier l\'existence de ce commercial '}) });
+                    .then((commercialPartenaireFromDb) => {
+                        if (commercialPartenaireFromDb) {
+                            res.status(201).json({ error: 'Cet commercial existe déja' });
+                        } else {
+                            commercialPartenaire.user_id = userFromDb._id;
+
+                            commercialPartenaire.save()
+                                .then((commercialPartenaireSaved) => { res.status(201).json({ success: 'Commercial ajouté' }); })
+                                .catch((error) => { res.status(400).json({ error: 'Impossible d\'ajouter ce commercial' }) });
+                        }
+                    })
+                    .catch((error) => { res.status(400).json({ error: 'Impossible de verifier l\'existence de ce commercial ' }) });
             }
             else {
                 user.save()
                     .then((userCreated) => {
                         commercialPartenaire.user_id = userCreated._id;
                         commercialPartenaire.save()
-                                      .then((commercialPartenaireCreated) => { res.status(201).json({ success: 'Commercial crée' }) })
-                                      .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce commercial' }); });
+                            .then((commercialPartenaireCreated) => { res.status(201).json({ success: 'Commercial crée' }) })
+                            .catch((error) => { res.status(400).json({ error: 'Impossible de crée ce commercial' }); });
                     })
-                    .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur '}); });
+                    .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' }); });
             }
         })
         .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur' }) });
@@ -120,26 +121,26 @@ app.put("/update", (req, res, next) => {
 
     //D'abord on met à jour le commercial
     CommercialPartenaire.findOneAndUpdate({ _id: commercialData._id },
-    {
-        partenaire_id: commercialData.partenaire_id,
-        user_id: commercialData.user_id,
-        code_commercial_partenaire: commercialData.code_commercial_partenaire,
-        statut: commercialData.statut,
-    })
-    .then((commercialPartenaires) => { 
-        //Une fois le commercial mis à jour, on met à jour le user
-        User.findOneAndUpdate({ _id: userData._id }, 
         {
-            firstname: userData.firstname,
-            lastname: userData.lastname,
-            phone: userData.phone,
-            email: userData.email,
-            civilite: userData.civilite,
+            partenaire_id: commercialData.partenaire_id,
+            user_id: commercialData.user_id,
+            code_commercial_partenaire: commercialData.code_commercial_partenaire,
+            statut: commercialData.statut,
         })
-        .then((users) => { res.status(200).json({'success': 'Modification reussie' }); })
-        .catch((error) => { res.status(500).json({'error': 'Problème de modification'}); });
-     })
-    .catch((error) => { res.status(500).json({'error': 'Problème de modification, contactez un administrateur'}); })
+        .then((commercialPartenaires) => {
+            //Une fois le commercial mis à jour, on met à jour le user
+            User.findOneAndUpdate({ _id: userData._id },
+                {
+                    firstname: userData.firstname,
+                    lastname: userData.lastname,
+                    phone: userData.phone,
+                    email: userData.email,
+                    civilite: userData.civilite,
+                })
+                .then((users) => { res.status(200).json({ 'success': 'Modification reussie' }); })
+                .catch((error) => { res.status(500).json({ 'error': 'Problème de modification' }); });
+        })
+        .catch((error) => { res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' }); })
 
 });
 

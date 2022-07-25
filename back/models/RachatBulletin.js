@@ -17,6 +17,10 @@ const rb_sch = new mongoose.Schema({
         type: String,
         required: true,
     },
+    isDispensed: {
+        type: Boolean,
+        default: false
+    }
 })
 
 const RachatBulletin = mongoose.model("RachatBulletin", rb_sch);

@@ -109,7 +109,7 @@ export class NotesComponent implements OnInit {
     this.matiereRachat = []
     this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
       rbs.forEach(rb => {
-        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id })
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed })
       })
     })
     this.notesForGenerateBulletin.forEach(n => {
@@ -117,7 +117,7 @@ export class NotesComponent implements OnInit {
     })
   }
   addRachatEtudiant() {
-    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true })
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false })
   }
 
   updateRachatEtudiant(i, value, type) {
@@ -144,10 +144,11 @@ export class NotesComponent implements OnInit {
 
   onSubmitRachat() {
     let problem: RachatBulletin = null
+    console.log(this.rachatEtudiant)
     this.rachatEtudiant.forEach(rb => {
       if (!rb.isNew) {
         //Update
-        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
         this.RBService.update(RBU).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -156,7 +157,7 @@ export class NotesComponent implements OnInit {
         })
       } else {
         //Create
-        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
         this.RBService.create(RBC).subscribe(data => {
           testlast(rb, this)
         }, err => {

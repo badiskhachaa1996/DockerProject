@@ -44,7 +44,7 @@ export class PartenaireInscriptionComponent implements OnInit {
       { value: "Individuel" },
     ];
 
-  pL: Partenaire[];
+  pL = Math.random() * 900;
 
 
   constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService) { }
@@ -118,17 +118,9 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    try {
-      this.PartenaireService.getAll().subscribe(data => {
-        this.pL = data
-      })
-    } catch (err) {
-      console.error(err)
-      let nb = Math.floor(Math.random() * 500)
-      for (let i = 0; i < nb; i++) {
-        this.pL.push(new Partenaire())
-      }
-    }
+    this.PartenaireService.getNBAll().subscribe(data => {
+      this.pL = data.nb
+    })
   }
 
 
@@ -203,7 +195,8 @@ export class PartenaireInscriptionComponent implements OnInit {
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
 
     return prenom + random;*/
-    let n = (this.pL.length + 1).toString().substring(0, 3)
+
+    let n = (this.pL + 1).toString().substring(0, 3)
     while (n.length < 3) {
       n = "0" + n
     }

@@ -179,10 +179,10 @@ app.post("/create", (req, res, next) => {
 
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p>" +
+                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
                                         "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes : </p>" +
                                         "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
@@ -220,11 +220,11 @@ app.post("/create", (req, res, next) => {
 
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p>" +
+                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
                                         "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes :</p>" +
                                         "<ul><li>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
@@ -264,9 +264,9 @@ app.post("/create", (req, res, next) => {
                                         "<p> Bienvenue au Service des inscriptions de l'ADG.</p ></div >" +
                                         "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès," +
                                         "  merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p></div>" +
+                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p></div>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
                                         "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
                                         "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +
@@ -316,19 +316,21 @@ app.post("/create", (req, res, next) => {
 
 
     Service.findOne({ label: "Service Admission" }).then(servAdmission => {
-        let serviceadmission_id = servAdmission._id
+        if(servAdmission){
+            let serviceadmission_id = servAdmission._id
 
-        const notif = new Notification({
-            etat: false,
-            type: "nouvelle demande admission",
-            date_ajout: Date.now(),
-            service_id: serviceadmission_id,
-        });
-        notif.save().then((notifCreated) => {
-            console.log("Votre notif a été crée!");
-            console.log(notifCreated);
-
-        }).catch((error) => { res.status(300).send({ message: 'Impossible de créer un nouvelle notif !', error }) });
+            const notif = new Notification({
+                etat: false,
+                type: "nouvelle demande admission",
+                date_ajout: Date.now(),
+                service_id: serviceadmission_id,
+            });
+            notif.save().then((notifCreated) => {
+                console.log("Votre notif a été crée!");
+                console.log(notifCreated);
+    
+            }).catch((error) => { console.error(error) });
+        }
     }).catch((error) => {
         console.error(error)
         res.status(404).send(error);

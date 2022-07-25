@@ -340,23 +340,34 @@
             <form (ngSubmit)="onSubmitRachat()" class="p-fluid p-formgrid grid">
                 <div *ngFor="let r of rachatEtudiant; let i = index" class="col-12">
                     <div class="grid">
-                        <div class="col-6 md:col-6" *ngIf="rachatEtudiant[i]['isNew']==true">
+                        <div class="col-12 md:col-4" *ngIf="rachatEtudiant[i]['isNew']==true">
                             <label>Module: </label>
                             <p-dropdown [options]="matiereRachat"
                                 (onChange)="updateRachatEtudiant(i,$event,'matiere_id')"></p-dropdown>
                         </div>
-                        <div class="col-5 md:col-5" *ngIf="rachatEtudiant[i]['isNew']==false">
+                        <div class="col-12 md:col-4" *ngIf="rachatEtudiant[i]['isNew']==false">
                             <label>Module: </label>
                             <p>{{matieres[rachatEtudiant[i]['matiere_id']].nom}}</p>
                         </div>
-                        <div class="col-5 md:col-5">
-                            <label>Nouvelle Moyenne: </label>
+                        <div class="col-5 md:col-3" *ngIf="rachatEtudiant[i]['dispensed']!=true">
+                            <label>Nouvelle Moyenne: </label><br>
                             <input type="number" step="0.01" [value]="rachatEtudiant[i]['fixed_moy']"
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
                                 pInputText>
                         </div>
-                        <div class="field col-2 md:col-2">
-                            <i class="pi pi-trash" (click)="deleteRachatEtudiant(i, rachatEtudiant[i]['isNew'])"
+                        <div class="col-5 md:col-4" *ngIf="rachatEtudiant[i]['isNew']==true">
+                            <label>Dispenser ? </label><br>
+                            <p-selectButton [value]="rachatEtudiant[i]['dispensed']"
+                                [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                (onChange)="updateRachatEtudiant(i,$event.value,'dispensed')"></p-selectButton>
+                        </div>
+                        <div class="col-5 md:col-4" *ngIf="rachatEtudiant[i]['isNew']==false && rachatEtudiant[i]['dispensed']==true">
+                            <label>Dispenser:</label><br>
+                            <p>Cette étudiant est dispensé de cette matière</p>
+                        </div>
+
+                        <div class="field col-2 md:col-1">
+                            <i class="pi pi-trash my-2" (click)="deleteRachatEtudiant(i, rachatEtudiant[i]['isNew'])"
                                 aria-hidden="true"></i>
                         </div>
                     </div>
@@ -443,7 +454,7 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
-                        <tr>
+                        <tr *ngIf="!note.isDispensed">
                             <td>{{ note.matiere_name}}</td>
                             <td style="width: 4em;">{{ note.coef }}</td>
                             <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
