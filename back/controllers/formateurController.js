@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const nodemailer = require('nodemailer');
+const origin = require("../config");
 app.disable("x-powered-by");
 const { Formateur } = require('./../models/formateur');
 const { User } = require('./../models/user');
@@ -179,7 +180,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
     }
     Formateur.findById(req.params.id).then(formateur => {
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="t.dev.estya.com/calendrier/formateur/ + ' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + '<a href="' + origin + '/calendrier/formateur/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: formateur.email,
