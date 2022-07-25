@@ -86,8 +86,16 @@ app.get("/getAllByUserID/:id", (req, res) => {
 //Récuperer les 20 notifications dernières d'un user
 app.get("/get20ByUserID/:id", (req, res) => {
     Notification.find({ user_id: req.params.id, etat: false }).then(Notifications => {
+        console.log(Notification)
         res.status(200).send(Notifications.slice(0, 20))
     })
+});
+app.get("/get20AdmissionNotifi", (req, res) => {
+    Notification.find({ info_id:null, etat: false }).then(notifications => {
+console.log(notifications)
+objet20notif =notifications.slice(0, 20)
+        res.status(200).send(objet20notif)
+    }).catch(error => { console.log(error) })
 });
 
 app.post("/viewNotifs", (req, res) => {
