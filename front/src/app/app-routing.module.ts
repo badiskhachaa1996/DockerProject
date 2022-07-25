@@ -147,8 +147,8 @@ import { NotificationComponent } from './notification/notification.component';
                     { path: 'prospects', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Collaborateur/Partenaire type:Commercial
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'emploi-du-temps', component: EmploiDuTempsComponent },

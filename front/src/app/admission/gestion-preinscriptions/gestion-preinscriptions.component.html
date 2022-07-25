@@ -151,7 +151,7 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Tous" [options]="dropdownDecision"
                         (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
                         [style]="{'margin':'5px'}">
@@ -214,8 +214,7 @@
                             {{ prospect.user_id.lastname | uppercase }}
                             {{ prospect.user_id.firstname | titlecase }}
                         </td>
-                        <td
-                            *ngIf="!prospect.user_id">
+                        <td *ngIf="!prospect.user_id">
                             Error Smith
                         </td>
                         <td>
@@ -233,13 +232,15 @@
                         <td>
                             {{ prospect.statut_dossier }}
                         </td>
-                        <td *ngIf=" prospect.enTraitement == false">
-                            <i pTooltip="Changer le statut du dossier" tooltipPosition="bottom" class="pi pi-bookmark"
-                                (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
+                        <td *ngIf="prospect.enTraitement == false">
+                            <i *ngIf="!dataCommercial" pTooltip="Changer le statut du dossier" tooltipPosition="bottom"
+                                class="pi pi-bookmark" (click)="inscriptionSelected=prospect;initStatutForm(prospect)"
+                                aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
-                            <i pTooltip="Mettre à jour les payements" tooltipPosition="bottom" class="pi pi-money-bill"
-                                (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
+                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les payements" tooltipPosition="bottom"
+                                class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
+                                aria-hidden="true"></i>
                         </td>
                         <td *ngIf=" prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
