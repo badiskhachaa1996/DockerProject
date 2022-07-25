@@ -146,16 +146,9 @@ app.post("/inscription", (req, res, next) => {
                                 commercial.save().then((commercialsaved) => {
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe   sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes : </p>" +
-                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
+                                        "<p>Bonjour,</p><p>Votre demarche sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe   sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>"
+                                        + "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                        "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
-                                        " <li>Déposer votre dossier de candidature </li>" +
-                                        " <li>Suivre l'état d'avancement sur le portail</li>" +
-                                        " </ul>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
-                                        "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
                                         "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Bien cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
