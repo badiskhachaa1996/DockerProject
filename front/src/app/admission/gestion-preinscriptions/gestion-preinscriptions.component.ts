@@ -194,6 +194,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.userService.WhatTheRole(this.token.id).subscribe(data => {
       if (data.type == 'Commercial' && data.data.statut == 'Admin') {
         this.dataCommercial = data.data
+        console.log(data)
+      }
+      if (data.type == "Commercial" && data.data.code_commercial_partenaire) {
+        localStorage.setItem("CommercialCode", data.data.code_commercial_partenaire)
       }
       this.refreshProspect()
       this.socket.on("TraitementProspect", (prospect) => {
@@ -220,11 +224,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
           }
         })
-
       })
-
-
-
     })
 
   }
@@ -334,9 +334,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
   generateCode(prospect: Prospect) {
     let user: any = prospect.user_id
     let code_pays = user.nationnalite.substring(0, 3)
-    environment.dicNationaliteCode.forEach(code=>{
-      if(code[user.nationnalite] && code[user.nationnalite]!=undefined){
-        code_pays=code[user.nationnalite]
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
+        code_pays = code[user.nationnalite]
       }
     })
     let prenom = user.firstname.substring(0, 1)
@@ -402,7 +402,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
   }
 
   onGetFormAdmissionEDUHORIZONS() {
-    this.router.navigate(['formulaire-admission','eduhorizons']);
+    this.router.navigate(['formulaire-admission', 'eduhorizons']);
+  }
+
+  openNewForm(namedRoute : string){
+    let newRelativeUrl = namedRoute
+    let baseUrl = window.location.href.replace(this.router.url, '');
+    window.open(baseUrl + newRelativeUrl, '_blank');
   }
 
   downloadFile(id, i) {
@@ -498,7 +504,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
       t['Confirmation CF'] = p.validated_cf
-      if (p.agent_id &&  this.users[p.agent_id] && this.users[p.agent_id].lastname) {
+      if (p.agent_id && this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }
       dataExcel.push(t)

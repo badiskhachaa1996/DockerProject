@@ -32,6 +32,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
 
   routeItems: MenuItem[];
+  cookieCodeCommercial = ""
   nationList = environment.nationalites;
   calendar: any;
   fr = environment.fr;
@@ -142,7 +143,9 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    if(localStorage.getItem("CommercialCode")){
+      this.cookieCodeCommercial=localStorage.getItem("CommercialCode")
+    }
 
 
     if (this.form_origin == "eduhorizons") {
@@ -270,7 +273,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       agence: new FormControl(false),
       nomAgence: new FormControl('', Validators.pattern('[^0-9]+')),
       donneePerso: new FormControl(false, Validators.required),
-      code_commercial: new FormControl(''),
+      code_commercial: new FormControl(this.cookieCodeCommercial),
 
     });
   };
