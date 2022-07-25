@@ -157,7 +157,6 @@ import { NotificationComponent } from './notification/notification.component';
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                 ],

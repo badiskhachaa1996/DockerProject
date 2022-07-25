@@ -86,7 +86,8 @@ app.post("/inscription", (req, res, next) => {
             numero_adresse: userData.numero_adresse,
             postal_adresse: userData.postal_adresse,
             date_creation: new Date(),
-            indicatif:userData.indicatif
+            indicatif:userData.indicatif,
+            verifedEmail: true
             //statut_ent:userData?.statut
         });
     let commercialData = req.body.newCommercial
