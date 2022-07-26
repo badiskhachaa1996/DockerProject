@@ -11,7 +11,6 @@ import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Inscription } from 'src/app/models/Inscription';
-import { FirstInscriptionService } from 'src/app/services/first-inscription.service';
 import { MessageService } from 'primeng/api';
 import { Diplome } from 'src/app/models/Diplome';
 import { Prospect } from 'src/app/models/Prospect';
@@ -30,11 +29,13 @@ import { ServService } from 'src/app/services/service.service';
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
 
-  constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private fInscriptionService: FirstInscriptionService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
+  constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
 
   routeItems: MenuItem[];
+  cookieCodeCommercial = ""
   nationList = environment.nationalites;
   calendar: any;
+  fr = environment.fr;
   ActiveIndex = 0;
   RegisterForm: FormGroup;
   paysList = environment.pays;
@@ -42,8 +43,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   diplomes = [];
   diplomesOfCampus = [];
   userConnected: User;
-  maxYear = new Date().getFullYear() - 16
-  minYear = new Date().getFullYear() - 50
+  maxYear = new Date().getFullYear() - 13
+  minYear = new Date().getFullYear() - 80
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
@@ -142,7 +143,9 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
-
+    if(localStorage.getItem("CommercialCode")){
+      this.cookieCodeCommercial=localStorage.getItem("CommercialCode")
+    }
 
 
     if (this.form_origin == "eduhorizons") {
@@ -234,10 +237,10 @@ export class FormulaireAdmissionComponent implements OnInit {
       date_naissance: new FormControl('', [Validators.required]),
       nationalite: new FormControl(this.nationList[0], [Validators.required]),
       pays_adresse: new FormControl(this.paysList[76], [Validators.required, Validators.pattern('[^0-9]+')]),
-      email: new FormControl('', [Validators.required, Validators.email, Validators.pattern('[^0-9]+')]),
-      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), ]),
       indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
 
       //******* Parcours académiques et professionnel *******
@@ -270,7 +273,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       agence: new FormControl(false),
       nomAgence: new FormControl('', Validators.pattern('[^0-9]+')),
       donneePerso: new FormControl(false, Validators.required),
-      code_commercial: new FormControl(''),
+      code_commercial: new FormControl(this.cookieCodeCommercial),
 
     });
   };
@@ -284,8 +287,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   }
 
   verifEmailInBD() {
+    this.emailExist = false
     this.AuthService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
-      console.log(dataMail)
       if (dataMail) {
         this.emailExist = true
         this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });

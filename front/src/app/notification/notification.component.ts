@@ -23,9 +23,11 @@ export class NotificationComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
     this.token = jwt_decode(localStorage.getItem("token"))
     if (this.token) {
+      console.log(this.token)
+
       this.NotificationService.get20ByUserID(this.token.id)
         .subscribe(
           data => {
@@ -63,8 +65,31 @@ export class NotificationComponent implements OnInit {
           this.userDic[element._id] = element;
         });
       })
-    }
-  
-  }
 
+
+      if (this.token.service_id) {
+        this.NotificationService.get20AdmissionNotifi().subscribe(notifadmission => {
+
+          console.log(notifadmission)
+
+          for (let index = 0; index < notifadmission.length; index++) {
+
+
+            console.log(notifadmission[index])
+            this.notifications.push(notifadmission[index])
+          }
+
+            this.NotificationService.viewNotifs(notifadmission)
+              .subscribe(
+                response => {
+                  this.NotificationService.reloadNotif({ id: this.token.id })
+                },
+                error => {
+                  console.error(error);
+                });
+        })
+      }
+
+    }
+  }
 }

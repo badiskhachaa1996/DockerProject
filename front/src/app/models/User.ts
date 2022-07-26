@@ -23,7 +23,7 @@ export class User {
         public numero_adresse?:string,
         public postal_adresse?:string,
         public nationnalite?: string,
-        public verifedEmail?: string,
+        public verifedEmail?: boolean,
         public date_creation?:Date
     ){}
     
