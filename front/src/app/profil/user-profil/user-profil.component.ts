@@ -250,9 +250,7 @@ export class UserProfilComponent implements OnInit {
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
 
       this.userco = jwt_decode(data['userToken'])['userFromDb']
-
-
-
+      console.log(this.userco.password)
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
         this.InfoUser = data?.data
         let date = new Date(this.InfoUser?.date_naissance)
@@ -327,6 +325,7 @@ export class UserProfilComponent implements OnInit {
 
     this.onInitPasswordForm();
 
+    
 
 
   }
