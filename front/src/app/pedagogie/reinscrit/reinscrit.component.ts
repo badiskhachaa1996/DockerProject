@@ -21,7 +21,7 @@ export class ReinscritComponent implements OnInit {
   @ViewChild('fileInput') fileInput: FileUpload;
   showUploadFile: Etudiant;
   etudiants: Etudiant[] = [];
-  users= {};
+  users = {};
   token;
   imageToShow;
   parcoursList = []
@@ -134,7 +134,7 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
       , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise, this.showAssignForm.diplome, this.parcoursList, this.AssignForm.value.remarque
     )
-    etd.custom_id=this.generateCode(etd)
+    etd.custom_id = this.generateCode(etd)
     this.etudiantService.update(etd).subscribe(data => {
       this.refreshEtudiant()
       this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
@@ -157,13 +157,47 @@ export class ReinscritComponent implements OnInit {
     );
   }
 
-  generateCode(prospect:Etudiant) {
+  showPayement: Etudiant;
+
+  payementList = []
+
+  onAddPayement() {
+    this.payementList.push({ type: "", montant: 0 })
+  }
+
+  changeMontant(i, event, type) {
+    if (type == "montant") {
+      this.payementList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementList[i][type] = event.target.value;
+    }
+  }
+
+  deletePayement(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le payement ?")) {
+      this.payementList.splice(i, 1)
+    }
+  }
+
+  addNewPayment() {
+    console.log(this.payementList)
+    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.refreshEtudiant()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: "error", summary: "Erreur" })
+    })
+  }
+
+  generateCode(prospect: Etudiant) {
     let user: User = this.users[prospect.user_id]
     console.log(user)
     let code_pays = user.nationnalite.substring(0, 3)
-    environment.dicNationaliteCode.forEach(code=>{
-      if(code[user.nationnalite] && code[user.nationnalite]!=undefined){
-        code_pays=code[user.nationnalite]
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
+        code_pays = code[user.nationnalite]
       }
     })
     let prenom = user.firstname.substring(0, 1)
