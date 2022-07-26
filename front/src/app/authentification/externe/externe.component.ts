@@ -16,6 +16,8 @@ import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
 })
 export class ExterneComponent implements OnInit {
 
+  showLoginPage=false;
+
   formLogin: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(5)]),
@@ -52,6 +54,8 @@ export class ExterneComponent implements OnInit {
 
       console.error(error)
     })
+
+    this.showLoginPage=false;
 
   }
 

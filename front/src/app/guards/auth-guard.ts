@@ -3,10 +3,8 @@ import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { environment } from 'src/environments/environment';
-import { io } from 'socket.io-client';
 import { EventEmitterService } from '../services/event-emitter.service';
-import { User } from '../models/User';
+
 
 
 @Injectable({
@@ -81,7 +79,7 @@ export class AuthGuardService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
         let currenttoken: any = localStorage.getItem("token");
-        let role!: string;
+
         if (currenttoken) {
             currenttoken = jwt_decode(localStorage.getItem("token"))
             console.log(currenttoken)
@@ -111,7 +109,7 @@ export class AuthGuardService implements CanActivate {
                         }
 
                         else {
-                            console.log( "Completer votre profil avant de continuer la navigation")
+                            console.log("Completer votre profil avant de continuer la navigation")
                             this.router.navigate(['/completion-profil']);
 
                             return true
@@ -120,7 +118,7 @@ export class AuthGuardService implements CanActivate {
 
             }
         }
-        else{
+        else {
             this.router.navigate(['/login']);
         }
     }
