@@ -147,17 +147,29 @@ export class UserProfilComponent implements OnInit {
     let passwordactual = this.passwordForm.get('passwordactual').value;
     let password = this.passwordForm.get('password').value;
     let verifypassword = this.passwordForm.get('verifypassword').value;
+    if (password = verifypassword) {
+      //TODO Verification du mot de passe
+      this.AuthService.verifPassword({ 'id': this.decodeToken.id, 'password': passwordactual }).subscribe(
+        ((responseV) => {
+          console.log(responseV);
 
-    //TODO Verification du mot de passe
-    this.AuthService.verifPassword({ id: this.decodeToken.id, password: passwordactual }).subscribe(
-      ((responseV) => {
-        console.log(responseV);
-      }),
-      ((error) => {
-        console.error(error)
-      })
-    );
+          this.AuthService.updatePwd(this.decodeToken.id, verifypassword).subscribe((updatedPwd) => {
+  
+            this.passwordForm.reset();
+            this.toggleUpdatepwd = false;
+            this.messageService.add({ severity: 'success', summary: 'Mise a jour mot de passe ', detail: 'avec succes' });
 
+          }), ((error) => { console.log(error) })
+
+
+        }),
+      ), ((error) => {
+        console.log(error)
+      });
+    }
+    else {
+      this.passwordForm.get('verifypassword').dirty
+    }
   }
 
 
@@ -325,7 +337,7 @@ export class UserProfilComponent implements OnInit {
 
     this.onInitPasswordForm();
 
-    
+
 
 
   }

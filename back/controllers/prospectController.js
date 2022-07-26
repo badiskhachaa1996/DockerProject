@@ -64,7 +64,7 @@ app.get("/getByUserid/:id", (req, res, next) => {
     console.log(req.params.id);
     Prospect.findOne({ user_id: req.params.id })
         .then((prospectFromDb) => {
-            console.log("ass")
+          
             res.status(201).send(prospectFromDb);
 
 
