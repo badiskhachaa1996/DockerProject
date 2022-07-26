@@ -555,4 +555,15 @@ app.post('/getAllByMultipleClasseID', (req, res) => {
         res.send(result)
     })
 });
+
+app.post('/addNewPayment/:id', (req, res) => {
+    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: req.body.payement }, function (err, data) {
+        if (err) {
+            console.error(err)
+            res.status(500).send(err)
+        } else {
+            res.status(201).send(data)
+        }
+    })
+})
 module.exports = app;

@@ -40,8 +40,11 @@ const etudiantSchema = mongoose.Schema({
     isOnStage: { type: Boolean, default: false },
     fileRight: {
         type: mongoose.Schema.Types.Mixed, required: false
-
     },
+    payment_reinscrit: {
+        type: [mongoose.Schema.Types.Mixed],
+        default: []
+    }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
