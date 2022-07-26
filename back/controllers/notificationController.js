@@ -90,11 +90,11 @@ app.get("/get20ByUserID/:id", (req, res) => {
         res.status(200).send(Notifications.slice(0, 20))
     })
 });
-app.get("/get20AdmissionNotifi", (req, res) => {
+app.get("/getAdmissionNotifi", (req, res) => {
     Notification.find({ info_id:null, etat: false }).then(notifications => {
 console.log(notifications)
-objet20notif =notifications.slice(0, 20)
-        res.status(200).send(objet20notif)
+
+        res.status(200).send(notifications)
     }).catch(error => { console.log(error) })
 });
 
