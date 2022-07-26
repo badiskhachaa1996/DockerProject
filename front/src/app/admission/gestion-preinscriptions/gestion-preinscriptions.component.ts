@@ -192,11 +192,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.userService.WhatTheRole(this.token.id).subscribe(data => {
-      if (data.type == 'Commercial' && data.data.statut == 'Admin') {
-        this.dataCommercial = data.data
-        console.log(data)
-      }
       if (data.type == "Commercial" && data.data.code_commercial_partenaire) {
+        this.dataCommercial = data.data
         localStorage.setItem("CommercialCode", data.data.code_commercial_partenaire)
       }
       this.refreshProspect()
