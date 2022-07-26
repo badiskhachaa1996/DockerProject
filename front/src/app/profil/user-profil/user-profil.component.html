@@ -13,7 +13,7 @@
                 <i pTooltip="Modifier votre photo de profil" class="pi pi-fw pi-image" (click)="clickFile()"
                     style="font-size: 15px;" aria-hidden="true"></i>
                 <i pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
-                    style="font-size: 15px;" aria-hidden="true"></i>
+                    *ngIf="userco.password != ''" style="font-size: 15px;" aria-hidden="true"></i>
             </div>
             <h2>Profil</h2>
             <div style="text-align: center;">
