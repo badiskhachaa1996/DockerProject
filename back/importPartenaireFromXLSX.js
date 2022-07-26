@@ -44,14 +44,13 @@ mongoose
                     //indicatifWhatsApp: data['TVA']
                 })
                 part.code_partenaire = generateCode(part)
-                console.log(part.nom + part.code_partenaire)
-                /*part.save((errU, newPartenaire) => {
+                part.save((errU, newPartenaire) => {
                     if (errU) {
                         console.error(errU)
                     } else {
                         console.log(newPartenaire.nom + newPartenaire.code_partenaire)
                     }
-                })*/
+                })
             })
         }).catch(err => {
             console.error(err);
