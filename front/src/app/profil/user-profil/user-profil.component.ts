@@ -157,7 +157,7 @@ export class UserProfilComponent implements OnInit {
   
             this.passwordForm.reset();
             this.toggleUpdatepwd = false;
-            this.messageService.add({ severity: 'success', summary: 'Mise a jour mot de passe ', detail: 'avec succes' });
+            this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
 
           }), ((error) => { console.log(error) })
 
