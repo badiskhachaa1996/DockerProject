@@ -290,7 +290,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
             role: req.body.user.role,
             service_id: req.body?.user.service_id,
             entreprise: req.body.user.entreprise,
-            isAlternant:req.body.user.type,
+            isAlternant: req.body.user.type,
             pays_adresse: req.body.user.pays_adresse,
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
@@ -526,33 +526,40 @@ app.get("/WhatTheRole/:id", (req, res) => {
 app.post("/verifyUserPassword", (req, res) => {
     let passwordToVerif = req.body.password;
     let id = req.body.id;
+
+    console.log(passwordToVerif, ' ', id)
     User.findOne({ _id: id })
         .then((userFromDb) => {
-            bcrypt.compare(userFromDb.password, passwordToVerif)
-                  .then(valid => {
-                    if(!valid)
-                    {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !'});
+
+            bcrypt.compare(passwordToVerif, userFromDb.password)
+                .then(valid => {
+                    if (!valid) {
+                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
-                        res.status(200).json({ success: 'OK' });
-                  })
-                  .catch((error) => console.error(error));
-                            
+                    res.status(200).json({ success: 'OK' });
+                })
+                .catch((error) => console.error(error));
+
         })
-        .catch((error) => {res.status(500).send("Impossible de modifier votre mot de passe, veuillez contacter un administrateur")})
+        .catch((error) => { console.log(error) })
 });
 
-app.put("/udpatePwd/:id", (req, res) => {
-    var pwd = req.body.pwd;
-    User.findOneAndUpdate({_id: req.params.id}, 
+app.post("/updatePwd/:id", (req, res) => {
+
+    let pwd = req.body.pwd;
+    console.log(req.body)
+    User.findOneAndUpdate({ _id: req.params.id },
         {
             password: bcrypt.hashSync(pwd, 8),
         })
         .then((userFromDb) => {
-            let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+            console.log(userFromDb)
+            let token = { "id": userFromDb._id, "role": userFromDb.role, "service_id": userFromDb.service_id };
+
+            console.log(token)
             res.status(200).send(token);
         })
-        .catch((error) => {res.status(401).send("Impossible de mettre à jour votre mot de passe !")});
+        .catch((error) => { console.log(error) });
 });
 
 
