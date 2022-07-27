@@ -12,6 +12,12 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(400).send(error.message); })
 });
 
+app.get("/getAllPopulate", (req, res, next) => {
+    CommercialPartenaire.find().populate('partenaire_id')
+        .then((commercialPartenaires) => { res.status(200).send(commercialPartenaires); })
+        .catch((error) => { res.status(400).send(error.message); })
+});
+
 //Recuperation de la liste des commerciales
 app.get("/getAllByPartenaireId/:partenaire_id", (req, res, next) => {
     CommercialPartenaire.find({ partenaire_id: req.params.partenaire_id })

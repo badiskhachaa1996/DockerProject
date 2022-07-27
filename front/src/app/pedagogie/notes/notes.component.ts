@@ -51,6 +51,7 @@ export class NotesComponent implements OnInit {
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
   classes: Classe[] = [];
+  showPVAnnuel = false
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
@@ -928,9 +929,9 @@ export class NotesComponent implements OnInit {
   hideBtn = false
 
   //Methode de generation du bulletin de note
-  onGenerateBulletin() {
+  onGenerateBulletin(id = 'content') {
 
-    var element = document.getElementById('content');
+    var element = document.getElementById(id);
     var opt = {
       margin: 0,
       filename: 'bulletin.pdf',

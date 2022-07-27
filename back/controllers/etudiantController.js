@@ -373,7 +373,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 listEtudiantID.forEach(e_id => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
-                        listMoyenneEtudiants[e_id][m_nom] = 0
+                        listMoyenneEtudiants[e_id][m_nom] = 0.00000
                         if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
                             listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
                         }

@@ -183,19 +183,19 @@ app.post("/create", (req, res, next) => {
 
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes : </p>" +
-                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
+                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
+                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
                                         " </ul>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Bien cordialement.</p>" +
+                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                        " <p>Cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
 
 
@@ -224,20 +224,20 @@ app.post("/create", (req, res, next) => {
                                 else if (prospectSaved.type_form == "espic") {
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes :</p>" +
+                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
                                         "<ul><li>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
+                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
                                         " </ul>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Bien cordialement.</p>" /*+
+                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                        " <p>Cordialement.</p>" /*+
                                     "<p><img src =''alt=\" \" width='620' height='227' /></p>"*/
                                     let mailOptions = {
                                         from: "admission@espic.com",
@@ -266,11 +266,11 @@ app.post("/create", (req, res, next) => {
 
 
                                     let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
-                                        "<p> Bienvenue au Service des inscriptions de l'ADG.</p ></div >" +
+                                        "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
                                         "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès," +
-                                        "  merci de connecter avec votre mail et votre mot de passe : <strong> " +
+                                        "  merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p></div>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
+                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
                                         "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
@@ -284,7 +284,7 @@ app.post("/create", (req, res, next) => {
                                         "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
                                         "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
                                         "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
                                         "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
                                         "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"
 

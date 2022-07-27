@@ -15,8 +15,11 @@
 
     <h2 Style="text-align: center; color: black;font-weight: bold;">Poursuivre ma demande d'admission </h2>
 
+    <div *ngIf="codeCommercial" style="text-align: left;"><button pButton (click)="comeBack()"> <i
+                class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
+    </div>
 
-    <div Style="text-align: right"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
+    <div style="text-align: right;"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
                 pTooltip="Se déconnecter"></i> Déconnexion</button>
     </div>
 

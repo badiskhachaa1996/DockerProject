@@ -465,10 +465,13 @@
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
-                        <tr *ngIf="!note.isDispensed">
+                        <tr>
                             <td>{{ note.matiere_name}}</td>
                             <td style="width: 4em;">{{ note.coef }}</td>
-                            <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="!note.isDispensed && note.moy_etu!=0.00000">{{ note.moy_etu |
+                                number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note.isDispensed">Dispensé</td>
+                            <td style="width: 5em;" *ngIf="note.moy_etu==0.00000">Absent</td>
                             <!--<td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
                             <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>-->
                             <td style="width: 5em;">{{ note.moy_classe | number : '0.1-2' }}</td>
@@ -506,6 +509,154 @@
                             <td colspan="2">Semestre non validé</td>
                             <td *ngIf="moyEtudiant >= 10"></td>
                             <td *ngIf="moyEtudiant < 10">X</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+                <img src="assets/images/service-administratif.png" alt="signature"
+                    style="float: right; width: 30%; height: 30%;">
+                <img src="assets/images/footer-bulletin.png" alt="footer"
+                    style="display: block; margin-left: auto; margin-right: auto; clear: both;" width="800">
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12" *ngIf="showPVAnnuel">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red"
+                (click)="showPVAnnuel = false; notesForGenerateBulletin = [];" aria-hidden="true">
+            </i>
+            <h3>Prévisualisation du bulletin Annuel</h3>
+
+            <div style="float: right;">
+                <!--<button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
+                    label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
+                </button>
+                <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
+                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale"
+                    class="ml-1">
+                </button>
+
+                <button pButton (click)="showFormUpdateAppreciationGenerale = true;
+                                        appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
+                    class="ml-1" type="button" label="Modifier l'appréciation générale"
+                    *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
+                </button>-->
+
+                <button pButton class="ml-1" *ngIf="!hideBtn"
+                    (click)="onGenerateBulletin('contentAnnuel');hideBtn = true" type="button" style="float:right;"
+                    label="Exporter en pdf">
+                </button>
+            </div>
+
+
+            <div id="contentAnnuel">
+                <div style="float: left; margin-top: 80px; margin-left: 20px;">
+                    <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
+                        Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
+                        Bulletin du {{ semestreForGenerateBulletin }} <br>
+                        <strong>{{ classeForBGenerateBulletin.abbrv }} -
+                            <!-- NOM de Formation-->
+                        </strong> <br>
+                    </p>
+                    <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
+                </div>
+
+                <div style="float: right; margin-top: 80px;">
+                    <p>
+                        <!-- right-->
+                        <strong>{{ users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
+                            users[etudiantToGenerateBulletin.user_id]?.firstname | uppercase }} </strong> <br>
+                        Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
+                        <!--Adresse + Civilité-->
+                    </p>
+                </div>
+
+                <figure>
+                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
+                    <figcaption *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
+                        activeCampus.ville }},
+                        {{ activeCampus.pays }}</figcaption>
+                </figure>
+
+                <p-table [value]="notesForGenerateBulletin" class="bulletin" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th></th>
+                            <th style="width: 4em;"></th>
+                            <th colspan="3">Moyenne</th>
+                            <th colspan="3">Promotion</th>
+                        </tr>
+                        <tr>
+                            <th>Modules</th>
+                            <th style="width: 4em;">Coef</th>
+                            <th style="width: 5em;">Semestre 1</th>
+                            <th style="width: 5em;">Semestre 2</th>
+                            <th style="width: 5em;">Annuel</th>
+                            <th style="width: 5em;">Moy.</th>
+                            <th style="width: 5em;">Min.</th>
+                            <th style="width: 5em;">Max.</th>
+                            <th>Appréciations</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-note>
+                        <tr>
+                            <td>{{ note.matiere_name}}</td>
+                            <td style="width: 4em;">{{ note.coef }}</td>
+                            <td style="width: 5em;"
+                                *ngIf="!note['Semestre 1'].isDispensed && note['Semestre 1'].moy_etu!=0.00000">{{
+                                note['Semestre 1'].moy_etu |
+                                number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 1'].isDispensed">Dispensé</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 1'].moy_etu==0.00000">Absent</td>
+                            <td style="width: 5em;"
+                                *ngIf="!note['Semestre 2'].isDispensed && note['Semestre 2'].moy_etu!=0.00000">{{
+                                note['Semestre 2'].moy_etu |
+                                number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 2'].isDispensed">Dispensé</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 2'].moy_etu==0.00000">Absent</td>
+                            <td style="width: 5em;"
+                                *ngIf="!note['Annuel'].isDispensed && note['Annuel'].moy_etu!=0.00000">{{
+                                note['Annuel'].moy_etu |
+                                number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Annuel'].isDispensed">Dispensé</td>
+                            <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000">Absent</td>
+                            <td style="width: 5em;">{{ note.moy_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;">{{ note.min_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;">{{ note.max_classe | number : '0.1-2' }}</td>
+                            <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
+                                appreciationModules[note.matiere_id] }}</td>
+                            <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="footer">
+                        <tr>
+                            <td colspan="2">Moyenne générale</td>
+                            <td>{{ moyEtudiant['Semestre 1'] | number : '0.1-2' }}</td>
+                            <td>{{ moyEtudiant['Semestre 2'] | number : '0.1-2' }}</td>
+                            <td>{{ moyEtudiant['Annuel'] | number : '0.1-2' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
+                                appreciationGenerale.appreciation }}</td>
+                        </tr>
+
+                        <br>
+
+                        <tr>
+                            <td colspan="2">Décision du conseil de classe</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Année validé</td>
+                            <td *ngIf="moyEtudiant['Annuel'] >= 10">X</td>
+                            <td *ngIf="moyEtudiant['Annuel'] < 10"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Année non validé</td>
+                            <td *ngIf="moyEtudiant['Annuel'] >= 10"></td>
+                            <td *ngIf="moyEtudiant['Annuel'] < 10">X</td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -581,7 +732,7 @@
                                 onNullAppreciationGenerale();
                                 GenerateBulletin2(etudiant._id,semestreForGenerateBulletin);
                                 etudiantToGenerateBulletin = etudiant;
-                                onGetAppreciationGenerale();"></i>
+                                onGetAppreciationGenerale(); hideBtn=false"></i>
                         </td>
                     </tr>
                 </ng-template>
