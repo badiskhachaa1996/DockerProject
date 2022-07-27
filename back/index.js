@@ -97,6 +97,9 @@ app.use('/', function (req, res, next) {
         next()
     } else {
         let token = jwt.decode(req.header("token"))
+        if (token['p']) {
+            token = token['p']
+        }
         if (token && token.id && token.role) {
             User.findOne({ _id: token.id, role: token.role }, (err, user) => {
                 if (err) {

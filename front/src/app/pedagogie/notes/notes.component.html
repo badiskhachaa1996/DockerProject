@@ -434,7 +434,7 @@
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
                     </p>
                     <p>
-                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse0}} <br>
+                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse}} <br>
                         {{users[etudiantToGenerateBulletin.user_id]?.ville_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.pays_adresse}}
                     </p>
                 </div>
@@ -555,6 +555,10 @@
 
             <div id="contentAnnuel">
                 <div style="float: left; margin-top: 80px; margin-left: 20px;">
+                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80"><!--TODO Logo different en fonction de l'école-->
+                    <p *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
+                        activeCampus.ville }},
+                        {{ activeCampus.pays }}</p>
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin Annuel <br>
@@ -572,17 +576,10 @@
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
                     </p>
                     <p>
-                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse0}} <br>
+                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse}} <br>
                         {{users[etudiantToGenerateBulletin.user_id]?.ville_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.pays_adresse}}
                     </p>
                 </div>
-
-                <figure>
-                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
-                    <figcaption *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
-                        activeCampus.ville }},
-                        {{ activeCampus.pays }}</figcaption>
-                </figure>
 
                 <p-table [value]="notesForGenerateBulletin" class="bulletin" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
