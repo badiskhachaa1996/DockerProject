@@ -42,7 +42,7 @@ export class Prospect {
         public nir?:string,
         public mobilite_reduite?:boolean,
         public sportif_hn?: boolean,
-     
+        public horsAdmission?: boolean,
     ) { }
 
 }
