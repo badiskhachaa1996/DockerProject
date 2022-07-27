@@ -364,7 +364,7 @@
                                     formControlName="isGarant" optionLabel="label">
                                 </p-selectButton>
                             </div>
-                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant">
+                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant.value">
                                 <label For="nom_garant">Nom du garant <span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="nom_garant" type="text" placeholder="Nom du garant"
@@ -416,7 +416,6 @@
                                 <label For="agence">Etes-vous passé par une agence d'orientation ? <span
                                         style="color: red;"> *
                                     </span></label>
-
                                 <p-selectButton formControlName="isGarant"
                                     [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
                                 </p-selectButton>

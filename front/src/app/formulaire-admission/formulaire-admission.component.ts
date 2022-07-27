@@ -415,8 +415,8 @@ export class FormulaireAdmissionComponent implements OnInit {
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
     // if (rythme_formation == "Alternance") {
     let nir = this.RegisterForm.get('nir').value;
-    let mobilite_reduite = this.RegisterForm.get('mobilite_reduite').value;
-    let sportif_hn = this.RegisterForm.get('sportif_hn').value;
+    let mobilite_reduite = this.RegisterForm.get('mobilite_reduite').value.value;
+    let sportif_hn = this.RegisterForm.get('sportif_hn').value.value;
 
 
     if (this.form_origin == "eduhorizons") {
