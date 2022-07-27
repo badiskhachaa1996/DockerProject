@@ -112,7 +112,7 @@ app.use('/', function (req, res, next) {
         } else {
             if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/ValidateEmail/')
                 || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl == "/soc/user/getByEmail" ||
-                req.originalUrl.startsWith('/soc/forfeitForm')) {
+                req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/getById')) {
                 next()
             } else {
                 res.status(403).send("Accès non autorisé")
