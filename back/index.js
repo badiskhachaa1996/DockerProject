@@ -93,11 +93,11 @@ const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
 
-    if (!origin || origin == "http://localhost:4200") {
+    if (!origin) {
         next()
     } else {
         let token = jwt.decode(req.header("token"))
-        if (token['p']) {
+        if (token && token['p']) {
             token = token['p']
         }
         if (token && token.id && token.role) {
@@ -115,7 +115,7 @@ app.use('/', function (req, res, next) {
             })
         } else {
             if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
-                || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl == "/soc/user/getByEmail" ||
+                || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
                 req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/getById')) {
                 next()
             } else {
