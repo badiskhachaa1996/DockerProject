@@ -178,8 +178,8 @@ app.post("/create", (req, res, next) => {
 
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p>" +
                                         "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
                                         "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
@@ -219,8 +219,8 @@ app.post("/create", (req, res, next) => {
                                 else if (prospectSaved.type_form == "espic") {
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>" +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p>" +
                                         "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
                                         "<ul><li>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
@@ -262,9 +262,9 @@ app.post("/create", (req, res, next) => {
 
                                     let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
                                         "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
-                                        "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès," +
-                                        "  merci de vous connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p></div>" +
+                                        "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès." +
+                                        "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p></div>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
                                         " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
