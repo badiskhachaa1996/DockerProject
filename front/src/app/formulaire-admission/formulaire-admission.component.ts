@@ -144,6 +144,9 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    console.log(this.route.snapshot.paramMap.get('code_commercial'))
+
     if (localStorage.getItem("CommercialCode")) {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
     }
@@ -278,9 +281,13 @@ export class FormulaireAdmissionComponent implements OnInit {
       agence: new FormControl(false),
       nomAgence: new FormControl('', Validators.pattern('[^0-9]+')),
       donneePerso: new FormControl(false, Validators.required),
-      code_commercial: new FormControl(this.cookieCodeCommercial),
+      code_commercial: new FormControl(this.route.snapshot.paramMap.get('code_commercial')),
 
     });
+    if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
+      this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
+
+    }
   };
 
   nextPage() {
