@@ -154,6 +154,13 @@ app.get("/getInfoById/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
 
+//Recuperation des infos user
+app.get("/getPopulate/:id", (req, res, next) => {
+    User.findOne({ _id: req.params.id }).populate("service_id")
+        .then((userfromDb) => { res.status(200).send(userfromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
+});
+
 
 //Récupération de tous les users
 app.get("/getAll", (req, res) => {
