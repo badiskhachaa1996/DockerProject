@@ -284,7 +284,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
         } else {
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            if (dataU.role == "Admin" || (dataU.role == "Agent" && dataU.service_id && dataU.service_id.includes('Admission'))) {
+            let service : any = dataU.service_id
+            if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
                 ((responseAdmission) => {
                   this.prospects = responseAdmission
