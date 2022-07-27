@@ -35,7 +35,7 @@
                         formControlName="phase_complementaire"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label>Statut Payement: </label>
+                    <label>Statut paiement: </label>
                     <p-dropdown [options]="statutPayement" optionLabel="value" formControlName="statut_payement">
                     </p-dropdown>
                 </div>
@@ -90,7 +90,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showPayement = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un paiement de : {{
                 showPayement.user_id?.firstname }} {{
                 showPayement.user_id?.lastname | uppercase }}
             </h3>
@@ -98,7 +98,7 @@
                 <div class="col-12" *ngFor="let data of payementList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
                     <div class="field col-12 md:col-4">
-                        <label>Type de payement:</label><br>
+                        <label>Type de paiement:</label><br>
                         <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                             [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
                     </div>
@@ -112,10 +112,10 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
                 </div>
                 <div class="col-6">
-                    <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
+                    <button pButton label="Mettre à jour les paiements" (click)="addNewPayment()"></button>
                 </div>
             </div>
 
@@ -238,7 +238,7 @@
                                 aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
-                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les payements" tooltipPosition="bottom"
+                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
                         </td>
@@ -408,7 +408,7 @@
                         <th>Agent</th>
                         <th>Décision Admission</th>
                         <th>Phase complémentaire</th>
-                        <th>Statut Payement</th>
+                        <th>Statut Paiement</th>
                         <th>Attestation traité par</th>
                     </tr>
                 </ng-template>
@@ -463,7 +463,7 @@
 
             <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
 
-            <h5 style="color: red; text-align: center;">Payements</h5>
+            <h5 style="color: red; text-align: center;">Paiements</h5>
             <ul>
                 <li *ngFor="let payement of prospect.payement; index as i">
                     <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>

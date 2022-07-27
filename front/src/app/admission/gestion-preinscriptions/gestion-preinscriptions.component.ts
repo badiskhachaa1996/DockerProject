@@ -153,6 +153,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
 
   onAddPayement() {
+    if(this.payementList==null){
+      this.payementList=[]
+    }
     this.payementList.push({ type: "", montant: 0 })
   }
 
@@ -172,7 +175,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
   }
 
   addNewPayment() {
-    console.log(this.payementList)
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
       this.refreshProspect()
