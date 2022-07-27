@@ -39,6 +39,9 @@ export class Prospect {
         public payement?:[],
         public avancement_visa?:boolean,
         public etat_traitement?:string,
+        public nir?:string,
+        public mobilite_reduite?:boolean,
+        public sportif_hn?: boolean,
      
     ) { }
 

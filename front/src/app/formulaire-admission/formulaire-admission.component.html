@@ -272,11 +272,35 @@
                                 <p-dropdown [options]="typeFormationDropdown" optionLabel="value"
                                     formControlName="rythme_formation"></p-dropdown>
                             </div>
+                            <div class="field col-12 p-fluid p-formgrid grid" *ngIf="
+                                RegisterForm.value.rythme_formation.value=='Alternance'">
+                                <div class="field col-12 md:col-12">
+                                    <span> Informations nécessaires pourl'alternance</span>
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label For="nir">Numéro de Sécurité Sociale<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="nir" type="text" placeholder="Numéro de Sécurité Sociale"
+                                        formControlName="nir" />
+                                </div>
+
+                                <div class="field col-12 md:col-4">
+                                    <label For="mobilite_reduite">Etes vous une personne a mobilité réduite ?</label>
+                                    <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="mobilite_reduite">
+                                    </p-toggleButton>
+                                </div>
+                                <div class="field col-12 md:col-4">
+                                    <label For="sportif_hn">Etes vous sportif(ve) de haut niveaux ?</label>
+                                    <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="sportif_hn">
+                                    </p-toggleButton>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <button pButton type="button" label="Précedent" style="float: left;"
-                            (click)="previousPage()"></button>
+                        <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
+                        </button>
                         <button pButton type="button" label="Suivant"
                             [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "
                             style="float: right;" (click)="nextPage()"></button>

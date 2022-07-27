@@ -157,7 +157,7 @@ app.post("/inscription", (req, res, next) => {
                                     let mailOptions = {
                                         from: "contact@eduhorizons.com",
                                         to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
+                                        subject: 'Acces IMS',
                                         html: htmlmail,
                                         attachments: [{
                                             filename: 'SignatureEmailEH.png',

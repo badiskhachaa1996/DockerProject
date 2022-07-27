@@ -18,6 +18,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
 import { Notification } from 'src/app/models/notification';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ServService } from 'src/app/services/service.service';
+import { map } from 'rxjs';
 
 
 @Component({
@@ -143,8 +144,8 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if(localStorage.getItem("CommercialCode")){
-      this.cookieCodeCommercial=localStorage.getItem("CommercialCode")
+    if (localStorage.getItem("CommercialCode")) {
+      this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
     }
 
 
@@ -240,8 +241,12 @@ export class FormulaireAdmissionComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), ]),
+      numero_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'),]),
       indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+      // ****** Informations suplumentaires si alternant *******
+      nir: new FormControl(''),
+      mobilite_reduite: new FormControl(false),
+      sportif_hn: new FormControl(false),
 
       //******* Parcours académiques et professionnel *******
       validated_academic_level: new FormControl(this.academicList[0], [Validators.required]),
@@ -331,7 +336,9 @@ export class FormulaireAdmissionComponent implements OnInit {
   get programme() { return this.RegisterForm.get('programme').value.value; }
   get formation() { return this.RegisterForm.get('formation').value.value; }
   get rythme_formation() { return this.RegisterForm.get('rythme_formation').value; }
-
+  get nir() { return this.RegisterForm.get('nir'); }
+  get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
+  get sportif_hn() { return this.RegisterForm.get('sportif_hn'); }
   //****** Notre partenaire d'accompagnement Eduhorizons *******
   get servicesEh() { return this.RegisterForm.get('servicesEh'); }
   get isGarant() { return this.RegisterForm.get('isGarant'); }
@@ -377,6 +384,7 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   //Methode d'ajout d'un nouveau prospect
   onAddProspect() {
+
     //recuperation des données du formulaire
     let civilite = this.RegisterForm.get('civilite').value.value;
     let lastname = this.RegisterForm.get('lastname').value;
@@ -405,6 +413,12 @@ export class FormulaireAdmissionComponent implements OnInit {
     let programme = this.RegisterForm.get('programme').value.value;
     let formation = this.RegisterForm.get('formation').value.value;
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
+    // if (rythme_formation == "Alternance") {
+    let nir = this.RegisterForm.get('nir').value;
+    let mobilite_reduite = this.RegisterForm.get('mobilite_reduite').value;
+    let sportif_hn = this.RegisterForm.get('sportif_hn').value;
+
+
     if (this.form_origin == "eduhorizons") {
       programme = null
       formation = null
@@ -421,24 +435,24 @@ export class FormulaireAdmissionComponent implements OnInit {
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite,);
 
     //Creation du nouveau prospect
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp);
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
           //Envoie de notif TODO
 
 
-          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).subscribe((notif) => {
-           console.log(notif)
+          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
+            console.log(notif)
             this.NotifService.newNotif(notif)
 
 
           }, (error) => {
             console.error(error)
-          });
+          }));
 
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
           this.getFilesAccess(response.dataUser._id)
@@ -458,15 +472,15 @@ export class FormulaireAdmissionComponent implements OnInit {
   getFilesAccess(ID) {
     this.AuthService.WhatTheRole(ID).subscribe(data => {
       localStorage.setItem("ProspectConected", data.Ptoken)
-      if (this.token == null) {
+      if (this.token !== null) {
         localStorage.setItem("token", this.token)
       }
       this.router.navigateByUrl('/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
-        if (this.token == null) {
+        if (this.token !== null) {
           localStorage.setItem("token", this.token)
         }
         localStorage.setItem("ProspectConected", data.Ptoken)
-        localStorage.setItem("token", this.token)
+
         this.router.navigate(["/suivre-ma-preinscription"]);
       });
     })

@@ -93,7 +93,6 @@ app.get("/get20ByUserID/:id", (req, res) => {
 app.get("/getAdmissionNotifi", (req, res) => {
     Notification.find({ info_id:null, etat: false }).then(notifications => {
 console.log(notifications)
-
         res.status(200).send(notifications)
     }).catch(error => { console.log(error) })
 });
