@@ -466,7 +466,6 @@ export class FormulaireAdmissionComponent implements OnInit {
           localStorage.setItem("token", this.token)
         }
         localStorage.setItem("ProspectConected", data.Ptoken)
-        localStorage.setItem("token", this.token)
         this.router.navigate(["/suivre-ma-preinscription"]);
       });
     })

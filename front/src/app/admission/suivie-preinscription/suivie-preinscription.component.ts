@@ -33,6 +33,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   RdNTest: boolean = false;
   RdNTest2: boolean = false;
   TCFTest: boolean = false;
+  codeCommercial;
   DocTypes: any[] = [
     { value: null, label: "Choississez le type de fichier", },
     { value: 'Carte_vitale', label: 'Carte vitale.', },
@@ -59,7 +60,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    this.codeCommercial = localStorage.getItem("CommercialCode")
 
     this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
 
@@ -113,6 +114,10 @@ export class SuiviePreinscriptionComponent implements OnInit {
     window.location.reload()
   }
 
+  comeBack() {
+    this.router.navigateByUrl('/gestion-preinscriptions/' + this.codeCommercial)
+  }
+
 
 
   FileUpload(event, doc: string) {
@@ -148,8 +153,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
       if (this.diplomeTest && this.piece_identiteTest && this.CVTest && this.LMTest && this.RdNTest && this.RdNTest2 && this.TCFTest) {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
-      if(this.ProspectConnected.etat_traitement!="Nouvelle"){
-        this.admissionService.changeEtatTraitement(this.ProspectConnected._id,"Retour Etudiant")
+      if (this.ProspectConnected.etat_traitement != "Nouvelle") {
+        this.admissionService.changeEtatTraitement(this.ProspectConnected._id, "Retour Etudiant")
       }
     },
       (error) => {
