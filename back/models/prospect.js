@@ -126,20 +126,30 @@ const prospect_schema = new mongoose.Schema({
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
-    avancement_visa:{
-        type:Boolean
+    avancement_visa: {
+        type: Boolean
     },
     enTraitement: {
         type: Boolean,
         default: false
     },
-    avancement_visa: {
-        type: Boolean
-    },
+
     etat_traitement: {
         type: String,
         default: "Nouvelle"
-    }
+    },
+    nir: {
+        type: String,
+        required: false,
+    },
+    mobilite_reduite: {
+        type: Boolean,
+        default: false
+    },
+    Sport_hn: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);

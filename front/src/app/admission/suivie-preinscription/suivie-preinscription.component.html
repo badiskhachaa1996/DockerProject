@@ -280,7 +280,7 @@
                         </div>
 
                         <div class="col-12 field">
-                            <p-fileUpload style="text-align: right;"
+                            <p-fileUpload 
                                 (uploadHandler)="FileUpload($event,uploadFileForm.value.typeDoc)" mode="basic"
                                 chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
                                 accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true"

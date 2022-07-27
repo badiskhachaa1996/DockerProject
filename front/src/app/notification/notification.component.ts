@@ -38,7 +38,7 @@ export class NotificationComponent implements OnInit {
               .subscribe(
                 response => {
                   this.NotificationService.reloadNotif({ id: this.token.id })
-            
+
                   this.appTopBarComponent.setToZero()
                 },
                 error => {

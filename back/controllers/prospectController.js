@@ -64,7 +64,7 @@ app.get("/getByUserid/:id", (req, res, next) => {
     console.log(req.params.id);
     Prospect.findOne({ user_id: req.params.id })
         .then((prospectFromDb) => {
-          
+
             res.status(201).send(prospectFromDb);
 
 
@@ -135,11 +135,16 @@ app.post("/create", (req, res, next) => {
             else {
                 user.save()
                     .then((userCreated) => {
+                        console.log("creation user pour prospect")
+                        console.log(userCreated)
                         prospect.user_id = userCreated._id;
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "mykey")
+                        console.log(token)
                         prospect.save()
                             .then((prospectSaved) => {
-                                res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
+                                console.log("tok after save pros")
+                                console.log(token)
+
 
                                 if (prospectSaved.type_form == "estya") {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
@@ -305,18 +310,24 @@ app.post("/create", (req, res, next) => {
 
                                     });
                                 }
+                                res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
                             })
 
-
                     })
-                    .catch((error) => { res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur !', error }) });
+                    .catch((error) => {
+                        console.log(error)
+                        // res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur2 !', error })
+                    });
             }
         })
-        .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ', error }) });
+        .catch((error) => {
+            console.log(error)
+            //res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur3 ', error }) 
+        });
 
 
     Service.findOne({ label: "Service Admission" }).then(servAdmission => {
-        if(servAdmission){
+        if (servAdmission) {
             let serviceadmission_id = servAdmission._id
 
             const notif = new Notification({
@@ -328,7 +339,7 @@ app.post("/create", (req, res, next) => {
             notif.save().then((notifCreated) => {
                 console.log("Votre notif a été crée!");
                 console.log(notifCreated);
-    
+
             }).catch((error) => { console.error(error) });
         }
     }).catch((error) => {
