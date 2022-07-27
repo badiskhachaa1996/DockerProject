@@ -101,21 +101,22 @@ app.use('/', function (req, res, next) {
             User.findOne({ _id: token.id, role: token.role }, (err, user) => {
                 if (err) {
                     console.error(err)
-                    res.status(403).send("Accès non autorisé")
+                    res.status(403).send("Accès non autorisé, Erreur", err)
                 }
                 else if (user) {
                     next()
                 } else {
-                    res.status(403).send("Accès non autorisé")
+                    console.error(user)
+                    res.status(403).send("Accès non autorisé, User not found")
                 }
             })
         } else {
-            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/ValidateEmail/')
+            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
                 || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl == "/soc/user/getByEmail" ||
                 req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/getById')) {
                 next()
             } else {
-                res.status(403).send("Accès non autorisé")
+                res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
             }
         }
     }

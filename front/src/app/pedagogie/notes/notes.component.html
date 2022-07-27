@@ -420,20 +420,22 @@
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin du {{ semestreForGenerateBulletin }} <br>
-                        <strong>{{ classeForBGenerateBulletin.abbrv }} -
-                            <!-- NOM de Formation-->
-                        </strong> <br>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }}</strong>
+                        <br>
                     </p>
                     <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                 </div>
 
                 <div style="float: right; margin-top: 80px;">
                     <p>
-                        <!-- right-->
-                        <strong>{{ users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
+                        <strong>{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}{{
+                            users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
                             users[etudiantToGenerateBulletin.user_id]?.firstname | uppercase }} </strong> <br>
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
-                        <!--Adresse + Civilité-->
+                    </p>
+                    <p>
+                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse0}} <br>
+                        {{users[etudiantToGenerateBulletin.user_id]?.ville_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.pays_adresse}}
                     </p>
                 </div>
 
@@ -468,15 +470,15 @@
                         <tr>
                             <td>{{ note.matiere_name}}</td>
                             <td style="width: 4em;">{{ note.coef }}</td>
-                            <td style="width: 5em;" *ngIf="!note.isDispensed && note.moy_etu!=0.00000">{{ note.moy_etu |
+                            <td style="width: 5em;text-align: right;" *ngIf="!note.isDispensed && note.moy_etu!=0.00000">{{ note.moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note.isDispensed">Dispensé</td>
                             <td style="width: 5em;" *ngIf="note.moy_etu==0.00000">Absent</td>
                             <!--<td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
                             <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>-->
-                            <td style="width: 5em;">{{ note.moy_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;">{{ note.min_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;">{{ note.max_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.moy_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.min_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.max_classe | number : '0.1-2' }}</td>
                             <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
                                 appreciationModules[note.matiere_id] }}</td>
                             <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
@@ -485,7 +487,7 @@
                     <ng-template pTemplate="footer">
                         <tr>
                             <td colspan="2">Moyenne générale</td>
-                            <td>{{ moyEtudiant | number : '0.1-2' }}</td>
+                            <td style="text-align: right;">{{ moyEtudiant | number : '0.1-2' }}</td>
                             <!--<td>{{ moyEtudiant | number : '0.1-2' }}</td>
                             <td>{{ moyEtudiant | number : '0.1-2' }}</td>-->
                             <td></td>
@@ -515,7 +517,7 @@
 
                 <img src="assets/images/service-administratif.png" alt="signature"
                     style="float: right; width: 30%; height: 30%;">
-                <img src="assets/images/footer-bulletin.png" alt="footer"
+                <img src="assets/images/footer-bulletinv2.png" alt="footer"
                     style="display: block; margin-left: auto; margin-right: auto; clear: both;" width="800">
 
             </div>
@@ -555,21 +557,23 @@
                 <div style="float: left; margin-top: 80px; margin-left: 20px;">
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
-                        Bulletin du {{ semestreForGenerateBulletin }} <br>
-                        <strong>{{ classeForBGenerateBulletin.abbrv }} -
-                            <!-- NOM de Formation-->
-                        </strong> <br>
+                        Bulletin Annuel <br>
+                        <strong>{{ classeForBGenerateBulletin.titre_long }}</strong>
+                        <br>
                     </p>
                     <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                 </div>
 
                 <div style="float: right; margin-top: 80px;">
                     <p>
-                        <!-- right-->
-                        <strong>{{ users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
+                        <strong>{{users[etudiantToGenerateBulletin.user_id]?.civilite | i18nSelect :genderMap}}{{
+                            users[etudiantToGenerateBulletin.user_id]?.lastname | uppercase }} {{
                             users[etudiantToGenerateBulletin.user_id]?.firstname | uppercase }} </strong> <br>
                         Né(e) le {{ etudiantToGenerateBulletin.date_de_naissance | date:'dd/MM/yyyy' }} <br>
-                        <!--Adresse + Civilité-->
+                    </p>
+                    <p>
+                        {{users[etudiantToGenerateBulletin.user_id]?.numero_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.rue_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.postal_adresse0}} <br>
+                        {{users[etudiantToGenerateBulletin.user_id]?.ville_adresse}} {{users[etudiantToGenerateBulletin.user_id]?.pays_adresse}}
                     </p>
                 </div>
 
@@ -604,27 +608,27 @@
                         <tr>
                             <td>{{ note.matiere_name}}</td>
                             <td style="width: 4em;">{{ note.coef }}</td>
-                            <td style="width: 5em;"
+                            <td style="width: 5em;text-align: right;"
                                 *ngIf="!note['Semestre 1'].isDispensed && note['Semestre 1'].moy_etu!=0.00000">{{
                                 note['Semestre 1'].moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 1'].isDispensed">Dispensé</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 1'].moy_etu==0.00000">Absent</td>
-                            <td style="width: 5em;"
+                            <td style="width: 5em;text-align: right;"
                                 *ngIf="!note['Semestre 2'].isDispensed && note['Semestre 2'].moy_etu!=0.00000">{{
                                 note['Semestre 2'].moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 2'].isDispensed">Dispensé</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 2'].moy_etu==0.00000">Absent</td>
-                            <td style="width: 5em;"
+                            <td style="width: 5em;text-align: right;"
                                 *ngIf="!note['Annuel'].isDispensed && note['Annuel'].moy_etu!=0.00000">{{
                                 note['Annuel'].moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Annuel'].isDispensed">Dispensé</td>
                             <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000">Absent</td>
-                            <td style="width: 5em;">{{ note.moy_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;">{{ note.min_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;">{{ note.max_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.moy_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.min_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;text-align: right;">{{ note.max_classe | number : '0.1-2' }}</td>
                             <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
                                 appreciationModules[note.matiere_id] }}</td>
                             <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
@@ -633,9 +637,9 @@
                     <ng-template pTemplate="footer">
                         <tr>
                             <td colspan="2">Moyenne générale</td>
-                            <td>{{ moyEtudiant['Semestre 1'] | number : '0.1-2' }}</td>
-                            <td>{{ moyEtudiant['Semestre 2'] | number : '0.1-2' }}</td>
-                            <td>{{ moyEtudiant['Annuel'] | number : '0.1-2' }}</td>
+                            <td style="text-align: right;">{{ moyEtudiant['Semestre 1'] | number : '0.1-2' }}</td>
+                            <td style="text-align: right;">{{ moyEtudiant['Semestre 2'] | number : '0.1-2' }}</td>
+                            <td style="text-align: right;">{{ moyEtudiant['Annuel'] | number : '0.1-2' }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -663,7 +667,7 @@
 
                 <img src="assets/images/service-administratif.png" alt="signature"
                     style="float: right; width: 30%; height: 30%;">
-                <img src="assets/images/footer-bulletin.png" alt="footer"
+                <img src="assets/images/footer-bulletinv2.png" alt="footer"
                     style="display: block; margin-left: auto; margin-right: auto; clear: both;" width="800">
 
             </div>
@@ -728,6 +732,12 @@
                                      onGetAppreciationGenerale();
                                      showBulletin = true;"></i>-->
                             <i class="pi pi-file-excel" pTooltip="Générer le bulletin" (click)="moyEtudiant = null;
+                                notesForGenerateBulletin = [];
+                                onNullAppreciationGenerale();
+                                GenerateBulletin2(etudiant._id,semestreForGenerateBulletin);
+                                etudiantToGenerateBulletin = etudiant;
+                                onGetAppreciationGenerale(); hideBtn=false"></i>
+                            <i class="pi pi-file-excel" pTooltip="Générer le bulletin Annuel" (click)="moyEtudiant = null;
                                 notesForGenerateBulletin = [];
                                 onNullAppreciationGenerale();
                                 GenerateBulletin2(etudiant._id,semestreForGenerateBulletin);
