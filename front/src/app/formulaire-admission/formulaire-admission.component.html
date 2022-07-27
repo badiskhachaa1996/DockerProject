@@ -286,13 +286,16 @@
 
                                 <div class="field col-12 md:col-4">
                                     <label For="mobilite_reduite">Etes vous une personne a mobilité réduite ?</label>
-                                    <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="mobilite_reduite">
-                                    </p-toggleButton>
+
+                                    <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                        formControlName="mobilite_reduite" optionLabel="label">
+                                    </p-selectButton>
                                 </div>
                                 <div class="field col-12 md:col-4">
                                     <label For="sportif_hn">Etes vous sportif(ve) de haut niveaux ?</label>
-                                    <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="sportif_hn">
-                                    </p-toggleButton>
+                                    <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                        formControlName="sportif_hn" optionLabel="label">
+                                    </p-selectButton>
                                 </div>
 
                             </div>
@@ -356,10 +359,12 @@
                             <br>
                             <div class="field col-12 md:col-4">
                                 <label For="garant">Avez-vous un garant financier ?</label>
-                                <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="isGarant">
-                                </p-toggleButton>
+
+                                <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                                    formControlName="isGarant" optionLabel="label">
+                                </p-selectButton>
                             </div>
-                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant">
+                            <div class="field col-12 md:col-4" *ngIf="RegisterForm.value.isGarant.value">
                                 <label For="nom_garant">Nom du garant <span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="nom_garant" type="text" placeholder="Nom du garant"
@@ -411,7 +416,9 @@
                                 <label For="agence">Etes-vous passé par une agence d'orientation ? <span
                                         style="color: red;"> *
                                     </span></label>
-                                <p-toggleButton onLabel="Oui" offLabel="Non" formControlName="agence"></p-toggleButton>
+                                <p-selectButton formControlName="isGarant"
+                                    [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
+                                </p-selectButton>
                             </div>
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                 <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span

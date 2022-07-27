@@ -150,6 +150,10 @@ const prospect_schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    horsAdmission: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);
