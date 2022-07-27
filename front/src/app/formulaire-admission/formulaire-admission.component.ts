@@ -472,17 +472,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   getFilesAccess(ID) {
     this.AuthService.WhatTheRole(ID).subscribe(data => {
       localStorage.setItem("ProspectConected", data.Ptoken)
-      if (this.token !== null) {
-        localStorage.setItem("token", this.token)
-      }
-      this.router.navigateByUrl('/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
-        if (this.token !== null) {
-          localStorage.setItem("token", this.token)
-        }
-        localStorage.setItem("ProspectConected", data.Ptoken)
-
-        this.router.navigate(["/suivre-ma-preinscription"]);
-      });
+      this.router.navigate(["/suivre-ma-preinscription"]);
     })
   }
 
