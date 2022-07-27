@@ -257,7 +257,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.userService.getAll().subscribe(
       ((response) => {
         if (this.code) {
+          //Si il y a un code de Commercial
           if (this.token != null && this.dataCommercial != null) {
+            //Si il est considéré comme Admin dans son Partenaire
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
@@ -268,6 +270,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
               ((error) => { console.error(error); })
             );
           } else {
+            //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
@@ -280,17 +283,19 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
-          if (this.dataCommercial && this.dataCommercial.statut == "Admin" || this.token.role == "Admin") {
-            this.admissionService.getAll().subscribe(
-              ((responseAdmission) => {
-                this.prospects = responseAdmission
-                response.forEach((user) => {
-                  this.users[user._id] = user;
-                });
-              }),
-              ((error) => { console.error(error); })
-            );
-          }
+          this.userService.getPopulate(this.token.id).subscribe(dataU => {
+            if (dataU.role == "Admin" || (dataU.role == "Agent" && dataU.service_id && dataU.service_id.includes('Admission'))) {
+              this.admissionService.getAll().subscribe(
+                ((responseAdmission) => {
+                  this.prospects = responseAdmission
+                  response.forEach((user) => {
+                    this.users[user._id] = user;
+                  });
+                }),
+                ((error) => { console.error(error); })
+              );
+            }
+          })
         }
       }),
       ((error) => { console.error(error); })
@@ -402,7 +407,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.router.navigate(['formulaire-admission', 'eduhorizons']);
   }
 
-  openNewForm(namedRoute : string){
+  openNewForm(namedRoute: string) {
     let newRelativeUrl = namedRoute
     let baseUrl = window.location.href.replace(this.router.url, '');
     window.open(baseUrl + newRelativeUrl, '_blank');

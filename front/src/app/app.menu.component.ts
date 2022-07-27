@@ -180,9 +180,12 @@ export class AppMenuComponent implements OnInit {
                             this.isAdmission = service.label.includes('Admission')
                             this.isPedagogie = service.label.includes('dagogie')
                         }
-                        this.isEtudiant = dataUser.type == "Etudiant"
-                        this.isFormateur = dataUser.type == "Formateur"
-                        this.isCommercial = dataUser.type == "Commercial"
+                        if (data && data.data) {
+                            //TODO Récupérer les infos sans WhatTheRole
+                            this.isEtudiant = dataUser.type == "Etudiant"
+                            this.isFormateur = dataUser.type == "Formateur"
+                            this.isCommercial = dataUser.type == "Commercial"
+                        }
                         if (this.isFormateur) {
                             //Formateur
                             this.model = [
