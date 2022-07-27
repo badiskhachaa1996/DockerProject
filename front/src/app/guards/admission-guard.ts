@@ -25,7 +25,7 @@ export class AdmissionGuardService implements CanActivate {
     let role: string = currenttoken.role;
     let serviceName
 
-    if (role == 'Admin' || role=="Agent") {
+    if (role == 'Admin' || role == "Agent") {
       console.log("Accés autorisé")
       return true;
     }

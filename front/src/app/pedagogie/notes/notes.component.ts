@@ -52,6 +52,7 @@ export class NotesComponent implements OnInit {
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
   classes: Classe[] = [];
   showPVAnnuel = false
+  genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
@@ -194,7 +195,7 @@ export class NotesComponent implements OnInit {
   //Génération bulletins de notes
   formGenerateBulletin: FormGroup;
   showFormGenerateBulletin: boolean = false;
-  classeForBGenerateBulletin: Classe;
+  classeForBGenerateBulletin: any;
   etudiantFromClasse: Etudiant[] = [];
   etudiantToGenerateBulletin: Etudiant;
   semestreChoose: string;
@@ -737,9 +738,9 @@ export class NotesComponent implements OnInit {
 
   onGenerateClasse() {
     //recuperation des infos de la classe en question
-    this.classeService.get(this.formGenerateBulletin.get('classe').value.value).subscribe(
+    this.classeService.getPopulate(this.formGenerateBulletin.get('classe').value.value).subscribe(
       ((response) => {
-        this.classeForBGenerateBulletin = response;
+        this.classeForBGenerateBulletin = response.diplome_id;
       }),
       ((error) => { console.error(error); })
     );
@@ -824,6 +825,22 @@ export class NotesComponent implements OnInit {
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
+    }, error => {
+      console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
+    })
+  }
+
+  GenerateBulletinAnnuel(etudiant_id) {
+    //Par Morgan
+    this.notesForGenerateBulletin = []
+    this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
+      console.log(data)
+      this.moyEtudiant = data.moyenneEtudiant
+      this.notesForGenerateBulletin = data.data
+      this.showPVAnnuel = true
     }, error => {
       console.error(error)
     })
