@@ -4,15 +4,19 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
-const { Prospect } = require('./models/prospect');
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-let origin = require("./config")
-if (process.env.origin) {
-    origin = process.env.origin
+let origin = "http://localhost:4200"
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = "https://t.dev.estya.com"
+    } else (
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+    )
 }
 app.use(cors({ origin: origin }));
 
@@ -35,8 +39,7 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
-        console.log("L'api s'est connecté à MongoDB.");
-
+        console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
         /* 
         //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
         
@@ -93,29 +96,34 @@ const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
 
-    if (!origin || origin == "http://localhost:4200") {
+    if (!origin) {
         next()
     } else {
         let token = jwt.decode(req.header("token"))
+        if (token && token['p']) {
+            token = token['p']
+        }
         if (token && token.id && token.role) {
             User.findOne({ _id: token.id, role: token.role }, (err, user) => {
                 if (err) {
                     console.error(err)
-                    res.status(403).send("Accès non autorisé")
+                    res.status(403).send("Accès non autorisé, Erreur", err)
                 }
                 else if (user) {
                     next()
                 } else {
-                    res.status(403).send("Accès non autorisé")
+                    console.error(user)
+                    res.status(403).send("Accès non autorisé, User not found")
                 }
             })
         } else {
-            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/ValidateEmail/')
-                || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl == "/soc/user/getByEmail" ||
-                req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/getById') || req.originalUrl.startsWith("/soc/partenaire/getNBAll")) {
+
+            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
+                || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith("/soc/user/WhatTheRole") || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
+                req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/getById') || req.originalUrl == "/soc/partenaire/getNBAll") {
                 next()
             } else {
-                res.status(403).send("Accès non autorisé")
+                res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
             }
         }
     }

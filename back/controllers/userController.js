@@ -117,7 +117,7 @@ app.post("/login", (req, res) => {
         email_perso: data.email,
     }).then((userFromDb) => {
         if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
-            res.status(404).send({ message: "Email ou Mot de passe  incorrect", data });
+            res.status(404).send({ message: "Email ou Mot de passe incorrect" });
         }
         else {
             if (userFromDb.verifedEmail) {
@@ -150,6 +150,13 @@ app.get("/getById/:id", (req, res) => {
 //Recuperation des infos user
 app.get("/getInfoById/:id", (req, res, next) => {
     User.findOne({ _id: req.params.id })
+        .then((userfromDb) => { res.status(200).send(userfromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
+});
+
+//Recuperation des infos user
+app.get("/getPopulate/:id", (req, res, next) => {
+    User.findOne({ _id: req.params.id }).populate("service_id")
         .then((userfromDb) => { res.status(200).send(userfromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
@@ -560,6 +567,47 @@ app.post("/updatePwd/:id", (req, res) => {
             res.status(200).send(token);
         })
         .catch((error) => { console.log(error) });
+});
+
+app.get('/TESTMAIL', (req, res) => {
+    let origin = "http://localhost:4200"
+    if (process.argv[2]) {
+        let argProd = process.argv[2]
+        if (argProd.includes('dev')) {
+            origin = "https://t.dev.estya.com"
+        } else (
+            origin = "https://ticket.estya.com"
+        )
+    }
+    let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
+    let temp2 = temp.replace('eMailduProSpect', "m.hue@estya.com")
+
+    temp2 = temp2.replace('oRiGin', origin)
+
+    temp2 = temp2.replace("\"oRiGin/", '"' + origin + "/")
+
+    let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + temp2
+
+    let mailOptions = {
+        from: "estya-ticketing@estya.com",
+        to: "m.hue@estya.com",
+        subject: 'TEST EMAIL',
+        html: htmlmail,
+        attachments: [{
+            filename: 'Image1.png',
+            path: 'assets/Image1.png',
+            cid: 'Image1' //same cid value as in the html img src
+        }]
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+            res.status(500).send(error)
+        } else {
+            res.status(200).send({ temp, temp2 })
+        }
+    });
 });
 
 

@@ -111,10 +111,11 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
   resetAuth() {
     localStorage.clear();
-    window.location.reload()
+    this.router.navigate(['/login'])
   }
 
   comeBack() {
+    localStorage.removeItem('ProspectConected');
     this.router.navigateByUrl('/gestion-preinscriptions/' + this.codeCommercial)
   }
 
@@ -127,7 +128,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
     formData.append('id', this.ProspectConnected._id);
     formData.append('document', doc);
     formData.append('file', event.files[0]);
-    this.admissionService.uploadFile(formData, this.ProspectConnected._id).subscribe(res => {
+    this.admissionService.uploadFile(formData, this.ProspectConnected._id,'ProspectConected').subscribe(res => {
       this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
       if (doc.includes('diplome')) {
         this.diplomeTest = true;
@@ -154,7 +155,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
       if (this.ProspectConnected.etat_traitement != "Nouvelle") {
-        this.admissionService.changeEtatTraitement(this.ProspectConnected._id, "Retour Etudiant")
+        this.admissionService.changeEtatTraitement(this.ProspectConnected._id, "Retour Etudiant",'ProspectConected')
       }
     },
       (error) => {

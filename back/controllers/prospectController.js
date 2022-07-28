@@ -83,8 +83,13 @@ app.post("/create", (req, res, next) => {
 
     //Création du nouvel objet prospect et du nouvel objet user
     const prospect = new Prospect({
-        ...prospectData
+        ...prospectData,
+
     });
+    if (prospectData.code_commercial) {
+        prospect.horsAdmission = true;
+    }
+
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
     const user = new User(
         {

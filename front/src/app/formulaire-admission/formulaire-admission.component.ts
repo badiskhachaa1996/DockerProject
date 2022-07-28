@@ -144,6 +144,9 @@ export class FormulaireAdmissionComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    console.log(this.route.snapshot.paramMap.get('code_commercial'))
+
     if (localStorage.getItem("CommercialCode")) {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
     }
@@ -278,9 +281,13 @@ export class FormulaireAdmissionComponent implements OnInit {
       agence: new FormControl(false),
       nomAgence: new FormControl('', Validators.pattern('[^0-9]+')),
       donneePerso: new FormControl(false, Validators.required),
-      code_commercial: new FormControl(this.cookieCodeCommercial),
+      code_commercial: new FormControl(this.route.snapshot.paramMap.get('code_commercial')),
 
     });
+    if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
+      this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
+
+    }
   };
 
   nextPage() {
@@ -415,8 +422,8 @@ export class FormulaireAdmissionComponent implements OnInit {
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
     // if (rythme_formation == "Alternance") {
     let nir = this.RegisterForm.get('nir').value;
-    let mobilite_reduite = this.RegisterForm.get('mobilite_reduite').value;
-    let sportif_hn = this.RegisterForm.get('sportif_hn').value;
+    let mobilite_reduite = this.RegisterForm.get('mobilite_reduite').value.value;
+    let sportif_hn = this.RegisterForm.get('sportif_hn').value.value;
 
 
     if (this.form_origin == "eduhorizons") {
@@ -472,17 +479,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   getFilesAccess(ID) {
     this.AuthService.WhatTheRole(ID).subscribe(data => {
       localStorage.setItem("ProspectConected", data.Ptoken)
-      if (this.token !== null) {
-        localStorage.setItem("token", this.token)
-      }
-      this.router.navigateByUrl('/suivre-ma-preinscription', { skipLocationChange: true }).then(() => {
-        if (this.token !== null) {
-          localStorage.setItem("token", this.token)
-        }
-        localStorage.setItem("ProspectConected", data.Ptoken)
-
-        this.router.navigate(["/suivre-ma-preinscription"]);
-      });
+      this.router.navigate(["/suivre-ma-preinscription"]);
     })
   }
 

@@ -43,6 +43,16 @@ app.get("/getById/:id", (req, res) => {
         })
 });
 
+//Récuperer une classe par ID
+app.get("/getPopulate/:id", (req, res) => {
+    Classe.findOne({ _id: req.params.id }).populate('diplome_id')
+        .then((data) => {
+            res.status(200).send(data);
+        }).catch((error) => {
+            res.status(400).send("Impossible de recuperer cette classe: " + error);
+        })
+});
+
 //Récuperer tous les classes
 app.get("/getAll", (req, res) => {
     Classe.find()

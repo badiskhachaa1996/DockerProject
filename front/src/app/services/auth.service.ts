@@ -53,6 +53,11 @@ export class AuthService {
     return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getPopulate(id: string) {
+    let url = this.apiUrl + 'getPopulate/' + id;
+    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   getByEmail(email: string) {
     let registreUrl = this.apiUrl + "getByEmail/" + email;
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
@@ -130,6 +135,11 @@ export class AuthService {
   updatePwd(id: string, pwd) {
     let url = this.apiUrl + "updatePwd/" + id;
     return this.http.post<any>(url, { pwd }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  TESTMAIL(){
+    let url = this.apiUrl	+"TESTMAIL"
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
 }

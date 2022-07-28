@@ -33,13 +33,13 @@ export class ExterneComponent implements OnInit {
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
     this.AuthService.login(userToLog).subscribe((data) => {
-      localStorage.setItem('token', data.token)
       this.socket.isAuth()
       this.AuthService.WhatTheRole(jwt_decode(data.token)['id']).subscribe((roleConnected) => {
         if (roleConnected.type == "Prospect") {
           localStorage.setItem('ProspectConected', roleConnected.Ptoken)
           this.router.navigate(['/suivre-ma-preinscription'])
         } else{
+          localStorage.setItem('token', data.token)
           this.router.navigateByUrl('/#/', { skipLocationChange: true })
         }
 

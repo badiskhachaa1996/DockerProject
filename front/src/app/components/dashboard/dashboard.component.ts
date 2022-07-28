@@ -29,11 +29,13 @@ export class DashboardComponent implements OnInit {
 
     user: User;
 
+    token;
+
     constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService) { }
 
     ngOnInit() {
-        let token: any = jwt_decode(localStorage.getItem("token"))
-        this.UserService.getById(token.id).subscribe(dataUser => {
+        this.token= jwt_decode(localStorage.getItem("token"))
+        this.UserService.getById(this.token.id).subscribe(dataUser => {
             this.user = jwt_decode(dataUser.userToken)['userFromDb']
         })
         this.config = this.configService.config;
@@ -69,6 +71,14 @@ export class DashboardComponent implements OnInit {
                 }
             ]
         };
+    }
+
+    SCIENCE() {
+        //TEST ENVOIE DE MAIL
+        this.UserService.TESTMAIL().subscribe(data => {
+            console.log(data.temp)
+            console.log(data.temp2)
+        })
     }
 
     updateChartOptions() {
