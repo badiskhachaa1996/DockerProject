@@ -627,11 +627,11 @@ app.post("/updatePwd/:id", (req, res) => {
 app.get("/HowIsIt/:id", (req, res) => {
     User.findById(req.params.id).then((userFromDb) => {
         if (!userFromDb) {
-            res.status(404).send("Cette utilisateur n'existe pas")
+            res.status(404).send({ txt: "Cette utilisateur n'existe pas" })
         } else if (userFromDb.civilite == null) {
-            res.status(201).send("Profil incomplet")
+            res.status(201).send({ txt: "Profil incomplet" })
         } else {
-            res.status(201).send("Profil complet");
+            res.status(201).send({ txt: "Profil complet" });
         }
     }).catch((error) => {
         console.error(error)

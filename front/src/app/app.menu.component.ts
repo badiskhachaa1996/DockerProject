@@ -184,7 +184,9 @@ export class AppMenuComponent implements OnInit {
                 this.isEtudiant = dataUser.type == "Etudiant"
                 this.isFormateur = dataUser.type == "Formateur"
                 this.isCommercial = dataUser.type == "Commercial"
-                if (this.isFormateur) {
+                if (this.isAdmin) {
+                    this.model = this.modelAdmin
+                } else if (this.isFormateur) {
                     //Formateur
                     this.FService.getByUserId(this.token.id).subscribe(dataF => {
                         if (dataF) {
@@ -413,9 +415,7 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 }
-                else if (this.isAdmin) {
-                    this.model = this.modelAdmin
-                } else {
+                else {
                     console.error("Aucun Menu disponible")
                 }
             } else {

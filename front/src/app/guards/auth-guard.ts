@@ -94,10 +94,10 @@ export class AuthGuardService implements CanActivate {
 
                 return this.authService.HowIsIt(currenttoken.id).pipe(
                     map(stateOfUser => {
-                        if (stateOfUser == 'Profil Complet' || state.url == "/completion-profil") {
+                        if (stateOfUser.txt == 'Profil complet' || state.url == "/completion-profil") {
                             return true
                         }
-                        else if (stateOfUser == "Profil incomplet") {
+                        else if (stateOfUser.txt == "Profil incomplet") {
                             this.router.navigate(['/completion-profil']);
                         } else {
                             this.router.navigate(['/login']);
