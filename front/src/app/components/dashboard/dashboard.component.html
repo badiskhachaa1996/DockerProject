@@ -243,7 +243,7 @@
         </div>
 
     </div> -->
-<div *ngIf="!token || token.role!='Admin'">
+<div *ngIf="this.isUnknow">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
     <div class="card">
@@ -257,7 +257,104 @@
         <p>Merci de votre patience!</p>
     </div>
 </div>
-<div *ngIf="token && token.role=='Admin'">
+<div *ngIf="this.isEtudiant">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher les derniers notes obtenus-->
+    <!-- Afficher les cours de la journée-->
+</div>
+<div *ngIf="this.isFormateur">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher les cours de la journée-->
+</div>
+<div *ngIf="this.isAdmission">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total d'inscrit-->
+    <!-- Afficher le nombre de nouvelle inscrit (etat_traitement=='Nouvelle') -->
+    <!-- Afficher le nombre d'etudiant en attente (etat_traitement=='Retour Etudiant') -->
+</div>
+<div *ngIf="this.isPedagogie">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total de réinscription en attente -->
+    <!-- Afficher le nombre total d'étudiants dans les filières Informatique, Commercial et Tertiaire -->
+    <!-- Afficher l'emploi du temps de la journée dans les filières Informatique, Commercial et Tertiaire -->
+</div>
+<div *ngIf="this.isCommercial">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total de ces prospects avec leur code -->
+    <!-- Afficher le nombre total d'étudiants avec leur code -->
+</div>
+<div *ngIf="this.isReinscrit">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total de ces prospects avec leur code -->
+    <!-- Afficher le nombre total d'étudiants avec leur code -->
+</div>
+<div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
 </div>

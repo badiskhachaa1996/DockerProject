@@ -26,7 +26,7 @@ export class ExterneComponent implements OnInit {
 
   token: any;
   constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService,
-    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService:AdmissionService) { }
+    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
 
@@ -44,7 +44,13 @@ export class ExterneComponent implements OnInit {
           localStorage.setItem('token', data.token)
           this.router.navigateByUrl('/#/', { skipLocationChange: true })
         }
-
+      }, error => {
+        if (error.status == 404) {
+          localStorage.setItem('token', data.token)
+          this.router.navigateByUrl('/#/', { skipLocationChange: true })
+        } else {
+          console.error(error)
+        }
       })
     }, error => {
       if (error.status == 304) {

@@ -202,7 +202,14 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + dataF._id },
                                     ]
-                                }
+                                },
+                                {
+                                    label: 'Gestions des examens', icon: 'pi pi-copy', items: [
+                                        { label: 'Ajouter un examen', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
+                                        { label: 'Liste des examens', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                                    ]
+                                },
+                                { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
                             ];
                         }
                     })
@@ -416,6 +423,14 @@ export class AppMenuComponent implements OnInit {
                     ]
                 }
                 else {
+                    this.model = [
+                        {
+                            label: 'Ticketing',
+                            items: [
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                            ]
+                        }
+                    ]
                     console.error("Aucun Menu disponible")
                 }
             } else {
