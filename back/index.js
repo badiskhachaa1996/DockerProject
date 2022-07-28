@@ -106,20 +106,33 @@ app.use('/', function (req, res, next) {
                 res.status(403).send("Accès non autorisé, Erreur", err)
             }
             else if (user) {
-                next()
+                jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (errToken, decoded) {
+                    if (req.originalUrl.startsWith('/soc/user/HowIsIt')) {
+                        next()
+                    } else if (decoded == undefined) {
+                        if (errToken.name == "JsonWebTokenError") {
+                            //Token Incorrect
+                            res.status(403).send(errToken)
+                        } else if (errToken.name == "TokenExpiredError") {
+                            //Token Expired
+                            res.status(401).send(errToken)
+                        }
+                    } else {
+                        next()
+                    }
+                });
             } else {
                 console.error(user)
                 res.status(403).send("Accès non autorisé, User not found")
             }
         })
     } else {
-
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
-            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
-            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl == "/soc/partenaire/getNBAll") {
+            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail")
+            || req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl == "/soc/partenaire/getNBAll") {
             next()
         } else {
-            res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
+            res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
         }
     }
 });

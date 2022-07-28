@@ -4,6 +4,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { map, Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { EventEmitterService } from '../services/event-emitter.service';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -72,7 +73,7 @@ export class AuthGuardService implements CanActivate {
   }
    
    */
-    constructor(private authService: AuthService,
+    constructor(private authService: AuthService, private messageService: MessageService,
         private ss: EventEmitterService,
         private router: Router) { }
 
@@ -94,12 +95,17 @@ export class AuthGuardService implements CanActivate {
 
                 return this.authService.HowIsIt(currenttoken.id).pipe(
                     map(stateOfUser => {
-                        if (stateOfUser.txt == 'Profil complet' || state.url == "/completion-profil") {
+                        if (stateOfUser.name == 'Profil complet' || state.url == "/completion-profil") {
                             return true
                         }
-                        else if (stateOfUser.txt == "Profil incomplet") {
+                        else if (stateOfUser.name == "Profil incomplet") {
                             this.router.navigate(['/completion-profil']);
-                        } else {
+                        } else if (stateOfUser.name == "JsonWebTokenError" || stateOfUser.name == "TokenExpiredError") {
+                            localStorage.setItem('errorToken', JSON.stringify(stateOfUser))
+                            localStorage.removeItem('token')
+                            this.router.navigate(['/login']);
+                        }
+                        else {
                             this.router.navigate(['/login']);
                         }
                     }))

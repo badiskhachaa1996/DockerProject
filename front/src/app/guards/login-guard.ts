@@ -19,7 +19,6 @@ export class LoginGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> | boolean {
 
         if (!localStorage.getItem('token') && !localStorage.getItem('ProspectConected')) {
-            console.log("Login")
             return true
         }
         else if (localStorage.getItem('ProspectConected')) {

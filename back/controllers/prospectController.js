@@ -120,7 +120,7 @@ app.post("/create", (req, res, next) => {
                             prospect.user_id = userFromDb._id;
                             prospect.save()
                                 .then((prospectSaved) => {
-                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d")
                                     res.status(201).json({ success: 'Prospect ajouté dans la BD', dataUser: userFromDb, token });
                                 })
                                 .catch((error) => { res.status(400).json({ error: 'Impossible d\ajouter ce prospect' }) });
@@ -135,7 +135,7 @@ app.post("/create", (req, res, next) => {
                         console.log("creation user pour prospect")
                         console.log(userCreated)
                         prospect.user_id = userCreated._id;
-                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "mykey")
+                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d")
                         console.log(token)
                         prospect.save()
                             .then((prospectSaved) => {
@@ -402,7 +402,7 @@ app.get("/getByUserId/:user_id", (req, res, next) => {
 app.get("/getTokenByUserId/:user_id", (req, res, next) => {
     Prospect.findOne({ user_id: req.params.user_id }).populate("user_id").then(prospectFromDb => {
         if (prospectFromDb) {
-            prospectFromDb = jwt.sign({prospectFromDb}, 'TokenProspect')
+            prospectFromDb = jwt.sign({ prospectFromDb }, '126c43168ab170ee503b686cd857032d')
             res.status(201).send({ token: prospectFromDb });
         } else {
             res.status(200).send(null);
