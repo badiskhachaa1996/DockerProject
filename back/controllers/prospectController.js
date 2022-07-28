@@ -6,7 +6,6 @@ const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { User } = require('./../models/user');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
-const origin = require("../config");
 const path = require('path');
 var mime = require('mime-types')
 const jwt = require("jsonwebtoken");
@@ -26,6 +25,15 @@ let transporterEstya = nodemailer.createTransport({
         pass: 'ADMIelite19',
     },
 });
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+    )
+}
 let transporterEH = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -155,9 +163,9 @@ app.post("/create", (req, res, next) => {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
                                     temp = temp.replace('eMailduProSpect', userCreated.email_perso)
 
-                                    temp = temp.replace('oRiGin', origin)
+                                    temp = temp.replace('oRiGin', origin[0])
 
-                                    temp = temp.replace("\"oRiGin/", '"' + origin + "/")
+                                    temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
 
                                     let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + r + temp
 
@@ -192,7 +200,7 @@ app.post("/create", (req, res, next) => {
                                         r + "</strong></p>" +
                                         "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
                                         "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
@@ -234,7 +242,7 @@ app.post("/create", (req, res, next) => {
                                         "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
                                         "<ul><li>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
@@ -276,7 +284,7 @@ app.post("/create", (req, res, next) => {
                                         "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong></p></div>" +
                                         "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
                                         "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
                                         "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +

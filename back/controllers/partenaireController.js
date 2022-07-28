@@ -5,7 +5,15 @@ const bcrypt = require("bcryptjs");
 const { User } = require("./../models/user");
 const { CommercialPartenaire } = require("./../models/CommercialPartenaire");
 const nodemailer = require('nodemailer');
-const origin = require("../config");
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+    )
+}
 app.disable("x-powered-by");
 
 
@@ -148,7 +156,7 @@ app.post("/inscription", (req, res, next) => {
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demarche sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe   sur <a href=\"" + origin + "/#/suivre-ma-preinscription\">ce lien</a> </p>"
                                         + "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Bien cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";

@@ -9,11 +9,11 @@ const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-let origin = "http://localhost:4200"
+let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
     if (argProd.includes('dev')) {
-        origin = "https://t.dev.estya.com"
+        origin = ["https://t.dev.estya.com"]
     } else (
         origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
     )
