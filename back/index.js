@@ -15,7 +15,7 @@ if (process.argv[2]) {
     if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
-        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com"]
     )
 }
 app.use(cors({ origin: origin }));
@@ -95,36 +95,31 @@ const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
-
-    if (!origin) {
-        next()
-    } else {
-        let token = jwt.decode(req.header("token"))
-        if (token && token['p']) {
-            token = token['p']
-        }
-        if (token && token.id && token.role) {
-            User.findOne({ _id: token.id, role: token.role }, (err, user) => {
-                if (err) {
-                    console.error(err)
-                    res.status(403).send("Accès non autorisé, Erreur", err)
-                }
-                else if (user) {
-                    next()
-                } else {
-                    console.error(user)
-                    res.status(403).send("Accès non autorisé, User not found")
-                }
-            })
-        } else {
-
-            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
-                || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
-                req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl == "/soc/partenaire/getNBAll") {
+    let token = jwt.decode(req.header("token"))
+    if (token && token['p']) {
+        token = token['p']
+    }
+    if (token && token.id && token.role) {
+        User.findOne({ _id: token.id, role: token.role }, (err, user) => {
+            if (err) {
+                console.error(err)
+                res.status(403).send("Accès non autorisé, Erreur", err)
+            }
+            else if (user) {
                 next()
             } else {
-                res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
+                console.error(user)
+                res.status(403).send("Accès non autorisé, User not found")
             }
+        })
+    } else {
+
+        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
+            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
+            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl == "/soc/partenaire/getNBAll") {
+            next()
+        } else {
+            res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
         }
     }
 });
