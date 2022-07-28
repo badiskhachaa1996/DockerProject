@@ -147,7 +147,7 @@ export class AddFormateurComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout de nouveau formateur
   onInitFormAddFormateur() {
     this.formAddFormateur = this.formBuilder.group({
-      civilite: [this.civiliteList[0]],
+      civilite: [this.civiliteList[0], Validators.required,],
       firstname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       lastname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       indicatif: ['', [Validators.required]],
