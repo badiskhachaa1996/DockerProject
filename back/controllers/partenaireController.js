@@ -213,11 +213,12 @@ app.get("/getAll", (req, res) => {
 app.get("/getNBAll", (req, res) => {
     Partenaire.find()
         .then(result => {
-            res.status(201).send({ nb: result.length });
+            console.log(result.length);
+            res.status(200).send({ nb: result.length });
         })
         .catch(err => {
-            console.error(err);
-            res.status(404).send(err);
+            console.log(err);
+
         })
 });
 
