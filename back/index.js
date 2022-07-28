@@ -96,8 +96,8 @@ const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
     let token = jwt.decode(req.header("token"))
-    if (token && token['p']) {
-        token = token['p']
+    if (token && token['prospectFromDb']) {
+        token = token['prospectFromDb']
     }
     if (token && token.id && token.role) {
         User.findOne({ _id: token.id, role: token.role }, (err, user) => {

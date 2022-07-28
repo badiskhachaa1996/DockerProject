@@ -37,8 +37,8 @@ export class ExterneComponent implements OnInit {
     this.AuthService.login(userToLog).subscribe((data) => {
       this.socket.isAuth()
       this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
-        if (pData) {
-          localStorage.setItem('ProspectConected', pData)
+        if (pData.token) {
+          localStorage.setItem('ProspectConected', pData.token)
           this.router.navigate(['/suivre-ma-preinscription'])
         } else {
           localStorage.setItem('token', data.token)

@@ -62,7 +62,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
     this.codeCommercial = localStorage.getItem("CommercialCode")
 
-    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
+    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
 
     this.ecoleProspect = this.ProspectConnected.type_form
 

@@ -400,14 +400,17 @@ app.get("/getByUserId/:user_id", (req, res, next) => {
 
 //Recuperation d'un token via user_id
 app.get("/getTokenByUserId/:user_id", (req, res, next) => {
-    Prospect.findOne({ user_id: req.params.user_id }).then(prospectFromDb => {
+    Prospect.findOne({ user_id: req.params.user_id }).populate("user_id").then(prospectFromDb => {
         if (prospectFromDb) {
-            prospectFromDb = jwt.sign({ p: prospectFromDb }, 'TokenProspect')
+            prospectFromDb = jwt.sign({prospectFromDb}, 'TokenProspect')
+            res.status(201).send({ token: prospectFromDb });
+        } else {
+            res.status(200).send(null);
         }
-        res.status(200).send(prospectFromDb);
+
     }).catch((error) => {
         console.error(error)
-        res.status(404).send(error);
+        res.status(500).send(error);
     })
 });
 
