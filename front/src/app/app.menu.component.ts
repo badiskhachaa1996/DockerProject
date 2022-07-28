@@ -248,7 +248,7 @@ export class AppMenuComponent implements OnInit {
                                         label: 'Partenaires',
                                         items: [
                                             { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', data.data.code_commercial_partenaire] },
-                                            { label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                            //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                         ]
                                     }
                                 ];
@@ -269,7 +269,7 @@ export class AppMenuComponent implements OnInit {
                                         items: [
                                             { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', data.data.code_commercial_partenaire] },
                                             { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', data.data.partenaire_id] },
-                                            { label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                            //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                         ]
                                     }
                                 ];

@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { CommercialPartenaire } from '../models/CommercialPartenaire';
 import { Partenaire } from '../models/Partenaire';
 import { User } from '../models/User';
+import { AuthService } from '../services/auth.service';
 import { PartenaireService } from '../services/partenaire.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   nationList = environment.nationalites;
   fr = environment.fr;
   civiliteList = environment.civilite;
+  emailExist = false
 
   maxYear = new Date().getFullYear() - 16;
   minYear = new Date().getFullYear() - 50;
@@ -47,7 +49,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   pL = Math.random() * 900;
 
 
-  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService) { }
+  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService,private UserService:AuthService) { }
 
   RegisterForm: FormGroup = new FormGroup({
 
@@ -189,6 +191,21 @@ export class PartenaireInscriptionComponent implements OnInit {
     }
 
   }
+
+  verifEmailInBD() {
+    this.emailExist = false
+    this.UserService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
+      if (dataMail) {
+        this.emailExist = true
+        this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        return true
+      }
+    },
+      (error) => {
+        return false
+      })
+  }
+
   generateCode() {
     /*let random = Math.random().toString(36).substring(0, 3).toUpperCase();
 

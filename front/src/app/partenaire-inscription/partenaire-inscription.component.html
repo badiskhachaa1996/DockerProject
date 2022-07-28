@@ -84,9 +84,11 @@
                                     <input pInputText id="phone_partenaire" type="email"
                                         formControlName="email_partenaire" placeholder="Adresse email de la société" />
                                     <div
-                                        *ngIf="email_partenaire.invalid && (email_partenaire.touched || email_partenaire.dirty)">
+                                        *ngIf="(email_partenaire.invalid || emailExist) && (email_partenaire.touched || email_partenaire.dirty)">
                                         <span style="color: red;" class="error" *ngIf="email_partenaire.errors">*
                                             L'email est obligatoire.</span>
+                                        <span style="color: red;" class="error" *ngIf="emailExist">*
+                                            L'email est déjà utilisée.</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
@@ -225,7 +227,7 @@
                                 <div class="field col-12 md:col-6">
                                     <label For="email">Email : <span style="color: red;"> * </span></label>
                                     <input pInputText id="email" type="email" formControlName="email"
-                                        placeholder="Adresse email du représentant" />
+                                        placeholder="Adresse email du représentant" (blur)="verifEmailInBD()" />
                                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
                                         <span style="color: red;" class="error" *ngIf="email.errors?.required">* L'email
                                             est obligatoire.</span>
@@ -366,7 +368,7 @@
                                 [disabled]="civilite.invalid || lastname.invalid || firstname.invalid
                             || phone.invalid || whatsApp.invalid || email.invalid || date_naissance.invalid || nationalite.invalid 
                             || numero_adresse.invalid || rue_adresse.invalid || postal_adresse.invalid || ville_adresse.invalid 
-                            || pays_adresse.invalid || statut.invalid || password.invalid || password_confirmed.invalid" type="submit"
+                            || pays_adresse.invalid || statut.invalid || password.invalid || password_confirmed.invalid || emailExist" type="submit"
                                 (click)="submitForm(); changeEtatForm(); "></button>
                         </div>
                     </p-fieldset>
