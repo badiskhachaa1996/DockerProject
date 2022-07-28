@@ -82,37 +82,25 @@ export class AuthGuardService implements CanActivate {
 
         if (currenttoken) {
             currenttoken = jwt_decode(localStorage.getItem("token"))
-            console.log(currenttoken)
-
-
-
             if (!localStorage.getItem('token') && !localStorage.getItem('ProspectConected')) {
-                console.log("Login")
                 this.router.navigate(['/login']);
                 return false
             }
             else if (localStorage.getItem('ProspectConected')) {
-                console.log("Prospect token")
                 this.router.navigate(['/suivre-ma-preinscription']);
                 return false
             }
             else {
 
-                return this.authService.getById(currenttoken.id).pipe(
-                    map(userdata => {
-                        let UserTok: any = jwt_decode(userdata.userToken)
-                        console.log(UserTok.userFromDb)
-
-                        if (UserTok.userFromDb.civilite || state.url == "/completion-profil") {
-                            console.log("accés autorisé: ")
+                return this.authService.HowIsIt(currenttoken.id).pipe(
+                    map(stateOfUser => {
+                        if (stateOfUser == 'Profil Complet' || state.url == "/completion-profil") {
                             return true
                         }
-
-                        else {
-                            console.log("Completer votre profil avant de continuer la navigation")
+                        else if (stateOfUser == "Profil incomplet") {
                             this.router.navigate(['/completion-profil']);
-
-                            return true
+                        } else {
+                            this.router.navigate(['/login']);
                         }
                     }))
 

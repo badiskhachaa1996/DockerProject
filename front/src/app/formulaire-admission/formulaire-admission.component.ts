@@ -308,8 +308,6 @@ export class FormulaireAdmissionComponent implements OnInit {
       }
     },
       (error) => {
-        console.log(this.emailExist + '151')
-        console.log("Email unique")
         return false
       })
   }
@@ -449,14 +447,9 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
-          //Envoie de notif TODO
-
-
           this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
             console.log(notif)
             this.NotifService.newNotif(notif)
-
-
           }, (error) => {
             console.error(error)
           }));
@@ -477,8 +470,8 @@ export class FormulaireAdmissionComponent implements OnInit {
   }
 
   getFilesAccess(ID) {
-    this.AuthService.WhatTheRole(ID).subscribe(data => {
-      localStorage.setItem("ProspectConected", data.Ptoken)
+    this.admissionService.getTokenByUserId(ID).subscribe(data => {
+      localStorage.setItem("ProspectConected", data)
       this.router.navigate(["/suivre-ma-preinscription"]);
     })
   }

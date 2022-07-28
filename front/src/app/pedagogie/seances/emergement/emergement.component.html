@@ -92,7 +92,7 @@
     <p-fieldset class="col-12" *ngIf="seance" legend="{{seance.libelle}}">
         <div class="p-fluid grid" style="color: black;font-weight:normal;">
             <div class="col-12 md:col-6 grid"
-                *ngIf="userList && userList[seance.formateur_id] && dataRole.type!='Formateur'">
+                *ngIf="userList && userList[seance.formateur_id] && userList[seance.formateur_id].type!='Formateur'">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Formateur :</strong>
                 </div>

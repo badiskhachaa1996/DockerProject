@@ -3,6 +3,9 @@ import { AppMainComponent } from './app.main.component';
 import jwt_decode from "jwt-decode";
 import { AuthService } from './services/auth.service';
 import { Service } from './models/Service';
+import { EtudiantService } from './services/etudiant.service';
+import { FormateurService } from './services/formateur.service';
+import { CommercialPartenaireService } from './services/commercial-partenaire.service';
 
 @Component({
     selector: 'app-menu',
@@ -164,30 +167,27 @@ export class AppMenuComponent implements OnInit {
     isCommercial: Boolean = false
 
 
-    constructor(public appMain: AppMainComponent, private userService: AuthService) { }
+    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService) { }
 
     ngOnInit() {
         //Decodage du token
         this.token = jwt_decode(localStorage.getItem('token'));
-        this.userService.WhatTheRole(this.token.id).subscribe(
-            ((data) => {
-                this.userService.getPopulate(this.token.id).subscribe(dataUser => {
-                    if (dataUser) {
-                        this.isAdmin = dataUser.role == "Admin"
-                        this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
-                        let service: any = dataUser.service_id
-                        if (this.isAgent && service != null) {
-                            this.isAdmission = service.label.includes('Admission')
-                            this.isPedagogie = service.label.includes('dagogie')
-                        }
-                        if (data && data.data) {
-                            //TODO Récupérer les infos sans WhatTheRole
-                            this.isEtudiant = dataUser.type == "Etudiant"
-                            this.isFormateur = dataUser.type == "Formateur"
-                            this.isCommercial = dataUser.type == "Commercial"
-                        }
-                        if (this.isFormateur) {
-                            //Formateur
+        this.userService.getPopulate(this.token.id).subscribe(dataUser => {
+            if (dataUser) {
+                this.isAdmin = dataUser.role == "Admin"
+                this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
+                let service: any = dataUser.service_id
+                if (this.isAgent && service != null) {
+                    this.isAdmission = service.label.includes('Admission')
+                    this.isPedagogie = service.label.includes('dagogie')
+                }
+                this.isEtudiant = dataUser.type == "Etudiant"
+                this.isFormateur = dataUser.type == "Formateur"
+                this.isCommercial = dataUser.type == "Commercial"
+                if (this.isFormateur) {
+                    //Formateur
+                    this.FService.getByUserId(this.token.id).subscribe(dataF => {
+                        if (dataF) {
                             this.model = [
                                 {
                                     label: 'Ticketing',
@@ -198,228 +198,232 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + data.data._id },
+                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + dataF._id },
                                     ]
                                 }
                             ];
                         }
+                    })
+                }
 
-                        else if (this.isEtudiant && !this.isAgent) {
-                            //Etudiant
-                            if (data.data.classe_id) {
-                                this.model = [
-                                    {
-                                        label: 'Ticketing',
-                                        items: [
-                                            { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        ]
-                                    },
-                                    {
-                                        label: "Pédagogie",
-                                        items: [
-                                            { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + data.data.classe_id },
-                                        ]
-                                    }
-                                ];
-                            } else {
-                                this.model = [
-                                    {
-                                        label: 'Ticketing',
-                                        items: [
-                                            { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        ]
-                                    }
-                                ];
-                            }
-                        }
-
-                        else if (this.isCommercial) {
-                            if (data.data.statut != "Admin") {
-                                //Commercial Normal
-                                this.model = [
-                                    {
-                                        label: 'Ticketing', icon: 'pi pi-ticket',
-                                        items: [
-                                            { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                            { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        ]
-                                    },
-                                    {
-                                        label: 'Partenaires',
-                                        items: [
-                                            { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', data.data.code_commercial_partenaire] },
-                                            //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
-                                        ]
-                                    }
-                                ];
-                            }
-
-                            else {
-                                //Commercial considéré Admin dans son Partenaire
-                                this.model = [
-                                    {
-                                        label: 'Ticketing', icon: 'pi pi-ticket',
-                                        items: [
-                                            { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                            { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        ]
-                                    },
-                                    {
-                                        label: 'Partenaires',
-                                        items: [
-                                            { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', data.data.code_commercial_partenaire] },
-                                            { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', data.data.partenaire_id] },
-                                            //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
-                                        ]
-                                    }
-                                ];
-                            }
-                        } else if (this.isAdmission) {
+                else if (this.isEtudiant && !this.isAgent) {
+                    //Etudiant
+                    this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
+                        if (dataEtu && dataEtu.classe_id) {
                             this.model = [
                                 {
-                                    label: 'Accueil',
+                                    label: 'Ticketing',
                                     items: [
-                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
-                                    ]
-                                },
-                                {
-                                    label: 'Ticketing', icon: 'pi pi-ticket',
-                                    items: [
-                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
                                         { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
-                                    ]
-                                },
-                                {
-                                    label: 'Admission',
-                                    items: [
-                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
-                                    ]
-                                }
-                            ]
-                        } else if (this.isPedagogie) {
-                            this.model = [
-                                {
-                                    label: 'Accueil',
-                                    items: [
-                                        { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
-                                    ]
-                                },
-                                {
-                                    label: 'Ticketing', icon: 'pi pi-ticket',
-                                    items: [
-                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                        { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
                                     ]
                                 },
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
-                                        {
-                                            label: 'Gestions des séances', icon: 'pi pi-video',
-                                            items: [
-                                                { label: 'Ajouter une séance', icon: 'pi pi-user-plus', routerLink: ['/ajout-seance'] },
-                                                { label: 'Voir la liste des séances', icon: 'pi pi-sort-alpha-down', routerLink: ['/seances'] },
-                                                { label: 'Voir l\'emploi du temps des séances', icon: 'pi pi-calendar', routerLink: ['/emploi-du-temps'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des formateurs', icon: 'pi pi-id-card',
-                                            items: [
-                                                { label: 'Ajouter un formateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-formateur'] },
-                                                { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
-                                            ]
-                                        },
-                                        { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
-                                        { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
-                                        {
-                                            label: 'Gestions des étudiants', icon: 'pi pi-users',
-                                            items: [
-                                                { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
-                                                { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des entreprises', icon: 'pi pi-home',
-                                            items: [
-                                                { label: 'Ajouter une entreprise', icon: 'pi pi-user-plus', routerLink: ['/ajout-entreprise'] },
-                                                { label: 'Liste des entreprises', icon: 'pi pi-sort-alpha-down', routerLink: ['/entreprises'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des examens', icon: 'pi pi-copy', items: [
-                                                { label: 'Ajouter un examen', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
-                                                { label: 'Liste des examens', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
-                                            ]
-                                        },
-                                        { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                     ]
+                                }
+                            ];
+                        } else {
+                            this.model = [
+                                {
+                                    label: 'Ticketing',
+                                    items: [
+                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                    ]
+                                }
+                            ];
+                        }
+                    })
+                }
 
+                else if (this.isCommercial) {
+                    this.CService.getByUserId(this.token.id).subscribe(cData => {
+                        if (cData.statut != "Admin") {
+                            //Commercial Normal
+                            this.model = [
+                                {
+                                    label: 'Ticketing', icon: 'pi pi-ticket',
+                                    items: [
+                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                    ]
                                 },
                                 {
-                                    label: 'Administration',
+                                    label: 'Partenaires',
                                     items: [
-                                        {
-                                            label: 'Gestions des années scolaires', icon: 'pi pi-calendar',
-                                            items: [
-                                                { label: 'Ajouter une année scolaire', icon: 'pi pi-calendar-plus', routerLink: ['/ajout-annee-scolaire'] },
-                                                { label: 'Liste des années scolaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/annee-scolaire'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des écoles', icon: 'pi pi-home',
-                                            items: [
-                                                { label: 'Ajouter une école', icon: 'pi pi-plus-circle', routerLink: ['/ajout-ecole'] },
-                                                { label: 'Liste des écoles', icon: 'pi pi-sort-alpha-down', routerLink: ['/ecole'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des campus', icon: 'pi pi-home',
-                                            items: [
-                                                { label: 'Ajouter un campus', icon: 'pi pi-plus-circle', routerLink: ['/ajout-campus'] },
-                                                { label: 'Liste des campus', icon: 'pi pi-sort-alpha-down', routerLink: ['/campus'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
-                                            items: [
-                                                { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
-                                                { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des groupes', icon: 'pi pi-users',
-                                            items: [
-                                                { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
-                                                { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
-                                            ]
-                                        },
-                                        {
-                                            label: 'Gestions des agents', icon: 'pi pi-users',
-                                            items: [
-                                                { label: 'Ajouter un agent', icon: 'pi pi-user-plus', routerLink: ['/admin/ajout-agent'] },
-                                                { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
-                                            ]
-                                        },
+                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                    ]
+                                }
+                            ];
+                        }
+
+                        else {
+                            //Commercial considéré Admin dans son Partenaire
+                            this.model = [
+                                {
+                                    label: 'Ticketing', icon: 'pi pi-ticket',
+                                    items: [
+                                        { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Partenaires',
+                                    items: [
+                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
+                                        //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                    ]
+                                }
+                            ];
+                        }
+                    })
+                } else if (this.isAdmission) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        },
+                        {
+                            label: 'Admission',
+                            items: [
+                                { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                            ]
+                        }
+                    ]
+                } else if (this.isPedagogie) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
+                            ]
+                        },
+                        {
+                            label: "Pédagogie",
+                            items: [
+                                { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
+                                {
+                                    label: 'Gestions des séances', icon: 'pi pi-video',
+                                    items: [
+                                        { label: 'Ajouter une séance', icon: 'pi pi-user-plus', routerLink: ['/ajout-seance'] },
+                                        { label: 'Voir la liste des séances', icon: 'pi pi-sort-alpha-down', routerLink: ['/seances'] },
+                                        { label: 'Voir l\'emploi du temps des séances', icon: 'pi pi-calendar', routerLink: ['/emploi-du-temps'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des formateurs', icon: 'pi pi-id-card',
+                                    items: [
+                                        { label: 'Ajouter un formateur', icon: 'pi pi-user-plus', routerLink: ['/ajout-formateur'] },
+                                        { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
+                                    ]
+                                },
+                                { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                                { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un étudiant', icon: 'pi pi-user-plus', routerLink: ['/ajout-etudiant'] },
+                                        { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des entreprises', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter une entreprise', icon: 'pi pi-user-plus', routerLink: ['/ajout-entreprise'] },
+                                        { label: 'Liste des entreprises', icon: 'pi pi-sort-alpha-down', routerLink: ['/entreprises'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des examens', icon: 'pi pi-copy', items: [
+                                        { label: 'Ajouter un examen', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
+                                        { label: 'Liste des examens', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                                    ]
+                                },
+                                { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                            ]
+
+                        },
+                        {
+                            label: 'Administration',
+                            items: [
+                                {
+                                    label: 'Gestions des années scolaires', icon: 'pi pi-calendar',
+                                    items: [
+                                        { label: 'Ajouter une année scolaire', icon: 'pi pi-calendar-plus', routerLink: ['/ajout-annee-scolaire'] },
+                                        { label: 'Liste des années scolaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/annee-scolaire'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des écoles', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter une école', icon: 'pi pi-plus-circle', routerLink: ['/ajout-ecole'] },
+                                        { label: 'Liste des écoles', icon: 'pi pi-sort-alpha-down', routerLink: ['/ecole'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des campus', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter un campus', icon: 'pi pi-plus-circle', routerLink: ['/ajout-campus'] },
+                                        { label: 'Liste des campus', icon: 'pi pi-sort-alpha-down', routerLink: ['/campus'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
+                                    items: [
+                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
+                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des groupes', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
+                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des agents', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un agent', icon: 'pi pi-user-plus', routerLink: ['/admin/ajout-agent'] },
+                                        { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
                                     ]
                                 },
                             ]
-                        }
-                        else if (this.isAdmin) {
-                            this.model = this.modelAdmin
-                        } else {
-                            console.error("Aucun Menu disponible")
-                        }
-                    } else {
-                        console.error("Aucun Utilisteur trouvé")
-                    }
-                })
+                        },
+                    ]
+                }
+                else if (this.isAdmin) {
+                    this.model = this.modelAdmin
+                } else {
+                    console.error("Aucun Menu disponible")
+                }
+            } else {
+                console.error("Aucun Utilisteur trouvé")
+            }
+        })
 
-            }),
-            ((error) => { console.error(error); })
-        );
+
 
         // this.model = [
         //     {

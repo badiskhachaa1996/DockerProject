@@ -137,6 +137,11 @@ export class AuthService {
     return this.http.post<any>(url, { pwd }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  HowIsIt(user_id) {
+    let url = this.apiUrl + "HowIsIt/" + user_id;
+    return this.http.get<String>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+  }
+
   /*TESTMAIL(){
     let url = this.apiUrl	+"TESTMAIL"
     return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })

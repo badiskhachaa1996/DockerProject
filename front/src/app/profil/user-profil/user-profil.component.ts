@@ -14,6 +14,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { ClasseService } from 'src/app/services/classe.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 
 @Component({
@@ -148,13 +149,12 @@ export class UserProfilComponent implements OnInit {
     let password = this.passwordForm.get('password').value;
     let verifypassword = this.passwordForm.get('verifypassword').value;
     if (password = verifypassword) {
-      //TODO Verification du mot de passe
       this.AuthService.verifPassword({ 'id': this.decodeToken.id, 'password': passwordactual }).subscribe(
         ((responseV) => {
           console.log(responseV);
 
           this.AuthService.updatePwd(this.decodeToken.id, verifypassword).subscribe((updatedPwd) => {
-  
+
             this.passwordForm.reset();
             this.toggleUpdatepwd = false;
             this.messageService.add({ severity: 'success', summary: 'Mot de passe ', detail: 'Votre mot de passe a été mis à jour avec succès' });
@@ -237,7 +237,9 @@ export class UserProfilComponent implements OnInit {
   get nationalite() { return this.RegisterForm.get('nationalite'); }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }
 
-  constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder, private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService, private EtudiantService: EtudiantService) { }
+  constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
+    private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
+    private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
 
@@ -252,17 +254,16 @@ export class UserProfilComponent implements OnInit {
 
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
-    this.AuthService.WhatTheRole(decodeToken.id).subscribe(data => {
-      this.typeProfil = data.type
-      if (data.type = "Commercial") {
-        this.infoCommercial = data.data
+    this.CommercialService.getByUserId(decodeToken.id).subscribe(data => {
+      if (data) {
+        this.infoCommercial = data
       }
 
     })
     this.AuthService.getById(this.userupdate.id).subscribe((data) => {
 
       this.userco = jwt_decode(data['userToken'])['userFromDb']
-      console.log(this.userco.password)
+      //TODO C'est quoi cette merde
       this.AuthService.WhatTheRole(this.userupdate.id).subscribe(data => {
         this.InfoUser = data?.data
         let date = new Date(this.InfoUser?.date_naissance)

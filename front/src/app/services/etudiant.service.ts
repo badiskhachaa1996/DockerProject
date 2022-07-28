@@ -40,7 +40,7 @@ export class EtudiantService {
   //Recuperation d'un etudiant via son user_id
   getByUser_id(user_id: string) {
     let registreUrl = this.apiUrl + "getByUserid/" + user_id;
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Mis à jour d'un etudiant

@@ -17,6 +17,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 import { Presence } from 'src/app/models/Presence';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 
 
@@ -91,7 +92,7 @@ export class ListEtudiantComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
-    private router: Router, private presenceService: PresenceService) { }
+    private router: Router, private presenceService: PresenceService, private CommercialService:CommercialPartenaireService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -175,9 +176,9 @@ export class ListEtudiantComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
-    this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
-      if (!this.code && data.type == "Partenaire") {
-        this.code = data.data.code_partenaire
+    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
+      if (!this.code && data && data.code_commercial_partenaire) {
+        this.code = data.code_commercial_partenaire
       }
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
