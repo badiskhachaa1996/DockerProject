@@ -1,11 +1,11 @@
 <p-toast></p-toast>
 <div class="grid">
-	<!-- Formulaire d'ajout d'un collaborateur -->
-	<div class="col-12" *ngIf="showFormAddCommercial">
-		<div class="card">
-			<i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-				(click)="showFormAddCommercial = false;">
-			</i>
+    <!-- Formulaire d'ajout d'un collaborateur -->
+    <div class="col-12" *ngIf="showFormAddCommercial">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showFormAddCommercial = false;">
+            </i>
             <h4 style="text-align: center;">Ajouter un collaborateur</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddCommercial" (ngSubmit)="onAddCommercial()">
                 <div class="field col-12 md:col-2">
@@ -18,7 +18,7 @@
                 </div>
                 <div class="field col-12 md:col-5">
                     <label for="prenom">Prénom</label>
-                    <input pInputText id="prenom" type="text" formControlName="firstname"/>
+                    <input pInputText id="prenom" type="text" formControlName="firstname" />
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="phone">Numéro de téléphone</label>
@@ -34,26 +34,26 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="password">Mot de passe</label>
-                    <input pInputText id="password" type="password" formControlName="password"/>
+                    <input pInputText id="password" type="password" formControlName="password" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="password_confirmed">Confirmer le mot de passe</label>
-                    <input pInputText id="password_confirmed" type="password" formControlName="password_confirmed"/>
+                    <input pInputText id="password_confirmed" type="password" formControlName="password_confirmed" />
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton label="Ajouter ce commercial"
-							[disabled]="formAddCommercial.invalid" type="submit"></button>
+                    <button pButton label="Ajouter ce commercial" [disabled]="formAddCommercial.invalid"
+                        type="submit"></button>
                 </div>
             </form>
         </div>
-	</div>
+    </div>
 
-	<!-- Formulaire de modification d'un collaborateur -->
-	<div class="col-12" *ngIf="showFormUpdateCommercial">
-		<div class="card">
-			<i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
-				(click)="showFormUpdateCommercial = false;">
-			</i>
+    <!-- Formulaire de modification d'un collaborateur -->
+    <div class="col-12" *ngIf="showFormUpdateCommercial">
+        <div class="card">
+            <i aria-hidden="true" class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showFormUpdateCommercial = false;">
+            </i>
             <h4 style="text-align: center;">Modifier un collaborateur</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateCommercial" (ngSubmit)="onUpdateCommercial()">
                 <div class="field col-12 md:col-2">
@@ -66,7 +66,7 @@
                 </div>
                 <div class="field col-12 md:col-5">
                     <label for="prenom">Prénom</label>
-                    <input pInputText id="prenom" type="text" formControlName="firstname"/>
+                    <input pInputText id="prenom" type="text" formControlName="firstname" />
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="phone">Numéro de téléphone</label>
@@ -81,77 +81,87 @@
                     <p-dropdown [options]="statutList" optionLabel="value" formControlName="statut"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
-                    <button pButton label="Modifier ce commercial"
-							[disabled]="formUpdateCommercial.invalid" type="submit"></button>
+                    <button pButton label="Modifier ce commercial" [disabled]="formUpdateCommercial.invalid"
+                        type="submit"></button>
                 </div>
             </form>
         </div>
-	</div>
+    </div>
 
     <div class="col-12">
-		<div class="card">
-			<button *ngIf="idPartenaire" pButton pRipple label="Ajouter un commercial" class="mr-2 mb-2"
-					style="float: right;" (click)="showFormAddCommercial = true; showFormUpdateCommercial = false;"></button>
-		
-			<h5>Liste des collaborateurs</h5>
-			<p-table #dt1
-                     dataKey="_id" [rows]="10" 
-                     [rowHover]="true" 
-					 rowExpandMode="single" [value]="commercialPartenaires"
-                     [paginator]="true" [pageLinks]="5"
-                     [globalFilterFields]="['code_commercial_partenaire', 'statut']"
-					 [totalRecords]="commercialPartenaires.length"
-                     responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+        <div class="card">
+            <button *ngIf="idPartenaire" pButton pRipple label="Ajouter un commercial" class="mr-2 mb-2"
+                style="float: right;"
+                (click)="showFormAddCommercial = true; showFormUpdateCommercial = false;"></button>
 
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
-						<span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th pSortableColumn="nom_prenom" style="text-align: center;"> Nom & Prénom	<p-sortIcon field="nom_prenom"></p-sortIcon></th>
-						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>	
-						<th pSortableColumn="telephone" style="text-align: center;"> Téléphone <p-sortIcon field="telephone"></p-sortIcon></th>
-                        <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut"></p-sortIcon></th>
-                        <th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code"></p-sortIcon></th>
-						<th>
-							<div class="flex justify-content-between align-items-center">
-								Action
-							</div>
-						</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-commercial>
-					<tr>
-						<td style="min-width: 12rem;">
+            <h5>Liste des collaborateurs</h5>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" rowExpandMode="single"
+                [value]="commercialPartenaires" [paginator]="true" [pageLinks]="5"
+                [globalFilterFields]="['code_commercial_partenaire', 'statut']"
+                [totalRecords]="commercialPartenaires.length" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="nom_prenom" style="text-align: center;"> Nom & Prénom <p-sortIcon
+                                field="nom_prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="telephone" style="text-align: center;"> Téléphone <p-sortIcon
+                                field="telephone"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code">
+                            </p-sortIcon>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Action
+                            </div>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-commercial>
+                    <tr>
+                        <td style="min-width: 12rem;">
                             {{ users[commercial.user_id]?.lastname | uppercase}}
                             {{ users[commercial.user_id]?.firstname | titlecase }}
-						</td>
-						<td style="min-width: 12rem;">
-							{{ users[commercial.user_id]?.email }}
-						</td>
-						<td style="min-width: 14rem;">
-							{{ users[commercial.user_id]?.phone }}
-						</td>
-						<td style="min-width: 14rem;">
-							{{ commercial.statut }}
-						</td>
-						<td style="min-width: 14rem;">
-							{{ commercial.code_commercial_partenaire }}
-						</td>
-						<td style="min-width: 10rem;">
-							<i style="margin-left: 2%;"
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ users[commercial.user_id]?.email }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ users[commercial.user_id]?.phone }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.statut }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.code_commercial_partenaire }}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
                                 (click)="showFormUpdateCommercial = true; showFormAddCommercial = false; idCommercialToUpdate = commercial._id; idUserToUpdate = commercial.user_id; onGetById();"
                                 class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le commercial"></i>
-						</td>
-					</tr>
-				</ng-template>
-    		</p-table>
-		</div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
 
-	</div>
+    </div>
 </div>
