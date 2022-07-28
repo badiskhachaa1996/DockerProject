@@ -569,7 +569,7 @@ app.post("/updatePwd/:id", (req, res) => {
         .catch((error) => { console.log(error) });
 });
 
-app.get('/TESTMAIL', (req, res) => {
+/*app.get('/TESTMAIL', (req, res) => {
     let origin = "http://localhost:4200"
     if (process.argv[2]) {
         let argProd = process.argv[2]
@@ -608,7 +608,7 @@ app.get('/TESTMAIL', (req, res) => {
             res.status(200).send({ temp, temp2 })
         }
     });
-});
+});*/
 
 
 /*app.get("/SecretPathForAbsoluteNoReason", (req, res) => {

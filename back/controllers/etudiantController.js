@@ -8,7 +8,7 @@ const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
 const { RachatBulletin } = require('./../models/RachatBulletin');
 app.disable("x-powered-by");
-const origin = require("../config");
+
 const path = require('path');
 var mime = require('mime-types')
 const fs = require("fs")
@@ -23,6 +23,16 @@ let transporter = nodemailer.createTransport({
         pass: 'ESTYA@@2021',
     },
 });
+
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com"]
+    )
+}
 
 
 
@@ -211,7 +221,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
             })
         })
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="' + origin + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'ims@estya.com',
             to: mailList,

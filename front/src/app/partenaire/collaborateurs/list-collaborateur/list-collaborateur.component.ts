@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import jwt_decode from "jwt-decode";
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { User } from 'src/app/models/User';
@@ -37,6 +38,8 @@ export class ListCollaborateurComponent implements OnInit {
   users: User[] = [];
   dropdownUser: User[] = [];
 
+  token
+
   civiliteList = [
     { label: 'Mr', value: 'Mr' },
     { label: 'Mme', value: 'Mme' },
@@ -53,7 +56,7 @@ export class ListCollaborateurComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    this.token = jwt_decode(localStorage.getItem('token'));
     //Recuperation des données
     this.onGetData();
 
