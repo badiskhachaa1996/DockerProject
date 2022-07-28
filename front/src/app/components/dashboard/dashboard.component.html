@@ -257,6 +257,7 @@
         <p>Merci de votre patience!</p>
     </div>
 </div>
+
 <div *ngIf="this.isEtudiant">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -273,6 +274,7 @@
     <!-- Afficher les derniers notes obtenus-->
     <!-- Afficher les cours de la journée-->
 </div>
+
 <div *ngIf="this.isFormateur">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -288,6 +290,7 @@
     </div>
     <!-- Afficher les cours de la journée-->
 </div>
+
 <div *ngIf="this.isAdmission">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -305,6 +308,7 @@
     <!-- Afficher le nombre de nouvelle inscrit (etat_traitement=='Nouvelle') -->
     <!-- Afficher le nombre d'etudiant en attente (etat_traitement=='Retour Etudiant') -->
 </div>
+
 <div *ngIf="this.isPedagogie">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -322,6 +326,7 @@
     <!-- Afficher le nombre total d'étudiants dans les filières Informatique, Commercial et Tertiaire -->
     <!-- Afficher l'emploi du temps de la journée dans les filières Informatique, Commercial et Tertiaire -->
 </div>
+
 <div *ngIf="this.isCommercial">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -338,6 +343,7 @@
     <!-- Afficher le nombre total de ces prospects avec leur code -->
     <!-- Afficher le nombre total d'étudiants avec leur code -->
 </div>
+
 <div *ngIf="this.isReinscrit">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -352,6 +358,7 @@
         <p>Merci de votre patience!</p>
     </div>
 </div>
+
 <div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
