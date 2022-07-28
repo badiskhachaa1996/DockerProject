@@ -570,6 +570,15 @@ app.post("/updatePwd/:id", (req, res) => {
 });
 
 app.get('/TESTMAIL', (req, res) => {
+    let origin = "http://localhost:4200"
+    if (process.argv[2]) {
+        let argProd = process.argv[2]
+        if (argProd.includes('dev')) {
+            origin = "https://t.dev.estya.com"
+        } else (
+            origin = "https://ticket.estya.com"
+        )
+    }
     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
     let temp2 = temp.replace('eMailduProSpect', "m.hue@estya.com")
 
@@ -577,7 +586,7 @@ app.get('/TESTMAIL', (req, res) => {
 
     temp2 = temp2.replace("\"oRiGin/", '"' + origin + "/")
 
-    let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + r + temp2
+    let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + temp2
 
     let mailOptions = {
         from: "estya-ticketing@estya.com",
@@ -596,7 +605,7 @@ app.get('/TESTMAIL', (req, res) => {
             console.error(error);
             res.status(500).send(error)
         } else {
-            res.status(200).send({temp, temp2})
+            res.status(200).send({ temp, temp2 })
         }
     });
 });
