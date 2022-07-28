@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -30,14 +31,49 @@ export class DashboardComponent implements OnInit {
     user: User;
 
     token;
+    isAdmin = false
+    isAgent = false
+    isAdmission = false
+    isPedagogie = false
+    isEtudiant = false
+    isFormateur = false
+    isCommercial = false
+    isReinscrit = false
+    isUnknow = false
 
-    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService) { }
+    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService, private EtuService: EtudiantService) { }
 
     ngOnInit() {
-        this.token= jwt_decode(localStorage.getItem("token"))
-        this.UserService.getById(this.token.id).subscribe(dataUser => {
-            this.user = jwt_decode(dataUser.userToken)['userFromDb']
+        this.token = jwt_decode(localStorage.getItem('token'));
+        this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
+            if (dataUser) {
+                this.isAdmin = dataUser.role == "Admin"
+                this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
+                let service: any = dataUser.service_id
+                if (this.isAgent && service != null) {
+                    this.isAdmission = service.label.includes('Admission')
+                    this.isPedagogie = service.label.includes('dagogie')
+                }
+                this.isEtudiant = dataUser.type == "Etudiant"
+                this.isFormateur = dataUser.type == "Formateur"
+                this.isCommercial = dataUser.type == "Commercial"
+                if (this.isEtudiant) {
+                    this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+                        this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
+                        this.isEtudiant = !this.isReinscrit
+                    })
+                }
+                this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)
+            }
         })
+
+
+
+
+
+
+
+        //SAKAI Default
         this.config = this.configService.config;
         this.subscription = this.configService.configUpdate$.subscribe(config => {
             this.config = config;
@@ -73,13 +109,10 @@ export class DashboardComponent implements OnInit {
         };
     }
 
-    /*SCIENCE() {
-        //TEST ENVOIE DE MAIL
-        this.UserService.TESTMAIL().subscribe(data => {
-            console.log(data.temp)
-            console.log(data.temp2)
-        })
-    }*/
+    SCIENCE() {
+        console.log("PAS TOUCHE")
+
+    }
 
     updateChartOptions() {
         if (this.config.dark)

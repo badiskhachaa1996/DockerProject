@@ -66,19 +66,6 @@ let transporterAdg = nodemailer.createTransport({
         pass: 'ADG@@2022ims',
     },
 });
-
-
-app.get("/getByUserid/:id", (req, res, next) => {
-    console.log(req.params.id);
-    Prospect.findOne({ user_id: req.params.id })
-        .then((prospectFromDb) => {
-
-            res.status(201).send(prospectFromDb);
-
-
-        })
-        .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
-});
 //Creation d'un nouveau prospect
 app.post("/create", (req, res, next) => {
 
@@ -94,6 +81,7 @@ app.post("/create", (req, res, next) => {
         ...prospectData,
 
     });
+
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
     const user = new User(
         {
@@ -402,11 +390,21 @@ app.get("/getAllBySchool/:school", (req, res, next) => {
 
 //Recuperation d'un prospect via user_id
 app.get("/getByUserId/:user_id", (req, res, next) => {
-    console.log(req.params.user_id)
-    let user_id = req.params.user_id;
-    Prospect.findOne({ user_id: user_id }).then(prospectFromDb => {
-        let prospectR = prospectFromDb
-        res.status(200).send(prospectR);
+    Prospect.findOne({ user_id: req.params.user_id }).then(prospectFromDb => {
+        res.status(200).send(prospectFromDb);
+    }).catch((error) => {
+        console.error(error)
+        res.status(404).send(error);
+    })
+});
+
+//Recuperation d'un token via user_id
+app.get("/getTokenByUserId/:user_id", (req, res, next) => {
+    Prospect.findOne({ user_id: req.params.user_id }).then(prospectFromDb => {
+        if (prospectFromDb) {
+            prospectFromDb = jwt.sign({ p: prospectFromDb }, 'TokenProspect')
+        }
+        res.status(200).send(prospectFromDb);
     }).catch((error) => {
         console.error(error)
         res.status(404).send(error);

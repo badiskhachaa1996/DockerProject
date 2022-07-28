@@ -8,6 +8,7 @@ import { EventEmitterService } from 'src/app/services/event-emitter.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
 import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 @Component({
   selector: 'app-externe',
@@ -16,7 +17,7 @@ import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
 })
 export class ExterneComponent implements OnInit {
 
-  showLoginPage=false;
+  showLoginPage = false;
 
   formLogin: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -24,25 +25,32 @@ export class ExterneComponent implements OnInit {
   })
 
   token: any;
-  constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
+  constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService,
+    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
-   
+
   }
 
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
     this.AuthService.login(userToLog).subscribe((data) => {
       this.socket.isAuth()
-      this.AuthService.WhatTheRole(jwt_decode(data.token)['id']).subscribe((roleConnected) => {
-        if (roleConnected.type == "Prospect") {
-          localStorage.setItem('ProspectConected', roleConnected.Ptoken)
+      this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
+        if (pData) {
+          localStorage.setItem('ProspectConected', pData)
           this.router.navigate(['/suivre-ma-preinscription'])
-        } else{
+        } else {
           localStorage.setItem('token', data.token)
           this.router.navigateByUrl('/#/', { skipLocationChange: true })
         }
-
+      }, error => {
+        if (error.status == 404) {
+          localStorage.setItem('token', data.token)
+          this.router.navigateByUrl('/#/', { skipLocationChange: true })
+        } else {
+          console.error(error)
+        }
       })
     }, error => {
       if (error.status == 304) {
@@ -55,12 +63,12 @@ export class ExterneComponent implements OnInit {
       console.error(error)
     })
 
-    this.showLoginPage=false;
+    this.showLoginPage = false;
 
   }
 
   toLoginMiscroft() {
-    
+
     if (this.msalGuardConfig.authRequest) {
       this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
         .subscribe((response: AuthenticationResult) => {
@@ -72,22 +80,22 @@ export class ExterneComponent implements OnInit {
               if (data.message) {
                 localStorage.setItem("modify", "true")
                 this.router.navigate(['completion-profil'])
-              }else{
+              } else {
                 this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
                   this.ss.connected()
                 });
 
               }
-              
-            },(error)=>{
+
+            }, (error) => {
               console.error(error)
             })
-          }else{
+          } else {
             console.error("ERROR MICROSOFT")
           }
         });
     }
   }
-  
+
 
 }

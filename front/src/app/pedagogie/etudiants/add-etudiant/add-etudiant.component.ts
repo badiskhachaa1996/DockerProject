@@ -13,6 +13,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-add-etudiant',
@@ -65,7 +66,8 @@ export class AddEtudiantComponent implements OnInit {
   parcoursList = []
   isMinor = false;
 
-  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService, private router: Router) { }
+  constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
+    private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService) { }
 
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
@@ -116,9 +118,9 @@ export class AddEtudiantComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
-    this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
-      if (!this.code && data.type == "Partenaire") {
-        this.code = data.data.code_partenaire
+    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
+      if (!this.code && data && data.code_commercial_partenaire) {
+        this.code = data.code_commercial_partenaire
       }
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
@@ -175,7 +177,7 @@ export class AddEtudiantComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout d'un étudiant
   onInitFormAddEtudiant() {
     this.formAddEtudiant = this.formBuilder.group({
-      civilite: [this.civiliteList[0]],
+      civilite: [this.civiliteList[0], Validators.required],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: ['', [Validators.required]],
@@ -191,7 +193,7 @@ export class AddEtudiantComponent implements OnInit {
       nationalite: [this.nationList[0], Validators.required],
       date_naissance: [null, Validators.required],
       isAlternant: [false],
-      isOnStage:[false],
+      isOnStage: [false],
 
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
@@ -252,9 +254,9 @@ export class AddEtudiantComponent implements OnInit {
     let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
     return nom + random;
   }
-  changestage(){
-   console.log( this.formAddEtudiant.get('isOnStage')?.value) 
-}
+  changestage() {
+    console.log(this.formAddEtudiant.get('isOnStage')?.value)
+  }
   //Methode d'ajout d'un étudiant
   onAddEtudiant() {
     //Recuperation des données du formulaire
@@ -305,8 +307,8 @@ export class AddEtudiantComponent implements OnInit {
 
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(null, '', classe_id, statut, nationalite, date_naissance, null, null, null, null, custom_id,
-      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value,nom_tuteur, prenom_tuteur
-      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList, this.formAddEtudiant.get('remarque').value,isOnStage.value);
+      numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, indicatif_rl + " " + phone_rl, email_rl, adresse_rl, dernier_diplome, isAlternant.value, nom_tuteur, prenom_tuteur
+      , adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList, this.formAddEtudiant.get('remarque').value, isOnStage.value);
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
@@ -332,10 +334,10 @@ export class AddEtudiantComponent implements OnInit {
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-    
+
     console.log(age)
-   return age < 18;
-    
+    return age < 18;
+
   }
 
   clickFile(rowData) {

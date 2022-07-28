@@ -42,7 +42,7 @@
                 
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddMatiere" (ngSubmit)="onAddMatiere();">
                     <div class="field col-12 md:col-8">
-                        <label For="matiere">Nom de la module <span style="color: red;"> * </span></label>
+                        <label For="matiere">Nom du module <span style="color: red;"> * </span></label>
                         <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
                         <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
                             <span *ngIf="nom.errors?.pattern" style="color: red;">

@@ -85,9 +85,9 @@ export class ProspectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
-    this.userService.WhatTheRole(this.token.id).subscribe(data => {
-      if (data.type == 'Commercial' && data.data.statut == 'Admin') {
-        this.dataCommercial = data.data
+    this.commercialService.getByUserId(this.token.id).subscribe(data => {
+      if (data && data.statut == 'Admin') {
+        this.dataCommercial = data
       }
       this.refreshProspect()
     })

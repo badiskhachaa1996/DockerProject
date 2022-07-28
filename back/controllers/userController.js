@@ -348,7 +348,11 @@ app.get("/getAllbyEmailPerso/:id", (req, res) => {
 app.get("/getByEmail/:email", (req, res) => {
 
     User.findOne({ email_perso: req.params.email }).then((dataInscription) => {
-        res.status(200).send(dataInscription);
+        if (dataInscription) {
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
     })
         .catch(err => {
             res.status(404).send(err);
@@ -619,6 +623,21 @@ app.post("/updatePwd/:id", (req, res) => {
         res.send(data)
     })
 })*/
+
+app.get("/HowIsIt/:id", (req, res) => {
+    User.findById(req.params.id).then((userFromDb) => {
+        if (!userFromDb) {
+            res.status(404).send({ txt: "Cette utilisateur n'existe pas" })
+        } else if (userFromDb.civilite == null) {
+            res.status(201).send({ txt: "Profil incomplet" })
+        } else {
+            res.status(201).send({ txt: "Profil complet" });
+        }
+    }).catch((error) => {
+        console.error(error)
+        res.status(404).send(error);
+    })
+});
 
 
 module.exports = app;
