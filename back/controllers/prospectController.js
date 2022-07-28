@@ -81,7 +81,7 @@ app.post("/create", (req, res, next) => {
         ...prospectData,
 
     });
-    
+
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
     const user = new User(
         {
@@ -402,7 +402,7 @@ app.get("/getByUserId/:user_id", (req, res, next) => {
 app.get("/getTokenByUserId/:user_id", (req, res, next) => {
     Prospect.findOne({ user_id: req.params.user_id }).then(prospectFromDb => {
         if (prospectFromDb) {
-            prospectFromDb = jwt.sign(prospectFromDb, 'TokenProspect')
+            prospectFromDb = jwt.sign({ p: prospectFromDb }, 'TokenProspect')
         }
         res.status(200).send(prospectFromDb);
     }).catch((error) => {
