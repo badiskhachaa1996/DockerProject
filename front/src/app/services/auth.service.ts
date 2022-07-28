@@ -124,7 +124,7 @@ export class AuthService {
 
   WhatTheRole(id) {
     let url = this.apiUrl + "WhatTheRole/" + id;
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) .append('token', localStorage.getItem('token')) });
   }
 
   verifPassword(tbObj: any) {
