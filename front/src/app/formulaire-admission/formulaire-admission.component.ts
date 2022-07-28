@@ -286,7 +286,6 @@ export class FormulaireAdmissionComponent implements OnInit {
     });
     if (!this.route.snapshot.paramMap.get('code_commercial') && localStorage.getItem("CommercialCode")) {
       this.RegisterForm.controls.code_commercial.patchValue(this.cookieCodeCommercial)
-
     }
   };
 
@@ -435,17 +434,21 @@ export class FormulaireAdmissionComponent implements OnInit {
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;
     let prenomGarant = this.RegisterForm.get('prenomGarant').value;
-
-    //****** Une dernière étape *******
-    let agence = this.RegisterForm.get('agence').value;
+    let hors_Admission=false;
+    if (this.route.snapshot.paramMap.get('code_commercial')){
+      hors_Admission=true;
+    }
+      //****** Une dernière étape *******
+      let agence = this.RegisterForm.get('agence').value;
     let nomAgence = this.RegisterForm.get('nomAgence').value;
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite,);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite,hors_Admission);
 
     //Creation du nouveau prospect
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn);
+
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn,);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {

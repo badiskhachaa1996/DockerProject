@@ -94,10 +94,7 @@ app.post("/create", (req, res, next) => {
         ...prospectData,
 
     });
-    if (prospectData.code_commercial) {
-        prospect.horsAdmission = true;
-    }
-
+    
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
     const user = new User(
         {
