@@ -273,11 +273,8 @@ export class UserProfilComponent implements OnInit {
             date_naissance: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getUTCFullYear()
           })
         }
-        console.log(this.userco._id)
         this.prospectService.getByUserId(this.userco._id).subscribe(prospectdata => {
           this.PreinscriptionData = prospectdata
-
-          console.log(prospectdata)
         })
       })
 

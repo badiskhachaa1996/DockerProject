@@ -75,8 +75,6 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-
-    console.log(token)
     this.AuthService.getById(token['id']).subscribe((data) => {
       console.log(data)
       this.userConnected = jwt_decode(data.userToken)['userFromDb']
