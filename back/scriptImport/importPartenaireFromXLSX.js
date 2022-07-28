@@ -1,6 +1,6 @@
 var XLSX = require('xlsx')
 const mongoose = require("mongoose");
-const { Partenaire } = require("./models/partenaire");
+const { Partenaire } = require("../models/partenaire");
 var workbook = XLSX.readFile('data.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames;
 var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
