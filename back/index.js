@@ -15,7 +15,7 @@ if (process.argv[2]) {
     if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
-        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com"]
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
     )
 }
 app.use(cors({ origin: origin }));
