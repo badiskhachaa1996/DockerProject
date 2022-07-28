@@ -141,7 +141,7 @@
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
-                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3']"
+                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','email_perso','user_id','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -152,7 +152,7 @@
                             class="w-full" />
                     </span>
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Tous" [options]="dropdownDecision"
-                        (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
@@ -168,7 +168,7 @@
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="lastname" scope="col" style="text-align: center;">
+                        <th pSortableColumn="user_id.lastname" scope="col" style="text-align: center;">
                             Nom & Prénom: <p-sortIcon field="lastname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="type_form" scope="col" style="text-align: center;">
@@ -204,11 +204,7 @@
                         <td>
                             {{ prospect.customid }}
                         </td>
-                        <td
-                            *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
-                            {{ users[prospect.user_id].lastname | uppercase }}
-                            {{ users[prospect.user_id].firstname | titlecase }}
-                        </td>
+
                         <td
                             *ngIf="prospect.user_id && prospect.user_id.lastname && !users[prospect.user_id] && prospect.user_id.firstname">
                             {{ prospect.user_id.lastname | uppercase }}

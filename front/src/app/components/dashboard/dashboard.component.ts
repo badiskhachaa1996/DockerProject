@@ -73,13 +73,10 @@ export class DashboardComponent implements OnInit {
         };
     }
 
-    /*SCIENCE() {
-        //TEST ENVOIE DE MAIL
-        this.UserService.TESTMAIL().subscribe(data => {
-            console.log(data.temp)
-            console.log(data.temp2)
-        })
-    }*/
+    SCIENCE() {
+        console.log("PAS TOUCHE")
+        
+    }
 
     updateChartOptions() {
         if (this.config.dark)
