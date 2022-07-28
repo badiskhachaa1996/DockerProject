@@ -83,6 +83,7 @@ import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
+import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 
 
 @NgModule({
@@ -149,7 +150,7 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
                     { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
-                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [ CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
+                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
@@ -167,6 +168,7 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
+            { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },

@@ -434,17 +434,17 @@ export class FormulaireAdmissionComponent implements OnInit {
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;
     let prenomGarant = this.RegisterForm.get('prenomGarant').value;
-    let hors_Admission=false;
-    if (this.route.snapshot.paramMap.get('code_commercial')){
-      hors_Admission=true;
+    let hors_Admission = false;
+    if (this.route.snapshot.paramMap.get('code_commercial')) {
+      hors_Admission = true;
     }
-      //****** Une dernière étape *******
-      let agence = this.RegisterForm.get('agence').value;
+    //****** Une dernière étape *******
+    let agence = this.RegisterForm.get('agence').value;
     let nomAgence = this.RegisterForm.get('nomAgence').value;
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite,hors_Admission);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite, hors_Admission);
 
     //Creation du nouveau prospect
 
