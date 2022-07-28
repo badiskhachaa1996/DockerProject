@@ -84,7 +84,7 @@ deploy_node_todev:
     - ln -s ~/storage storage
     - npm install
     - pm2 delete index
-    - pm2 start index.js
+    - pm2 start index.js -- --dev
    # - pm2 logs index
   only:
     - Version1-2
