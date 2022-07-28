@@ -203,15 +203,15 @@
         </h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" rowExpandMode="single" [rows]="10"
-                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length">
-                <ng-template pTemplate="caption">
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length" [globalFilterFields]="">              
+                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_id', 'contains')">
                         </p-dropdown>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                                 placeholder="Recherche" />
                         </span>
                     </div>
@@ -246,8 +246,8 @@
                         <td *ngIf="userList[rowData.user_id]">
                             {{userList[rowData.user_id].firstname}}
                         </td>
-                        <td *ngFor="let cid of seance.classe_id; let index = index">
-                            {{classeList[cid].nom}}
+                        <td *ngIf="rowData.user_id && dicEtudiant[rowData.user_id]">
+                            {{dicEtudiant[rowData.user_id].classe_id.nom}}                      
                         </td>
                         <td>
                             {{(rowData.isPresent)?"Oui":"Non"}}

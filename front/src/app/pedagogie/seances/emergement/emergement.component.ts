@@ -19,6 +19,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Formateur } from 'src/app/models/Formateur';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { AnyARecord } from 'dns';
+import { group } from 'console';
 const io = require("socket.io-client");
 
 @Component({
@@ -51,6 +53,7 @@ export class EmergementComponent implements OnInit {
   dataRole = { data: "", type: "" };
   showCanvas = true;
   presence: any = null;
+  dicEtudiant = {}
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
   date = new Date().getTime()
@@ -193,10 +196,14 @@ export class EmergementComponent implements OnInit {
         this.userList[user._id] = user;
       });
     })
-    this.ClasseService.getAll().subscribe((dataU) => {
+    this.ClasseService.getAll().subscribe(dataU => {
       dataU.forEach(classe => {
         this.classeList[classe._id] = classe;
       });
+    // this.ClasseService.getAll().subscribe( dataU => {
+    //   dataU.forEach(item => {
+    //     this.groupeFilter.push(item.label, item.value);
+    //   })})
       this.CampusService.getAll().subscribe(dataC => {
         let dicCampus = {}
         let dicDiplome = {}
@@ -235,6 +242,7 @@ export class EmergementComponent implements OnInit {
             }
             if (!this.customIncludes(this.dropdownEtudiant, temp)) {
               this.dropdownEtudiant.push(temp)
+              this.dicEtudiant[etu.user_id._id]=etu
             }
           }
         })
@@ -245,7 +253,9 @@ export class EmergementComponent implements OnInit {
       diplomes.forEach(diplome => {
         this.diplomeList[diplome._id] = diplome
       })
+      
       if (this.seance) {
+        
         this.seance.classe_id.forEach((cid, index) => {
           if (this.classeList[cid] && this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
             if (index == 0) {
@@ -457,3 +467,5 @@ export class EmergementComponent implements OnInit {
     return r
   }
 }
+
+

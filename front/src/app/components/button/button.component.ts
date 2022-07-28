@@ -14,7 +14,7 @@ export class ButtonComponent implements OnInit {
         this.items = [
             {label: 'Update', icon: 'pi pi-refresh'},
             {label: 'Delete', icon: 'pi pi-times'},
-            {label: 'Angular.io', icon: 'pi pi-info', url: 'http://angular.io'},
+            {label: 'Angular.io', icon: 'pi pi-info', url: '://angular.io'},
             {separator: true},
             {label: 'Setup', icon: 'pi pi-cog'}
         ];

@@ -80,7 +80,7 @@ const noteController = require('./controllers/noteController');
 const entrepriseController = require('./controllers/entrepriseController');
 const examenController = require('./controllers/examenController');
 const rbc = require('./controllers/rachatBulletinController')
-
+const contactController = require('./controllers/contactController');
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
@@ -181,6 +181,7 @@ app.use('/soc/prospect', prospectController)
 app.use('/soc/historiqueEchange', historiqueEchangeController)
 
 app.use('/soc/forfeitForm', forfeitFormController)
+app.use('/soc/contact', contactController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

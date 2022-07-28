@@ -191,6 +191,7 @@ import { FirstConnectionComponent } from './profil/first-connection/first-connec
 import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
+import { ContactComponent } from './contact/contact.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -368,7 +369,8 @@ import { NotificationComponent } from './notification/notification.component';
         ProspectsComponent,
         ReinscritComponent,
         DetailsEtudiantComponent,
-        NotificationComponent
+        NotificationComponent,
+        ContactComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
