@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="field col-12 md:col-4">
                                     <label For="indicatifPhone">Indicatif : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="indicatifPhone" type="number" formControlName="indicatifPhone"
+                                    <input pInputText id="indicatifPhone" type="text" formControlName="indicatifPhone"
                                         placeholder="Indicatif du numéro téléphone de la société" />
                                     <div
                                         *ngIf="indicatifPhone.invalid && (indicatifPhone.touched || indicatifPhone.dirty)">
@@ -66,7 +66,7 @@
                                 <div class="field col-12 md:col-8">
                                     <label For="phone_partenaire">Numéro de téléphone : <span style="color: red;">
                                             *</span></label>
-                                    <input pInputText id="phone_partenaire" type="number"
+                                    <input pInputText id="phone_partenaire" type="text"
                                         formControlName="phone_partenaire"
                                         placeholder="Numéro de téléphone de la société" />
                                     <div
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="SIREN">SIREN : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="SIREN" type="number" formControlName="SIREN"
+                                    <input pInputText id="SIREN" type="text" formControlName="SIREN"
                                         placeholder="SIREN de la société" />
                                     <div *ngIf="SIREN.invalid && (SIREN.touched || SIREN.dirty)">
                                         <span style="color: red;" class="error" *ngIf="SIREN.errors?.required">* Le
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="SIRET">SIRET : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="SIRET" type="number" formControlName="SIRET"
+                                    <input pInputText id="SIRET" type="text" formControlName="SIRET"
                                         placeholder="SIRET de la société" />
                                     <div *ngIf="SIRET.invalid && (SIRET.touched || SIRET.dirty)">
                                         <span style="color: red;" class="error" *ngIf="SIRET.errors?.required">* Le
@@ -200,9 +200,21 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
+                                    <label For="indicatifPhoneR">Indicatif : <span style="color: red;"> * </span></label>
+                                    <input pInputText id="indicatifPhoneR" type="text" formControlName="indicatifPhoneR"
+                                        placeholder="Indicatif du numéro téléphone de la société" />
+                                    <div
+                                        *ngIf="indicatifPhoneR.invalid && (indicatifPhoneR.touched || indicatifPhoneR.dirty)">
+                                        <span style="color: red;" class="error"
+                                            *ngIf="indicatifPhoneR.errors?.required">* L'indicatif est obligatoire</span>
+                                        <span style="color: red;" class="error" *ngIf="indicatifPhoneR.errors?.pattern">*
+                                            Seul les chiffres sont acceptés</span>
+                                    </div>
+                                </div>
+                                <div class="field col-12 md:col-6">
                                     <label For="phone">Numéro de téléphone : <span style="color: red;"> *
                                         </span></label>
-                                    <input pInputText id="phone" type="number" formControlName="phone"
+                                    <input pInputText id="phone" type="text" formControlName="phone"
                                         placeholder="Numéro de téléphone du réprésentant*" />
                                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
                                         <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le
@@ -210,11 +222,13 @@
                                         <span style="color: red;" class="error"
                                             *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le téléphone
                                             doit être composé:+33 612345678.</span>
+                                        <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul
+                                            les chiffres sont acceptés</span>
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="whatsApp">Numéro whatsapp : <span style="color: red;"> * </span></label>
-                                    <input pInputText id="whatsApp" type="number" formControlName="whatsApp"
+                                    <input pInputText id="whatsApp" type="text" formControlName="whatsApp"
                                         placeholder="Numéro whatsApp du réprésentant" />
                                     <div *ngIf="whatsApp.invalid && (whatsApp.touched || whatsApp.dirty)">
                                         <span style="color: red;" class="error" *ngIf="whatsApp.errors?.required">* Le
@@ -222,6 +236,8 @@
                                         <span style="color: red;" class="error"
                                             *ngIf="whatsApp.errors?.minlength || whatsApp.errors?.maxlength">* Le numéro
                                             WhatsApp doit être composé: 0612345678.</span>
+                                            <span style="color: red;" class="error" *ngIf="whatsApp.errors?.pattern">* Seul
+                                                les chiffres sont acceptés</span>    
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
@@ -286,7 +302,7 @@
                                 <div class="field col-12 md:col-6">
                                     <label For="postal_adresse">Code postal : <span style="color: red;"> *
                                         </span></label>
-                                    <input pInputText id="postal_adresse" type="number" formControlName="postal_adresse"
+                                    <input pInputText id="postal_adresse" type="text" formControlName="postal_adresse"
                                         placeholder="Code postal du représentant" />
                                     <div
                                         *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">

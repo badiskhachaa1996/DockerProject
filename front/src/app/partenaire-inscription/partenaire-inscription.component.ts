@@ -58,7 +58,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     type: new FormControl(this.typeSoc[0]),
     format_juridique: new FormControl(this.formatJuridique[0]),
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+    phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
     number_TVA: new FormControl(''),
     SIREN: new FormControl('', [Validators.pattern('[0-9]+')]),
@@ -71,6 +71,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+    indicatifPhoneR: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     whatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -104,6 +105,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   get civilite() { return this.RegisterForm.get('civilite'); }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
+  get indicatifPhoneR() { return this.RegisterForm.get('indicatifPhoneR'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get whatsApp() { return this.RegisterForm.get('whatsApp'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -137,7 +139,7 @@ export class PartenaireInscriptionComponent implements OnInit {
         null,
         this.RegisterForm.value.firstname,
         this.RegisterForm.value.lastname,
-        "+33",//TODO Indicatif
+        this.RegisterForm.value.indicatifPhoneR,
         this.RegisterForm.value.phone,
         this.RegisterForm.value.email,
         this.RegisterForm.value.email,
