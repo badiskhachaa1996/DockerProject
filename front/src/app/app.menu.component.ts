@@ -159,6 +159,7 @@ export class AppMenuComponent implements OnInit {
     model: any[];
     token: any;
     isAgent: Boolean = false
+    isReponsable: Boolean = false
     isAdmin: Boolean = false
     isAdmission: Boolean = false
     isPedagogie: Boolean = false
@@ -175,9 +176,10 @@ export class AppMenuComponent implements OnInit {
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
                 this.isAdmin = dataUser.role == "Admin"
-                this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
+                this.isAgent = dataUser.role == "Agent"
+                this.isReponsable = dataUser.role == "Responsable"
                 let service: any = dataUser.service_id
-                if (this.isAgent && service != null) {
+                if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')
                     this.isPedagogie = service.label.includes('dagogie')
                 }
@@ -215,7 +217,7 @@ export class AppMenuComponent implements OnInit {
                     })
                 }
 
-                else if (this.isEtudiant && !this.isAgent) {
+                else if (this.isEtudiant && !this.isAgent && !this.isReponsable) {
                     //Etudiant
                     this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
                         if (dataEtu && dataEtu.classe_id) {
@@ -290,28 +292,60 @@ export class AppMenuComponent implements OnInit {
                         }
                     })
                 } else if (this.isAdmission) {
-                    this.model = [
-                        {
-                            label: 'Accueil',
-                            items: [
-                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
-                            ]
-                        },
-                        {
-                            label: 'Ticketing', icon: 'pi pi-ticket',
-                            items: [
-                                { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                                { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
-                            ]
-                        },
-                        {
-                            label: 'Admission',
-                            items: [
-                                { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
-                            ]
-                        }
-                    ]
+                    if (this.isAgent) {
+                        this.model = [
+                            {
+                                label: 'Accueil',
+                                items: [
+                                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                ]
+                            },
+                            {
+                                label: 'Ticketing', icon: 'pi pi-ticket',
+                                items: [
+                                    { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                    { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                ]
+                            },
+                            {
+                                label: 'Admission',
+                                items: [
+                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                ]
+                            }
+                        ]
+                    } else if (this.isReponsable) {
+                        this.model = [
+                            {
+                                label: 'Accueil',
+                                items: [
+                                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                                ]
+                            },
+                            {
+                                label: 'Ticketing', icon: 'pi pi-ticket',
+                                items: [
+                                    { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                    { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                ]
+                            },
+                            {
+                                label: 'Admission',
+                                items: [
+                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                ]
+                            },
+                            {
+                                label: 'Partenaires',
+                                items: [
+                                    { label: 'Ajouter un partenaires', icon: 'pi pi pi-user-plus', routerLink: ['/admin/ajout-de-partenaire'] },
+                                    { label: 'Liste des partenaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/partenaire'] },
+                                    { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur'] },
+                                    //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
+                                ]
+                            }
+                        ]
+                    }
                 } else if (this.isPedagogie) {
                     this.model = [
                         {
