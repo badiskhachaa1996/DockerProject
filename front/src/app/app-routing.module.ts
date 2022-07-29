@@ -73,7 +73,7 @@ import { AdminGuardService } from './guards/admin-guard';
 import { AdmissionGuardService } from './guards/admission-guard';
 import { PedagogieGuardService } from './guards/pedagogie-guard';
 import { AdministrationGuardService } from './guards/administration-guard';
-import { EtudiantGuardService } from './guards/etudiant-guard';
+
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
 import { ProspectGuard } from './guards/prospect-guard';
@@ -83,6 +83,7 @@ import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ContactComponent } from './contact/contact.component';
+import { CollaborateurGuard } from './guards/collaborateur.guard';
 
 
 @NgModule({
@@ -148,8 +149,8 @@ import { ContactComponent } from './contact/contact.component';
                     { path: 'prospects', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [ CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
@@ -158,7 +159,6 @@ import { ContactComponent } from './contact/contact.component';
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent }
@@ -166,6 +166,7 @@ import { ContactComponent } from './contact/contact.component';
             },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+            { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },

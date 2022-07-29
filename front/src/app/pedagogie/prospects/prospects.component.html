@@ -375,7 +375,8 @@
                     </td>
                     <td *ngIf="!infoCommercialExpand"></td>
                     <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
-                    <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
+                    <td *ngIf="!prospect.nomAgence && !prospect.code_commercial" style="color: red;">Ce prospect ne vient pas d'une agence</td>
+                    <td *ngIf="!prospect.nomAgence && prospect.code_commercial && dicCommercial[prospect.code_commercial] && dicCommercial[prospect.code_commercial].nom" style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td>
                     <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
 
                 </tr>

@@ -16,6 +16,7 @@ import { AnneeScolaire } from 'src/app/models/AnneeScolaire';
 import { Ecole } from 'src/app/models/Ecole';
 import { Campus } from 'src/app/models/Campus';
 import { saveAs as importedSaveAs } from "file-saver";
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 
 @Component({
@@ -96,9 +97,11 @@ export class ListDiplomeComponent implements OnInit {
   token;
   uploadDiplome: Diplome = null
 
+  isCommercial : boolean = false;
+
   constructor(private productService: ProductService, private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
-    private formateurService: FormateurService, private AuthService: AuthService) { }
+    private formateurService: FormateurService, private AuthService: AuthService, private CommercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
 
@@ -325,6 +328,13 @@ export class ListDiplomeComponent implements OnInit {
       console.error(error)
     })
 
+  }
+
+  onGetCommercialePartenaire() {
+    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
+      this.isCommercial = data != null
+    }
+    )
   }
 
 

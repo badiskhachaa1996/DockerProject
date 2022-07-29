@@ -30,12 +30,13 @@ export class Etudiant {
         public phone_tuteur?: string,
         public indicatif_tuteur?: string,
         public isHandicaped?: boolean,
-        public suivi_handicaped?:string,
-        public entreprise?:string,
+        public suivi_handicaped?: string,
+        public entreprise?: string,
         public diplome?: string,
         public parcours?: any,
-        public remarque?:string,
-        public isOnStage?:boolean,
-        public fileRight?:[]
+        public remarque?: string,
+        public isOnStage?: boolean,
+        public fileRight?: [],
+        public payment_reinscrit?: string
     ) { }
 }

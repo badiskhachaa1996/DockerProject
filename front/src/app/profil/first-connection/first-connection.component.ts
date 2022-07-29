@@ -54,7 +54,7 @@ export class FirstConnectionComponent implements OnInit {
       civilite: new FormControl(environment.civilite[0], [Validators.required]),
       lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      indicatif: new FormControl('', [Validators.required]),
+      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       entreprise_id: new FormControl(this.dropdownEntreprise[0]),
       type: new FormControl(this.statutList[0], [Validators.required]),
@@ -75,8 +75,6 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-
-    console.log(token)
     this.AuthService.getById(token['id']).subscribe((data) => {
       console.log(data)
       this.userConnected = jwt_decode(data.userToken)['userFromDb']

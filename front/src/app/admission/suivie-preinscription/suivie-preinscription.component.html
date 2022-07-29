@@ -15,8 +15,11 @@
 
     <h2 Style="text-align: center; color: black;font-weight: bold;">Poursuivre ma demande d'admission </h2>
 
+    <div *ngIf="codeCommercial" style="text-align: left;"><button pButton (click)="comeBack()"> <i
+                class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
+    </div>
 
-    <div Style=" text-align: right;"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
+    <div style="text-align: right;"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
                 pTooltip="Se déconnecter"></i> Déconnexion</button>
     </div>
 
@@ -277,7 +280,7 @@
                         </div>
 
                         <div class="col-12 field">
-                            <p-fileUpload style="text-align: right;"
+                            <p-fileUpload 
                                 (uploadHandler)="FileUpload($event,uploadFileForm.value.typeDoc)" mode="basic"
                                 chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
                                 accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true"
@@ -285,8 +288,11 @@
                             </p-fileUpload>
                         </div>
 
-
                     </form>
+
+                    <div class="">
+                        <h3>Documents chargés : </h3>
+                    </div>
 
                 </p-fieldset>
 

@@ -6,50 +6,55 @@
             <form class="p-fluid p-formgrid grid" (ngSubmit)="saveUser()" [formGroup]="RegisterForm">
                 <p-toast></p-toast>
                 <div class="field col-12 md:col-4">
-                    <label for="civilite">Civilité :</label>
+                    <label for="civilite">Civilité <span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="civilite" [options]="civiliteList" optionLabel="value"></p-dropdown>
+                <div *ngIf="civilite.invalid && (civilite.touched || civilite.dirty)">
+                    <span class="error" *ngIf="civilite.errors?.required" style="color: red;">* La civilité est obligatoire</span>
+                </div>    
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="lastname">Nom :</label>
+                    <label for="lastname">Nom <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="lastname" placeholder="Nom"
                         pInputText>
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                        <span class="error" *ngIf="lastname.errors?.required">*Le nom est obligatoire</span>
-                        <span class="error" *ngIf="lastname.errors?.pattern">*Seul les lettres sont
-                            acceptés</span>
+                        <span class="error" *ngIf="lastname.errors?.required" style="color: red;">* Le nom est obligatoire</span>
+                        <span class="error" *ngIf="lastname.errors?.pattern" style="color: red;">* Seul les lettres sont acceptés</span>
                     </div>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="firstname">Prénom :</label>
+                    <label for="firstname">Prénom <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="firstname" placeholder="Prénom" pInputText>
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                        <span class="error" *ngIf="firstname.errors?.required">*Le prénom est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="firstname.errors?.pattern">*Seul les lettres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="firstname.errors?.required" style="color: red;">* Le prénom est obligatoire.</span>
+                        <span class="error" *ngIf="firstname.errors?.pattern" style="color: red;">* Seul les lettres sont acceptés.</span>
                     </div>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label for="Indicatif">Indicatif :</label>
+                    <label for="Indicatif">Indicatif <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="indicatif" placeholder="Indicatif" pInputText>
+                <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
+                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">* L'indicatif est obligatoire</span>
+                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern" style="color: red;">* Seul les chiffres sont acceptés</span>
+                </div>    
                 </div>
                 <div class="field col-12 md:col-8">
-                    <label for="phone" >Téléphone :</label>
+                    <label for="phone" >Téléphone <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="phone" placeholder="Téléphone" pInputText>
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                        <span class="error" *ngIf="phone.errors?.required">*Le téléphone est obligatoire.</span>
-                        <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength">*Le
-                            téléphone doit être composé:+33 612345678.</span>
+                        <span class="error" *ngIf="phone.errors?.required" style="color: red;">* Le téléphone est obligatoire.</span>
+                        <span class="error" *ngIf="phone.errors?.minlength || phone.errors?.maxlength" style="color: red;">*Le téléphone doit être composé:+33 612345678.</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Statut :</label>
+                    <label>Statut </label>
                     <p-dropdown formControlName="type" [options]="statutList" optionLabel="value" placeholder="Choissiez un statut"></p-dropdown>
+                    <div *ngIf="type.invalid && (type.touched || type.dirty)">
+                    </div>    
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Formation desiré :</label>
+                    <label>Formation desiré </label>
                     <p-dropdown formControlName="diplome" [options]="programeFrDropdown" optionLabel="value"
                     filterPlaceholder="Diplome" filter="true" emptyFilterMessage="Pas de diplome trouvé" ></p-dropdown>
                     <!-- <p-dropdown *ngIf="dropdownClasse && dropdownClasse[0]!=null" formControlName="classe_id"
@@ -68,86 +73,72 @@
                 </div>
 
                 <div class="field col-12 md:col-2">
-                    <label for="numero_adresse" >Numéro de rue :</label>
+                    <label for="numero_adresse" >Numéro de rue <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="numero_adresse" placeholder="20" pInputText>
                     <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
-                        <span class="error" *ngIf="numero_adresse.errors?.required">*Le numéro de l'adresse est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="numero_adresse.errors?.pattern">*Seul les chiffres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="numero_adresse.errors?.required" style="color: red;">* Le numéro de l'adresse est obligatoire.</span>
+                        <span class="error" *ngIf="numero_adresse.errors?.pattern" style="color: red;">* Seul les chiffres sont acceptés.</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label for="rue_adresse" >Nom de la rue :</label>
+                    <label for="rue_adresse" >Nom de la rue <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="rue_adresse" placeholder="Rue du Louvre" pInputText>
                     <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
-                        <span class="error" *ngIf="rue_adresse.errors?.required">*Le nom de la rue est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="rue_adresse.errors?.pattern">*Seul les lettres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="rue_adresse.errors?.required" style="color: red;">* Le nom de la rue est obligatoire.</span>
+                        <span class="error" *ngIf="rue_adresse.errors?.pattern" style="color: red;">* Seul les lettres sont acceptés.</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label for="postal_adresse" >Code postal :</label>
+                    <label for="postal_adresse" >Code postal <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="postal_adresse" placeholder="75001" pInputText>
                     <div *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">
-                        <span class="error" *ngIf="postal_adresse.errors?.required">*Le code postal est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="postal_adresse.errors?.pattern">*Seul les chiffres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="postal_adresse.errors?.required" style="color: red;">* Le code postal est obligatoire.</span>
+                        <span class="error" *ngIf="postal_adresse.errors?.pattern" style="color: red;">* Seul les chiffres sont acceptés.</span>
                     </div>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label for="ville_adresse" >Ville :</label>
+                    <label for="ville_adresse" >Ville <span style="color: red;"> * </span></label>
                     <input type="text" formControlName="ville_adresse" placeholder="Paris" pInputText>
                     <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
-                        <span class="error" *ngIf="ville_adresse.errors?.required">*La ville est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="ville_adresse.errors?.pattern">*Seul les lettres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="ville_adresse.errors?.required" style="color: red;">* La ville est obligatoire.</span>
+                        <span class="error" *ngIf="ville_adresse.errors?.pattern" style="color: red;">* Seul les lettres sont acceptés.</span>
                     </div>
                 </div>
 
 
                 <div class="field col-12 md:col-6">
-                    <label for="pays_adresse" >Pays :</label>
+                    <label for="pays_adresse" >Pays <span style="color: red;"> * </span></label>
                     <!-- <input type="text" formControlName="pays_adresse" placeholder="France" pInputText> -->
                     <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de pays trouvé" placeholder="France" filterPlaceholder="France"
                         filter="true"></p-dropdown>
                     <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
-                        <span class="error" *ngIf="pays_adresse.errors?.required">*Le pays est
-                            obligatoire.</span>
-                        
+                        <span class="error" *ngIf="pays_adresse.errors?.required" style="color: red;">*Le pays est obligatoire.</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                        <label for="date_naissance" >Date de naissance :</label>
+                        <label for="date_naissance" >Date de naissance <span style="color: red;"> * </span></label>
                         <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy"
                             [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
                             [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
                             [yearRange]="rangeYear"></p-calendar>
                     <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
-                        <span class="error" *ngIf="date_naissance.errors?.required">*La date de naissance est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="date_naissance.errors?.pattern">*Le format ne correspond
-                            pas à une date dd/MM/YYYY.</span>
+                        <span class="error" *ngIf="date_naissance.errors?.required" style="color: red;">* La date de naissance est obligatoire.</span>
+                        <span class="error" *ngIf="date_naissance.errors?.pattern" style="color: red;">* Le format ne correspond pas à une date dd/MM/YYYY.</span>
                     </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label for="nationalite" >Nationalité :</label>
+                    <label for="nationalite" >Nationalité <span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
                         filter="true"></p-dropdown>
                     <div *ngIf="nationalite.invalid && (nationalite.touched || nationalite.dirty)">
-                        <span class="error" *ngIf="nationalite.errors?.required">*La nationalité est
-                            obligatoire.</span>
-                        <span class="error" *ngIf="nationalite.errors?.pattern">*Seul les lettres sont
-                            acceptés.</span>
+                        <span class="error" *ngIf="nationalite.errors?.required" style="color: red;">* La nationalité est obligatoire.</span>
+                        <span class="error" *ngIf="nationalite.errors?.pattern" style="color: red;">* Seul les lettres sont acceptés.</span>
                     </div>
                 </div>
 

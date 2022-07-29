@@ -17,6 +17,15 @@ let transporter = nodemailer.createTransport({
         pass: 'ESTYA@@2021',
     },
 });
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+    )
+}
 
 //Recupère la liste des formateurs
 app.get("/getAll", (req, res, next) => {
@@ -179,7 +188,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
     }
     Formateur.findById(req.params.id).then(formateur => {
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="t.dev.estya.com/calendrier/formateur/ + ' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + '<a href="' + origin[0] + '/calendrier/formateur/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'estya-ticketing@estya.com',
             to: formateur.email,

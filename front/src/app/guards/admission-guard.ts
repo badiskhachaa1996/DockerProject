@@ -25,13 +25,13 @@ export class AdmissionGuardService implements CanActivate {
     let role: string = currenttoken.role;
     let serviceName
 
-    if (role == 'Admin') {
+    if (role == 'Admin' || role == "Agent") {
       console.log("Accés autorisé")
       return true;
     }
     else {
-
-      return this.serv.getAServiceByid(currenttoken.service_id).pipe(
+      return false
+      /*return this.serv.getAServiceByid(currenttoken.service_id).pipe(
         map(service => {
           serviceName = service.dataService.label
           if (serviceName.includes("Admission")) {
@@ -43,7 +43,7 @@ export class AdmissionGuardService implements CanActivate {
             this.router.navigate(['/pages/access']);
             return false
           }
-        }))
+        }))*/
     }
 
   }

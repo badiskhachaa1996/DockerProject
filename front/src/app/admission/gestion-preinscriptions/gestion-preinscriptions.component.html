@@ -35,7 +35,7 @@
                         formControlName="phase_complementaire"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label>Statut Payement: </label>
+                    <label>Statut paiement: </label>
                     <p-dropdown [options]="statutPayement" optionLabel="value" formControlName="statut_payement">
                     </p-dropdown>
                 </div>
@@ -90,7 +90,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
                 (click)="showPayement = null" aria-hidden="true"> </i>
-            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un paiement de : {{
                 showPayement.user_id?.firstname }} {{
                 showPayement.user_id?.lastname | uppercase }}
             </h3>
@@ -98,7 +98,7 @@
                 <div class="col-12" *ngFor="let data of payementList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
                     <div class="field col-12 md:col-4">
-                        <label>Type de payement:</label><br>
+                        <label>Type de paiement:</label><br>
                         <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                             [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
                     </div>
@@ -112,10 +112,10 @@
                     </div>
                 </div>
                 <div class="col-6">
-                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
                 </div>
                 <div class="col-6">
-                    <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
+                    <button pButton label="Mettre à jour les paiements" (click)="addNewPayment()"></button>
                 </div>
             </div>
 
@@ -128,20 +128,20 @@
         <div class="card">
             <div style="float: right;">
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESTYA"
-                    (click)="onGetFormAdmissionESTYA()"></button>
+                    (click)="openNewForm('formulaire-admission/estya')"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ADG"
-                    (click)="onGetFormAdmissionADG()"></button>
+                    (click)="openNewForm('formulaire-admission/adg')"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande ESPIC"
-                    (click)="onGetFormAdmissionESPIC()"></button>
+                    (click)="openNewForm('formulaire-admission/espic')"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande EH"
-                    (click)="onGetFormAdmissionEDUHORIZONS()"></button>
+                    (click)="openNewForm('formulaire-admission/eduhorizons')"></button>
             </div>
             <h5>Liste des pre-inscriptions</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5"
-                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3']"
+                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','email_perso','user_id','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -151,8 +151,8 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
-                        (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Tous" [options]="dropdownDecision"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
@@ -168,7 +168,7 @@
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="lastname" scope="col" style="text-align: center;">
+                        <th pSortableColumn="user_id.lastname" scope="col" style="text-align: center;">
                             Nom & Prénom: <p-sortIcon field="lastname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="type_form" scope="col" style="text-align: center;">
@@ -204,18 +204,13 @@
                         <td>
                             {{ prospect.customid }}
                         </td>
-                        <td
-                            *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
-                            {{ users[prospect.user_id].lastname | uppercase }}
-                            {{ users[prospect.user_id].firstname | titlecase }}
-                        </td>
+
                         <td
                             *ngIf="prospect.user_id && prospect.user_id.lastname && !users[prospect.user_id] && prospect.user_id.firstname">
                             {{ prospect.user_id.lastname | uppercase }}
                             {{ prospect.user_id.firstname | titlecase }}
                         </td>
-                        <td
-                            *ngIf="!prospect.user_id">
+                        <td *ngIf="!prospect.user_id">
                             Error Smith
                         </td>
                         <td>
@@ -233,13 +228,15 @@
                         <td>
                             {{ prospect.statut_dossier }}
                         </td>
-                        <td *ngIf=" prospect.enTraitement == false">
-                            <i pTooltip="Changer le statut du dossier" tooltipPosition="bottom" class="pi pi-bookmark"
-                                (click)="inscriptionSelected=prospect;initStatutForm(prospect)" aria-hidden="true"></i>
+                        <td *ngIf="prospect.enTraitement == false">
+                            <i *ngIf="!dataCommercial" pTooltip="Changer le statut du dossier" tooltipPosition="bottom"
+                                class="pi pi-bookmark" (click)="inscriptionSelected=prospect;initStatutForm(prospect)"
+                                aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=prospect" aria-hidden="true"></i>
-                            <i pTooltip="Mettre à jour les payements" tooltipPosition="bottom" class="pi pi-money-bill"
-                                (click)="showPayement=prospect;payementList=prospect.payement" aria-hidden="true"></i>
+                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                                class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
+                                aria-hidden="true"></i>
                         </td>
                         <td *ngIf=" prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
@@ -407,7 +404,7 @@
                         <th>Agent</th>
                         <th>Décision Admission</th>
                         <th>Phase complémentaire</th>
-                        <th>Statut Payement</th>
+                        <th>Statut Paiement</th>
                         <th>Attestation traité par</th>
                     </tr>
                 </ng-template>
@@ -462,7 +459,7 @@
 
             <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
 
-            <h5 style="color: red; text-align: center;">Payements</h5>
+            <h5 style="color: red; text-align: center;">Paiements</h5>
             <ul>
                 <li *ngFor="let payement of prospect.payement; index as i">
                     <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>

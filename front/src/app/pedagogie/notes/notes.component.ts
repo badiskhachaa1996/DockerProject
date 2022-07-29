@@ -51,6 +51,8 @@ export class NotesComponent implements OnInit {
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
   classes: Classe[] = [];
+  showPVAnnuel = false
+  genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
@@ -109,7 +111,7 @@ export class NotesComponent implements OnInit {
     this.matiereRachat = []
     this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
       rbs.forEach(rb => {
-        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id })
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed })
       })
     })
     this.notesForGenerateBulletin.forEach(n => {
@@ -117,7 +119,7 @@ export class NotesComponent implements OnInit {
     })
   }
   addRachatEtudiant() {
-    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true })
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false })
   }
 
   updateRachatEtudiant(i, value, type) {
@@ -144,10 +146,11 @@ export class NotesComponent implements OnInit {
 
   onSubmitRachat() {
     let problem: RachatBulletin = null
+    console.log(this.rachatEtudiant)
     this.rachatEtudiant.forEach(rb => {
       if (!rb.isNew) {
         //Update
-        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
         this.RBService.update(RBU).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -156,7 +159,7 @@ export class NotesComponent implements OnInit {
         })
       } else {
         //Create
-        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose)
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
         this.RBService.create(RBC).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -192,7 +195,7 @@ export class NotesComponent implements OnInit {
   //Génération bulletins de notes
   formGenerateBulletin: FormGroup;
   showFormGenerateBulletin: boolean = false;
-  classeForBGenerateBulletin: Classe;
+  classeForBGenerateBulletin: any;
   etudiantFromClasse: Etudiant[] = [];
   etudiantToGenerateBulletin: Etudiant;
   semestreChoose: string;
@@ -735,9 +738,9 @@ export class NotesComponent implements OnInit {
 
   onGenerateClasse() {
     //recuperation des infos de la classe en question
-    this.classeService.get(this.formGenerateBulletin.get('classe').value.value).subscribe(
+    this.classeService.getPopulate(this.formGenerateBulletin.get('classe').value.value).subscribe(
       ((response) => {
-        this.classeForBGenerateBulletin = response;
+        this.classeForBGenerateBulletin = response.diplome_id;
       }),
       ((error) => { console.error(error); })
     );
@@ -818,9 +821,26 @@ export class NotesComponent implements OnInit {
     this.notesForGenerateBulletin = []
     this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
+      console.log(data)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
+    }, error => {
+      console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
+    })
+  }
+
+  GenerateBulletinAnnuel(etudiant_id) {
+    //Par Morgan
+    this.notesForGenerateBulletin = []
+    this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
+      console.log(data)
+      this.moyEtudiant = data.moyenneEtudiant
+      this.notesForGenerateBulletin = data.data
+      this.showPVAnnuel = true
     }, error => {
       console.error(error)
     })
@@ -926,9 +946,9 @@ export class NotesComponent implements OnInit {
   hideBtn = false
 
   //Methode de generation du bulletin de note
-  onGenerateBulletin() {
+  onGenerateBulletin(id = 'content') {
 
-    var element = document.getElementById('content');
+    var element = document.getElementById(id);
     var opt = {
       margin: 0,
       filename: 'bulletin.pdf',

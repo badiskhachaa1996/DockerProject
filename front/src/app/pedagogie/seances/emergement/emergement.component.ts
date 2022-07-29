@@ -50,7 +50,6 @@ export class EmergementComponent implements OnInit {
   classeList = [{}];
   campusDic = {}
   diplomeList = {};
-  dataRole = { data: "", type: "" };
   showCanvas = true;
   presence: any = null;
   dicEtudiant = {}
@@ -176,7 +175,7 @@ export class EmergementComponent implements OnInit {
       this.showCanvas = this.showCanvas && this.presence == null
     }, error => console.error(error))
   }
-  
+
 
   ngOnInit(): void {
     try {
@@ -187,9 +186,6 @@ export class EmergementComponent implements OnInit {
     this.reloadPresence();
     this.FormateurService.getByUserId(this.token.id).subscribe(data => {
       this.formateurInfo = data
-    })
-    this.AuthService.WhatTheRole(this.token.id).subscribe(data => {
-      this.dataRole = data
     })
     this.AuthService.getAll().subscribe((dataU) => {
       dataU.forEach(user => {
@@ -282,9 +278,9 @@ export class EmergementComponent implements OnInit {
     if (!this.presence) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
-          if (dataWTR.type == "Formateur") {
-            this.FormateurService.updateMatiere(dataWTR.data, this.seance).subscribe(dataVH => {
+        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
+          if (data) {
+            this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
               this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
             })
           }
@@ -299,9 +295,9 @@ export class EmergementComponent implements OnInit {
       presence._id = this.presence._id
       this.PresenceService.addSignature(presence).subscribe(data => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.AuthService.WhatTheRole(this.token.id).subscribe(dataWTR => {
-          if (dataWTR.type == "Formateur") {
-            this.FormateurService.updateMatiere(dataWTR.data, this.seance).subscribe(dataVH => {
+        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
+          if (data) {
+            this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
               this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
             })
           }

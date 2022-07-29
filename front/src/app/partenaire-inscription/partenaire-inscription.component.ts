@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { CommercialPartenaire } from '../models/CommercialPartenaire';
 import { Partenaire } from '../models/Partenaire';
 import { User } from '../models/User';
+import { AuthService } from '../services/auth.service';
 import { PartenaireService } from '../services/partenaire.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   nationList = environment.nationalites;
   fr = environment.fr;
   civiliteList = environment.civilite;
+  emailExist = false
 
   maxYear = new Date().getFullYear() - 16;
   minYear = new Date().getFullYear() - 50;
@@ -44,10 +46,10 @@ export class PartenaireInscriptionComponent implements OnInit {
       { value: "Individuel" },
     ];
 
-  pL: Partenaire[];
+  pL = Math.random() * 900;
 
 
-  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService) { }
+  constructor(public PartenaireService: PartenaireService, private router: Router, private messageService: MessageService,private UserService:AuthService) { }
 
   RegisterForm: FormGroup = new FormGroup({
 
@@ -56,7 +58,7 @@ export class PartenaireInscriptionComponent implements OnInit {
     type: new FormControl(this.typeSoc[0]),
     format_juridique: new FormControl(this.formatJuridique[0]),
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+    phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
     number_TVA: new FormControl(''),
     SIREN: new FormControl('', [Validators.pattern('[0-9]+')]),
@@ -69,10 +71,11 @@ export class PartenaireInscriptionComponent implements OnInit {
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
-    whatsApp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14), Validators.minLength(9)]),
+    indicatifPhoneR: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    whatsApp: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    date_naissance: new FormControl("", [Validators.required]),
+    date_naissance: new FormControl(""),
     nationalite: new FormControl(this.nationList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
     numero_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
     rue_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
@@ -102,6 +105,7 @@ export class PartenaireInscriptionComponent implements OnInit {
   get civilite() { return this.RegisterForm.get('civilite'); }
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
+  get indicatifPhoneR() { return this.RegisterForm.get('indicatifPhoneR'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get whatsApp() { return this.RegisterForm.get('whatsApp'); }
   get email() { return this.RegisterForm.get('email'); }
@@ -118,17 +122,9 @@ export class PartenaireInscriptionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    try {
-      this.PartenaireService.getAll().subscribe(data => {
-        this.pL = data
-      })
-    } catch (err) {
-      console.error(err)
-      let nb = Math.floor(Math.random() * 500)
-      for (let i = 0; i < nb; i++) {
-        this.pL.push(new Partenaire())
-      }
-    }
+    this.PartenaireService.getNBAll().subscribe(data => {
+      this.pL = data.nb
+    })
   }
 
 
@@ -143,7 +139,7 @@ export class PartenaireInscriptionComponent implements OnInit {
         null,
         this.RegisterForm.value.firstname,
         this.RegisterForm.value.lastname,
-        "+33",//TODO Indicatif
+        this.RegisterForm.value.indicatifPhoneR,
         this.RegisterForm.value.phone,
         this.RegisterForm.value.email,
         this.RegisterForm.value.email,
@@ -197,13 +193,29 @@ export class PartenaireInscriptionComponent implements OnInit {
     }
 
   }
+
+  verifEmailInBD() {
+    this.emailExist = false
+    this.UserService.getByEmail(this.RegisterForm.value.email).subscribe((dataMail) => {
+      if (dataMail) {
+        this.emailExist = true
+        this.messageService.add({ severity: 'error', summary: 'Votre email est déjà utilisé', detail: "L'inscription ne pourra pas être finalisé" });
+        return true
+      }
+    },
+      (error) => {
+        return false
+      })
+  }
+
   generateCode() {
     /*let random = Math.random().toString(36).substring(0, 3).toUpperCase();
 
     let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();
 
     return prenom + random;*/
-    let n = (this.pL.length + 1).toString().substring(0, 3)
+
+    let n = (this.pL + 1).toString().substring(0, 3)
     while (n.length < 3) {
       n = "0" + n
     }

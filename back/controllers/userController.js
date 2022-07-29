@@ -117,11 +117,11 @@ app.post("/login", (req, res) => {
         email_perso: data.email,
     }).then((userFromDb) => {
         if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
-            res.status(404).send({ message: "Email ou Mot de passe  incorrect", data });
+            res.status(404).send({ message: "Email ou Mot de passe incorrect" });
         }
         else {
             if (userFromDb.verifedEmail) {
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token });
             }
             else { res.status(304).send({ message: "Compte pas activé", data }); }
@@ -136,7 +136,7 @@ app.post("/login", (req, res) => {
 app.get("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "userData")
+        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
         res.status(200).send({ userToken });
     }).catch((error) => {
         console.error(error)
@@ -150,6 +150,13 @@ app.get("/getById/:id", (req, res) => {
 //Recuperation des infos user
 app.get("/getInfoById/:id", (req, res, next) => {
     User.findOne({ _id: req.params.id })
+        .then((userfromDb) => { res.status(200).send(userfromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
+});
+
+//Recuperation des infos user
+app.get("/getPopulate/:id", (req, res, next) => {
+    User.findOne({ _id: req.params.id }).populate("service_id")
         .then((userfromDb) => { res.status(200).send(userfromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
@@ -290,7 +297,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
             role: req.body.user.role,
             service_id: req.body?.user.service_id,
             entreprise: req.body.user.entreprise,
-            isAlternant:req.body.user.type,
+            isAlternant: req.body.user.type,
             pays_adresse: req.body.user.pays_adresse,
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
@@ -331,7 +338,7 @@ app.get("/getAllbyEmailPerso/:id", (req, res) => {
 
     let emailperso = req.params.id;
     User.findOne({ email_perso: emailperso }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "userData")
+        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
         res.status(200).send(userToken);
     }).catch(err => {
         res.status(404).send(error);
@@ -341,7 +348,11 @@ app.get("/getAllbyEmailPerso/:id", (req, res) => {
 app.get("/getByEmail/:email", (req, res) => {
 
     User.findOne({ email_perso: req.params.email }).then((dataInscription) => {
-        res.status(200).send(dataInscription);
+        if (dataInscription) {
+            res.status(200).send(true);
+        } else {
+            res.status(200).send(false);
+        }
     })
         .catch(err => {
             res.status(404).send(err);
@@ -455,7 +466,7 @@ app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (user) {
 
-            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
+            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
             if (user.civilite == null) {
                 res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
             } else {
@@ -473,7 +484,7 @@ app.post('/AuthMicrosoft', (req, res) => {
             })
             newUser.save().then((userFromDb) => {
 
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token, message: "Nouveau compte crée" });
             }, (err2) => {
                 console.error(err2)
@@ -505,7 +516,7 @@ app.get("/WhatTheRole/:id", (req, res) => {
                                 else {
                                     Prospect.findOne({ user_id: id }).then(p => {
                                         if (p && p.length != 0) {
-                                            let Ptoken = jwt.sign({ p }, 'ptoken')
+                                            let Ptoken = jwt.sign({ p }, '126c43168ab170ee503b686cd857032d', { expiresIn: '7d' })
                                             res.status(200).send({ data: p, type: "Prospect", Ptoken })
                                         }
 
@@ -526,34 +537,82 @@ app.get("/WhatTheRole/:id", (req, res) => {
 app.post("/verifyUserPassword", (req, res) => {
     let passwordToVerif = req.body.password;
     let id = req.body.id;
+
+    console.log(passwordToVerif, ' ', id)
     User.findOne({ _id: id })
         .then((userFromDb) => {
-            bcrypt.compare(userFromDb.password, passwordToVerif)
-                  .then(valid => {
-                    if(!valid)
-                    {
-                        return res.status(401).json({ error: 'Mot de passe incorrect !'});
+
+            bcrypt.compare(passwordToVerif, userFromDb.password)
+                .then(valid => {
+                    if (!valid) {
+                        return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
-                        res.status(200).json({ success: 'OK' });
-                  })
-                  .catch((error) => console.error(error));
-                            
+                    res.status(200).json({ success: 'OK' });
+                })
+                .catch((error) => console.error(error));
+
         })
-        .catch((error) => {res.status(500).send("Impossible de modifier votre mot de passe, veuillez contacter un administrateur")})
+        .catch((error) => { console.log(error) })
 });
 
-app.put("/udpatePwd/:id", (req, res) => {
-    var pwd = req.body.pwd;
-    User.findOneAndUpdate({_id: req.params.id}, 
+app.post("/updatePwd/:id", (req, res) => {
+
+    let pwd = req.body.pwd;
+    console.log(req.body)
+    User.findOneAndUpdate({ _id: req.params.id },
         {
             password: bcrypt.hashSync(pwd, 8),
         })
         .then((userFromDb) => {
-            let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+            console.log(userFromDb)
+            let token = { "id": userFromDb._id, "role": userFromDb.role, "service_id": userFromDb.service_id };
+
+            console.log(token)
             res.status(200).send(token);
         })
-        .catch((error) => {res.status(401).send("Impossible de mettre à jour votre mot de passe !")});
+        .catch((error) => { console.log(error) });
 });
+
+/*app.get('/TESTMAIL', (req, res) => {
+    let origin = "http://localhost:4200"
+    if (process.argv[2]) {
+        let argProd = process.argv[2]
+        if (argProd.includes('dev')) {
+            origin = "https://t.dev.estya.com"
+        } else (
+            origin = "https://ticket.estya.com"
+        )
+    }
+    let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
+    let temp2 = temp.replace('eMailduProSpect', "m.hue@estya.com")
+
+    temp2 = temp2.replace('oRiGin', origin)
+
+    temp2 = temp2.replace("\"oRiGin/", '"' + origin + "/")
+
+    let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + temp2
+
+    let mailOptions = {
+        from: "estya-ticketing@estya.com",
+        to: "m.hue@estya.com",
+        subject: 'TEST EMAIL',
+        html: htmlmail,
+        attachments: [{
+            filename: 'Image1.png',
+            path: 'assets/Image1.png',
+            cid: 'Image1' //same cid value as in the html img src
+        }]
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+            res.status(500).send(error)
+        } else {
+            res.status(200).send({ temp, temp2 })
+        }
+    });
+});*/
 
 
 /*app.get("/SecretPathForAbsoluteNoReason", (req, res) => {
@@ -564,6 +623,27 @@ app.put("/udpatePwd/:id", (req, res) => {
         res.send(data)
     })
 })*/
+
+app.get("/HowIsIt/:id", (req, res) => {
+    jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (err, decoded) {
+        if (decoded == undefined) {
+            res.status(201).send(err)
+        } else {
+            User.findById(req.params.id).then((userFromDb) => {
+                if (!userFromDb) {
+                    res.status(201).send({ name: "Cette utilisateur n'existe pas" })
+                } else if (userFromDb.civilite == null) {
+                    res.status(201).send({ name: "Profil incomplet" })
+                } else {
+                    res.status(201).send({ name: "Profil complet" });
+                }
+            }).catch((error) => {
+                console.error(error)
+                res.status(404).send(error);
+            })
+        }
+    });
+});
 
 
 module.exports = app;
