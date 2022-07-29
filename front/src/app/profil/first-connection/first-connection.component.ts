@@ -31,8 +31,7 @@ export class FirstConnectionComponent implements OnInit {
   userConnected: User;
   nationList = environment.nationalites;
   paysList = environment.pays;
-  programeFrDropdown = environment.programeFrDropdown;
-  programEnDropdown = environment.programEnDropdown;
+  programReinscrit = environment.formationReinscrit
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -67,7 +66,7 @@ export class FirstConnectionComponent implements OnInit {
       nationalite: new FormControl(this.nationList[0]),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
-      diplome: new FormControl(this.programeFrDropdown[0]),
+      diplome: new FormControl(this.programReinscrit[0]),
     });
   }
 
@@ -86,7 +85,7 @@ export class FirstConnectionComponent implements OnInit {
       })
 
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
-        this.programeFrDropdown = environment.ADGprogrameFrDropdown;
+        this.programReinscrit = environment.ADGReinscrit;
       }
     })
 
