@@ -250,7 +250,7 @@ export class AppMenuComponent implements OnInit {
 
                 else if (this.isCommercial) {
                     this.CService.getByUserId(this.token.id).subscribe(cData => {
-                        if (cData.statut != "Admin") {
+                        if (cData && cData.statut != "Admin") {
                             //Commercial Normal
                             this.model = [
                                 {

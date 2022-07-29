@@ -193,10 +193,10 @@
                         <td style="min-width: 10rem;">{{ diplome.code_RNCP }}</td>
                         <td style="min-width: 10rem;">{{diplome.certificateur}}</td>
                         <td>
-                            <i style="margin-left: 2%;"
+                            <i style="margin-left: 2%;" pTooltip="Modifier" *ngIf="!this.isCommercial"
                                 (click)="showFormUpdateDiplome = true; idDiplomeToUpdate = diplome._id; onGetbyId(diplome);"
                                 class="pi pi-pencil" aria-hidden="true"></i>
-                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file" *ngIf="!this.isCommercial"
                                 (click)="clickFile(diplome)" style="margin-left: 2%;" aria-hidden="true"></i>
                         </td>
                     </tr>
