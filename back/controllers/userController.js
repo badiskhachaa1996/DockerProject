@@ -121,7 +121,7 @@ app.post("/login", (req, res) => {
         }
         else {
             if (userFromDb.verifedEmail) {
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token });
             }
             else { res.status(304).send({ message: "Compte pas activé", data }); }
@@ -136,7 +136,7 @@ app.post("/login", (req, res) => {
 app.get("/getById/:id", (req, res) => {
     let id = req.params.id;
     User.findOne({ _id: id }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "userData")
+        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
         res.status(200).send({ userToken });
     }).catch((error) => {
         console.error(error)
@@ -338,7 +338,7 @@ app.get("/getAllbyEmailPerso/:id", (req, res) => {
 
     let emailperso = req.params.id;
     User.findOne({ email_perso: emailperso }).then((userFromDb) => {
-        let userToken = jwt.sign({ userFromDb }, "userData")
+        let userToken = jwt.sign({ userFromDb }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
         res.status(200).send(userToken);
     }).catch(err => {
         res.status(404).send(error);
@@ -466,7 +466,7 @@ app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
         if (user) {
 
-            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "mykey")
+            let token = jwt.sign({ id: user._id, role: user.role, service_id: user.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
             if (user.civilite == null) {
                 res.status(200).send({ token, message: "Nouveau compte crée via Ticket" });
             } else {
@@ -484,7 +484,7 @@ app.post('/AuthMicrosoft', (req, res) => {
             })
             newUser.save().then((userFromDb) => {
 
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token, message: "Nouveau compte crée" });
             }, (err2) => {
                 console.error(err2)
@@ -516,7 +516,7 @@ app.get("/WhatTheRole/:id", (req, res) => {
                                 else {
                                     Prospect.findOne({ user_id: id }).then(p => {
                                         if (p && p.length != 0) {
-                                            let Ptoken = jwt.sign({ p }, 'ptoken')
+                                            let Ptoken = jwt.sign({ p }, '126c43168ab170ee503b686cd857032d', { expiresIn: '7d' })
                                             res.status(200).send({ data: p, type: "Prospect", Ptoken })
                                         }
 
@@ -625,18 +625,24 @@ app.post("/updatePwd/:id", (req, res) => {
 })*/
 
 app.get("/HowIsIt/:id", (req, res) => {
-    User.findById(req.params.id).then((userFromDb) => {
-        if (!userFromDb) {
-            res.status(404).send({ txt: "Cette utilisateur n'existe pas" })
-        } else if (userFromDb.civilite == null) {
-            res.status(201).send({ txt: "Profil incomplet" })
+    jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (err, decoded) {
+        if (decoded == undefined) {
+            res.status(201).send(err)
         } else {
-            res.status(201).send({ txt: "Profil complet" });
+            User.findById(req.params.id).then((userFromDb) => {
+                if (!userFromDb) {
+                    res.status(201).send({ name: "Cette utilisateur n'existe pas" })
+                } else if (userFromDb.civilite == null) {
+                    res.status(201).send({ name: "Profil incomplet" })
+                } else {
+                    res.status(201).send({ name: "Profil complet" });
+                }
+            }).catch((error) => {
+                console.error(error)
+                res.status(404).send(error);
+            })
         }
-    }).catch((error) => {
-        console.error(error)
-        res.status(404).send(error);
-    })
+    });
 });
 
 

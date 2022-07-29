@@ -41,7 +41,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { value: 'Carte_etudiant', label: "Carte étudiant" },
     { value: 'Attestation_scolarite', label: 'Attestation de scolarité' },
     { value: 'Attestation_travail', label: 'Attestation de travaille' },
-    { value: 'Visa', label: "Visa" }
+    { value: 'Visa', label: "Visa" },
+    { value: "Justificatif_Sportif_Haut_Niveau", label: "Justificatif Sportif Haut Niveau" }
   ];
 
   DocTypes2: any[] = [
@@ -62,7 +63,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
 
     this.codeCommercial = localStorage.getItem("CommercialCode")
 
-    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['p'];
+    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
 
     this.ecoleProspect = this.ProspectConnected.type_form
 
@@ -128,7 +129,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
     formData.append('id', this.ProspectConnected._id);
     formData.append('document', doc);
     formData.append('file', event.files[0]);
-    this.admissionService.uploadFile(formData, this.ProspectConnected._id,'ProspectConected').subscribe(res => {
+    this.admissionService.uploadFile(formData, this.ProspectConnected._id, 'ProspectConected').subscribe(res => {
       this.messageService.add({ severity: 'success', summary: 'Fichier upload avec succès', detail: docname + ' a été envoyé' });
       if (doc.includes('diplome')) {
         this.diplomeTest = true;
@@ -155,7 +156,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Tous les documents ont été envoyés', detail: "Attendez la validation par un agent." });
       }
       if (this.ProspectConnected.etat_traitement != "Nouvelle") {
-        this.admissionService.changeEtatTraitement(this.ProspectConnected._id, "Retour Etudiant",'ProspectConected')
+        this.admissionService.changeEtatTraitement(this.ProspectConnected._id, "Retour Etudiant", 'ProspectConected')
       }
     },
       (error) => {

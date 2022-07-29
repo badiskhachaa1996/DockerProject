@@ -109,6 +109,9 @@
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
+                        <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                            style="float: right;margin-left:2%" *ngIf="!idPartenaire">
+                        </button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
