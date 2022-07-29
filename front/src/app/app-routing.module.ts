@@ -82,6 +82,7 @@ import { LoginGuard } from './guards/login-guard';
 import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
+import { ContactComponent } from './contact/contact.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
 
 
@@ -160,6 +161,7 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
+                    { path: 'contact', component: ContactComponent }
                 ],
             },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
