@@ -1,6 +1,10 @@
 const { User } = require("../models/user");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+var XLSX = require('xlsx')
+var workbook = XLSX.readFile('dataC.xlsx', { cellDates: true });
+var sheet_name_list = workbook.SheetNames;
+var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -13,13 +17,16 @@ mongoose
         /*User.find({ password: { $ne: null } }).then(dataU => {
             console.log(dataU)
         })*/
-        User.find({ $where: "this.password == this.email" }).then(dataU2 => {
-            dataU2.forEach(u => {
-                User.findByIdAndUpdate(u._id, {
-                    password: bcrypt.hashSync(u.password, 8)
-                }, { new: true }, (newU => {
-                    console.log(newU)
-                }))
+        xlData.forEach(data => {
+            let password = data['Mot de passe']
+            password.replace(' ', '')
+            let u = {
+                verifedEmail: true,
+                type: "Commercial",
+                password: bcrypt.hashSync(password)
+            }
+            User.findOneAndUpdate({ email_perso: data['Email'] }, u, { new: true }).then(newData => {
+                console.log(newData)
             })
         })
     })
