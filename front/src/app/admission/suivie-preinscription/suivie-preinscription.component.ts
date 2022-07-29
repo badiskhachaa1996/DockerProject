@@ -36,7 +36,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   codeCommercial;
   DocTypes: any[] = [
     { value: null, label: "Choississez le type de fichier", },
-    { value: 'Carte_vitale', label: 'Carte vitale.', },
+    { value: 'Carte_vitale', label: 'Carte vitale', },
     { value: 'Carte_sejour', label: "Carte séjour" },
     { value: 'Carte_etudiant', label: "Carte étudiant" },
     { value: 'Attestation_scolarite', label: 'Attestation de scolarité' },

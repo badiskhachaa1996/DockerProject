@@ -87,12 +87,13 @@ export class ListEtudiantComponent implements OnInit {
   showUploadFile;
 
   isMinor = false;
+  isCommercial: boolean = false;
 
   absences: Presence[] = []
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
-    private router: Router, private presenceService: PresenceService, private CommercialService:CommercialPartenaireService) { }
+    private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -122,14 +123,14 @@ export class ListEtudiantComponent implements OnInit {
     this.onInitFormUpdateEtudiant();
 
   }
-  confirmRighFile(file,etudiant) {
+  confirmRighFile(file, etudiant) {
     console.log("confirme right for ", file)
     this.confirmationService.confirm({
       message: 'Voulez vous que ce document soit visible sur le profil de l\'étudiant?',
       header: 'Visibilité',
       icon: 'pi pi-eye',
       accept: () => {
-        this.etudiantService.setFileRight(etudiant._id, file,true).subscribe((dataright) => {
+        this.etudiantService.setFileRight(etudiant._id, file, true).subscribe((dataright) => {
 
         })
         this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted' });
@@ -139,14 +140,14 @@ export class ListEtudiantComponent implements OnInit {
         switch (type) {
           case ConfirmEventType.REJECT:
 
-            this.etudiantService.setFileRight(etudiant._id, file,false).subscribe((dataright) => {
-    
+            this.etudiantService.setFileRight(etudiant._id, file, false).subscribe((dataright) => {
+
             })
             break;
           case ConfirmEventType.CANCEL:
 
-            this.etudiantService.setFileRight(etudiant._id, file,false).subscribe((dataright) => {
-       
+            this.etudiantService.setFileRight(etudiant._id, file, false).subscribe((dataright) => {
+
             })
             break;
         }
@@ -261,6 +262,8 @@ export class ListEtudiantComponent implements OnInit {
     }
     this.isMinor = !(age < 18);
   }
+
+
 
 
   //Methode d'initialisation du formulaire de modification d'un étudiant
@@ -464,11 +467,11 @@ export class ListEtudiantComponent implements OnInit {
       formData.append('id', this.showUploadFile._id)
       formData.append('file', event.files[0])
       this.etudiantService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
-        this.confirmRighFile(event.files[0],this.showUploadFile)
+        this.confirmRighFile(event.files[0], this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.loadPP(this.showUploadFile)
-        
-      
+
+
         event.target = null;
         this.showUploadFile = null;
 
@@ -504,6 +507,13 @@ export class ListEtudiantComponent implements OnInit {
     if (confirm("Voulez-vous supprimer le parcours ?")) {
       this.parcoursList.splice(i)
     }
+  }
+
+  onGetCommercialePartenaire() {
+    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
+      this.isCommercial = data != null
+    }
+    )
   }
 
 }
