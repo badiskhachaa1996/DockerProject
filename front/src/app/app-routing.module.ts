@@ -86,6 +86,8 @@ import { ContactComponent } from './contact/contact.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
+import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
+import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 
 
 @NgModule({
@@ -180,6 +182,8 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
             { path: 'pages/access', component: AccessComponent },
             { path: 'validation-email/:mail', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
             { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
+            { path: 'mentions-legales', component: MentionsLegalesComponent },
+            { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
             { path: '**', redirectTo: 'pages/notfound' }
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],

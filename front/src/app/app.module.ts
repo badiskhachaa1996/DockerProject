@@ -194,6 +194,8 @@ import { NotificationComponent } from './notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { ContactComponent } from './contact/contact.component';
+import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
+import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 @NgModule({
   imports: [
     BrowserModule,
