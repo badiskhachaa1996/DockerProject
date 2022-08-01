@@ -31,6 +31,10 @@ export class ExterneComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  gAfterViewInit() {
+
     if (localStorage.getItem('errorToken')) {
       let tokenError: { name: string, message: string, expiredAt: number } = JSON.parse(localStorage.getItem('errorToken'))
       //localStorage.removeItem('errorToken')
@@ -49,7 +53,7 @@ export class ExterneComponent implements OnInit {
     this.AuthService.login(userToLog).subscribe((data) => {
       this.socket.isAuth()
       this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
-        if (pData.token) {
+        if (pData && pData.token) {
           localStorage.setItem('ProspectConected', pData.token)
           this.router.navigate(['/suivre-ma-preinscription'])
         } else {

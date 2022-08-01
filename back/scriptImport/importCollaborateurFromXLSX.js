@@ -40,6 +40,8 @@ mongoose
                             lastname: data.NOM.toUpperCase(),
                             email: data.Email,
                             email_perso: data.Email,
+                            verifedEmail:true,
+                            type:"Commercial",
                             pays_adresse: data.Pays,
                             nationnalite: data['Nationalité'],
                             date_creation: new Date(),
