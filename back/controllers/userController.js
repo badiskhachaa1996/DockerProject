@@ -643,7 +643,7 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
 
             console.log("password Updated")
 
-            User.findOneAndUpdate({ id: TokenData.user_id }, { password: bcrypt.hashSync(req.body.pwd, 8), }, { new: true }, (err, userModified) => {
+            User.findOneAndUpdate({ email: TokenData.email }, { password: bcrypt.hashSync(req.body.pwd, 8), }, { new: true }, (err, userModified) => {
                 if (err) {
                     console.error(err)
                 } else {
