@@ -21,7 +21,17 @@ export class MpOublieComponent implements OnInit {
     this.authService.getByEmail(email_saisie).subscribe(UserExist => {
       console.log(UserExist)
       if (UserExist == true) {
+
         this.messageService.add({ severity: 'info', summary: 'Email envoyé', detail: 'Rendez vous sur le mail reçu pour continuer' });
+        this.authService.pwdToken(email_saisie).subscribe(mpToken => {
+          if (mpToken) {
+            console.log(mpToken)
+            localStorage.setItem("mptoken",mpToken)
+            
+          }
+          else { console.log("je sais pas trop") }
+        },
+          error => { console.log(error) })
 
       }
       else {
@@ -30,7 +40,8 @@ export class MpOublieComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Email érroné', detail: 'Verifiez la saisie de votre email' });
       }
 
-    })
+    },
+      error => { console.log(error) })
 
 
   }

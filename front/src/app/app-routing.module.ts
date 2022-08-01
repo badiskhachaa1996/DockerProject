@@ -84,6 +84,7 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './notification/notification.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
+import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 
 
 @NgModule({
@@ -169,6 +170,7 @@ import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.compon
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
             { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
+            { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },

@@ -124,7 +124,7 @@ export class AuthService {
 
   WhatTheRole(id) {
     let url = this.apiUrl + "WhatTheRole/" + id;
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) .append('token', localStorage.getItem('token')) });
+    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   verifPassword(tbObj: any) {
@@ -141,6 +141,17 @@ export class AuthService {
     let url = this.apiUrl + "HowIsIt/" + user_id;
     return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
+
+  pwdToken(email) {
+    let url = this.apiUrl + "pwdToken/" + email;
+    return this.http.post<any>(url,  { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+  }
+  reinitPwd(pwdTokenID,pwd) {
+    let url = this.apiUrl + "reinitPwd/" +pwdTokenID;
+    return this.http.post<any>(url, {pwd},{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+  }
+
+  
 
   /*TESTMAIL(){
     let url = this.apiUrl	+"TESTMAIL"

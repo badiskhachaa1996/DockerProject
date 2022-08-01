@@ -192,6 +192,7 @@ import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
+import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -370,7 +371,8 @@ import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.compon
         ReinscritComponent,
         DetailsEtudiantComponent,
         NotificationComponent,
-        MpOublieComponent
+        MpOublieComponent,
+        ResetMpComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
