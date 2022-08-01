@@ -474,7 +474,7 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   getFilesAccess(ID) {
     this.admissionService.getTokenByUserId(ID).subscribe(data => {
-      localStorage.setItem("ProspectConected", data)
+      localStorage.setItem("ProspectConected", data.token)
       this.router.navigate(["/suivre-ma-preinscription"]);
     })
   }

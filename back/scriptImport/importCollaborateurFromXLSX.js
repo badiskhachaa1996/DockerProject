@@ -1,9 +1,9 @@
 var XLSX = require('xlsx')
 const mongoose = require("mongoose");
-const { Partenaire } = require("./models/partenaire");
-const { CommercialPartenaire } = require("./models/CommercialPartenaire");
-const { User } = require("./models/user");
-var workbook = XLSX.readFile('data1.xlsx', { cellDates: true });
+const { Partenaire } = require("../models/partenaire");
+const { CommercialPartenaire } = require("../models/CommercialPartenaire");
+const { User } = require("../models/user");
+var workbook = XLSX.readFile('data.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames;
 var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
 var dicP = {}
@@ -40,6 +40,8 @@ mongoose
                             lastname: data.NOM.toUpperCase(),
                             email: data.Email,
                             email_perso: data.Email,
+                            verifedEmail:true,
+                            type:"Commercial",
                             pays_adresse: data.Pays,
                             nationnalite: data['Nationalité'],
                             date_creation: new Date(),

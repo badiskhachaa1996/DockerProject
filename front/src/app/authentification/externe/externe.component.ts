@@ -13,6 +13,7 @@ import { AdmissionService } from 'src/app/services/admission.service';
 @Component({
   selector: 'app-externe',
   templateUrl: './externe.component.html',
+  providers: [MessageService],
   styleUrls: ['./externe.component.scss']
 })
 export class ExterneComponent implements OnInit {
@@ -32,13 +33,28 @@ export class ExterneComponent implements OnInit {
 
   }
 
+  gAfterViewInit() {
+
+    if (localStorage.getItem('errorToken')) {
+      let tokenError: { name: string, message: string, expiredAt: number } = JSON.parse(localStorage.getItem('errorToken'))
+      //localStorage.removeItem('errorToken')
+      if (tokenError.name == 'TokenExpiredError') {
+        console.log(tokenError)
+        this.messageService.add({ severity: 'error', summary: 'Veuillez vous reconnecter', detail: tokenError.message })
+        console.log(tokenError)
+      } else {
+        this.messageService.add({ severity: 'error', summary: "N'essayer pas d'usurper l'identité de quelqu'un s'il vous plaît", detail: tokenError.message })
+      }
+    }
+  }
+
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
     this.AuthService.login(userToLog).subscribe((data) => {
       this.socket.isAuth()
       this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
-        if (pData) {
-          localStorage.setItem('ProspectConected', pData)
+        if (pData && pData.token) {
+          localStorage.setItem('ProspectConected', pData.token)
           this.router.navigate(['/suivre-ma-preinscription'])
         } else {
           localStorage.setItem('token', data.token)

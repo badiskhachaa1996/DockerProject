@@ -23,6 +23,7 @@ app.post("/create", (req, res, next) => {
         classe_id: req.body.classe_id,
         seance_max: req.body.seance_max,
         coeff: req.body.coeff,
+        credit_ects: req.body.credit_ects,
     });
 
     matiere.save()
@@ -51,6 +52,7 @@ app.post("/updateById", (req, res, next) => {
             classe_id: req.body.classe_id,
             seance_max: req.body.seance_max,
             coeff: req.body.coeff,
+            credit_ects: req.body.credit_ects,
         })
         .then((matiereUpdated) => { res.status(200).send(matiereUpdated) })
         .catch((error) => { res.status(500).send(error) })

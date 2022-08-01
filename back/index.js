@@ -82,7 +82,7 @@ const noteController = require('./controllers/noteController');
 const entrepriseController = require('./controllers/entrepriseController');
 const examenController = require('./controllers/examenController');
 const rbc = require('./controllers/rachatBulletinController')
-
+const contactController = require('./controllers/contactController');
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
@@ -96,8 +96,8 @@ const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
     let token = jwt.decode(req.header("token"))
-    if (token && token['p']) {
-        token = token['p']
+    if (token && token['prospectFromDb']) {
+        token = token['prospectFromDb']
     }
     if (token && token.id && token.role) {
         User.findOne({ _id: token.id, role: token.role }, (err, user) => {
@@ -106,20 +106,33 @@ app.use('/', function (req, res, next) {
                 res.status(403).send("Accès non autorisé, Erreur", err)
             }
             else if (user) {
-                next()
+                jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (errToken, decoded) {
+                    if (req.originalUrl.startsWith('/soc/user/HowIsIt')) {
+                        next()
+                    } else if (decoded == undefined) {
+                        if (errToken.name == "JsonWebTokenError") {
+                            //Token Incorrect
+                            res.status(403).send(errToken)
+                        } else if (errToken.name == "TokenExpiredError") {
+                            //Token Expired
+                            res.status(401).send(errToken)
+                        }
+                    } else {
+                        next()
+                    }
+                });
             } else {
                 console.error(user)
                 res.status(403).send("Accès non autorisé, User not found")
             }
         })
     } else {
-
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
         } else {
-            res.status(403).send("Accès non autorisé, Wrong Token", req.originalUrl)
+            res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
         }
     }
 });
@@ -181,6 +194,7 @@ app.use('/soc/prospect', prospectController)
 app.use('/soc/historiqueEchange', historiqueEchangeController)
 
 app.use('/soc/forfeitForm', forfeitFormController)
+app.use('/soc/contact', contactController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

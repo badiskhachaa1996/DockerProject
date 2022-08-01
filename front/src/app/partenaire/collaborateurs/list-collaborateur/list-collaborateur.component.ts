@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 import { CommercialPartenaire } from 'src/app/models/CommercialPartenaire';
 import { Partenaire } from 'src/app/models/Partenaire';
 import { User } from 'src/app/models/User';
@@ -258,6 +260,30 @@ export class ListCollaborateurComponent implements OnInit {
         ((error) => { console.error(error); })
       );
     }
+
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.commercialPartenaires.forEach(p => {
+      let user: User = this.users[p.user_id]
+      if (user && user.lastname && user.lastname && p.code_commercial_partenaire) {
+        let t = {}
+        t['NOM'] = user.lastname.toUpperCase()
+        t['Prenom'] = user.firstname
+        t['Code Commercial'] = p.code_commercial_partenaire
+        t['Est Admin'] = (p.isAdmin) ? "Oui" : "Non";
+        dataExcel.push(t)
+      }
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "partenaires" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
 
