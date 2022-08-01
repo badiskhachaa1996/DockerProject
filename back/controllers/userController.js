@@ -639,7 +639,7 @@ app.post("/reinitPwd/:pwdTokenID", (req, res) => {
     pwdToken.findOne({ _id: req.params.pwdTokenID }).then((TokenData) => {
 
         console.log(((new Date() - TokenData.date_creation) / 1000) / 3600)
-        if ((((new Date() - TokenData.date_creation) / 1000) / 3600) < 23) {
+        if ((((new Date() - TokenData.date_creation) / 1000) / 3600) < 0.25) {
 
             console.log("password Updated")
 
