@@ -504,7 +504,7 @@ export class ListEtudiantComponent implements OnInit {
 
   onRemoveParcours(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
-    if (confirm("Voulez-vous supprimer le parcours ?")) {
+    if (confirm("Voulez-vous vraiment supprimer le parcours ?")) {
       this.parcoursList.splice(i)
     }
   }
