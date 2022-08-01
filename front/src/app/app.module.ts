@@ -192,6 +192,8 @@ import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { ContactComponent } from './contact/contact.component';
+import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
+import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 @NgModule({
     imports: [
         BrowserModule,
@@ -370,7 +372,9 @@ import { ContactComponent } from './contact/contact.component';
         ReinscritComponent,
         DetailsEtudiantComponent,
         NotificationComponent,
-        ContactComponent
+        ContactComponent,
+        MentionsLegalesComponent,
+        PolitiqueConfidentialiteComponent
     ],
     providers: [MessageService, ConfirmationService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
