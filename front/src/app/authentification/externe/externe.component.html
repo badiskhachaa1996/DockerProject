@@ -2,7 +2,7 @@
 <div class="layout-topbar">
     <div class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
         <h5>Connexion à Inted Management System</h5>
-    </div>    
+    </div>
 </div>
 <div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
     <div class="grid justify-content-center p-2 lg:p-0" style="min-width:10%">
@@ -13,22 +13,26 @@
                 <div class="w-full md:w-10 mx-auto">
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
                         <img src="\assets\images\logo_eh_sfb.png" alt="logo eduhorizons" style="width: 40%;">
-                    </div>    
+                    </div>
                     <label for="email1" class="block text-900 text-xl font-medium mb-2">Email</label>
-                    <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email" pInputText
-                        class="w-full mb-3" style="padding:1rem;">
+                    <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email"
+                        pInputText class="w-full mb-3" style="padding:1rem;">
 
                     <label for="password1" class="block text-900 text-xl font-medium mb-2">Mot de passe</label>
-                    <input id="password1" formControlName="password" type="password" pInputText placeholder="Entrez votre mot de passe"
-                        class="w-full mb-3" style="padding:1rem;">
+                    <input id="password1" formControlName="password" type="password" pInputText
+                        placeholder="Entrez votre mot de passe" class="w-full mb-3" style="padding:1rem;">
 
                     <div class="flex align-items-center justify-content-between mb-5">
                         <a class="font-medium no-underline ml-2 text-right cursor-pointer"
-                            style="color: var(--primary-color)" href="mailto:support@estya.com">Mot de passe oublié ?</a>
+                            style="color: var(--primary-color)" (click)="router.navigate(['mot-de-passe_oublie'])">Mot
+                            de passe oublié ?</a>
                     </div>
-                    <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="Login()"class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                    <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="Login()"
+                        class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
                     <br><br>
-                    <button pButton pRipple label="Retour" icon="pi pi-arrow-circle-left" (click)="showLoginPage = false;" class="w-full p-3 text-xl p-button-info p-button-raised"></button>
+                    <button pButton pRipple label="Retour" icon="pi pi-arrow-circle-left"
+                        (click)="showLoginPage = false;"
+                        class="w-full p-3 text-xl p-button-info p-button-raised"></button>
                 </div>
             </form>
         </div>
@@ -37,13 +41,17 @@
             <div class="card"style="height: 100%;">
                 <div class="flex justify-content-between mb-2">
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-                            <img src="\assets\images\eh.png" alt="logo eduhorizons" style="width: 40%;"class="m-6">
-                            <p style="text-align: center;">Si vous souhaitez suivre votre demande d'admission, ou si vous êtes un partenaire ou un collabotateur, merci de vous connectez avec votre adresse mail et votre mot de passe.</p>   
+                        <img src="\assets\images\eh.png" alt="logo eduhorizons" style="width: 40%;" class="m-6">
+                        <p style="text-align: center;">Si vous souhaitez suivre votre demande d'admission, ou si vous
+                            êtes un partenaire ou un collabotateur, merci de vous connectez avec votre adresse mail et
+                            votre mot de passe.</p>
                         <form [formGroup]="formLogin" class="h-full w-full m-0 py-7 px-4">
-                        <div class="w-full md:w-10 mx-auto">
-                            <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="showLoginPage = true;" class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
-                        </div>
-                    </form>
+                            <div class="w-full md:w-10 mx-auto">
+                                <button pButton pRipple label="Se connecter" icon="pi pi-envelope"
+                                    (click)="showLoginPage = true;"
+                                    class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -54,15 +62,19 @@
                 <div class="flex justify-content-between mb-4">
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
                         <div class="col-12 mt-5 xl:mt-0 text-center">
-                            <img src="assets/images/logo-ims.png" alt="IMS logo" class="mb-4" style="width:140px; height:70px;">
+                            <img src="assets/images/logo-ims.png" alt="IMS logo" class="mb-4"
+                                style="width:140px; height:70px;">
                         </div>
                         <form [formGroup]="formLogin" class="h-full w-full m-0 py-7 px-4">
-                        <div class="w-full md:w-10 mx-auto">
-                            <p style="text-align: center;">Si vous êtes un salarié interne ou un étudiant, merci de vous connectez avec votre compte Microsoft.</p>
-                            <br><br><br><br>
-                            <button pButton pRipple label="Se connecter " icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-3 text-xl p-button-primary p-button-raised"></button>        
-                        </div>
-                    </form>
+                            <div class="w-full md:w-10 mx-auto">
+                                <p style="text-align: center;">Si vous êtes un salarié interne ou un étudiant, merci de
+                                    vous connectez avec votre compte Microsoft.</p>
+                                <br><br><br><br>
+                                <button pButton pRipple label="Se connecter " icon="pi pi-microsoft"
+                                    (click)="toLoginMiscroft()"
+                                    class="w-full p-3 text-xl p-button-primary p-button-raised"></button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -83,5 +95,5 @@
                 <img src="https://www.lemonway.com/wp-content/themes/lemonway-2020/dist/images/logo-lemonway.png"
                     alt="logo Lemonway" style="max-height:30px; padding-top: 5px;"></a>
         </div>
-    </div>  
+    </div>
 </div>

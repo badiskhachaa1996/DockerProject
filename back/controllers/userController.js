@@ -11,11 +11,24 @@ const fs = require("fs");
 const { Inscription } = require("../models/inscription");
 const { Formateur } = require("../models/formateur")
 const { Etudiant } = require("../models/etudiant")
+const { pwdToken } = require("../models/pwdToken")
 const { Partenaire } = require("../models/partenaire")
 const { Prospect } = require("../models/prospect")
 const { CommercialPartenaire } = require("../models/CommercialPartenaire")
 
 
+
+
+
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
+    )
+}
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -573,6 +586,79 @@ app.post("/updatePwd/:id", (req, res) => {
         .catch((error) => { console.log(error) });
 });
 
+app.post("/pwdToken/:email", (req, res) => {
+
+    console.log(req.params.email)
+    //  let pwd_token = { 'email': req.params.email, 'date_creation': new Date() };
+
+    let PwdToken = new pwdToken({
+        email: req.params.email,
+        date_creation: new Date(),
+    })
+
+    PwdToken.save().then((pwdTokFromDb) => {
+
+        let Intedtransporter = nodemailer.createTransport({
+            host: "smtp.office365.com",
+            port: 587,
+            secure: false, // true for 587, false for other ports
+            requireTLS: true,
+            auth: {
+                user: 'noreply@intedgroup.com',
+                pass: '@iNTEDgROUPE',
+            },
+        });
+        console.log(pwdTokFromDb)
+        let htmlmail = '<p>Bonjour , </p><p style="color:black">Nous avons reçu une demande de modification de mot de passe pour votre compte IMS. Si vous souhaitez poursuivre la réinitialisation de votre mot de passe, cliquez sur le lien ci-dessous ou copiez-le directement dans la barre d\'adresse de votre navigateur : </p><p style="color:black"> <a href="' + origin + '/#/mot_de_passe_reinit/' + pwdTokFromDb._id + '"> Je réinitialise mon mot de passe </a> </span>  </p><p style="color:black">Si vous n\'êtes pas l\'auteur de cette requête, ou si vous ne voulez pas réinitialiser votre mot de passe, merci de ne pas tenir compte de cet e-mail.</p><p style="color:black">En cas de questions ou de problèmes, ou si vous rencontrez des difficultés au cours de la réinitialisation de votre mot de passe, contactez nous par email sur l\'adresse email suivante : contact@intedgroup.com</p><p style="color:black">Cordialement.</p><footer> <img  src="footer_signature"/></footer>';
+        let mailOptions = {
+            from: 'noreply@intedgroup.com',
+            to: PwdToken.email,
+            subject: '[IMS] Mot de passe oublié',
+            html: htmlmail,
+            attachments: [{
+                filename: 'logoIMS.png',
+                path: 'assets/logoIMS.png',
+                cid: 'footer_signature' //same cid value as in the html img src
+            }]
+        };
+        Intedtransporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+            }
+        });
+
+        res.status(200).send(pwdTokFromDb);
+
+    }).catch((error) => {
+        console.error(error)
+        res.status(400).send(error);
+    })
+});
+app.post("/reinitPwd/:pwdTokenID", (req, res) => {
+
+    pwdToken.findOne({ _id: req.params.pwdTokenID }).then((TokenData) => {
+
+        console.log(((new Date() - TokenData.date_creation) / 1000) / 3600)
+        if ((((new Date() - TokenData.date_creation) / 1000) / 3600) < 0.25) {
+
+            console.log("password Updated")
+
+            User.findOneAndUpdate({ email: TokenData.email }, { password: bcrypt.hashSync(req.body.pwd, 8), }, { new: true }, (err, userModified) => {
+                if (err) {
+                    console.error(err)
+                } else {
+                    res.send(userModified)
+                }
+            })
+        }
+        else {
+            console.log("Token expired")
+            res.send("Token expired")
+        }
+
+    })
+
+})
 /*app.get('/TESTMAIL', (req, res) => {
     let origin = "http://localhost:4200"
     if (process.argv[2]) {

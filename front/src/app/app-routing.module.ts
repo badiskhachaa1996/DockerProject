@@ -84,6 +84,8 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './notification/notification.component';
 import { ContactComponent } from './contact/contact.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
+import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
+import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 
@@ -171,6 +173,8 @@ import { PolitiqueConfidentialiteComponent } from './footer/politique-confidenti
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
+            { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
+            { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
