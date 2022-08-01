@@ -84,6 +84,10 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './notification/notification.component';
 import { ContactComponent } from './contact/contact.component';
 import { CollaborateurGuard } from './guards/collaborateur.guard';
+import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
+import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
+import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
+import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 
 
 @NgModule({
@@ -150,7 +154,7 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
                     { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
-                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [ CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
+                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
                     { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
@@ -169,6 +173,8 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
             { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
+            { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
+            { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
@@ -176,6 +182,8 @@ import { CollaborateurGuard } from './guards/collaborateur.guard';
             { path: 'pages/access', component: AccessComponent },
             { path: 'validation-email/:mail', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
             { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
+            { path: 'mentions-legales', component: MentionsLegalesComponent },
+            { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
             { path: '**', redirectTo: 'pages/notfound' }
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],
