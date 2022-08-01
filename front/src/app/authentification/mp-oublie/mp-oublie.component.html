@@ -14,13 +14,24 @@
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
                         <img src="\assets\images\logo_eh_sfb.png" alt="logo eduhorizons" style="width: 40%;">
                     </div>
-                    <label for="email1" class="block text-900 text-xl font-medium mb-2">Email :</label>
-                    <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email"
-                        pInputText class="w-full mb-3" style="padding:1rem;">
+                </div>
+                <div>
+                    <div class="col-12" *ngIf="!buttonRetour">
+                        <label for="email1" class="block text-900 text-xl font-medium mb-2">Email :</label>
+                        <input id="email1" formControlName="email" type="email" placeholder="Entrez votre adresse email"
+                            pInputText class="w-full mb-3" style="padding:1rem;">
+                    </div>
+                    <div class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container" *ngIf="buttonRetour">
+                        <p>
+                            Rendez vous sur le mail reçu pour continuer
+                        </p>
+                    </div>
 
-
-                    <button pButton pRipple label="Réinitiliser mot de passe" icon="pi pi-key" (click)="submitForm()"
-                        [disabled]="!form_mpoublie.valid"
+                    <button *ngIf="!buttonRetour" pButton pRipple label="Réinitiliser mot de passe" icon="pi pi-key"
+                        (click)="submitForm()" [disabled]="!form_mpoublie.valid"
+                        class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                    <button *ngIf="buttonRetour" pButton pRipple label="Retour" icon="pi pi-arrow-left"
+                        (click)="router.navigate(['/'])"
                         class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
                 </div>
             </form>
