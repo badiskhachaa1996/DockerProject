@@ -70,6 +70,10 @@
                         <label For="coeff">Coefficient <span style="color: red;"> * </span></label>
                         <input pInputText id="coeff" type="number" formControlName="coeff" placeholder="0" />
                     </div>
+                    <div class="field col-12 md:col-3">
+                        <label For="coeff">Crédits ECTS <span style="color: red;"> * </span></label>
+                        <input pInputText id="coeff" type="number" formControlName="credit_ects" placeholder="0" />
+                    </div>
                     <div>
                         <button pButton label="Ajouter le module" type="submit" [disabled]="formAddMatiere.invalid"></button>
                     </div>
@@ -110,6 +114,10 @@
                     <label For="coeff">Coefficient <span style="color: red;"> * </span></label>
                     <input pInputText id="coeff" type="number" formControlName="coeff" placeholder="0" />
                 </div>
+                <div class="field col-12 md:col-3">
+                    <label For="coeff">Crédits ECTS <span style="color: red;"> * </span></label>
+                    <input pInputText id="coeff" type="number" formControlName="credit_ects" placeholder="0" />
+                </div>
                 <div>
                     <button pButton label="Ajouter le module" type="submit" [disabled]="formModifMatiere.invalid"></button>
                 </div>
@@ -149,6 +157,7 @@
                         <th pSortableColumn="volume_real" style="text-align:center"> Volume réalisé <p-sortIcon field="volume_real"></p-sortIcon></th>
                         <th pSortableColumn="volume_plan" style="text-align:center"> Volume planifié <p-sortIcon field="volume_plan"></p-sortIcon></th>
                         <th pSortableColumn="coeff" style="text-align:center">Coefficient <p-sortIcone field="coeff"></p-sortIcone></th> 
+                        <th pSortableColumn="coeff" style="text-align:center">Crédits ECTS <p-sortIcone field="credit_ects"></p-sortIcone></th> 
                         <th style="text-align:center">Action</th>              
 				</ng-template>
                 <ng-template pTemplate="body" let-matiere>
@@ -179,6 +188,9 @@
 						</td>
                         <td  style="min-width: 12rem;">
                             {{matiere.coeff}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.credit_ects}}
                         </td>
                         <td>
 							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
