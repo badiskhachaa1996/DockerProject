@@ -147,7 +147,7 @@ export class MatieresComponent implements OnInit {
 
   //Methode de recuperation de la matière à modifier
   onGetbyId(rowData: Matiere) {
-    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max });
+    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects});
     this.diplomeService.getById(rowData.formation_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ formation_id: data._id });
