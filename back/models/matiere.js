@@ -10,6 +10,7 @@ const matiereSchema = mongoose.Schema({
     seance_max: { type: Number, required: true },
     coeff: { type: Number, default: 1 },
     credit_ects : { type: Number, required: true },
+    remarque : { type: String },
 });
 
 //creation de la table matiere
