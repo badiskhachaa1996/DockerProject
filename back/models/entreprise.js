@@ -31,6 +31,7 @@ const entrepriseSchema = mongoose.Schema({
     financeur: { type: String, required: false },
     nda: { type: String, required: false },
     type_soc: { type: String, required: false },
+    categorie: { type: [String], default: [] }
 });
 
 //Création de la table entreprise via le schema de la table

@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
 
 @Component({
   selector: 'app-add-formateur',
@@ -95,7 +96,8 @@ export class AddFormateurComponent implements OnInit {
 
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
-    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
+    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService,
+    private CampusService: CampusService, private PrestataireService: EntrepriseService) { }
 
   ngOnInit(): void {
     this.diplomeService.getAll().subscribe(data => {
@@ -281,7 +283,7 @@ export class AddFormateurComponent implements OnInit {
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
-      console.log(newUser)
+    console.log(newUser)
     /*
   this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
     ((response) => {

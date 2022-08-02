@@ -31,6 +31,7 @@ export class Entreprise {
         public financeur?: string,
         public nda?: string,
         public type_soc?: string,
-    ){}
+        public categorie?: string[]
+    ) { }
 
 }

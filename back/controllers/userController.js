@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const mongoose = require("mongoose");
 const fs = require("fs");
-const { Inscription } = require("../models/inscription");
 const { Formateur } = require("../models/formateur")
 const { Etudiant } = require("../models/etudiant")
 const { pwdToken } = require("../models/pwdToken")
@@ -315,7 +314,8 @@ app.post("/updateEtudiant/:id", (req, res) => {
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
-            postal_adresse: req.body.user.postal_adresse
+            postal_adresse: req.body.user.postal_adresse,
+            statut: req.body.user.statut
             // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {

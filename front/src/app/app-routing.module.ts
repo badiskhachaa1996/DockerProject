@@ -88,6 +88,7 @@ import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.compon
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
+import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 
 
 @NgModule({
@@ -168,6 +169,7 @@ import { PolitiqueConfidentialiteComponent } from './footer/politique-confidenti
                     { path: 'contact', component: ContactComponent }
                 ],
             },
+            { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },

@@ -1,0 +1,162 @@
+<!-- Appelation -->
+<!-- Activité -->
+<!-- Adresse du siège social -->
+<!-- Adresse du contrat -->
+<!-- Caisse de retraite complémentaire -->
+<!-- Convention Collective -->
+<!-- Code IDCC -->
+<!-- N° de Siret -->
+<!-- Nombre de salariés -->
+<!-- Indicatif + Téléphone -->
+<!-- Code NAF -->
+<!-- OPCO -->
+<!-- Informations du dirigeant
+Nom et Prénom du Gérant ou du Dirigeant :
+	
+Téléphone :
+		E-mail :	
+ -->
+<!-- Informations des tuteurs
+Nom, Prénom & Date de naissance du Tuteur : 
+		Né le : 	
+Fonction :		Ancienneté dans la fonction occupée :	
+Téléphone :		E-mail :	
+Niveau de formation du tuteur : 	
+
+-->
+<!--
+    
+CONTRAT DE L’ALTERNANT
+
+Date de début du Contrat:
+		Date de fin de Contrat :	
+Horaires de l’entreprise :
+	
+Nom de l’Alternant:
+		Date & lieu de naissance :	
+Intitulé de l’emploi occupé par l’Alternant : 
+	
+Classification de l’emploi dans la convention collective (pour contract) :
+	
+Niveau :
+		Coefficient hiérarchique :	
+Formation suivie :
+	
+
+-->
+
+<!--
+    Date et signature du Responsable de l’entreprise : 	Date et signature du tuteur : 
+-->
+<p-toast></p-toast>
+<div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+    <div class="card">
+        <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+
+        <p-timeline [value]="formSteps" layout="horizontal">
+            <ng-template pTemplate="content" let-event>
+                {{event}}
+            </ng-template>
+        </p-timeline>
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
+            <div *ngIf="ActiveIndex==0">
+                <div style="text-align: center;">
+                    <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
+                        minutes.</small><br>
+                </div>
+                <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-2">
+                                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                                    formControlName="civilite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label For="nom">Nom <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                                    formControlName="lastname" />
+                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom
+                                        est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.pattern">* Seul les
+                                        lettres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-5">
+                                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                                    formControlName="firstname" />
+                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le
+                                        prénom est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Suivant" style="float: right;"
+                            [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || date_naissance.invalid || nationalite.value==null || 
+                        pays_adresse.invalid || email.invalid || indicatif.invalid || phone.invalid || numero_whatsapp.invalid || emailExist "
+                            (click)="nextPage();verifEmailInBD()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+            <div *ngIf="ActiveIndex==4">
+                <div style="text-align: center;">
+                    <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
+                </div>
+                <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="grid" style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-12">
+                                <label For="agence">Etes-vous passé par une agence d'orientation ? <span
+                                        style="color: red;"> *
+                                    </span></label>
+                                <p-selectButton formControlName="isGarant"
+                                    [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
+                                </p-selectButton>
+                            </div>
+                            <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
+                                <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
+                                        style="color: red;"> * </span></label>
+                                <input pInputText id="oui_agence" type="text" placeholder="Expériences professionnel" />
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="code_commercial">Code commercial<span style="color: red;"> * </span></label>
+                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
+                                    formControlName="code_commercial" />
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales" target="_blank">mentions légales</a> et accepte que mes données soient utiliseés dans le cadre de mon accompagnement
+                                    et dans le traitement de ma demande ?</h6>
+                                <div>
+                                    <p-radioButton value=true name="donneePerso" formControlName="donneePerso">
+                                    </p-radioButton>
+                                    <label for="oui"> Oui</label>
+                                </div>
+                                <div style="margin-top: 2px;">
+                                    <p-radioButton value=false name="donneePerso" formControlName="donneePerso">
+                                    </p-radioButton>
+                                    <label for="non"> Non</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant"
+                            [disabled]="agence.invalid || nomAgence.invalid || code_commercial.invalid || donneePerso.value==false"
+                            type="submit" style="float: right;"></button>
+                    </div>
+                </p-fieldset>
+            </div>

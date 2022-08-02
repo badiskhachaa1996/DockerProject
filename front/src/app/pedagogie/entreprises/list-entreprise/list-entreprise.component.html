@@ -34,14 +34,12 @@
 
                 <div class="field col-12 md:col-6">
                     <label>VIP:</label><br>
-                    <input type="number" formControlName="vip" class="form-control col-12" placeholder="VIP"
-                        pInputText>
+                    <input type="number" formControlName="vip" class="form-control col-12" placeholder="VIP" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>NDA</label><br>
-                    <input type="text" formControlName="nda" class="form-control col-12"
-                        placeholder="NDA" pInputText>
+                    <input type="text" formControlName="nda" class="form-control col-12" placeholder="NDA" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -56,13 +54,19 @@
                     </div>
                 </div>
 
+                <div class="field col-12 md:col-4">
+                    <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
+                    <p-multiSelect [options]="categorieList" defaultLabel="Choississez la catégorie"
+                        formControlName="categorie"></p-multiSelect>
+                </div>
+
                 <div class="field col-12 md:col-3">
                     <label>Entreprise Interne ou Externe ?</label><br>
                     <p-selectButton [options]="IntExtChoice" formControlName="isInterne"></p-selectButton>
                 </div>
 
                 <div class="field col-12 md:col-3">
-                    <label>Numéro de siret:</label><br>
+                    <label>Numéro de SIRET:</label><br>
                     <input type="text" formControlName="siret" class="form-control col-12" placeholder="Siret"
                         pInputText>
                 </div>
@@ -75,8 +79,8 @@
 
                 <div class="field col-12 md:col-3">
                     <label>Numéro TVA:</label><br>
-                    <input type="text" formControlName="num_tva" class="form-control col-12"
-                        placeholder="Numéro TVA" pInputText>
+                    <input type="text" formControlName="num_tva" class="form-control col-12" placeholder="Numéro TVA"
+                        pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -126,8 +130,7 @@
                     <input type="text" formControlName="nom_contact_2nd" class="form-control col-12"
                         placeholder="Nom contact sécondaire" pInputText>
 
-                    <div
-                        *ngIf="nom_contact_2nd_m.invalid && (nom_contact_2nd_m.touched || nom_contact_2nd_m.dirty)">
+                    <div *ngIf="nom_contact_2nd_m.invalid && (nom_contact_2nd_m.touched || nom_contact_2nd_m.dirty)">
                         <span *ngIf="nom_contact_2nd_m.errors?.pattern" style="color: red;">
                             Le nom n'est pas dans le bon format
                         </span>
@@ -159,8 +162,14 @@
                         placeholder="Email contact sécondaire" pInputText>
                 </div>
 
+                <div class="field col-12 md:col-4">
+                    <label for="indicatif_2nd">Indicatif du numéro de téléphone:</label>
+                    <input type="text" formControlName="indicatif_2nd" placeholder="Numéro de téléphone contact"
+                        pInputText>
+                </div>
 
-                <div class="field col-12 md:col-12">
+
+                <div class="field col-12 md:col-8">
                     <label>Numéro de téléphone du contact sécondaire:</label><br>
                     <input type="text" formControlName="phone_contact_2nd" class="form-control col-12"
                         placeholder="Numéro de téléphone contact sécondaire" pInputText>
@@ -180,8 +189,8 @@
 
                 <div class="field col-12 md:col-6">
                     <label>Ville où se situe l'entreprise:</label><br>
-                    <input type="text" formControlName="ville_adresse" class="form-control col-12"
-                        placeholder="Ville" pInputText>
+                    <input type="text" formControlName="ville_adresse" class="form-control col-12" placeholder="Ville"
+                        pInputText>
 
                     <div *ngIf="ville_adresse_m.invalid && (ville_adresse_m.touched || ville_adresse_m.dirty)">
                         <span *ngIf="ville_adresse_m.errors?.pattern" style="color: red;">
@@ -222,6 +231,12 @@
                         pInputText>
                 </div>
 
+                <div class="field col-12 md:col-4">
+                    <label>Indicatif du numéro de téléphone:</label><br>
+                    <input type="text" formControlName="indicatif_ent" class="form-control col-12" placeholder="+33"
+                        pInputText>
+                </div>
+
                 <div class="field col-12 md:col-12">
                     <label>Numéro de téléphone de l'entreprise:</label><br>
                     <input type="text" formControlName="phone" class="form-control col-12"
@@ -230,14 +245,14 @@
 
                 <div class="field col-12 md:col-12">
                     <label>Site internet de l'entreprise:</label><br>
-                    <input type="text" formControlName="website" class="form-control col-12"
-                        placeholder="Site internet" pInputText>
+                    <input type="text" formControlName="website" class="form-control col-12" placeholder="Site internet"
+                        pInputText>
                 </div>
 
                 <div class="field col-12 md:col-12">
                     <label>Organisme financeur:</label><br>
-                    <input type="text" formControlName="financeur" class="form-control col-12"
-                        placeholder="Financeur" pInputText>
+                    <input type="text" formControlName="financeur" class="form-control col-12" placeholder="Financeur"
+                        pInputText>
 
                     <div *ngIf="financeur_m.invalid && (financeur_m.touched || financeur_m.dirty)">
                         <span *ngIf="financeur_m.errors?.pattern" style="color: red;">
@@ -262,22 +277,30 @@
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
                 responsiveLayout="scroll" [rows]="10" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-					</div>
-				</ng-template>
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
 
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem;"></th>
-                        <th pSortableColumn="raison_sociale"> Raison sociale <p-sortIcon field="raison_sociale"></p-sortIcon></th>
-                        <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique"></p-sortIcon></th>
-                        <th pSortableColumn="siret"> Siret <p-sortIcon field ="siret"></p-sortIcon></th>
-                        <th pSortableColumn="telephone"> Téléphone <p-sortIcon field="telephone"></p-sortIcon></th>
-                        <th pSortableColumn="vip"> VIP  <p-sortIcon field="vip"></p-sortIcon></th>
+                        <th pSortableColumn="raison_sociale"> Raison sociale <p-sortIcon field="raison_sociale">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="siret"> Siret <p-sortIcon field="siret"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="telephone"> Téléphone <p-sortIcon field="telephone"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="vip"> VIP <p-sortIcon field="vip"></p-sortIcon>
+                        </th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -353,8 +376,10 @@
                 </ng-template>
             </p-table>
 
-            <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du 1er contact</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact" styleClass="p-datatable-gridlines">
+            <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du
+                1er contact</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nom</th>
@@ -374,8 +399,10 @@
                     </tr>
                 </ng-template>
             </p-table>
-            <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">Informations du 2ème contact</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" styleClass="p-datatable-gridlines">
+            <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">
+                Informations du 2ème contact</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Nom</th>
@@ -398,7 +425,7 @@
                     </tr>
                 </ng-template>
             </p-table>
-            
+
         </div>
         </td>
         </tr>
