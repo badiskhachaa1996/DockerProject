@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class ResetMpComponent implements OnInit {
 
-  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private messageService: MessageService) { }
+  constructor(private authService: AuthService, private activatedRoute: ActivatedRoute, private router: Router, private messageService: MessageService) { }
 
   updatePwdForm: FormGroup = new FormGroup({
     nv_mp: new FormControl('', [Validators.required, Validators.minLength(8)]),
@@ -25,10 +25,10 @@ export class ResetMpComponent implements OnInit {
   Onupdatepwd() {
 
     if (this.updatePwdForm.get('nv_mp').value == this.updatePwdForm.get('nv_mpC').value) {
-      console.log("lunch api");
-
+      
       this.authService.reinitPwd(this.activatedRoute.snapshot.params.pwdtokenID, this.nv_mp.value).subscribe(reinitpwdData => {
-        console.log(reinitpwdData)
+        this.messageService.add({ severity: 'success', summary: 'Modification mot de passe ', detail: 'Mot de passe modifié avec succes' });
+       this.updatePwdForm.disable()
       }, (err => { console.log(err) }))
     }
     else {
