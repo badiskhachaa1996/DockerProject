@@ -34,11 +34,11 @@
             <div class="card">
                 <div class="p-fluid p-formgrid grid">
                     <div class="col-12 md:col-6">
-                        <strong>Adresse email:</strong> {{userco.email}}
+                        <strong>Adresse email:</strong> {{userco.email}} 
                     </div>
 
-                    <div class="col-12 md:col-6" *ngIf="userco.phone">
-                        <strong>Téléphone:</strong> {{userco.phone}}
+                    <div class="col-12 md:col-6" *ngIf="userco.phone && userco.indicatif">
+                        <strong>Téléphone:</strong> {{userco.indicatif}} {{userco.phone}}
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">

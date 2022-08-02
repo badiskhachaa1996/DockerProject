@@ -90,6 +90,8 @@ import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-leg
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 
+import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
+import { AppComponent } from './app.component';
 
 @NgModule({
     imports: [
@@ -189,6 +191,7 @@ import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscript
             { path: '**', redirectTo: 'pages/notfound' }
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],
+
     exports: [RouterModule]
 })
 export class AppRoutingModule {

@@ -449,15 +449,19 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
-          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
-            console.log(notif)
-            this.NotifService.newNotif(notif)
-          }, (error) => {
-            console.error(error)
-          }));
+          this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
+            console.log(serviceAdmission)
 
-          this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-          this.getFilesAccess(response.dataUser._id)
+            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
+              console.log(notif)
+              this.NotifService.newNotif(notif)
+            }, (error) => {
+              console.error(error)
+            }));
+
+            this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+            this.getFilesAccess(response.dataUser._id)
+          })
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)

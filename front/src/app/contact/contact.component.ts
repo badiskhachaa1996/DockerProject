@@ -28,15 +28,17 @@ export class ContactComponent implements OnInit {
   onInitContactForm() {
     this.contactform = this.formBuilder.group({
       civilite: new FormControl(environment.civilite[0], [Validators.required]),
-      nom: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]),
+      nom: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
+      prenom : new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      description: new FormControl('', [Validators.required])
+      description: new FormControl('', [Validators.required]),
     })
 
   }
 
   get civilite() { return this.contactform.get('civilite').value.value; }
   get nom() { return this.contactform.get('nom').value; };
+  get prenom() { return this.contactform.get('prenom').value; }
   get email() { return this.contactform.get('email').value; };
   get description() { return this.contactform.get('description').value; };
 
@@ -46,7 +48,8 @@ export class ContactComponent implements OnInit {
 
     let messageObject = {
       civilite : this.civilite,
-      name: this.nom,
+      lastname: this.nom,
+      firstname: this.prenom,
       mail: this.email,
       des: this.description,
     }
@@ -58,6 +61,7 @@ export class ContactComponent implements OnInit {
       res.send("ok");
       console.log("ok");
     })
+
   }
 
 }

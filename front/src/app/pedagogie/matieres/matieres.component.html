@@ -20,6 +20,12 @@
                     <ul>
                         <li><span style="color: red;">Volume horaire</span> : Entrez le volume horaire du module. </li>
                     </ul>
+                    <ul>
+                        <li><span style="color: red;">Coeff</span> : Entrez le coefficient du module. </li>
+                    </ul>
+                    <ul>
+                        <li><span style="color: red;">Crédits ECTS</span> : Entrez le crédit ECTS du module.</li>
+                    </ul>
                     <p class="line-height-3 m-0">
                         Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Ajouter le module"</span> pour finaliser l'ajout du module.
                     </p>
@@ -74,6 +80,10 @@
                         <label For="coeff">Crédits ECTS <span style="color: red;"> * </span></label>
                         <input pInputText id="coeff" type="number" formControlName="credit_ects" placeholder="0" />
                     </div>
+                    <div class="field col-12">
+                        <label For="remarque">Remarque</label>
+                        <textarea id="remarque" pInputTextarea placeholder="Remarque" autoResize rows="3" cols="150" formControlName="remarque"></textarea>
+                    </div>     
                     <div>
                         <button pButton label="Ajouter le module" type="submit" [disabled]="formAddMatiere.invalid"></button>
                     </div>
@@ -100,7 +110,7 @@
                 </div>
                 <div class="field col-12 md:col-8">
                     <label For="classe">Classe <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id" placeholder="Choissisez une classe"></p-dropdown>
+                    <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id" ></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="seance_max">Séance max <span style="color: red;"> * </span></label>
@@ -118,8 +128,12 @@
                     <label For="credit_ects">Crédits ECTS <span style="color: red;"> * </span></label>
                     <input pInputText id="credit_ects" type="number" formControlName="credit_ects" />
                 </div>
+                <div class="field col-12">
+                    <label For="remarque">Remarque</label>
+                    <textarea id="remarque" pInputTextarea placeholder="Remarque" autoResize rows="3" cols="150" formControlName="remarque"></textarea>
+                </div>    
                 <div>
-                    <button pButton label="Ajouter le module" type="submit" [disabled]="formModifMatiere.invalid"></button>
+                    <button pButton label="Modifier le module" type="submit" [disabled]="formModifMatiere.invalid"></button>
                 </div>
             </form>
         </div>
@@ -140,14 +154,22 @@
                      [globalFilterFields]="['nom']"
                      responsiveLayout="scroll">
 
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
-						<span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-						</span>
-					</div>
-				</ng-template>
+                     <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <div class="field">                                
+                                <span style="margin-left: 2px;">
+                                    <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
+                                                (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
+                                                emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
+                                    </p-dropdown>
+                                </span>
+                            </div>
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+                            </span>
+                        </div>
+                    </ng-template>
 				<ng-template pTemplate="header">
 					<tr>
 						<th pSortableColumn="nom" style="text-align:center"> Nom <p-sortIcon field="nom"></p-sortIcon></th>
@@ -157,7 +179,8 @@
                         <th pSortableColumn="volume_real" style="text-align:center"> Volume réalisé <p-sortIcon field="volume_real"></p-sortIcon></th>
                         <th pSortableColumn="volume_plan" style="text-align:center"> Volume planifié <p-sortIcon field="volume_plan"></p-sortIcon></th>
                         <th pSortableColumn="coeff" style="text-align:center">Coefficient <p-sortIcone field="coeff"></p-sortIcone></th> 
-                        <th pSortableColumn="coeff" style="text-align:center">Crédits ECTS <p-sortIcone field="credit_ects"></p-sortIcone></th> 
+                        <th pSortableColumn="credit_ects" style="text-align:center">Crédits ECTS <p-sortIcone field="credit_ects"></p-sortIcone></th>
+                        <th pSortableColumn="remarque" style="text-align:center">Remarque <p-sortIcone field="remarque"></p-sortIcone></th>
                         <th style="text-align:center">Action</th>              
 				</ng-template>
                 <ng-template pTemplate="body" let-matiere>
@@ -191,6 +214,9 @@
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.credit_ects}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.remarque}}
                         </td>
                         <td>
 							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
