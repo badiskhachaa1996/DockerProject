@@ -89,6 +89,8 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 
+import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
+import { AppComponent } from './app.component';
 
 @NgModule({
     imports: [
@@ -187,6 +189,7 @@ import { PolitiqueConfidentialiteComponent } from './footer/politique-confidenti
             { path: '**', redirectTo: 'pages/notfound' }
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],
+
     exports: [RouterModule]
 })
 export class AppRoutingModule {

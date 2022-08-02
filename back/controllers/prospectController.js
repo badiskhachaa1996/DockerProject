@@ -132,17 +132,11 @@ app.post("/create", (req, res, next) => {
             else {
                 user.save()
                     .then((userCreated) => {
-                        console.log("creation user pour prospect")
-                        console.log(userCreated)
+
                         prospect.user_id = userCreated._id;
                         let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d")
-                        console.log(token)
                         prospect.save()
                             .then((prospectSaved) => {
-                                console.log("tok after save pros")
-                                console.log(token)
-
-
                                 if (prospectSaved.type_form == "estya") {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
                                     temp = temp.replace('eMailduProSpect', userCreated.email_perso)

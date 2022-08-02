@@ -442,23 +442,27 @@ export class FormulaireAdmissionComponent implements OnInit {
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite, hors_Admission);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite);
 
     //Creation du nouveau prospect
 
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn,);
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn, hors_Admission);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
-          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
-            console.log(notif)
-            this.NotifService.newNotif(notif)
-          }, (error) => {
-            console.error(error)
-          }));
+          this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
+            console.log(serviceAdmission)
 
-          this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-          this.getFilesAccess(response.dataUser._id)
+            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
+              console.log(notif)
+              this.NotifService.newNotif(notif)
+            }, (error) => {
+              console.error(error)
+            }));
+
+            this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+            this.getFilesAccess(response.dataUser._id)
+          })
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)
