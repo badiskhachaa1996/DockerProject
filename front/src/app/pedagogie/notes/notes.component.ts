@@ -50,6 +50,9 @@ export class NotesComponent implements OnInit {
   dropdownExamen: any[] = [{ libelle: '', value: '' }];
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  filterCampus: any[] = [
+    { label: "Tous les campus", value: null }
+  ]
   classes: Classe[] = [];
   showPVAnnuel = false
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
@@ -251,6 +254,9 @@ export class NotesComponent implements OnInit {
     this.campusService.getAll().subscribe(
       ((response) => {
         this.campus = response;
+        this.campus.forEach(c => {
+          this.filterCampus.push({ label: c.libelle, value: c._id })
+        })
       }),
       ((error) => { console.error(error); })
     );
@@ -268,7 +274,7 @@ export class NotesComponent implements OnInit {
     );
 
     //Recuperation de la liste des notes
-    this.noteService.getAll().subscribe(
+    this.noteService.getAllPopulate().subscribe(
       ((response) => {
         this.notes = response;
       }),
@@ -368,20 +374,22 @@ export class NotesComponent implements OnInit {
   //Formulaire d'initialisation du formulaire d'ajout de note par classe et par examen et par semestre
   onInitFormAddNoteByClasseByExam() {
     this.formAddNoteByClasseByExam = this.fromBuilder.group({
-      note_val: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      note_val: ['', [Validators.required]],
       etudiant_id: ['', Validators.required],
       appreciation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàù .]+$")]],
+      isAbsent: [false]
     });
   }
 
   //Methode d'initialisation du formulaire d'ajout de notes
   onInitFormAddNote() {
     this.formAddNote = this.fromBuilder.group({
-      note_val: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      note_val: ['', [Validators.required]],
       semestre: ['', Validators.required],
       etudiant_id: ['', Validators.required],
       examen_id: ['', Validators.required],
       appreciation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàù .]+$")]],
+      isAbsent: [false]
     });
   }
 
@@ -488,9 +496,12 @@ export class NotesComponent implements OnInit {
     let note_val = this.formAddNoteByClasseByExam.get('note_val').value;
     let etudiant_id = this.formAddNoteByClasseByExam.get('etudiant_id').value.value;
     let appreciation = this.formAddNoteByClasseByExam.get('appreciation').value;
+    let isAbsent = this.formAddNoteByClasseByExam.get('isAbsent').value;
 
     let classe_id = this.classeSelected._id;
     let matiere_id = this.examSelected.matiere_id;
+
+
 
 
     this.examenService.getById(this.examSelected._id).subscribe(
@@ -519,7 +530,7 @@ export class NotesComponent implements OnInit {
               }
               else if (response.success) {
                 //Création de la nouvelle note à créer dans la BD
-                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id);
+                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id, isAbsent);
 
                 this.noteService.create(note).subscribe(
                   ((response) => {
@@ -567,6 +578,7 @@ export class NotesComponent implements OnInit {
     let etudiant_id = this.formAddNote.get('etudiant_id').value.value;
     let examen_id = this.formAddNote.get('examen_id').value.value;
     let appreciation = this.formAddNote.get('appreciation').value;
+    let isAbsent = this.formAddNote.get('isAbsent').value;
 
     let classe_id: string;
     let matiere_id: string;
@@ -593,7 +605,7 @@ export class NotesComponent implements OnInit {
         else {
 
           //Création de la nouvelle note à créer dans la BD
-          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id);
+          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id,isAbsent);
 
           this.noteService.create(note).subscribe(
             ((response) => {

@@ -315,24 +315,25 @@ app.post("/updateEtudiant/:id", (req, res) => {
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
             postal_adresse: req.body.user.postal_adresse,
-            statut: req.body.user.statut
+            statut: req.body.user.statut,
+            type:req.body.user.type,
             // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {
-            if (err || !user) {
-                console.error(err);
-                res.send(err)
-            } else {
-                let etudiantData = req.body.newEtudiant;
-                let etudiant = new Etudiant(
-                    {
-                        ...etudiantData
-                    });
-                etudiant.save()
-                    .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
-                    .catch((error) => { res.status(500).send(error) });
-            }
-        })
+        if (err || !user) {
+            console.error(err);
+            res.send(err)
+        } else {
+            let etudiantData = req.body.newEtudiant;
+            let etudiant = new Etudiant(
+                {
+                    ...etudiantData
+                });
+            etudiant.save()
+                .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
+                .catch((error) => { res.status(500).send(error) });
+        }
+    })
 })
 
 //Récupérer tous les users via Service ID
