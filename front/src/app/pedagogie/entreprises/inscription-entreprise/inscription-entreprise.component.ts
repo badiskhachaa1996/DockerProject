@@ -52,6 +52,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       // ****** Informations de l'entreprise ****
       raison_sociale: new FormControl('', Validators.required),
       activite: new FormControl('', Validators.required),
+
       adresse_ss: new FormControl('', Validators.required),
       postal_ss: new FormControl('', Validators.required),
       ville_ss: new FormControl('', Validators.required),
@@ -61,7 +62,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
       ville_ec: new FormControl('', Validators.required),
 
       crc: new FormControl('', Validators.required),
-      idcc: new FormControl('', Validators.required),
+      convention : new FormControl('', Validators.required),
+      idcc: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //1486
       siret: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
       nb_salarie: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
       phone_ent: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),

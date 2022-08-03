@@ -77,28 +77,146 @@ Formation suivie :
                                 <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                                     formControlName="civilite"></p-dropdown>
                             </div>
-                            <div class="field col-12 md:col-5">
-                                <label For="nom">Nom <span style="color: red;"> * </span></label>
-                                <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
-                                    formControlName="lastname" />
-                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom
+                            <div class="field col-12 md:col-12">
+                                <label For="raison_sociale">Appelation <span style="color: red;"> * </span></label>
+                                <input pInputText id="raison_sociale" type="text" placeholder="Eduhorizons"
+                                    formControlName="raison_sociale" />
+                                <div *ngIf="raison_sociale.invalid && (raison_sociale.touched || raison_sociale.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.required">*
+                                        L'appelation
                                         est obligatoire</span>
-                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.pattern">* Seul les
-                                        lettres sont acceptés</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
+                                        lettres sont acceptés</span>-->
                                 </div>
                             </div>
-                            <div class="field col-12 md:col-5">
-                                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
-                                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
-                                    formControlName="firstname" />
-                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le
-                                        prénom est obligatoire.</span>
-                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
-                                        lettres sont acceptés.</span>
+                            <div class="field col-12 md:col-12">
+                                <label For="activite">Activité de l'entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pTextArea id="activite" type="text"
+                                    placeholder="Création de site web pour professionel"
+                                    formControlName="activite"></textarea>
+                                <div *ngIf="activite.invalid && (activite.touched || activite.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="activite.errors?.required">* Les
+                                        activités sont obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>-->
                                 </div>
                             </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="crc">Caisse de retraite complémentaire : <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="crc" type="text" placeholder="KLESIA" formControlName="crc" />
+                                <div *ngIf="crc.invalid && (crc.touched || crc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="crc.errors?.required">*
+                                        La Caisse de retraite complémentaire est obligatoire</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
+                                        lettres sont acceptés</span>-->
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-8">
+                                <label For="convention">Convention Collective : <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="convention" type="text"
+                                    placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
+                                    formControlName="convention" />
+                                <div *ngIf="convention.invalid && (convention.touched || convention.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="convention.errors?.required">*
+                                        La Convention Collective est obligatoire</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
+                                        lettres sont acceptés</span>-->
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="idcc">Code IDCC: <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText type="number" placeholder="1486" formControlName="crc" />
+                                <div *ngIf="idcc.invalid && (idcc.touched || idcc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="idcc.errors?.required">*
+                                        Le code IDCC est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
+                                        chiffres sont acceptés</span>
+                                </div>
+                            </div>
+
+                            <!--Adresse du siège social-->
+                            <h3>Adresse du siège social</h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ss">Adresse du Siège sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="adresse_ss" type="text" placeholder="15 Rue du Louvre"
+                                    formControlName="adresse_ss" />
+                                <div *ngIf="adresse_ss.invalid && (adresse_ss.touched || adresse_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ss.errors?.required">*
+                                        L'adresse du siège sociale est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ss">Code Postal du Siège sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="postal_ss" type="text" placeholder="75001"
+                                    formControlName="postal_ss" />
+                                <div *ngIf="postal_ss.invalid && (postal_ss.touched || postal_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ss.errors?.required">*
+                                        L'adresse du siège sociale est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ss">Ville du Siège sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="ville_ss" type="text" placeholder="Paris"
+                                    formControlName="ville_ss" />
+                                <div *ngIf="ville_ss.invalid && (ville_ss.touched || ville_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ss.errors?.required">* La ville
+                                        du siège sociale est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+                            <!--Adresse d’exécution du contrat -->
+                            <h3>Adresse d’exécution du contrat </h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ec">Adresse de l’exécution du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="adresse_ec" type="text" placeholder="15 Rue du Louvre"
+                                    formControlName="adresse_ec" />
+                                <div *ngIf="adresse_ec.invalid && (adresse_ec.touched || adresse_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ec.errors?.required">*
+                                        L'adresse d’exécution du contrat est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ec">Code Postal de l’exécution du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="postal_ec" type="text" placeholder="75001"
+                                    formControlName="postal_ec" />
+                                <div *ngIf="postal_ec.invalid && (postal_ec.touched || postal_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ec.errors?.required">*
+                                        L'adresse d’exécution du contrat est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ec">Ville de l’exécution du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="ville_ec" type="text" placeholder="Paris"
+                                    formControlName="ville_ec" />
+                                <div *ngIf="ville_ec.invalid && (ville_ec.touched || ville_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ec.errors?.required">* La ville
+                                        de l’exécution du contrat est obligatoire.</span>
+                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
+                                                                    lettres sont acceptés.</span>-->
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div>
@@ -136,7 +254,9 @@ Formation suivie :
                                     formControlName="code_commercial" />
                             </div>
                             <div class="ui-g-12 ui-md-12">
-                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales" target="_blank">mentions légales</a> et accepte que mes données soient utiliseés dans le cadre de mon accompagnement
+                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
+                                        target="_blank">mentions légales</a> et accepte que mes données soient utiliseés
+                                    dans le cadre de mon accompagnement
                                     et dans le traitement de ma demande ?</h6>
                                 <div>
                                     <p-radioButton value=true name="donneePerso" formControlName="donneePerso">
