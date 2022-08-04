@@ -258,4 +258,38 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 
 }, (error) => { res.status(500).send(error); })
 
+app.get('/getFormateurFromClasseID/:classe_id/:semestre', (req, res, next) => {
+    Seance.find({ classe_id: req.params.classe_id }).then(seanceList => {
+        //TODO Enlever les seances en dehors du semestre
+        let dicMatiere = {}//matiere_id:{formateur_id:nb,formateur_id:nb}
+        let r = {}//matiere_id:formateur_id
+        seanceList.forEach(seance => {
+            if (dicMatiere[seance.matiere_id]) {
+                if (dicMatiere[seance.matiere_id][seance.formateur_id]) {
+                    dicMatiere[seance.matiere_id][seance.formateur_id] += 1
+                } else {
+                    dicMatiere[seance.matiere_id][seance.formateur_id] = 1
+                }
+            } else {
+                dicMatiere[seance.matiere_id] = {}
+                dicMatiere[seance.matiere_id][seance.formateur_id] = 1
+            }
+        })
+        Object.keys(dicMatiere).forEach(matiere => {
+            let fList = dicMatiere[matiere]
+            let chosenOne = Object.keys(fList)[0]
+            let highest = fList[chosenOne]
+            Object.keys(fList).forEach(f_id => {
+                let nb = fList[f_id]
+                if (nb > highest) {
+                    highest = nb
+                    chosenOne = f_id
+                }
+            })
+            r[matiere] = chosenOne
+        })
+        res.status(201).send(r)
+    })
+}, (error) => { res.status(500).send(error); })
+
 module.exports = app;

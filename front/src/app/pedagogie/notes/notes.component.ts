@@ -24,6 +24,8 @@ import { Appreciation } from 'src/app/models/Appreciation';
 import { AppreciationService } from 'src/app/services/appreciation.service';
 import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service';
 import { RachatBulletin } from 'src/app/models/RachatBulletin';
+import { SeanceService } from 'src/app/services/seance.service';
+import { FormateurService } from 'src/app/services/formateur.service';
 
 @Component({
   selector: 'app-notes',
@@ -42,6 +44,7 @@ export class NotesComponent implements OnInit {
 
   users: User[] = [];
   userList: any[] = [];
+  formateurs = {}
 
   etudiants: Etudiant[] = [];
   dropdownEtudiant: any[] = [];
@@ -86,6 +89,7 @@ export class NotesComponent implements OnInit {
   dropdownExamByClasse: any[] = [{ libelle: '', value: '' }];
 
   appreciationModules = {}
+  dicFormateurMatiere = {}
 
   initAppreciation(mode) {
     if (mode == "set") {
@@ -233,7 +237,7 @@ export class NotesComponent implements OnInit {
   constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService,
     private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService,
     private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService,
-    private noteService: NoteService, private RBService: RachatBulletinService) { }
+    private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService:FormateurService) { }
 
   ngOnInit(): void {
     //Recuperation de l'année scolaire en cours
@@ -605,7 +609,7 @@ export class NotesComponent implements OnInit {
         else {
 
           //Création de la nouvelle note à créer dans la BD
-          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id,isAbsent);
+          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id, isAbsent);
 
           this.noteService.create(note).subscribe(
             ((response) => {
@@ -833,7 +837,6 @@ export class NotesComponent implements OnInit {
     this.notesForGenerateBulletin = []
     this.semestreChoose = semestre
     this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      console.log(data)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
       this.showBulletin = true
@@ -842,6 +845,9 @@ export class NotesComponent implements OnInit {
     })
     this.etudiantService.getById(etudiant_id).subscribe(data => {
       this.etudiantToGenerateBulletin = data
+      this.seanceService.getFormateurFromClasseID(data.classe_id, semestre).subscribe(d => {
+        this.dicFormateurMatiere = d
+      })
     })
   }
 
@@ -858,6 +864,9 @@ export class NotesComponent implements OnInit {
     })
     this.etudiantService.getById(etudiant_id).subscribe(data => {
       this.etudiantToGenerateBulletin = data
+      this.seanceService.getFormateurFromClasseID(data.classe_id, "Annuel").subscribe(d => {
+        this.dicFormateurMatiere = d
+      })
     })
   }
 
