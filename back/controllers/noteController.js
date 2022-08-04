@@ -11,6 +11,13 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+//Recuperation de la liste des notes
+app.get("/getAllPopulate", (req, res, next) => {
+    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } })
+        .then((notesFromDb) => { res.status(200).send(notesFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
 
 //Recuperation de la liste des notes via un id et un semestre
 app.get("/getAllByIdBySemestre/:id/:semestre", (req, res, next) => {
@@ -47,16 +54,14 @@ app.get("/getAllByClasse/:id", (req, res, next) => {
 //Permet de verifier si un etudiant à deja une note pour le meme semestre et pour la meme matiere
 app.get("/verifNoteByIdBySemestreByExam/:id/:semestre/:exam", (req, res, next) => {
     Note.findOne({ etudiant_id: req.params.id, semestre: req.params.semestre, examen_id: req.params.exam })
-        .then((noteFromDb) => { 
-            if(noteFromDb)
-            {
+        .then((noteFromDb) => {
+            if (noteFromDb) {
                 res.status(201).json({ error: "L'étudiant possède déjà une note" });
             }
-            else
-            {
+            else {
                 res.status(200).json({ success: "L'étudiant ne possède pas de note" });
             }
-             
+
         })
         .catch((error) => { res.status(500).send("Veuillez contacter un administrateur"); });
 });
@@ -67,16 +72,11 @@ app.post("/create", (req, res, next) => {
 
     //Création du nouvel objet Note
     let data = req.body;
+    delete data._id
 
     let note = new Note(
         {
-            note_val: data.note_val,
-            semestre: data.semestre,
-            etudiant_id: data.etudiant_id,
-            examen_id: data.examen_id,
-            appreciation: data.appreciation,
-            classe_id: data.classe_id,
-            matiere_id: data.matiere_id,
+            ...data
         }
     );
 
@@ -97,10 +97,10 @@ app.get("/getAllByClasseBySemestre/:classeid/:semestre", (req, res, next) => {
 //Mise à jour d'une note via son identifiant
 app.put("/updateById/:id", (req, res, next) => {
 
-    Note.findOneAndUpdate({ _id: req.params.id }, 
+    Note.findOneAndUpdate({ _id: req.params.id },
         {
             note_val: req.body.note_val,
-            semestre:  req.body.semestre,
+            semestre: req.body.semestre,
             etudiant_id: req.body.etudiant_id,
             examen_id: req.body.examen_id,
             appreciation: req.body.appreciation,
@@ -108,7 +108,7 @@ app.put("/updateById/:id", (req, res, next) => {
             matiere_id: req.body.matiere_id,
         })
         .then((noteUpdated) => { res.status(200).send(noteUpdated); })
-        .catch((error) => {res.status(400).send(error.message); });
+        .catch((error) => { res.status(400).send(error.message); });
 
 });
 

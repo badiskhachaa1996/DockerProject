@@ -13,57 +13,58 @@ export class FormateurService {
 
   apiUrl = environment.origin + "formateur/"
 
-  constructor( private httpClient: HttpClient ) { }
+  constructor(private httpClient: HttpClient) { }
 
   //Methode de recuperation de la liste des formateurs
-  getAll()
-  {
+  getAll() {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<Formateur[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Methode de recuperation de la liste des formateurs
+  getAllPopulate() {
+    let registreUrl = this.apiUrl + "getAllPopulate";
+    return this.httpClient.get<Formateur[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   //Methode de recuperation d'un formateur via son id formateur
-  getById(id: string)
-  {
+  getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Formateur>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Recupère un formateur via son user_id
-  getByUserId(id: string)
-  {
+  getByUserId(id: string) {
     let registreUrl = this.apiUrl + "getByUserId/" + id;
     return this.httpClient.get<Formateur>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //création d'un formateur
-  create(tbObj: any)
-  {
+  create(tbObj: any) {
     let registreUrl = this.apiUrl + "create";
     return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Met à jour un formateur via son idFormateur
-  updateById(formateur: Formateur)
-  {
+  updateById(formateur: Formateur) {
     let registreUrl = this.apiUrl + "updateById/" + formateur._id;
     return this.httpClient.post<any>(registreUrl, formateur, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllUser(){
-    return this.httpClient.get(this.apiUrl+"getAllUser",{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  getAllUser() {
+    return this.httpClient.get(this.apiUrl + "getAllUser", { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
-  updateMatiere(formateur,data){
-    return this.httpClient.post(this.apiUrl+"updateVolume/"+formateur._id,data,{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  updateMatiere(formateur, data) {
+    return this.httpClient.post(this.apiUrl + "updateVolume/" + formateur._id, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
   sendEDT(id, update = "/nope") {
-    let registreUrl = this.apiUrl + "sendEDT/" + id+update;
+    let registreUrl = this.apiUrl + "sendEDT/" + id + update;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getFiles(id:any) {
+  getFiles(id: any) {
     let url = this.apiUrl + "getFiles/" + id
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

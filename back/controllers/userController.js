@@ -315,7 +315,8 @@ app.post("/updateEtudiant/:id", (req, res) => {
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
             postal_adresse: req.body.user.postal_adresse,
-            statut: req.body.user.statut
+            statut: req.body.user.statut,
+            type: req.body.user.type,
             // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {

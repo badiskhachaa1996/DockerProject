@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 //creation du schema de la table diplome
 const tuteurSch = mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     entreprise_id: { type: mongoose.Schema.Types.ObjectId, ref: "entreprise" },
     fonction: { type: String },
     anciennete: { type: String },
