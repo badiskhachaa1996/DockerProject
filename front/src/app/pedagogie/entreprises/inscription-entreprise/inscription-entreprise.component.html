@@ -161,7 +161,7 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-8 md:col-6">
-                                <label For="phone_ent">Telephone entreprise <span style="color: red;"> *
+                                <label For="phone_ent">Téléphone <small>(entreprise)</small><span style="color: red;">*
                                     </span></label>
                                 <input pInputText type="number" placeholder="1486" formControlName="phone_ent" />
                                 <div *ngIf="phone_ent.invalid && (phone_ent.touched || phone_ent.dirty)">
@@ -362,7 +362,7 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-9 md:col-4">
-                                <label For="phone">Téléphone du dirigeant<span style="color: red;"> *
+                                <label For="phone">Téléphone <small>(dirigeant)</small> <span style="color: red;">*
                                     </span></label>
                                 <input pInputText id="phone" type="tel" placeholder="phone du dirigeant"
                                     formControlName="phone" />
@@ -372,7 +372,8 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-3 md:col-2">
-                                <label For="indicatif_whatsapp">indicatif whatsapp<span style="color: red;">*
+                                <label For="indicatif_whatsapp">indicatif <small>(WhatsApp)</small><span
+                                        style="color: red;">*
                                     </span></label>
                                 <input pInputText id="indicatif_whatsapp" type="number"
                                     placeholder="indicatif_whatsapp du dirigeant"
@@ -385,8 +386,9 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-9 md:col-4">
-                                <label For="numero_whatsapp">Numéro WhatsApp<span style="color: red;"> *
+                                <label For="numero_whatsapp">Numéro<br><small>(WhatsApp)</small><span style="color: red;">*
                                     </span></label>
+                                    
                                 <input pInputText id="numero_whatsapp" type="tel"
                                     placeholder="numero_whatsapp du dirigeant" formControlName="numero_whatsapp" />
                                 <div
@@ -412,13 +414,13 @@ Formation suivie :
                     [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12 md:col-2">
+                            <div class="field col-12 md:col-4">
                                 <label For="civilite">Civilité<span style="color: red;"> * </span></label>
                                 <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                                     formControlName="civilite_t1"></p-dropdown>
                             </div>
-                            <div class="field col-12 md:col-10"></div>
-                            <div class="field col-12 md:col-6">
+                          
+                            <div class="field col-12 md:col-4">
                                 <label For="lastname_t1">Nom<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="lastname_t1" type="text" placeholder="Nom du tuteur"
@@ -428,7 +430,7 @@ Formation suivie :
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-4">
                                 <label For="firstname_t1">Prenom<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="firstname_t1" type="text" placeholder="Prenom du dirigeant"
@@ -461,9 +463,9 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="email_t1">email du tuteur<span style="color: red;"> *
+                                <label For="email_t1">Email du tuteur<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="email_t1" type="email" placeholder="email_t1 du dirigeant"
+                                <input pInputText id="email_t1" type="email" placeholder="Email du dirigeant"
                                     formControlName="email_t1" />
                                 <div *ngIf="email_t1.invalid && (email_t1.touched || email_t1.dirty)">
                                     <span style="color: red;" class="error" *ngIf="email_t1.errors?.required">* Le
@@ -497,7 +499,7 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="temps_fonction_t1">ancienneté dans la fonction en années<span
+                                <label For="temps_fonction_t1">Ancienneté dans la fonction en années<span
                                         style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="temps_fonction_t1" type="number" placeholder="fonction du tuteur"
@@ -537,7 +539,7 @@ Formation suivie :
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-6">
-                                <label For="debut_contrat">date de debut du contrat<span style="color: red;"> *
+                                <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                     </span></label>
                                 <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
                                     [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
@@ -550,7 +552,7 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="fin_contrat">date de fin du contrat<span style="color: red;"> *
+                                <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
                                     </span></label>
                                 <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
                                     [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
