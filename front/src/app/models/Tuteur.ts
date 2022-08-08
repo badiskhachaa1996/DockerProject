@@ -7,7 +7,8 @@ export class Tuteur {
         public user_id?:User,
         public fonction?: string,
         public anciennete?: string,
-        public niveau_formation?: string
+        public niveau_formation?: string,
+        public date_naissance?: Date
     ) { }
 
 }

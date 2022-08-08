@@ -31,7 +31,22 @@ const entrepriseSchema = mongoose.Schema({
     financeur: { type: String, required: false },
     nda: { type: String, required: false },
     type_soc: { type: String, required: false },
-    categorie: { type: [String], default: [] }
+    categorie: { type: [String], default: [] },
+    Directeur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    activite: { type: String, required: false },
+    adresse_ec: { type: String, required: false },
+    postal_ec: { type: String, required: false },
+    ville_ec: { type: String, required: false },
+    crc: { type: String, required: false },
+    convention: { type: String, required: false },
+    telecopie: { type: String, required: false },
+    nb_salarie: { type: String, required: false },
+    idcc: { type: String, required: false },
+    indicatif: { type: String, required: false },
+    OPCO: { type: String, required: false },
+    organisme_prevoyance: { type: String, required: false },
+
+
 });
 
 //Création de la table entreprise via le schema de la table

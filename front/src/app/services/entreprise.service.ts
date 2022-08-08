@@ -16,37 +16,33 @@ export class EntrepriseService {
   constructor(private httpClient: HttpClient) { }
 
   //Methode de recuperation de la liste des entreprises
-  getAll()
-  {
+  getAll() {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<Entreprise[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Creation d'une nouvelle entreprise
-  create(entreprise: Entreprise)
-  {
+  create(entreprise: Entreprise) {
     let registreUrl = this.apiUrl + "create";
     return this.httpClient.post<Entreprise>(registreUrl, entreprise, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+
   //Recuperation d'une entreprise via un id
-  getById(id: string)
-  {
+  getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Entreprise>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Modification d'une entreprise
-  update(entreprise: Entreprise)
-  {
+  update(entreprise: Entreprise) {
     let registreUrl = this.apiUrl + "update";
     return this.httpClient.put<Entreprise>(registreUrl, entreprise, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  inscription(entreprise){
-    let registreUrl = this.apiUrl + "create";
-    return this.httpClient.post<Entreprise>(registreUrl, entreprise, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  createNewContrat(objectTosend) {
+    let registreUrl = this.apiUrl + "createNewContrat";
+    return this.httpClient.post<Entreprise>(registreUrl, objectTosend, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  
 }
