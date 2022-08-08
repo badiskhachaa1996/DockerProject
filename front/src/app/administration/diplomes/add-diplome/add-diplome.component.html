@@ -190,6 +190,26 @@
                     </p-dropdown>
                 </div>
 
+                <div class="field col-12 md:col-6">
+                    <label>Date de début semestre 1</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_1"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin semestre 1</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_1"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début semestre 2</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_2"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin semestre 2</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_2"></p-calendar>
+                </div>
+
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit" [disabled]="formAddDiplome.invalid"></button>
                 </div>

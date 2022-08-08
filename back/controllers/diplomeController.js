@@ -30,6 +30,10 @@ app.post("/creatediplome", (req, res) => {
         date_fin_examen: data?.date_fin_examen,
         date_debut_stage: data?.date_debut_stage,
         date_fin_stage: data?.date_fin_stage,
+        date_debut_semestre_1: data?.date_debut_semestre_1,
+        date_fin_semestre_1: data?.date_fin_semestre_1,
+        date_debut_semestre_2: data?.date_debut_semestre_2,
+        date_fin_semestre_2: data?.date_fin_semestre_2,
         code_diplome: data?.code_diplome,
         formateur_id: data?.formateur_id
     });
@@ -66,6 +70,10 @@ app.post("/editById/:id", (req, res) => {
             date_fin_examen: req.body.date_fin_examen,
             date_debut_stage: req.body.date_debut_stage,
             date_fin_stage: req.body.date_fin_stage,
+            date_debut_semestre_1: req.body.date_debut_semestre_1,
+            date_fin_semestre_1: req.body.date_fin_semestre_1,
+            date_debut_semestre_2: req.body.date_debut_semestre_2,
+            date_fin_semestre_2: req.body.date_fin_semestre_2,
             code_diplome: req.body.code_diplome,
             formateur_id: req.body.formateur_id
 
