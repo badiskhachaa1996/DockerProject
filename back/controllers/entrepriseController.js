@@ -68,7 +68,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                 NewContrat.tuteur_id = NewTutData._id
                                 NewContrat.save().then((NewContData) => {
                                     res.status(200).send([NewContData, EntrepCreated, CeoCreated, NewTutData])
-                                }).catch((errorCt) => { res.status(400).json({ error: 'impossible de creer un nouveau tuteur' + errorCt.message }) })
+                                }).catch((errorCt) => { res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message }) })
 
 
 

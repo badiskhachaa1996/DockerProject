@@ -11,8 +11,10 @@ import { AuthService } from 'src/app/services/auth.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { ServService } from 'src/app/services/service.service';
+import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
-
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-inscription-entreprise',
@@ -50,7 +52,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   emailExist: boolean;
   listAlternantDD = []
   formationList = []
-  constructor(private formationService: DiplomeService, private route: ActivatedRoute, private formBuilder: FormBuilder, private messageService: MessageService,
+  constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private formBuilder: FormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private EtudiantService: EtudiantService) { }
 
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
@@ -343,13 +345,15 @@ export class InscriptionEntrepriseComponent implements OnInit {
       ((response) => {
         if (response) {
           this.RegisterForm.reset
-          this.ActiveIndex=0
-          /*this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
-            console.log(notif)
-            this.NotifService.newNotif(notif)
-          }, (error) => {
-            console.error(error)
-          }));*/
+          this.ActiveIndex = 0
+          this.servService.getAServiceByLabel("Commercial").subscribe(serviceCommercial => {
+            this.NotifService.create(new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial?._id)).pipe(map(notif => {
+              console.log(notif)
+              this.NotifService.newNotif(notif)
+            }, (error) => {
+              console.error(error)
+            }));
+          })
 
           this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
         } else {
