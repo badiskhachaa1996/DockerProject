@@ -192,13 +192,13 @@
 
             <form [formGroup]="formSelectClasse" (ngSubmit)="onSelectClasse()" class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-6">
-                    <label For="examen">Examen</label>
+                    <label>Classe</label>
                     <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
                         emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="semestre">Semestre</label>
+                    <label>Semestre</label>
                     <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
                         emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif"
                         filter="true">
