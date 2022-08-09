@@ -263,7 +263,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       '',
       this.postal_ss,
       "",
-      true
+      false
     );
 
 
@@ -334,7 +334,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       null,
       null,
       null,
-      true
+      false
     );
 
     let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire, this.alternant.value, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, null, this.code_commercial)
