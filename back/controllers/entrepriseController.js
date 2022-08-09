@@ -166,7 +166,7 @@ app.post("/createNewContrat", (req, res, next) => {
                         .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }
         })
-        .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });
+        .catch((error) => { res.status(500).json({ error:error }) });
 
 });
 
