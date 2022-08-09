@@ -252,6 +252,7 @@ export class EmploiDuTempsComponent implements OnInit {
         },
       );
     } else if (this.type && this.type == "classe" && this.ID) {
+      console.log(this.ID)
       this.seanceService.getAllByClasseId(this.ID).subscribe(
         (datas) => {
           this.showEvents(datas)

@@ -29,6 +29,12 @@ export class NoteService {
     return this.httpClient.get<Note[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Recuperation de la liste des notes via l'id d'un étudiant
+  getAllByEtudiantId(id: string) {
+    let registreUrl = this.apiUrl + "getAllByEtudiantId/" + id;
+    return this.httpClient.get<Note[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   //Recuperation d'une liste de note par semestre via un identifiant etudiant
   getAllByIdBySemestre(id: string, semestre: string)
   {

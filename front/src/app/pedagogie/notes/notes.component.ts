@@ -297,43 +297,53 @@ export class NotesComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
+    // this.matiereService.getAll().subscribe(
+    //   (responseM) => {
 
+    //     this.examenService.getAll().subscribe(
+    //       (responseE) => {
+    //         responseE.forEach((examen) => {
 
+    //           responseM.forEach((matiere) => {
+    //             this.matieres[matiere._id] = matiere;
 
+                
+    //               this.dropdownExamen.push({
+    //                 libelle: matiere.nom,
+    //                 value: examen._id,
+    //               });
 
-    this.matiereService.getAll().subscribe(
-      (responseM) => {
+    //               this.examens[examen._id] = examen;
+                
+                
+    //           });
 
+    //         });
 
-        this.examenService.getAllEvaluation().subscribe(
-          (responseE) => {
-            responseE.forEach((examen) => {
+    //       }),
+    //       (error) => {
+    //         console.error(error);
+    //       };
+    //   },
+    //   (error) => {
+    //     console.error(error);
+    //   }
+    // );
+    // console.log(this.dropdownExamen)
 
-              responseM.forEach((matiere) => {
-                this.matieres[matiere._id] = matiere;
-
-                if (matiere._id == examen.matiere_id) {
-                  this.dropdownExamen.push({
-                    libelle: matiere.nom,
-                    value: examen._id,
-                  });
-
-                  this.examens[examen._id] = examen;
-                }
-
-              });
-
-            });
-
-          }),
-          (error) => {
-            console.error(error);
-          };
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
+/////////test dropdown Examen test
+this.examenService.getAll().subscribe(
+  (responseE) => {
+    responseE.forEach((examen) => {
+      this.dropdownExamen.push({
+        libelle: examen.libelle,
+        value: examen._id,
+      });
+      this.examens[examen._id] = examen;
+    })
+    
+  })
+  
 
     //Initialisation des formulaires
     this.onInitFormSelectClasse();
@@ -344,6 +354,8 @@ export class NotesComponent implements OnInit {
     this.onInitFormAddNoteByClasseByExam();
     this.onInitFormAppreciationGenerale();
     this.onInitFormUpdateAppreciationGenerale();
+
+   
   }
 
 
@@ -361,7 +373,6 @@ export class NotesComponent implements OnInit {
       examen: ['', Validators.required],
     });
   }
-
   //Formulaire d'initialisation du formulaire d'ajout de note par classe et par examen et par semestre
   onInitFormAddNoteByClasseByExam() {
     this.formAddNoteByClasseByExam = this.fromBuilder.group({
@@ -434,15 +445,15 @@ export class NotesComponent implements OnInit {
         this.dropdownExamByClasse = [{ libelle: '', value: '' }];
 
         response.forEach((examen) => {
-          for (let matiere in this.matieres) {
-            if (examen.matiere_id == this.matieres[matiere]._id) {
+          // for (let matiere in this.matieres) {
+            // if (examen.matiere_id == this.matieres[matiere]._id) {
               this.dropdownExamByClasse.push({
-                libelle: this.matieres[matiere].nom,
+                libelle: examen.libelle,
                 value: examen._id,
               });
-            }
-          }
-
+            // }
+          // }
+              console.log(this.dropdownExamByClasse)
         });
 
 

@@ -18,6 +18,7 @@ export class ExamenService {
   getAll()
   {
     let registreUrl = this.apiUrl + "getAll";
+    console.log("Je suis la!")
     return this.httpClient.get<Examen[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -25,6 +26,7 @@ export class ExamenService {
   getAllEvaluation()
   {
     let registreUrl = this.apiUrl + "getAllEvaluation";
+    
     return this.httpClient.get<Examen[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 

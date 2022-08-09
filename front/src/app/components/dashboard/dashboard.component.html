@@ -244,7 +244,147 @@
 
     </div> -->
 
+
 <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
 <h3>Le tableau de bord est actuellement en construction pour votre statut!</h3>
 <h4>Pour naviguer sur l'application, merci d'utiliser le menu à gauche</h4>
 <h5>Merci de votre patience!</h5>
+
+<div *ngIf="this.isEtudiant">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+
+        <div class="col-12 md:col-6">
+            <div class="card" >
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <div>
+                        <h4 class="col-12">Planning journée</h4>
+                    </div>
+               
+                        <div class="col-12" *ngIf="type==null">
+                            <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
+                        </div>  
+                    </div>
+
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="card" *ngIf="notes">
+                <h5>Dernières notes obtenues</h5>
+                <p-table [value]="dernotes">
+                    <ng-template pTemplate="header">
+                        <tr> 
+                            <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon></th>
+                            <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon></th>
+                        </tr>
+                    </ng-template> 
+                    <ng-template pTemplate="body" let-note>
+                            <tr>
+                                <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
+                                <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+                            </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+     
+<div *ngIf="this.isFormateur">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher les cours de la journée-->
+</div>
+
+<div *ngIf="this.isAdmission">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total d'inscrit-->
+    <!-- Afficher le nombre de nouvelle inscrit (etat_traitement=='Nouvelle') -->
+    <!-- Afficher le nombre d'etudiant en attente (etat_traitement=='Retour Etudiant') -->
+</div>
+
+<div *ngIf="this.isPedagogie">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher un calendrier de taches (TODO)-->
+    <!-- Afficher le nombre total de réinscription en attente -->
+    <!-- Afficher le nombre total d'étudiants dans les filières Informatique, Commercial et Tertiaire -->
+    <!-- Afficher l'emploi du temps de la journée dans les filières Informatique, Commercial et Tertiaire -->
+</div>
+
+<div *ngIf="this.isCommercial">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+    <!-- Afficher le nombre total de ces prospects avec leur code -->
+    <!-- Afficher le nombre total d'étudiants avec leur code -->
+</div>
+
+<div *ngIf="this.isReinscrit">
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+    </h2>
+    <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\construction.jpg" style="width: 40%;">
+        </div>
+        <p>Votre demande de reinscription est en cours de traitement</p>
+        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
+        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
+                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
+        <p>Merci de votre patience!</p>
+    </div>
+</div>
+
+<div *ngIf="isAdmin">
+    <h2>Outil pour les devs</h2>
+    <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
+</div>
+

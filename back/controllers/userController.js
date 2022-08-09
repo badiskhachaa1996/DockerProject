@@ -565,5 +565,27 @@ app.put("/udpatePwd/:id", (req, res) => {
     })
 })*/
 
+app.get("/HowIsIt/:id", (req, res) => {
+    jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (err, decoded) {
+        if (decoded == undefined) {
+            res.status(201).send(err)
+        } else {
+            User.findById(req.params.id).then((userFromDb) => {
+                if (!userFromDb) {
+                    res.status(201).send({ name: "Cette utilisateur n'existe pas" })
+                } else if (userFromDb.civilite == null) {
+                    res.status(201).send({ name: "Profil incomplet" })
+                } else {
+                    res.status(201).send({ name: "Profil complet" });
+                }
+            }).catch((error) => {
+                console.log("pb ici")
+                console.error(error)
+                res.status(404).send(error);
+            })
+        }
+    });
+});
+
 
 module.exports = app;

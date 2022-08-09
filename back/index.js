@@ -35,6 +35,7 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+
         console.log("L'api s'est connecté à MongoDB.");
 
         /* 
@@ -51,6 +52,9 @@ mongoose
             'local'
         );
         */
+
+
+        console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
 
     })
     .catch(err => {
