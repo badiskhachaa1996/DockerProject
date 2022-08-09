@@ -34,6 +34,13 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des formateur " + error.Message }) })
 });
 
+//Recupère la liste des formateurs
+app.get("/getAllPopulate", (req, res, next) => {
+    Formateur.find().populate('user_id')
+        .then((formateursFromDb) => { res.status(200).send(formateursFromDb) })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des formateur " + error.Message }) })
+});
+
 //Recupère la liste d'un formateur via un id formateur
 app.get("/getById/:id", (req, res, next) => {
     Formateur.findById(req.params.id)

@@ -356,7 +356,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
     let r = []
-    let moy_tt = 0
+    let moy_tt = 0.00000000001
     Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
         Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
             let listEtudiantID = []
@@ -395,7 +395,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 listEtudiantID.forEach(e_id => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
-                        listMoyenneEtudiants[e_id][m_nom] = 0.00000
+                        listMoyenneEtudiants[e_id][m_nom] = 0.00000000001
                         if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
                             listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
                         }
@@ -419,11 +419,11 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                         if (dicRB[dicMatiere[m_nom]._id]) {
                             old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                             isDispensed = dicRB[dicMatiere[m_nom]._id].isDispensed
+                            //TODO listMoyenneEtudiants ne prends pas en compte les absences
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
-                        //TODO Rajouter le formateur
-                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
-                        if (!isDispensed) {
+                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, ects: dicMatiere[m_nom].credit_ects, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
+                        if (!isDispensed && listMoyenneEtudiants[req.params.etudiant_id][m_nom] != 0.00000000001) {
                             moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
                             sumMoy += dicMatiere[m_nom].coeff
                         }
@@ -438,94 +438,6 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
         })
     })
 })
-
-app.get("/getBulletinAnnuel/:etudiant_id", (req, res, next) => {
-    // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
-    // MOY TT ETU
-    // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
-    let r = { "Semestre 1": [], "Semestre 2": [], "Annuel": [] }
-    let moy_tt = 0
-    Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
-        Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
-            let listEtudiantID = []
-            etudiants.forEach(etu => {
-                listEtudiantID.push(etu._id)
-            })
-            Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: "Semestre 1" }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).then(notes => {
-                let listExamenID = []
-                let listMatiereNOM = []
-                let listNotesEtudiants = {} // {etudiant_id:{matiere_id:[number]}}
-                let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
-                let listMoyenne = {} // {matiere_nom:[number]}
-                let dicMatiere = {}
-                let listMoyChoose = {}
-                notes.forEach(n => {
-                    if (n.examen_id != null && !listExamenID.includes(n.examen_id._id)) {
-                        listExamenID.push(n.examen_id._id)
-                    }
-                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.nom)) {
-                        listMatiereNOM.push(n.examen_id.matiere_id.nom)
-                        dicMatiere[n.examen_id.matiere_id.nom] = n.examen_id.matiere_id
-                    }
-
-                })
-                listEtudiantID.forEach(e_id => {
-                    listNotesEtudiants[e_id] = {}
-                    listMatiereNOM.forEach(m_nom => {
-                        listNotesEtudiants[e_id][m_nom] = []
-                        notes.forEach(note => {
-                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.nom == m_nom) {
-                                listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val))
-                            }
-                        })
-                    })
-                })
-                listEtudiantID.forEach(e_id => {
-                    listMoyenneEtudiants[e_id] = {}
-                    listMatiereNOM.forEach(m_nom => {
-                        listMoyenneEtudiants[e_id][m_nom] = 0.00000
-                        if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
-                            listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
-                        }
-                    })
-                })
-                listMatiereNOM.forEach(m_nom => {
-                    listMoyenne[m_nom] = []
-                    listEtudiantID.forEach(e_id => {
-                        listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
-                    })
-                })
-                let dicRB = {}
-                RachatBulletin.find({ user_id: chosenOne.user_id, semestre: "Semestre 1" }).then(rbs => {
-                    rbs.forEach(rb => {
-                        dicRB[rb.matiere_id] = rb
-                    })
-                    let sumMoy = 0
-                    listMatiereNOM.forEach(m_nom => {
-                        let old_note = null
-                        let isDispensed = false
-                        if (dicRB[dicMatiere[m_nom]._id]) {
-                            old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
-                            isDispensed = dicRB[dicMatiere[m_nom]._id].isDispensed
-                            listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
-                        }
-                        r['Semestre 1'].push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
-                        if (!isDispensed) {
-                            moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
-                            sumMoy += dicMatiere[m_nom].coeff
-                        }
-                        listMoyChoose[dicMatiere[m_nom]._id] = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
-                    })
-                    if (sumMoy != 0) {
-                        moy_tt = moy_tt / sumMoy
-                    }
-                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose })
-                })
-            })
-        })
-    })
-})
-
 
 app.get("/getAllByCode/:code", (req, res) => {
     Etudiant.find({ classe_id: { $ne: null } }).then(result => {

@@ -462,9 +462,7 @@
                 <p-table [value]="notesForGenerateBulletin" class="bulletin" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th></th>
-                            <th></th>
-                            <th style="width: 4em;"></th>
+                            <th colspan="3"></th>
                             <th colspan="1">Etudiant</th>
                             <th colspan="3">Promotion</th>
                         </tr>
@@ -478,6 +476,7 @@
                             <th style="width: 5em;">Moy.</th>-->
                             <th style="width: 5em;">Min.</th>
                             <th style="width: 5em;">Max.</th>
+                            <th>ECTS</th>
                             <th>Appréciations</th>
                         </tr>
                     </ng-template>
@@ -495,15 +494,16 @@
                             </td>
                             <td style="width: 4em;">{{ note.coef }}</td>
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="!note.isDispensed && note.moy_etu!=0.00000">{{ note.moy_etu |
+                                *ngIf="!note.isDispensed && note.moy_etu!=0.00000000001">{{ note.moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note.isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note.moy_etu==0.00000">Absent</td>
+                            <td style="width: 5em;" *ngIf="note.moy_etu==0.00000000001">Absent</td>
                             <!--<td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
                             <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>-->
                             <td style="width: 5em;text-align: right;">{{ note.moy_classe | number : '0.1-2' }}</td>
                             <td style="width: 5em;text-align: right;">{{ note.min_classe | number : '0.1-2' }}</td>
                             <td style="width: 5em;text-align: right;">{{ note.max_classe | number : '0.1-2' }}</td>
+                            <td>{{ note.ects }}</td>
                             <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
                                 appreciationModules[note.matiere_id] }}</td>
                             <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
@@ -516,9 +516,7 @@
                             <td style="text-align: right;">{{ moyEtudiant | number : '0.1-2' }}</td>
                             <!--<td>{{ moyEtudiant | number : '0.1-2' }}</td>
                             <td>{{ moyEtudiant | number : '0.1-2' }}</td>-->
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan="5"></td>
                             <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
@@ -614,13 +612,13 @@
                 <p-table [value]="notesForGenerateBulletin" class="bulletin" styleClass="p-datatable-gridlines">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th></th>
-                            <th style="width: 4em;"></th>
+                            <th colspan="3"></th>
                             <th colspan="3">Moyenne</th>
                             <th colspan="3">Promotion</th>
                         </tr>
                         <tr>
                             <th>Modules</th>
+                            <th>Formateur</th>
                             <th style="width: 4em;">Coef</th>
                             <th style="width: 5em;">Semestre 1</th>
                             <th style="width: 5em;">Semestre 2</th>
@@ -628,34 +626,55 @@
                             <th style="width: 5em;">Moy.</th>
                             <th style="width: 5em;">Min.</th>
                             <th style="width: 5em;">Max.</th>
+                            <th>ECTS</th>
                             <th>Appréciations</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
                         <tr>
                             <td>{{ note.matiere_name}}</td>
+                            <td
+                                *ngIf="dicFormateurMatiere[note.matiere_id] && users[dicFormateurMatiere[note.matiere_id]]">
+                                {{users[dicFormateurMatiere[note.matiere_id]].lastname | uppercase}}
+                                {{users[dicFormateurMatiere[note.matiere_id]].firstname | titlecase}}
+                            </td>
+                            <td
+                                *ngIf="!dicFormateurMatiere[note.matiere_id] || !users[dicFormateurMatiere[note.matiere_id]]">
+                                Formateur Référent
+                            </td>
                             <td style="width: 4em;">{{ note.coef }}</td>
+                            <!-- Note Semestre 1 -->
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="!note['Semestre 1'].isDispensed && note['Semestre 1'].moy_etu!=0.00000">{{
-                                note['Semestre 1'].moy_etu |
-                                number : '0.1-2' }}</td>
-                            <td style="width: 5em;" *ngIf="note['Semestre 1'].isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note['Semestre 1'].moy_etu==0.00000">Absent</td>
+                                *ngIf="note['Semestre 1'] && !note['Semestre 1'].isDispensed && note['Semestre 1'].moy_etu!=0.00000000001">
+                                {{note['Semestre 1'].moy_etu | number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 1'] && note['Semestre 1'].isDispensed">
+                                Dispensé</td>
+                            <td style="width: 5em;"
+                                *ngIf="note['Semestre 1'] && note['Semestre 1'].moy_etu==0.00000000001">Absent</td>
+                            <td style="width: 5em;" *ngIf="!note['Semestre 1']"> </td>
+                            <!-- Note Semestre 2 -->
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="!note['Semestre 2'].isDispensed && note['Semestre 2'].moy_etu!=0.00000">{{
-                                note['Semestre 2'].moy_etu |
-                                number : '0.1-2' }}</td>
-                            <td style="width: 5em;" *ngIf="note['Semestre 2'].isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note['Semestre 2'].moy_etu==0.00000">Absent</td>
+                                *ngIf="note['Semestre 2'] && !note['Semestre 2'].isDispensed && note['Semestre 2'].moy_etu!=0.00000000001">
+                                {{note['Semestre 2'].moy_etu |number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Semestre 2'] && note['Semestre 2'].isDispensed">
+                                Dispensé</td>
+                            <td style="width: 5em;"
+                                *ngIf="note['Semestre 2'] && note['Semestre 2'].moy_etu==0.00000000001">Absent</td>
+                            <td style="width: 5em;" *ngIf="!note['Semestre 2']"> </td>
+                            <!-- Note Annuel -->
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="!note['Annuel'].isDispensed && note['Annuel'].moy_etu!=0.00000">{{
-                                note['Annuel'].moy_etu |
-                                number : '0.1-2' }}</td>
+                                *ngIf="!note['Annuel'].isDispensed && note['Annuel'].moy_etu!=0.00000000001">
+                                {{ note['Annuel'].moy_etu |number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Annuel'].isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000">Absent</td>
-                            <td style="width: 5em;text-align: right;">{{ note.moy_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;text-align: right;">{{ note.min_classe | number : '0.1-2' }}</td>
-                            <td style="width: 5em;text-align: right;">{{ note.max_classe | number : '0.1-2' }}</td>
+                            <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000000001">Absent</td>
+                            <!-- Moyenne -->
+                            <td style="width: 5em;text-align: right;">{{ note['Annuel'].moy_classe | number : '0.1-2' }}
+                            </td>
+                            <td style="width: 5em;text-align: right;">{{ note['Annuel'].min_classe | number : '0.1-2' }}
+                            </td>
+                            <td style="width: 5em;text-align: right;">{{ note['Annuel'].max_classe | number : '0.1-2' }}
+                            </td>
+                            <td>{{ note.ects }}</td>
                             <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
                                 appreciationModules[note.matiere_id] }}</td>
                             <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
@@ -664,12 +683,22 @@
                     <ng-template pTemplate="footer">
                         <tr>
                             <td colspan="2">Moyenne générale</td>
-                            <td style="text-align: right;">{{ moyEtudiant['Semestre 1'] | number : '0.1-2' }}</td>
-                            <td style="text-align: right;">{{ moyEtudiant['Semestre 2'] | number : '0.1-2' }}</td>
-                            <td style="text-align: right;">{{ moyEtudiant['Annuel'] | number : '0.1-2' }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Semestre 1']!=0.00000000001">{{
+                                moyEtudiantAnnuel['Semestre 1'] | number : '0.1-2' }}</td>
+                            <td *ngIf="moyEtudiantAnnuel['Semestre 1']==0.00000000001">
+                                Absent
+                            </td>
+                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Semestre 2']!=0.00000000001">{{
+                                moyEtudiantAnnuel['Semestre 2'] | number : '0.1-2' }}</td>
+                            <td *ngIf="moyEtudiantAnnuel['Semestre 2']==0.00000000001">
+                                Absent
+                            </td>
+                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Annuel']!=0.00000000001">{{
+                                moyEtudiantAnnuel['Annuel'] | number : '0.1-2' }}</td>
+                            <td *ngIf="moyEtudiantAnnuel['Annuel']==0.00000000001">
+                                Absent
+                            </td>
+                            <td colspan="5"></td>
                             <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
@@ -681,13 +710,13 @@
                         </tr>
                         <tr>
                             <td colspan="2">Année validé</td>
-                            <td *ngIf="moyEtudiant['Annuel'] >= 10">X</td>
-                            <td *ngIf="moyEtudiant['Annuel'] < 10"></td>
+                            <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10">X</td>
+                            <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10"></td>
                         </tr>
                         <tr>
                             <td colspan="2">Année non validé</td>
-                            <td *ngIf="moyEtudiant['Annuel'] >= 10"></td>
-                            <td *ngIf="moyEtudiant['Annuel'] < 10">X</td>
+                            <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10"></td>
+                            <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10">X</td>
                         </tr>
                     </ng-template>
                 </p-table>

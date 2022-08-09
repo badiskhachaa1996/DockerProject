@@ -17,9 +17,6 @@ mongoose
     })
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
-        /*User.find({ password: { $ne: null } }).then(dataU => {
-            console.log(dataU)
-        })*/
         Partenaire.find().then(pDATA => {
             pDATA.forEach(p => {
                 dicP[p.nom] = p
@@ -34,7 +31,7 @@ mongoose
                 }
                 User.findOneAndUpdate({ email_perso: data['Email'] }, u, { new: true }).then(newData => {
                     if (newData != null) {
-                        console.log(newData.email)
+                        console.log(newData.email_perso)
                     } else {
                         var p = dicP[data['Partenaire']]
                         if (p != undefined) {
