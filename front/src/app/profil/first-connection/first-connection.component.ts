@@ -81,7 +81,12 @@ export class FirstConnectionComponent implements OnInit {
 
       this.RegisterForm.patchValue({
         lastname: this.userConnected.lastname,
-        firstname: this.userConnected.firstname
+        firstname: this.userConnected.firstname,
+        ville_adresse: this.userConnected?.ville_adresse,
+        rue_adresse: this.userConnected?.rue_adresse,
+        numero_adresse: this.userConnected?.numero_adresse,
+        postal_adresse: this.userConnected?.postal_adresse,
+        phone: this.userConnected?.phone
       })
 
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
