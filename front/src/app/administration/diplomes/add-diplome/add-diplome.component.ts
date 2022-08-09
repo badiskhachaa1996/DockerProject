@@ -182,6 +182,10 @@ export class AddDiplomeComponent implements OnInit {
       date_fin_examen: [''],
       date_debut_stage: [''],
       date_fin_stage: [''],
+      date_debut_semestre_1: [''],
+      date_fin_semestre_1: [''],
+      date_debut_semestre_2: [''],
+      date_fin_semestre_2: [''],
       code_diplome: ['', Validators.required],
       formateur_id: [''],
     });
@@ -235,14 +239,18 @@ export class AddDiplomeComponent implements OnInit {
     let date_fin_examen = this.formAddDiplome.get('date_fin_examen')?.value;
     let date_debut_stage = this.formAddDiplome.get('date_debut_stage')?.value;
     let date_fin_stage = this.formAddDiplome.get('date_fin_stage')?.value;
+    let date_debut_semestre_1 = this.formAddDiplome.get('date_debut_semestre_1')?.value;
+    let date_fin_semestre_1 = this.formAddDiplome.get('date_fin_semestre_1')?.value;
+    let date_debut_semestre_2 = this.formAddDiplome.get('date_debut_semestre_2')?.value;
+    let date_fin_semestre_2 = this.formAddDiplome.get('date_fin_semestre_2')?.value;
     let code_diplome = this.formAddDiplome.get('code_diplome')?.value;
     let formateur_id = this.formAddDiplome.get('formateur_id')?.value.value;
 
-    //création et envoie du nouvelle objet diplôme
+    //création et envoie du nouvel objet diplôme
     let newDiplome = new Diplome(
       null, titre, titre_long, campus_id, description, type_diplome, type_etude, domaine, niveau, certificateur,
       code_RNCP, nb_heure, date_debut, date_fin, rythme, frais, frais_en_ligne,
-      isCertified, date_debut_examen, date_fin_examen, date_debut_stage, date_fin_stage, code_diplome, null, null, formateur_id
+      isCertified, date_debut_examen, date_fin_examen, date_debut_stage, date_fin_stage, date_debut_semestre_1, date_fin_semestre_1, date_debut_semestre_2, date_fin_semestre_2, code_diplome, null, null, formateur_id
     );
     this.diplomeService.create(newDiplome).subscribe(
       (() => {
@@ -350,6 +358,7 @@ export class AddDiplomeComponent implements OnInit {
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
       (() => {
         this.messageService.add({ severity: 'success', summary: 'Modification de diplôme', detail: 'Cet diplôme a bien été modifié' });
+        this.showFormUpdateDiplome = false;
         this.diplomeService.getAll().subscribe(
           (data) => { this.diplomes = data; },
           (error) => { console.error(error) }
@@ -358,7 +367,6 @@ export class AddDiplomeComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
-    this.showFormUpdateDiplome = false;
   }
 
   clickFile(rowData) {

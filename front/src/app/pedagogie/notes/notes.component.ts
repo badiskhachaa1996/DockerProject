@@ -26,6 +26,7 @@ import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service'
 import { RachatBulletin } from 'src/app/models/RachatBulletin';
 import { SeanceService } from 'src/app/services/seance.service';
 import { FormateurService } from 'src/app/services/formateur.service';
+import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-notes',
@@ -232,6 +233,9 @@ export class NotesComponent implements OnInit {
   showBtnAddAppreciationGenerale: boolean = true;
   showBtnUpdateAppreciationGenerale: boolean = false;
 
+  //Pour recuperer le rôle de l'utilisateur
+  userRole: string = '';
+  token: any;
 
   @ViewChild('content', { static: false }) el!: ElementRef;
 
@@ -241,6 +245,11 @@ export class NotesComponent implements OnInit {
     private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService: FormateurService) { }
 
   ngOnInit(): void {
+    /** Recuperation du rôle de l'utilisateur **/
+    this.token = jwt_decode(localStorage.getItem('token'));
+    this.userRole = this.token.role;
+    /** end */
+
     //Recuperation de l'année scolaire en cours
     this.anneeScolaireService.getActive().subscribe(
       ((response) => { this.anneScolaire = response; }),
@@ -365,7 +374,7 @@ export class NotesComponent implements OnInit {
   onInitFormSelectClasse() {
     this.formSelectClasse = this.fromBuilder.group({
       classe: ['', Validators.required],
-      semestre: ['', Validators.required],
+      semestre: [''],
     });
   }
 

@@ -14,6 +14,7 @@ export class ContratAlternance {
         public coeff_hierachique?: String,
         public formation?: Diplome,
         public tuteur_id?: User,
+        public code_commercial?: string,
     ) { }
 
 }

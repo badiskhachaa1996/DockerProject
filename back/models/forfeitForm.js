@@ -95,7 +95,7 @@ const Schema = new mongoose.Schema({
     },
     email_perso: {
         type: String,
-        required:false,
+       
     },
     civilite: {
         type: String,

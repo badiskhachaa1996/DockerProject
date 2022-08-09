@@ -198,6 +198,10 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_examen: this.diplomeToUpdate.date_fin_examen,
       date_debut_stage: this.diplomeToUpdate.date_debut_stage,
       date_fin_stage: this.diplomeToUpdate.date_fin_stage,
+      date_debut_semestre_1: this.diplomeToUpdate.date_debut_semestre_1,
+      date_fin_semestre_1: this.diplomeToUpdate.date_fin_semestre_1,
+      date_debut_semestre_2: this.diplomeToUpdate.date_debut_semestre_2,
+      date_fin_semestre_2: this.diplomeToUpdate.date_fin_semestre_2,
       code_diplome: this.diplomeToUpdate.code_diplome
     });
 
@@ -227,6 +231,10 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_examen: [''],
       date_debut_stage: [''],
       date_fin_stage: [''],
+      date_debut_semestre_1: [''],
+      date_fin_semestre_1: [''],
+      date_debut_semestre_2: [''],
+      date_fin_semestre_2: [''],
       code_diplome: ['', Validators.required],
       formateur_id: ['']
     });
@@ -256,6 +264,10 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.date_fin_examen = this.formUpdateDiplome.get('date_fin_examen')?.value;
     this.diplomeToUpdate.date_debut_stage = this.formUpdateDiplome.get('date_debut_stage')?.value;
     this.diplomeToUpdate.date_fin_stage = this.formUpdateDiplome.get('date_fin_stage')?.value;
+    this.diplomeToUpdate.date_debut_semestre_1 = this.formUpdateDiplome.get('date_debut_semestre_1')?.value;
+    this.diplomeToUpdate.date_fin_semestre_1 = this.formUpdateDiplome.get('date_fin_semestre_1')?.value;
+    this.diplomeToUpdate.date_debut_semestre_2 = this.formUpdateDiplome.get('date_debut_semestre_2')?.value;
+    this.diplomeToUpdate.date_fin_semestre_2 = this.formUpdateDiplome.get('date_fin_semestre_2')?.value;
     this.diplomeToUpdate.code_diplome = this.formUpdateDiplome.get('code_diplome')?.value;
     this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
 
