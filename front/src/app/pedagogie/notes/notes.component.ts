@@ -210,6 +210,7 @@ export class NotesComponent implements OnInit {
   notesBySemestre: Note[] = [];
   matiere_id: string;
   moyEtudiant: number;
+  moyEtudiantAnnuel: { 'Semestre 1': number, 'Semestre 2': number, 'Annuel': number } = { 'Semestre 1': 0, 'Semestre 2': 0, 'Annuel': 0 }
   semestreForGenerateBulletin: string;
 
   showGenerateBulletin: boolean = false;
@@ -237,7 +238,7 @@ export class NotesComponent implements OnInit {
   constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService,
     private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService,
     private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService,
-    private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService:FormateurService) { }
+    private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService: FormateurService) { }
 
   ngOnInit(): void {
     //Recuperation de l'année scolaire en cours
@@ -854,7 +855,48 @@ export class NotesComponent implements OnInit {
   GenerateBulletinAnnuel(etudiant_id) {
     //Par Morgan
     this.notesForGenerateBulletin = []
-    this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
+    this.etudiantService.getBulletin(etudiant_id, 'Semestre 1').subscribe(dataS1 => {
+      this.moyEtudiantAnnuel['Semestre 1'] = dataS1.moyenneEtudiant
+      let notesS1 = dataS1.data
+      this.etudiantService.getBulletin(etudiant_id, 'Semestre 2').subscribe(dataS2 => {
+        this.moyEtudiantAnnuel['Semestre 2'] = dataS2.moyenneEtudiant
+        this.moyEtudiantAnnuel['Annuel'] = this.getMoyAnnuel(dataS1.moyenneEtudiant, dataS2.moyenneEtudiant)
+        let notesS2 = dataS2.data
+        console.log(notesS1, notesS2)
+        dataS1.data.forEach(NS1 => {
+          dataS2.data.forEach(NS2 => {
+            if (NS1.matiere_id == NS2.matiere_id) {
+              this.notesForGenerateBulletin.push({ "Semestre 1": NS1, "Semestre 2": NS2, "Annuel": this.getNoteAnnuel(NS1, NS2), 'matiere_name': NS1.matiere_name, 'coef': NS1.coef, 'matiere_id': NS1.matiere_id, 'ects': NS1.ects })
+              notesS1.splice(notesS1.indexOf(NS1), 1)
+              notesS2.splice(notesS2.indexOf(NS2), 1)
+            }
+          })
+        })
+        if (notesS1.length != 0) {
+          notesS1.forEach(n => {
+            this.notesForGenerateBulletin.push({ "Semestre 1": n, "Semestre 2": null, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+          })
+        }
+        if (notesS2.length != 0) {
+          notesS2.forEach(n => {
+            this.notesForGenerateBulletin.push({ "Semestre 1": null, "Semestre 2": n, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+          })
+        }
+        console.log(notesS2, notesS1)
+        this.showPVAnnuel = true
+      }, error => {
+        console.error(error)
+      })
+    }, error => {
+      console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
+      this.seanceService.getFormateurFromClasseID(data.classe_id, "Annuel").subscribe(d => {
+        this.dicFormateurMatiere = d
+      })
+    })
+    /*this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
       console.log(data)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
@@ -867,7 +909,35 @@ export class NotesComponent implements OnInit {
       this.seanceService.getFormateurFromClasseID(data.classe_id, "Annuel").subscribe(d => {
         this.dicFormateurMatiere = d
       })
-    })
+    })*/
+  }
+
+  getMoyAnnuel(ns1: number, ns2: number) {
+    console.log(ns1, ns2)
+    let moy_etu = (ns1 + ns2) / 2
+    if (ns1 == 0.00000000001) {
+      moy_etu = ns2
+    }
+    else if (ns2 == 0.00000000001) {
+      moy_etu = ns1
+    }
+    return moy_etu
+  }
+
+  getNoteAnnuel(ns1: { coef: number, isDispensed: Boolean, matiere_id: string, matiere_name: string, max_classe: number, min_classe: number, moy_classe: number, moy_etu: number }, ns2: { coef: number, isDispensed: Boolean, matiere_id: string, matiere_name: string, max_classe: number, min_classe: number, moy_classe: number, moy_etu: number }) {
+    let moy_etu = (ns1.moy_etu + ns2.moy_etu) / 2
+    if (ns1.moy_etu == 0.00000000001) {
+      moy_etu = ns2.moy_etu
+    }
+    else if (ns2.moy_etu == 0.00000000001) {
+      moy_etu = ns1.moy_etu
+    }
+    return {
+      coef: ns1.coef, isDispensed: ns1.isDispensed && ns2.isDispensed, matiere_id: ns1.matiere_id, matiere_name: ns1.matiere_name,
+      max_classe: (ns1.max_classe + ns2.max_classe) / 2, min_classe: (ns1.min_classe + ns2.min_classe) / 2, moy_classe: (ns1.moy_classe + ns2.moy_classe) / 2,
+      moy_etu: moy_etu
+    }
+
   }
 
   avg(arr: [number]) {
@@ -877,6 +947,8 @@ export class NotesComponent implements OnInit {
     })
     return total / arr.length
   }
+
+
 
 
   //Methode d'initialisation du formulaire de saisie d'appréciation générale
