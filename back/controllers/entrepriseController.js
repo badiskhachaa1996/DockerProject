@@ -6,7 +6,7 @@ const { Entreprise } = require('./../models/entreprise');
 const { CAlternance } = require('./../models/contrat_alternance');
 const nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
+let transporterINTED = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
     secure: false, // true for 587, false for other ports
@@ -83,8 +83,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                     let Ceo_htmlmail =
                                         "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
                                         Ceo_Pwd + "</strong></p>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
-                                        "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                        "<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
                                         "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Cordialement.</p>";
 
@@ -100,7 +99,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                         //     cid: 'Image1' //same cid value as in the html img src
                                         // }]
                                     };
-                                    transporterEstya.sendMail(Ceo_mailOptions, function (error, info) {
+                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
                                         console.log('Acces CEO Envoyés')
                                         if (error) {
                                             console.error(error);
@@ -112,8 +111,8 @@ app.post("/createNewContrat", (req, res, next) => {
                                     let Teuteur_HtmlMail =
                                         "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
                                         Tuteur_Pwd + "</strong></p>" +
-                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
-                                        "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                        "<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
+                                      
                                         "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Cordialement.</p>";
 
@@ -129,7 +128,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                         //     cid: 'Image1' //same cid value as in the html img src
                                         // }]
                                     };
-                                    transporterEstya.sendMail(Tuteur_mailOptions, function (error, info) {
+                                    transporterINTED.sendMail(Tuteur_mailOptions, function (error, info) {
                                         console.log('Acces Tuteur Envoyés')
                                         if (error) {
                                             console.error(error);
