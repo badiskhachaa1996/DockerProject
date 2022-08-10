@@ -5,7 +5,7 @@ import { MessageService } from 'primeng/api';
 import { map } from 'rxjs';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { Entreprise } from 'src/app/models/Entreprise';
-import { Prospect } from 'src/app/models/Prospect';
+
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
@@ -53,7 +53,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   listAlternantDD = []
   formationList = []
   constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private formBuilder: FormBuilder, private messageService: MessageService,
-    private entrepriseService: EntrepriseService, private AuthService: AuthService, private EtudiantService: EtudiantService) { }
+    private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
   get activite() { return this.RegisterForm.get('activite').value; }
@@ -111,22 +111,22 @@ export class InscriptionEntrepriseComponent implements OnInit {
   ngOnInit(): void {
 
     this.onInitRegisterForm();
-    this.EtudiantService.getAllAlternants().subscribe((alternatsdata) => {
 
-      console.log(alternatsdata)
+
+    this.etudiantService.getAllAlternants().subscribe(alternatsdata => {
+
+
       this.listAlternant = alternatsdata
 
-      this.listAlternant.forEach(alt => {
-        console.log(alt)
+      alternatsdata.forEach(alt => {
+       
         alt.nomcomplet = alt.user_id?.firstname + " " + alt.user_id?.lastname
         this.listAlternantDD.push(alt)
-      })
+      }, (error) => { console.log(error) })
 
-    }, (error) => {
-      console.log(error)
-    })
+    }, (error) => { console.log(error) })
     this.formationService.getAll().subscribe(data => {
-
+     
       data.forEach(element => {
         this.formationList.push({ label: element.titre, value: element._id });
       });

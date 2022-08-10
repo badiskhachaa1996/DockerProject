@@ -128,7 +128,7 @@ app.use('/', function (req, res, next) {
         })
     } else {
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
-            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") ||
+            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" ||
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
         } else {
