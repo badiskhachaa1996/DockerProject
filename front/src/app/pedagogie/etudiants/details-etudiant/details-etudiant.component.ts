@@ -38,13 +38,13 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   barDataHor: any = {
 
-    labels: ['Presences', 'Absences', 'Absences non justifiées'],
+    labels: ['Présences', 'Absences', 'Absences non justifiées'],
     datasets: [
       {
         data: [0, 0, 0],
         backgroundColor: [
           '#22C20E',
-          "#FF6384",
+          "red",
           '#730e0e',
 
         ],
@@ -61,7 +61,7 @@ export class DetailsEtudiantComponent implements OnInit {
     labels: ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'],
     datasets: [
       {
-        label: 'Abscence',
+        label: 'Absences',
         backgroundColor: 'red',
         hoverBackgroundColor: [
           "#FF6384"
@@ -70,7 +70,7 @@ export class DetailsEtudiantComponent implements OnInit {
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       {
-        label: 'Présence',
+        label: 'Présences',
         backgroundColor: '#22C20E',
         hoverBackgroundColor: [
           "#22C55E",
@@ -80,7 +80,7 @@ export class DetailsEtudiantComponent implements OnInit {
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       },
       {
-        label: 'Absence non justifié',
+        label: 'Absences non justifiées',
         backgroundColor: '#730e0e',
         hoverBackgroundColor: [
           "#781d1d",
@@ -157,14 +157,14 @@ export class DetailsEtudiantComponent implements OnInit {
           this.AssiduiteListe.forEach(item => {
 
             if (item.isPresent != true) {
-              // abscense ++1
+              // absence ++1
               let month: string = item.seance_id?.date_debut.slice(5, 7)
               console.log(month)
               this.nb_absences++
               this.barData.datasets[0].data[Number(month) - 1]++
 
               if (item.justificatif != true) {
-                // abscense non justifié ++1
+                // absence non justifié ++1
                 let month: string = item.seance_id?.date_debut.slice(5, 7)
                 console.log(month)
                 this.nb_absencesNJ++

@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="grid">
     <!-- Partie dedié à l'upload de photo de profil -->
     <div class="col-12">
@@ -13,7 +14,7 @@
                 <i pTooltip="Modifier votre photo de profil" class="pi pi-fw pi-image" (click)="clickFile()"
                     style="font-size: 15px;" aria-hidden="true"></i>
                 <i pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
-                    style="font-size: 15px;" aria-hidden="true"></i>
+                    *ngIf="userco.password != undefined" style="font-size: 15px;" aria-hidden="true"></i>
             </div>
             <h2>Profil</h2>
             <div style="text-align: center;">
@@ -33,11 +34,11 @@
             <div class="card">
                 <div class="p-fluid p-formgrid grid">
                     <div class="col-12 md:col-6">
-                        <strong>Adresse email:</strong> {{userco.email}}
+                        <strong>Adresse email:</strong> {{userco.email}} 
                     </div>
 
-                    <div class="col-12 md:col-6" *ngIf="userco.phone">
-                        <strong>Téléphone:</strong> {{userco.phone}}
+                    <div class="col-12 md:col-6" *ngIf="userco.phone && userco.indicatif">
+                        <strong>Téléphone:</strong> {{userco.indicatif}} {{userco.phone}}
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="userco.rue_adresse">
@@ -189,15 +190,15 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="passwordForm" (ngSubmit)="onUpdatePassword()">
                 <div class="field col-12">
                     <label For="pwd_actu">Mot de passe actuel</label>
-                    <input pInputText id="pwd_actu" type="text" formControlName="passwordactual" />
+                    <input pInputText id="pwd_actu" type="password" formControlName="passwordactual" />
                 </div>
                 <div class="field col-12">
                     <label For="n_pwd">Nouveau mot de passe</label>
-                    <input pInputText id="n_pwd" type="text" formControlName="password" />
+                    <input pInputText id="n_pwd" type="password" formControlName="password" />
                 </div>
                 <div class="field col-12">
                     <label For="confirm_n_pwd">Confirmer le nouveau mot de passe</label>
-                    <input pInputText id="confirm_n_pwd" type="text" formControlName="verifypassword">
+                    <input pInputText id="confirm_n_pwd" type="password" formControlName="verifypassword">
                 </div>
                 <small style="color: red;">{{pwdmsgerr}}</small>
                 <div class="col-4 md:col-2">

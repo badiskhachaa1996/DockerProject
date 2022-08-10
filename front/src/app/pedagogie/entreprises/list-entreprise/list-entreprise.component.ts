@@ -15,6 +15,12 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 export class ListEntrepriseComponent implements OnInit {
   token;
   entreprises: Entreprise[] = [];
+  categorieList = [
+    'Sous-traitant',
+    "Alternant",
+    "Autre" 
+  ]
+
   formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
   IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }]
@@ -33,7 +39,7 @@ export class ListEntrepriseComponent implements OnInit {
     }
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
-      ((response) => { this.entreprises = response;}),
+      ((response) => { this.entreprises = response; }),
       ((error) => { console.error(error); })
     );
 
@@ -56,25 +62,26 @@ export class ListEntrepriseComponent implements OnInit {
       nom_contact: [''],
       prenom_contact: [''],
       fc_contact: [''],
-      email_contact: [''],
+      email_contact: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
       phone_contact: [''],
       nom_contact_2nd: [''],
       prenom_contact_2nd: [''],
       fc_contact_2nd: [''],
-      email_contact_2nd: [''],
+      email_contact_2nd: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
       phone_contact_2nd: [''],
       pays_adresse: [''],
       ville_adresse: [''],
       rue_adresse: [''],
       numero_adresse: [''],
       postal_adresse: [''],
-      email: [''],
+      email: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
       phone: [''],
       website: [''],
       financeur: [''],
       nda: [''],
       type_soc: [''],
-    });
+      categorie: [[]]
+    })
   }
 
   initFormUpdateEntreprise(entreprise: Entreprise) {
@@ -109,6 +116,7 @@ export class ListEntrepriseComponent implements OnInit {
       financeur: entreprise.financeur,
       nda: entreprise.nda,
       type_soc: entreprise.type_soc,
+      categorie: entreprise.categorie
     })
   }
 
@@ -158,8 +166,11 @@ export class ListEntrepriseComponent implements OnInit {
     let financeur = this.formUpdateEntreprise.get('financeur')?.value;
     let nda = this.formUpdateEntreprise.get('nda')?.value;
     let type_soc = this.formUpdateEntreprise.get('type_soc')?.value;
+    let categorie = this.formUpdateEntreprise.get('categorie')?.value
 
-    let entreprise = new Entreprise(this.showFormUpdateEntreprise._id, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd, fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website, financeur, nda, type_soc);
+    let entreprise = new Entreprise(this.showFormUpdateEntreprise._id, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd,
+      fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website,
+      financeur, nda, type_soc, categorie);
 
     this.entrepriseService.update(entreprise).subscribe(
       ((response) => {

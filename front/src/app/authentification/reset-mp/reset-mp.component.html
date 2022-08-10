@@ -1,0 +1,50 @@
+<p-toast></p-toast>
+<div class="layout-topbar">
+    <div class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
+        <h5>Reinitialisation de votre mot de passe</h5>
+    </div>
+</div>
+<div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <p-toast></p-toast>
+    <div class="grid justify-content-center p-2 lg:p-0" style="min-width:10%">
+        <div class="col-8 "
+            style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <form [formGroup]="updatePwdForm" class="h-full w-full m-0 py-7 px-4"
+                style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
+                <div class="w-full md:w-10 mx-auto">
+                    <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+                        <img src="\assets\images\logoIMS.png" alt="logo eduhorizons" style="width: 60%;">
+                    </div>
+
+                    <label for="nv_mp" class="block text-900 text-xl font-medium mb-2">Entrez un nouveau mot de
+                        passe</label>
+                    <input id="nv_mp" formControlName="nv_mp" type="password" placeholder="Nouveau mot de passe" pInputText
+                        class="w-full mb-3" style="padding:1rem;">
+                    <div *ngIf="nv_mp.invalid && (nv_mp.touched || nv_mp.dirty)">
+                        <span class="error" style="color: red;">* Saisir un mot de passe correct! 8caracters minimimum
+                        </span>
+                    </div>
+
+                    <label for="nv_mpC" class="block text-900 text-xl font-medium mb-2">Vérification du mot de passe
+                    </label>
+                    <input id="nv_mpC" formControlName="nv_mpC" type="password" pInputText
+                        placeholder="Confirmez votre mot de passe" class="w-full mb-3" style="padding:1rem;">
+                    <div *ngIf="nv_mpC.invalid && (nv_mpC.touched || nv_mpC.dirty)">
+
+                        <span class="error" style="color: red;">* veuillez resaisir le méme mot de
+                            passe que vous avez tapé dans le premier champ</span>
+                    </div>
+                    <div class="flex align-items-center justify-content-between mb-5">
+
+                    </div>
+                    <button  *ngIf="!updatePwdForm.disabled" pButton pRipple label="Modifier" icon="pi pi-sync" [disabled]="updatePwdForm.invalid"
+                        class="w-full p-3 text-xl p-button-danger p-button-raised" (click)="Onupdatepwd()"></button>
+                    <br><br>
+                    <button *ngIf="updatePwdForm.disabled" pButton pRipple label="Retour" icon="pi pi-sync"
+                        class="w-full p-3 text-xl p-button-danger p-button-raised"
+                        (click)="router.navigate(['/login'])"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

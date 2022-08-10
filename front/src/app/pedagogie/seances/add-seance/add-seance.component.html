@@ -78,14 +78,14 @@
                         placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Campus</label><br>
+                    <label>Campus <span style="color: red;"> * </span></label><br>
                     <p-multiSelect formControlName="campus_id" [options]="dropdownCampus"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
                     </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
-                    <label>Nom du formateur</label><br>
+                    <label>Nom du formateur <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
                         placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
                         filterPlaceholder="Nom de formateur" filter="true">
@@ -103,7 +103,7 @@
                         formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <small>(Obligatoire) <span style="color: red;"> * </span></small>
+                    <br>
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 

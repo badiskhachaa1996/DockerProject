@@ -6,11 +6,11 @@ const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { User } = require('./../models/user');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
-const origin = require("../config");
 const path = require('path');
 var mime = require('mime-types')
 const jwt = require("jsonwebtoken");
-
+const { Notification } = require("./../models/notification");
+const { Service } = require("./../models/service");
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
@@ -25,6 +25,15 @@ let transporterEstya = nodemailer.createTransport({
         pass: 'ADMIelite19',
     },
 });
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
+    )
+}
 let transporterEH = nodemailer.createTransport({
     host: "smtp.office365.com",
     port: 587,
@@ -57,19 +66,6 @@ let transporterAdg = nodemailer.createTransport({
         pass: 'ADG@@2022ims',
     },
 });
-
-
-app.get("/getByUserid/:id", (req, res, next) => {
-    console.log(req.params.id);
-    Prospect.findOne({ user_id: req.params.id })
-        .then((prospectFromDb) => {
-           console.log("ass")
-                res.status(201).send(prospectFromDb);
-           
-
-        })
-        .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence du prospect" }); });
-});
 //Creation d'un nouveau prospect
 app.post("/create", (req, res, next) => {
 
@@ -82,8 +78,10 @@ app.post("/create", (req, res, next) => {
 
     //Création du nouvel objet prospect et du nouvel objet user
     const prospect = new Prospect({
-        ...prospectData
+        ...prospectData,
+
     });
+
     let r = userData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
     const user = new User(
         {
@@ -122,7 +120,7 @@ app.post("/create", (req, res, next) => {
                             prospect.user_id = userFromDb._id;
                             prospect.save()
                                 .then((prospectSaved) => {
-                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "mykey")
+                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                                     res.status(201).json({ success: 'Prospect ajouté dans la BD', dataUser: userFromDb, token });
                                 })
                                 .catch((error) => { res.status(400).json({ error: 'Impossible d\ajouter ce prospect' }) });
@@ -134,19 +132,18 @@ app.post("/create", (req, res, next) => {
             else {
                 user.save()
                     .then((userCreated) => {
+
                         prospect.user_id = userCreated._id;
-                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "mykey")
+                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
-                                res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
-
                                 if (prospectSaved.type_form == "estya") {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
                                     temp = temp.replace('eMailduProSpect', userCreated.email_perso)
 
-                                    temp = temp.replace('oRiGin', origin)
+                                    temp = temp.replace('oRiGin', origin[0])
 
-                                    temp = temp.replace("\"oRiGin/", '"' + origin + "/")
+                                    temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
 
                                     let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + r + temp
 
@@ -165,31 +162,25 @@ app.post("/create", (req, res, next) => {
                                     transporterEstya.sendMail(mailOptions, function (error, info) {
                                         if (error) {
                                             console.error(error);
-
                                         }
-
-
-
                                     });
 
                                 }
                                 else if (prospectSaved.type_form == "eduhorizons") {
-
-
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes : </p>" +
-                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p>" +
+                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes : </p>" +
+                                        "<ul><li><p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
                                         " </ul>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Bien cordialement.</p>" +
+                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                        " <p>Cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
 
 
@@ -218,20 +209,20 @@ app.post("/create", (req, res, next) => {
                                 else if (prospectSaved.type_form == "espic") {
 
                                     let htmlmail =
-                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès, merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p>" +
-                                        "<p> Afin d'entamer l'étude de votre dossier veuillez suivre les étapes suivantes :</p>" +
+                                        "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p>" +
+                                        "<p> Afin d'entamer l'étude de votre dossier, veuillez suivre les étapes suivantes :</p>" +
                                         "<ul><li>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "</li><li>S'authentifier avec vos coordonnées sur le portail. </li>" +
                                         " <li>Déposer votre dossier de candidature </li>" +
                                         " <li>Suivre l'état d'avancement sur le portail</li>" +
                                         " </ul>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
-                                        "<p> <br />On reste à votre disposition pour tout complément d'information. </p>" +
-                                        " <p>Bien cordialement.</p>" /*+
+                                        "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                        " <p>Cordialement.</p>" /*+
                                     "<p><img src =''alt=\" \" width='620' height='227' /></p>"*/
                                     let mailOptions = {
                                         from: "admission@espic.com",
@@ -260,12 +251,12 @@ app.post("/create", (req, res, next) => {
 
 
                                     let htmlmail = "<div> <p>Bonjour, </p> </div>   <div>" +
-                                        "<p> Bienvenue au Service des inscriptions de l'ADG.</p ></div >" +
-                                        "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès," +
-                                        "  merci de connecter avec votre mail et votre mot de passe : <strong> " +
-                                        r + "</strong>  sur <a href=\"" + origin + "/suivrePreinscription\">ce lien</a> </p></div>" +
-                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer Votre compte et valider votre email en cliquant sur" +
-                                        " <a href=\"" + origin + "/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                        "<p> Bienvenue au service des inscriptions de l'ADG.</p ></div >" +
+                                        "<div><p>Votre demande d'inscription sur notre plateforme a été; enregistré avec succès." +
+                                        "  Merci d'activer votre compte en cliquant sur le lien ci-dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
+                                        r + "</strong></p></div>" +
+                                        "<p><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                        " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
                                         "<div><p>Ci-après les critères d'admission et les documents nécessaires à nous communiquer afin d'entamer l'étude de votre candidature : </p>" +
                                         "</div><div><p> <br /> </p></div><div><ol start='1'><li>   <p>Critères d'admission :</p></li> </ol> </div><div>" +
                                         "<p> <br /> </p></div> <div><ul><li><p>Niveau linguistique : Eligible de faire le cursus en français. </p>" +
@@ -278,7 +269,7 @@ app.post("/create", (req, res, next) => {
                                         "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
                                         "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
                                         "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
-                                        "<p>Si vous aurez des difficultés de charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
+                                        "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
                                         "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
                                         "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"
 
@@ -304,14 +295,42 @@ app.post("/create", (req, res, next) => {
 
                                     });
                                 }
+                                res.status(201).json({ success: 'Prospect crée', dataUser: userCreated, token: token });
                             })
-                            .catch((error) => { res.status(400).send({ message: 'Impossible de créer un nouveau prospect !', error }) });
+
                     })
-                    .catch((error) => { res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur !', error }) });
+                    .catch((error) => {
+                        console.log(error)
+                        // res.status(400).send({ message: 'Impossible de créer un nouvel utilisateur2 !', error })
+                    });
             }
         })
-        .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });
+        .catch((error) => {
+            console.log(error)
+            //res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur3 ', error }) 
+        });
 
+
+    Service.findOne({ label: "Service Admission" }).then(servAdmission => {
+        if (servAdmission) {
+            let serviceadmission_id = servAdmission._id
+
+            const notif = new Notification({
+                etat: false,
+                type: "nouvelle demande admission",
+                date_ajout: Date.now(),
+                service_id: serviceadmission_id,
+            });
+            notif.save().then((notifCreated) => {
+                console.log("Votre notif a été crée!");
+                console.log(notifCreated);
+
+            }).catch((error) => { console.error(error) });
+        }
+    }).catch((error) => {
+        console.error(error)
+        res.status(404).send(error);
+    })
 });
 
 
@@ -359,14 +378,27 @@ app.get("/getAllBySchool/:school", (req, res, next) => {
 
 //Recuperation d'un prospect via user_id
 app.get("/getByUserId/:user_id", (req, res, next) => {
-    console.log(req.params.user_id)
-    let user_id = req.params.user_id;
-    Prospect.findOne({ user_id: user_id }).then(prospectFromDb => {
-        let prospectR = prospectFromDb
-        res.status(200).send(prospectR );
+    Prospect.findOne({ user_id: req.params.user_id }).then(prospectFromDb => {
+        res.status(200).send(prospectFromDb);
     }).catch((error) => {
         console.error(error)
         res.status(404).send(error);
+    })
+});
+
+//Recuperation d'un token via user_id
+app.get("/getTokenByUserId/:user_id", (req, res, next) => {
+    Prospect.findOne({ user_id: req.params.user_id }).populate("user_id").then(prospectFromDb => {
+        if (prospectFromDb) {
+            prospectFromDb = jwt.sign({ prospectFromDb }, '126c43168ab170ee503b686cd857032d', { expiresIn: "7d" })
+            res.status(201).send({ token: prospectFromDb });
+        } else {
+            res.status(200).send(null);
+        }
+
+    }).catch((error) => {
+        console.error(error)
+        res.status(500).send(error);
     })
 });
 

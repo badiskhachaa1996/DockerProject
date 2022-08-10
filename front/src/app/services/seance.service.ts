@@ -86,5 +86,10 @@ export class SeanceService {
     let url = this.apiUrl + "downloadFile/" + id + "/" + filename
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
   }
+  getFormateurFromClasseID(classe_id, semestre){
+    let url = this.apiUrl + "getFormateurFromClasseID/" + classe_id + "/" + semestre
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
+
 
 }

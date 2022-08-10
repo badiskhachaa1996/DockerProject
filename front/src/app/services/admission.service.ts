@@ -42,9 +42,14 @@ export class AdmissionService {
   //Recuperation d'un prospect via son userId
   getByUserId(user_id: string) {
     let registreurl = this.apiUrl + 'getByUserId/' + user_id;
-    return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<Prospect>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  
+
+  getTokenByUserId(user_id: string) {
+    let registreurl = this.apiUrl + 'getTokenByUserId/' + user_id;
+    return this.httpClient.get<any>(registreurl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
 
   //recuperation de la liste des admissions
   getAll() {
@@ -53,7 +58,7 @@ export class AdmissionService {
   }
 
 
-  
+
   updateStatut(id_prospect, p) {
     let url = this.apiUrl + "updateStatut/" + id_prospect
     return this.httpClient.post<Prospect>(url, p, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -76,9 +81,9 @@ export class AdmissionService {
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  uploadFile(formData, id) {
+  uploadFile(formData, id, token = 'token') {
     let url = this.apiUrl + "uploadFile/" + id
-    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) });
   }
 
   getAllCodeCommercial(code) {
@@ -100,8 +105,8 @@ export class AdmissionService {
     return this.httpClient.post<Prospect>(url, body, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
   }
 
-  changeEtatTraitement(id, etat = "Vu") {
+  changeEtatTraitement(id, etat = "Vu", token = 'token') {
     let url = this.apiUrl + "etatTraitement/" + id + "/" + etat
-    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) })
   }
 }

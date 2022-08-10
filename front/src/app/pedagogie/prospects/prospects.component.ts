@@ -14,6 +14,7 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { ClasseService } from 'src/app/services/classe.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { Partenaire } from 'src/app/models/Partenaire';
 
 @Component({
   selector: 'app-prospects',
@@ -32,6 +33,7 @@ export class ProspectsComponent implements OnInit {
   token;
   dataCommercial: CommercialPartenaire;
   infoCommercialExpand: CommercialPartenaire;
+  dicCommercial = {}
   ListPiped: String[] = []
   DocTypes: any[] = [
     { value: null, label: "Choississez le type de fichier", },
@@ -83,9 +85,9 @@ export class ProspectsComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
-    this.userService.WhatTheRole(this.token.id).subscribe(data => {
-      if (data.type == 'Commercial' && data.data.statut == 'Admin') {
-        this.dataCommercial = data.data
+    this.commercialService.getByUserId(this.token.id).subscribe(data => {
+      if (data && data.statut == 'Admin') {
+        this.dataCommercial = data
       }
       this.refreshProspect()
     })
@@ -95,6 +97,11 @@ export class ProspectsComponent implements OnInit {
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value
+      })
+    })
+    this.commercialService.getAllPopulate().subscribe(dataC=>{
+      dataC.forEach(c=>{
+        this.dicCommercial[c.code_commercial_partenaire]=c.partenaire_id
       })
     })
   }

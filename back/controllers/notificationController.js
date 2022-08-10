@@ -1,17 +1,18 @@
 const express = require("express");
 const app = express();
 app.disable("x-powered-by");
-const { Notification} = require("./../models/notification");
+const { Notification } = require("./../models/notification");
 const fs = require("fs");
 const { Ticket } = require("../models/ticket");
 const io = require("socket.io");
 
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {
-    if(req.body.type=="Traitement de votre ticket"){
+    console.log(req.body)
+    if (req.body.type == "Traitement de votre ticket") {
         //Si le ticket est traité alors on supprime tout les notifications lié à ce ticket
-        Notification.deleteMany({ticket_id:req.body.ticket_id},(err,resultat)=>{
-            if(err){
+        Notification.deleteMany({ info_id: req.body.info_id }, (err, resultat) => {
+            if (err) {
                 res.send(err)
             }
         });
@@ -19,10 +20,12 @@ app.post("/create", (req, res) => {
     const notif = new Notification({
         etat: req.body.etat,
         type: req.body.type,
-        ticket_id: req.body.ticket_id,
+        info_id: req.body.info_id,
         date_ajout: Date.now(),
-        user_id:req.body.user_id
+        user_id: req.body.user_id
     });
+
+
     notif.save((err, user) => {
         res.send({ message: "Votre notif a été crée!", doc: user });
     });
@@ -75,28 +78,35 @@ app.get("/getAll", (req, res) => {
 });
 //Récuperer tous les notifications d'un user
 app.get("/getAllByUserID/:id", (req, res) => {
-    Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
+    Notification.find({ user_id: req.params.id, etat: false }).then(Notifications => {
         res.status(200).send(Notifications)
     })
 });
 
 //Récuperer les 20 notifications dernières d'un user
 app.get("/get20ByUserID/:id", (req, res) => {
-    Notification.find({user_id:req.params.id,etat:false}).then(Notifications=>{
-        res.status(200).send(Notifications.slice(0,20))
+    Notification.find({ user_id: req.params.id, etat: false }).then(Notifications => {
+        console.log(Notification)
+        res.status(200).send(Notifications.slice(0, 20))
     })
+});
+app.get("/getAdmissionNotifi", (req, res) => {
+    Notification.find({ info_id:null, etat: false }).then(notifications => {
+console.log(notifications)
+        res.status(200).send(notifications)
+    }).catch(error => { console.log(error) })
 });
 
 app.post("/viewNotifs", (req, res) => {
     //Passe en vue une liste de notifications
-    let notifications=req.body.notifications;
-    let returnTick=[];
+    let notifications = req.body.notifications;
+    let returnTick = [];
     notifications.forEach(element => {
         Notification.findByIdAndUpdate(element._id,
             {
-                etat:true,
-             
-            }, {new: true}, (err, notif) => {
+                etat: true,
+
+            }, { new: true }, (err, notif) => {
                 if (err) {
                     res.send(err)
                 }

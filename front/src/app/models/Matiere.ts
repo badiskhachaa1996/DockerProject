@@ -8,7 +8,9 @@ export class Matiere {
         public abbrv?: string,
         public classe_id?:string,
         public seance_max?:number,
-        public coeff?:number
+        public coeff?:number,
+        public credit_ects?:number,
+        public remarque?: string,
     ) { };
 
 }

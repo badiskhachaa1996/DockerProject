@@ -4,12 +4,13 @@ import { TicketService } from '../services/ticket.service';
 import jwt_decode from "jwt-decode";
 import { SujetService } from '../services/sujet.service';
 import { AuthService } from '../services/auth.service';
-
+import { AppTopBarComponent } from '../app.topbar.component';
 
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  styleUrls: ['./notification.component.scss'],
+  providers: [AppTopBarComponent],
 })
 export class NotificationComponent implements OnInit {
 
@@ -19,13 +20,16 @@ export class NotificationComponent implements OnInit {
   sujetDic: any[] = [];
   userDic: any[] = [];
   retour: boolean = false;
-  constructor(private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService: AuthService) { }
+  constructor(private appTopBarComponent: AppTopBarComponent, private NotificationService: NotificationService, private TicketService: TicketService, private SujetService: SujetService, private AuthService: AuthService) { }
 
 
   ngOnInit(): void {
-    
+
     this.token = jwt_decode(localStorage.getItem("token"))
     if (this.token) {
+
+      console.log(this.token)
+
       this.NotificationService.get20ByUserID(this.token.id)
         .subscribe(
           data => {
@@ -34,6 +38,8 @@ export class NotificationComponent implements OnInit {
               .subscribe(
                 response => {
                   this.NotificationService.reloadNotif({ id: this.token.id })
+
+                  this.appTopBarComponent.setToZero()
                 },
                 error => {
                   console.error(error);
@@ -63,8 +69,35 @@ export class NotificationComponent implements OnInit {
           this.userDic[element._id] = element;
         });
       })
-    }
-  
-  }
 
+
+      if (this.token.service_id) {
+        console.log('71')
+        this.NotificationService.getAdmissionNotifi().subscribe(notifadmission => {
+
+          console.log(notifadmission)
+
+          for (let index = 0; index < notifadmission.length; index++) {
+
+
+            console.log(notifadmission[index])
+            this.notifications.push(notifadmission[index])
+          }
+
+          this.NotificationService.viewNotifs(notifadmission)
+            .subscribe(
+              response => {
+                this.NotificationService.reloadNotif({ id: this.token.id })
+                this.appTopBarComponent.setToZero();
+
+
+              },
+              error => {
+                console.error(error);
+              });
+        })
+      }
+
+    }
+  }
 }

@@ -1,10 +1,25 @@
-
-
-<div class="surface-section px-4 py-8 md:px-6 lg:px-8">
-    <div class="text-700 text-center">
-        <div class="text-blue-600 font-bold mb-3"></div>
-        <div class="text-900 font-bold text-5xl mb-3">Votre Compte est activé </div>
-        <div class="text-700 text-2xl mb-5">Vous pouvez dés a présent vous connecter avec votre mot de passe reçu par email.</div>
-        <button pButton pRipple label="Se connecter" [routerLink]="['/login-externe']" class="font-bold px-3 py-1 p-button-raised p-button-rounded white-space-nowrap"></button>
-    </div>
+<div class="surface-0 flex align-items-center min-h-screen min-w-screen overflow-hidden">
+    <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+        <div class="card">
+            <div class="flex justify-content-between mb-2">
+                <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+                    <div class="flex justify-content-center flex-wrap card-container">
+                        <img src="assets\images\infoPerso.jpg" style="width:250px; height:250px;">
+                        <h4 style="text-align: center;">Félicitations ! Votre compte est maintenant activé.</h4>
+                        <p style="text-align: center;">Vous pouvez dés à présent vous connecter avec votre mot de passe reçu par email.</p>
+                        <div class="col-6 col-offset-0 flex justify-content-center flex-wrap card-container">
+                            <button pButton pRipple label="Se connecter" [routerLink]="['/login']" class="font-bold px-3 py-1 p-button-raised p-button-rounded white-space-nowrap"></button>
+                        </div>   
+                    </div>    
+                </div>
+            </div>
+        </div>
+        <div class="layout-footer" class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
+            <span style="text-align: center;" class="font-medium ml-2">Mentions légales <sup>.</sup> Politique de confidentialité <sup>.</sup> Données personnelles </span>
+        </div>
+        <div class="layout-footer" class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
+            <span style="text-align: center;" class="font-medium ml-2">Copyright<sup>©</sup> 2022 - Inted Management System </span>
+        </div>
+        <img style="text-align: center;" src="assets/images/logo-ims.png" alt="IMS logo" class="mb-4" style="width:140px; height:70px;">
+    </div>    
 </div>

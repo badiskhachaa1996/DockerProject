@@ -42,7 +42,7 @@ export class MatieresComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //Initialisation du formulaire de mdification d'une matière
+    //Initialisation du formulaire de modification d'une matière
     this.onInitFormModifMatiere();
 
     //recuperation de la liste des Matières
@@ -82,6 +82,8 @@ export class MatieresComponent implements OnInit {
       classe_id: [this.classeList[0], Validators.required],
       seance_max: ['', Validators.required],
       coeff: ['', Validators.required],
+      credit_ects: ['', Validators.required],
+      remarque: [''],
     })
   }
 
@@ -99,6 +101,8 @@ export class MatieresComponent implements OnInit {
     let classe_id = this.formAddMatiere.get("classe_id").value;
     let seance_max = this.formAddMatiere.get("seance_max").value;
     let coeff = this.formAddMatiere.get("coeff").value;
+    let credit_ects = this.formAddMatiere.get("credit_ects").value;
+    let remarque = this.formAddMatiere.get("remarque").value;
 
 
     //Recuperation de la formation_id
@@ -116,6 +120,8 @@ export class MatieresComponent implements OnInit {
           classe_id,
           seance_max,
           coeff,
+          credit_ects,
+          remarque,
 
         );
         //Envoi vers la BD
@@ -144,7 +150,7 @@ export class MatieresComponent implements OnInit {
 
   //Methode de recuperation de la matière à modifier
   onGetbyId(rowData: Matiere) {
-    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max });
+    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, classe_id: rowData.classe_id, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects, remarque: rowData.remarque});
     this.diplomeService.getById(rowData.formation_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ formation_id: data._id });
@@ -166,6 +172,8 @@ export class MatieresComponent implements OnInit {
       classe_id: ['', Validators.required],
       seance_max: ['', Validators.required],
       coeff: ['', Validators.required],
+      credit_ects: ['', Validators.required],
+      remarque: [''],
     });
   }
 
@@ -183,6 +191,8 @@ export class MatieresComponent implements OnInit {
     let classe_id = this.formModifMatiere.get("classe_id").value;
     let seance_max = this.formModifMatiere.get("seance_max").value;
     let coeff = this.formModifMatiere.get("coeff").value;
+    let credit_ects = this.formModifMatiere.get("credit_ects").value;
+    let remarque = this.formModifMatiere.get("remarque").value;
 
     //Recuperation de la formation_id
     this.ClasseService.get(this.formModifMatiere.get("classe_id").value).subscribe(
@@ -198,6 +208,8 @@ export class MatieresComponent implements OnInit {
           classe_id,
           seance_max,
           coeff,
+          credit_ects,
+          remarque,
         );
 
 

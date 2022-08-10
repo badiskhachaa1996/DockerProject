@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
 
 @Component({
   selector: 'app-add-formateur',
@@ -95,7 +96,8 @@ export class AddFormateurComponent implements OnInit {
 
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
-    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
+    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService,
+    private CampusService: CampusService, private PrestataireService: EntrepriseService) { }
 
   ngOnInit(): void {
     this.diplomeService.getAll().subscribe(data => {
@@ -147,7 +149,7 @@ export class AddFormateurComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout de nouveau formateur
   onInitFormAddFormateur() {
     this.formAddFormateur = this.formBuilder.group({
-      civilite: [this.civiliteList[0]],
+      civilite: [this.civiliteList[0], Validators.required,],
       firstname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       lastname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       indicatif: ['', [Validators.required]],
@@ -281,24 +283,23 @@ export class AddFormateurComponent implements OnInit {
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
-      console.log(newUser)
-    /*
-  this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
-    ((response) => {
-      if (response.success) {
-        this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
-        this.onInitFormAddFormateur();
-        this.showFormAddFormateur = false;
-        this.resetAddFormateur();
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
-      }
-    }),
-    ((error) => {
-      this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
-      console.error(error);
-    })
-  );*/
+   
+    this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
+      ((response) => {
+        if (response.success) {
+          this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+          this.onInitFormAddFormateur();
+          this.showFormAddFormateur = false;
+          this.resetAddFormateur();
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
+        }
+      }),
+      ((error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
+        console.error(error);
+      })
+    );
 
   }
 

@@ -31,8 +31,7 @@ export class FirstConnectionComponent implements OnInit {
   userConnected: User;
   nationList = environment.nationalites;
   paysList = environment.pays;
-  programeFrDropdown = environment.programeFrDropdown;
-  programEnDropdown = environment.programEnDropdown;
+  programReinscrit = environment.formationReinscrit
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -54,7 +53,7 @@ export class FirstConnectionComponent implements OnInit {
       civilite: new FormControl(environment.civilite[0], [Validators.required]),
       lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      indicatif: new FormControl('', [Validators.required]),
+      indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       entreprise_id: new FormControl(this.dropdownEntreprise[0]),
       type: new FormControl(this.statutList[0], [Validators.required]),
@@ -67,7 +66,7 @@ export class FirstConnectionComponent implements OnInit {
       nationalite: new FormControl(this.nationList[0]),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
-      diplome: new FormControl(this.programeFrDropdown[0]),
+      diplome: new FormControl(this.programReinscrit[0]),
     });
   }
 
@@ -75,8 +74,6 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-
-    console.log(token)
     this.AuthService.getById(token['id']).subscribe((data) => {
       console.log(data)
       this.userConnected = jwt_decode(data.userToken)['userFromDb']
@@ -84,11 +81,16 @@ export class FirstConnectionComponent implements OnInit {
 
       this.RegisterForm.patchValue({
         lastname: this.userConnected.lastname,
-        firstname: this.userConnected.firstname
+        firstname: this.userConnected.firstname,
+        ville_adresse: this.userConnected?.ville_adresse,
+        rue_adresse: this.userConnected?.rue_adresse,
+        numero_adresse: this.userConnected?.numero_adresse,
+        postal_adresse: this.userConnected?.postal_adresse,
+        phone: this.userConnected?.phone
       })
 
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
-        this.programeFrDropdown = environment.ADGprogrameFrDropdown;
+        this.programReinscrit = environment.ADGReinscrit;
       }
     })
 

@@ -8,6 +8,7 @@ const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
 const { RachatBulletin } = require('./../models/RachatBulletin');
 app.disable("x-powered-by");
+
 const path = require('path');
 var mime = require('mime-types')
 const fs = require("fs")
@@ -22,6 +23,16 @@ let transporter = nodemailer.createTransport({
         pass: 'ESTYA@@2021',
     },
 });
+
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ticket.estya.com"]
+    )
+}
 
 
 
@@ -123,6 +134,19 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
+app.get("/getAllAlternants", (req, res, next) => {
+
+    Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
+        .then((alternantsFromDb) => {
+       
+            res.status(200).send(alternantsFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Impossible de recuperer la liste des étudiant');
+        })
+});
+
 
 //Récupérer la liste de tous les étudiants via un Id de classe
 app.get("/getAllByClasseId/:id", (req, res, next) => {
@@ -210,7 +234,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
             })
         })
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="t.dev.estya.com/calendrier/classe/ + ' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'ims@estya.com',
             to: mailList,
@@ -333,7 +357,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
     let r = []
-    let moy_tt = 0
+    let moy_tt = 0.00000000001
     Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
         Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
             let listEtudiantID = []
@@ -372,7 +396,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 listEtudiantID.forEach(e_id => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
-                        listMoyenneEtudiants[e_id][m_nom] = 0
+                        listMoyenneEtudiants[e_id][m_nom] = 0.00000000001
                         if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
                             listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
                         }
@@ -392,18 +416,23 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     let sumMoy = 0
                     listMatiereNOM.forEach(m_nom => {
                         let old_note = null
-                        if (dicRB[dicMatiere[m_nom]._id] && dicRB[dicMatiere[m_nom]._id]) {
+                        let isDispensed = false
+                        if (dicRB[dicMatiere[m_nom]._id]) {
                             old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
-                            
+                            isDispensed = dicRB[dicMatiere[m_nom]._id].isDispensed
+                            //TODO listMoyenneEtudiants ne prends pas en compte les absences
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
-                        console.log(old_note, listMoyenneEtudiants[req.params.etudiant_id][m_nom])
-                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note })
-                        moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
-                        sumMoy += dicMatiere[m_nom].coeff
+                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, ects: dicMatiere[m_nom].credit_ects, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
+                        if (!isDispensed && listMoyenneEtudiants[req.params.etudiant_id][m_nom] != 0.00000000001) {
+                            moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
+                            sumMoy += dicMatiere[m_nom].coeff
+                        }
                         listMoyChoose[dicMatiere[m_nom]._id] = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                     })
-                    moy_tt = moy_tt / sumMoy
+                    if (sumMoy != 0) {
+                        moy_tt = moy_tt / sumMoy
+                    }
                     res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose })
                 })
             })
@@ -550,4 +579,15 @@ app.post('/getAllByMultipleClasseID', (req, res) => {
         res.send(result)
     })
 });
+
+app.post('/addNewPayment/:id', (req, res) => {
+    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: req.body.payement }, function (err, data) {
+        if (err) {
+            console.error(err)
+            res.status(500).send(err)
+        } else {
+            res.status(201).send(data)
+        }
+    })
+})
 module.exports = app;

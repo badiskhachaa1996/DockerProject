@@ -289,7 +289,7 @@
                         <td style="min-width: 10rem;">{{ users[etudiant.user_id]?.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" (click)=" showFormUpdateEtudiant = true; 
+                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)=" showFormUpdateEtudiant = true; 
                                     showFormExportEtudiant = false; 
                                     idEtudiantToUpdate = etudiant._id; 
                                     idUserOfEtudiantToUpdate = etudiant.user_id;
@@ -301,7 +301,7 @@
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                                 (click)="showUploadFile=etudiant" aria-hidden="true"></i>
                             <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
-                                (click)="clickFile(etudiant)" aria-hidden="true"></i>
+                                (click)="clickFile(etudiant)" aria-hidden="true" *ngIf="!this.isCommercial"></i>
                             <i (click)="router.navigate(['/details/'+etudiant._id])"
                                 pTooltip="Suivie assiduité" tooltipPosition="bottom" class="pi pi-chart-bar"
                                 aria-hidden="true">

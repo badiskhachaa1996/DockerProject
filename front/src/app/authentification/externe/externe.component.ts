@@ -8,13 +8,17 @@ import { EventEmitterService } from 'src/app/services/event-emitter.service';
 import { SocketService } from 'src/app/services/socket.service';
 import { MSAL_GUARD_CONFIG, MsalGuardConfiguration, MsalService } from '@azure/msal-angular';
 import { PopupRequest, AuthenticationResult } from '@azure/msal-browser';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 @Component({
   selector: 'app-externe',
   templateUrl: './externe.component.html',
+  providers: [MessageService],
   styleUrls: ['./externe.component.scss']
 })
 export class ExterneComponent implements OnInit {
+
+  showLoginPage = false;
 
   formLogin: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -22,25 +26,47 @@ export class ExterneComponent implements OnInit {
   })
 
   token: any;
-  constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService, private socket: SocketService,  @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService,) { }
+  constructor(public AuthService: AuthService, private router: Router, private messageService: MessageService, private ss: EventEmitterService,
+    private socket: SocketService, @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration, private msalService: MsalService, private ProspectService: AdmissionService) { }
 
   ngOnInit(): void {
-   
+
+  }
+
+  gAfterViewInit() {
+
+    if (localStorage.getItem('errorToken')) {
+      let tokenError: { name: string, message: string, expiredAt: number } = JSON.parse(localStorage.getItem('errorToken'))
+      //localStorage.removeItem('errorToken')
+      if (tokenError.name == 'TokenExpiredError') {
+        console.log(tokenError)
+        this.messageService.add({ severity: 'error', summary: 'Veuillez vous reconnecter', detail: tokenError.message })
+        console.log(tokenError)
+      } else {
+        this.messageService.add({ severity: 'error', summary: "N'essayer pas d'usurper l'identité de quelqu'un s'il vous plaît", detail: tokenError.message })
+      }
+    }
   }
 
   Login() {
     let userToLog = { email: this.formLogin.value.email, password: this.formLogin.value.password };
     this.AuthService.login(userToLog).subscribe((data) => {
-      localStorage.setItem('token', data.token)
       this.socket.isAuth()
-      this.AuthService.WhatTheRole(jwt_decode(data.token)['id']).subscribe((roleConnected) => {
-        if (roleConnected.type == "Prospect") {
-          localStorage.setItem('ProspectConected', roleConnected.Ptoken)
+      this.ProspectService.getTokenByUserId(jwt_decode(data.token)['id']).subscribe((pData) => {
+        if (pData && pData.token) {
+          localStorage.setItem('ProspectConected', pData.token)
           this.router.navigate(['/suivre-ma-preinscription'])
-        } else{
-          this.router.navigateByUrl('/ticket/suivi', { skipLocationChange: true })
+        } else {
+          localStorage.setItem('token', data.token)
+          this.router.navigateByUrl('/#/', { skipLocationChange: true })
         }
-
+      }, error => {
+        if (error.status == 404) {
+          localStorage.setItem('token', data.token)
+          this.router.navigateByUrl('/#/', { skipLocationChange: true })
+        } else {
+          console.error(error)
+        }
       })
     }, error => {
       if (error.status == 304) {
@@ -53,10 +79,12 @@ export class ExterneComponent implements OnInit {
       console.error(error)
     })
 
+    this.showLoginPage = false;
+
   }
 
   toLoginMiscroft() {
-    
+
     if (this.msalGuardConfig.authRequest) {
       this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
         .subscribe((response: AuthenticationResult) => {
@@ -68,22 +96,22 @@ export class ExterneComponent implements OnInit {
               if (data.message) {
                 localStorage.setItem("modify", "true")
                 this.router.navigate(['completion-profil'])
-              }else{
+              } else {
                 this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
                   this.ss.connected()
                 });
 
               }
-              
-            },(error)=>{
+
+            }, (error) => {
               console.error(error)
             })
-          }else{
+          } else {
             console.error("ERROR MICROSOFT")
           }
         });
     }
   }
-  
+
 
 }

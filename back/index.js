@@ -4,15 +4,19 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const jwt = require("jsonwebtoken");
-const { Prospect } = require('./models/prospect');
 //const scrypt_Mail = require("./middleware/scrypt_Mail");
 // var CronJob = require('cron').CronJob;
 
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
-let origin = require("./config")
-if (process.env.origin) {
-    origin = process.env.origin
+let origin = ["http://localhost:4200"]
+if (process.argv[2]) {
+    let argProd = process.argv[2]
+    if (argProd.includes('dev')) {
+        origin = ["https://t.dev.estya.com"]
+    } else (
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "http://partenaire.eduhorizons.com", "http://login.eduhorizons.com"]
+    )
 }
 app.use(cors({ origin: origin }));
 
@@ -36,7 +40,7 @@ mongoose
     })
     .then(() => {
 
-        console.log("L'api s'est connecté à MongoDB.");
+        console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
 
         /* 
         //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
@@ -75,7 +79,6 @@ const campusController = require('./controllers/campusController');
 const diplomeController = require('./controllers/diplomeController');
 const presenceController = require('./controllers/presenceController');
 const seanceController = require('./controllers/seanceController');
-const inscriptionController = require('./controllers/inscriptionController');
 const formateurController = require('./controllers/formateurController');
 const ressourceController = require('./controllers/ressourceController');
 const etudiantController = require('./controllers/etudiantController');
@@ -97,31 +100,44 @@ const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 
 app.use('/', function (req, res, next) {
-
-    if (!origin || origin == "http://localhost:4200") {
-        next()
-    } else {
-        let token = jwt.decode(req.header("token"))
-        if (token && token.id && token.role) {
-            User.findOne({ _id: token.id, role: token.role }, (err, user) => {
-                if (err) {
-                    console.error(err)
-                    res.status(403).send("Accès non autorisé")
-                }
-                else if (user) {
-                    next()
-                } else {
-                    res.status(403).send("Accès non autorisé")
-                }
-            })
-        } else {
-            if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/prospect/create" || req.originalUrl == "/soc/partenaire/inscription"
-                || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/user/WhatTheRole" || req.originalUrl == "/soc/user/login" || req.originalUrl == "/soc/user/getByEmail" ||
-                req.originalUrl.startsWith('/soc/forfeitForm')) {
-                next()
-            } else {
-                res.status(403).send("Accès non autorisé")
+    let token = jwt.decode(req.header("token"))
+    if (token && token['prospectFromDb']) {
+        token = token['prospectFromDb']
+    }
+    if (token && token.id && token.role) {
+        User.findOne({ _id: token.id, role: token.role }, (err, user) => {
+            if (err) {
+                console.error(err)
+                res.status(403).send("Accès non autorisé, Erreur", err)
             }
+            else if (user) {
+                jwt.verify(req.header("token"), '126c43168ab170ee503b686cd857032d', function (errToken, decoded) {
+                    if (req.originalUrl.startsWith('/soc/user/HowIsIt')) {
+                        next()
+                    } else if (decoded == undefined) {
+                        if (errToken.name == "JsonWebTokenError") {
+                            //Token Incorrect
+                            res.status(403).send(errToken)
+                        } else if (errToken.name == "TokenExpiredError") {
+                            //Token Expired
+                            res.status(401).send(errToken)
+                        }
+                    } else {
+                        next()
+                    }
+                });
+            } else {
+                console.error(user)
+                res.status(403).send("Accès non autorisé, User not found")
+            }
+        })
+    } else {
+        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl.startsWith('/soc/prospect/')
+            || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" ||
+            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
+            next()
+        } else {
+            res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
         }
     }
 });
@@ -153,8 +169,6 @@ app.use('/soc/diplome', diplomeController);
 app.use('/soc/presence', presenceController);
 
 app.use('/soc/seance', seanceController);
-
-app.use('/soc/inscription', inscriptionController);
 
 app.use('/soc/formateur', formateurController);
 
@@ -197,8 +211,16 @@ io.on("connection", (socket) => {
 
     //Lorsqu'une nouvelle Notification est crée, alors on l'envoi à la personne connecté
     socket.on('NewNotif', (data) => {
-        io.to(data.user_id).emit('NewNotif', data)
-        io.emit(data, { NewNotif: data });
+        console.log(data)
+        if (data?.user_id) {
+            io.to(data?.user_id).emit('NewNotif', data)
+            io.emit(data, { NewNotif: data });
+        }
+        else {
+            io.to(data?.service_id).emit('NewNotif', data)
+            io.emit(data, { NewNotif: data });
+        }
+
     })
 
     socket.on('reloadNotif', (data) => {

@@ -14,15 +14,20 @@ const schema= new mongoose.Schema({
         required:true,
         default:Date.now()
     },
-    ticket_id:{
+    info_id:{
         type: mongoose.SchemaTypes.ObjectId,
-         required:true,
+      
          ref:'ticket'
     },
     user_id:{
         type: mongoose.SchemaTypes.ObjectId,
-        required:true,
+     
         ref:'user'
+    },
+    service_id:{
+        type: mongoose.SchemaTypes.ObjectId,
+       
+        ref:'service'
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
