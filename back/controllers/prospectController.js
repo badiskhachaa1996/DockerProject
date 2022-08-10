@@ -162,17 +162,11 @@ app.post("/create", (req, res, next) => {
                                     transporterEstya.sendMail(mailOptions, function (error, info) {
                                         if (error) {
                                             console.error(error);
-
                                         }
-
-
-
                                     });
 
                                 }
                                 else if (prospectSaved.type_form == "eduhorizons") {
-
-
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong></p>" +

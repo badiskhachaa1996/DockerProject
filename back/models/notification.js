@@ -16,17 +16,17 @@ const schema= new mongoose.Schema({
     },
     info_id:{
         type: mongoose.SchemaTypes.ObjectId,
-         required:false,
+      
          ref:'ticket'
     },
     user_id:{
         type: mongoose.SchemaTypes.ObjectId,
-        required:false,
+     
         ref:'user'
     },
     service_id:{
         type: mongoose.SchemaTypes.ObjectId,
-        required:false,
+       
         ref:'service'
     }
 });

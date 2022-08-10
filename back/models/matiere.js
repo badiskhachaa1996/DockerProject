@@ -9,8 +9,8 @@ const matiereSchema = mongoose.Schema({
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: true },
     seance_max: { type: Number, required: true },
     coeff: { type: Number, default: 1 },
-    credit_ects : { type: Number, required: true },
-    remarque : { type: String },
+    credit_ects: { type: Number, default: 1 },
+    remarque: { type: String },
 });
 
 //creation de la table matiere

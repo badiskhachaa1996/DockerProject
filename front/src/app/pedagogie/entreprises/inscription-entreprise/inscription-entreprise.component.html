@@ -302,8 +302,8 @@ Formation suivie :
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]=" raison_sociale.invalid || activite.invalid || adresse_ss.invalid || postal_ss.invalid || ville_ss.invalid || 
-                                adresse_ec.invalid || postal_ec.invalid || ville_ec.invalid || crc.invalid || convention.invalid || idcc.invalid || siret.invalid || nb_salarie.invalid || phone_ent.invalid  || indicatif_ent.invalid || ape_naf.invalid || OPCO.invalid"
+                                [disabled]="! raison_sociale || ! activite || ! adresse_ss || ! postal_ss || ! ville_ss || 
+                              !  adresse_ec || ! postal_ec || ! ville_ec || ! crc || ! convention || ! idcc ||  ! siret || ! nb_salarie || ! phone_ent  || ! indicatif_ent || ! ape_naf || ! OPCO"
                                 (click)="nextPage()"></button>
                         </div>
 
@@ -386,9 +386,10 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-9 md:col-4">
-                                <label For="numero_whatsapp">Numéro<br><small>(WhatsApp)</small><span style="color: red;">*
+                                <label For="numero_whatsapp">Numéro<br><small>(WhatsApp)</small><span
+                                        style="color: red;">*
                                     </span></label>
-                                    
+
                                 <input pInputText id="numero_whatsapp" type="tel"
                                     placeholder="numero_whatsapp du dirigeant" formControlName="numero_whatsapp" />
                                 <div
@@ -400,9 +401,9 @@ Formation suivie :
                             </div>
                         </div>
                         <div>
-                            <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]="civilite.invalid || lastname.invalid || firstname.invalid || 
-                 email.invalid || indicatif.invalid || phone.invalid || indicatif_whatsapp.invalid  || numero_whatsapp.invalid  " (click)="nextPage();verifEmailInBD()"></button>
+                            <button pButton type="button" label="Suivant" style="float: right;" [disabled]="! civilite ||  ! lastname || ! firstname || 
+                            ! email|| ! indicatif || ! phone || ! indicatif_whatsapp  || ! numero_whatsapp"
+                                (click)="nextPage();verifEmailInBD()"></button>
                         </div>
                     </div>
                 </p-fieldset>
@@ -419,7 +420,7 @@ Formation suivie :
                                 <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                                     formControlName="civilite_t1"></p-dropdown>
                             </div>
-                          
+
                             <div class="field col-12 md:col-4">
                                 <label For="lastname_t1">Nom<span style="color: red;"> *
                                     </span></label>
@@ -526,9 +527,9 @@ Formation suivie :
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]="civilite_t1.invalid || lastname_t1.invalid || firstname_t1.invalid || 
-                            email_t1.invalid || indicatif_t1.invalid || phone_t1.invalid || fonction_t1.invalid  || date_naissance_t1.invalid || niv_formation_t1.invalid  || temps_fonction_t1.invalid  "
-                                (click)="nextPage();verifEmailInBD()"></button>
+                                [disabled]="! civilite_t1 || ! lastname_t1 || ! firstname_t1 || 
+                            ! email_t1 || ! indicatif_t1 || ! phone_t1 || ! fonction_t1  || ! date_naissance_t1 || ! niv_formation_t1  || ! temps_fonction_t1  "
+                                (click)="nextPage();verifEmailt1InBD()"></button>
                         </div>
                     </div>
                 </p-fieldset>
@@ -577,8 +578,12 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="alternant">Alternant<span style="color: red;"> *
                                     </span></label>
-                                <p-dropdown [options]="alternantList" optionLabel="label" optionDisabled="actif"
-                                    id="alternant" formControlName="alternant"></p-dropdown>
+                                <p-dropdown class="p-dropdown-clearable" [options]="listAlternantDD" dataKey="_id"
+                                    filter="true"
+                                    filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
+                                    optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
+                                    formControlName="alternant">
+                                </p-dropdown>
                                 <div *ngIf="alternant.invalid && (alternant.touched || alternant.dirty)">
                                     <span style="color: red;" class="error" *ngIf="alternant.errors?.required">*
                                         Le
@@ -660,9 +665,9 @@ Formation suivie :
 
                         </div>
                         <div>
-                            <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]="debut_contrat.invalid || fin_contrat.invalid || classification.invalid || 
-                                alternant.invalid || intitule.invalid || niv.invalid || coeff_hier.invalid  || form.invalid || code_commercial.invalid " (click)="nextPage()"></button>
+                            <button pButton type="button" label="Suivant" style="float: right;" [disabled]="! debut_contrat || ! fin_contrat || ! classification || 
+                                ! alternant || ! intitule ||!  niv || ! coeff_hier  || ! form|| ! code_commercial "
+                                (click)="nextPage()"></button>
                         </div>
                     </div>
                 </p-fieldset>
@@ -699,8 +704,8 @@ Formation suivie :
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant" [disabled]="donneePerso.value==false"
-                            type="submit" style="float: right;"></button>
+                        <button pButton type="button" label="Suivant" [disabled]="donneePerso == null " type="submit"
+                            style="float: right;"></button>
                     </div>
                 </p-fieldset>
             </div>
