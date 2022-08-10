@@ -158,17 +158,29 @@ app.post("/createNewContrat", (req, res, next) => {
                                                 }
                                             });
                                             res.status(200).send([NewContData, EntrepCreated, CeoCreated, NewTutData])
-                                        }).catch((errorCt) => { res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message }) })
-                                    }).catch((errorT1) => { res.status(400).json({ error: 'impossible de creer un nouveau tuteur' + errorT1.message }) })
+                                        }).catch((errorCt) => {
+                                            console.log("loco1")
+                                            res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message })
+                                        })
+                                    }).catch((errorT1) => {
+                                        console.log("loco2")
+                                        res.status(400).json({ error: 'impossible de creer un nouveau tuteur' + errorT1.message })
+                                    })
                             })
-                                .catch((errorEN) => { res.status(400).json({ error: 'Impossible de créer une nouvelle entreprise ' + errorEN.message }) });
+                                .catch((errorEN) => {
+                                    console.log("loco3")
+                                    res.status(400).json({ error: 'Impossible de créer une nouvelle entreprise ' + errorEN.message })
+                                });
                         })
-                        .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
+                        .catch((error) => {
+                            console.log("loco4")
+                            res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message })
+                        });
             }
         })
         .catch((error) => {
-            console.error(error)
-            res.status(501).json({  error })
+            console.log(error)
+            res.status(501).json({ error })
         });
 
 });
