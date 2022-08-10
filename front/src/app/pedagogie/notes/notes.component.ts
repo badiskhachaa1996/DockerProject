@@ -26,19 +26,17 @@ import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service'
 import { RachatBulletin } from 'src/app/models/RachatBulletin';
 import { SeanceService } from 'src/app/services/seance.service';
 import { FormateurService } from 'src/app/services/formateur.service';
-import jwt_decode from "jwt-decode";
 
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
+  providers: [MessageService],
   styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit {
 
   notes: Note[] = [];
 
-  formAddNote: FormGroup;
-  showFormAddNote: boolean = false;
   showBulletin: boolean = false
   formUpdateNote: FormGroup;
   showFormUpdateNote: boolean = false;
@@ -51,7 +49,7 @@ export class NotesComponent implements OnInit {
   dropdownEtudiant: any[] = [];
 
   examens: Examen[] = [];
-  dropdownExamen: any[] = [{ libelle: '', value: '' }];
+  dropdownExamen: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
   filterCampus: any[] = [
@@ -60,6 +58,8 @@ export class NotesComponent implements OnInit {
   classes: Classe[] = [];
   showPVAnnuel = false
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+
+  isAnneeScolaire: boolean = true;
 
   //Données de la dropdown semestre
   dropdownSemestre: any = [
@@ -87,7 +87,7 @@ export class NotesComponent implements OnInit {
 
   showTableAddnotes: boolean = false;
 
-  dropdownExamByClasse: any[] = [{ libelle: '', value: '' }];
+  dropdownExamByClasse: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
   appreciationModules = {}
   dicFormateurMatiere = {}
@@ -232,9 +232,6 @@ export class NotesComponent implements OnInit {
   showBtnAddAppreciationGenerale: boolean = true;
   showBtnUpdateAppreciationGenerale: boolean = false;
 
-  //Pour recuperer le rôle de l'utilisateur
-  userRole: string = '';
-  token: any;
 
   @ViewChild('content', { static: false }) el!: ElementRef;
 
@@ -244,11 +241,6 @@ export class NotesComponent implements OnInit {
     private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService:FormateurService) { }
 
   ngOnInit(): void {
-    /** Recuperation du rôle de l'utilisateur **/
-    this.token = jwt_decode(localStorage.getItem('token'));
-    this.userRole = this.token.role;
-    /** end */
-
     //Recuperation de l'année scolaire en cours
     this.anneeScolaireService.getActive().subscribe(
       ((response) => { this.anneScolaire = response; }),
@@ -329,6 +321,7 @@ export class NotesComponent implements OnInit {
 
         this.examenService.getAllEvaluation().subscribe(
           (responseE) => {
+            console.log(responseE);
             responseE.forEach((examen) => {
 
               responseM.forEach((matiere) => {
@@ -359,7 +352,6 @@ export class NotesComponent implements OnInit {
 
     //Initialisation des formulaires
     this.onInitFormSelectClasse();
-    this.onInitFormAddNote();
     this.onInitFormUpdateNote();
     this.onInitFormGenerateBulletin();
     this.onInitFormSelectExam();
@@ -372,7 +364,7 @@ export class NotesComponent implements OnInit {
   //Methode d'initialisation du formulaire de selection d'une classe
   onInitFormSelectClasse() {
     this.formSelectClasse = this.fromBuilder.group({
-      classe: ['', Validators.required],
+      classe: [''],
       semestre: [''],
     });
   }
@@ -394,25 +386,6 @@ export class NotesComponent implements OnInit {
     });
   }
 
-  //Methode d'initialisation du formulaire d'ajout de notes
-  onInitFormAddNote() {
-    this.formAddNote = this.fromBuilder.group({
-      note_val: ['', [Validators.required]],
-      semestre: ['', Validators.required],
-      etudiant_id: ['', Validators.required],
-      examen_id: ['', Validators.required],
-      appreciation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàù .]+$")]],
-      isAbsent: [false]
-    });
-  }
-
-  //pour la partie de traitement des erreurs sur le formulaire
-  get note_val() {
-    return this.formAddNote.get("note_val");
-  }
-  get appreciation() {
-    return this.formAddNote.get("appreciation");
-  }
 
   get note_val_esm() {
     return this.formAddNoteByClasseByExam.get("note_val");
@@ -442,12 +415,39 @@ export class NotesComponent implements OnInit {
 
   //Methode de selection d'une classe et d'un semestre
   onSelectClasse() {
-    this.semestreSelected = this.formSelectClasse.get('semestre').value.value;
+    // this.semestreSelected = this.formSelectClasse.get('semestre').value.value;
+    //Recuperation de la date du jour
+    let date = new Date();
 
     //Selection de la classe 
     for (let classe in this.classes) {
       if (this.classes[classe]._id == this.formSelectClasse.get('classe').value.value) {
         this.classeSelected = this.classes[classe];
+
+        //Recuperation du diplome et attribution du semestre
+        this.diplomeService.getById(this.classeSelected.diplome_id).subscribe(
+          ((response) => { 
+            
+            if(date >= response.date_debut_semestre_1 && date <= response.date_fin_semestre_1)
+            {
+              this.semestreSelected = 'Semestre 1';
+              this.isAnneeScolaire = true;
+            }
+
+            else if(date >= response.date_debut_semestre_2 && date <= response.date_fin_semestre_2)
+            {
+              this.semestreSelected = 'Semestre 2';
+              this.isAnneeScolaire = true;
+            }
+
+            else
+            {
+              this.isAnneeScolaire = false;
+              this.messageService.add({ key: 'tst', severity: 'error', summary: 'Ajout impossible', detail: 'Vous êtes hors année scolaire, impossible d\'ajouter une note!' });
+            }
+          }),
+          ((error) => { console.error(error); })
+        );
       }
     }
 
@@ -455,7 +455,7 @@ export class NotesComponent implements OnInit {
     this.examenService.getAllByClasseId(this.classeSelected._id).subscribe(
       ((response) => {
 
-        this.dropdownExamByClasse = [{ libelle: '', value: '' }];
+        this.dropdownExamByClasse = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
         response.forEach((examen) => {
           for (let matiere in this.matieres) {
@@ -560,9 +560,6 @@ export class NotesComponent implements OnInit {
                       ((error) => { console.error(error); })
                     );
 
-                    this.showFormAddNote = false;
-                    this.formAddNote.reset();
-
                   }),
                   ((error) => {
                     this.messageService.add({
@@ -576,76 +573,6 @@ export class NotesComponent implements OnInit {
             ((error) => { console.error(error); })
           );
 
-        }
-      }),
-      ((error) => { console.error(error); })
-    );
-  }
-
-
-  //Methode d'ajout d'une note
-  onAddNote() {
-    //Recuperation des infos du formulaire
-    let note_val = this.formAddNote.get('note_val').value;
-    let semestre = this.formAddNote.get('semestre').value.value;
-    let etudiant_id = this.formAddNote.get('etudiant_id').value.value;
-    let examen_id = this.formAddNote.get('examen_id').value.value;
-    let appreciation = this.formAddNote.get('appreciation').value;
-    let isAbsent = this.formAddNote.get('isAbsent').value;
-
-    let classe_id: string;
-    let matiere_id: string;
-
-    for (let exam in this.examens) {
-      if (this.examens[exam]._id == examen_id) {
-        classe_id = this.examens[exam].classe_id;
-        matiere_id = this.examens[exam].matiere_id;
-      }
-    }
-
-    this.examenService.getById(examen_id).subscribe(
-      ((response) => {
-
-        //verification si la note max n'est pas depassé
-        if (response.note_max < note_val) {
-
-          this.messageService.add({
-            severity: "error",
-            summary: "Impossible d'attribuer une note, la note maximale pour cet examen est " + response.note_max,
-          });
-
-        }
-        else {
-
-          //Création de la nouvelle note à créer dans la BD
-          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id, isAbsent);
-
-          this.noteService.create(note).subscribe(
-            ((response) => {
-              this.messageService.add({
-                severity: "success",
-                summary: "Nouvelle note attribuée",
-              });
-
-              //Recuperation de la liste des notes
-              this.noteService.getAll().subscribe(
-                ((response) => {
-                  this.notes = response;
-                }),
-                ((error) => { console.error(error); })
-              );
-
-              this.showFormAddNote = false;
-              this.formAddNote.reset();
-
-            }),
-            ((error) => {
-              this.messageService.add({
-                severity: "error",
-                summary: "Impossible d'attribuer une note, veuillez contacter un administrateur.",
-              });
-            })
-          );
         }
       }),
       ((error) => { console.error(error); })
