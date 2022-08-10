@@ -39,7 +39,9 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
+
         console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
+
         /* 
         //Lancer le scrypt MailAuto une fois par mois a 12h11min:11sec
         
@@ -54,6 +56,9 @@ mongoose
             'local'
         );
         */
+
+
+        console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
 
     })
     .catch(err => {

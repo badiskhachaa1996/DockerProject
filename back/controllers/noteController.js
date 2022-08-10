@@ -19,6 +19,22 @@ app.get("/getAllPopulate", (req, res, next) => {
 });
 
 
+//Recuperation de la liste des notes
+app.get("/getAllPopulate", (req, res, next) => {
+    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } })
+        .then((notesFromDb) => { res.status(200).send(notesFromDb); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Recuperation de la liste des notes via id d'un étudiant
+app.get("/getAllByEtudiantId/:id", (req, res, next) => {
+    Note.find({ etudiant_id: req.params.id })
+        .then((notesFromDb) => { res.status(200).send(notesFromDb); })
+        .catch((error) => { res.status(400).send(error); });
+});
+
+
+
 //Recuperation de la liste des notes via un id et un semestre
 app.get("/getAllByIdBySemestre/:id/:semestre", (req, res, next) => {
     Note.find({ etudiant_id: req.params.id, semestre: req.params.semestre })
