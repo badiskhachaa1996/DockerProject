@@ -13,7 +13,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Récupère la liste des evaluations
 app.get("/getAllEvaluation", (req, res, next) => {
-    Examen.find({ type: 'Évaluation' })
+    Examen.find({ niveau: 'Évaluation' })
         .then((examensFromDb) => { res.status(200).send(examensFromDb); })
         .catch((error) => { res.status(500).send(error.message); console.log('je suis ici');});
 });
