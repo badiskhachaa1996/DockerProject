@@ -7,7 +7,7 @@ var sheet_name_list = workbook.SheetNames; // Classes Name
 //sheet_name_list = [workbook.SheetNames[24]]
 let users = []
 mongoose
-    .connect(`mongodb://localhost:27017/testScriptEtudiant`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -76,14 +76,16 @@ mongoose
                                         verifedEmail: true,
                                         date_creation: di
                                     })
-                                    let code = ""
-                                    if (dn && data['Nationalité ']) {
-                                        code = generateCode(u, dn)
-                                    } else {
-                                        console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
-                                    }
                                     u.save((err, newUser) => {
                                         users.push(newUser)
+                                        let code = ""
+                                        if (dn && data['Nationalité ']) {
+                                            code = generateCode(u, dn)
+                                        } else {
+                                            newUser.nationnalite = "Inconnu"
+                                            code = generateCode(newUser,new Date())
+                                            console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
+                                        }
                                         if (!err) {
                                             let etu = new Etudiant({
                                                 user_id: newUser._id,
