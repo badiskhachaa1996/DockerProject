@@ -64,9 +64,9 @@ export class NotesComponent implements OnInit {
   //Données de la dropdown semestre
   dropdownSemestre: any = [
     { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
-    { libelle: 'Semestre 1', value: 'Semestre 1', actif: false },
-    { libelle: 'Semestre 2', value: 'Semestre 2', actif: false },
-    { libelle: 'Semestre 3', value: 'Semestre 3', actif: false }
+    { libelle: '1er', value: 'Semestre 1', actif: false },
+    { libelle: '2ème', value: 'Semestre 2', actif: false },
+    { libelle: 'Annuel', value: 'Annuel', actif: false }
   ];
 
   //Données liées à la saisie de notes
@@ -93,15 +93,15 @@ export class NotesComponent implements OnInit {
   dicFormateurMatiere = {}
 
   initAppreciation(mode) {
+    
     if (mode == "set") {
-      this.notesForGenerateBulletin.forEach(n => {
-        this.appreciationModules[n.matiere_id] = ""
-      })
+
     } else {
       this.notesForGenerateBulletin.forEach(n => {
         if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
           this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
         } else {
+          console.log(n,this.appreciationModules)
           this.appreciationModules[n.matiere_id] = ""
         }
       })
@@ -845,14 +845,52 @@ export class NotesComponent implements OnInit {
   GenerateBulletin2(etudiant_id, semestre) {
     //Par Morgan
     this.notesForGenerateBulletin = []
-    this.semestreChoose = semestre
-    this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      this.moyEtudiant = data.moyenneEtudiant
-      this.notesForGenerateBulletin = data.data
-      this.showBulletin = true
-    }, error => {
-      console.error(error)
-    })
+    if (semestre != "Annuel") {
+      this.semestreChoose = semestre
+      this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
+        this.moyEtudiant = data.moyenneEtudiant
+        this.notesForGenerateBulletin = data.data
+        this.showBulletin = true
+      }, error => {
+        console.error(error)
+      })
+    } else {
+      this.etudiantService.getBulletin(etudiant_id, 'Semestre 1').subscribe(dataS1 => {
+        this.moyEtudiantAnnuel['Semestre 1'] = dataS1.moyenneEtudiant
+        let notesS1 = dataS1.data
+        this.etudiantService.getBulletin(etudiant_id, 'Semestre 2').subscribe(dataS2 => {
+          this.moyEtudiantAnnuel['Semestre 2'] = dataS2.moyenneEtudiant
+          this.moyEtudiantAnnuel['Annuel'] = this.getMoyAnnuel(dataS1.moyenneEtudiant, dataS2.moyenneEtudiant)
+          let notesS2 = dataS2.data
+          console.log(notesS1, notesS2)
+          dataS1.data.forEach(NS1 => {
+            dataS2.data.forEach(NS2 => {
+              if (NS1.matiere_id == NS2.matiere_id) {
+                this.notesForGenerateBulletin.push({ "Semestre 1": NS1, "Semestre 2": NS2, "Annuel": this.getNoteAnnuel(NS1, NS2), 'matiere_name': NS1.matiere_name, 'coef': NS1.coef, 'matiere_id': NS1.matiere_id, 'ects': NS1.ects })
+                notesS1.splice(notesS1.indexOf(NS1), 1)
+                notesS2.splice(notesS2.indexOf(NS2), 1)
+              }
+            })
+          })
+          if (notesS1.length != 0) {
+            notesS1.forEach(n => {
+              this.notesForGenerateBulletin.push({ "Semestre 1": n, "Semestre 2": null, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+            })
+          }
+          if (notesS2.length != 0) {
+            notesS2.forEach(n => {
+              this.notesForGenerateBulletin.push({ "Semestre 1": null, "Semestre 2": n, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+            })
+          }
+          console.log(notesS2, notesS1)
+          this.showPVAnnuel = true
+        }, error => {
+          console.error(error)
+        })
+      }, error => {
+        console.error(error)
+      })
+    }
     this.etudiantService.getById(etudiant_id).subscribe(data => {
       this.etudiantToGenerateBulletin = data
       this.seanceService.getFormateurFromClasseID(data.classe_id, semestre).subscribe(d => {
@@ -992,7 +1030,8 @@ export class NotesComponent implements OnInit {
         this.showGenerateBulletin = true;
         this.showFormAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
-        this.appreciationModules = response.appreciation_matiere
+        if(response.appreciation_matiere)
+          this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -1014,7 +1053,8 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
-        this.appreciationModules = response.appreciation_matiere
+        if(response.appreciation_matiere)
+          this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -1030,7 +1070,8 @@ export class NotesComponent implements OnInit {
           this.showAppreciationGenerale = true;
           this.showBtnAddAppreciationGenerale = false;
           this.showBtnUpdateAppreciationGenerale = true;
-          this.appreciationModules = response.appreciation_matiere
+          if (response.appreciation_matiere)
+            this.appreciationModules = response.appreciation_matiere
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
       }),
@@ -1049,7 +1090,7 @@ export class NotesComponent implements OnInit {
 
   //Methode de generation du bulletin de note
   onGenerateBulletin(id = 'content') {
-
+    console.log(id)
     var element = document.getElementById(id);
     var opt = {
       margin: 0,

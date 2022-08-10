@@ -277,16 +277,16 @@
             <form [formGroup]="formAppreciationGenerale" (ngSubmit)="onSetAppreciationGenerale()"
                 class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-12">
-                    <label For="appreciation">Appréciation</label>
+                    <label For="appreciation">Appréciation du semestre</label>
                     <input type="text" id="appreciation" formControlName="appreciation" placeholder="appreciation"
                         pInputText>
                     <small style="color: red;">L'appréciation est définie pour le semestre actuel</small>
                 </div>
-                <div *ngFor="let note of notesForGenerateBulletin; let i = index">
-                    <div class="grid">
+                <div class="field col-12" *ngFor="let note of notesForGenerateBulletin; let i = index">
+                    <div class="grid col-12">
                         <div class="col-6 md:col-6">
                             <label>Module: </label>
-                            <p>{{note.matiere_name}}</p>
+                            <h4>{{note.matiere_name}}</h4>
                         </div>
                         <div class="col-6 md:col-6">
                             <label>Appreciation: </label>
@@ -296,7 +296,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="field col-12">
                     <button pButton label="Ajouter l'appréciation" type="submit"
                         [disabled]="formAppreciationGenerale.invalid"></button>
                 </div>
@@ -319,11 +319,11 @@
                     <input type="text" id="appreciation" formControlName="appreciation" placeholder="appreciation"
                         pInputText>
                 </div>
-                <div *ngFor="let note of notesForGenerateBulletin; let i = index">
-                    <div class="grid">
+                <div class="col-12" *ngFor="let note of notesForGenerateBulletin; let i = index">
+                    <div class="grid col-12">
                         <div class="col-6 md:col-6">
                             <label>Module: </label>
-                            <p>{{note.matiere_name}}</p>
+                            <h4>{{note.matiere_name}}</h4>
                         </div>
                         <div class="col-6 md:col-6">
                             <label>Appreciation: </label>
@@ -333,7 +333,7 @@
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class="col-12">
                     <button pButton label="Modifier l'appréciation" type="submit"
                         [disabled]="formUpdateAppreciationGenerale.invalid"></button>
                 </div>
@@ -516,8 +516,8 @@
                             <td style="text-align: right;">{{ moyEtudiant | number : '0.1-2' }}</td>
                             <!--<td>{{ moyEtudiant | number : '0.1-2' }}</td>
                             <td>{{ moyEtudiant | number : '0.1-2' }}</td>-->
-                            <td colspan="5"></td>
-                            <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
+                            <td colspan="4"></td>
+                            <td *ngIf="showAppreciationGenerale" style="text-align: left;"> {{
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
 
@@ -553,10 +553,9 @@
             <i class="pi pi-times-circle" style="float:right; color: red"
                 (click)="showPVAnnuel = false; notesForGenerateBulletin = [];" aria-hidden="true">
             </i>
-            <h3>Prévisualisation du bulletin Annuel</h3>
-
+            
             <div style="float: right;">
-                <!--<button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
+                <button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
                     label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
                 <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
@@ -568,13 +567,15 @@
                                         appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
                     class="ml-1" type="button" label="Modifier l'appréciation générale"
                     *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
-                </button>-->
+                </button>
 
                 <button pButton class="ml-1" *ngIf="!hideBtn"
-                    (click)="onGenerateBulletin('contentAnnuel');hideBtn = true" type="button" style="float:right;"
+                    (click)="onGenerateBulletin('contentAnnuel');" type="button" style="float:right;"
                     label="Exporter en pdf">
                 </button>
             </div>
+            <h3>Prévisualisation du bulletin Annuel</h3>
+
 
 
             <div id="contentAnnuel">
@@ -793,13 +794,13 @@
                                 GenerateBulletin2(etudiant._id,semestreForGenerateBulletin);
                                 etudiantToGenerateBulletin = etudiant;
                                 onGetAppreciationGenerale(); hideBtn=false"></i>
-                            <i class="pi pi-file-excel" pTooltip="Générer le bulletin Annuel" (click)="
+                            <!--<i class="pi pi-file-excel" pTooltip="Générer le bulletin Annuel" (click)="
                                 moyEtudiant = null;
                                 notesForGenerateBulletin = [];
                                 onNullAppreciationGenerale();
                                 GenerateBulletinAnnuel(etudiant._id);
                                 etudiantToGenerateBulletin = etudiant;
-                                onGetAppreciationGenerale(); hideBtn=false"></i>
+                                onGetAppreciationGenerale(); hideBtn=false"></i>-->
                         </td>
                     </tr>
                 </ng-template>
