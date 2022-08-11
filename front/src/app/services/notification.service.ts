@@ -20,7 +20,7 @@ export class NotificationService {
 
   create(notif: any) {
     let url = this.apiUrl + "create";
-    return this.http.post<any>(url, notif, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.http.post<any>(url, notif, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getAll() {

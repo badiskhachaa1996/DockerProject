@@ -5,7 +5,7 @@ app.disable("x-powered-by");
 const { Entreprise } = require('./../models/entreprise');
 const { CAlternance } = require('./../models/contrat_alternance');
 const nodemailer = require('nodemailer');
-
+const bcrypt = require("bcryptjs");
 
 let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
@@ -33,6 +33,20 @@ app.get("/getAll", (req, res, next) => {
     Entreprise.find()
         .then((entreprisesFromDb) => { res.status(200).send(entreprisesFromDb); })
         .catch((error) => { req.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
+});
+
+app.get("/getAllContrats", (req, res, next) => {
+    CAlternance.find()
+        .then((CAFromDb) => {
+            console.log(CAFromDb);
+            res.status(200).send(CAFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            req.status(500).json({
+                error: "Impossible de recuperer la liste de tous les contrats " + error.message
+            });
+        });
 });
 
 //creation d'une nouvelle entreprise
@@ -77,7 +91,7 @@ app.post("/createNewContrat", (req, res, next) => {
             }
             else {
                 //Creation d'un nouveau utilisateur CEO d'entreprise
-                let Ceo_Pwd = CeoCreated.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
+                let Ceo_Pwd = NewCeo.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
                 NewCeo.password = bcrypt.hashSync(Ceo_Pwd, 8),
 
                     NewCeo.save()
@@ -159,16 +173,16 @@ app.post("/createNewContrat", (req, res, next) => {
                                             });
                                             res.status(200).send([NewContData, EntrepCreated, CeoCreated, NewTutData])
                                         }).catch((errorCt) => {
-                                            console.log("loco1")
+
                                             res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message })
                                         })
                                     }).catch((errorT1) => {
-                                        console.log("loco2")
+
                                         res.status(400).json({ error: 'impossible de creer un nouveau tuteur' + errorT1.message })
                                     })
                             })
                                 .catch((errorEN) => {
-                                    console.log("loco3")
+
                                     res.status(400).json({ error: 'Impossible de créer une nouvelle entreprise ' + errorEN.message })
                                 });
                         })
