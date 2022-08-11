@@ -2,7 +2,7 @@
 	<!-- Formulaire de modification d'un formateur -->
 	<div class="col-12" *ngIf="showFormUpdateFormateur">
 		<div class="card">
-			<i class="pi pi-times-circle" style="float:right; font-size: 20px;"
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;"
 				(click)="showFormUpdateFormateur = false;" aria-hidden="true">
 			</i>
 			<h4 style="text-align: center;">Modifier un formateur </h4>
@@ -275,6 +275,9 @@
 
 	<div class="col-12">
 		<div class="card">
+			<div style="float: right;">
+				<button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+			</div>
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
 			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda']" [totalRecords]="formateurs.length"

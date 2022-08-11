@@ -96,6 +96,9 @@
     <div class="col-12">
         <div class="card">
           
+            <div style="float: right;">
+                <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+            </div>
             <h3>Examens</h3>
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
@@ -111,11 +114,9 @@
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de la classe">
                             </p-dropdown>
 
-
-
                             <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
                                 <p-dropdown filter="true" [options]="dropdownType"
-                                    (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="libelle"
+                                    (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="label"
                                     emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'examens">
                                 </p-dropdown>
                             </span>

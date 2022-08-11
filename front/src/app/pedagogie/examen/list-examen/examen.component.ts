@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
 import { Examen } from 'src/app/models/Examen';
@@ -66,7 +67,8 @@ export class ExamenComponent implements OnInit {
     private formateurService: FormateurService,
     private examenService: ExamenService,
     private matiereService: MatiereService,
-    private classeService: ClasseService
+    private classeService: ClasseService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -260,5 +262,10 @@ export class ExamenComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  onRedirect()
+  {
+    this.router.navigate(['ajout-examen']);
   }
 }

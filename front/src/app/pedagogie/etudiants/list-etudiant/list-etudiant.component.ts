@@ -516,4 +516,9 @@ export class ListEtudiantComponent implements OnInit {
     )
   }
 
+  onRedirect()
+  {
+    this.router.navigate(['ajout-etudiant']);
+  }
+
 }

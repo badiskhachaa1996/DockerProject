@@ -114,7 +114,7 @@ export class AddEntrepriseComponent implements OnInit {
       ((response) => {
 
         this.messageService.add({ severity: 'success', summary: 'Ajout de l\entreprise' });
-
+        this.formAddEntreprise.reset();
       }),
       ((error) => { console.error(error); })
     );

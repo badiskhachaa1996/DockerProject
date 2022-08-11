@@ -70,6 +70,10 @@
 							<i class="pi pi-search"></i>
 							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
 						</span>
+
+                        <div style="float: right;">
+                            <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+                        </div>
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">

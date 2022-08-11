@@ -167,6 +167,9 @@
     <!-- Affichage des diplomes -->
     <div class="col-12">
         <div class="card">
+            <div style="float: right;">
+                <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+            </div>
             <h5>Liste des diplômes</h5>
             <p-toast></p-toast>
             <p-table class="p-datatable-gridlines" #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id" [expandedRowKeys]="expandedRows"
@@ -179,7 +182,7 @@
                             <input pInputText type="text" placeholder="Recherche"
                                 (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                             <i class="pi pi-search"></i>
-                        </span>
+                        </span>                       
                     </div>
 
                     <div class="flex table-header">

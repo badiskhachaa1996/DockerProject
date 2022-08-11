@@ -33,6 +33,9 @@
 
     <div class="col-12">
 		<div class="card">
+			<div style="float: right;">
+				<button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+			</div>
 			<h5>Liste des groupes</h5>
 			<p-table #dt1 *ngIf="classes" [value]="classes" rowExpandMode="single"
                      dataKey="_id" [rows]="10" 
