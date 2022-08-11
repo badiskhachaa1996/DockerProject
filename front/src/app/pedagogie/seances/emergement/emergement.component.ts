@@ -110,6 +110,7 @@ export class EmergementComponent implements OnInit {
       }
     });
 
+
     function drawLine(ctxt, x1, y1, x2, y2) {
       x1 -= 15
       y1 -= 20
@@ -178,6 +179,7 @@ export class EmergementComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -225,9 +227,16 @@ export class EmergementComponent implements OnInit {
     this.SeanceService.getById(this.ID).subscribe(dataS => {
       console.log(dataS)
       this.seance = dataS
+      console.log(new Date())
+      console.log(this.date)
       this.date_debut = new Date(dataS.date_debut).getTime()
-      this.date_fin = this.date_debut + (15 * 60)//15 minutes max
+      console.log(new Date(dataS.date_debut))
+      console.log(this.date_debut)
+      this.date_fin = this.date_debut + (15 * 60000)
+      console.log(new Date(this.date_fin))//15 minutes max
+      console.log(this.date_fin)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
+      console.log(this.showCanvas)//15 minutes max
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(data => {
         console.log(data)
         data.forEach(etu => {

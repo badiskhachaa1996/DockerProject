@@ -1,4 +1,5 @@
   <!-- Partie ajout de documents -->
+  <p-toast></p-toast>
   <div class="col-12" *ngIf="showUploadFile!=null">
     <div class="card">
         <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
@@ -155,7 +156,7 @@
 <div class="col-12">
     <div class="card">
         <h5>Liste des prospects en attente d'assignation</h5>
-        <p-toast></p-toast>
+        
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"

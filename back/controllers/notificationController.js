@@ -18,11 +18,12 @@ app.post("/create", (req, res) => {
         });
     }
     const notif = new Notification({
-        etat: req.body.etat,
+        etat: false,
         type: req.body.type,
         info_id: req.body.info_id,
         date_ajout: Date.now(),
-        user_id: req.body.user_id
+        user_id: req.body.user_id,
+        service_id: req.body.service_id
     });
 
 
@@ -91,8 +92,8 @@ app.get("/get20ByUserID/:id", (req, res) => {
     })
 });
 app.get("/getAdmissionNotifi", (req, res) => {
-    Notification.find({ info_id:null, etat: false }).then(notifications => {
-console.log(notifications)
+    Notification.find({ info_id: null, etat: false }).then(notifications => {
+        console.log(notifications)
         res.status(200).send(notifications)
     }).catch(error => { console.log(error) })
 });

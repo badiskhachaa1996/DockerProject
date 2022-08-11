@@ -44,6 +44,7 @@ export class MatieresComponent implements OnInit {
 
     //Initialisation du formulaire de modification d'une matière
     this.onInitFormModifMatiere();
+    
 
     //recuperation de la liste des Matières
     this.matiereService.getAll().subscribe(

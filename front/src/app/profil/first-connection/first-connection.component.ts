@@ -226,8 +226,8 @@ export class FirstConnectionComponent implements OnInit {
           this.RegisterForm.value.diplome.value
         )
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
-          this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           localStorage.removeItem('modify')
+          this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.ss.connected()
             this.router.navigate(["/"]);

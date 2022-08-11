@@ -93,7 +93,7 @@ export class NotesComponent implements OnInit {
   dicFormateurMatiere = {}
 
   initAppreciation(mode) {
-    
+
     if (mode == "set") {
 
     } else {
@@ -101,7 +101,7 @@ export class NotesComponent implements OnInit {
         if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
           this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
         } else {
-          console.log(n,this.appreciationModules)
+          console.log(n, this.appreciationModules)
           this.appreciationModules[n.matiere_id] = ""
         }
       })
@@ -117,9 +117,10 @@ export class NotesComponent implements OnInit {
   initRachatEtudiant() {
     this.rachatEtudiant = []
     this.matiereRachat = []
+
     this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
       rbs.forEach(rb => {
-        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed })
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed, semestre: rb.semestre })
       })
     })
     this.notesForGenerateBulletin.forEach(n => {
@@ -127,7 +128,7 @@ export class NotesComponent implements OnInit {
     })
   }
   addRachatEtudiant() {
-    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false })
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false, semestre: this.semestreChoose })
   }
 
   updateRachatEtudiant(i, value, type) {
@@ -158,7 +159,7 @@ export class NotesComponent implements OnInit {
     this.rachatEtudiant.forEach(rb => {
       if (!rb.isNew) {
         //Update
-        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, rb.semestre, rb.dispensed)
         this.RBService.update(RBU).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -167,7 +168,7 @@ export class NotesComponent implements OnInit {
         })
       } else {
         //Create
-        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, rb.semestre, rb.dispensed)
         this.RBService.create(RBC).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -782,6 +783,7 @@ export class NotesComponent implements OnInit {
         console.error(error)
       })
     } else {
+      this.semestreChoose = "Annuel"
       this.etudiantService.getBulletin(etudiant_id, 'Semestre 1').subscribe(dataS1 => {
         this.moyEtudiantAnnuel['Semestre 1'] = dataS1.moyenneEtudiant
         let notesS1 = dataS1.data
@@ -951,13 +953,12 @@ export class NotesComponent implements OnInit {
     this.appreciationService.create(appreciation).subscribe(
       ((response) => {
         this.appreciationGenerale = response;
-        this.onGetNotes();
-        this.onGetAppreciationGenerale();
-        this.showBulletin = true;
-        this.showGenerateBulletin = true;
-        this.showFormAppreciationGenerale = false;
+        this.showAppreciationGenerale = true;
+        this.showBtnAddAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
-        if(response.appreciation_matiere)
+        this.showFormUpdateAppreciationGenerale = false;
+        this.showGenerateBulletin = true;
+        if (response.appreciation_matiere)
           this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
@@ -980,7 +981,7 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
-        if(response.appreciation_matiere)
+        if (response.appreciation_matiere)
           this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
@@ -990,6 +991,8 @@ export class NotesComponent implements OnInit {
 
   //Recuperation de l'appreciation générale
   onGetAppreciationGenerale() {
+    this.appreciationModules = {}
+    this.appreciationGenerale = {}
     this.appreciationService.get(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((response) => {
         if (response != null) {
