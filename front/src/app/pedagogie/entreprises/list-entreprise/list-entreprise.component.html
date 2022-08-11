@@ -272,6 +272,9 @@
 
     <div class="col-12">
         <div class="card">
+            <div style="float: right;">
+                <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+            </div>
             <h5>Liste des entreprise</h5>
             <p-toast></p-toast>
             <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret', 'isInterne', 'website', 'vip']"

@@ -29,7 +29,7 @@ export class AddCampusComponent implements OnInit {
   addcampusForm: FormGroup = new FormGroup({
     libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     ecole_id: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required,Validators.pattern('[^0-9]+')]),
+    ville: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
     pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
     email: new FormControl('', [Validators.required, Validators.email, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com))$")]),
     adresse: new FormControl('', Validators.required),
@@ -88,7 +88,7 @@ export class AddCampusComponent implements OnInit {
   saveCampus() {
     let campus = new Campus(null, this.addcampusForm.value.libelle, this.addcampusForm.value.ecole_id.value, this.addcampusForm.value.ville, this.addcampusForm.value.pays, this.addcampusForm.value.email, this.addcampusForm.value.adresse, this.addcampusForm.value.site, this.salles)
     this.campusService.createCampus(campus).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
+      this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des campus', detail: 'Votre campus a bien été ajouté' });
       this.campuss.push(data)
       this.addcampusForm.reset();
       this.salles = []

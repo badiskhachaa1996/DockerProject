@@ -31,7 +31,7 @@ export class AddEcoleComponent implements OnInit {
     annee_id: new FormControl('', Validators.required),
     telephone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
     adresse: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required,Validators.pattern('[^0-9]+')]),
+    ville: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
     pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
 
   });
@@ -73,7 +73,7 @@ export class AddEcoleComponent implements OnInit {
   saveEcole() {
     let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone)
     this.EcoleService.create(ecole).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
+      this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
       this.ecoles.push(data);
       this.addecoleForm.reset();
     }, (error) => {
