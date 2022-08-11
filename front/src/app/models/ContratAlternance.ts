@@ -1,5 +1,4 @@
 import { Diplome } from "./Diplome";
-import { Etudiant } from "./Etudiant";
 import { User } from "./User";
 
 export class ContratAlternance {
@@ -7,7 +6,7 @@ export class ContratAlternance {
         public debut_contrat?: Date,
         public fin_contrat?: Date,
         public horaire?: String,
-        public alternant_id?: Etudiant,
+        public alternant_id?: User,
         public intitule?: String,
         public classification?: String,
         public niveau_formation?: String,

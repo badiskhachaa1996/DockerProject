@@ -1,36 +1,36 @@
 const mongoose = require("mongoose");
-const schema= new mongoose.Schema({
-    etat:{
+const schema = new mongoose.Schema({
+    etat: {
         type: Boolean,
-        required : true,
-        default:false
+        required: true,
+        default: false
     },
     type: {
-        type:String,
-        required :  true
+        type: String,
+        required: true
     },
-    date_ajout:{
-        type:Date,
-        required:true,
-        default:Date.now()
+    date_ajout: {
+        type: Date,
+        required: true,
+        default: Date.now()
     },
-    info_id:{
+    info_id: {
         type: mongoose.SchemaTypes.ObjectId,
-      
-         ref:'ticket'
+
+        ref: 'ticket'
     },
-    user_id:{
+    user_id: {
         type: mongoose.SchemaTypes.ObjectId,
-     
-        ref:'user'
+
+        ref: 'user'
     },
-    service_id:{
+    service_id: {
         type: mongoose.SchemaTypes.ObjectId,
-       
-        ref:'service'
+
+        ref: 'service'
     }
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
-const Notification= mongoose.model("notification",schema);
+const Notification = mongoose.model("notification", schema);
 //on prépare ce model pour l'importer dans d'autres composants en l'exportant comme ça
-module.exports={Notification};
+module.exports = { Notification };
