@@ -262,6 +262,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
           //Si il y a un code de Commercial
           if (this.token != null && this.dataCommercial != null) {
             //Si il est considéré comme Admin dans son Partenaire
+            console.log("Admin Commercial")
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
@@ -272,6 +273,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
               ((error) => { console.error(error); })
             );
           } else {
+            console.log("Agent Commercial")
             //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
@@ -285,6 +287,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
+          console.log("Admission")
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
             let service : any = dataU.service_id
             if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {

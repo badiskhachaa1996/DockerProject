@@ -10,39 +10,18 @@ import { AuthService } from '../services/auth.service';
 export class CollaborateurGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router,) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
     let currenttoken: any = localStorage.getItem("token")
 
     if (currenttoken) {
-      currenttoken = jwt_decode(localStorage.getItem("token"))
-      let role: string = currenttoken.role;
-      let type: string = currenttoken.type;
-      let service_id = currenttoken.service_id;
-      if (type != "Commercial") {
-
-        console.log("accés refusé | Not Commercial");
-        return false
-      }
-      else if (type == "Commercial") {
-
-        console.log("acces autorisé  | Commercial")
-        return true
-
-        // this.authService.getById(currenttoken.id).pipe(map(data => {
-        //   console.log(data)
-        //   type = data.type
-        //   console.log(type)
-        //   if (type = "Commercial") {
-        //     console.log("Partenaire autorisé")
-        //     result == true;
-        //   }
-        //   else {
-        //     console.log("Acces refusé")
-        //     result == false
-        //   }
-        // }))
-      }
+      return this.authService.getById(currenttoken.id).pipe(map(user => {
+        if(user.type=="Commercial"){
+          return true
+        }else{
+          return false
+        }
+      }));
     }
     else {
       console.log("connexion requise")
