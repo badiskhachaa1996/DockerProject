@@ -119,4 +119,10 @@ export class ListEcoleComponent implements OnInit {
 
   }
 
+  //Methode pour rediriger vers le formulaire d'ajout d'une école
+  onRedirect()
+  {
+    this.router.navigate(['/ajout-ecole']);
+  }
+
 }

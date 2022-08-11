@@ -3,7 +3,6 @@
     <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
     <!-- Partie ajout de documents -->
     <div class="col-12" *ngIf="showUploadFile!=null">
-       
         <div class="card">
             <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
                 aria-hidden="true"> </i>
@@ -237,6 +236,9 @@
 
     <div class="col-12">
         <div class="card">
+            <div style="float: right;">
+                <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
+            </div>
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"

@@ -190,4 +190,9 @@ export class ListEntrepriseComponent implements OnInit {
 
   }
 
+  onRedirect()
+  {
+    this.router.navigate(['ajout-entreprise']);
+  }
+
 }

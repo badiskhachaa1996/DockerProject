@@ -1,17 +1,14 @@
-<p-toast></p-toast>
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
     <div class="col-12">
         <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle année scolaire"
             [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
             [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
+                Pour créer une année scolaire, veillez à saisir correctement le libelle de l'année scolaire
+                dans le bon format.<br>
+                <span style="color: red;">Ex: </span> 2022-2023 <br>
+                <span style="color: red;">Ex: </span> 2022/2023 <br>
             </p>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -34,10 +31,7 @@
             <form class="p-fluid p-formgrid grid" (ngSubmit)="saveAnneeScolaire()" [formGroup]="anneeScolaireForm">
                 <div class="field col-12 md:col-6">
                     <label for="libelle">Libéllé</label>
-                    <p-calendar id="libelle" formControlName="libelle" value="[rangedate]" dateFormat="yy"
-                                yearNavigator="true" yearRange="2020:2030" rowExpandMode="range" dataType="string"
-                                 multipleSeparator="/">
-                    </p-calendar>
+                    <input pInputText id="libelle" formControlName="libelle" type="text" placeholder="Ex: 2022-2023" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Etat</label>
@@ -47,6 +41,8 @@
                     <button pButton label="Ajouter" type="submit"[disabled]="anneeScolaireForm.invalid" ></button>
                 </div>
             </form>
+
+            <a routerLink="/annee-scolaire" style="float: right;"><i class="pi pi-caret-right"></i> Voir les années-scolaires</a>
         </div>
     </div>
 </div>

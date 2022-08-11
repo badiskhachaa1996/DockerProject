@@ -480,4 +480,9 @@ export class ListFormateursComponent implements OnInit {
       });
     }
   }
+
+  onRedirect()
+  {
+    this.router.navigate(['ajout-formateur']);
+  }
 }
