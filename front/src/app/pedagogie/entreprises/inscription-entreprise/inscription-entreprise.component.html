@@ -63,7 +63,7 @@ Formation suivie :
                 {{event}}
             </ng-template>
         </p-timeline>
-        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
+        <form  [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
             <div *ngIf="ActiveIndex==0">
                 <div style="text-align: center;">
                     <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
@@ -77,13 +77,7 @@ Formation suivie :
                                 <label For="raison_sociale">Appelation <span style="color: red;"> * </span></label>
                                 <input pInputText id="raison_sociale" type="text" placeholder="Eduhorizons"
                                     formControlName="raison_sociale" />
-                                <div *ngIf="raison_sociale.invalid && (raison_sociale.touched || raison_sociale.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.required">*
-                                        L'appelation
-                                        est obligatoire</span>
-                                    <!--<span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
-                                        lettres sont acceptés</span>-->
-                                </div>
+
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label For="activite">Activité de l'entreprise <span style="color: red;"> *
@@ -280,7 +274,8 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="OPCO">OPCO <span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO" />
+                                <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO"
+                                    />
                                 <div *ngIf="OPCO.invalid && (OPCO.touched || OPCO.dirty)">
                                     <span style="color: red;" class="error" *ngIf="OPCO.errors?.required">* Le champs
                                         est obligatoire.</span>
@@ -386,8 +381,7 @@ Formation suivie :
                                 </div>
                             </div>
                             <div class="field col-9 md:col-4">
-                                <label For="numero_whatsapp">Numéro<br><small>(WhatsApp)</small><span
-                                        style="color: red;">*
+                                <label For="numero_whatsapp">Numéro<small>(WhatsApp)</small><span style="color: red;">*
                                     </span></label>
 
                                 <input pInputText id="numero_whatsapp" type="tel"
@@ -704,7 +698,7 @@ Formation suivie :
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant" [disabled]="donneePerso == null " type="submit"
+                        <button pButton type="button" label="Suivant" [disabled]="!donneePerso" type="submit"
                             style="float: right;"></button>
                     </div>
                 </p-fieldset>
