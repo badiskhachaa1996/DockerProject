@@ -12,7 +12,7 @@ export class CollaborateurGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    let currenttoken: any = localStorage.getItem("token")
+    let currenttoken: any = jwt_decode(localStorage.getItem("token"))
 
     if (currenttoken) {
       return this.authService.getById(currenttoken.id).pipe(map(user => {
