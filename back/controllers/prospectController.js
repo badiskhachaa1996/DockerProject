@@ -621,6 +621,7 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
+    console.log(req.params.code_partenaire)
     Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
         .then(prospects => {
             prospects.forEach(function (element, index) {
