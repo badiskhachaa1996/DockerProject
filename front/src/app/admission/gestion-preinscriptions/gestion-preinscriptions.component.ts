@@ -268,7 +268,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
-                console.log(responseAdmission)
                 this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
