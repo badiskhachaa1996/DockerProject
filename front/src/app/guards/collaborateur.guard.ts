@@ -16,19 +16,17 @@ export class CollaborateurGuard implements CanActivate {
 
     if (currenttoken) {
       currenttoken = jwt_decode(localStorage.getItem("token"))
-
-      console.log(currenttoken)
       let role: string = currenttoken.role;
       let type: string = currenttoken.type;
       let service_id = currenttoken.service_id;
-      if (role == 'user') {
+      if (type != "Commercial") {
 
-        console.log("accés refusé | user");
+        console.log("accés refusé | Not Commercial");
         return false
       }
-      else if (role == 'Admin' || role == "Agent" && !service_id) {
-        
-        console.log("acces autorisé  | Agent")
+      else if (type == "Commercial") {
+
+        console.log("acces autorisé  | Commercial")
         return true
 
         // this.authService.getById(currenttoken.id).pipe(map(data => {
