@@ -256,10 +256,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
-
+    this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
-        this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
+        
         if (this.code) {
           //Si il y a un code de Commercial
           if (this.token != null && this.dataCommercial != null && this.dataCommercial.isAdmin) {
@@ -268,6 +268,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
+                console.log(responseAdmission)
                 this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
@@ -282,7 +283,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
               ((responseAdmission) => {
                 this.prospects = responseAdmission
                 this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
-                console.log(responseAdmission)
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
