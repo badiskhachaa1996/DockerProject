@@ -349,6 +349,11 @@ export class ListDiplomeComponent implements OnInit {
     )
   }
 
+  onRedirect()
+  {
+    this.router.navigate(['ajout-diplome']);
+  }
+
 
 
   // expandAll() {

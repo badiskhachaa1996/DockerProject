@@ -125,8 +125,8 @@ import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/l
                     { path: 'documentation', component: DocumentationComponent },
                     /***************************/
                     { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
+                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },

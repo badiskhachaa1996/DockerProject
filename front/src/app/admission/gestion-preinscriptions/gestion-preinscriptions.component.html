@@ -206,8 +206,7 @@
                             {{ prospect.customid }}
                         </td>
 
-                        <td
-                            *ngIf="prospect.user_id && prospect.user_id.lastname && !users[prospect.user_id] && prospect.user_id.firstname">
+                        <td *ngIf="prospect.user_id && prospect.user_id.lastname && prospect.user_id.firstname">
                             {{ prospect.user_id.lastname | uppercase }}
                             {{ prospect.user_id.firstname | titlecase }}
                         </td>
@@ -416,7 +415,7 @@
                     <tr>
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
-                        <td *ngIf="prospect.agent_id">
+                        <td *ngIf="prospect.agent_id && prospect.agent_id.civilite">
                             {{ prospect.agent_id.civilite }}
                             {{ prospect.agent_id.lastname | titlecase }}
                             {{ prospect.agent_id.firstname | titlecase }}

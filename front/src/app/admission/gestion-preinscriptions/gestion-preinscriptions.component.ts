@@ -153,8 +153,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
 
   onAddPayement() {
-    if(this.payementList==null){
-      this.payementList=[]
+    if (this.payementList == null) {
+      this.payementList = []
     }
     this.payementList.push({ type: "", montant: 0 })
   }
@@ -256,15 +256,19 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
+    this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
+
         if (this.code) {
           //Si il y a un code de Commercial
-          if (this.token != null && this.dataCommercial != null) {
+          if (this.token != null && this.dataCommercial != null && this.dataCommercial.isAdmin) {
             //Si il est considéré comme Admin dans son Partenaire
+            console.log("Admin Commercial")
             this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
+                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
@@ -272,10 +276,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
               ((error) => { console.error(error); })
             );
           } else {
+            console.log("Agent Commercial")
             //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
+                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
@@ -285,12 +291,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
+          console.log("Admission")
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            let service : any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {
+            let service: any = dataU.service_id
+            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
                 ((responseAdmission) => {
                   this.prospects = responseAdmission
+                  this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                   response.forEach((user) => {
                     this.users[user._id] = user;
                   });

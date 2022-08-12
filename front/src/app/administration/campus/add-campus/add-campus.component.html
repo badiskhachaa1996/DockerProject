@@ -1,16 +1,11 @@
-<p-toast></p-toast>
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
     <div class="col-12">
         <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
             modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
+                Merci de penser à bien selectionner l'école qui sera rattacher au campus et de 
+                vérifier les informations saisies pour l'adresse du campus.
             </p>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -88,6 +83,8 @@
                     <button pButton label="Ajouter" type="submit" [disabled]="addcampusForm.invalid"></button>
                 </div>
             </form>
+
+            <a routerLink="/campus" style="float: right;"><i class="pi pi-caret-right"></i> Voir les campus</a>
         </div>
     </div>
 </div>

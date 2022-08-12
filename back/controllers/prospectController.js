@@ -577,10 +577,10 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
-    Partenaire.findOne({ _id: req.params.id_partenaire }).populate("user_id").populate('agent_id')
+    Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find().then(prospects => {
+                Prospect.find().populate("user_id").populate('agent_id').then(prospects => {
                     CommercialPartenaire.find({ partenaire_id: partenaireFromDB._id }).then(commercials => {
                         let listProspects = []
                         commercials.forEach(c => {
@@ -621,6 +621,7 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
+    console.log(req.params.code_partenaire)
     Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
         .then(prospects => {
             prospects.forEach(function (element, index) {
