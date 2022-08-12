@@ -415,7 +415,7 @@
                     <tr>
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
-                        <td *ngIf="prospect.agent_id">
+                        <td *ngIf="prospect.agent_id && prospect.agent_id.civilite">
                             {{ prospect.agent_id.civilite }}
                             {{ prospect.agent_id.lastname | titlecase }}
                             {{ prospect.agent_id.firstname | titlecase }}
