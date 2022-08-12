@@ -14,6 +14,8 @@ var fileOptions = {
     fileName: "test.txt",
     fileContent: "JE SUIS UN TEST",
 }*/
+let userDic = {}
+let fileList = fs.readdirSync('../storage')
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -24,11 +26,10 @@ mongoose
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
         User.find().then(data => {
-            let userDic = {}
             data.forEach(u => {
                 userDic[u._id] = u.lastname + " " + u.firstname
             })
-            let fileList = fs.readdirSync('../storage')
+            
             // storage/prospect/id/filetype/image.png
             fileList.forEach(file => {
                 if (fs.lstatSync('../storage/' + file).isDirectory()) {
