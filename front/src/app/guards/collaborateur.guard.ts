@@ -15,9 +15,9 @@ export class CollaborateurGuard implements CanActivate {
     let currenttoken: any = jwt_decode(localStorage.getItem("token"))
 
     if (currenttoken) {
-      return this.authService.getById(currenttoken.id).pipe(map(user => {
-        let data = jwt_decode(user.userToken)['userFromDb']
-        if (data.type == "Commercial") {
+      return this.authService.getPopulate(currenttoken.id).pipe(map(user => {
+        let service: any = user.service_id
+        if (user.type == "Commercial" || service.label.includes("Admission")) {
           return true
         } else {
           return false
