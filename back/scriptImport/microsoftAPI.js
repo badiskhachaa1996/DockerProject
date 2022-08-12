@@ -1,6 +1,7 @@
 var spsave = require("spsave").spsave;
-var spauth = require('node-sp-auth');
 var fs = require('fs');
+const { exit } = require("process");
+const { User } = require('../models/user.js')
 
 /*get auth options
 var credentialOptions = {
@@ -32,7 +33,7 @@ fileList.forEach(file => {
                                     folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
                                     fileName: file4,
                                     fileContent: fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
-                                })
+                                }, [file, file2, file3])
                             }
                         });
                     } else {
@@ -40,7 +41,7 @@ fileList.forEach(file => {
                             folder: "Shared Documents/" + file + "/" + file2,
                             fileName: file3,
                             fileContent: fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
-                        })
+                        }, [file, file2])
                     }
                 });
             } else {
@@ -48,15 +49,15 @@ fileList.forEach(file => {
                     folder: "Shared Documents/" + file,
                     fileName: file2,
                     fileContent: fs.readFileSync('../storage/' + file + "/" + file2)
-                })
+                }, [file])
             }
         });
     } else {
         console.log('../storage/' + file)
     }
 });
-
-function sendFile(fileOptions) {
+exit
+function sendFile(fileOptions, filePath) {
     var credentialOptions = {
         username: "test.admin@estya.com",
         password: "EstyaFR2022"
@@ -70,9 +71,15 @@ function sendFile(fileOptions) {
         .then(successHandler => {
             console.log(fileOptions.fileName + " a été envoyé avec succès")
             //console.log(successHandler)
+            if (fileList[fileList.length - 1] == filePath[0]) {
+                console.log("Finish")
+            }
         })
         .catch(errorHandler => {
             console.error(errorHandler)
+            if (fileList[fileList.length - 1] == filePath[0]) {
+                console.log("Finish")
+            }
         });
 }
 /*
