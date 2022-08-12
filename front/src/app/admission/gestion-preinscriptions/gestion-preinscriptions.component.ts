@@ -259,7 +259,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
-        
+
         if (this.code) {
           //Si il y a un code de Commercial
           if (this.token != null && this.dataCommercial != null && this.dataCommercial.isAdmin) {
@@ -294,7 +294,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
           console.log("Admission")
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
             let service: any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {
+            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
                 ((responseAdmission) => {
                   this.prospects = responseAdmission
