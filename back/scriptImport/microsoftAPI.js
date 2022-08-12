@@ -8,8 +8,8 @@ var credentialOptions = {
 }
 
 var fileOptions = {
-    folder: "Test",
-    filename: "test.txt",
+    folder: "Shared Documents/Test",
+    fileName: "test.txt",
     fileContent: "JE SUIS UN TEST",
 }
 spauth.getAuth("https://elitechgroupe.sharepoint.com/sites/Ims_storage", credentialOptions)
