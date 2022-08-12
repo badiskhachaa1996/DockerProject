@@ -1,6 +1,6 @@
 var spsave = require("spsave").spsave;
+const mongoose = require("mongoose");
 var fs = require('fs');
-const { exit } = require("process");
 const { User } = require('../models/user.js')
 
 /*get auth options
@@ -14,58 +14,70 @@ var fileOptions = {
     fileName: "test.txt",
     fileContent: "JE SUIS UN TEST",
 }*/
-User.find().then(data => {
-    let userDic = {}
-    data.forEach(u => {
-        userDic[u._id] = u.lastname + " " + u.firstname
+mongoose
+    .connect(`mongodb://localhost:27017/learningNode`, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
     })
-    let fileList = fs.readdirSync('../storage')
-    // storage/prospect/id/filetype/image.png
-    fileList.forEach(file => {
-        if (fs.lstatSync('../storage/' + file).isDirectory()) {
-            let fileList2 = fs.readdirSync('../storage/' + file)
-            fileList2.forEach(file2 => {
-                if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
-                    let fileList3 = fs.readdirSync('../storage/' + file + "/" + file2)
-                    fileList3.forEach(file3 => {
-                        if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
-                            let fileList4 = fs.readdirSync('../storage/' + file + "/" + file2 + "/" + file3)
-                            fileList4.forEach(file4 => {
-                                if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
-                                    console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
+    .then(() => {
+        console.log("L'api s'est connecté à MongoDB.");
+        User.find().then(data => {
+            let userDic = {}
+            data.forEach(u => {
+                userDic[u._id] = u.lastname + " " + u.firstname
+            })
+            let fileList = fs.readdirSync('../storage')
+            // storage/prospect/id/filetype/image.png
+            fileList.forEach(file => {
+                if (fs.lstatSync('../storage/' + file).isDirectory()) {
+                    let fileList2 = fs.readdirSync('../storage/' + file)
+                    fileList2.forEach(file2 => {
+                        if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
+                            let fileList3 = fs.readdirSync('../storage/' + file + "/" + file2)
+                            fileList3.forEach(file3 => {
+                                if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
+                                    let fileList4 = fs.readdirSync('../storage/' + file + "/" + file2 + "/" + file3)
+                                    fileList4.forEach(file4 => {
+                                        if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
+                                            console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
+                                        } else {
+                                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
+                                            sendFile({
+                                                folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
+                                                fileName: file4,
+                                                fileContent
+                                            }, [file, file2, file3])
+                                        }
+                                    });
                                 } else {
-                                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
+                                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
                                     sendFile({
-                                        folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
-                                        fileName: file4,
+                                        folder: "Shared Documents/" + file + "/" + file2,
+                                        fileName: file3,
                                         fileContent
-                                    }, [file, file2, file3])
+                                    }, [file, file2])
                                 }
                             });
                         } else {
-                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
+                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
                             sendFile({
-                                folder: "Shared Documents/" + file + "/" + file2,
-                                fileName: file3,
+                                folder: "Shared Documents/" + file,
+                                fileName: file2,
                                 fileContent
-                            }, [file, file2])
+                            }, [file])
                         }
                     });
                 } else {
-                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
-                    sendFile({
-                        folder: "Shared Documents/" + file,
-                        fileName: file2,
-                        fileContent
-                    }, [file])
+                    console.log('../storage/' + file)
                 }
             });
-        } else {
-            console.log('../storage/' + file)
-        }
+        })
+    })
+    .catch(err => {
+        console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     });
-})
-
 function sendFile(fileOptions, filePath) {
     var credentialOptions = {
         username: "test.admin@estya.com",
