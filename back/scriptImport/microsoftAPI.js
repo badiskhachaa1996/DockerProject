@@ -2,6 +2,8 @@ var spsave = require("spsave").spsave;
 const mongoose = require("mongoose");
 var fs = require('fs');
 const { User } = require('../models/user.js')
+const { Prospect } = require('../models/prospect')
+const { Etudiant } = require('../models/etudiant')
 
 /*get auth options
 var credentialOptions = {
@@ -15,6 +17,7 @@ var fileOptions = {
     fileContent: "JE SUIS UN TEST",
 }*/
 let userDic = {}
+let userList = []
 let fileList = fs.readdirSync('../storage')
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
@@ -25,55 +28,73 @@ mongoose
     })
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
-        User.find().then(data => {
-            data.forEach(u => {
-                userDic[u._id] = u.lastname + " " + u.firstname
-            })
-            
-            // storage/prospect/id/filetype/image.png
-            fileList.forEach(file => {
-                if (fs.lstatSync('../storage/' + file).isDirectory()) {
-                    let fileList2 = fs.readdirSync('../storage/' + file)
-                    fileList2.forEach(file2 => {
-                        if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
-                            let fileList3 = fs.readdirSync('../storage/' + file + "/" + file2)
-                            fileList3.forEach(file3 => {
-                                if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
-                                    let fileList4 = fs.readdirSync('../storage/' + file + "/" + file2 + "/" + file3)
-                                    fileList4.forEach(file4 => {
-                                        if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
-                                            console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
+        User.find().then(dataU => {
+            Prospect.find().populate("user_id").then(dataP => {
+                Etudiant.find().populate("user_id").then(dataE => {
+                    dataP.forEach(p => {
+                        if (p.user_id) {
+                            userDic[p.user_id._id] = "[" + p?.customid + "] " + p.user_id.lastname + " " + p.user_id.firstname
+                            userList.push(p.user_id._id)
+                        }
+                    })
+                    dataE.forEach(e => {
+                        if (e.user_id) {
+                            userDic[e.user_id._id] = "[" + e?.customid + "] " + e.user_id.lastname + " " + e.user_id.firstname
+                            userList.push(e.user_id._id)
+                        }
+
+                    })
+                    dataU.forEach(u => {
+                        if (userList.includes(u._id) == false)
+                            userDic[u._id] = u.lastname + " " + u.firstname
+                    })
+
+                    // storage/prospect/id/filetype/image.png
+                    fileList.forEach(file => {
+                        if (fs.lstatSync('../storage/' + file).isDirectory()) {
+                            let fileList2 = fs.readdirSync('../storage/' + file)
+                            fileList2.forEach(file2 => {
+                                if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
+                                    let fileList3 = fs.readdirSync('../storage/' + file + "/" + file2)
+                                    fileList3.forEach(file3 => {
+                                        if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
+                                            let fileList4 = fs.readdirSync('../storage/' + file + "/" + file2 + "/" + file3)
+                                            fileList4.forEach(file4 => {
+                                                if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
+                                                    console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
+                                                } else {
+                                                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
+                                                    sendFile({
+                                                        folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
+                                                        fileName: file4,
+                                                        fileContent
+                                                    }, [file, file2, file3])
+                                                }
+                                            });
                                         } else {
-                                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
+                                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
                                             sendFile({
-                                                folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
-                                                fileName: file4,
+                                                folder: "Shared Documents/" + file + "/" + file2,
+                                                fileName: file3,
                                                 fileContent
-                                            }, [file, file2, file3])
+                                            }, [file, file2])
                                         }
                                     });
                                 } else {
-                                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
+                                    let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
                                     sendFile({
-                                        folder: "Shared Documents/" + file + "/" + file2,
-                                        fileName: file3,
+                                        folder: "Shared Documents/" + file,
+                                        fileName: file2,
                                         fileContent
-                                    }, [file, file2])
+                                    }, [file])
                                 }
                             });
                         } else {
-                            let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
-                            sendFile({
-                                folder: "Shared Documents/" + file,
-                                fileName: file2,
-                                fileContent
-                            }, [file])
+                            console.log('../storage/' + file)
                         }
                     });
-                } else {
-                    console.log('../storage/' + file)
-                }
-            });
+                })
+            })
         })
     })
     .catch(err => {
@@ -85,9 +106,8 @@ function sendFile(fileOptions, filePath) {
         password: "EstyaFR2022"
     }
     filePath.forEach(file => {
-        if (userDic[file]) {
-            fileOptions.folder = fileOptions.folder.replace(file, userDic[file])
-        }
+        fileOptions.folder = fileOptions.folder.replace(file, userDic[file])
+        fileOptions.fileName = fileOptions.fileName.replace(file, userDic[file])
     })
     spsave({
         siteUrl: "https://elitechgroupe.sharepoint.com/sites/Ims_storage"
@@ -96,7 +116,6 @@ function sendFile(fileOptions, filePath) {
         fileOptions
     )
         .then(successHandler => {
-            console.log(fileOptions.fileName + " a été envoyé avec succès")
             //console.log(successHandler)
             if (fileList[fileList.length - 1] == filePath[0]) {
                 console.log("Finish")
