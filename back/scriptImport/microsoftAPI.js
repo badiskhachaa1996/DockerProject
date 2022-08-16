@@ -106,8 +106,10 @@ function sendFile(fileOptions, filePath) {
         password: "EstyaFR2022"
     }
     filePath.forEach(file => {
-        fileOptions.folder = fileOptions.folder.replace(file, userDic[file])
-        fileOptions.fileName = fileOptions.fileName.replace(file, userDic[file])
+        if(userDic[file]){
+            fileOptions.folder = fileOptions.folder.replace(file, userDic[file])
+            fileOptions.fileName = fileOptions.fileName.replace(file, userDic[file])
+        }
     })
     spsave({
         siteUrl: "https://elitechgroupe.sharepoint.com/sites/Ims_storage"
