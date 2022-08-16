@@ -49,45 +49,60 @@ mongoose
                         if (userList.includes(u._id) == false)
                             userDic[u._id] = u.lastname + " " + u.firstname
                     })
-
                     // storage/prospect/id/filetype/image.png
                     fileList.forEach(file => {
+                        let timeOut = 0
+                        if (nbUplaod == 500) {
+                            timeOut = 1000 * 60
+                        }
                         if (fs.lstatSync('../storage/' + file).isDirectory()) {
                             let fileList2 = fs.readdirSync('../storage/' + file)
                             fileList2.forEach(file2 => {
+                                let timeOut = 0
+                                if (nbUplaod == 500) {
+                                    timeOut = 1000 * 60
+                                }
                                 if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
                                     let fileList3 = fs.readdirSync('../storage/' + file + "/" + file2)
                                     fileList3.forEach(file3 => {
+                                        let timeOut = 0
+                                        if (nbUplaod == 500) {
+                                            timeOut = 1000 * 60
+                                        }
                                         if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
                                             let fileList4 = fs.readdirSync('../storage/' + file + "/" + file2 + "/" + file3)
                                             fileList4.forEach(file4 => {
+                                                let timeOut = 0
+                                                if (nbUplaod == 500) {
+                                                    timeOut = 1000 * 60
+                                                }
                                                 if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
                                                     console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
                                                 } else {
                                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
-                                                    sendFile({
+                                                    setTimeout(sendFile({
                                                         folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
                                                         fileName: file4,
                                                         fileContent
-                                                    }, [file, file2, file3])
+                                                    }, [file, file2, file3]), timeOut)
                                                 }
                                             });
                                         } else {
                                             let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
-                                            sendFile({
+                                            setTimeout(sendFile({
                                                 folder: "Shared Documents/" + file + "/" + file2,
                                                 fileName: file3,
                                                 fileContent
-                                            }, [file, file2])
+                                            }, [file, file2]), timeOut)
                                         }
                                     });
                                 } else {
                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
-                                    sendFile({
+                                    setTimeout(sendFile({
                                         folder: "Shared Documents/" + file,
                                         fileName: file2,
                                         fileContent
-                                    }, [file])
+                                    }, [file]), timeOut)
                                 }
                             });
                         } else {
@@ -113,12 +128,6 @@ function sendFile(fileOptions, filePath) {
         }
     })
     nbUplaod++
-    if (nbUplaod == 1) {
-        console.log("Waiting for API Microsoft to CALM DOWN")
-        await new Promise(resolve => setTimeout(resolve, (1000 * 60)));
-        console.log("Time to work again")
-        nbUplaod = 0
-    }
     spsave({
         siteUrl: "https://elitechgroupe.sharepoint.com/sites/Ims_storage"
     },
