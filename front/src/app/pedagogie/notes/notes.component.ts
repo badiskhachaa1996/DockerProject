@@ -101,7 +101,6 @@ export class NotesComponent implements OnInit {
         if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
           this.appreciationModules[n.matiere_id] = this.appreciationToUpdate.appreciation_matiere[n.matiere_id]
         } else {
-          console.log(n, this.appreciationModules)
           this.appreciationModules[n.matiere_id] = ""
         }
       })
@@ -428,22 +427,19 @@ export class NotesComponent implements OnInit {
 
         //Recuperation du diplome et attribution du semestre
         this.diplomeService.getById(this.classeSelected.diplome_id).subscribe(
-          ((response) => { 
-            
-            if(date >= response.date_debut_semestre_1 && date <= response.date_fin_semestre_1)
-            {
+          ((response) => {
+
+            if (date >= response.date_debut_semestre_1 && date <= response.date_fin_semestre_1) {
               this.semestreSelected = 'Semestre 1';
               this.isAnneeScolaire = true;
             }
 
-            else if(date >= response.date_debut_semestre_2 && date <= response.date_fin_semestre_2)
-            {
+            else if (date >= response.date_debut_semestre_2 && date <= response.date_fin_semestre_2) {
               this.semestreSelected = 'Semestre 2';
               this.isAnneeScolaire = true;
             }
 
-            else
-            {
+            else {
               this.isAnneeScolaire = false;
               this.messageService.add({ key: 'tst', severity: 'error', summary: 'Ajout impossible', detail: 'Vous êtes hors année scolaire, impossible d\'ajouter une note!' });
             }
@@ -779,53 +775,20 @@ export class NotesComponent implements OnInit {
         this.moyEtudiant = data.moyenneEtudiant
         this.notesForGenerateBulletin = data.data
         this.showBulletin = true
+        this.onGetAppreciationGenerale(data.haveDispensed)
       }, error => {
         console.error(error)
+      })
+      this.etudiantService.getById(etudiant_id).subscribe(data => {
+        this.etudiantToGenerateBulletin = data
+        this.seanceService.getFormateurFromClasseID(data.classe_id, semestre).subscribe(d => {
+          this.dicFormateurMatiere = d
+        })
       })
     } else {
       this.semestreChoose = "Annuel"
-      this.etudiantService.getBulletin(etudiant_id, 'Semestre 1').subscribe(dataS1 => {
-        this.moyEtudiantAnnuel['Semestre 1'] = dataS1.moyenneEtudiant
-        let notesS1 = dataS1.data
-        this.etudiantService.getBulletin(etudiant_id, 'Semestre 2').subscribe(dataS2 => {
-          this.moyEtudiantAnnuel['Semestre 2'] = dataS2.moyenneEtudiant
-          this.moyEtudiantAnnuel['Annuel'] = this.getMoyAnnuel(dataS1.moyenneEtudiant, dataS2.moyenneEtudiant)
-          let notesS2 = dataS2.data
-          console.log(notesS1, notesS2)
-          dataS1.data.forEach(NS1 => {
-            dataS2.data.forEach(NS2 => {
-              if (NS1.matiere_id == NS2.matiere_id) {
-                this.notesForGenerateBulletin.push({ "Semestre 1": NS1, "Semestre 2": NS2, "Annuel": this.getNoteAnnuel(NS1, NS2), 'matiere_name': NS1.matiere_name, 'coef': NS1.coef, 'matiere_id': NS1.matiere_id, 'ects': NS1.ects })
-                notesS1.splice(notesS1.indexOf(NS1), 1)
-                notesS2.splice(notesS2.indexOf(NS2), 1)
-              }
-            })
-          })
-          if (notesS1.length != 0) {
-            notesS1.forEach(n => {
-              this.notesForGenerateBulletin.push({ "Semestre 1": n, "Semestre 2": null, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
-            })
-          }
-          if (notesS2.length != 0) {
-            notesS2.forEach(n => {
-              this.notesForGenerateBulletin.push({ "Semestre 1": null, "Semestre 2": n, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
-            })
-          }
-          console.log(notesS2, notesS1)
-          this.showPVAnnuel = true
-        }, error => {
-          console.error(error)
-        })
-      }, error => {
-        console.error(error)
-      })
+      this.GenerateBulletinAnnuel(etudiant_id)
     }
-    this.etudiantService.getById(etudiant_id).subscribe(data => {
-      this.etudiantToGenerateBulletin = data
-      this.seanceService.getFormateurFromClasseID(data.classe_id, semestre).subscribe(d => {
-        this.dicFormateurMatiere = d
-      })
-    })
   }
 
   GenerateBulletinAnnuel(etudiant_id) {
@@ -860,6 +823,7 @@ export class NotesComponent implements OnInit {
         }
         console.log(notesS2, notesS1)
         this.showPVAnnuel = true
+        this.onGetAppreciationGenerale(dataS1.haveDispensed || dataS2.haveDispensed)
       }, error => {
         console.error(error)
       })
@@ -923,10 +887,6 @@ export class NotesComponent implements OnInit {
     })
     return total / arr.length
   }
-
-
-
-
   //Methode d'initialisation du formulaire de saisie d'appréciation générale
   onInitFormAppreciationGenerale() {
     this.formAppreciationGenerale = this.fromBuilder.group({
@@ -990,20 +950,37 @@ export class NotesComponent implements OnInit {
 
 
   //Recuperation de l'appreciation générale
-  onGetAppreciationGenerale() {
+  onGetAppreciationGenerale(haveDispensed = false) {
     this.appreciationModules = {}
     this.appreciationGenerale = {}
     this.appreciationService.get(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((response) => {
-        if (response != null) {
+        if (response != null && response.appreciation != "") {
           this.appreciationGenerale = response;
-          this.showAppreciationGenerale = true;
           this.showBtnAddAppreciationGenerale = false;
           this.showBtnUpdateAppreciationGenerale = true;
           if (response.appreciation_matiere)
             this.appreciationModules = response.appreciation_matiere
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
+
+        if (response == null || response.appreciation == "") {
+          //Si semesestre Validé : Semestre Validée
+          if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant >= 10)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Validée", this.semestreChoose, null, null)
+          if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant < 10)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Non Validée", this.semestreChoose, null, null)
+          //Si Année validé : Année Validée
+          if (this.moyEtudiantAnnuel['Annuel'] && this.semestreChoose == "Annuel" && this.moyEtudiantAnnuel['Annuel'] >= 10)
+            this.appreciationGenerale = new Appreciation(null, "Année Validée", "Annuel", null, null)
+          if (this.moyEtudiantAnnuel['Annuel'] && this.semestreChoose == "Annuel" && this.moyEtudiantAnnuel['Annuel'] < 10)
+            this.appreciationGenerale = new Appreciation(null, "Année Non Validée", "Annuel", null, null)
+          //Si validé avec Rachat: Année Validée avec Rachat
+          if (haveDispensed)
+            this.appreciationGenerale.appreciation = this.appreciationGenerale.appreciation + " avec rachat"
+          console.log(this.appreciationGenerale)
+        }
+        this.showAppreciationGenerale = true;
       }),
       ((error) => { console.error(error); })
     );

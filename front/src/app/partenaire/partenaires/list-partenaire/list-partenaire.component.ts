@@ -108,11 +108,11 @@ export class ListPartenaireComponent implements OnInit {
   }
 
   seePreRecruted(rowData: Partenaire) {
-    this.router.navigate(["/gestion-preinscriptions/" + rowData.code_partenaire])
+    this.router.navigate(["/gestion-preinscriptions/" + rowData._id])
   }
 
   seeRecruted(rowData: Partenaire) {
-    this.router.navigate(["/etudiants/" + rowData.code_partenaire])
+    this.router.navigate(["/etudiants/" + rowData._id])
   }
 
   seeUnderPartenaire(rowData) {
