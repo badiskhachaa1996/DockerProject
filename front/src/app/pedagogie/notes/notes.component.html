@@ -293,7 +293,7 @@
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
                                 pInputText>
                         </div>
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true">
+                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true && semestreChoose=='Annuel'">
                             <label>Dispenser ? </label><br>
                             <p-selectButton [value]="rachatEtudiant[i]['dispensed']"
                                 [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
@@ -463,7 +463,7 @@
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
 
-                        <br>
+                        <br><br>
 
                         <tr>
                             <td colspan="2">Décision du conseil de classe</td>
@@ -480,6 +480,7 @@
                         </tr>
                     </ng-template>
                 </p-table>
+                <br>
                 <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                 <img src="assets/images/service-administratif.png" alt="signature"
                     style="float: right; width: 30%; height: 30%;">
@@ -567,7 +568,6 @@
                             <th style="text-align: center;">Min.</th>
                             <th style="text-align: center;">Max.</th>
                             <th style="text-align: center;">ECTS</th>
-                            <th style="text-align: center;">Appréciations</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
@@ -602,8 +602,7 @@
                                 *ngIf="note['Semestre 2'] && note['Semestre 2'].moy_etu==0.00000000001">0 (Abs)</td>-->
                             <td style="width: 5em;background-color: #d0d0d0;" *ngIf="!note['Semestre 2']"> </td>
                             <!-- Note Annuel -->
-                            <td style="width: 5em;text-align: right;"
-                                *ngIf="!note['Annuel'].isDispensed">
+                            <td style="width: 5em;text-align: right;" *ngIf="!note['Annuel'].isDispensed">
                                 {{ note['Annuel'].moy_etu |number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Annuel'].isDispensed">Dispensé</td>
                             <!-- <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000000001">0 (Abs)</td>-->
@@ -615,9 +614,6 @@
                             <td style="width: 5em;text-align: right;">{{ note['Annuel'].max_classe | number : '0.1-2' }}
                             </td>
                             <td>{{ note.ects }}</td>
-                            <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
-                                appreciationModules[note.matiere_id] }}</td>
-                            <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="footer">
@@ -630,13 +626,14 @@
                             </td>-->
                             <td style="text-align: right;">{{
                                 moyEtudiantAnnuel['Semestre 2'] | number : '0.1-2' }}</td>
-                            <td style="text-align: right;" >{{
+                            <td style="text-align: right;">{{
                                 moyEtudiantAnnuel['Annuel'] | number : '0.1-2' }}</td>
                             <td colspan="4"></td>
                             <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
 
+                        <br>
                         <br>
 
                         <tr>
@@ -652,6 +649,8 @@
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10"></td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10">X</td>
                         </tr>
+                        <br>
+                        <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                     </ng-template>
                 </p-table>
 

@@ -353,6 +353,7 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
+    //TODO Mettre les moy sur 20 et calculer les coeffs des examens
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }

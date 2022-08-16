@@ -67,7 +67,7 @@
         </div>
     </div>
 </div>
-<div class="card" *ngIf="presence==null || !presence.isPresent">
+<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
         <div class="col-12">
