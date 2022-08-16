@@ -39,7 +39,7 @@ mongoose
                     })
                     dataE.forEach(e => {
                         if (e.user_id) {
-                            userDic[e.user_id._id] = "[" + e?.customid + "] " + e.user_id.lastname + " " + e.user_id.firstname
+                            userDic[e.user_id._id] = "[" + e?.custom_id + "] " + e.user_id.lastname + " " + e.user_id.firstname
                             userList.push(e.user_id._id)
                         }
 
