@@ -135,7 +135,7 @@ app.post("/login", (req, res) => {
         }
         else {
             if (userFromDb.verifedEmail) {
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id ,type:userFromDb.type}, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token });
             }
             else { res.status(304).send({ message: "Compte pas activé", data }); }
