@@ -63,7 +63,7 @@ Formation suivie :
                 {{event}}
             </ng-template>
         </p-timeline>
-        <form  [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
             <div *ngIf="ActiveIndex==0">
                 <div style="text-align: center;">
                     <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
@@ -268,14 +268,13 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="lastname">Télécopie</label>
                                 <input pInputText id="telecopie" type="text" placeholder="Télécopie"
-                                    formControlName="telecopie" />
+                                    formControlName="telecopie" />                                                                                                                                                                
                             </div>
 
                             <div class="field col-12 md:col-6">
                                 <label For="OPCO">OPCO <span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO"
-                                    />
+                                <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO" />
                                 <div *ngIf="OPCO.invalid && (OPCO.touched || OPCO.dirty)">
                                     <span style="color: red;" class="error" *ngIf="OPCO.errors?.required">* Le champs
                                         est obligatoire.</span>

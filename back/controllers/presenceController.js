@@ -97,7 +97,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                     dataTosend.push(seance)
 
                     ctx.fillText(dateFormat(new Date(seance.seance_id.date_debut.toISOString().split('T')[0])), 460, 730 + yi, (414 - 131));
-
+                    console.log(etudiantData)
                     ctx.fillText(etudiantData.user_id.firstname + ' ' + etudiantData.user_id.lastname, 50, 730 + yi, (414 - 131));
                     if (new Date(seance.seance_id.date_debut).getHours() < 13) {
                         if (seance.isPresent) {
@@ -148,7 +148,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
 
 
                     yi = yi + 81;
-                    if ( yi == 810 || yi > 810) {
+                    if (yi == 810 || yi > 810) {
                         ctx.addPage()
                         ctx.drawImage(bg, 0, 0)
                         yi = 0

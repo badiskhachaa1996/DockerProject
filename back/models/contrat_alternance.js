@@ -10,7 +10,7 @@ const contrat_alternanceSch = mongoose.Schema({
     niveau_formation: { type: String, required: true },
     coeff_hierachique: { type: String, required: true },
     formation: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
-    alternant_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    alternant_id: { type: mongoose.Schema.Types.ObjectId, ref: "etudiant" },
     tuteur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     code_commercial: { type: String, required: false },
 });

@@ -129,6 +129,8 @@ app.post("/login", (req, res) => {
         email_perso: data.email,
     }).then((userFromDb) => {
         if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
+            console.log(userFromDb)
+            console.log(bcrypt.compareSync(data.password, userFromDb.password))
             res.status(404).send({ message: "Email ou Mot de passe incorrect" });
         }
         else {
@@ -139,7 +141,7 @@ app.post("/login", (req, res) => {
             else { res.status(304).send({ message: "Compte pas activé", data }); }
         }
     }).catch((error) => {
-        console.error(error)
+        console.log(error)
         res.status(404).send(error);
     })
 });
@@ -169,7 +171,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
     User.findOne({ _id: req.params.id }).populate("service_id")
-        .then((userfromDb) => { res.status(200).send(userfromDb); })
+        ?.then((userfromDb) => { res.status(200).send(userfromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
 
