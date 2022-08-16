@@ -53,6 +53,8 @@ mongoose
                     fileList.forEach(file => {
                         let timeOut = 0
                         if (nbUplaod == 500) {
+                            console.log("WILL BE SLEEPING")
+                            nbUplaod = 0
                             timeOut = 1000 * 60
                         }
                         if (fs.lstatSync('../storage/' + file).isDirectory()) {
@@ -60,6 +62,8 @@ mongoose
                             fileList2.forEach(file2 => {
                                 let timeOut = 0
                                 if (nbUplaod == 500) {
+                                    console.log("WILL BE SLEEPING")
+                                    nbUplaod = 0
                                     timeOut = 1000 * 60
                                 }
                                 if (fs.lstatSync('../storage/' + file + "/" + file2).isDirectory()) {
@@ -67,6 +71,8 @@ mongoose
                                     fileList3.forEach(file3 => {
                                         let timeOut = 0
                                         if (nbUplaod == 500) {
+                                            console.log("WILL BE SLEEPING")
+                                            nbUplaod = 0
                                             timeOut = 1000 * 60
                                         }
                                         if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3).isDirectory()) {
@@ -74,35 +80,37 @@ mongoose
                                             fileList4.forEach(file4 => {
                                                 let timeOut = 0
                                                 if (nbUplaod == 500) {
+                                                    console.log("WILL BE SLEEPING")
+                                                    nbUplaod = 0
                                                     timeOut = 1000 * 60
                                                 }
                                                 if (fs.lstatSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4).isDirectory()) {
                                                     console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
                                                 } else {
                                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
-                                                    setTimeout(sendFile({
+                                                    setTimeout(sendFile, timeOut, {
                                                         folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
                                                         fileName: file4,
                                                         fileContent
-                                                    }, [file, file2, file3]), timeOut)
+                                                    }, [file, file2, file3])
                                                 }
                                             });
                                         } else {
                                             let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
-                                            setTimeout(sendFile({
+                                            setTimeout(sendFile, timeOut, {
                                                 folder: "Shared Documents/" + file + "/" + file2,
                                                 fileName: file3,
                                                 fileContent
-                                            }, [file, file2]), timeOut)
+                                            }, [file, file2])
                                         }
                                     });
                                 } else {
                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
-                                    setTimeout(sendFile({
+                                    setTimeout(sendFile, timeOut, {
                                         folder: "Shared Documents/" + file,
                                         fileName: file2,
                                         fileContent
-                                    }, [file]), timeOut)
+                                    }, [file])
                                 }
                             });
                         } else {

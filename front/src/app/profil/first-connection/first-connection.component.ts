@@ -14,6 +14,7 @@ import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Diplome } from 'src/app/models/Diplome';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
   selector: 'app-first-connection',
@@ -22,7 +23,8 @@ import { Diplome } from 'src/app/models/Diplome';
 })
 export class FirstConnectionComponent implements OnInit {
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
+    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
@@ -74,20 +76,34 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-    this.AuthService.getById(token['id']).subscribe((data) => {
-      console.log(data)
-      this.userConnected = jwt_decode(data.userToken)['userFromDb']
-      console.log(jwt_decode(data.userToken))
+    this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
+      if (data.user_id) {
+        this.userConnected = data.user_id
+        this.RegisterForm.patchValue({
+          lastname: this.userConnected.lastname,
+          firstname: this.userConnected.firstname,
+          ville_adresse: this.userConnected?.ville_adresse,
+          rue_adresse: this.userConnected?.rue_adresse,
+          numero_adresse: this.userConnected?.numero_adresse,
+          postal_adresse: this.userConnected?.postal_adresse,
+          phone: this.userConnected?.phone,
+          date_naissance: new Date(data?.date_naissance)
+        })
+      } else {
+        this.AuthService.getById(token['id']).subscribe(dataU => {
+          this.userConnected = jwt_decode(dataU.userToken)['userFromDb']
+          this.RegisterForm.patchValue({
+            lastname: this.userConnected.lastname,
+            firstname: this.userConnected.firstname,
+            ville_adresse: this.userConnected?.ville_adresse,
+            rue_adresse: this.userConnected?.rue_adresse,
+            numero_adresse: this.userConnected?.numero_adresse,
+            postal_adresse: this.userConnected?.postal_adresse,
+            phone: this.userConnected?.phone,
+          })
+        })
+      }
 
-      this.RegisterForm.patchValue({
-        lastname: this.userConnected.lastname,
-        firstname: this.userConnected.firstname,
-        ville_adresse: this.userConnected?.ville_adresse,
-        rue_adresse: this.userConnected?.rue_adresse,
-        numero_adresse: this.userConnected?.numero_adresse,
-        postal_adresse: this.userConnected?.postal_adresse,
-        phone: this.userConnected?.phone
-      })
 
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
         this.programReinscrit = environment.ADGReinscrit;

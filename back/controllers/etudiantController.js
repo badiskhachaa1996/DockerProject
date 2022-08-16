@@ -177,6 +177,13 @@ app.get("/getByUserid/:user_id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });
 
+//Recupere un étudiant via son user_id
+app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
+    Etudiant.findOne({ "user_id._id": req.params.user_id }).populate('user_id')
+        .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
+});
+
 
 //Mettre à jour un étudiant via son identifiant
 app.post("/update", (req, res, next) => {
