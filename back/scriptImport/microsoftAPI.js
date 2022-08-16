@@ -19,6 +19,7 @@ var fileOptions = {
 let userDic = {}
 let userList = []
 let fileList = fs.readdirSync('../storage')
+let nbUplaod = 0
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -106,11 +107,18 @@ function sendFile(fileOptions, filePath) {
         password: "EstyaFR2022"
     }
     filePath.forEach(file => {
-        if(userDic[file]){
+        if (userDic[file]) {
             fileOptions.folder = fileOptions.folder.replace(file, userDic[file])
             fileOptions.fileName = fileOptions.fileName.replace(file, userDic[file])
         }
     })
+    nbUplaod++
+    if (nbUplaod == 1) {
+        console.log("Waiting for API Microsoft to CALM DOWN")
+        await new Promise(resolve => setTimeout(resolve, (1000 * 60)));
+        console.log("Time to work again")
+        nbUplaod = 0
+    }
     spsave({
         siteUrl: "https://elitechgroupe.sharepoint.com/sites/Ims_storage"
     },

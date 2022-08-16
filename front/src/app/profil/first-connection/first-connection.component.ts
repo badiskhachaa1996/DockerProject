@@ -32,7 +32,7 @@ export class FirstConnectionComponent implements OnInit {
   nationList = environment.nationalites;
   paysList = environment.pays;
   programReinscrit = environment.formationReinscrit
-  maxYear = new Date().getFullYear() - 16
+  maxYear = new Date().getFullYear() - 13
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
