@@ -117,12 +117,13 @@ function sendFile(fileOptions, filePath) {
     )
         .then(successHandler => {
             //console.log(successHandler)
+            console.log(fileOptions.folder + "/" + fileOptions.fileName)
             if (fileList[fileList.length - 1] == filePath[0]) {
                 console.log("Finish")
             }
         })
         .catch(errorHandler => {
-            console.error(errorHandler)
+            console.error(errorHandler, fileOptions)
             if (fileList[fileList.length - 1] == filePath[0]) {
                 console.log("Finish")
             }
