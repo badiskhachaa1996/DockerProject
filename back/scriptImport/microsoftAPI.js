@@ -88,35 +88,42 @@ mongoose
                                                     console.log('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4 + "/")
                                                 } else {
                                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3 + "/" + file4)
-                                                    setTimeout(sendFile, timeOut, {
-                                                        folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
-                                                        fileName: file4,
-                                                        fileContent
-                                                    }, [file, file2, file3])
+                                                    setTimeout(function () {
+                                                        sendFile({
+                                                            folder: "Shared Documents/" + file + "/" + file2 + "/" + file3,
+                                                            fileName: file4,
+                                                            fileContent
+                                                        }, [file, file2, file3])
+                                                    }, timeOut)
                                                 }
                                             });
                                         } else {
                                             let fileContent = fs.readFileSync('../storage/' + file + "/" + file2 + "/" + file3)
-                                            setTimeout(sendFile, timeOut, {
-                                                folder: "Shared Documents/" + file + "/" + file2,
-                                                fileName: file3,
-                                                fileContent
-                                            }, [file, file2])
+                                            setTimeout(function () {
+                                                sendFile({
+                                                    folder: "Shared Documents/" + file + "/" + file2,
+                                                    fileName: file3,
+                                                    fileContent
+                                                }, [file, file2])
+                                            }, timeOut)
                                         }
                                     });
                                 } else {
                                     let fileContent = fs.readFileSync('../storage/' + file + "/" + file2)
-                                    setTimeout(sendFile, timeOut, {
-                                        folder: "Shared Documents/" + file,
-                                        fileName: file2,
-                                        fileContent
-                                    }, [file])
+                                    setTimeout(function () {
+                                        sendFile({
+                                            folder: "Shared Documents/" + file,
+                                            fileName: file2,
+                                            fileContent
+                                        }, [file])
+                                    }, timeOut)
                                 }
                             });
                         } else {
                             console.log('../storage/' + file)
                         }
                     });
+                    console.log("Will Finishing soon")
                 })
             })
         })
@@ -145,15 +152,9 @@ function sendFile(fileOptions, filePath) {
         .then(successHandler => {
             //console.log(successHandler)
             console.log(fileOptions.folder + "/" + fileOptions.fileName)
-            if (fileList[fileList.length - 1] == filePath[0]) {
-                console.log("Finish")
-            }
         })
         .catch(errorHandler => {
             console.error(errorHandler, fileOptions)
-            if (fileList[fileList.length - 1] == filePath[0]) {
-                console.log("Finish")
-            }
         });
 }
 /*

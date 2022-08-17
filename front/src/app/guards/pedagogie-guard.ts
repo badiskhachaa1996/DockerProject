@@ -36,7 +36,7 @@ export class PedagogieGuardService implements CanActivate {
          
           serviceName = service.dataService.label
           
-          if (serviceName.includes("Pedagogie")) {
+          if (serviceName.includes("agogie")) {
             console.log("accés autorisé: " + role)
             return true
           }

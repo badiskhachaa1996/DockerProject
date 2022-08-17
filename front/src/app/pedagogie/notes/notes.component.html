@@ -118,15 +118,15 @@
     <!-- Formulaire de selection d'une classe -->
     <div class="col-12" *ngIf="showFormSelectClasse">
         <div class="card">
-            <h3>Veuillez choisir la classe</h3>
+            <h3>Veuillez choisir le groupe</h3>
             <i class="pi pi-times-circle" style="float:right; color: red;"
                 (click)="showFormSelectClasse = false; dropdownExamByClasse = [];" aria-hidden="true"></i>
 
             <form [formGroup]="formSelectClasse" (ngSubmit)="onSelectClasse()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
-                    <label>Classe</label>
+                    <label>Groupe</label>
                     <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
-                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                        emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du groupe" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -171,9 +171,9 @@
 
             <form [formGroup]="formGenerateBulletin" (ngSubmit)="onGenerateClasse()" class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-6">
-                    <label For="classe">Classe</label>
+                    <label For="classe">Groupe</label>
                     <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
-                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                        emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du Groupe" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
@@ -185,7 +185,7 @@
                 </div>
 
                 <div>
-                    <button pButton label="Afficher la classe" type="submit"
+                    <button pButton label="Afficher le groupe" type="submit"
                         [disabled]="formGenerateBulletin.invalid"></button>
                 </div>
             </form>
@@ -670,7 +670,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
-            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par classe: {{
+            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par groupe: {{
                 classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
@@ -753,7 +753,7 @@
 
             <h3>Saisie de notes</h3>
             <p>
-                Classe: <strong>{{ classeSelected.abbrv }}</strong> <br />
+                Groupe: <strong>{{ classeSelected.abbrv }}</strong> <br />
                 Examen: <strong>{{ matieres[examSelected.matiere_id]?.nom }}</strong> <br />
                 Semestre: <strong>{{ semestreSelected }}</strong>
             </p>
@@ -853,7 +853,7 @@
                     <tr>
                         <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="classe"> Classe <p-sortIcon field="classe"></p-sortIcon>
+                        <th pSortableColumn="classe"> Groupe <p-sortIcon field="classe"></p-sortIcon>
                         </th>
                         <th pSortableColumn="matiere"> Module <p-sortIcon field="matiere"></p-sortIcon>
                         </th>
