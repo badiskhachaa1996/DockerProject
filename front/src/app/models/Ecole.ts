@@ -9,7 +9,10 @@ export class Ecole {
         public adresse?:        string,
         public email?:          string,
         public site?:           string,
-        public telephone?:      string
+        public telephone?:      string,
+        public logo?:           string,
+        public cachet?:         string,
+        public pied_de_page?:   string,
         ) {}
         
 }

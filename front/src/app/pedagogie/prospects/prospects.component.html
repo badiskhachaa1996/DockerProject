@@ -183,6 +183,9 @@
                     <th pSortableColumn="customid" scope="col">
                         ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
                     </th>
+                    <th scope="col">
+                        Email perso <p-sortIcon field="email_perso"></p-sortIcon>
+                    </th>
                     <th pSortableColumn="lastname" scope="col">
                         Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
                     </th>
@@ -216,6 +219,9 @@
                     </td>
                     <td>
                         {{ prospect.customid }}
+                    </td>
+                    <td>
+                        {{ users[prospect.user_id]?.email_perso }}
                     </td>
                     <td
                         *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">

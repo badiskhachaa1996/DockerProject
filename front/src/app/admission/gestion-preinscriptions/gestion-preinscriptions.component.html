@@ -181,6 +181,9 @@
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
+                        <th style="text-align: center;">
+                            Email perso
+                        </th>
                         <th pSortableColumn="nbDoc" scope="col" style="text-align: center;">
                             Nombre de documents<p-sortIcon field="nbDoc"></p-sortIcon>
                         </th>
@@ -221,6 +224,9 @@
                         </td>
                         <td>
                             {{ prospect.campus_choix_1 }}
+                        </td>
+                        <td>
+                            {{ prospect.user_id?.email_perso }}
                         </td>
                         <td>
                             {{ prospect.nbDoc }}
