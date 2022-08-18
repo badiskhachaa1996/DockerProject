@@ -47,7 +47,7 @@ app.get("/getAllByUser/:id", (req, res) => {
 app.post("/getAssiduitePDF/:id", (req, res) => {
 
     let rangDate = req.body
-    console.log(rangDate[0], "--", rangDate[0])
+
     let dataTosend = [];
     etudiantData: Etudiant;
     const pdfName = 'Ass_' + req.params.id + ".pdf"
@@ -97,7 +97,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                     dataTosend.push(seance)
 
                     ctx.fillText(dateFormat(new Date(seance.seance_id.date_debut.toISOString().split('T')[0])), 460, 730 + yi, (414 - 131));
-                    console.log(etudiantData)
+                   
                     ctx.fillText(etudiantData.user_id.firstname + ' ' + etudiantData.user_id.lastname, 50, 730 + yi, (414 - 131));
                     if (new Date(seance.seance_id.date_debut).getHours() < 13) {
                         if (seance.isPresent) {
@@ -125,7 +125,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                             ctx.fillStyle = 'black';
                         }
                     }
-
+                      
                     ctx.fillText(seance.seance_id.formateur_id.user_id.firstname + " " + seance.seance_id.formateur_id.user_id.lastname, 1325, 730 + yi, (414 - 131));
 
 
@@ -134,12 +134,12 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                             dataForPres = dataForPresData
 
                             if (dataForPres[0]) {
-                                console.log(yif + "*******yi****yi****yi****yi******yi****yi*****")
+                              
                                 let srx = "storage/signature/" + dataForPres[0]._id + ".png"
-                                console.log(srx)
+                             
                                 signForImage.src = srx;
                                 ctx.drawImage(signForImage, 1648, 670 + yif, (680 - 332), 50);
-                                console.log(yif + "**drawed")
+                               
                             }
 
                             yif = await yif + 81;

@@ -75,7 +75,7 @@ app.post("/createNewContrat", (req, res, next) => {
         .then((CeoFromDb) => {
             if (CeoFromDb) {
 
-                res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur-- Email deja Utilisé ' + error.message })
+                res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur-- Email deja Utilisé ' })
             }
             else {
                 //Creation d'un nouveau utilisateur CEO d'entreprise
@@ -188,7 +188,7 @@ app.post("/createNewContrat", (req, res, next) => {
 });
 
 app.get("/getAllContrats/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path:'formation'})
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
         .then((CAFromDb) => {
             console.log(CAFromDb);
             res.status(200).send(CAFromDb);
