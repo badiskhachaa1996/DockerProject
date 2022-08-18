@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                     ]
                 },
-                { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                 {
                     label: 'Gestions des étudiants', icon: 'pi pi-users',
@@ -133,7 +133,7 @@ export class AppMenuComponent implements OnInit {
         {
             label: 'Admission',
             items: [
-                { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
             ]
         },
         {
@@ -263,7 +263,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Partenaires',
                                     items: [
-                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
                                 }
@@ -283,7 +283,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Partenaires',
                                     items: [
-                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                         { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
@@ -310,7 +310,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             }
                         ]
@@ -332,7 +332,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             },
                             {
@@ -381,7 +381,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                                     ]
                                 },
-                                { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                                 {
                                     label: 'Gestions des étudiants', icon: 'pi pi-users',
