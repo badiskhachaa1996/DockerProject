@@ -147,6 +147,7 @@ import { AppComponent } from './app.component';
                     { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
                     { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'matieres/:id', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },

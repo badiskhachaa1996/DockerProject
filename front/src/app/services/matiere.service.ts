@@ -29,6 +29,13 @@ export class MatiereService {
     return this.httpClient.get<Matiere[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Obtenir la liste des matieres via un id diplome
+  getAllByDiplome(id: string)
+  {
+    let registreUrl = this.apiUrl + "getAllByDiplome/" + id;
+    return this.httpClient.get<Matiere[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   //Methode de recuperation d'une matière bia son id
   getById(id: string)
   {

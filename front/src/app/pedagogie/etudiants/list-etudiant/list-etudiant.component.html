@@ -320,6 +320,7 @@
                                     <ng-template pTemplate="header">
                     <tr>
                         <th></th>
+                        <th *ngIf="users[etudiant.user_id]?.email_perso">Email perso</th>
                         <th>Adresse </th>
                         <th>Date de naissance </th>
                         <th>Téléphone </th>
@@ -338,6 +339,9 @@
                     <tr>
                         <td>
                             <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
+                        </td>
+                        <td *ngIf="users[etudiant.user_id]?.email_perso">
+                            {{ users[etudiant.user_id]?.email_perso }}
                         </td>
                         <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
                             {{ users[etudiant.user_id].numero_adresse }} {{ users[etudiant.user_id].rue_adresse }} {{
