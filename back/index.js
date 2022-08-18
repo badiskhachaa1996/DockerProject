@@ -15,7 +15,7 @@ if (process.argv[2]) {
     if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
-        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com","https://ims.intedgroup.com"]
+        origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.intedgroup.com"]
     )
 }
 app.use(cors({ origin: origin }));
@@ -56,9 +56,6 @@ mongoose
             'local'
         );
         */
-
-
-        console.log("L'api s'est connecté à MongoDB.\nL'origin est:" + origin);
 
     })
     .catch(err => {
@@ -134,10 +131,10 @@ app.use('/', function (req, res, next) {
     } else {
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel')
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" ||
-            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
+            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContrats') || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
         } else {
-            res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
+            res.status(403).send("Accès non autorisé, Wrong Token " + token + " Vérifiez aussi que la méthode de request POST ou GET est respecté" + req.originalUrl)
         }
     }
 });

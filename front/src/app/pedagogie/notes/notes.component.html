@@ -118,15 +118,15 @@
     <!-- Formulaire de selection d'une classe -->
     <div class="col-12" *ngIf="showFormSelectClasse">
         <div class="card">
-            <h3>Veuillez choisir la classe</h3>
+            <h3>Veuillez choisir le groupe</h3>
             <i class="pi pi-times-circle" style="float:right; color: red;"
                 (click)="showFormSelectClasse = false; dropdownExamByClasse = [];" aria-hidden="true"></i>
 
             <form [formGroup]="formSelectClasse" (ngSubmit)="onSelectClasse()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
-                    <label>Classe</label>
+                    <label>Groupe</label>
                     <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
-                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                        emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du groupe" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -171,22 +171,21 @@
 
             <form [formGroup]="formGenerateBulletin" (ngSubmit)="onGenerateClasse()" class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-6">
-                    <label For="classe">Classe</label>
+                    <label For="classe">Groupe</label>
                     <p-dropdown formControlName="classe" [options]="dropdownClasse" optionLabel="libelle"
-                        emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Classe" filter="true">
+                        emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Nom du Groupe" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="semestre">Semestre</label>
-                    <p-dropdown formControlName="semestre"
-                        [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },{ libelle: '1er', value: 'Semestre 1', actif: false },{ libelle: '2ème', value: 'Semestre 2', actif: false }]"
-                        optionLabel="libelle" emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre"
-                        optionDisabled="actif" filter="true">
+                    <p-dropdown formControlName="semestre" [options]="dropdownSemestre" optionLabel="libelle"
+                        emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre" optionDisabled="actif"
+                        filter="true">
                     </p-dropdown>
                 </div>
 
                 <div>
-                    <button pButton label="Afficher la classe" type="submit"
+                    <button pButton label="Afficher le groupe" type="submit"
                         [disabled]="formGenerateBulletin.invalid"></button>
                 </div>
             </form>
@@ -294,7 +293,7 @@
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
                                 pInputText>
                         </div>
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true">
+                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true && semestreChoose=='Annuel'">
                             <label>Dispenser ? </label><br>
                             <p-selectButton [value]="rachatEtudiant[i]['dispensed']"
                                 [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
@@ -309,7 +308,9 @@
                         <div class="col-6"
                             *ngIf="semestreForGenerateBulletin=='Annuel' && rachatEtudiant[i]['isNew']==true">
                             <label>Semestre: </label>
-                            <p-dropdown [options]="dropdownSemestre" optionLabel="libelle"
+                            <p-dropdown [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
+                            { libelle: '1er', value: 'Semestre 1', actif: false },
+                            { libelle: '2ème', value: 'Semestre 2', actif: false }]" optionLabel="libelle"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'semestre')"
                                 emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre"
                                 optionDisabled="actif" filter="true">
@@ -354,13 +355,12 @@
                     label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
                 <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
-                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale"
-                    class="ml-1">
+                    label="Saisir les appréciations" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
                 </button>
 
                 <button pButton (click)="showFormUpdateAppreciationGenerale = true;
                                         appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
-                    class="ml-1" type="button" label="Modifier l'appréciation générale"
+                    class="ml-1" type="button" label="Modifier les appréciations"
                     *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
                 </button>
 
@@ -407,21 +407,21 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th colspan="3"></th>
-                            <th colspan="1">Etudiant</th>
-                            <th colspan="3">Promotion</th>
+                            <th colspan="1" style="text-align: center;">Etudiant</th>
+                            <th colspan="3" style="text-align: center;">Promotion</th>
                         </tr>
                         <tr>
-                            <th>Modules</th>
-                            <th>Formateur</th>
-                            <th style="width: 4em;">Coef</th>
-                            <th colspan="2">Moyenne</th>
+                            <th style="text-align: center;">Modules</th>
+                            <th style="text-align: center;">Formateur</th>
+                            <th style="text-align: center;">Coef</th>
+                            <th colspan="2" style="text-align: center;">Moyenne</th>
                             <!--<th style="width: 5em;">Moy. S2</th>
                             <th style="width: 5em;">Moy. Annuel</th>
                             <th style="width: 5em;">Moy.</th>-->
-                            <th style="width: 5em;">Min.</th>
-                            <th style="width: 5em;">Max.</th>
-                            <th>ECTS</th>
-                            <th>Appréciations</th>
+                            <th style="width: 5em;" style="text-align: center;">Min.</th>
+                            <th style="width: 5em;" style="text-align: center;">Max.</th>
+                            <th style="text-align: center;">ECTS</th>
+                            <th style="text-align: center;">Appréciations</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
@@ -436,13 +436,12 @@
                                 *ngIf="!dicFormateurMatiere[note.matiere_id] || !users[dicFormateurMatiere[note.matiere_id]]">
                                 Formateur Référent
                             </td>
-                            <td style="width: 4em;">{{ note.coef }}</td>
-                            <td style="width: 5em;text-align: right;"
-                                *ngIf="!note.isDispensed && note.moy_etu!=0.00000000001">{{ note.moy_etu |
+                            <td style="width: 4em;text-align: center;">{{ note.coef }}</td>
+                            <td style="width: 5em;text-align: right;" *ngIf="!note.isDispensed">{{ note.moy_etu |
                                 number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note.isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note.moy_etu==0.00000000001">Absent</td>
-                            <!--<td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
+                            <!--<td style="width: 5em;" *ngIf="note.moy_etu==0.00000000001">0</td>
+                            <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>
                             <td style="width: 5em;">{{ note.moy_etu | number : '0.1-2' }}</td>-->
                             <td style="width: 5em;text-align: right;">{{ note.moy_classe | number : '0.1-2' }}</td>
                             <td style="width: 5em;text-align: right;">{{ note.min_classe | number : '0.1-2' }}</td>
@@ -464,7 +463,7 @@
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
 
-                        <br>
+                        <br><br>
 
                         <tr>
                             <td colspan="2">Décision du conseil de classe</td>
@@ -481,6 +480,7 @@
                         </tr>
                     </ng-template>
                 </p-table>
+                <br>
                 <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                 <img src="assets/images/service-administratif.png" alt="signature"
                     style="float: right; width: 30%; height: 30%;">
@@ -502,13 +502,12 @@
                     label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
                 <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
-                    label="Saisir appréciation générale" *ngIf="!hideBtn && showBtnAddAppreciationGenerale"
-                    class="ml-1">
+                    label="Saisir les appréciations" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
                 </button>
 
                 <button pButton (click)="showFormUpdateAppreciationGenerale = true;
                                         appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
-                    class="ml-1" type="button" label="Modifier l'appréciation générale"
+                    class="ml-1" type="button" label="Modifier les appréciations"
                     *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
                 </button>
 
@@ -533,7 +532,6 @@
                         <strong>{{ classeForBGenerateBulletin.titre_long }}</strong>
                         <br>
                     </p>
-                    <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                 </div>
 
                 <div style="float: right; margin-top: 80px;">
@@ -556,21 +554,20 @@
                     <ng-template pTemplate="header">
                         <tr>
                             <th colspan="3"></th>
-                            <th colspan="3">Moyenne</th>
-                            <th colspan="3">Promotion</th>
+                            <th style="text-align: center;" colspan="3">Moyenne</th>
+                            <th style="text-align: center;" colspan="3">Promotion</th>
                         </tr>
                         <tr>
-                            <th>Modules</th>
-                            <th>Formateur</th>
-                            <th style="width: 4em;">Coef</th>
-                            <th style="width: 5em;">Semestre 1</th>
-                            <th style="width: 5em;">Semestre 2</th>
-                            <th style="width: 5em;">Annuel</th>
-                            <th style="width: 5em;">Moy.</th>
-                            <th style="width: 5em;">Min.</th>
-                            <th style="width: 5em;">Max.</th>
-                            <th>ECTS</th>
-                            <th>Appréciations</th>
+                            <th style="text-align: center;">Modules</th>
+                            <th style="text-align: center;">Formateur</th>
+                            <th style="text-align: center;">Coef</th>
+                            <th style="width: 8em;text-align: center;">Semestre 1</th>
+                            <th style="width: 8em;text-align: center;">Semestre 2</th>
+                            <th style="text-align: center;">Annuel</th>
+                            <th style="text-align: center;">Moy.</th>
+                            <th style="text-align: center;">Min.</th>
+                            <th style="text-align: center;">Max.</th>
+                            <th style="text-align: center;">ECTS</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-note>
@@ -588,28 +585,27 @@
                             <td style="width: 4em;">{{ note.coef }}</td>
                             <!-- Note Semestre 1 -->
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="note['Semestre 1'] && !note['Semestre 1'].isDispensed && note['Semestre 1'].moy_etu!=0.00000000001">
+                                *ngIf="note['Semestre 1'] && !note['Semestre 1'].isDispensed">
                                 {{note['Semestre 1'].moy_etu | number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 1'] && note['Semestre 1'].isDispensed">
                                 Dispensé</td>
-                            <td style="width: 5em;"
-                                *ngIf="note['Semestre 1'] && note['Semestre 1'].moy_etu==0.00000000001">Absent</td>
-                            <td style="width: 5em;" *ngIf="!note['Semestre 1']"> </td>
+                            <!--  <td style="width: 5em;"
+                                *ngIf="note['Semestre 1'] && note['Semestre 1'].moy_etu==0.00000000001">0 (Abs)</td> -->
+                            <td style="width: 5em;background-color: #d0d0d0;" *ngIf="!note['Semestre 1']"> </td>
                             <!-- Note Semestre 2 -->
                             <td style="width: 5em;text-align: right;"
-                                *ngIf="note['Semestre 2'] && !note['Semestre 2'].isDispensed && note['Semestre 2'].moy_etu!=0.00000000001">
+                                *ngIf="note['Semestre 2'] && !note['Semestre 2'].isDispensed">
                                 {{note['Semestre 2'].moy_etu |number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Semestre 2'] && note['Semestre 2'].isDispensed">
                                 Dispensé</td>
-                            <td style="width: 5em;"
-                                *ngIf="note['Semestre 2'] && note['Semestre 2'].moy_etu==0.00000000001">Absent</td>
-                            <td style="width: 5em;" *ngIf="!note['Semestre 2']"> </td>
+                            <!-- <td style="width: 5em;"
+                                *ngIf="note['Semestre 2'] && note['Semestre 2'].moy_etu==0.00000000001">0 (Abs)</td>-->
+                            <td style="width: 5em;background-color: #d0d0d0;" *ngIf="!note['Semestre 2']"> </td>
                             <!-- Note Annuel -->
-                            <td style="width: 5em;text-align: right;"
-                                *ngIf="!note['Annuel'].isDispensed && note['Annuel'].moy_etu!=0.00000000001">
+                            <td style="width: 5em;text-align: right;" *ngIf="!note['Annuel'].isDispensed">
                                 {{ note['Annuel'].moy_etu |number : '0.1-2' }}</td>
                             <td style="width: 5em;" *ngIf="note['Annuel'].isDispensed">Dispensé</td>
-                            <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000000001">Absent</td>
+                            <!-- <td style="width: 5em;" *ngIf="note['Annuel'].moy_etu==0.00000000001">0 (Abs)</td>-->
                             <!-- Moyenne -->
                             <td style="width: 5em;text-align: right;">{{ note['Annuel'].moy_classe | number : '0.1-2' }}
                             </td>
@@ -618,34 +614,26 @@
                             <td style="width: 5em;text-align: right;">{{ note['Annuel'].max_classe | number : '0.1-2' }}
                             </td>
                             <td>{{ note.ects }}</td>
-                            <td *ngIf="appreciationModules && appreciationModules[note.matiere_id]">{{
-                                appreciationModules[note.matiere_id] }}</td>
-                            <td *ngIf="!appreciationModules || !appreciationModules[note.matiere_id]"></td>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="footer">
                         <tr>
                             <td colspan="3">Moyenne générale</td>
-                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Semestre 1']!=0.00000000001">{{
+                            <td style="text-align: right;">{{
                                 moyEtudiantAnnuel['Semestre 1'] | number : '0.1-2' }}</td>
-                            <td *ngIf="moyEtudiantAnnuel['Semestre 1']==0.00000000001">
-                                Absent
-                            </td>
-                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Semestre 2']!=0.00000000001">{{
+                            <!--<td *ngIf="moyEtudiantAnnuel['Semestre 1']==0.00000000001">
+                                -
+                            </td>-->
+                            <td style="text-align: right;">{{
                                 moyEtudiantAnnuel['Semestre 2'] | number : '0.1-2' }}</td>
-                            <td *ngIf="moyEtudiantAnnuel['Semestre 2']==0.00000000001">
-                                Absent
-                            </td>
-                            <td style="text-align: right;" *ngIf="moyEtudiantAnnuel['Annuel']!=0.00000000001">{{
+                            <td style="text-align: right;">{{
                                 moyEtudiantAnnuel['Annuel'] | number : '0.1-2' }}</td>
-                            <td *ngIf="moyEtudiantAnnuel['Annuel']==0.00000000001">
-                                Absent
-                            </td>
                             <td colspan="4"></td>
                             <td *ngIf="showAppreciationGenerale" style="text-align: center;"> {{
                                 appreciationGenerale.appreciation }}</td>
                         </tr>
 
+                        <br>
                         <br>
 
                         <tr>
@@ -661,6 +649,8 @@
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10"></td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10">X</td>
                         </tr>
+                        <br>
+                        <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
                     </ng-template>
                 </p-table>
 
@@ -680,7 +670,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
-            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par classe: {{
+            <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par groupe: {{
                 classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
@@ -735,7 +725,7 @@
                                 onNullAppreciationGenerale();
                                 GenerateBulletin2(etudiant._id,semestreForGenerateBulletin);
                                 etudiantToGenerateBulletin = etudiant;this.appreciationGenerale = {};
-                                onGetAppreciationGenerale(); hideBtn=false"></i>
+                                 hideBtn=false"></i>
                             <!--<i class="pi pi-file-excel" pTooltip="Générer le bulletin Annuel" (click)="
                                 moyEtudiant = null;
                                 notesForGenerateBulletin = [];
@@ -763,7 +753,7 @@
 
             <h3>Saisie de notes</h3>
             <p>
-                Classe: <strong>{{ classeSelected.abbrv }}</strong> <br />
+                Groupe: <strong>{{ classeSelected.abbrv }}</strong> <br />
                 Examen: <strong>{{ matieres[examSelected.matiere_id]?.nom }}</strong> <br />
                 Semestre: <strong>{{ semestreSelected }}</strong>
             </p>
@@ -863,7 +853,7 @@
                     <tr>
                         <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="classe"> Classe <p-sortIcon field="classe"></p-sortIcon>
+                        <th pSortableColumn="classe"> Groupe <p-sortIcon field="classe"></p-sortIcon>
                         </th>
                         <th pSortableColumn="matiere"> Module <p-sortIcon field="matiere"></p-sortIcon>
                         </th>

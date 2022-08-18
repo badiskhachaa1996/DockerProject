@@ -1,0 +1,92 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des Contrats</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [globalFilterFields]="['']" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
+                [value]="ListeContrats" dataKey="_id" responsiveLayout="scroll" [rows]="10"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem;"></th>
+                        <th pSortableColumn="alternant_id"> Nom Prenom <p-sortIcon field="alternant_id">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="intitule"> Intitulé du poste <p-sortIcon field="intitule">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="début_contrat"> Date début contrat <p-sortIcon field="début_contrat">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="fin_contrat"> Date fin contrat <p-sortIcon field="fin_contrat">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-contrat>
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="contrat"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 8rem;">{{ contrat.alternant_id.user_id.firstname }} {{
+                            contrat.alternant_id.user_id.lastname }}</td>
+                        <td style="min-width: 8rem;">{{ contrat.intitule }}</td>
+                        <td style="min-width: 8rem;">{{ contrat.formation.titre_long }}</td>
+                        <td style="min-width: 8rem;">{{ contrat.debut_contrat }}</td>
+                        <td style="min-width: 8rem;">{{ contrat.fin_contrat }}</td>
+                        <td>
+                            <i style="margin-left: 2%;" class="pi pi-pencil" aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="rowexpansion" let-contrat>
+                    <tr>
+                        <td colspan="7">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Horaire</th>
+                        <th>Classification</th>
+                        <th>Niveau de la formation</th>
+                        <th>Coeff hierachique</th>
+                        <th>code_commercial</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{contrat.horaire}}</td>
+                        <td>{{contrat.classification}}</td>
+                        <td>{{contrat.niveau_formation}}</td>
+
+                        <td>{{contrat.coeff_hierachique}}</td>
+                        <td>{{contrat.code_commercial}}</td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
+</div>

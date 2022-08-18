@@ -45,4 +45,9 @@ export class EntrepriseService {
     return this.httpClient.post<Entreprise>(registreUrl, objectTosend, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  getAllContrats(idTuteur: string) {
+    let registreUrl = this.apiUrl + "getAllContrats/" + idTuteur;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
 }

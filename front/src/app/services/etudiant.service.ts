@@ -27,7 +27,7 @@ export class EtudiantService {
   }
   getAllAlternants() {
     let registreUrl = this.apiUrl + "getAllAlternants";
-    return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" })});
+    return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
   getAllWait() {
@@ -39,6 +39,12 @@ export class EtudiantService {
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  //Recuperation d'un etudiant via son identifiant
+  getPopulateByUserid(id: string) {
+    let registreUrl = this.apiUrl + "getPopulateByUserid/" + id;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //Recuperation d'un etudiant via son user_id

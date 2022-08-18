@@ -35,19 +35,7 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { req.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
 });
 
-app.get("/getAllContrats", (req, res, next) => {
-    CAlternance.find()
-        .then((CAFromDb) => {
-            console.log(CAFromDb);
-            res.status(200).send(CAFromDb);
-        })
-        .catch((error) => {
-            console.log(error);
-            req.status(500).json({
-                error: "Impossible de recuperer la liste de tous les contrats " + error.message
-            });
-        });
-});
+
 
 //creation d'une nouvelle entreprise
 app.post("/create", (req, res, next) => {
@@ -87,7 +75,7 @@ app.post("/createNewContrat", (req, res, next) => {
         .then((CeoFromDb) => {
             if (CeoFromDb) {
 
-                res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur-- Email deja Utilisé ' + error.message })
+                res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur-- Email deja Utilisé ' })
             }
             else {
                 //Creation d'un nouveau utilisateur CEO d'entreprise
@@ -113,7 +101,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                         //Creation d'un nouveau contrat alternance
                                         NewContrat.save().then((NewContData) => {
                                             // Initialisation et Envoi des accés par email pour le CEO et le tuteur 
-                                            let Ceo_Pwd = CeoCreated.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
+
                                             let Ceo_htmlmail =
                                                 "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
                                                 Ceo_Pwd + "</strong></p>" +
@@ -143,7 +131,7 @@ app.post("/createNewContrat", (req, res, next) => {
                                             });
 
 
-                                            let Tuteur_Pwd = NewTutData.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
+
                                             let Teuteur_HtmlMail =
                                                 "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
                                                 Tuteur_Pwd + "</strong></p>" +
@@ -198,6 +186,22 @@ app.post("/createNewContrat", (req, res, next) => {
         });
 
 });
+
+app.get("/getAllContrats/:idTuteur", (req, res, next) => {
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
+        .then((CAFromDb) => {
+            console.log(CAFromDb);
+            res.status(200).send(CAFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            req.status(500).json({
+                error: "Impossible de recuperer la liste des contrats " + error.message
+            });
+        });
+});
+
+
 
 
 //Recuperation d'une entreprise selon un id
