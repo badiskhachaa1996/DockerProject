@@ -151,6 +151,14 @@ app.get('/getAllbyFormateur/:id', (req, res, next) => {
         .catch(error => res.status(400).send(error));
 });
 
+app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
+    let dd = new Date(req.params.date_debut)
+    let df = new Date(req.params.date_fin)
+    Seance.find({ date_debut: { $gte: dd, $lt: df } })
+        .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+        .catch(error => res.status(400).send(error));
+});
+
 app.get("/convertAllPlanified", (req, res) => {
     Seance.updateMany({ isPlanified: true }, { isPlanified: false })
         .then(

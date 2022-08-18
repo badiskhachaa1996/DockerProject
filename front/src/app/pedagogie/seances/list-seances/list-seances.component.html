@@ -92,7 +92,10 @@
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">
                         </p-dropdown>
-                        <p-calendar (change)="filterRange($event.value)" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                        <span>
+                            <p-calendar [(ngModel)]="calendar_value" (onSelect)="filterRange($event)" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                            <i *ngIf="calendar_value && calendar_value[0] && calendar_value[1]" class="pi pi-filter-slash" (click)="clearFilter()"></i>
+                        </span>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
