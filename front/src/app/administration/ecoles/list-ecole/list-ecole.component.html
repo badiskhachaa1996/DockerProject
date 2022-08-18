@@ -1,9 +1,39 @@
-<p-toast></p-toast>
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
+    <!-- Input d'ajout d'un logo -->
+    <div class="col-12" *ngIf="showFormAddImage">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddImage = false;"></i>
+            <h4>Ajouter un logo à {{ ecoleSelected.libelle }}</h4>
+            <div class="field col-12">
+                <input pInputFile type="file" multiple (change)="selectLogo($event)" accept="image/png" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+            </div>
+            <button pButton label="Envoyer" (click)="onAddLogo()"></button>
+        </div>
+        
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddImage = false;"></i>
+            <h4>Ajouter un cachet à {{ ecoleSelected.libelle }}</h4>
+            <div class="field col-12">
+                <input id="addCachet" type="file" multiple (change)="selectCachet($event)" accept="image/png" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+            </div>
+            <button pButton label="Envoyer" (click)="onAddCachet()"></button>
+        </div>
+        
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormAddImage = false;"></i>
+            <h4>Ajouter un pied de page à {{ ecoleSelected.libelle }}</h4>
+            <div class="field col-12">
+                <input id="addPp" type="file" multiple (change)="selectPp($event)" accept="image/png" style="background-color: #6366F1; color: white; padding: 15px; border-radius: 10px;">
+            </div>
+            <button pButton label="Envoyer" (click)="onAddPp()"></button>
+        </div>
+    </div>
 
 	<!-- Partie dedié à la modification d'une école -->
 	<div class="col-12" *ngIf="showFormUpdateEcole">
         <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showFormUpdateEcole = false; formUpdateEcole.reset()"> </i>
             <h4 style="text-align: center;">Ajouter une école</h4>
             <form class="p-fluid p-formgrid grid" [formGroup]="ecoleFormUpdate" (ngSubmit)="editEcole()">
                 <div class="field col-12 md:col-6">
@@ -99,11 +129,12 @@
 							{{ rowData.ville }}
 						</td>
 						<td style="min-width: 10rem;">
-							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+							<i style="margin-left: 2px;" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData)" aria-hidden="true"></i>
-                                <i  pTooltip="Campus" tooltipPosition="bottom" class="pi pi-play"
+                            <i style="margin-left: 2px;" pTooltip="Campus" tooltipPosition="bottom" class="pi pi-play"
                                 (click)="navigatetoCampus(rowData)" aria-hidden="true"></i>
-						</td>
+                            <i style="margin-left: 3px;" pTooltip="Les images" tooltipPosition="bottom" class="pi pi-images" (click)="ecoleSelected=rowData; showFormAddImage=true;"></i>
+                         </td>
 					</tr>
 				</ng-template>
     		</p-table>
