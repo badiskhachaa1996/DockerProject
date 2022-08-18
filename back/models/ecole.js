@@ -10,6 +10,9 @@ const ecole_schema = new mongoose.Schema({
     email: { type: String, required: true },
     site: { type: String, required: true },
     telephone: { type: String, required: true },  
+    logo: { type: String, required: false },
+    cachet: { type: String, required: false },
+    pied_de_page: { type: String, required: false },
 });
 
 //Creation de la table ecole et export du model Ecole

@@ -1,6 +1,13 @@
 <p-toast></p-toast>
+
+<!-- affichage de la partie upload de fichier -->
+<div class="col-12">
+    <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
+        style="display: none;" pInputFile />
+</div>
 <div class="grid">
-    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+    </p-confirmDialog>
     <!-- Partie ajout de documents -->
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
@@ -29,8 +36,9 @@
 
             <h4 style="text-align: center;">Modifier cet étudiant </h4>
             <div style="text-align: center;">
-                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
-             </div>
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
 
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showFormUpdateEtudiant = false; formUpdateEtudiant.reset()" aria-hidden="true"></i>
@@ -305,9 +313,8 @@
                                 (click)="showUploadFile=etudiant" aria-hidden="true"></i>
                             <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
                                 (click)="clickFile(etudiant)" aria-hidden="true" *ngIf="!this.isCommercial"></i>
-                            <i (click)="router.navigate(['/details/'+etudiant._id])"
-                                pTooltip="Suivie assiduité" tooltipPosition="bottom" class="pi pi-chart-bar"
-                                aria-hidden="true">
+                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
+                                tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
                         </td>
                     </tr>
@@ -320,6 +327,7 @@
                                     <ng-template pTemplate="header">
                     <tr>
                         <th></th>
+                        <th *ngIf="users[etudiant.user_id]?.email_perso">Email perso</th>
                         <th>Adresse </th>
                         <th>Date de naissance </th>
                         <th>Téléphone </th>
@@ -338,6 +346,9 @@
                     <tr>
                         <td>
                             <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
+                        </td>
+                        <td *ngIf="users[etudiant.user_id]?.email_perso">
+                            {{ users[etudiant.user_id]?.email_perso }}
                         </td>
                         <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
                             {{ users[etudiant.user_id].numero_adresse }} {{ users[etudiant.user_id].rue_adresse }} {{

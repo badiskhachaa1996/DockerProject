@@ -261,6 +261,6 @@ export class DetailsEtudiantComponent implements OnInit {
       this.chart2.data = this.barDataHor
       this.chart.data = this.barData
       this.barDataHorAJ = this.barDataHor
-    }, 2000);
+    }, 500);
   }
 }

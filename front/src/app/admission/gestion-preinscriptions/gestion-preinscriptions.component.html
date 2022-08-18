@@ -137,7 +137,7 @@
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande EH"
                     (click)="openNewForm('formulaire-admission/eduhorizons')"></button>
             </div>
-            <h5>Liste des pre-inscriptions</h5>
+            <h5>Liste des prospects</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
@@ -181,6 +181,9 @@
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
+                        <th style="text-align: center;">
+                            Email perso
+                        </th>
                         <th pSortableColumn="nbDoc" scope="col" style="text-align: center;">
                             Nombre de documents<p-sortIcon field="nbDoc"></p-sortIcon>
                         </th>
@@ -221,6 +224,9 @@
                         </td>
                         <td>
                             {{ prospect.campus_choix_1 }}
+                        </td>
+                        <td>
+                            {{ prospect.user_id?.email_perso }}
                         </td>
                         <td>
                             {{ prospect.nbDoc }}

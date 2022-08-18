@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
@@ -49,6 +50,7 @@ export class ListSeancesComponent implements OnInit {
     public formateurService: FormateurService, public CampusService: CampusService, private messageService: MessageService, private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
+    
     this.seanceService.getAll().subscribe(
       (datas) => {
         this.loadEvents(datas)
@@ -244,6 +246,8 @@ export class ListSeancesComponent implements OnInit {
       console.error(error)
     });
   }
-
+  filterRange(value) {
+    console.log(value)
+  }
 
 }

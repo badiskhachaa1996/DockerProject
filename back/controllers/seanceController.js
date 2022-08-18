@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
+const { Classe } = require("./../models/classe")
 app.disable("x-powered-by");
 const path = require('path');
 var mime = require('mime-types')
@@ -124,6 +125,22 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
             console.error(error)
             res.status(400).send(error)
         });
+});
+
+//Recuperation de toute les s selon l'id d'une classe
+app.get('/getAllByDiplomeID/:id', (req, res, next) => {
+    let cids = []
+    Classe.find({ diplome_id: req.params.id }).then(classe => {
+        classe.forEach(c => {
+            cids.push(c._id)
+        })
+        Seance.find({ classe_id: { $in: cids } })
+            .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+            .catch(error => {
+                console.error(error)
+                res.status(400).send(error)
+            });
+    })
 });
 
 
