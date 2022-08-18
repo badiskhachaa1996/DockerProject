@@ -18,6 +18,7 @@ import { Presence } from 'src/app/models/Presence';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 
 
@@ -89,11 +90,13 @@ export class ListEtudiantComponent implements OnInit {
   isMinor = false;
   isCommercial: boolean = false;
 
+  prospects = {}
+
   absences: Presence[] = []
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
-    private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService) { }
+    private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -118,6 +121,12 @@ export class ListEtudiantComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
+
+    this.ProspectService.getAll().subscribe(data => {
+      data.forEach(p => {
+        this.prospects[p.user_id] = p
+      })
+    })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormUpdateEtudiant();
@@ -516,8 +525,7 @@ export class ListEtudiantComponent implements OnInit {
     )
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-etudiant']);
   }
 

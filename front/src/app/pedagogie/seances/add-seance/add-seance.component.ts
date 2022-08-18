@@ -120,27 +120,18 @@ export class AddSeanceComponent implements OnInit {
 
   showSalles(value) {
     this.salleNames = []
-    value.forEach(cid=>{
+    value.forEach(cid => {
       this.campus[cid].salles.forEach(s => {
+        console.log(s)
         this.salleNames.push({ value: s, label: s })
       })
     })
-    this.seanceForm.patchValue({salle_name:this.salleNames[0].value})
-  }
+    if (this.salleNames.length != 0)
+      this.seanceForm.patchValue({ salle_name: this.salleNames[0].value })
+    else if (this.isPresentiel.value != "Distanciel")
+      this.messageService.add({ severity: "error", summary: "Choix des salles", detail: "Ces campus ne contiennent aucune salle." })
 
-  testAffichage(date) {
-    var targetTime = new Date(date);
-    //get the timezone offset from local time in minutes
-    var tzDifference = targetTime.getTimezoneOffset();
-    //convert the offset to milliseconds, add to targetTime, and make a new Date
-    var offsetTime = new Date(targetTime.getTime() + tzDifference * 60000);
-    console.log(offsetTime)
-    return offsetTime
   }
-
-  /*convertDatetoUTC0(date,tz="Africa/Dakar"){
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tz}));   
-  }*/
 
   saveSeance() {
     //TODO get nbSeance
