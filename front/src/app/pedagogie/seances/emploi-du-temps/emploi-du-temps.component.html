@@ -72,6 +72,12 @@
             <p-selectButton [options]="planOptions" (onChange)="showPlanifiedSeance($event.value);"
                 [(ngModel)]="btnPlan">
             </p-selectButton>
+            <p-dropdown *ngIf="diplomeFilter!=null && diplomeFilter.length!=1" [options]="diplomeFilter" class="mb-2"
+                (onChange)="filiereFilter($event.value)">
+            </p-dropdown>
+            <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter" class="mb-2"
+                (onChange)="classeFilter($event.value)" filter="true">
+            </p-dropdown>
             <button pButton class="ui-button-raised ui-button-success" (click)="validPlanification()"
                 style="float:left;" label="Valider la planification"></button>
         </div>
