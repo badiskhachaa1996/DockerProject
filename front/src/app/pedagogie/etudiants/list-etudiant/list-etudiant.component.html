@@ -358,8 +358,7 @@
                                 tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
                             <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
-                            class="pi pi-money-bill" (click)="showPayementFC(etudiant)"
-                            aria-hidden="true"></i>
+                                class="pi pi-money-bill" (click)="showPayementFC(etudiant)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -497,7 +496,6 @@
             <p-table responsiveLayout="scroll" *ngIf="prospects && prospects[etudiant.user_id]">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Payment </th>
                         <th>Date d'inscription </th>
                         <th>Document manquant </th>
                     </tr>
@@ -508,12 +506,18 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{prospects[etudiant.user_id].payement | json }}</td>
                         <td>{{ prospects[etudiant.user_id].date_creation | date:'dd/MM/yyyy' }} </td>
                         <td> {{ prospects[etudiant.user_id].nbDoc }} </td>
                     </tr>
                 </ng-template>
             </p-table>
+
+            <h5 *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement" style="color: red; text-align: center;">Paiements</h5>
+            <ul *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement">
+                <li *ngFor="let payement of prospects[etudiant.user_id].payement; index as i">
+                    <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>
+                </li>
+            </ul>
 
             <!-- Partie dedié à l'affichage des documents -->
 

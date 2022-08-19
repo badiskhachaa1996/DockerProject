@@ -85,6 +85,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve" },
     { value: "Non Retenu" },
     { value: "Payée" },
+    { value: "A signé les documents" },
   ]
   dropdownDecision = [
     { value: null, label: "Decision Admission" },

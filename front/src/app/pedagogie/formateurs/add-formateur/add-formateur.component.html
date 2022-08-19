@@ -1,10 +1,30 @@
 <p-toast></p-toast>
+<!--Formulaire de téléchargement de Fichier-->
+<div *ngIf="showUploadFile!=null" class="col-12">
+    <div class="card">
+        <i class="pi pi-times" style="float:right; font-size: 20px; cursor:pointer" (click)="showUploadFile = null"
+            aria-hidden="true"> </i>
+        <h4 *ngIf="showUploadFile.user_id && showUploadFile.user_id.lastname && showUploadFile.user_id.firstname"
+            style="font-weight: bold;text-align: center;">
+            Ajouter un document à : {{
+            showUploadFile.user_id.firstname }} {{
+            showUploadFile.user_id.lastname | uppercase }}</h4>
+        <form class="p-fluid p-formgrid grid">
+            <div class="col-2 md:col-5"></div>
+            <div class="field col-10 md:col-4">
+                <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
+                    customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000"
+                    [auto]="true" #fileInput>
+                </p-fileUpload>
+            </div>
+        </form>
+    </div>
+</div>
 <div class="grid">
-    <div *ngIf="!showFormAddFormateur">
+    <div>
         <div class="col-12">
-            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module"
-                [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
-                [breakpoints]="{'960px': '75vw'}">
+            <p-dialog header="Merci de suivre ces instructions avant d'ajouter un nouveau module" [(visible)]="display"
+                modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
                 <p class="line-height-3 m-0">
                     Voici les informationns à savoir pour ajouter une nouveau formateur:
                 </p>
@@ -370,7 +390,8 @@
                     </div>
                 </form>
 
-                <a routerLink="/formateurs" style="float: right;"><i class="pi pi-caret-right"></i> Voir les formateurs</a>
+                <a routerLink="/formateurs" style="float: right;"><i class="pi pi-caret-right"></i> Voir les
+                    formateurs</a>
             </div>
         </div>
     </div>

@@ -21,7 +21,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
   styleUrls: ['./add-formateur.component.scss']
 })
 export class AddFormateurComponent implements OnInit {
-
+  display=false
   typeFormateur = [
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
@@ -30,7 +30,6 @@ export class AddFormateurComponent implements OnInit {
   fr = environment.fr;
 
   formAddFormateur: FormGroup;
-  showFormAddFormateur: boolean = false;
 
   users: User[] = [];
   civiliteList = environment.civilite;
@@ -63,6 +62,8 @@ export class AddFormateurComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
   diplomesListe = [];
+
+  showUploadFile: Formateur = null
 
   onAddJ_diplome() {
     this.jury_diplomesList.push({ diplome_id: "", cout_h: 0 })
@@ -283,14 +284,14 @@ export class AddFormateurComponent implements OnInit {
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
-   
+
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {
         if (response.success) {
           this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+          response.data.user_id = response.dataUser
           this.onInitFormAddFormateur();
-          this.showFormAddFormateur = false;
-          this.resetAddFormateur();
+          this.showUploadFile = response.data
         } else {
           this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
         }
@@ -302,6 +303,24 @@ export class AddFormateurComponent implements OnInit {
     );
 
   }
+
+  
+  FileUpload(event) {
+    if (event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('id', this.showUploadFile._id)
+      formData.append('file', event.files[0])
+      this.formateurService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        event.target = null;
+        this.showUploadFile = null;
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
 
 
   onGetStatut() {

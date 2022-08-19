@@ -664,7 +664,7 @@ app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: "Payée", archived: [false, null] }).then(prospects => {
+    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null] }).then(prospects => {
         prospects.forEach(function (element, index) {
             let nb = 0
             try {
