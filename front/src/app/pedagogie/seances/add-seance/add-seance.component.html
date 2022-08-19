@@ -108,6 +108,17 @@
                     <p-dropdown formControlName="salle_name" [options]="salleNames">
                     </p-dropdown>
                 </div>
+                <div class="field col-12">
+                    <p-selectButton [options]="seanceOptions" 
+                                    optionLabel="name" 
+                                    optionValue="value"
+                                    formControlName="isUnique">
+                    </p-selectButton>
+                </div>
+                <div class="col-6 md:col-12" *ngIf="!seanceForm.value.isUnique">
+                    <label>Veuillez saisir la date de fin: <span style="color: red;"> * </span></label>
+                    <input type="datetime" formControlName="date_fin_plannification" pInputText>
+                </div>
                 <div>
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
                         label="Ajouter la séance" type="submit"></button>
