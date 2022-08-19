@@ -47,12 +47,19 @@ export class AddSeanceComponent implements OnInit {
     salle_name: new FormControl(this.salleNames[0]),
     isPlanified: new FormControl(false),
     campus_id: new FormControl([], Validators.required),
-    nbseance: new FormControl("")
+    nbseance: new FormControl(""),
+    isUnique: new FormControl(true, Validators.required),
+    date_fin_plannification: new FormControl(''),
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
 
   type = this.route.snapshot.paramMap.get('type');
+
+  seanceOptions = [
+    { name: 'Répéter sur plusieurs jours', value: false }, 
+    {name: 'Séance unique', value: true },
+  ]
 
   display: boolean;
   constructor(private EtudiantService: EtudiantService, private matiereService: MatiereService, private formateurService: FormateurService, private seanceService: SeanceService, private classeService: ClasseService, private messageService: MessageService, private router: Router, private route: ActivatedRoute,
@@ -143,6 +150,14 @@ export class AddSeanceComponent implements OnInit {
   }*/
 
   saveSeance() {
+    let date_debut = this.seanceForm.get('date_debut').value;
+    let dateDebut = date_debut.substr(0, 9);
+    let date_fin = this.seanceForm.get('date_fin_plannification').value;
+
+    console.log(dateDebut);
+    console.log(date_fin);
+
+
     //TODO get nbSeance
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
@@ -251,7 +266,6 @@ export class AddSeanceComponent implements OnInit {
 
       });
     })
-
   }
 
   getScoreString(s: String) {
