@@ -1,6 +1,13 @@
 <p-toast></p-toast>
+
+<!-- affichage de la partie upload de fichier -->
+<div class="col-12">
+    <input type="file" (change)="FileUploadPC($event.target.files)" id="selectedFile" #selectedFile
+        style="display: none;" pInputFile />
+</div>
 <div class="grid">
-    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+    <p-confirmDialog [style]="{width: '50vw'}" [baseZIndex]="10000" rejectButtonStyleClass="p-button-text">
+    </p-confirmDialog>
     <!-- Partie ajout de documents -->
     <div class="col-12" *ngIf="showUploadFile!=null">
         <div class="card">
@@ -22,6 +29,47 @@
             </form>
         </div>
     </div>
+    <!-- partie Voir/Ajouter des payements -->
+    <div class="col-12" *ngIf="showPayement!=null">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;"
+                (click)="showPayement = null" aria-hidden="true"> </i>
+            <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un paiement de : {{
+                showPayement.user_id?.firstname }} {{
+                showPayement.user_id?.lastname | uppercase }}
+            </h3>
+            <div class="p-fluid p-formgrid grid">
+                <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+                    <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                    <div class="field col-12 md:col-6">
+                        <label>Type de paiement:</label><br>
+                        <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                            [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label>Montant:</label><br>
+                        <input type="number" (change)="changeMontant(i,$event,'montant')"
+                            [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                    </div>
+                    <div class="field col-12 md:col-1">
+                        <label>&nbsp;</label><br>
+                        <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
+                            styleClass="p-button-danger"></button>
+                    </div>
+                    <!--<div class="field col-12 md:col-2">
+                        <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                    </div>-->
+                </div>
+                <div class="col-6">
+                    <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
+                </div>
+                <div class="col-6">
+                    <button pButton label="Mettre à jour les paiements" (click)="addNewPayment()"></button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <!-- Formulaire de modification d'un étudiant -->
     <div class="col-12" *ngIf="showFormUpdateEtudiant">
@@ -29,8 +77,9 @@
 
             <h4 style="text-align: center;">Modifier cet étudiant </h4>
             <div style="text-align: center;">
-                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</small>
-             </div>
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
 
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showFormUpdateEtudiant = false; formUpdateEtudiant.reset()" aria-hidden="true"></i>
@@ -305,10 +354,11 @@
                                 (click)="showUploadFile=etudiant" aria-hidden="true"></i>
                             <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
                                 (click)="clickFile(etudiant)" aria-hidden="true" *ngIf="!this.isCommercial"></i>
-                            <i (click)="router.navigate(['/details/'+etudiant._id])"
-                                pTooltip="Suivie assiduité" tooltipPosition="bottom" class="pi pi-chart-bar"
-                                aria-hidden="true">
+                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
+                                tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
+                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                                class="pi pi-money-bill" (click)="showPayementFC(etudiant)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -440,6 +490,34 @@
                     </tr>
                 </ng-template>
             </p-table>
+
+            <!-- Informations de prospects -->
+
+            <p-table responsiveLayout="scroll" *ngIf="prospects && prospects[etudiant.user_id]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date d'inscription </th>
+                        <th>Document manquant </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospects[etudiant.user_id].date_creation | date:'dd/MM/yyyy' }} </td>
+                        <td> {{ prospects[etudiant.user_id].nbDoc }} </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement" style="color: red; text-align: center;">Paiements</h5>
+            <ul *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement">
+                <li *ngFor="let payement of prospects[etudiant.user_id].payement; index as i">
+                    <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>
+                </li>
+            </ul>
 
             <!-- Partie dedié à l'affichage des documents -->
 

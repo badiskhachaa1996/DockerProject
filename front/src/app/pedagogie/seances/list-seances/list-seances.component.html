@@ -13,8 +13,9 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
-                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"  placeholder="Choissisez un module"
-                        emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom du module" filter="true">
+                    <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
+                        placeholder="Choissisez un module" emptyFilterMessage="Pas de module trouvé"
+                        filterPlaceholder="Nom du module" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
@@ -34,8 +35,9 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Nom du formateur</label><br>
-                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"  placeholder="Choissisez un formateur"
-                        emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom de formateur" filter="true">
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
+                        filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
@@ -90,6 +92,10 @@
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">
                         </p-dropdown>
+                        <span>
+                            <p-calendar [(ngModel)]="calendar_value" (onSelect)="filterRange($event)" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                            <i *ngIf="calendar_value && calendar_value[0] && calendar_value[1]" class="pi pi-filter-slash" (click)="clearFilter()"></i>
+                        </span>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -119,7 +125,8 @@
                             Début <p-sortIcon field="date_debut"></p-sortIcon>
                         </th>
                         <th pSortableColumn="date_fin" scope="col" style="text-align:center">
-                            Fin <p-sortIcon field="date_fin"></p-sortIcon>
+                            Fin
+                            <p-sortIcon field="date_fin"></p-sortIcon>
                         </th>
 
                         <th scope="col" style="text-align:center">

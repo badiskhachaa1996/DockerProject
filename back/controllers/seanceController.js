@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
+const { Classe } = require("./../models/classe")
 app.disable("x-powered-by");
 const path = require('path');
 var mime = require('mime-types')
@@ -126,10 +127,34 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
         });
 });
 
+//Recuperation de toute les s selon l'id d'une classe
+app.get('/getAllByDiplomeID/:id', (req, res, next) => {
+    let cids = []
+    Classe.find({ diplome_id: req.params.id }).then(classe => {
+        classe.forEach(c => {
+            cids.push(c._id)
+        })
+        Seance.find({ classe_id: { $in: cids } })
+            .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+            .catch(error => {
+                console.error(error)
+                res.status(400).send(error)
+            });
+    })
+});
+
 
 //Recuperation de toute les s selon l'identifiant du formateur
 app.get('/getAllbyFormateur/:id', (req, res, next) => {
     Seance.find({ formateur_id: req.params.id })
+        .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+        .catch(error => res.status(400).send(error));
+});
+
+app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
+    let dd = new Date(req.params.date_debut)
+    let df = new Date(req.params.date_fin)
+    Seance.find({ date_debut: { $gte: dd, $lt: df } })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });

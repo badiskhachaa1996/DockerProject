@@ -57,6 +57,11 @@ export class AdmissionService {
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllEtudiant() {
+    let registreUrl = this.apiUrl+'getAllEtudiant';
+    return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 
 
   updateStatut(id_prospect, p) {
@@ -108,5 +113,9 @@ export class AdmissionService {
   changeEtatTraitement(id, etat = "Vu", token = 'token') {
     let url = this.apiUrl + "etatTraitement/" + id + "/" + etat
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) })
+  }
+  createProspectWhileEtudiant(user_id) {
+    let url = this.apiUrl + "createProspectWhileEtudiant/" + user_id
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
   }
 }
