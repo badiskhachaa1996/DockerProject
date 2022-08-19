@@ -19,6 +19,7 @@ import { Presence } from 'src/app/models/Presence';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
+import { Prospect } from 'src/app/models/Prospect';
 
 
 
@@ -94,6 +95,57 @@ export class ListEtudiantComponent implements OnInit {
 
   absences: Presence[] = []
 
+  showPayement: Prospect
+
+  payementList = []
+  onAddPayement() {
+    if (this.payementList == null) {
+      this.payementList = []
+    }
+    this.payementList.push({ type: "", montant: 0 })
+  }
+
+  changeMontant(i, event, type) {
+    if (type == "montant") {
+      this.payementList[i][type] = parseInt(event.target.value);
+    } else {
+      this.payementList[i][type] = event.target.value;
+    }
+  }
+
+  deletePayement(i) {
+    //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
+    if (confirm("Voulez-vous supprimer le payement ?")) {
+      this.payementList.splice(i, 1)
+    }
+  }
+
+  addNewPayment() {
+    this.ProspectService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.prospects[this.showPayement.user_id] = data
+      this.showPayement = null
+      this.payementList = null
+      //this.refreshProspect()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: "error", summary: "Erreur" })
+    })
+  }
+
+  showPayementFC(etu: Etudiant) {
+    console.log(etu)
+    if (this.prospects[etu.user_id]) {
+      this.showPayement = this.prospects[etu.user_id]
+      this.payementList = this.showPayement.payement
+    } else {
+      this.ProspectService.createProspectWhileEtudiant(etu.user_id).subscribe(data => {
+        this.showPayement = data
+        this.payementList = data.payement
+      })
+    }
+  }
+
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService) { }
@@ -122,10 +174,11 @@ export class ListEtudiantComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
-    this.ProspectService.getAll().subscribe(data => {
+    this.ProspectService.getAllEtudiant().subscribe(data => {
       data.forEach(p => {
         this.prospects[p.user_id] = p
       })
+      console.log(this.prospects)
     })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
@@ -271,6 +324,8 @@ export class ListEtudiantComponent implements OnInit {
     }
     this.isMinor = !(age < 18);
   }
+
+
 
 
 
