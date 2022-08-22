@@ -275,6 +275,7 @@ export class ListCollaborateurComponent implements OnInit {
         t['Prenom'] = user.firstname
         t['Code Commercial'] = p.code_commercial_partenaire
         t['Est Admin'] = (p.isAdmin) ? "Oui" : "Non";
+        t['ID'] = p._id
         dataExcel.push(t)
       }
     })

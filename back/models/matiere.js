@@ -7,10 +7,10 @@ const matiereSchema = mongoose.Schema({
     volume_init: { type: Number, default: 0 },
     abbrv: { type: String, required: true },
     //classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: true },
-    semestre: {type:String},
-    niveau:{type:String},
+    semestre: { type: String, default: "Semestre 1" },
+    niveau: { type: String, default: "BTS" },
     //diplome_id:{type: mongoose.Schema.Types.ObjectId,ref:}
-    seance_max: { type: Number, required: true },
+    seance_max: { type: Number, required: true, default: 1 },
     coeff: { type: Number, default: 1 },
     credit_ects: { type: Number, default: 1 },
     remarque: { type: String },
