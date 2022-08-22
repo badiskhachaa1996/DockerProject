@@ -48,7 +48,7 @@
                 <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;"> * </span> sont obligatoires</p>
                 
                 <form class="p-fluid p-formgrid grid" [formGroup]="formAddMatiere" (ngSubmit)="onAddMatiere();">
-                    <div class="field col-12 md:col-8">
+                    <div class="field col-12 md:col-4">
                         <label For="matiere">Nom du module <span style="color: red;"> * </span></label>
                         <input pInputText id="matiere" type="text" formControlName="nom" placeholder="Exemple : Culture générale et expréssion" />
                         <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
@@ -61,12 +61,8 @@
                         <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
                         <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="Exemple : CGE" />
                     </div>
-                    <div class="field col-12 md:col-8">
-                        <label For="classe">Groupe <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id" placeholder="Choissisez une groupe"></p-dropdown>
-                    </div>
                     <div class="field col-12 md:col-4">
-                        <label For="seance_max">Séance max <span style="color: red;"> * </span></label>
+                        <label For="seance_max">Nombre de séances <span style="color: red;"> * </span></label>
                         <input pInputText id="seance_max" type="number" formControlName="seance_max" placeholder="0" />
                     </div>
                     <div class="field col-12 md:col-4">
@@ -80,6 +76,18 @@
                     <div class="field col-12 md:col-4">
                         <label For="coeff">Crédits ECTS <span style="color: red;"> * </span></label>
                         <input pInputText id="coeff" type="number" formControlName="credit_ects" placeholder="0" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="coeff">Filière <span style="color: red;"> * </span></label>
+                        <p-dropdown [options]="formationList" optionLabel="titre" formControlName="formation_id" optionValue="_id" ></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="semestre">Semestre <span style="color: red;"> * </span></label>
+                        <input pInputText id="semestre" type="text" formControlName="semestre" placeholder="Semestre 1" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="niveau">Niveau <span style="color: red;"> * </span></label>
+                        <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
                     </div>
                     <div class="field col-12">
                         <label For="remarque">Remarque</label>
@@ -182,6 +190,8 @@
                         <th pSortableColumn="coeff" style="text-align:center">Coefficient <p-sortIcone field="coeff"></p-sortIcone></th> 
                         <th pSortableColumn="credit_ects" style="text-align:center">Crédits ECTS <p-sortIcone field="credit_ects"></p-sortIcone></th>
                         <th pSortableColumn="remarque" style="text-align:center">Remarque <p-sortIcone field="remarque"></p-sortIcone></th>
+                        <th pSortableColumn="semestre" style="text-align:center">Semestre <p-sortIcone field="semestre"></p-sortIcone></th>
+                        <th pSortableColumn="niveau" style="text-align:center">Niveau <p-sortIcone field="niveau"></p-sortIcone></th>
                         <th style="text-align:center">Action</th>              
 				</ng-template>
                 <ng-template pTemplate="body" let-matiere>
@@ -198,14 +208,14 @@
                         <td style="min-width: 12rem;">
 							{{matiere.volume_init}}
 						</td>
-                        <td *ngIf="matiereVolume && matiereVolume.rCons && matiereVolume.rCons[matiere._id]!=undefined" style="min-width: 12rem;">
+                        <td *ngIf="matiereVolume && matiereVolume.rCons && matiereVolume.rCons[matiere._id]" style="min-width: 12rem;">
 							{{matiereVolume.rCons[matiere._id]}}
 						</td>
-                        <td *ngIf="!matiereVolume || matiereVolume.rCons==undefined || !matiereVolume.rCons[matiere._id]" style="min-width: 12rem;">
-							0
+                        <td *ngIf="!matiereVolume || !matiereVolume.rCons || !matiereVolume.rCons[matiere._id]" style="min-width: 12rem;">
+							0 {{matiere._id}}
 						</td>
                         <td *ngIf="!matiereVolume || !matiereVolume.rPlan || !matiereVolume.rPlan[matiere._id]" style="min-width: 12rem;">
-							0
+							0 {{matiere._id}}
 						</td>
                         <td *ngIf="matiereVolume && matiereVolume.rPlan && matiereVolume.rPlan[matiere._id]" style="min-width: 12rem;">
                             {{matiereVolume.rPlan[matiere._id]}}
@@ -218,6 +228,12 @@
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.remarque}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.semestre}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.niveau}}
                         </td>
                         <td>
 							<i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"

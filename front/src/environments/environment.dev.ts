@@ -47,12 +47,12 @@ export const environment = {
     "firstDayOfWeek": 0,
     today: 'Aujourdhui',
     weekHeader: 'sem',
-    "weak": 'Weak',
-    "medium": 'Medium',
-    "strong": 'Strong',
-    "passwordPrompt": 'Enter a password',
-    "emptyMessage": 'No results found',
-    "emptyFilterMessage": 'No results found'
+    "weak": 'Faible',
+    "medium": 'Moyen',
+    "strong": 'Fort',
+    "passwordPrompt": 'Entrer un mot de passe',
+    "emptyMessage": 'Aucun résultat',
+    "emptyFilterMessage": 'Aucun résultat'
   },
   fr: {
     firstDayOfWeek: 0,

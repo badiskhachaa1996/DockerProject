@@ -1,13 +1,2 @@
-function test() {
-    console.log("fonction test lancé")
-}
-
-console.log("Debut du programme")
-setTimeout(function () {
-    test()
-}, 1000);
-console.log("Milieu du programme")
-setTimeout(function () {
-    test()
-}, 2000);
-console.log("Fin du programme")
+let str ="123456789"
+console.log(str,str.substring(-3),str.substring(0,str.length-3))

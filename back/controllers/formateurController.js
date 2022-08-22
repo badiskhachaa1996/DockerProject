@@ -126,7 +126,7 @@ app.post("/create", (req, res, next) => {
                         } else {
                             formateur.user_id = userFromDb._id;
                             formateur.save()
-                                .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved }) })
+                                .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved, dataUser: userFromDb }) })
                                 .catch((error) => { res.status(400).json({ msg: "Impossible d'ajouter ce formateur ", error }) });
 
                         }
@@ -138,8 +138,10 @@ app.post("/create", (req, res, next) => {
                     .then((userCreated) => {
                         formateur.user_id = userCreated._id;
                         formateur.save()
-                            .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée' }) })
-                            .catch((error) => { res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
+                            .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée', data: formateurCreated, dataUser: userCreated }) })
+                            .catch((error) => { 
+                                console.error(error)
+                                res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }

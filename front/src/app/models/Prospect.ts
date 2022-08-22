@@ -43,6 +43,7 @@ export class Prospect {
         public mobilite_reduite?:boolean,
         public sportif_hn?: boolean,
         public horsAdmission?: boolean,
+        public archived?:boolean
     ) { }
 
 }

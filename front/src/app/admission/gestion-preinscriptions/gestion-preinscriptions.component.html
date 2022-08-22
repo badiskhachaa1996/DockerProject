@@ -96,21 +96,26 @@
                 showPayement.user_id?.lastname | uppercase }}
             </h3>
             <div class="p-fluid p-formgrid grid">
-                <div class="col-12" *ngFor="let data of payementList; let i = index">
+                <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
-                    <div class="field col-12 md:col-4">
+                    <div class="field col-12 md:col-6">
                         <label>Type de paiement:</label><br>
                         <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                             [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
                     </div>
-                    <div class="field col-12 md:col-4">
+                    <div class="field col-12 md:col-5">
                         <label>Montant:</label><br>
                         <input type="number" (change)="changeMontant(i,$event,'montant')"
                             [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
                     </div>
-                    <div class="field col-12 md:col-2">
-                        <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                    <div class="field col-12 md:col-1">
+                        <label>&nbsp;</label><br>
+                        <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
+                            styleClass="p-button-danger"></button>
                     </div>
+                    <!--<div class="field col-12 md:col-2">
+                    <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                </div>-->
                 </div>
                 <div class="col-6">
                     <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>

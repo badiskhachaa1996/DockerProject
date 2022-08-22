@@ -30,7 +30,7 @@ export class ListFormateursComponent implements OnInit {
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
   ];
-
+  
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];

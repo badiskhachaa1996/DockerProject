@@ -85,6 +85,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve" },
     { value: "Non Retenu" },
     { value: "Payée" },
+    { value: "A signé les documents" },
   ]
   dropdownDecision = [
     { value: null, label: "Decision Admission" },
@@ -177,7 +178,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
   addNewPayment() {
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshProspect()
+      this.prospects.forEach((p, index) => {
+        if (p._id == data._id)
+          this.prospects[index].payement = data.payement
+      })
+      this.showPayement = null
+      this.payementList = null
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
@@ -262,10 +268,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
         if (this.code) {
           //Si il y a un code de Commercial
-          if (this.token != null && this.dataCommercial != null && (this.dataCommercial.isAdmin || this.token.role!="user")) {
+          if (this.code.length > 20) {
             //Si il est considéré comme Admin dans son Partenaire
             console.log("Admin Commercial")
-            this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
+            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
                 this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })

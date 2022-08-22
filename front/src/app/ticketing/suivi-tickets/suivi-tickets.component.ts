@@ -64,12 +64,12 @@ export class SuiviTicketsComponent implements OnInit {
   listSujetSelected = [];
   listSujets1: any = [];
 
-  showCard : Boolean = true;
+  showCard: Boolean = true;
 
 
-  ticketUserInWaiting : Ticket[] = [];
-  ticketUserTraite : Ticket[] = [];
-  ticketUserInQueue : Ticket[] = [];
+  ticketUserInWaiting: Ticket[] = [];
+  ticketUserTraite: Ticket[] = [];
+  ticketUserInQueue: Ticket[] = [];
 
   dropdownService: any[] = [{ label: "Tous les services", value: null }];
   showStatut = [
@@ -219,23 +219,23 @@ export class SuiviTicketsComponent implements OnInit {
       this.updateList()
     })
     this.updateList();
-    
+
     //Recuperation des tickets en cours de traitement
     this.TicketService.getCountTicketUserInWaiting(this.token.id).subscribe(
-      ((response) => {this.ticketUserInWaiting = response;}),
-      ((error) => {console.error(error)})
+      ((response) => { this.ticketUserInWaiting = response; }),
+      ((error) => { console.error(error) })
     );
 
     //Recuperation des tickets traité
     this.TicketService.getCountTicketUserTraite(this.token.id).subscribe(
-      ((response) => {this.ticketUserTraite = response;}),
-      ((error) => {console.error(error)})
+      ((response) => { this.ticketUserTraite = response; }),
+      ((error) => { console.error(error) })
     );
 
     //Recuperation des tickets en queue d'entrée
     this.TicketService.getCountTicketUserQueue(this.token.id).subscribe(
-      ((response) => {this.ticketUserInQueue = response;}),
-      ((error) => {console.error(error)})
+      ((response) => { this.ticketUserInQueue = response; }),
+      ((error) => { console.error(error) })
     );
 
   }
@@ -321,7 +321,7 @@ export class SuiviTicketsComponent implements OnInit {
     this.showFormUpdate = false;
     this.scrollToTop()
   }
-  
+
   addTicket() {
     //Enregistrement du Ticket
     let req = {
@@ -369,6 +369,7 @@ export class SuiviTicketsComponent implements OnInit {
     this.MsgServ.getAllByTicketID(ticket._id)
       .subscribe(
         data => {
+          console.log(data)
           this.comments = data;
         },
         error => {
@@ -379,7 +380,6 @@ export class SuiviTicketsComponent implements OnInit {
     let isrep;
     if (this.selectedTicket.agent_id != jwt_decode(localStorage.getItem('token'))['id']) {
       isrep = true
-
     }
 
     let comment = {
