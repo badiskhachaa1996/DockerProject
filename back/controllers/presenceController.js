@@ -97,7 +97,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                     dataTosend.push(seance)
 
                     ctx.fillText(dateFormat(new Date(seance.seance_id.date_debut.toISOString().split('T')[0])), 460, 730 + yi, (414 - 131));
-                   
+
                     ctx.fillText(etudiantData.user_id.firstname + ' ' + etudiantData.user_id.lastname, 50, 730 + yi, (414 - 131));
                     if (new Date(seance.seance_id.date_debut).getHours() < 13) {
                         if (seance.isPresent) {
@@ -125,7 +125,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                             ctx.fillStyle = 'black';
                         }
                     }
-                      
+
                     ctx.fillText(seance.seance_id.formateur_id.user_id.firstname + " " + seance.seance_id.formateur_id.user_id.lastname, 1325, 730 + yi, (414 - 131));
 
 
@@ -134,12 +134,12 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
                             dataForPres = dataForPresData
 
                             if (dataForPres[0]) {
-                              
+
                                 let srx = "storage/signature/" + dataForPres[0]._id + ".png"
-                             
+
                                 signForImage.src = srx;
                                 ctx.drawImage(signForImage, 1648, 670 + yif, (680 - 332), 50);
-                               
+
                             }
 
                             yif = await yif + 81;
@@ -192,15 +192,46 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
     })
 });
 
-//Récupérer tous les presence d'une séance
-app.get("/getAllBySeance/:id", (req, res) => {
+
+
+app.post("/getAtt_ssiduitePDF/:id", (req, res) => {
+
+    etudiantData: Etudiant;
+    const pdfName = 'Ass_' + req.params.id + ".pdf"
+
+    //Récupérer tous les presence d'une séance
+
     Presence.find({ seance_id: req.params.id }).then((data) => {
         res.status(200).send(data);
     }).catch((error) => {
         res.status(404).send(error);
     })
-});
+    Etudiant.findOne({ user_id: req.params.id }).populate({
+        path: 'user_id', populate: {
+            path: "entreprise"
+        }
+    }).populate('classe_id').populate({
+        path: 'formateur_id', populate: {
+            path: "user_id"
+        }
+    }).then((data) => {
+        etudiantData = data
+        const canvas = Canvas.createCanvas(2300, 1500, 'pdf')
+        const ctx = canvas.getContext('2d')
+        const bg = new Canvas.Image()
+        bg.src = "assets/model_assiduite.png"
+        ctx.drawImage(bg, 0, 0)
+        ctx.font = '30px Arial';
+        xi = 0;
+        yi = 0;
+        xif = 0;
+        yif = 0;
+        const signForImage = new Canvas.Image()
+        const signImage = new Canvas.Image()
 
+
+    });
+});
 //Mets un étudiant en présent
 app.post("/isPresent/:id", (req, res) => {
     Presence.findByIdAndUpdate(req.params.id,
