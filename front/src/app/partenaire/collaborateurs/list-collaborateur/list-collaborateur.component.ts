@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import * as FileSaver from 'file-saver';
@@ -54,7 +54,8 @@ export class ListCollaborateurComponent implements OnInit {
     { label: 'Externe', value: 'Externe' }
   ];
 
-  constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService, private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder) { }
+  constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
+    private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder,private router: Router) { }
 
   ngOnInit(): void {
 
@@ -285,6 +286,15 @@ export class ListCollaborateurComponent implements OnInit {
     });
     FileSaver.saveAs(data, "partenaires" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+  
+  seePreRecruted(rowData: CommercialPartenaire) {
+    this.router.navigate(["/gestion-preinscriptions/" + rowData.code_commercial_partenaire])
+  }
+
+  seeRecruted(rowData: CommercialPartenaire) {
+    this.router.navigate(["/etudiants/" + rowData.code_commercial_partenaire])
   }
 
 

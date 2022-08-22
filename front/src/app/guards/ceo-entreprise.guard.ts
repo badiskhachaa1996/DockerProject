@@ -15,10 +15,10 @@ export class CeoEntrepriseGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
     let currenttoken: any = jwt_decode(localStorage.getItem("token"))
-    let type: string = currenttoken.type;                               
-
-
-    if (type == 'CEO Entreprise') {
+    let type: string = currenttoken.type;
+    if (currenttoken.role == "Admin")
+      return true
+    else if (type == 'CEO Entreprise') {
       console.log("accés autorisé")
       return true;
     }

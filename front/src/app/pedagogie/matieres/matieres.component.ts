@@ -118,7 +118,7 @@ export class MatieresComponent implements OnInit {
           formation_id,
           volume,
           abbrv,
-          classe_id,
+          //classe_id,
           seance_max,
           coeff,
           credit_ects,
@@ -151,17 +151,17 @@ export class MatieresComponent implements OnInit {
 
   //Methode de recuperation de la matière à modifier
   onGetbyId(rowData: Matiere) {
-    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, classe_id: rowData.classe_id, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects, remarque: rowData.remarque});
+    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects, remarque: rowData.remarque});
     this.diplomeService.getById(rowData.formation_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ formation_id: data._id });
       }
     )
-    this.ClasseService.get(rowData.classe_id).subscribe(
+    /*this.ClasseService.get(rowData.classe_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ classe_id: data });
       }
-    )
+    )*/
   }
 
   //Methode d'initialisation du formulaire de modification d'une matière
@@ -189,7 +189,7 @@ export class MatieresComponent implements OnInit {
     let nom = this.formModifMatiere.get('nom').value;
     let volume = this.formModifMatiere.get("volume").value;
     let abbrv = this.formModifMatiere.get("abbrv").value;
-    let classe_id = this.formModifMatiere.get("classe_id").value;
+    //let classe_id = this.formModifMatiere.get("classe_id").value;
     let seance_max = this.formModifMatiere.get("seance_max").value;
     let coeff = this.formModifMatiere.get("coeff").value;
     let credit_ects = this.formModifMatiere.get("credit_ects").value;
@@ -206,7 +206,7 @@ export class MatieresComponent implements OnInit {
           formation_id,
           volume,
           abbrv,
-          classe_id,
+          //classe_id,
           seance_max,
           coeff,
           credit_ects,

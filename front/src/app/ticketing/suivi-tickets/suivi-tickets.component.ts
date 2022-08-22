@@ -380,7 +380,6 @@ export class SuiviTicketsComponent implements OnInit {
     let isrep;
     if (this.selectedTicket.agent_id != jwt_decode(localStorage.getItem('token'))['id']) {
       isrep = true
-
     }
 
     let comment = {
