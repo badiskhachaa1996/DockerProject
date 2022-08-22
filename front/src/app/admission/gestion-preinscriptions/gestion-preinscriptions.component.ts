@@ -268,10 +268,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
         if (this.code) {
           //Si il y a un code de Commercial
-          if (this.token != null && this.dataCommercial != null && (this.dataCommercial.isAdmin || this.token.role != "user")) {
+          if (this.code.length > 20) {
             //Si il est considéré comme Admin dans son Partenaire
             console.log("Admin Commercial")
-            this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
+            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
                 this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
