@@ -107,8 +107,6 @@ app.get("/getDicMatiere", (req, res, next) => {
 app.get("/getAllVolume", (req, res, next) => {
     Seance.find()
         .then((SeanceList) => {
-            var listMatierePlan = []
-            var listMatiereCon = []
             var rPlan = {}
             var rCons = {}
             var date = new Date()
@@ -117,27 +115,25 @@ app.get("/getAllVolume", (req, res, next) => {
                 let sd1 = new Date(seance.date_debut).getTime()
                 let sd2 = new Date(seance.date_fin).getTime()
                 let diff = sd2 - sd1
-                let nb = Math.floor((diff % 86400000) / 3600000);
-                console.log(nb)
+                let nb = Math.floor((diff % 86400000) / 3600000);   
+                console.log(nb)            
                 if (date < seance.date_debut) {
                     if (rPlan[seance.matiere_id]) {
                         rPlan[seance.matiere_id] += nb
                     } else {
                         rPlan[seance.matiere_id] = nb
                     }
-                    listMatierePlan.push(seance.matiere_id)
                 } else {
                     if (rCons[seance.matiere_id]) {
                         rCons[seance.matiere_id] += nb
                     } else {
                         rCons[seance.matiere_id] = nb
                     }
-                    listMatiereCon.push(seance.matiere_id)
                 }
                 listMatire.push(seance.matiere_id)
             })
             console.log({ rPlan, rCons })
-            res.status(200).send({ rPlan, rCons, listMatierePlan, listMatiereCon })
+            res.status(200).send({ rPlan, rCons })
         })
         .catch((error) => {
             console.error(error)

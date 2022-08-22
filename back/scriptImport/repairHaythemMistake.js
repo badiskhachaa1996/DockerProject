@@ -20,7 +20,7 @@ mongoose
         console.log("L'api s'est connecté à MongoDB.");
         xlData.forEach(data => {
             User.findOne({ email_perso: data["Email"] }).then(dataUser => {
-                if (dataUser) {
+                if (dataUser && dataUser.email_perso) {
                     if (dataUser.type == "Commercial") {
                         CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
                             if (updateCommercial)
@@ -30,12 +30,17 @@ mongoose
                         })
                     } else {
                         CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
-                            if (updateCommercial)
+                            if (updateCommercial) {
+                                User.findByIdAndUpdate(dataUser._id, { type: "Commercial" })
                                 console.log(data["Email"], "a été mis à jour")
-                            else
-                                console.error(dataUser._id, "C'est la GIGA merde bro")
+                            }
+                            else {
+                                console.error(dataUser.email, "C'est la GIGA merde bro")
+
+                            }
+
                         })
-                        User.findByIdAndUpdate(dataUser._id, { type: "Commercial" })
+
                     }
                 } else {
                     //Check if partenaire exist

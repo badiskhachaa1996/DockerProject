@@ -52,6 +52,25 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
 
+  DocPresent = [
+    { label: "Relevé de note de semestre X" },
+    { label: "Diplôme BAC" },
+    { label: "Diplôme Licence" },
+    { label: "Diplôme Master" },
+    { label: "Curriculum Vitae" },
+    { label: "Lettre de motivation" },
+    { label: "Passeport" },
+    { label: "Carte d'identité nationale" },
+    { label: "Pièce d'identité" },
+    { label: "Attestation de travail" },
+    { label: "Attestation de stage" },
+    { label: "Certifications (tout type de certification)" },
+    { label: "Lettre de recommandation" },
+    { label: "Attestation d'inscription en Licence niveau X" },
+    { label: "Attestation de fréquentation" },
+    { label: "Attestation de Réussite" },
+  ]
+
   DocTypes2: any[] = [
     { value: 'piece_identite', label: 'Pièce d\'identité', },
     { value: 'CV', label: "CV" },
@@ -61,10 +80,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
   statutList: any[] = [
-    { value: "Documents manquants" },
-    { value: "Dossier passable" },
-    { value: "Dossier complet" },
-    { value: "Manque d'orientation" }
+    { value: "Manquants" },
+    { value: "Passable" },
+    { value: "Complet" },
+    { value: "Manque orientation" }
   ]
   statutVisible = [
     { value: "Dossier suspendu - En attente du prospect" },
@@ -74,8 +93,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   listFR = [
     { value: "Pas de TCF - Pays non Francophone" },
     { value: "TCF B2 ou plus" },
-    { value: "ILC B2 ou plus" },
-    { value: "Moins de B2" },
+    { value: "ELC B2 ou plus" },
+    { value: "En cours de formation ILTS" },
     { value: "Non concerné" }
   ]
   decisionList = [
@@ -126,17 +145,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   listAgent = [
     { value: "Aucun" },
-    { value: "Haitham" },
-    { value: "Dhekra" },
-    { value: "Moez" },
-    { value: "Dhouha" },
-    { value: "Maroua N" },
-    { value: "Malek" },
+    { value: "Haitham ELKADHI" },
+    { value: "Dhekra Ben HAMIDA" },
+    { value: "Moez BEN JABALLAH" },
+    { value: "Dhouha KOBROSLY" },
+    { value: "Maroua NOURI" },
+    { value: "Malek KOBROSLY" },
     { value: "Feryel" },
-    { value: "Elyes" },
-    { value: "Rania" },
-    { value: "Asma" },
-    { value: "Islem" },
+    { value: "Elyes HAJJI" },
+    { value: "Rania WARDENI" },
+    { value: "Asma NJAH" },
+    { value: "Islem DRIDI" },
     { value: "SLIM" },
     { value: "Achraf" },
   ]
@@ -328,7 +347,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     statut_payement: new FormControl(this.statutPayement[0]),
     traited_by: new FormControl(this.listAgent[0]),
     validated_cf: new FormControl(false),
-    avancement_visa: new FormControl(false)
+    avancement_visa: new FormControl(false),
+    dossier_traited_by: new FormControl(this.listAgent[0]),
+    typeDocVerified: new FormControl(""),
   })
 
 
