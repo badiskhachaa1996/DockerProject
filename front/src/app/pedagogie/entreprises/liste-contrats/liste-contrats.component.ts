@@ -21,9 +21,11 @@ export class ListeContratsComponent implements OnInit {
 
     this.token = jwt_decode(localStorage.getItem("token"))
     console.log(this.token)
-    if(!this.idTuteur && this.token)
-      this.idTuteur=this.token.id
+    
+    if (!this.idTuteur && this.token)
+      this.idTuteur = this.token.id
 
+  
     this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
       this.ListeContrats = listeData;
 

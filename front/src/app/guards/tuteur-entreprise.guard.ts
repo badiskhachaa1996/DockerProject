@@ -22,7 +22,7 @@ export class TuteurEntrepriseGuard implements CanActivate {
     let type: string = currenttoken.type;
 
 
-    if (type == 'Tuteur') {
+    if (type == 'Tuteur' || "CEO Entreprise") {
       console.log("accés autorisé")
       return true;
     }
