@@ -25,7 +25,6 @@ app.get("/get/:etudiant_id/:semestre", (req, res, next) => {
 //creation d'une nouvelle appreciation pour un semestre et pour un utilisateur
 app.post("/create", (req, res, next) => {
     delete req.body._id;
-    console.log(req.body)
     const appreciation = new Appreciation({
         ...req.body
     });
