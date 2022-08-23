@@ -198,6 +198,7 @@ import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-leg
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
+import { ArrToStrPipe } from './arr-to-str.pipe';
 @NgModule({
   imports: [
     BrowserModule,
@@ -380,7 +381,8 @@ import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/l
     ResetMpComponent,
     ContactComponent,
     InscriptionEntrepriseComponent,
-    ListeContratsComponent
+    ListeContratsComponent,
+    ArrToStrPipe
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

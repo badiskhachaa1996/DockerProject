@@ -9,7 +9,8 @@
                 : {{inscriptionSelected.user_id?.firstname }} {{inscriptionSelected.user_id?.lastname | uppercase }}
             </h3>
 
-            <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm" (ngSubmit)="changeStateBtn()">
+            <form class="p-fluid p-formgrid grid" [formGroup]="changeStateForm"
+                (ngSubmit)="changeStateBtn();addNewPayment()">
                 <!--<div class="field col-12 md:col-4">
                     <label>Statut</label>
                     <p-dropdown formControlName="statut" optionLabel="value" [options]="statutList">
@@ -23,7 +24,7 @@
                 <div class="field col-12 md:col-4">
                     <label>Contenu de dossier </label>
                     <p-multiSelect [options]="DocPresent" optionValue="label"
-                        defaultLabel="Choississez le type de fichier" formControlName="typeDocVerified"></p-multiSelect>
+                        defaultLabel="Choississez le type de fichier" formControlName="document_present"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Etat de Dossier</label>
@@ -33,7 +34,7 @@
                 <div class="field col-12 md:col-4" *ngIf="changeStateForm.value.statut.value=='Documents manquants'">
                     <label>Document manquant </label>
                     <p-multiSelect [options]="DocTypes2" defaultLabel="Choississez le type de fichier"
-                        formControlName="typeDoc"></p-multiSelect>
+                        formControlName="document_manquant"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4"
                     *ngIf="changeStateForm.value.statut.value=='Dossier passable' || changeStateForm.value.statut.value=='Dossier complet'">
@@ -98,10 +99,10 @@
                         formControlName="avancement_visa">
                     </p-selectButton>
                 </div>
-                <!--
-                    Commentaire 
-                -->
-
+                <div class="field col-12">
+                    <label>Commentaire: </label>
+                    <textarea pInputTextarea formControlName="remarque" autoResize rows="3" cols="30"></textarea>
+                </div>
                 <button pButton [disabled]="changeStateForm.invalid" label="Changer le statut"></button>
             </form>
         </div>
@@ -124,7 +125,7 @@
                     <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
                 </div>
                 <div class="field col-12">
-                    <p-fileUpload style="text-align: right;" (uploadHandler)="FileUpload($event)" mode="basic"
+                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic"
                         chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
                         accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true" #fileInput>
                     </p-fileUpload>
@@ -235,8 +236,8 @@
                         <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
                             ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nbDoc" scope="col" style="text-align: center;">
-                            Document<p-sortIcon field="nbDoc"></p-sortIcon>
+                        <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
+                            Document<p-sortIcon field="haveDoc"></p-sortIcon>
                         </th>
                         <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
                             Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
@@ -288,12 +289,10 @@
                         <td>
                             {{ prospect.code_commercial }}
                         </td>
-                        <td *ngIf="prospect.nbDoc>0">
-                            <!--TODO Ameliorer le back pour ameliorer la vitesse-->
+                        <td *ngIf="prospect.haveDoc">
                             Oui
                         </td>
-                        <td *ngIf="prospect.nbDoc==0">
-                            <!--TODO Ameliorer le back pour ameliorer la vitesse-->
+                        <td *ngIf="!prospect.haveDoc">
                             Non
                         </td>
                         <td>
@@ -330,7 +329,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-prospect>
                     <tr>
-                        <td colspan="9">
+                        <td colspan="13">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
@@ -485,11 +484,12 @@
                     <tr>
                         <th>Date du dernier traitement</th>
                         <th>Désignation du TCF</th>
-                        <th>Agent</th>
+                        <th>Dossier traité par</th>
                         <th>Décision Admission</th>
                         <th>Phase complémentaire</th>
                         <th>Statut Paiement</th>
                         <th>Attestation traité par</th>
+                        <th>Commentaire</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect>
@@ -499,15 +499,14 @@
                     <tr>
                         <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                         <td>{{ prospect.tcf }}</td>
-                        <td *ngIf="prospect.agent_id && prospect.agent_id.civilite">
-                            {{ prospect.agent_id.civilite }}
-                            {{ prospect.agent_id.lastname | titlecase }}
-                            {{ prospect.agent_id.firstname | titlecase }}
+                        <td>
+                            {{ prospect.dossier_traited_by }}
                         </td>
                         <td>{{prospect.decision_admission}}</td>
                         <td>{{prospect.phase_complementaire}}</td>
                         <td>{{prospect.statut_payement}}</td>
                         <td>{{prospect.traited_by}}</td>
+                        <td>{{prospect.remarque}}</td>
                     </tr>
                 </ng-template>
             </p-table>
@@ -540,6 +539,24 @@
                     </div>
                 </li>
             </ul>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Document Manquants</th>
+                        <th>Document Vérifié</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.document_manquant | arrToStr }}</td>
+                        <td>{{ prospect.document_present | arrToStr }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
 
             <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
 

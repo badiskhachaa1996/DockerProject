@@ -106,18 +106,11 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    nbDoc: {
-        type: Number,
-        default: 0
-    },
     traited_by: {
         type: String,
         default: "Aucun"
     },
-    archived: {
-        type: Boolean,
-        default: false
-    },
+
     validated_cf: {
         type: Boolean,
         default: false
@@ -146,7 +139,7 @@ const prospect_schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    Sport_hn: {
+    sportif_hn: {
         type: Boolean,
         default: false
     },
@@ -154,6 +147,30 @@ const prospect_schema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    archived: {
+        type: Boolean,
+        default: false
+    },
+    document_manquant: {
+        type: [String],
+        default: []
+    },
+    document_present: {
+        type: [String],
+        default: []
+    },
+    remarque: {
+        type: String,
+        default: ""
+    },
+    dossier_traited_by: {
+        type: String,
+        default: ""
+    },
+    haveDoc:{
+        type:Boolean,
+        default:false
+    }
 });
 
 const Prospect = mongoose.model("prospect", prospect_schema);
