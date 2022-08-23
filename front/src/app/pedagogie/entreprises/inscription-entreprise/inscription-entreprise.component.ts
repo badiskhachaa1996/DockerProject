@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeIcons } from 'primeng/api';
 import { map } from 'rxjs';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { Entreprise } from 'src/app/models/Entreprise';
@@ -15,6 +15,8 @@ import { ServService } from 'src/app/services/service.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
+import {StepsModule} from 'primeng/steps';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-inscription-entreprise',
@@ -26,11 +28,11 @@ export class InscriptionEntrepriseComponent implements OnInit {
   Tok_code_commercial: string = this.route.snapshot.paramMap.get('code');
 
   formSteps: any[] = [
-    "Entreprise",
-    "Representant",
-    "Tuteurs",
-    "Alternant",
-    "Fin",
+    { label: "Entreprise", icon: "pi pi-sitemap",i:0 },
+    { label: "Representant", icon: "pi pi-user" ,i:1},
+    { label: "Tuteurs", icon: "pi pi-id-card" ,i:2},
+    { label: "Alternant", icon: "pi pi-user" ,i:3},
+    { label: "Fin", icon: "pi pi-flag" ,i:4},
   ];
 
   listAlternant = []
