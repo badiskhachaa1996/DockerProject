@@ -34,7 +34,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
     { label: "Alternant", icon: "pi pi-user" ,i:3},
     { label: "Fin", icon: "pi pi-flag" ,i:4},
   ];
-
+  MessageFormSubmit:boolean;
   listAlternant = []
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
@@ -57,6 +57,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
   constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
+
+    
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
   get activite() { return this.RegisterForm.get('activite').value; }
   get adresse_ss() { return this.RegisterForm.get('adresse_ss').value; }
@@ -110,6 +112,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
   get code_commercial() { return this.RegisterForm.get('code_commercial').value; }
   get form() { return this.RegisterForm.get('form').value; }
   get donneePerso() { return this.RegisterForm.get('donneePerso').value; }
+
+
+
+  showBasicDialogFin() {
+    this.MessageFormSubmit = true;
+}
   ngOnInit(): void {
 
     this.onInitRegisterForm();
