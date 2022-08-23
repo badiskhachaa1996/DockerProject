@@ -527,7 +527,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     //Clean the data
     this.prospects.forEach(p => {
       let t = {}
-      t['NOM'] = p.lastname.toUpperCase()
+      t['NOM'] = p?.lastname?.toUpperCase()
       t['Prenom'] = p.firstname
       t['Date de la demande'] = p?.date_creation
       t['Date de naissance'] = p.date_naissance
@@ -547,7 +547,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut pro actuel'] = p.statut_actuel
       t['Langues'] = p.languages
       t['Experiences pro'] = p.professional_experience
-      t['Nom du garant'] = p?.nomGarant.toUpperCase()
+      t['Nom du garant'] = p?.nomGarant?.toUpperCase()
       t['Prenom du garant'] = p?.prenomGarant
       t['Nom de l\'agence'] = p?.nomAgence
       t['Code du commercial'] = p?.code_commercial

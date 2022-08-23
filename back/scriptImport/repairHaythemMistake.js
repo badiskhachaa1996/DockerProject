@@ -45,7 +45,8 @@ mongoose
                 } else {
                     //Check if partenaire exist
                     let email = data['Email']
-                    email = email.replace(' ', '')
+                    if (email)
+                        email = email.replace(' ', '')
                     let u = new User({
                         lastname: data['NOM'],
                         firstname: data['Prenom'],
