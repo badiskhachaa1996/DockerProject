@@ -1,14 +1,15 @@
 var XLSX = require('xlsx')
 var workbook = XLSX.readFile('data.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames;
-const bcrypt = require("bcryptjs");
-var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
+const mongoose = require("mongoose");
+var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 
 const { CommercialPartenaire } = require('../models/CommercialPartenaire');
+
 const { User } = require('../models/user');
 const { Partenaire } = require('../models/partenaire');
 
-ongoose
+mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
@@ -19,21 +20,38 @@ ongoose
         console.log("L'api s'est connecté à MongoDB.");
         xlData.forEach(data => {
             User.findOne({ email_perso: data["Email"] }).then(dataUser => {
-                if (dataUser) {
+                if (dataUser && dataUser.email_perso) {
                     if (dataUser.type == "Commercial") {
-                        Commercial.findByIdAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] })
+                        CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
+                            if (updateCommercial)
+                                console.log(data["Email"], "a été mis à jour")
+                            else
+                                console.error(dataUser._id, "C'est la merde bro")
+                        })
                     } else {
-                        console.error(dataUser, " n'est pas Commercial")
+                        CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
+                            if (updateCommercial) {
+                                User.findByIdAndUpdate(dataUser._id, { type: "Commercial" })
+                                console.log(data["Email"], "a été mis à jour")
+                            }
+                            else {
+                                console.error(dataUser.email, "C'est la GIGA merde bro")
+
+                            }
+
+                        })
+
                     }
                 } else {
-                    console.error(dataUser, " doit être crée")
                     //Check if partenaire exist
+                    let email = data['Email']
+                    email = email.replace(' ', '')
                     let u = new User({
                         lastname: data['NOM'],
                         firstname: data['Prenom'],
                         phone: data['phone'],
-                        email: data['Email'],
-                        email_perso: data['Email'],
+                        email: email,
+                        email_perso: email,
                         nationnalite: data['Nationalite'],
                         password: data['password']
                     })
