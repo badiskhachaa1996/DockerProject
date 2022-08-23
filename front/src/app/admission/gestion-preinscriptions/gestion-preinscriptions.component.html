@@ -24,7 +24,8 @@
                 <div class="field col-12 md:col-4">
                     <label>Contenu de dossier </label>
                     <p-multiSelect [options]="DocPresent" optionValue="label"
-                        defaultLabel="Choississez le type de fichier" formControlName="document_present"></p-multiSelect>
+                        defaultLabel="Choississez le type de fichier" formControlName="document_present">
+                    </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label>Etat de Dossier</label>
@@ -125,9 +126,9 @@
                     <p-dropdown [options]="DocTypes" formControlName="typeDoc"></p-dropdown>
                 </div>
                 <div class="field col-12">
-                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic"
-                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
-                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true" #fileInput>
+                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
+                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
                     </p-fileUpload>
                 </div>
             </form>
@@ -396,6 +397,7 @@
             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
+                        <th>Formation</th>
                         <th>Campus Choix 1</th>
                         <th>Campus Choix 2</th>
                         <th>Campus Choix 3</th>
@@ -406,6 +408,7 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
+                        <td>{{ prospect.formation}}</td>
                         <td>{{ prospect.campus_choix_1 }}</td>
                         <td>{{ prospect.campus_choix_2 }}</td>
                         <td>{{ prospect.campus_choix_3 }}</td>
