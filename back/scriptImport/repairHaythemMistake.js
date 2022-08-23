@@ -23,20 +23,55 @@ mongoose
                 if (dataUser && dataUser.email_perso) {
                     if (dataUser.type == "Commercial") {
                         CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
-                            if (updateCommercial)
-                                console.log(data["Email"], "a été mis à jour")
-                            else
-                                console.error(dataUser._id, "C'est la merde bro")
+                            if (updateCommercial){
+                                //console.log(data["Email"], "a été mis à jour")
+                            }
+                            else{
+                                Partenaire.find({ nom: data['p_nom'] }).then(partenaire => {
+                                    if (partenaire) {
+                                        let c = new CommercialPartenaire({
+                                            partenaire_id: partenaire._id,
+                                            user_id: newUser._id,
+                                            code_commercial_partenaire: data['Code Commercial'],
+                                            isAdmin: data['Est Admin'] == "Oui"
+                                        })
+                                        c.save().then(newCommercial => {
+                                            console.log(newCommercial._id, newUser._id)
+                                        })
+                                    } else {
+                                        let cp = data['Code Commercial'].substring(0, data['Code Commercial'].length - 3)
+                                        let p = new Partenaire({
+                                            user_id: newUser._id,
+                                            code_partenaire: cp,
+                                            nom: data['p_nom'],
+                                            email: data["p_email"],
+                                            Services: data['services'],
+                                            Pays: data['Pays']
+                                        })
+                                        p.save().then(newPartenaire => {
+                                            let c = new CommercialPartenaire({
+                                                partenaire_id: newPartenaire._id,
+                                                user_id: newUser._id,
+                                                code_commercial_partenaire: data['Code Commercial'],
+                                                isAdmin: data['isAdmin']
+                                            })
+                                            c.save().then(newCommercial => {
+                                                console.log(newCommercial._id, newPartenaire._id, newUser._id)
+                                            })
+                                        })
+                                    }
+                                })
+                            }
+                                
                         })
                     } else {
                         CommercialPartenaire.findOneAndUpdate({ user_id: dataUser._id }, { code_commercial_partenaire: data['Code Commercial'] }, { new: true }).then(updateCommercial => {
                             if (updateCommercial) {
                                 User.findByIdAndUpdate(dataUser._id, { type: "Commercial" })
-                                console.log(data["Email"], "a été mis à jour")
+                                //console.log(data["Email"], "a été mis à jour")
                             }
                             else {
                                 console.error(dataUser.email, "C'est la GIGA merde bro")
-
                             }
 
                         })
