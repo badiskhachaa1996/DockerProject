@@ -34,6 +34,11 @@ export class EntrepriseService {
     return this.httpClient.get<Entreprise>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getByDirecteurId(id: string) {
+    let registreUrl = this.apiUrl + "getByDirecteurId/" + id;
+    return this.httpClient.get<Entreprise>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   //Modification d'une entreprise
   update(entreprise: Entreprise) {
     let registreUrl = this.apiUrl + "update";

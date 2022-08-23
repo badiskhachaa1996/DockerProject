@@ -259,6 +259,13 @@ app.get("/getById/:id", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
 });
 
+//recupération d'une liste d'entreprise selon id director
+app.get("/getByDirecteurId/:id", (req, res, next) => {
+    Entreprise.findOne({ Directeur_id: req.params.id})
+    .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
+    .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
+})
+
 
 //Modification d'une entreprise
 app.put("/update", (req, res, next) => {

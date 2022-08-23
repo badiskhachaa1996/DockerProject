@@ -89,12 +89,18 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
+import { DemandeEventsComponent} from './demande-events/demande-events.component';
+import { ListEventsComponent} from './demande-events/list-events/list-events.component';
 
 import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
 import { AppComponent } from './app.component';
+
+import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
+
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
+
 
 @NgModule({
     imports: [
@@ -173,11 +179,18 @@ import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
+                    { path: 'list-events', component: ListEventsComponent },
+
+                    { path: 'tuteur', component: TuteurComponent },
+                    { path: 'tuteur/:entreprise', component: TuteurComponent },
+
                     { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent , canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] } // Listes de tous les contrats d'alternances
+
                 ],
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
+            { path: 'demande-events', component: DemandeEventsComponent },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
@@ -194,7 +207,7 @@ import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
             { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
             { path: 'mentions-legales', component: MentionsLegalesComponent },
             { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
-            { path: '**', redirectTo: 'pages/notfound' }
+            { path: '**', redirectTo: 'pages/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],
 

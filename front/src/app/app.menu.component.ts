@@ -134,7 +134,8 @@ export class AppMenuComponent implements OnInit {
             label: 'Admission',
             items: [
                 { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
-            ]
+                { label: 'Liste des inscriptions aux portes ouvertes', icon: 'pi pi-users', routerLink: ['/list-events'] }
+            ],
         },
         {
             label: 'Partenaires',
@@ -153,6 +154,11 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des partenaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/partenaire'] },
                     ]
                 },
+            ]
+        },{
+            label: 'Commercial',
+            items: [
+                { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
             ]
         },
     ];
