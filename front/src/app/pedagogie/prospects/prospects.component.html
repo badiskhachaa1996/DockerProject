@@ -155,7 +155,7 @@
 <!-- Liste des prospects en attente d'une assignation de groupe-->
 <div class="col-12">
     <div class="card">
-        <h5>Liste des prospects en attente d'assignation</h5>
+        <h5>Liste des pré-inscrits en attente d'assignation</h5>
         
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
@@ -182,6 +182,9 @@
                     <th style="width: 3rem" scope="col"></th>
                     <th pSortableColumn="customid" scope="col">
                         ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
+                    </th>
+                    <th scope="col">
+                        Email perso <p-sortIcon field="email_perso"></p-sortIcon>
                     </th>
                     <th pSortableColumn="lastname" scope="col">
                         Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
@@ -216,6 +219,9 @@
                     </td>
                     <td>
                         {{ prospect.customid }}
+                    </td>
+                    <td>
+                        {{ users[prospect.user_id]?.email_perso }}
                     </td>
                     <td
                         *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">

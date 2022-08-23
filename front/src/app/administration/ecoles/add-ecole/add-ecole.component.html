@@ -1,17 +1,12 @@
-<p-toast></p-toast>
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
+
 <div class="grid">
     <div class="col-12">
         <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
             [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
             [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                laborum.
+                Avant de créer une école, assurez-vous que l'année-scolaire existe déja.
             </p>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -63,7 +58,7 @@
                 </div>
                 <div class="field col-12 md:col-3">
                     <label For="ville">Ville <span style="color: red;"> * </span></label>
-                    <input pInputText id="ville" type="text" formControlName="ville" />
+                    <input pInputText id="ville" type="text" formControlName="ville" placeholder="Paris" />
                 </div>
                 <div class="field col-12 md:col-3">
                     <label For="pays">Pays <span style="color: red;"> * </span></label>
@@ -73,6 +68,8 @@
                     <button pButton label="Ajouter" type="submit" [disabled]="addecoleForm.invalid"></button>
                 </div>
             </form>
+
+            <a routerLink="/ecole"style="float: right;"><i class="pi pi-caret-right"></i> Voir la liste des écoles</a>
         </div>
     </div>
 </div>

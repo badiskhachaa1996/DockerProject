@@ -115,7 +115,8 @@ app.get("/getAllVolume", (req, res, next) => {
                 let sd1 = new Date(seance.date_debut).getTime()
                 let sd2 = new Date(seance.date_fin).getTime()
                 let diff = sd2 - sd1
-                let nb = Math.floor((diff % 86400000) / 3600000);               
+                let nb = Math.floor((diff % 86400000) / 3600000);   
+                console.log(nb)            
                 if (date < seance.date_debut) {
                     if (rPlan[seance.matiere_id]) {
                         rPlan[seance.matiere_id] += nb
@@ -129,7 +130,9 @@ app.get("/getAllVolume", (req, res, next) => {
                         rCons[seance.matiere_id] = nb
                     }
                 }
+                listMatire.push(seance.matiere_id)
             })
+            console.log({ rPlan, rCons })
             res.status(200).send({ rPlan, rCons })
         })
         .catch((error) => {

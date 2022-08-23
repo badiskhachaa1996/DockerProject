@@ -26,7 +26,7 @@ export class DetailsEtudiantComponent implements OnInit {
   idEtudiant = this.activeRoute.snapshot.paramMap.get('id');
   EtudiantDetail: Etudiant
   Etudiant_userdata: User;
-  RangeDateForPDF:any;
+  RangeDateForPDF: any;
   AssiduiteListe: any[];
   ListeSeanceDIC: any[] = [];
   matiereDic: any[] = [];
@@ -38,20 +38,22 @@ export class DetailsEtudiantComponent implements OnInit {
   nb_presences = 0;
   barDataHor: any = {
 
-    labels: ['Présences', 'Absences', 'Absences non justifiées'],
+    labels: ['Présences', 'Absences justifiées', 'Absences non justifiées'],
     datasets: [
       {
         data: [0, 0, 0],
         backgroundColor: [
           '#22C20E',
+          "#f9ac09",
           "red",
-          '#730e0e',
+
 
         ],
         hoverBackgroundColor: [
           "#22C55E",
-          "#FF6384",
-          "#781d1d",
+          "#f9ac09",
+          "#FF6384"
+
         ]
       }
     ]
@@ -61,10 +63,10 @@ export class DetailsEtudiantComponent implements OnInit {
     labels: ['Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre'],
     datasets: [
       {
-        label: 'Absences',
-        backgroundColor: 'red',
+        label: 'Absences Justifiés ',
+        backgroundColor: '#f9ac09',
         hoverBackgroundColor: [
-          "#FF6384"
+          "#f9ac19"
 
         ],
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -81,9 +83,9 @@ export class DetailsEtudiantComponent implements OnInit {
       },
       {
         label: 'Absences non justifiées',
-        backgroundColor: '#730e0e',
+        backgroundColor: 'red',
         hoverBackgroundColor: [
-          "#781d1d",
+          "red",
         ],
         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
@@ -92,6 +94,7 @@ export class DetailsEtudiantComponent implements OnInit {
   horizontalOptions: any;
   barOptions: any;
   PDFisLoading: boolean;
+  pourcentageAssiduite: number;
 
   VoirJustificatif(rowData) {
     this.PresenceService.getJustificatif(rowData).subscribe((data) => {
@@ -112,7 +115,7 @@ export class DetailsEtudiantComponent implements OnInit {
     setTimeout(() => {
       this.PDFisLoading = false,
 
-      this.messageService.add({ severity: "success", summary: "Fichier téléchargé" })
+        this.messageService.add({ severity: "success", summary: "Fichier téléchargé" })
     }
       , 2000);
   }
@@ -188,6 +191,10 @@ export class DetailsEtudiantComponent implements OnInit {
           this.barDataHor.datasets[0].data.push(this.nb_absences)
 
           this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
+
+          this. pourcentageAssiduite = 100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length)
+          console.log(this.pourcentageAssiduite)
+
         })
 
 
@@ -232,8 +239,10 @@ export class DetailsEtudiantComponent implements OnInit {
       plugins: {
         legend: {
           labels: {
-            color: 'black'
-          }
+            color: 'black',
+
+          },
+          legendCallback: { text: 'this is legend' }
         }
       }
     }
@@ -252,6 +261,6 @@ export class DetailsEtudiantComponent implements OnInit {
       this.chart2.data = this.barDataHor
       this.chart.data = this.barData
       this.barDataHorAJ = this.barDataHor
-    }, 2000);
+    }, 500);
   }
 }

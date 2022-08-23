@@ -47,6 +47,7 @@ export class EmergementComponent implements OnInit {
   uploadFile = false;
   presences;
   userList = [];
+  allowJustificatif = false
   classeList = [{}];
   campusDic = {}
   diplomeList = {};
@@ -179,7 +180,7 @@ export class EmergementComponent implements OnInit {
 
 
   ngOnInit(): void {
-    
+
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -198,10 +199,10 @@ export class EmergementComponent implements OnInit {
       dataU.forEach(classe => {
         this.classeList[classe._id] = classe;
       });
-    // this.ClasseService.getAll().subscribe( dataU => {
-    //   dataU.forEach(item => {
-    //     this.groupeFilter.push(item.label, item.value);
-    //   })})
+      // this.ClasseService.getAll().subscribe( dataU => {
+      //   dataU.forEach(item => {
+      //     this.groupeFilter.push(item.label, item.value);
+      //   })})
       this.CampusService.getAll().subscribe(dataC => {
         let dicCampus = {}
         let dicDiplome = {}
@@ -225,20 +226,12 @@ export class EmergementComponent implements OnInit {
       });
     })
     this.SeanceService.getById(this.ID).subscribe(dataS => {
-      console.log(dataS)
       this.seance = dataS
-      console.log(new Date())
-      console.log(this.date)
       this.date_debut = new Date(dataS.date_debut).getTime()
-      console.log(new Date(dataS.date_debut))
-      console.log(this.date_debut)
       this.date_fin = this.date_debut + (15 * 60000)
-      console.log(new Date(this.date_fin))//15 minutes max
-      console.log(this.date_fin)
+      this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 5) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
-      console.log(this.showCanvas)//15 minutes max
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(data => {
-        console.log(data)
         data.forEach(etu => {
           if (etu.user_id != null && etu.classe_id != null) {
             let temp = {
@@ -247,7 +240,7 @@ export class EmergementComponent implements OnInit {
             }
             if (!this.customIncludes(this.dropdownEtudiant, temp)) {
               this.dropdownEtudiant.push(temp)
-              this.dicEtudiant[etu.user_id._id]=etu
+              this.dicEtudiant[etu.user_id._id] = etu
             }
           }
         })
@@ -258,9 +251,9 @@ export class EmergementComponent implements OnInit {
       diplomes.forEach(diplome => {
         this.diplomeList[diplome._id] = diplome
       })
-      
+
       if (this.seance) {
-        
+
         this.seance.classe_id.forEach((cid, index) => {
           if (this.classeList[cid] && this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
             if (index == 0) {

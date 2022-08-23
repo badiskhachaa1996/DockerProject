@@ -18,7 +18,6 @@ const sch = mongoose.Schema({
     WhatsApp: { type: String },
     indicatifPhone: { type: String },
     indicatifWhatsApp: { type: String }
-
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

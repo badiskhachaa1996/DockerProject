@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                     ]
                 },
-                { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                 {
                     label: 'Gestions des étudiants', icon: 'pi pi-users',
@@ -133,8 +133,9 @@ export class AppMenuComponent implements OnInit {
         {
             label: 'Admission',
             items: [
-                { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
-            ]
+                { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                { label: 'Liste des inscriptions aux portes ouvertes', icon: 'pi pi-users', routerLink: ['/list-events'] }
+            ],
         },
         {
             label: 'Partenaires',
@@ -171,7 +172,8 @@ export class AppMenuComponent implements OnInit {
     isEtudiant: Boolean = false
     isFormateur: Boolean = false
     isCommercial: Boolean = false
-
+    isTuteurAlternance: Boolean = false;
+    isCeoEntreprise: Boolean = false;
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService) { }
 
@@ -183,6 +185,9 @@ export class AppMenuComponent implements OnInit {
                 this.isAdmin = dataUser.role == "Admin"
                 this.isAgent = dataUser.role == "Agent"
                 this.isReponsable = dataUser.role == "Responsable"
+                this.isCeoEntreprise = dataUser.type == "CEO Entreprise"
+                this.isTuteurAlternance = dataUser.type == "Tuteur"
+                console.log('isTuteur: ', this.isTuteurAlternance)
                 let service: any = dataUser.service_id
                 if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')
@@ -268,7 +273,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Partenaires',
                                     items: [
-                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
                                 }
@@ -288,7 +293,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Partenaires',
                                     items: [
-                                        { label: 'Gestions des préinscriptions', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
+                                        { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                         { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
@@ -315,7 +320,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             }
                         ]
@@ -337,7 +342,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'Admission',
                                 items: [
-                                    { label: 'Gestions des préinscriptions', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                                    { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
                                 ]
                             },
                             {
@@ -351,6 +356,61 @@ export class AppMenuComponent implements OnInit {
                             }
                         ]
                     }
+                } else if (this.isTuteurAlternance) {
+
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Contrats Alternances",
+                            items: [
+                                { label: 'Listes des alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+                            ]
+                        },
+                    ]
+
+
+                }
+
+                else if (this.isCeoEntreprise) {
+
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Tuteurs d'Alternants",
+                            items: [
+
+                                { label: 'Listes des tuteurs', icon: 'pi pi-list', routerLink: ['/liste-Tuteur'] },
+                            ]
+                        },
+                    ]
+
+
                 } else if (this.isPedagogie) {
                     this.model = [
                         {
@@ -386,7 +446,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                                     ]
                                 },
-                                { label: 'Gestion des prospects', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                                 {
                                     label: 'Gestions des étudiants', icon: 'pi pi-users',

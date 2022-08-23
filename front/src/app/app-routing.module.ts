@@ -89,10 +89,18 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
+import { DemandeEventsComponent} from './demande-events/demande-events.component';
+import { ListEventsComponent} from './demande-events/list-events/list-events.component';
 
 import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
 import { AppComponent } from './app.component';
+
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
+
+import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
+import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
+import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
+
 
 @NgModule({
     imports: [
@@ -125,8 +133,8 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
                     { path: 'documentation', component: DocumentationComponent },
                     /***************************/
                     { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
+                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
@@ -148,6 +156,7 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
                     { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
                     { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
                     { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'matieres/:id', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
@@ -170,11 +179,18 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
+                    { path: 'list-events', component: ListEventsComponent },
+
                     { path: 'tuteur', component: TuteurComponent },
                     { path: 'tuteur/:entreprise', component: TuteurComponent },
+
+                    { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent , canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+                    { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] } // Listes de tous les contrats d'alternances
+
                 ],
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
+            { path: 'demande-events', component: DemandeEventsComponent },
             { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
@@ -191,7 +207,7 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
             { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
             { path: 'mentions-legales', component: MentionsLegalesComponent },
             { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
-            { path: '**', redirectTo: 'pages/notfound' }
+            { path: '**', redirectTo: 'pages/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ],
 

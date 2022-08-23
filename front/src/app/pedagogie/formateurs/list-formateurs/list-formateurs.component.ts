@@ -30,7 +30,7 @@ export class ListFormateursComponent implements OnInit {
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
   ];
-
+  
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];
@@ -479,5 +479,10 @@ export class ListFormateursComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+
+  onRedirect()
+  {
+    this.router.navigate(['ajout-formateur']);
   }
 }

@@ -132,14 +132,13 @@ console.log(this.entreprises)
 
 //
 resetAddTuteur() {
-  this.addTuteurForm.reset()
-  this.addTuteurForm.patchValue({ civilite :this.civiliteList[0], pays_adresse:this.paysList[0], nationnalite:this.nationList[0]})
+  this.onInitFormAddTuteur()
+ 
 }
 
 //
 resetUpdateTuteur() {
-  this.updateTuteurForm.reset()
-  this.updateTuteurForm.patchValue({})
+  this.onInitUpdateTuteurForm()
 }
   
 //Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs

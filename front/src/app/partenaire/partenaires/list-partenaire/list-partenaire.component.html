@@ -7,7 +7,7 @@
                      [rowHover]="true" 
                      [totalRecords]="partenaires.length"
                      [paginator]="true" [pageLinks]="5"
-                     [globalFilterFields]="['libelle','email','site','ville','pays']"
+                     [globalFilterFields]="['nom','code_partenaire','email']"
                      responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">

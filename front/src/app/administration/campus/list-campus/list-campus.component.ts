@@ -120,4 +120,8 @@ export class ListCampusComponent implements OnInit {
     this.router.navigate(['/diplomes/', rowData._id]);
   }
 
+  onRedirect()
+  {
+    this.router.navigate(['ajout-campus']);
+  }
 }

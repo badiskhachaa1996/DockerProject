@@ -40,9 +40,17 @@ app.get("/getByID/:id", (req, res, next) => {
 });
 
 app.get("/getByUserID/:user_id/:semestre", (req, res, next) => {
-    RachatBulletin.find({ user_id: req.params.user_id, semestre: req.params.semestre }).then(r => {
-        res.status(201).send(r.length > 0 ? r : [])
-    })
+    if(req.params.semestre!="Annuel"){
+        RachatBulletin.find({ user_id: req.params.user_id, semestre: req.params.semestre }).then(r => {
+            res.status(201).send(r.length > 0 ? r : [])
+        })
+    }else{
+        RachatBulletin.find({ user_id: req.params.user_id }).then(r => {
+            res.status(201).send(r.length > 0 ? r : [])
+        })
+    }
+
+
 });
 
 app.get("/delete/:id", (req, res, next) => {

@@ -92,7 +92,7 @@ export class AddGroupeComponent implements OnInit {
 
     this.classeService.create(classe).subscribe(
       ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Classe ajouté' });
+        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des groupes', detail: 'Votre groupe a bien été ajouté' });
         this.classeService.getAll().subscribe(
           ((responseC) => { this.classes = responseC; }),
           ((error) => { console.error(error); })

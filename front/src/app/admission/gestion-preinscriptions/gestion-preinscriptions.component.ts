@@ -52,6 +52,25 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
 
+  DocPresent = [
+    { label: "Relevé de note de semestre X" },
+    { label: "Diplôme BAC" },
+    { label: "Diplôme Licence" },
+    { label: "Diplôme Master" },
+    { label: "Curriculum Vitae" },
+    { label: "Lettre de motivation" },
+    { label: "Passeport" },
+    { label: "Carte d'identité nationale" },
+    { label: "Pièce d'identité" },
+    { label: "Attestation de travail" },
+    { label: "Attestation de stage" },
+    { label: "Certifications (tout type de certification)" },
+    { label: "Lettre de recommandation" },
+    { label: "Attestation d'inscription en Licence niveau X" },
+    { label: "Attestation de fréquentation" },
+    { label: "Attestation de Réussite" },
+  ]
+
   DocTypes2: any[] = [
     { value: 'piece_identite', label: 'Pièce d\'identité', },
     { value: 'CV', label: "CV" },
@@ -61,10 +80,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
   statutList: any[] = [
-    { value: "Documents manquants" },
-    { value: "Dossier passable" },
-    { value: "Dossier complet" },
-    { value: "Manque d'orientation" }
+    { value: "Manquants" },
+    { value: "Passable" },
+    { value: "Complet" },
+    { value: "Manque orientation" }
   ]
   statutVisible = [
     { value: "Dossier suspendu - En attente du prospect" },
@@ -74,8 +93,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   listFR = [
     { value: "Pas de TCF - Pays non Francophone" },
     { value: "TCF B2 ou plus" },
-    { value: "ILC B2 ou plus" },
-    { value: "Moins de B2" },
+    { value: "ELC B2 ou plus" },
+    { value: "En cours de formation ILTS" },
     { value: "Non concerné" }
   ]
   decisionList = [
@@ -85,6 +104,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve" },
     { value: "Non Retenu" },
     { value: "Payée" },
+    { value: "A signé les documents" },
   ]
   dropdownDecision = [
     { value: null, label: "Decision Admission" },
@@ -125,17 +145,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   listAgent = [
     { value: "Aucun" },
-    { value: "Haitham" },
-    { value: "Dhekra" },
-    { value: "Moez" },
-    { value: "Dhouha" },
-    { value: "Maroua N" },
-    { value: "Malek" },
+    { value: "Haitham ELKADHI" },
+    { value: "Dhekra Ben HAMIDA" },
+    { value: "Moez BEN JABALLAH" },
+    { value: "Dhouha KOBROSLY" },
+    { value: "Maroua NOURI" },
+    { value: "Malek KOBROSLY" },
     { value: "Feryel" },
-    { value: "Elyes" },
-    { value: "Rania" },
-    { value: "Asma" },
-    { value: "Islem" },
+    { value: "Elyes HAJJI" },
+    { value: "Rania WARDENI" },
+    { value: "Asma NJAH" },
+    { value: "Islem DRIDI" },
     { value: "SLIM" },
     { value: "Achraf" },
   ]
@@ -153,8 +173,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
 
   onAddPayement() {
-    if(this.payementList==null){
-      this.payementList=[]
+    if (this.payementList == null) {
+      this.payementList = []
     }
     this.payementList.push({ type: "", montant: 0 })
   }
@@ -177,7 +197,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
   addNewPayment() {
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshProspect()
+      this.prospects.forEach((p, index) => {
+        if (p._id == data._id)
+          this.prospects[index].payement = data.payement
+      })
+      this.showPayement = null
+      this.payementList = null
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
@@ -256,15 +281,19 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
+    this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
+
         if (this.code) {
           //Si il y a un code de Commercial
-          if (this.token != null && this.dataCommercial != null) {
+          if (this.code.length > 20) {
             //Si il est considéré comme Admin dans son Partenaire
-            this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
+            console.log("Admin Commercial")
+            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
+                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
@@ -272,10 +301,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
               ((error) => { console.error(error); })
             );
           } else {
+            console.log("Agent Commercial")
             //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
               ((responseAdmission) => {
                 this.prospects = responseAdmission
+                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
@@ -285,12 +316,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
 
         } else {
+          console.log("Admission")
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            let service : any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {
+            let service: any = dataU.service_id
+            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
                 ((responseAdmission) => {
                   this.prospects = responseAdmission
+                  this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
                   response.forEach((user) => {
                     this.users[user._id] = user;
                   });
@@ -314,7 +347,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     statut_payement: new FormControl(this.statutPayement[0]),
     traited_by: new FormControl(this.listAgent[0]),
     validated_cf: new FormControl(false),
-    avancement_visa: new FormControl(false)
+    avancement_visa: new FormControl(false),
+    dossier_traited_by: new FormControl(this.listAgent[0]),
+    typeDocVerified: new FormControl(""),
   })
 
 

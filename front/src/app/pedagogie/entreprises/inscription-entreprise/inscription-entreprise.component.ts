@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators, FormBuilder, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { map } from 'rxjs';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
@@ -52,7 +52,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   emailExist: boolean;
   listAlternantDD = []
   formationList = []
-  constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private formBuilder: FormBuilder, private messageService: MessageService,
+  constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
@@ -119,14 +119,14 @@ export class InscriptionEntrepriseComponent implements OnInit {
       this.listAlternant = alternatsdata
 
       alternatsdata.forEach(alt => {
-       
+
         alt.nomcomplet = alt.user_id?.firstname + " " + alt.user_id?.lastname
         this.listAlternantDD.push(alt)
       }, (error) => { console.log(error) })
 
     }, (error) => { console.log(error) })
     this.formationService.getAll().subscribe(data => {
-     
+
       data.forEach(element => {
         this.formationList.push({ label: element.titre, value: element._id });
       });
@@ -344,18 +344,25 @@ export class InscriptionEntrepriseComponent implements OnInit {
     this.entrepriseService.createNewContrat(ObjetToSend).subscribe(
       ((response) => {
         if (response) {
-          this.RegisterForm.reset
-          this.ActiveIndex = 0
           this.servService.getAServiceByLabel("Commercial").subscribe(serviceCommercial => {
-            this.NotifService.create(new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial?._id)).pipe(map(notif => {
+            console.log('creation de la notif pour le service Commercial')
+            console.log(serviceCommercial)
+            let notifToCreate = new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial.dataService?._id)
+            console.log(notifToCreate)
+            this.NotifService.create(notifToCreate).subscribe(notif => {
               console.log(notif)
               this.NotifService.newNotif(notif)
-            }, (error) => {
-              console.error(error)
-            }));
+
+              this.messageService.add({ severity: 'success', summary: 'Le contrat alternance a été créé', detail: "Vérifiez vos mails pour les informations de connexion" });
+
+
+
+            });
+          }, (error) => {
+            console.log(error)
           })
 
-          this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)
@@ -367,6 +374,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
         console.error(error);
       })
     );
+
   }
 
 }

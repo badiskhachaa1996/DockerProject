@@ -138,7 +138,7 @@ app.get("/getAllAlternants", (req, res, next) => {
 
     Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
         .then((alternantsFromDb) => {
-       
+
             res.status(200).send(alternantsFromDb);
         })
         .catch((error) => {
@@ -173,6 +173,13 @@ app.get("/getById/:id", (req, res, next) => {
 //Recupere un étudiant via son user_id
 app.get("/getByUserid/:user_id", (req, res, next) => {
     Etudiant.findOne({ user_id: req.params.user_id })
+        .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
+});
+
+//Recupere un étudiant via son user_id
+app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
+    Etudiant.findOne({ "user_id._id": req.params.user_id }).populate('user_id')
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });
@@ -353,11 +360,13 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
+    //TODO Mettre les moy sur 20 et calculer les coeffs des examens
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
     let r = []
     let moy_tt = 0.00000000001
+    let haveDispensed = false
     Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
         Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
             let listEtudiantID = []
@@ -424,16 +433,19 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
                         r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, ects: dicMatiere[m_nom].credit_ects, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
-                        if (!isDispensed && listMoyenneEtudiants[req.params.etudiant_id][m_nom] != 0.00000000001) {
+                        if (!isDispensed) {
                             moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
                             sumMoy += dicMatiere[m_nom].coeff
+                        } else {
+                            haveDispensed = true
                         }
+
                         listMoyChoose[dicMatiere[m_nom]._id] = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                     })
                     if (sumMoy != 0) {
                         moy_tt = moy_tt / sumMoy
                     }
-                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose })
+                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose, haveDispensed })
                 })
             })
         })

@@ -25,7 +25,7 @@ export class AddAnneeScolaireComponent implements OnInit {
 
   anneeScolaireForm: FormGroup = new FormGroup({
     libelle: new FormControl('', Validators.required),
-    etat: new FormControl('', Validators.required),
+    etat: new FormControl(this.etat_annee[0], Validators.required),
   })
 
   anneeScolaireFormUpdate: FormGroup = new FormGroup({
@@ -58,12 +58,11 @@ export class AddAnneeScolaireComponent implements OnInit {
   }
 
   saveAnneeScolaire() {
-    var str = String(this.anneeScolaireForm.value.libelle)
-    var splited = str.split(',').join('/');
-    let anneeScolaire = new AnneeScolaire(null, splited, String(this.anneeScolaireForm.value.etat.value))
+    let anneeScolaire = new AnneeScolaire(null, String(this.anneeScolaireForm.value.libelle), String(this.anneeScolaireForm.value.etat.value))
 
     this.ASService.create(anneeScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des années scolaires', detail: 'Votre année scolaire a bien été ajouté' });
+      this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des années scolaires', detail: 'Votre année scolaire a bien été ajouté' });
+      
       this.anneeScolaires.push(data)
       this.showFormAddAnneeScolaire = false;
       this.anneeScolaireForm.reset();

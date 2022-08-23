@@ -10,41 +10,22 @@ import { AuthService } from '../services/auth.service';
 export class CollaborateurGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router,) { }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    let currenttoken: any = localStorage.getItem("token")
+    let currenttoken: any = jwt_decode(localStorage.getItem("token"))
 
     if (currenttoken) {
-      currenttoken = jwt_decode(localStorage.getItem("token"))
-
-      console.log(currenttoken)
-      let role: string = currenttoken.role;
-      let type: string = currenttoken.type;
-      let service_id = currenttoken.service_id;
-      if (role == 'user') {
-
-        console.log("accés refusé | user");
-        return false
-      }
-      else if (role == 'Admin' || role == "Agent" && !service_id) {
-        
-        console.log("acces autorisé  | Agent")
+      if (currenttoken.role == "Admin")
         return true
-
-        // this.authService.getById(currenttoken.id).pipe(map(data => {
-        //   console.log(data)
-        //   type = data.type
-        //   console.log(type)
-        //   if (type = "Commercial") {
-        //     console.log("Partenaire autorisé")
-        //     result == true;
-        //   }
-        //   else {
-        //     console.log("Acces refusé")
-        //     result == false
-        //   }
-        // }))
-      }
+      else
+        return this.authService.getPopulate(currenttoken.id).pipe(map(user => {
+          let service: any = user.service_id
+          if (user.type == "Commercial" || (service && service.label.includes("Admission"))) {
+            return true
+          } else {
+            return false
+          }
+        }));
     }
     else {
       console.log("connexion requise")

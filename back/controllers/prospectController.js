@@ -14,6 +14,7 @@ const { Service } = require("./../models/service");
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
+const { Etudiant } = require('../models/etudiant');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -333,6 +334,18 @@ app.post("/create", (req, res, next) => {
     })
 });
 
+app.get('/getAllEtudiant', (req, res, next) => {
+    let u = []
+    Etudiant.find({ user_id: { $ne: null } }).then(data => {
+        data.forEach(etu => {
+            u.push(etu.user_id)
+        })
+        Prospect.find({ user_id: { $in: u } }).then(dataP => {
+            res.send(dataP)
+        })
+    })
+
+})
 
 //Recuperation de la liste des prospect
 app.get("/getAll", (req, res, next) => {
@@ -577,10 +590,10 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
-    Partenaire.findOne({ _id: req.params.id_partenaire }).populate("user_id").populate('agent_id')
+    Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find().then(prospects => {
+                Prospect.find().populate("user_id").populate('agent_id').then(prospects => {
                     CommercialPartenaire.find({ partenaire_id: partenaireFromDB._id }).then(commercials => {
                         let listProspects = []
                         commercials.forEach(c => {
@@ -621,6 +634,7 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
+    console.log(req.params.code_partenaire)
     Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
         .then(prospects => {
             prospects.forEach(function (element, index) {
@@ -650,7 +664,7 @@ app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: "Payée", archived: [false, null] }).then(prospects => {
+    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null] }).then(prospects => {
         prospects.forEach(function (element, index) {
             let nb = 0
             try {
@@ -678,7 +692,7 @@ app.get('/getAllWait', (req, res, next) => {
 })
 
 app.post('/updatePayement/:id', (req, res) => {
-    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }, function (err, data) {
+    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(500).send(err)
@@ -692,6 +706,17 @@ app.get('/etatTraitement/:id/:etat', (req, res) => {
     Prospect.findByIdAndUpdate(req.params.id, { etat_traitement: req.params.etat }).then(data => {
         res.status(200).send(data)
     }).catch((error) => { res.status(500).send(error); });
+})
+
+app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
+    let p = Prospect({
+        user_id: req.params.user_id,
+        archived: true,
+        etat_traitement: "Fini"
+    })
+    p.save().then(data => {
+        res.status(201).send(data)
+    })
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

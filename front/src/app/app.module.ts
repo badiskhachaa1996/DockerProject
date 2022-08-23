@@ -197,7 +197,13 @@ import { ContactComponent } from './contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
+
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
+
+import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
+import { DemandeEventsComponent } from './demande-events/demande-events.component';
+import { ListEventsComponent } from './demande-events/list-events/list-events.component';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -380,7 +386,11 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
     ResetMpComponent,
     ContactComponent,
     InscriptionEntrepriseComponent,
-    TuteurComponent
+    TuteurComponent,
+    ListeContratsComponent,
+    DemandeEventsComponent,
+    ListEventsComponent
+
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
