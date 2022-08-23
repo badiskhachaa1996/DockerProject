@@ -72,43 +72,41 @@ mongoose
                                     //console.log(data["Email"], "a été mis à jour")
                                 }
                                 else {
-                                    if (dataUser.type == "Etudiant" || dataUser.type == "Prospect")
-                                        Partenaire.find({ nom: data['p_nom'] }).then(partenaire => {
-                                            if (partenaire) {
+                                    User.findByIdAndUpdate(dataUser._id, { type: "Commercial" })
+                                    Partenaire.find({ nom: data['p_nom'] }).then(partenaire => {
+                                        if (partenaire) {
+                                            let c = new CommercialPartenaire({
+                                                partenaire_id: partenaire._id,
+                                                user_id: dataUser._id,
+                                                code_commercial_partenaire: data['Code Commercial'],
+                                                isAdmin: data['Est Admin'] == "Oui"
+                                            })
+                                            c.save().then(newCommercial => {
+                                                console.log("Etudiant", newCommercial._id, dataUser._id)
+                                            })
+                                        } else {
+                                            let cp = data['Code Commercial'].substring(0, data['Code Commercial'].length - 3)
+                                            let p = new Partenaire({
+                                                user_id: dataUser._id,
+                                                code_partenaire: cp,
+                                                nom: data['p_nom'],
+                                                email: data["p_email"],
+                                                Services: data['services'],
+                                                Pays: data['Pays']
+                                            })
+                                            p.save().then(newPartenaire => {
                                                 let c = new CommercialPartenaire({
-                                                    partenaire_id: partenaire._id,
+                                                    partenaire_id: newPartenaire._id,
                                                     user_id: dataUser._id,
                                                     code_commercial_partenaire: data['Code Commercial'],
-                                                    isAdmin: data['Est Admin'] == "Oui"
+                                                    isAdmin: data['isAdmin']
                                                 })
                                                 c.save().then(newCommercial => {
-                                                    console.log("Etudiant",newCommercial._id, dataUser._id)
+                                                    console.log("Etudiant", newCommercial._id, newPartenaire._id, dataUser._id)
                                                 })
-                                            } else {
-                                                let cp = data['Code Commercial'].substring(0, data['Code Commercial'].length - 3)
-                                                let p = new Partenaire({
-                                                    user_id: dataUser._id,
-                                                    code_partenaire: cp,
-                                                    nom: data['p_nom'],
-                                                    email: data["p_email"],
-                                                    Services: data['services'],
-                                                    Pays: data['Pays']
-                                                })
-                                                p.save().then(newPartenaire => {
-                                                    let c = new CommercialPartenaire({
-                                                        partenaire_id: newPartenaire._id,
-                                                        user_id: dataUser._id,
-                                                        code_commercial_partenaire: data['Code Commercial'],
-                                                        isAdmin: data['isAdmin']
-                                                    })
-                                                    c.save().then(newCommercial => {
-                                                        console.log("Etudiant",newCommercial._id, newPartenaire._id, dataUser._id)
-                                                    })
-                                                })
-                                            }
-                                        })
-                                    else
-                                        console.error(dataUser, "C'est la GIGA merde bro")
+                                            })
+                                        }
+                                    })
                                 }
 
                             })
@@ -126,7 +124,8 @@ mongoose
                             email: email,
                             email_perso: email,
                             nationnalite: data['Nationalite'],
-                            password: data['password']
+                            password: data['password'],
+                            type: "Commercial"
                         })
                         u.save().then(newUser => {
                             Partenaire.findOne({ nom: data['p_nom'] }).then(partenaire => {
