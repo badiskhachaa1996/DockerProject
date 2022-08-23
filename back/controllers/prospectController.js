@@ -352,30 +352,6 @@ app.get("/getAll", (req, res, next) => {
 
     Prospect.find({ archived: [false, null] }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-
-            prospectsFromDb.forEach(function (element, index) {
-                let nb = 0
-                try {
-                    let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                    fileList.forEach(file => {
-                        if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                            nb += 1
-                        }
-                        else {
-                            let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                            files.forEach(f => {
-                                nb += 1
-                            });
-                        }
-                    });
-                } catch (e) {
-                    if (e.code != "ENOENT") {
-                        console.error(e)
-                    }
-                }
-                prospectsFromDb[index]["nbDoc"] = nb
-            });
-
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -464,7 +440,6 @@ app.put("/update", (req, res, next) => {
 // });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()
-    //let document_manquant = req.body.document_manquant
     Prospect.findByIdAndUpdate(req.params.id, {
         statut_dossier: req.body.statut_dossier,
         tcf: req.body.tcf,
@@ -477,8 +452,11 @@ app.post("/updateStatut/:id", (req, res, next) => {
         traited_by: req.body.traited_by,
         validated_cf: req.body.validated_cf,
         avancement_visa: req.body.avancement_visa,
-        etat_traitement: req.body.etat_traitement
-
+        etat_traitement: req.body.etat_traitement,
+        dossier_traited_by: req.body.dossier_traited_by,
+        document_manquant: req.body.document_manquant,
+        document_present: req.body.document_present,
+        remarque: req.body.remarque
     }, { new: true }).populate('user_id').populate('agent_id').exec(function (err, results) {
         if (err) {
             res.status(500).send(err)
@@ -583,7 +561,11 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
-
+        Prospect.findByIdAndUpdate(req.body.id, { haveDoc: true }, { new: true }, ((err, newProspect) => {
+            if (err) {
+                console.log(err)
+            }
+        }))
         res.status(201).json({ dossier: "dossier mise à jour" });
     }
 
@@ -593,38 +575,8 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
     Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find().populate("user_id").populate('agent_id').then(prospects => {
-                    CommercialPartenaire.find({ partenaire_id: partenaireFromDB._id }).then(commercials => {
-                        let listProspects = []
-                        commercials.forEach(c => {
-                            prospects.forEach(p => {
-                                if (p.code_commercial == c.code_commercial_partenaire) {
-                                    let nb = 0
-                                    try {
-                                        let fileList = fs.readdirSync('./storage/prospect/' + p._id + "/")
-                                        fileList.forEach(file => {
-                                            if (!fs.lstatSync('./storage/prospect/' + p._id + "/" + file).isDirectory()) {
-                                                nb += 1
-                                            }
-                                            else {
-                                                let files = fs.readdirSync('./storage/prospect/' + p._id + "/" + file)
-                                                files.forEach(f => {
-                                                    nb += 1
-                                                });
-                                            }
-                                        });
-                                    } catch (e) {
-                                        if (e.code != "ENOENT") {
-                                            console.error(e)
-                                        }
-                                    }
-                                    p["nbDoc"] = nb
-                                    listProspects.push(p)
-                                }
-                            })
-                        })
-                        res.status(200).send(listProspects)
-                    })
+                Prospect.find({ code_commercial: { $regex: "^" + partenaireFromDB.code_partenaire } }).populate("user_id").populate('agent_id').then(prospects => {
+                    res.status(200).send(prospects)
                 })
             } else {
                 res.status(400).send("Code incorrect, Aucun partenaire trouvé");
@@ -634,59 +586,14 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
-    console.log(req.params.code_partenaire)
     Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
         .then(prospects => {
-            prospects.forEach(function (element, index) {
-                let nb = 0
-                try {
-                    let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                    fileList.forEach(file => {
-                        if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                            nb += 1
-                        }
-                        else {
-                            let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                            files.forEach(f => {
-                                nb += 1
-                            });
-                        }
-                    });
-                } catch (e) {
-                    if (e.code != "ENOENT") {
-                        console.error(e)
-                    }
-                }
-                prospects[index]["nbDoc"] = nb
-            });
             res.send(prospects)
         }).catch((error) => { res.status(500).send(error); });
 })
 
 app.get('/getAllWait', (req, res, next) => {
     Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null] }).then(prospects => {
-        prospects.forEach(function (element, index) {
-            let nb = 0
-            try {
-                let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                fileList.forEach(file => {
-                    if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                        nb += 1
-                    }
-                    else {
-                        let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                        files.forEach(f => {
-                            nb += 1
-                        });
-                    }
-                });
-            } catch (e) {
-                if (e.code != "ENOENT") {
-                    console.error(e)
-                }
-            }
-            prospects[index]["nbDoc"] = nb
-        });
         res.send(prospects)
     }).catch((error) => { res.status(500).send(error); });
 })

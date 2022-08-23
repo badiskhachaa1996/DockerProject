@@ -38,12 +38,18 @@ export class Prospect {
         public validated_cf?:boolean,
         public payement?:[],
         public avancement_visa?:boolean,
+        public enTraitement?:boolean,
         public etat_traitement?:string,
         public nir?:string,
         public mobilite_reduite?:boolean,
         public sportif_hn?: boolean,
         public horsAdmission?: boolean,
-        public archived?:boolean
+        public archived?:boolean,
+        public document_manquant?:string[],
+        public document_present?:string[],
+        public remarque?:string,
+        public dossier_traited_by?:string,
+        public haveDoc?:boolean
     ) { }
 
 }

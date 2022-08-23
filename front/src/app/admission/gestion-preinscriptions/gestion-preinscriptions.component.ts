@@ -340,7 +340,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   changeStateForm: FormGroup = new FormGroup({
     statut: new FormControl(this.statutList[0], Validators.required),
-    typeDoc: new FormControl(""),
     statut_fr: new FormControl(this.listFR[0]),
     decision_admission: new FormControl(this.decisionList[0]),
     phase_complementaire: new FormControl(this.phaseComplementaire[0]),
@@ -349,7 +348,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
     validated_cf: new FormControl(false),
     avancement_visa: new FormControl(false),
     dossier_traited_by: new FormControl(this.listAgent[0]),
-    typeDocVerified: new FormControl(""),
+    remarque: new FormControl(""),
+    document_present: new FormControl(""),
+    document_manquant: new FormControl(""),
   })
 
 
@@ -367,7 +368,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       customid: prospect.customid,
       traited_by: { value: prospect.traited_by },
       validated_cf: prospect.validated_cf,
-      avancement_visa: prospect.avancement_visa
+      avancement_visa: prospect.avancement_visa,
+      remarque: prospect.remarque,
+      dossier_traited_by: { value: prospect.dossier_traited_by },
+      document_present: prospect.document_present,
+      document_manquant: prospect.document_manquant
     })
   }
 
@@ -400,9 +405,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
   changeStateBtn() {
     let p = {
       _id: this.inscriptionSelected._id,
+      dossier_traited_by: this.changeStateForm.value.dossier_traited_by.value,
+      document_present: this.changeStateForm.value.document_present,
       statut_dossier: this.changeStateForm.value.statut.value,
       tcf: this.changeStateForm.value.statut_fr.value,
-      document_manquant: this.changeStateForm.value.typeDoc,
+      document_manquant: this.changeStateForm.value.document_manquant,
       agent_id: this.token.id,
       decision_admission: this.changeStateForm.value.decision_admission.value,
       phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
@@ -411,7 +418,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
       traited_by: this.changeStateForm.value.traited_by.value,
       validated_cf: this.changeStateForm.value.validated_cf,
       avancement_visa: this.changeStateForm.value.avancement_visa,
-      etat_traitement: "Traité"
+      etat_traitement: "Traité",
+      remarque: this.changeStateForm.value.remarque
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
 
@@ -496,10 +504,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        this.socket.emit("UpdatedProspect", this.prospects[this.inscriptionSelected._id]);
+        
         this.expandRow(this.showUploadFile)
+        this.prospects.forEach(p => {
+          if (p._id == this.showUploadFile._id) {
+            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
+          }
+        })
         event.target = null;
         this.showUploadFile = null;
+
         this.fileInput.clear()
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
@@ -512,7 +527,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     //Clean the data
     this.prospects.forEach(p => {
       let t = {}
-      t['NOM'] = p.lastname.toUpperCase()
+      t['NOM'] = p?.lastname?.toUpperCase()
       t['Prenom'] = p.firstname
       t['Date de la demande'] = p?.date_creation
       t['Date de naissance'] = p.date_naissance
@@ -532,12 +547,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut pro actuel'] = p.statut_actuel
       t['Langues'] = p.languages
       t['Experiences pro'] = p.professional_experience
-      t['Nom du garant'] = p?.nomGarant.toUpperCase()
+      t['Nom du garant'] = p?.nomGarant?.toUpperCase()
       t['Prenom du garant'] = p?.prenomGarant
       t['Nom de l\'agence'] = p?.nomAgence
       t['Code du commercial'] = p?.code_commercial
       t['Autre'] = p.other
-      t['Nombre de documents'] = p.nbDoc
+      t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
       t['Decision Admission'] = p.decision_admission
       t['Phase complémentaire'] = p.phase_complementaire
       t['Statut Payement'] = p.statut_payement
