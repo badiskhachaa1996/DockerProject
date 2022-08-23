@@ -575,18 +575,8 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
     Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find().populate("user_id").populate('agent_id').then(prospects => {
-                    CommercialPartenaire.find({ partenaire_id: partenaireFromDB._id }).then(commercials => {
-                        let listProspects = []
-                        commercials.forEach(c => {
-                            prospects.forEach(p => {
-                                if (p.code_commercial == c.code_commercial_partenaire) {
-                                    listProspects.push(p)
-                                }
-                            })
-                        })
-                        res.status(200).send(listProspects)
-                    })
+                Prospect.find({ code_commercial: { $regex: "^" + partenaireFromDB.code_partenaire } }).populate("user_id").populate('agent_id').then(prospects => {
+                    res.status(200).send(prospects)
                 })
             } else {
                 res.status(400).send("Code incorrect, Aucun partenaire trouvé");
