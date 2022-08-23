@@ -72,7 +72,7 @@ mongoose
                                     //console.log(data["Email"], "a été mis à jour")
                                 }
                                 else {
-                                    if (dataUser.type == "Etudiant")
+                                    if (dataUser.type == "Etudiant" || dataUser.type == "Prospect")
                                         Partenaire.find({ nom: data['p_nom'] }).then(partenaire => {
                                             if (partenaire) {
                                                 let c = new CommercialPartenaire({
@@ -108,7 +108,7 @@ mongoose
                                             }
                                         })
                                     else
-                                        console.error(dataUser.email, "C'est la GIGA merde bro", dataUser.type)
+                                        console.error(dataUser, "C'est la GIGA merde bro")
                                 }
 
                             })
