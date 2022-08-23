@@ -154,6 +154,11 @@ export class AppMenuComponent implements OnInit {
                     ]
                 },
             ]
+        },{
+            label: 'Commercial',
+            items: [
+                { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
+            ]
         },
     ];
     model: any[];

@@ -92,6 +92,7 @@ import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscript
 
 import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
 import { AppComponent } from './app.component';
+import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 
 @NgModule({
     imports: [
@@ -168,7 +169,9 @@ import { AppComponent } from './app.component';
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
-                    { path: 'contact', component: ContactComponent }
+                    { path: 'contact', component: ContactComponent },
+                    { path: 'tuteur', component: TuteurComponent },
+                    { path: 'tuteur/:entreprise', component: TuteurComponent },
                 ],
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

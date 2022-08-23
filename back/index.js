@@ -91,19 +91,23 @@ const contactController = require('./controllers/contactController');
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
+
 const partenaireController = require('./controllers/partenaireController');
 const commercialPartenaireController = require('./controllers/commercialPartenaireController');
 const appreciationController = require('./controllers/appreciationController');
 const historiqueEchangeController = require('./controllers/historiqueEchangeController');
 const forfeitFormController = require('./controllers/forfeitFormController');
+const tuteurController = require('./controllers/tuteurController');
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
+
 
 app.use('/', function (req, res, next) {
     let token = jwt.decode(req.header("token"))
     if (token && token['prospectFromDb']) {
         token = token['prospectFromDb']
     }
+    
     if (token && token.id && token.role) {
         User.findOne({ _id: token.id, role: token.role }, (err, user) => {
             if (err) {
@@ -137,6 +141,7 @@ app.use('/', function (req, res, next) {
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
         } else {
+            console.log(token)
             res.status(403).send("Accès non autorisé, Wrong Token\n" + req.originalUrl)
         }
     }
@@ -147,6 +152,8 @@ app.use('/soc/rachatBulletin', rbc)
 app.use("/soc/user", UserController);
 
 app.use("/soc/service", ServiceController);
+
+
 
 app.use("/soc/sujet", SujetController);
 
@@ -199,7 +206,10 @@ app.use('/soc/prospect', prospectController)
 app.use('/soc/historiqueEchange', historiqueEchangeController)
 
 app.use('/soc/forfeitForm', forfeitFormController)
+
 app.use('/soc/contact', contactController)
+
+app.use("/soc/tuteur", tuteurController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
