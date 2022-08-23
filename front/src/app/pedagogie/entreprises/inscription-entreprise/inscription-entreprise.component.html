@@ -62,7 +62,7 @@ Formation suivie :
         <div >
             <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
         </div>
-        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect();showBasicDialogFin()">
             <div *ngIf="ActiveIndex==0">
                 <div style="text-align: center;">
                     <small></small><br>
@@ -644,4 +644,16 @@ Formation suivie :
             </div>
         </form>
     </div>
+    <p-dialog header="Inscription Entreprise et enregistrement du contrat avec succes  " [(visible)]="MessageFormSubmit" [style]="{width: '50vw'}">
+        <p>{{ lastname | uppercase}} {{ lastname }} recevra par email les acces a la platforme IMS en tant que CEO de l'entreprise</p>
+    
+        <p>Une fois connecté sur la platforme avec le le mot de passe reçu par email, Vous aurez accés a la liste de vos alternants et stagiéres suivants leurs formations dans une de nos écoles </p>
+    
+        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Qui recerevons a leurs tours les accés pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations concernant les formations suivis. </p>
+        <p>Si vous rencontrez des difficultés pour accéder a la platforme. N'hesitez pas a nous contact par email sur l'adresse : contact@intedgroup.com</p>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="router.navigate(['/']);" label="Fermer" styleClass="p-button-text"></p-button>
+        </ng-template>
+    </p-dialog>
+    
 </div>
