@@ -14,6 +14,7 @@ import { TagModule } from 'primeng/tag';
 import { pipe } from 'rxjs';
 import { saveAs as importedSaveAs } from "file-saver";
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
   selector: 'app-details-etudiant',
@@ -192,7 +193,7 @@ export class DetailsEtudiantComponent implements OnInit {
 
           this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
 
-          this. pourcentageAssiduite = 100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length)
+          this.pourcentageAssiduite = 100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length)
           console.log(this.pourcentageAssiduite)
 
         })
@@ -256,6 +257,8 @@ export class DetailsEtudiantComponent implements OnInit {
       }
     })
   }
+
+  
   ngAfterViewInit() {
     setTimeout(() => {
       this.chart2.data = this.barDataHor
