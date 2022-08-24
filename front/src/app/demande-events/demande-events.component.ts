@@ -41,6 +41,7 @@ export class DemandeEventsComponent implements OnInit {
       email : ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
       nom : ['', [Validators.required, Validators.pattern("^[a-zA-Zéèàêô -]+$")]],
       phone : ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      indicatif : ['', [Validators.required, Validators.pattern("^[+0-9]+$")]],
       pays_adresse : [this.paysList[0], Validators.required],
       domaine : ['', Validators.required],
 
@@ -50,6 +51,7 @@ export class DemandeEventsComponent implements OnInit {
   get email() { return this.addeventForm.get('email');};
   get nom() { return this.addeventForm.get('nom');};
   get phone() { return this.addeventForm.get('phone');};
+  get indicatif() { return this.addeventForm.get('indicatif');};
   get pays_adresse() { return this.addeventForm.get('pays_adresse').value;};
   get domaine() { return this.addeventForm.get('domaine').value;};
 
@@ -67,14 +69,15 @@ onAddEvent(){
   let nom = this.addeventForm.get('nom')?.value;
   let phone = this.addeventForm.get('phone')?.value;
   let pays_adresse = this.addeventForm.get('pays_adresse')?.value.value;
-  let domaine = this.addeventForm.get('domaine')?.value.value;
+  let indicatif = this.addeventForm.get('indicatif')?.value;
 
   let newEvent = new Demande_events(
     email,
     nom,
     phone,
     pays_adresse,
-    domaineSelect
+    domaineSelect,
+    indicatif
   )
   console.log(newEvent);
 
