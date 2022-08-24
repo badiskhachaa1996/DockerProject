@@ -31,8 +31,8 @@ angular_dependencies:
   script:
     - cd front
     - rm -rf node_modules/
-    - npm install web-animations-js
     - npm install
+    - npm install web-animations-js
   # only:
   #   - dev
   only:
