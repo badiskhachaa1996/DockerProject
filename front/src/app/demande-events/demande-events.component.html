@@ -27,33 +27,24 @@
             </div>
 
             <div class="field col-12 md:col-6">
-                <label For="nom">Nom <span style="color: red;"> * </span></label>
-                <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="nom" />
+                <label For="nom">Nom & Prénom<span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text" placeholder="John Smith" formControlName="nom" />
                 <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
                     <span style="color: red;" class="error" *ngIf="nom.errors?.required">* Le nom est obligatoire</span>
                     <span style="color: red;" class="error" *ngIf="nom.errors?.pattern">* Seul les lettres sont
                         acceptés</span>
                 </div>
             </div>
-
-            <div class="field col-12 md:col-2">
-                <label For="Indicatif">Indicatif <span style="color: red;"> * </span></label>
-                <input pInputText id="indicatif" type="text" formControlName="indicatif" placeholder="+33" />
-                <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
-                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* L'indicatif est
-                        obligatoire</span>
-                </div>
-            </div>
-
-            <div class="field col-12 md:col-4">
-                <label For="Téléphone">Téléphone <span style="color: red;"> * </span></label>
-                <input pInputText id="phone" type="text" formControlName="phone" placeholder="06 83 83 83 83" />
-                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                    <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le téléphone est
-                        obligatoire</span>
-                    <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les chiffres sont
-                        acceptés</span>
-                </div>
+            <div class="field col-12 md:col-6">
+                <label For="Téléphone">Téléphone <span style="color: red;"> * </span></label><br>
+                <ngx-intl-tel-input [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true"
+                    [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
+                  SearchCountryField.Iso2,
+                  SearchCountryField.Name
+                ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
+                    [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
+                    formControlName="phone">
+                </ngx-intl-tel-input>
             </div>
 
 

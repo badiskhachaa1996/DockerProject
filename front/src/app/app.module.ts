@@ -97,7 +97,7 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
-
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -205,7 +205,6 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 
 import { ArrToStrPipe } from './arr-to-str.pipe';
-
 @NgModule({
   imports: [
     BrowserModule,
@@ -296,7 +295,8 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     VirtualScrollerModule,
     AppCodeModule,
     StyleClassModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgxIntlTelInputModule
   ],
   declarations: [
     AppComponent,

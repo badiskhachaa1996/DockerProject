@@ -4,7 +4,6 @@ export class Demande_events{
     public nom?:   string,
     public phone?: string,
     public pays?: string,
-    public domaine? : string[],
-    public indicatif? : string
+    public domaine? : string[]
     ){}
 }
