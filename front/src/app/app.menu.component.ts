@@ -155,7 +155,7 @@ export class AppMenuComponent implements OnInit {
                     ]
                 },
             ]
-        },{
+        }, {
             label: 'Commercial',
             items: [
                 { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
@@ -174,6 +174,7 @@ export class AppMenuComponent implements OnInit {
     isCommercial: Boolean = false
     isTuteurAlternance: Boolean = false;
     isCeoEntreprise: Boolean = false;
+    isEvent = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService) { }
 
@@ -192,6 +193,7 @@ export class AppMenuComponent implements OnInit {
                 if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')
                     this.isPedagogie = service.label.includes('dagogie')
+                    this.isEvent = service.label.includes('Event')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant"
                 this.isFormateur = dataUser.type == "Formateur"
@@ -521,7 +523,31 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 }
-                else {
+                else if(this.isEvent){
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Evenementiels",
+                            items: [
+
+                                { label: 'Inscription Porte Ouverte', icon: 'pi pi-envelope', routerLink: ['/list-events'] },
+                            ]
+                        },
+                    ]
+                }else{
                     this.model = [
                         {
                             label: 'Ticketing',
