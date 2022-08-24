@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const mongoose = require("mongoose");
 const fs = require("fs");
-const { Tuteur } = require("../models/tuteur")
 const { Formateur } = require("../models/formateur")
 const { Etudiant } = require("../models/etudiant")
 const { pwdToken } = require("../models/pwdToken")
