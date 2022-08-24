@@ -31,11 +31,11 @@ angular_dependencies:
   script:
     - cd front
     - rm -rf node_modules/
+    - npm install
     - npm install web-animations-js
     - npm install intl-tel-input@17.0.3 --save
     - npm install google-libphonenumber --save
     - npm install ngx-intl-tel-input --save
-    - npm install
   # only:
   #   - dev
   only:
