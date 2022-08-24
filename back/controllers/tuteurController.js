@@ -6,7 +6,7 @@ app.disable("x-powered-by");
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
 const { pwdToken } = require("../models/pwdToken");
-const { Tuteur } = require("../models/tuteur");
+const { Tuteur } = require("../models/Tuteur");
 const { User } = require("../models/user");
 const nodemailer = require('nodemailer');
 const fs = require("fs");

@@ -82,7 +82,7 @@ export class MatieresComponent implements OnInit {
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
-      coeff: ['',  [Validators.required, Validators.pattern("^[0-9]$")]],
+      coeff: ['', [Validators.required, Validators.pattern("^[0-9]$")]],
       credit_ects: ['', Validators.required],
       remarque: [''],
       semestre: ['', Validators.required],
@@ -91,8 +91,7 @@ export class MatieresComponent implements OnInit {
   }
 
   resetAddMatiere() {
-    this.formAddMatiere.reset()
-    this.formAddMatiere.patchValue({ formation_id: this.formationList[0], volume: 0, classe_id: this.classeList[0], seance_max: 0 })
+    this.onInitFormAddMatiere()
   }
 
   //methode d'ajout d'une matiere
@@ -167,11 +166,13 @@ export class MatieresComponent implements OnInit {
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
       volume: [''],
       abbrv: ['', Validators.required],
-      classe_id: ['', Validators.required],
+      formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
       coeff: ['', Validators.required],
       credit_ects: ['', Validators.required],
       remarque: [''],
+      semestre: ['', Validators.required],
+      niveau: ['', Validators.required],
     });
   }
 
@@ -186,11 +187,13 @@ export class MatieresComponent implements OnInit {
     let nom = this.formModifMatiere.get('nom').value;
     let volume = this.formModifMatiere.get("volume").value;
     let abbrv = this.formModifMatiere.get("abbrv").value;
-    //let classe_id = this.formModifMatiere.get("classe_id").value;
+    let formation_id = this.formModifMatiere.get("formation_id").value;
     let seance_max = this.formModifMatiere.get("seance_max").value;
     let coeff = this.formModifMatiere.get("coeff").value;
     let credit_ects = this.formModifMatiere.get("credit_ects").value;
     let remarque = this.formModifMatiere.get("remarque").value;
+    let semestre = this.formModifMatiere.get("semestre").value;
+    let niveau = this.formAddMatiere.get("niveau").value;
 
     //Recuperation de la formation_id
     this.ClasseService.get(this.formModifMatiere.get("classe_id").value).subscribe(
@@ -208,6 +211,8 @@ export class MatieresComponent implements OnInit {
           coeff,
           credit_ects,
           remarque,
+          semestre,
+          niveau
         );
 
 

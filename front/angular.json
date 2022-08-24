@@ -31,6 +31,7 @@
                             "src/assets"
                         ],
                         "styles": [
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
                             "src/styles.scss",
                             "node_modules/@fullcalendar/core/main.min.css",
                             "node_modules/@fullcalendar/daygrid/main.min.css",
@@ -54,7 +55,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "3mb",
-                                    "maximumError": "5mb"
+                                    "maximumError": "6mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",

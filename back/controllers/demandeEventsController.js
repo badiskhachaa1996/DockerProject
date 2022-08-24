@@ -22,7 +22,6 @@ app.post("/create", (req, res, next) => {
 
     //création d'un nvx event
     let data = req.body.newEvent;
-    console.log(data)
     let NewEvent = new Demande_events(
         {
             ...data
@@ -39,8 +38,8 @@ app.post("/create", (req, res, next) => {
 
 app.get("/getAll", (req, res, next) => {
     Demande_events.find()
-    .then((result)  => { res.status(200).send(result); })
-    .catch((error) => { req.status(500).json({ error: "Probleme porte ouverte " + error.message });});
+        .then((result) => { res.status(200).send(result); })
+        .catch((error) => { req.status(500).json({ error: "Probleme porte ouverte " + error.message }); });
 })
 
 module.exports = app;
