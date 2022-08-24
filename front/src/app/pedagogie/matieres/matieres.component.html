@@ -133,17 +133,13 @@
                         placeholder="Exemple : Culture générale et expréssion" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="abreviation">Abréaviation <span style="color: red;"> * </span></label>
+                    <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
                     <input pInputText id="abreviation" type="text" formControlName="abbrv"
                         placeholder="Exemple : CGE" />
                 </div>
-                <div class="field col-12 md:col-8">
-                    <label For="classe">Classe <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="classeList" optionLabel="nom" formControlName="classe_id" optionValue="_id">
-                    </p-dropdown>
-                </div>
+
                 <div class="field col-12 md:col-4">
-                    <label For="seance_max">Séance max <span style="color: red;"> * </span></label>
+                    <label For="seance_max">Nombre de séances <span style="color: red;"> * </span></label>
                     <input pInputText id="seance_max" type="number" formControlName="seance_max" placeholder="0" />
                 </div>
                 <div class="field col-12 md:col-4">
@@ -157,6 +153,19 @@
                 <div class="field col-12 md:col-4">
                     <label For="credit_ects">Crédits ECTS <span style="color: red;"> * </span></label>
                     <input pInputText id="credit_ects" type="number" formControlName="credit_ects" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="coeff">Filière <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="formationList" optionLabel="titre" formControlName="formation_id"
+                        optionValue="_id"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="semestre">Semestre <span style="color: red;"> * </span></label>
+                    <input pInputText id="semestre" type="text" formControlName="semestre" placeholder="Semestre 1" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="niveau">Niveau <span style="color: red;"> * </span></label>
+                    <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
                 </div>
                 <div class="field col-12">
                     <label For="remarque">Remarque</label>
@@ -180,7 +189,6 @@
                     (click)="showFormAddMatiere = true; showFormModifMatiere = false;"></button>
             </div>
             <h5>Liste des modules</h5>
-            {{matiereVolume|json}}
             <p-table #dt1 rowExpandMode="single" [value]="matieres" dataKey="_id" [rows]="10" [rowHover]="true"
                 [totalRecords]="matieres.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
                 [globalFilterFields]="['nom','abbrv','remarque','semestre','niveau']" responsiveLayout="scroll">
@@ -188,12 +196,6 @@
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field">
-                            <span style="margin-left: 2px;">
-                                <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
-                                    emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
-                                </p-dropdown>
-                            </span>
                             <span style="margin-left: 2px;">
                                 <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
                                     (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
