@@ -404,10 +404,18 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: "Tuteurs d'Alternants",
+                            label: "Tutelle d'Alternants & Stagiaires",
+                            items: [
+                                { label: 'Liste de tous les alternants ', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
+                                { label: 'Liste des tuteurs', icon: 'pi pi-list', routerLink: ['/tuteur'] },
+                                { label: 'Alternants sous ma tutelle', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
+                            ]
+                        },
+                        {
+                            label: "",
                             items: [
 
-                                { label: 'Listes des tuteurs', icon: 'pi pi-list', routerLink: ['/liste-Tuteur'] },
+
                             ]
                         },
                     ]
@@ -523,7 +531,7 @@ export class AppMenuComponent implements OnInit {
                         },
                     ]
                 }
-                else if(this.isEvent){
+                else if (this.isEvent) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -547,7 +555,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                }else{
+                } else {
                     this.model = [
                         {
                             label: 'Ticketing',

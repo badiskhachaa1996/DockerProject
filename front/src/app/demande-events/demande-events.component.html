@@ -37,14 +37,15 @@
             </div>
             <div class="field col-12 md:col-6">
                 <label For="Téléphone">Téléphone <span style="color: red;"> * </span></label><br>
-                <ngx-intl-tel-input [preferredCountries]="preferredCountries" [enableAutoCountrySelect]="true"
-                    [enablePlaceholder]="true" [searchCountryFlag]="true" [searchCountryField]="[
+                <ngx-intl-tel-input class="pInputText"  [preferredCountries]="preferredCountries"
+                    [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+                    [searchCountryField]="[
                   SearchCountryField.Iso2,
                   SearchCountryField.Name
                 ]" [selectFirstCountry]="false" [selectedCountryISO]="CountryISO.France" [phoneValidation]="true"
                     [separateDialCode]="separateDialCode" [numberFormat]="PhoneNumberFormat.National" name="phone"
-                    formControlName="phone">
-                </ngx-intl-tel-input>
+                    formControlName="phone"> </ngx-intl-tel-input>
+
             </div>
 
 
