@@ -50,17 +50,25 @@ Formation suivie :
 -->
 <p-toast></p-toast>
 <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-    <div class="card">
+    <div class="card" styleClass="p-card-shadow">
         <h4 style="text-align: center;">Formulaire de creation de contrats d'alternances </h4>
         <div style="text-align: center;">
             <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
                 obligatoires</small><br>
         </div>
         <br>
-
-
         <div>
+
             <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
+
+            <br>
+            <div class=" card-container col-12 flex align-items-center justify-content-center flex-wrap "
+                styleClass="p-card-shadow">
+                <img *ngIf="ActiveIndex!==0" src="\assets\images\entreprise-1536x1025.jpg" 
+                    style="width: 100%; max-height: 300px;">
+                <img *ngIf="ActiveIndex==0" src='\assets\images\10605148.webp' 
+                    style="width: 100%; max-height: 300px;">
+            </div>
         </div>
         <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect();showBasicDialogFin()">
             <div *ngIf="ActiveIndex==0">
@@ -72,7 +80,8 @@ Formation suivie :
                         <div class="p-fluid p-formgrid grid">
 
                             <div class="field col-12 md:col-12">
-                                <label For="raison_sociale">Raison Sociale <span style="color: red;"> * </span></label>
+                                <label For="raison_sociale">Raison Sociale <span style="color: red;"> *
+                                    </span></label>
                                 <input pInputText id="raison_sociale" type="text" placeholder="Nom de l'entreprise "
                                     formControlName="raison_sociale" />
 
@@ -153,7 +162,8 @@ Formation suivie :
 
                             </div>
                             <div class="field col-12 md:col-3">
-                                <label For="ville_ss">Ville du Siège sociale <span style="color: red;"> *
+                                <label For="ville_ss">Ville du Siège sociale <span style="color: red;">
+                                        *
                                     </span></label>
                                 <input pInputText id="ville_ss" type="text" placeholder="Paris"
                                     formControlName="ville_ss" />
@@ -162,7 +172,8 @@ Formation suivie :
                             <!--Adresse d’exécution du contrat -->
                             <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
                             <div class="field col-12 md:col-6">
-                                <label For="adresse_ec">Adresse de l’exécution du contrat<span style="color: red;"> *
+                                <label For="adresse_ec">Adresse de l’exécution du contrat<span style="color: red;">
+                                        *
                                     </span></label>
                                 <input pInputText id="adresse_ec" type="text" placeholder="15 Rue du Louvre"
                                     formControlName="adresse_ec" />
@@ -234,7 +245,8 @@ Formation suivie :
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-2">
-                                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                                <label For="civilite">Civilité<span style="color: red;"> *
+                                    </span></label>
                                 <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                                     formControlName="civilite"></p-dropdown>
                             </div>
@@ -339,7 +351,8 @@ Formation suivie :
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-4">
-                                <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                                <label For="civilite">Civilité<span style="color: red;"> *
+                                    </span></label>
                                 <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                                     formControlName="civilite_t1"></p-dropdown>
                             </div>
@@ -350,7 +363,8 @@ Formation suivie :
                                 <input pInputText id="lastname_t1" type="text" placeholder="Nom du tuteur"
                                     formControlName="lastname_t1" />
                                 <div *ngIf="lastname_t1.invalid && (lastname_t1.touched || lastname_t1.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="lastname_t1.errors?.required">* Le
+                                    <span style="color: red;" class="error" *ngIf="lastname_t1.errors?.required">*
+                                        Le
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
@@ -360,7 +374,8 @@ Formation suivie :
                                 <input pInputText id="firstname_t1" type="text" placeholder="Prenom du dirigeant"
                                     formControlName="firstname_t1" />
                                 <div *ngIf="firstname_t1.invalid && (firstname_t1.touched || firstname_t1.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="firstname_t1.errors?.required">* Le
+                                    <span style="color: red;" class="error" *ngIf="firstname_t1.errors?.required">*
+                                        Le
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
@@ -371,7 +386,8 @@ Formation suivie :
                                 <input pInputText id="indicatif_t1" type="number" placeholder="indicatif "
                                     formControlName="indicatif_t1" />
                                 <div *ngIf="indicatif_t1.invalid && (indicatif_t1.touched || indicatif_t1.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="indicatif_t1.errors?.required">* Le
+                                    <span style="color: red;" class="error" *ngIf="indicatif_t1.errors?.required">*
+                                        Le
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
@@ -398,7 +414,8 @@ Formation suivie :
                             </div>
 
                             <div class="field col-12 md:col-6">
-                                <label For="date_naissance_t1">Date de naissance du tuteur<span style="color: red;"> *
+                                <label For="date_naissance_t1">Date de naissance du tuteur<span style="color: red;">
+                                        *
                                     </span></label>
                                 <p-calendar formControlName="date_naissance_t1" dateFormat="dd/mm/yy"
                                     [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
@@ -418,13 +435,14 @@ Formation suivie :
                                 <input pInputText id="fonction_t1" type="text" placeholder="fonction du tuteur"
                                     formControlName="fonction_t1" />
                                 <div *ngIf="fonction_t1.invalid && (fonction_t1.touched || fonction_t1.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="fonction_t1.errors?.required">* Le
+                                    <span style="color: red;" class="error" *ngIf="fonction_t1.errors?.required">*
+                                        Le
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
-                                <label For="temps_fonction_t1">Ancienneté dans la fonction en années<span
-                                        style="color: red;"> *
+                                <label For="temps_fonction_t1">Ancienneté dans la fonction en
+                                    années<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="temps_fonction_t1" type="number" placeholder="0"
                                     formControlName="temps_fonction_t1" />
@@ -546,8 +564,7 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="niv">Niveau de la formation<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="niv" type="text" placeholder="Bac+3"
-                                    formControlName="niv" />
+                                <input pInputText id="niv" type="text" placeholder="Bac+3" formControlName="niv" />
                                 <div *ngIf="niv.invalid && (niv.touched || niv.dirty)">
                                     <span style="color: red;" class="error" *ngIf="niv.errors?.required">*
                                         Le
@@ -571,7 +588,8 @@ Formation suivie :
                                 <label For="form">Formation<span style="color: red;"> *
                                     </span></label>
                                 <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
-                                    id="form" formControlName="form"></p-dropdown>
+                                    id="form" formControlName="form">
+                                </p-dropdown>
                                 <div *ngIf="form.invalid && (form.touched || form.dirty)">
                                     <span style="color: red;" class="error" *ngIf="form.errors?.required">*
                                         Le
@@ -616,7 +634,8 @@ Formation suivie :
                         <div class="p-fluid p-formgrid grid">
                             <div class="ui-g-12 ui-md-12">
                                 <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
-                                        target="_blank">mentions légales</a> et accepte que mes données
+                                        target="_blank">mentions
+                                        légales</a> et accepte que mes données
                                     soient
                                     utiliseés
                                     dans le cadre de mon accompagnement
@@ -643,19 +662,25 @@ Formation suivie :
                 </p-fieldset>
             </div>
         </form>
+
     </div>
     <p-dialog header="Inscription Entreprise et enregistrement du contrat avec succes  " [(visible)]="MessageFormSubmit"
         [style]="{width: '50vw'}">
-        <p>{{ lastname | uppercase}} {{ lastname }} recevra par email les acces a la platforme IMS en tant que CEO de
+        <p>{{ lastname | uppercase}} {{ lastname }} recevra par email les acces a la platforme IMS en
+            tant que CEO de
             l'entreprise</p>
 
-        <p>Une fois connecté sur la platforme avec le le mot de passe reçu par email, Vous aurez accés a la liste de vos
+        <p>Une fois connecté sur la platforme avec le le mot de passe reçu par email, Vous aurez accés a
+            la liste de vos
             alternants et stagiéres suivants leurs formations dans une de nos écoles </p>
 
-        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Qui recerevons a leurs tours les accés
-            pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations concernant les
+        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Qui recerevons a leurs
+            tours les accés
+            pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations
+            concernant les
             formations suivis. </p>
-        <p>Si vous rencontrez des difficultés pour accéder a la platforme. N'hesitez pas a nous contact par email sur
+        <p>Si vous rencontrez des difficultés pour accéder a la platforme. N'hesitez pas a nous contact
+            par email sur
             l'adresse : contact@intedgroup.com</p>
         <ng-template pTemplate="footer">
             <p-button icon="pi pi-check" (click)="router.navigate(['/']);" label="Fermer" styleClass="p-button-text">

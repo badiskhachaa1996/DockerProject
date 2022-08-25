@@ -15,8 +15,8 @@ import { ServService } from 'src/app/services/service.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
-import {StepsModule} from 'primeng/steps';
-import {MenuItem} from 'primeng/api';
+import { StepsModule } from 'primeng/steps';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-inscription-entreprise',
@@ -28,13 +28,14 @@ export class InscriptionEntrepriseComponent implements OnInit {
   Tok_code_commercial: string = this.route.snapshot.paramMap.get('code');
 
   formSteps: any[] = [
-    { label: "Entreprise", icon: "pi pi-sitemap",i:0 },
-    { label: "Representant", icon: "pi pi-user" ,i:1},
-    { label: "Tuteurs", icon: "pi pi-id-card" ,i:2},
-    { label: "Alternant", icon: "pi pi-user" ,i:3},
-    { label: "Fin", icon: "pi pi-flag" ,i:4},
+    { label: "Entreprise", icon: "pi pi-sitemap", i: 0 },
+    { label: "Representant", icon: "pi pi-user", i: 1 },
+    { label: "Tuteurs", icon: "pi pi-id-card", i: 2 },
+    { label: "Alternant", icon: "pi pi-user", i: 3 },
+    { label: "Fin", icon: "pi pi-flag", i: 4 },
   ];
-  MessageFormSubmit:boolean;
+
+  MessageFormSubmit: boolean;
   listAlternant = []
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
@@ -54,11 +55,16 @@ export class InscriptionEntrepriseComponent implements OnInit {
   emailExist: boolean;
   listAlternantDD = []
   formationList = []
+
+  products: any[];
+
+
   constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
 
-    
+
+
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
   get activite() { return this.RegisterForm.get('activite').value; }
   get adresse_ss() { return this.RegisterForm.get('adresse_ss').value; }
@@ -117,8 +123,9 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   showBasicDialogFin() {
     this.MessageFormSubmit = true;
-}
+  }
   ngOnInit(): void {
+
 
     this.onInitRegisterForm();
 
