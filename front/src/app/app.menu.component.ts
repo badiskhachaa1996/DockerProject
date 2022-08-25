@@ -195,7 +195,7 @@ export class AppMenuComponent implements OnInit {
                     this.isPedagogie = service.label.includes('dagogie')
                     this.isEvent = service.label.includes('Event')
                 }
-                this.isEtudiant = dataUser.type == "Etudiant"
+                this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
                 this.isCommercial = dataUser.type == "Commercial"
                 if (this.isAdmin) {

@@ -69,9 +69,9 @@ export class TuteurComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
-              this.isAdmin = dataUser.role == "Admin"
-              this.isAgent = dataUser.role == "Agent"
-              this.isCEO = dataUser.type == "CEO Entreprise"  
+              let isAdmin = dataUser.role == "Admin"
+              let isAgent = dataUser.role == "Agent"
+              let isCEO = dataUser.type == "CEO Entreprise"  
             }
             
             if(this.isCEO){
@@ -95,39 +95,37 @@ export class TuteurComponent implements OnInit {
             }
             if(!this.isCEO){
             //recupération des entreprises
-           
-    
-console.log(this.entreprises)
-//récupération des tuteur
-  this.tuteurService.getAll().subscribe(
-    (dataTuteur) => {
-      dataTuteur.forEach(tuteur => {
-        this.tuteurs.push(tuteur);
-      })
-    }
-  );
-  console.log(this.tuteurs)
+                    console.log(this.entreprises)
+                    //récupération des tuteur
+                      this.tuteurService.getAll().subscribe(
+                        (dataTuteur) => {
+                          dataTuteur.forEach(tuteur => {
+                            this.tuteurs.push(tuteur);
+                          })
+                        }
+                      );
+                      console.log(this.tuteurs)
 
-//récupération des tuteur
-    this.UserService.getAll().subscribe(
-      (dataUser) => {
-        dataUser.forEach(user => {
-          this.users.push(user);
-        })
-      }
-    );
-
-    this.entrepriseService.getAll().subscribe(
-      (data) => {
-        data.forEach(entreprise =>{
-          this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id});
-        })
-      })
-    }
-  })
-        
-   this.onInitFormAddTuteur()
-   this.onInitUpdateTuteurForm()
+                    //récupération des user
+                        this.UserService.getAll().subscribe(
+                          (dataUser) => {
+                            dataUser.forEach(user => {
+                              this.users.push(user);
+                            })
+                          }
+                        );
+                    //Liste des entreprises
+                        this.entrepriseService.getAll().subscribe(
+                          (data) => {
+                            data.forEach(entreprise =>{
+                              this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id});
+                            })
+                          })
+                        }
+                      })
+                            
+                      this.onInitFormAddTuteur()
+                      this.onInitUpdateTuteurForm()
   }
 
 //

@@ -203,7 +203,6 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { DemandeEventsComponent } from './demande-events/demande-events.component';
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
-
 import { ArrToStrPipe } from './arr-to-str.pipe';
 @NgModule({
   imports: [
@@ -392,7 +391,6 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     ListeContratsComponent,
     DemandeEventsComponent,
     ListEventsComponent,
-
     ListeContratsComponent,
     ArrToStrPipe
   ],

@@ -2,11 +2,12 @@
 const mongoose = require("mongoose");
 //creation du schema de table demande_event
 const demande_events = mongoose.Schema({
-    email: { type: String, required: true },
-    nom: { type: String, required: true },
-    phone: { type: String, required: true },
-    pays: { type: String, required: true },
-    domaine: { type: [String], required: true }
+    email: { type: String },
+    nom:   { type: String },
+    phone: { type: String },
+    pays:  { type: String },
+    domaine : { type: [String] }
+
 });
 
 //creation de la table  à l'aide de la biblio mongoose et son schema

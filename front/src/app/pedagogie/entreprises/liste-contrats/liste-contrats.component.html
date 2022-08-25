@@ -52,7 +52,7 @@
                         <td style="min-width: 8rem;">{{ contrat.debut_contrat }}</td>
                         <td style="min-width: 8rem;">{{ contrat.fin_contrat }}</td>
                         <td>
-                            <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"></i>
+                            <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true" (click)="showPresence(contrat.alternant_id._id)"></i>
                         </td>
                     </tr>
                 </ng-template>

@@ -16,6 +16,7 @@ export class EtudiantService {
 
   //Methode de création d'un etudiant
   create(tbObj: any) {
+    console.log("service", tbObj)
     let registreUrl = this.apiUrl + "create";
     return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

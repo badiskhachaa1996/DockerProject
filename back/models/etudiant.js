@@ -23,17 +23,10 @@ const etudiantSchema = mongoose.Schema({
     adresse_rl: { type: String },
     dernier_diplome: { type: String },
     isAlternant: { type: Boolean, default: false },
-    // entreprise_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Entrepise', default: null, required: false },
+   
 
-    nom_tuteur: { type: String, default: null },
-    prenom_tuteur: { type: String, default: null },
-    adresse_tuteur: { type: String, default: null },
-    email_tuteur: { type: String, default: null },
-    phone_tuteur: { type: String, default: null },
-    indicatif_tuteur: { type: String, default: null },
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
-    entreprise: { type: String, required: false },
     diplome: { type: String, required: false },
     parcours: { type: mongoose.Schema.Types.Mixed, required: false }, // diplome: String, date: Date
     remarque: { type: String },
