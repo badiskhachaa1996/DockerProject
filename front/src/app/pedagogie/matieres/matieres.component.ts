@@ -78,7 +78,7 @@ export class MatieresComponent implements OnInit {
   onInitFormAddMatiere() {
     this.formAddMatiere = this.formBuilder.group({
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: ['', [Validators.required, Validators.pattern("^[0-9]$")]],
+      volume: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
@@ -163,7 +163,7 @@ export class MatieresComponent implements OnInit {
   onInitFormModifMatiere() {
     this.formModifMatiere = this.formBuilder.group({
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: [''],
+      volume: ['', Validators.pattern("^[0-9]+$")],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
