@@ -350,7 +350,7 @@ app.get('/getAllEtudiant', (req, res, next) => {
 //Recuperation de la liste des prospect
 app.get("/getAll", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null] }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
             res.status(201).send(prospectsFromDb)
         })
@@ -575,7 +575,7 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
     Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find({ code_commercial: { $regex: "^" + partenaireFromDB.code_partenaire } }).populate("user_id").populate('agent_id').then(prospects => {
+                Prospect.find({ code_commercial: { $regex: "^" + partenaireFromDB.code_partenaire }, user_id: { $ne: null } }).populate("user_id").populate('agent_id').then(prospects => {
                     res.status(200).send(prospects)
                 })
             } else {
@@ -586,14 +586,14 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
-    Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
+    Prospect.find({ code_commercial: req.params.code_partenaire, user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then(prospects => {
             res.send(prospects)
         }).catch((error) => { res.status(500).send(error); });
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null] }).then(prospects => {
+    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null], user_id: { $ne: null } }).then(prospects => {
         res.send(prospects)
     }).catch((error) => { res.status(500).send(error); });
 })

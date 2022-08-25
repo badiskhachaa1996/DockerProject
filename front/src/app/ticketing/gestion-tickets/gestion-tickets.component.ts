@@ -458,10 +458,10 @@ export class GestionTicketsComponent implements OnInit {
 
 
   TicketFormAdd: FormGroup = new FormGroup({
-    description: new FormControl('', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]), 
+    description: new FormControl('', [Validators.required]), 
     sujet: new FormControl('', Validators.required),
     service: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")])
+    email: new FormControl('', [Validators.required, Validators.email])
   })
 
   get email() { return this.TicketFormAdd.get('email'); }
