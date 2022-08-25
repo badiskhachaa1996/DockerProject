@@ -131,7 +131,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Manquant" },
     { value: "Rupture d'étude" },
     { value: "Sous Dossier" },
-    { value: "Envoyé à Eduhorizons" },
+    { value: "Envoyé à EduHorizons" },
     { value: "En attente du retour ELC" },
     { value: "Demande équivalence envoyée" },
   ]
@@ -176,7 +176,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0 })
+    this.payementList.push({ type: "", montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
@@ -253,8 +253,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   }
 
-  expandRow(prospect: Prospect) {
+  onRowSelect(event) {
+    this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: event });
+  }
 
+  expandRow(prospect: Prospect) {
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -504,7 +507,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        
+
         this.expandRow(this.showUploadFile)
         this.prospects.forEach(p => {
           if (p._id == this.showUploadFile._id) {

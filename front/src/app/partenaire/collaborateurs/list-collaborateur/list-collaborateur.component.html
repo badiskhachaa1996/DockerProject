@@ -116,7 +116,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="nom_prenom" style="text-align: center;"> Nom & Prénom <p-sortIcon
+                        <th pSortableColumn="code" style="text-align: center;"> ID Commercial <p-sortIcon field="code">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom_prenom" style="text-align: center;"> Prénom & Nom <p-sortIcon
                                 field="nom_prenom"></p-sortIcon>
                         </th>
                         <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
@@ -128,9 +131,7 @@
                         <th pSortableColumn="statut" style="text-align: center;"> Statut <p-sortIcon field="statut">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code">
-                            </p-sortIcon>
-                        </th>
+
                         <th>
                             <div class="flex justify-content-between align-items-center">
                                 Action
@@ -140,9 +141,13 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-commercial>
                     <tr>
+                        <td style="min-width: 14rem;">
+                            {{ commercial.code_commercial_partenaire }}
+                        </td>
                         <td style="min-width: 12rem;">
-                            {{ users[commercial.user_id]?.lastname | uppercase}}
                             {{ users[commercial.user_id]?.firstname | titlecase }}
+                            {{ users[commercial.user_id]?.lastname | uppercase}}
+
                         </td>
                         <td style="min-width: 12rem;">
                             {{ users[commercial.user_id]?.email }}
@@ -153,9 +158,7 @@
                         <td style="min-width: 14rem;">
                             {{ commercial.statut }}
                         </td>
-                        <td style="min-width: 14rem;">
-                            {{ commercial.code_commercial_partenaire }}
-                        </td>
+
                         <td style="min-width: 10rem;">
                             <i style="margin-left: 2%;" *ngIf="token && token.id!=commercial.user_id"
                                 (click)="showFormUpdateCommercial = true; showFormAddCommercial = false; idCommercialToUpdate = commercial._id; idUserToUpdate = commercial.user_id; onGetById();"

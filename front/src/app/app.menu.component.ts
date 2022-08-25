@@ -134,7 +134,7 @@ export class AppMenuComponent implements OnInit {
             label: 'Admission',
             items: [
                 { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
-                { label: 'Liste des inscriptions aux portes ouvertes', icon: 'pi pi-users', routerLink: ['/list-events'] }
+                { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
             ],
         },
         {
@@ -543,7 +543,7 @@ export class AppMenuComponent implements OnInit {
                             label: "Evenementiels",
                             items: [
 
-                                { label: 'Inscription Porte Ouverte', icon: 'pi pi-envelope', routerLink: ['/list-events'] },
+                                { label: 'Gestion des participantes pour les événements', icon: 'pi pi-envelope', routerLink: ['/list-events'] },
                             ]
                         },
                     ]

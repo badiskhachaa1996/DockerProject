@@ -1,7 +1,7 @@
 <!-- LISTE DES INSCRIPTIONS POUR AGENT PEDAGOGIE/ADMISSION -->
 <div class="col-12">
     <div class="card">
-        <h5>Liste des demandes de participations aux portes ouvertes</h5>
+        <h5>Liste des participantes pour les évenements</h5>
         <p-table #dt1 rowExpandMode="single" [value]="events"
                  dataKey="_id" [rows]="10" 
                  [rowHover]="true"
@@ -28,7 +28,7 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th style="text-align:center"> Email <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Nom <p-sortIcon></p-sortIcon></th>
+                    <th style="text-align:center"> Prénom & Nom <p-sortIcon></p-sortIcon></th>
                     <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon></th>
                     <th style="text-align:center"> Pays <p-sortIcon></p-sortIcon></th>
                     <th style="text-align:center"> Domaine </th>              
