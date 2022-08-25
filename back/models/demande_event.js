@@ -6,7 +6,8 @@ const demande_events = mongoose.Schema({
     nom:   { type: String },
     phone: { type: String },
     pays:  { type: String },
-    domaine : { type: [String] },
+    domaine : { type: [String] }
+
 });
 
 //creation de la table  à l'aide de la biblio mongoose et son schema

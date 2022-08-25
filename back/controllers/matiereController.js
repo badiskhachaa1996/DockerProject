@@ -50,11 +50,12 @@ app.post("/updateById", (req, res, next) => {
             formation_id: req.body.formation_id,
             volume_init: req.body.volume_init,
             abbrv: req.body.abbrv,
-            classe_id: req.body.classe_id,
             seance_max: req.body.seance_max,
             coeff: req.body.coeff,
             credit_ects: req.body.credit_ects,
             remarque: req.body.remarque,
+            semestre: req.body.semestre,
+            niveau: req.body.niveau
         })
         .then((matiereUpdated) => { res.status(200).send(matiereUpdated) })
         .catch((error) => { res.status(500).send(error) })
@@ -130,7 +131,6 @@ app.get("/getAllVolume", (req, res, next) => {
                         rCons[seance.matiere_id] = nb
                     }
                 }
-                listMatire.push(seance.matiere_id)
             })
             console.log({ rPlan, rCons })
             res.status(200).send({ rPlan, rCons })

@@ -78,11 +78,11 @@ export class MatieresComponent implements OnInit {
   onInitFormAddMatiere() {
     this.formAddMatiere = this.formBuilder.group({
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: ['', [Validators.required, Validators.pattern("^[0-9]$")]],
+      volume: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
-      coeff: ['',  [Validators.required, Validators.pattern("^[0-9]$")]],
+      coeff: ['', [Validators.required, Validators.pattern("^[0-9]$")]],
       credit_ects: ['', Validators.required],
       remarque: [''],
       semestre: ['', Validators.required],
@@ -91,8 +91,7 @@ export class MatieresComponent implements OnInit {
   }
 
   resetAddMatiere() {
-    this.formAddMatiere.reset()
-    this.formAddMatiere.patchValue({ formation_id: this.formationList[0], volume: 0, classe_id: this.classeList[0], seance_max: 0 })
+    this.onInitFormAddMatiere()
   }
 
   //methode d'ajout d'une matiere
@@ -148,12 +147,11 @@ export class MatieresComponent implements OnInit {
 
   //Methode de recuperation de la matière à modifier
   onGetbyId(rowData: Matiere) {
-    this.formModifMatiere.patchValue({ nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects, remarque: rowData.remarque });
-    this.diplomeService.getById(rowData.formation_id).subscribe(
-      (data) => {
-        this.formModifMatiere.patchValue({ formation_id: data._id });
-      }
-    )
+    this.formModifMatiere.patchValue({
+      nom: rowData.nom, volume: rowData.volume_init, abbrv: rowData.abbrv, seance_max: rowData.seance_max, coeff: rowData.coeff, credit_ects: rowData.credit_ects,
+      remarque: rowData.remarque, semestre: rowData.semestre, niveau: rowData.niveau
+    });
+    this.formModifMatiere.patchValue({ formation_id: rowData.formation_id });
     /*this.ClasseService.get(rowData.classe_id).subscribe(
       (data) => {
         this.formModifMatiere.patchValue({ classe_id: data });
@@ -165,13 +163,15 @@ export class MatieresComponent implements OnInit {
   onInitFormModifMatiere() {
     this.formModifMatiere = this.formBuilder.group({
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: [''],
+      volume: ['', Validators.pattern("^[0-9]+$")],
       abbrv: ['', Validators.required],
-      classe_id: ['', Validators.required],
+      formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
       coeff: ['', Validators.required],
       credit_ects: ['', Validators.required],
       remarque: [''],
+      semestre: ['', Validators.required],
+      niveau: ['', Validators.required],
     });
   }
 
@@ -186,48 +186,40 @@ export class MatieresComponent implements OnInit {
     let nom = this.formModifMatiere.get('nom').value;
     let volume = this.formModifMatiere.get("volume").value;
     let abbrv = this.formModifMatiere.get("abbrv").value;
-    //let classe_id = this.formModifMatiere.get("classe_id").value;
+    let formation_id = this.formModifMatiere.get("formation_id").value;
     let seance_max = this.formModifMatiere.get("seance_max").value;
     let coeff = this.formModifMatiere.get("coeff").value;
     let credit_ects = this.formModifMatiere.get("credit_ects").value;
     let remarque = this.formModifMatiere.get("remarque").value;
-
-    //Recuperation de la formation_id
-    this.ClasseService.get(this.formModifMatiere.get("classe_id").value).subscribe(
-      ((response) => {
-        let formation_id = response.diplome_id;
-
-        this.matiereToUpdate = new Matiere(
-          this.idMatiereToUpdate,
-          nom,
-          formation_id,
-          volume,
-          abbrv,
-          //classe_id,
-          seance_max,
-          coeff,
-          credit_ects,
-          remarque,
-        );
-
-
-        this.matiereService.updateById(this.matiereToUpdate).subscribe(
-          ((response) => {
-            this.messageService.add({ severity: 'success', summary: 'Modification du module', detail: 'Ce module a bien été modifiée' });
-            //recuperation de la liste des Matières
-            this.matiereService.getAll().subscribe(
-              ((responseM) => { this.matieres = responseM; }),
-              ((error) => { console.error(error) })
-            );
-          }),
-          ((error) => { console.error(error) })
-        );
-
-
-      }),
-      ((error) => { console.error(error); })
+    let semestre = this.formModifMatiere.get("semestre").value;
+    let niveau = this.formModifMatiere.get("niveau").value;
+    this.matiereToUpdate = new Matiere(
+      this.idMatiereToUpdate,
+      nom,
+      formation_id,
+      volume,
+      abbrv,
+      //classe_id,
+      seance_max,
+      coeff,
+      credit_ects,
+      remarque,
+      semestre,
+      niveau
     );
 
+
+    this.matiereService.updateById(this.matiereToUpdate).subscribe(
+      ((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Modification du module', detail: 'Ce module a bien été modifiée' });
+        //recuperation de la liste des Matières
+        this.matiereService.getAll().subscribe(
+          ((responseM) => { this.matieres = responseM; }),
+          ((error) => { console.error(error) })
+        );
+      }),
+      ((error) => { console.error(error) })
+    );
     this.formModifMatiere.reset();
     this.showFormModifMatiere = false;
   }

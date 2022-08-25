@@ -15,8 +15,8 @@ import { ServService } from 'src/app/services/service.service';
 import { Notification } from 'src/app/models/notification';
 import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
-import {StepsModule} from 'primeng/steps';
-import {MenuItem} from 'primeng/api';
+import { StepsModule } from 'primeng/steps';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-inscription-entreprise',
@@ -28,13 +28,14 @@ export class InscriptionEntrepriseComponent implements OnInit {
   Tok_code_commercial: string = this.route.snapshot.paramMap.get('code');
 
   formSteps: any[] = [
-    { label: "Entreprise", icon: "pi pi-sitemap",i:0 },
-    { label: "Representant", icon: "pi pi-user" ,i:1},
-    { label: "Tuteurs", icon: "pi pi-id-card" ,i:2},
-    { label: "Alternant", icon: "pi pi-user" ,i:3},
-    { label: "Fin", icon: "pi pi-flag" ,i:4},
+    { label: "Entreprise", icon: "pi pi-sitemap", i: 0 },
+    { label: "Representant", icon: "pi pi-user", i: 1 },
+    { label: "Tuteurs", icon: "pi pi-id-card", i: 2 },
+    { label: "Alternant", icon: "pi pi-user", i: 3 },
+    { label: "Fin", icon: "pi pi-flag", i: 4 },
   ];
-  MessageFormSubmit:boolean;
+
+  MessageFormSubmit: boolean;
   listAlternant = []
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
@@ -52,13 +53,18 @@ export class InscriptionEntrepriseComponent implements OnInit {
   civiliteList = environment.civilite;
   nationList = environment.nationalites;
   emailExist: boolean;
-  listAlternantDD = []
+  listAlternantDD : any = [] 
   formationList = []
+
+  products: any[];
+
+
   constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
     private entrepriseService: EntrepriseService, private AuthService: AuthService, private etudiantService: EtudiantService) { }
 
 
-    
+
+
   get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
   get activite() { return this.RegisterForm.get('activite').value; }
   get adresse_ss() { return this.RegisterForm.get('adresse_ss').value; }
@@ -117,8 +123,9 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   showBasicDialogFin() {
     this.MessageFormSubmit = true;
-}
+  }
   ngOnInit(): void {
+
 
     this.onInitRegisterForm();
 
@@ -142,6 +149,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
       });
 
     })
+
+
   }
 
   onInitRegisterForm() {
@@ -192,7 +201,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
-      alternant: new FormControl(this.listAlternant[0]),
+      alternant: new FormControl(this.listAlternantDD[0]),
       intitule: new FormControl('', Validators.required),
       classification: new FormControl('', Validators.required),
       niv: new FormControl('', Validators.required),
@@ -205,10 +214,14 @@ export class InscriptionEntrepriseComponent implements OnInit {
       donneePerso: new FormControl(''),
 
     });
+
+
+
   };
 
   nextPage() {
     this.ActiveIndex++
+ 
   }
 
   previousPage() {
@@ -347,6 +360,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       false
     );
 
+    
     let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire, this.alternant.value, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, null, this.code_commercial)
 
     //Creation de lobjet a envoyer dans le back 
@@ -355,12 +369,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
       ((response) => {
         if (response) {
           this.servService.getAServiceByLabel("Commercial").subscribe(serviceCommercial => {
-            console.log('creation de la notif pour le service Commercial')
-            console.log(serviceCommercial)
+        
+          
             let notifToCreate = new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial.dataService?._id)
-            console.log(notifToCreate)
+            
             this.NotifService.create(notifToCreate).subscribe(notif => {
-              console.log(notif)
+            
               this.NotifService.newNotif(notif)
 
               this.messageService.add({ severity: 'success', summary: 'Le contrat alternance a été créé', detail: "Vérifiez vos mails pour les informations de connexion" });

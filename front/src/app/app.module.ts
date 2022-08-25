@@ -97,7 +97,7 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
-
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -294,7 +294,8 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     VirtualScrollerModule,
     AppCodeModule,
     StyleClassModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgxIntlTelInputModule
   ],
   declarations: [
     AppComponent,
@@ -392,7 +393,6 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     ListEventsComponent,
     ListeContratsComponent,
     ArrToStrPipe
-
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

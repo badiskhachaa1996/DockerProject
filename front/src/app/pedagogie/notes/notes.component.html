@@ -674,7 +674,7 @@
                 classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="5" [pageLinks]="5"
+                [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="10" [pageLinks]="5"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -851,7 +851,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
                         </th>
                         <th pSortableColumn="classe"> Groupe <p-sortIcon field="classe"></p-sortIcon>
                         </th>

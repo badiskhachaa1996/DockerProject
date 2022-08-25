@@ -20,8 +20,9 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
+						<th pSortableColumn="code" style="text-align: center;"> ID Partenaire <p-sortIcon field="code"></p-sortIcon></th>
 						<th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe"></p-sortIcon></th>
-						<th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code"></p-sortIcon></th>
+						
 						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
 						<th style="text-align: center;">Action</th>
 					</tr>
@@ -29,11 +30,12 @@
 				<ng-template pTemplate="body" let-rowData>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{ rowData.nom | titlecase }}
-						</td>
-						<td style="min-width: 12rem;">
 							{{ rowData.code_partenaire }}
 						</td>
+						<td style="min-width: 12rem;">
+							{{ rowData.nom | titlecase }}
+						</td>
+
 						<td style="min-width: 14rem;">
 							{{ rowData.email}}
 						</td>

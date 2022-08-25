@@ -215,7 +215,7 @@
         <h5>Liste des étudiants en réinscription</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
+            [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
             [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
@@ -232,7 +232,7 @@
                     <th style="width: 3rem"></th>
                     <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
+                    <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
                     </th>
                     <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon>
                     </th>
@@ -256,9 +256,9 @@
                             (click)="loadPP(etudiant)"></button>
                     </td>
                     <td>{{ etudiant.custom_id }}</td>
-                    <td style="min-width: 10rem;"> {{
-                        users[etudiant.user_id]?.lastname | uppercase
-                        }} {{ users[etudiant.user_id]?.firstname }}
+                    <td style="min-width: 10rem;">
+                        {{ users[etudiant.user_id]?.firstname }}
+                        {{ users[etudiant.user_id]?.lastname | uppercase }}
                     </td>
                     <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
                     <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>

@@ -227,7 +227,12 @@
 		</div>
 	</div>
 
-
+	<p-dialog header="Affectation à quel Agent" [modal]="true" [(visible)]="showDropDown" [style]="{height: '50vw'}">
+		<div class="p-5 mb-5">
+			<p-dropdown [options]="userList" (onChange)="Affected($event)" placeholder="Choissisez un agent">
+			</p-dropdown>
+		</div>
+	</p-dialog>
 
 	<div class="col-12">
 		<div class="card">
@@ -304,9 +309,6 @@
 							<i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
 								*ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"
 								aria-hidden="true"></i>
-							<p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-								(onChange)="Affected($event)" placeholder="Choissisez un agent">
-							</p-dropdown>
 						</td>
 					</tr>
 				</ng-template>
@@ -336,7 +338,7 @@
 			<p-table class="p-datatable-gridlines" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 				<ng-template pTemplate="header">
 					<tr>
-						<th>Nom Prénom </th>
+						<th>Prénom & Nom </th>
 						<th *ngIf="userDic[rowData.createur_id].phone">Téléphone</th>
 						<th>Email</th>
 						<th *ngIf="userDic[rowData.createur_id].adresse">Adresse</th>
@@ -454,7 +456,7 @@
 					<th>Service</th>
 					<th>Sujet</th>
 					<th>Date d'acceptation</th>
-					<th>Temps de traitement</th>
+					<!--<th>Temps de traitement</th>-->
 					<th>Désignation</th>
 					<th>Statut</th>
 					<th>Action</th>
@@ -472,10 +474,10 @@
 					<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
 					<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 					<td style="min-width: 10rem;">{{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}</td>
-					<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
+					<!--<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
 						{{showWorkingTime(rowData)}}</td>
 					<td *ngIf="rowData.statut == 'Traité'" style="min-width: 10rem;">{{endDateOfTreatment(rowData)}}
-					</td>
+					</td>-->
 					<td *ngIf="rowData.isAffected" style="min-width: 10rem;">Affecté</td>
 					<td *ngIf="!rowData.isAffected" style="min-width: 10rem;">Accepté</td>
 					<td [pSelectableRow]="rowData" style="min-width: 10rem;">{{rowData.statut}}</td>
@@ -519,7 +521,7 @@
 		<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Nom Prénom</th>
+					<th>Prénom & Nom</th>
 					<th *ngIf="userDic[rowData.createur_id].phone">Téléphone</th>
 					<th *ngIf="userDic[rowData.createur_id].email">Email</th>
 					<th *ngIf="userDic[rowData.createur_id].adresse">Adresse</th>
@@ -816,7 +818,7 @@
 		<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Nom Prénom</th>
+					<th>Prénom & Nom</th>
 					<th *ngIf="userDic[rowData.createur_id].phone">Téléphone</th>
 					<th *ngIf="userDic[rowData.createur_id].email">Email</th>
 					<th *ngIf="userDic[rowData.createur_id].adresse">Adresse</th>
@@ -868,7 +870,7 @@
 		<p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 			<ng-template pTemplate="header">
 				<tr>
-					<th>Nom Prénom</th>
+					<th>Prénom & Nom</th>
 					<th *ngIf="userDic[rowData.agent_id].phone">Téléphone</th>
 					<th *ngIf="userDic[rowData.agent_id].email">Email</th>
 					<th *ngIf="userDic[rowData.agent_id].adresse">Adresse</th>
