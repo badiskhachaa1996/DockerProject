@@ -227,7 +227,12 @@
 		</div>
 	</div>
 
-
+	<p-dialog header="Affectation à quel Agent" [modal]="true" [(visible)]="showDropDown" [style]="{height: '50vw'}">
+		<div class="p-5 mb-5">
+			<p-dropdown [options]="userList" (onChange)="Affected($event)" placeholder="Choissisez un agent">
+			</p-dropdown>
+		</div>
+	</p-dialog>
 
 	<div class="col-12">
 		<div class="card">
@@ -304,9 +309,6 @@
 							<i pTooltip="Affecter" tooltipPosition="bottom" style="margin-left: 5%;"
 								*ngIf="isReponsable" class="pi pi-user-plus" (click)="showDropdownUser(rowData)"
 								aria-hidden="true"></i>
-							<p-dropdown *ngIf="showDropDown && showDropDown==rowData" [options]="userList"
-								(onChange)="Affected($event)" placeholder="Choissisez un agent">
-							</p-dropdown>
 						</td>
 					</tr>
 				</ng-template>

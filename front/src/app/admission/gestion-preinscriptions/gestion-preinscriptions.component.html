@@ -200,7 +200,7 @@
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single" (onRowSelect)="expandRow($event.data)"
-                [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','email_perso','user_id','rythme_formation']"
+                [globalFilterFields]="['customid', 'statut_actuel', 'validated_academic_level', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -321,7 +321,7 @@
                         <td>
                             {{prospect.date_creation | date :'dd/MM/yyyy' }}
                         </td>
-                        <td *ngIf="prospect.enTraitement == false">
+                        <td *ngIf="!prospect.enTraitement">
                             <i *ngIf="!dataCommercial" pTooltip="Changer le statut du dossier" tooltipPosition="bottom"
                                 class="pi pi-bookmark"
                                 (click)="showPayement=prospect;payementList=prospect.payement;inscriptionSelected=prospect;initStatutForm(prospect)"
@@ -332,7 +332,7 @@
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
                         </td>
-                        <td *ngIf=" prospect.enTraitement == true">
+                        <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
                                 pTooltip="Dossier en cours de traitement"></i>
                         </td>
@@ -340,7 +340,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-prospect>
                     <tr>
-                        <td colspan="13">
+                        <td colspan="14">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
