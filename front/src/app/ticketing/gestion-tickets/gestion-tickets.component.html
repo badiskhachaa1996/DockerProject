@@ -456,7 +456,7 @@
 					<th>Service</th>
 					<th>Sujet</th>
 					<th>Date d'acceptation</th>
-					<th>Temps de traitement</th>
+					<!--<th>Temps de traitement</th>-->
 					<th>Désignation</th>
 					<th>Statut</th>
 					<th>Action</th>
@@ -474,10 +474,10 @@
 					<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
 					<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 					<td style="min-width: 10rem;">{{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}</td>
-					<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
+					<!--<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
 						{{showWorkingTime(rowData)}}</td>
 					<td *ngIf="rowData.statut == 'Traité'" style="min-width: 10rem;">{{endDateOfTreatment(rowData)}}
-					</td>
+					</td>-->
 					<td *ngIf="rowData.isAffected" style="min-width: 10rem;">Affecté</td>
 					<td *ngIf="!rowData.isAffected" style="min-width: 10rem;">Accepté</td>
 					<td [pSelectableRow]="rowData" style="min-width: 10rem;">{{rowData.statut}}</td>
