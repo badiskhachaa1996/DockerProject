@@ -40,6 +40,7 @@ export class FirstConnectionComponent implements OnInit {
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
+  token;
 
   statutList = [
     { value: "Etudiant", actif: false },
@@ -76,8 +77,9 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
+    
     this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
-      if (data.user_id) {
+      if (data) {
         this.userConnected = data.user_id
         this.RegisterForm.patchValue({
           lastname: this.userConnected.lastname,
@@ -237,9 +239,8 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          null,
-          this.RegisterForm.value.entreprise,
-          this.RegisterForm.value.diplome.value
+          null
+          // this.RegisterForm.value.diplome.value
         )
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           localStorage.removeItem('modify')

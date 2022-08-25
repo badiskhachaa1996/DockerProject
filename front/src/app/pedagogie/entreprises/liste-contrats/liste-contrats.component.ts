@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Etudiant } from 'src/app/models/Etudiant';
+import { EtudiantService } from 'src/app/services/etudiant.service';
+
+
 @Component({
   selector: 'app-liste-contrats',
   templateUrl: './liste-contrats.component.html',
@@ -11,6 +15,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./liste-contrats.component.scss']
 })
 export class ListeContratsComponent implements OnInit {
+
   token;
   ListeContrats = []
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
@@ -19,16 +24,25 @@ export class ListeContratsComponent implements OnInit {
   ngOnInit(): void {
 
 
+
     this.token = jwt_decode(localStorage.getItem("token"))
     console.log(this.token)
-    if(!this.idTuteur && this.token)
-      this.idTuteur=this.token.id
+
+    if (!this.idTuteur && this.token)
+      this.idTuteur = this.token.id
+
 
     this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
       this.ListeContrats = listeData;
-
-
     })
+
+
+
+  }
+
+  showPresence(alternant_id){
+    console.log(alternant_id)
+    this.router.navigate(["details/" + alternant_id]);
   }
 
 }

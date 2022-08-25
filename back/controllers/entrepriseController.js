@@ -57,7 +57,6 @@ app.post("/createNewContrat", (req, res, next) => {
 
     let CeoData = req.body.CEO
     delete CeoData._id;
-    console.log(CeoData.email);
     let EntrepriseData = req.body.entreprise;
     delete EntrepriseData._id;
     let TuteurData = req.body.t1;
@@ -84,14 +83,10 @@ app.post("/createNewContrat", (req, res, next) => {
 
                     NewCeo.save()
                         .then((CeoCreated) => {
-                            console.log(CeoCreated.email)
 
                             NewEntrepise.Directeur_id = CeoCreated._id
-                            console.log(NewEntrepise)
                             //Creation d'une nouvelle entreprise
                             NewEntrepise.save().then((EntrepCreated) => {
-                                console.log("EntrepCreated: ", EntrepCreated._id)
-                                console.log(NewTuteur.email = CeoCreated.email)
 
                                 if (NewTuteur.email = CeoCreated.email) {
 

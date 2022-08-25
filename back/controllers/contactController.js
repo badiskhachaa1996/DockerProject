@@ -22,8 +22,6 @@ let transporterContact = nodemailer.createTransport({
 
 
 app.post("/sendMail", (req, res) => {
-    console.log("requete envoyée dans le back");
-    console.log(req.body);
     let messageObject = req.body;
 
     //  res.send(info);
@@ -78,14 +76,6 @@ app.post("/sendMail", (req, res) => {
         if (error) {
             console.error(error);
         }
-        console.log("email envoyée avec success")
-    });
-
-    transporterContact.sendMail(mailOptionsUser, function (error, info) {
-        if (error) {
-            console.error(error);
-        }
-        console.log("email envoyée avec success")
     });
 
 

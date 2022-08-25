@@ -44,7 +44,9 @@ app.post("/create", (req, res, next) => {
     let etudiant = new Etudiant(
         {
             ...etudiantData
-        });  //Creation du nouveau user
+        });  
+    console.log(etudiant)
+    //Creation du nouveau user
     let userData = req.body.newUser;
     let user = new User(
         {
@@ -78,6 +80,7 @@ app.post("/create", (req, res, next) => {
                             res.status(400).json({ error: 'Cet étudiant existe déja' });
                         } else {
                             etudiant.user_id = userFromDb._id;
+                            console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
 
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
@@ -91,6 +94,7 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         etudiant.user_id = userCreated._id;
+                        console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
                             .catch((error) => {
