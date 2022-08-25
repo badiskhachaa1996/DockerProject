@@ -227,7 +227,7 @@
 		</div>
 	</div>
 
-	<p-dialog header="Affectation à quel Agent" [(visible)]="showDropDown">
+	<p-dialog header="Affectation à quel Agent" [modal]="true" [(visible)]="showDropDown" [style]="{height: '50vw'}">
 		<div class="p-5 mb-5">
 			<p-dropdown [options]="userList" (onChange)="Affected($event)" placeholder="Choissisez un agent">
 			</p-dropdown>
