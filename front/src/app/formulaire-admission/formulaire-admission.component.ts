@@ -77,13 +77,13 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   campusDropdown =
     [
-      { value: "Campus Paris - France" },
-      { value: "Campus Montpellier - France" },
-      { value: "Campus Athène - Grèce" },
-      { value: "Campus Valence - Espagne" },
-      { value: "Campus Florence - Italie" },
-      { value: "Campus UAE - Dubai" },
-      { value: "Campus Tunis - Tunisie" },
+      { value: "Paris - France" },
+      { value: "Montpellier - France" },
+      { value: "Athène - Grèce" },
+      { value: "Valence - Espagne" },
+      { value: "Florence - Italie" },
+      { value: "UAE - Dubai" },
+      { value: "Tunis - Tunisie" },
 
     ];
 
@@ -153,33 +153,33 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     if (this.form_origin == "eduhorizons") {
       this.campusDropdown = [
-        { value: "Campus France - Paris" },
-        { value: "Campus France - Montpellier" },
-        { value: "Campus Valence - Espagne" },
-        { value: "Campus Florence - Italie" },
-        { value: "Campus UAE - Dubai" },
-        { value: "Campus Tunisie - Tunis" },
-        { value: "Campus Montréal - Canada" },
-        { value: "Campus Malte " },
-        { value: "Campus Congo" },
-        { value: "Campus Maroc" },
-        { value: "Campus USA" },
-        { value: "Campus En ligne" }
+        { value: "France - Paris" },
+        { value: "France - Montpellier" },
+        { value: "Valence - Espagne" },
+        { value: "Florence - Italie" },
+        { value: "UAE - Dubai" },
+        { value: "Tunisie - Tunis" },
+        { value: "Montréal - Canada" },
+        { value: "Malte " },
+        { value: "Congo" },
+        { value: "Maroc" },
+        { value: "USA" },
+        { value: "En ligne" }
       ]
     } else if (this.form_origin == "estya") {
       this.campusDropdown = [
-        { value: "Campus Paris - France" },
-        { value: "Campus Montpellier - France" },
-        { value: "Campus Brazzaville - Congo" },
-        { value: "Campus Rabat - Maroc " },
-        { value: "Campus Malte" },
-        { value: "Campus En ligne" }
+        { value: "Paris - France" },
+        { value: "Montpellier - France" },
+        { value: "Brazzaville - Congo" },
+        { value: "Rabat - Maroc " },
+        { value: "Malte" },
+        { value: "En ligne" }
       ]
     } else if (this.form_origin == "adg") {
       this.campusDropdown = [
-        { value: "Campus Paris - France" },
-        { value: "Campus Montpellier - France" },
-        { value: "Campus En ligne" }
+        { value: "Paris - France" },
+        { value: "Montpellier - France" },
+        { value: "En ligne" }
       ]
 
       this.programeFrDropdown = [
@@ -211,9 +211,9 @@ export class FormulaireAdmissionComponent implements OnInit {
       ]
     } else if (this.form_origin == "espic") {
       this.campusDropdown = [
-        { value: "Campus France - Paris" },
-        { value: "Campus Athène - Grèce" },
-        { value: "Campus En ligne" }
+        { value: "France - Paris" },
+        { value: "Athène - Grèce" },
+        { value: "En ligne" }
       ]
 
     }
@@ -266,7 +266,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-      //****** Notre partenaire d'accompagnement Eduhorizons *******
+      //****** Notre partenaire d'accompagnement EduHorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -342,7 +342,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
   get sportif_hn() { return this.RegisterForm.get('sportif_hn'); }
-  //****** Notre partenaire d'accompagnement Eduhorizons *******
+  //****** Notre partenaire d'accompagnement EduHorizons *******
   get servicesEh() { return this.RegisterForm.get('servicesEh'); }
   get isGarant() { return this.RegisterForm.get('isGarant'); }
   get nomGarant() { return this.RegisterForm.get('nomGarant'); }
@@ -426,7 +426,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme = null
       formation = null
     }
-    //****** Notre partenaire d'accompagnement Eduhorizons *******
+    //****** Notre partenaire d'accompagnement EduHorizons *******
     let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value];
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;

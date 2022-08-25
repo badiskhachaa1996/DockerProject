@@ -60,15 +60,6 @@ Formation suivie :
         <div>
 
             <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
-
-            <br>
-            <div class=" card-container col-12 flex align-items-center justify-content-center flex-wrap "
-                styleClass="p-card-shadow">
-                <img *ngIf="ActiveIndex!==0" src="\assets\images\entreprise-1536x1025.jpg" 
-                    style="width: 100%; max-height: 300px;">
-                <img *ngIf="ActiveIndex==0" src='\assets\images\10605148.webp' 
-                    style="width: 100%; max-height: 300px;">
-            </div>
         </div>
         <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect();showBasicDialogFin()">
             <div *ngIf="ActiveIndex==0">
@@ -528,13 +519,9 @@ Formation suivie :
                                     filter="true"
                                     filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
                                     optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
-                                    formControlName="alternant">
+                                    formControlName="alternant" >
                                 </p-dropdown>
-                                <div *ngIf="alternant.invalid && (alternant.touched || alternant.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="alternant.errors?.required">*
-                                        Le
-                                        champs est obligatoire.</span>
-                                </div>
+
                             </div>
 
                             <div class="field col-12 md:col-6">
@@ -613,7 +600,7 @@ Formation suivie :
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;" [disabled]="! debut_contrat || ! fin_contrat || ! classification || 
                                 ! alternant || ! intitule ||!  niv || ! coeff_hier  || ! form|| ! code_commercial "
-                                (click)="nextPage()"></button>
+                                (click)="nextPage(); "></button>
                         </div>
                     </div>
                     <div>

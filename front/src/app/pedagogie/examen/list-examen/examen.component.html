@@ -103,7 +103,7 @@
             <h3>Examens</h3>
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['libelle', 'classe_id', 'matiere_id', 'note_max', 'coef']" [rows]="5"
+                [globalFilterFields]="['libelle', 'classe_id', 'matiere_id', 'note_max', 'coef']" [rows]="10"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">

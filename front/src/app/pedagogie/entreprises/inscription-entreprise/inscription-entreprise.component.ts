@@ -53,7 +53,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   civiliteList = environment.civilite;
   nationList = environment.nationalites;
   emailExist: boolean;
-  listAlternantDD = []
+  listAlternantDD : any = [] 
   formationList = []
 
   products: any[];
@@ -149,6 +149,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
       });
 
     })
+
+
   }
 
   onInitRegisterForm() {
@@ -199,7 +201,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
-      alternant: new FormControl(this.listAlternant[0]),
+      alternant: new FormControl(this.listAlternantDD[0]),
       intitule: new FormControl('', Validators.required),
       classification: new FormControl('', Validators.required),
       niv: new FormControl('', Validators.required),
@@ -212,10 +214,14 @@ export class InscriptionEntrepriseComponent implements OnInit {
       donneePerso: new FormControl(''),
 
     });
+
+
+
   };
 
   nextPage() {
     this.ActiveIndex++
+ 
   }
 
   previousPage() {
@@ -354,6 +360,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       false
     );
 
+    
     let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire, this.alternant.value, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, null, this.code_commercial)
 
     //Creation de lobjet a envoyer dans le back 
@@ -362,12 +369,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
       ((response) => {
         if (response) {
           this.servService.getAServiceByLabel("Commercial").subscribe(serviceCommercial => {
-            console.log('creation de la notif pour le service Commercial')
-            console.log(serviceCommercial)
+        
+          
             let notifToCreate = new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial.dataService?._id)
-            console.log(notifToCreate)
+            
             this.NotifService.create(notifToCreate).subscribe(notif => {
-              console.log(notif)
+            
               this.NotifService.newNotif(notif)
 
               this.messageService.add({ severity: 'success', summary: 'Le contrat alternance a été créé', detail: "Vérifiez vos mails pour les informations de connexion" });

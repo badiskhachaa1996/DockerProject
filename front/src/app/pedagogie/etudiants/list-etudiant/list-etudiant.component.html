@@ -51,6 +51,11 @@
                         <input type="number" (change)="changeMontant(i,$event,'montant')"
                             [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
                     </div>
+                    <div class="field col-12 md:col-5">
+                        <label>Date du paiement:</label><br>
+                        <input type="date" (change)="changeMontant(i,$event,'date')"
+                            [(value)]="payementList[i]['date']" pInputText>
+                    </div>
                     <div class="field col-12 md:col-1">
                         <label>&nbsp;</label><br>
                         <button type="button" pButton icon="pi pi-times" (click)="deletePayement(i)"
@@ -291,7 +296,7 @@
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
-                [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="5"
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -308,7 +313,7 @@
                         <th style="width: 3rem"></th>
                         <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nom_prenom"> Nom et prénom <p-sortIcon field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="nom_prenom"> Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
                         </th>
                         <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon>
                         </th>
@@ -332,8 +337,7 @@
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 
                         <td>
-                            {{ users[etudiant.user_id]?.civilite | i18nSelect: genderMap}} {{ etudiant?.lastname |
-                            uppercase }} {{ etudiant?.firstname }}
+                            {{ etudiant?.firstname }} {{ etudiant?.lastname | uppercase }}
                         </td>
                         <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
                         <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
@@ -512,7 +516,8 @@
                 </ng-template>
             </p-table>
 
-            <h5 *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement" style="color: red; text-align: center;">Paiements</h5>
+            <h5 *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement"
+                style="color: red; text-align: center;">Paiements</h5>
             <ul *ngIf="prospects[etudiant.user_id] && prospects[etudiant.user_id].payement">
                 <li *ngFor="let payement of prospects[etudiant.user_id].payement; index as i">
                     <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>

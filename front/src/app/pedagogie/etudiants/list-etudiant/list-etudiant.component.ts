@@ -102,7 +102,7 @@ export class ListEtudiantComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0 })
+    this.payementList.push({ type: "", montant: 0, date:"" })
   }
 
   changeMontant(i, event, type) {

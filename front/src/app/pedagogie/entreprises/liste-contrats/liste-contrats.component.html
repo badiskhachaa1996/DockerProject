@@ -1,5 +1,5 @@
 <div class="grid">
-    
+
     <div class="col-12">
         <div class="card">
             <h5>Liste des Contrats</h5>
@@ -20,7 +20,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem;"></th>
-                        <th pSortableColumn="alternant_id"> Nom Prenom <p-sortIcon field="alternant_id">
+                        <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="intitule"> Intitulé du poste <p-sortIcon field="intitule">
@@ -44,8 +44,9 @@
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
-                        <td style="min-width: 8rem;">{{ contrat.alternant_id.user_id.firstname }} {{
-                            contrat.alternant_id.user_id.lastname }}</td>
+                        <td style="min-width: 8rem;">
+                            {{ contrat.alternant_id.user_id.firstname }}
+                            {{ contrat.alternant_id.user_id.lastname }}</td>
                         <td style="min-width: 8rem;">{{ contrat.intitule }}</td>
                         <td style="min-width: 8rem;">{{ contrat.formation.titre_long }}</td>
                         <td style="min-width: 8rem;">{{ contrat.debut_contrat }}</td>

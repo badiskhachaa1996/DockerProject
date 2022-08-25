@@ -78,7 +78,7 @@
         </div>
         <h3>Liste des séances {{ titre }}</h3>
         <div class="col-12 card shadow-lg my-5 ">
-            <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="5"
+            <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="10"
                 responsiveLayout="scroll" [paginator]="true" [pageLinks]="5" [responsive]="true"
                 [totalRecords]="seances.length" [filterDelay]="0"
                 [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']"
