@@ -12,8 +12,6 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Entreprise } from 'src/app/models/Entreprise';
-import { Tuteur } from 'src/app/models/Tuteur';
-import { TuteurService } from 'src/app/services/Tuteur.service';
 
 @Component({
   selector: 'app-reinscrit',

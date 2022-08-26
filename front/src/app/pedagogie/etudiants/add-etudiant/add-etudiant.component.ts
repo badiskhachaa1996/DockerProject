@@ -14,8 +14,8 @@ import jwt_decode from "jwt-decode";
 import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
-import { Tuteur } from 'src/app/models/tuteur';
 import { TuteurService } from 'src/app/services/tuteur.service';
+import { Tuteur } from 'src/app/models/Tuteur';
 
 @Component({
   selector: 'app-add-etudiant',
