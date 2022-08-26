@@ -266,13 +266,14 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="siret">Numero de Siret<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="siret"   maxlength="15"   type="number" placeholder="XXXX-XXXX-XXXX-XXX"
-                                    formControlName="siret" />
+                                <input pInputText id="siret" maxlength="15" type="number"
+                                    placeholder="XXXX-XXXX-XXXX-XXX" formControlName="siret" />
                                 <div *ngIf="siret.invalid && (siret.touched || siret.dirty)">
                                     <span style="color: red;" class="error" *ngIf="siret.errors?.required">*
                                         Le numero de siret
                                         est obligatoire.</span>
-                                    <span style="color: red;" class="error" *ngIf="siret.errors?.pattern">* Le numéro de siret est composé de 15 chiffres</span>
+                                    <span style="color: red;" class="error" *ngIf="siret.errors?.pattern">* Le numéro de
+                                        siret est composé de 15 chiffres</span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-6">
@@ -675,7 +676,7 @@ Formation suivie :
                                     formControlName="code_commercial" />
                                 <div>
                                     <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
-                                    <span style="color: red;" class="error" >*
+                                    <span style="color: red;" class="error">*
                                         Le
                                         champs est obligatoire.</span>
                                 </div>
@@ -740,16 +741,14 @@ Formation suivie :
     </div>
     <p-dialog header="Inscription Entreprise et enregistrement du contrat avec succes  " [(visible)]="MessageFormSubmit"
         [style]="{width: '50vw'}">
-        <p>{{ lastname.value | uppercase}} {{ lastname.value }} recevra par email les acces a la platforme IMS en
-            tant que CEO de
-            l'entreprise</p>
+        <p>{{ lastname.value | uppercase}} {{ lastname.value }} recevra par email les accès à la plate-forme IMS en tant
+            que CEO de l'entreprise</p>
 
-        <p>Une fois connecté sur la platforme avec le le mot de passe reçu par email, Vous aurez accés a
+        <p>Une fois connecté sur la plate-forme avec le mot de passe reçu par email, Vous aurez accès à
             la liste de vos
-            alternants et stagiéres suivants leurs formations dans une de nos écoles </p>
+            alternants qui sont étudiants dans une de nos écoles </p>
 
-        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Qui recerevons a leurs
-            tours les accés
+        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Et Auront un accés
             pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations
             concernant les
             formations suivis. </p>
