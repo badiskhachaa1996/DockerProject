@@ -15,6 +15,8 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
 import { PresenceService } from 'src/app/services/presence.service';
 import { Presence } from 'src/app/models/Presence';
+import { TuteurService } from 'src/app/services/tuteur.service';
+import { Tuteur } from 'src/app/models/Tuteur';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
@@ -55,8 +57,10 @@ export class ListEtudiantComponent implements OnInit {
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
+  dropdownClasse: any[] = [{ libelle: 'Choisissez une classe', value: null }];
   searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
+  tuteur: Tuteur[] = []
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
@@ -74,7 +78,7 @@ export class ListEtudiantComponent implements OnInit {
   dateDeNaissanceToExport: Date;
 
   entreprises: Entreprise[] = [];
-  dropdownEntreprise: any[] = [{ libelle: '', value: '' }];
+  dropdownEntreprise: any[] = [{ libelle: 'Choisissez une entreprise', value: '' }];
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -148,7 +152,8 @@ export class ListEtudiantComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
-    private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService) { }
+    private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
+    private tuteurService: TuteurService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -162,7 +167,7 @@ export class ListEtudiantComponent implements OnInit {
     this.onGetAllClasses();
 
     /* Specialement pour la partie dexport des données */
-    this.dropdownEntreprise = [{ libelle: 'Choissisez une entreprise', value: '' }];
+    this.dropdownEntreprise = [{ libelle: 'Choisissez une entreprise', value: '' }];
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
       ((response) => {
@@ -185,6 +190,21 @@ export class ListEtudiantComponent implements OnInit {
     this.onInitFormUpdateEtudiant();
 
   }
+
+
+  TuteurListLoad(entreprise_id){
+    //Liste des tuteurs par entreprise_id
+    let entrepriseId = this.formUpdateEtudiant.get('entreprise_id')?.value;
+    console.log(entrepriseId.value)
+    this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
+      (response) => {
+        response.forEach((tuteur) => {
+          this.dropdownTuteurByEntreprise.push({libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id})
+          console.log(this.dropdownTuteurByEntreprise)
+        })
+    });this.dropdownTuteurByEntreprise = [];
+  }
+
   confirmRighFile(file, etudiant) {
     console.log("confirme right for ", file)
     this.confirmationService.confirm({
@@ -223,7 +243,7 @@ export class ListEtudiantComponent implements OnInit {
   onGetAllClasses() {
 
     this.dropdownUser = [];
-    this.dropdownClasse = [{ libelle: 'Choissisez une classe', value: null }];
+    this.dropdownClasse = [{ libelle: 'Choisissez une classe', value: null }];
     this.searchClass = [{ libelle: 'Toutes les classes', value: null }];
 
     //Recuperation de la liste des classes
@@ -305,12 +325,29 @@ export class ListEtudiantComponent implements OnInit {
   get date_naissance2() { return this.formUpdateEtudiant.get('date_naissance'); }
 
 
-  generateCode(lastname) {
-    let random = Math.random().toString(36).substring(8).toUpperCase();
-    random = random.substring(0, 4)
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.users.length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
 
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
-    return nom + random;
   }
 
 
@@ -344,11 +381,10 @@ export class ListEtudiantComponent implements OnInit {
       adresse_tuteur: [""],
       email_tuteur: ["", Validators.email],
       phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
-      indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
+      // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
-      custom_id: [''],
       numero_INE: [''],
       numero_NIR: ['', Validators.pattern('[0-9]+')],
       isMinor: [false],
@@ -374,15 +410,10 @@ export class ListEtudiantComponent implements OnInit {
     let date_naissance = this.formUpdateEtudiant.get('date_naissance')?.value;
     let nationalite = this.formUpdateEtudiant.get('nationalite')?.value.value;
 
-    let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
     let isAlternant = this.formUpdateEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formUpdateEtudiant.get('isOnStage')?.value;
-    let nom_tuteur = this.formUpdateEtudiant.get('nom_tuteur')?.value;
-    let prenom_tuteur = this.formUpdateEtudiant.get('prenom_tuteur')?.value;
-    let adresse_tuteur = this.formUpdateEtudiant.get('adresse_tuteur')?.value;
-    let email_tuteur = this.formUpdateEtudiant.get('email_tuteur')?.value;
-    let phone_tuteur = this.formUpdateEtudiant.get('phone_tuteur')?.value;
-    let indicatif_tuteur = this.formUpdateEtudiant.get('indicatif_tuteur')?.value;
+    
+    // let indicatif_tuteur = this.formUpdateEtudiant.get('indicatif_tuteur')?.value;
     let dernier_diplome = this.formUpdateEtudiant.get('dernier_diplome')?.value;
     let sos_email = this.formUpdateEtudiant.get('sos_email')?.value;
     let sos_phone = this.formUpdateEtudiant.get('sos_phone')?.value;
@@ -393,14 +424,41 @@ export class ListEtudiantComponent implements OnInit {
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise = this.formUpdateEtudiant.get('entreprise')?.value;
-    let remarque = entreprise = this.formUpdateEtudiant.get('remeraque')?.value;
+    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value;
+    let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
 
-    let etudiant = new Etudiant(this.idEtudiantToUpdate, this.idUserOfEtudiantToUpdate, classe_id, statut, nationalite, date_naissance,
-      null, null, null, null, custom_id, numero_INE, numero_NIR, sos_email, sos_phone, nom_rl, prenom_rl, phone_rl, email_rl, adresse_rl, dernier_diplome,
-      isAlternant, nom_tuteur, prenom_tuteur, adresse_tuteur, email_tuteur, phone_tuteur, indicatif_tuteur, isHandicaped, suivi_handicaped, entreprise, null, this.parcoursList, remarque, isOnStage);
+    let etudiant = new Etudiant(
+      this.idEtudiantToUpdate, 
+      this.idUserOfEtudiantToUpdate, 
+      classe_id, 
+      statut, 
+      nationalite, 
+      date_naissance,
+      this.etudiantToUpdate.code_partenaire, 
+      this.etudiantToUpdate.hasBeenBought, 
+      this.etudiantToUpdate.examenBought,
+      this.etudiantToUpdate.howMuchBought,
+      this.etudiantToUpdate.custom_id, 
+      numero_INE, 
+      numero_NIR, 
+      sos_email, 
+      sos_phone, 
+      nom_rl, 
+      prenom_rl, 
+      phone_rl, 
+      email_rl, 
+      adresse_rl, 
+      dernier_diplome,
+      isAlternant, 
+      isHandicaped, 
+      suivi_handicaped,
+      this.etudiantToUpdate.diplome,
+      this.etudiantToUpdate.parcours,
+      remarque, 
+      isOnStage 
+      );
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -427,12 +485,11 @@ export class ListEtudiantComponent implements OnInit {
         this.parcoursList = this.etudiantToUpdate.parcours
         this.formUpdateEtudiant.patchValue({
           statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
-          isAlternant: this.etudiantToUpdate.isAlternant, nom_tuteur: this.etudiantToUpdate.nom_tuteur, prenom_tuteur: this.etudiantToUpdate.prenom_tuteur, adresse_tuteur: this.etudiantToUpdate.adresse_tuteur,
-          email_tuteur: this.etudiantToUpdate.email_tuteur, phone_tuteur: this.etudiantToUpdate.phone_tuteur, indicatif_tuteur: this.etudiantToUpdate.indicatif_tuteur,
+          isAlternant: this.etudiantToUpdate.isAlternant,
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          entreprise: this.etudiantToUpdate.entreprise, remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage,
+          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage,
         });
       }),
       ((error) => { console.error(error); })
@@ -544,11 +601,6 @@ export class ListEtudiantComponent implements OnInit {
       });
     }
 
-  }
-
-  generateCustomCode() {
-    let code = this.generateCode(this.formUpdateEtudiant.value.lastname)
-    this.formUpdateEtudiant.patchValue({ custom_id: code })
   }
 
   parcoursList = []

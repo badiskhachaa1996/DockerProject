@@ -183,16 +183,6 @@
                         formControlName="sos_phone" />
                 </div>
 
-                <div class="field col-12">
-                    <label>Code Etudiant:</label>
-                    <div class="p-inputgroup">
-                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
-                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn"
-                            (click)="generateCustomCode()">
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Parcous Etudiant-->
                 <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -271,15 +261,24 @@
                 <div class="col-12" *ngIf="formAddEtudiant.value.isAlternant || formAddEtudiant.value.isOnStage ">
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
-                        <!-- <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                        <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
                                     emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
-                                    filter="true">
-                        </p-dropdown> -->
-                        <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
-                            formControlName="entreprise" />
+                                    filter="true" (onChange)="TuteurListLoad(entreprise_id)">
+                        </p-dropdown>
+                        <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
+                            formControlName="entreprise" /> -->
                     </div>
 
                     <div class="field col-12">
+                        <label>Tuteur<span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise" optionLabel="libelle"
+                                    emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
+                                    filter="true">
+                        </p-dropdown>
+                    </div>
+
+                    <!-- SUPPRIMER LES CHAMPS? -->
+                    <!-- <div class="field col-12">
                         <label For="tn">Nom du tuteur</label>
                         <input pInputText type="text" id="tn" placeholder="Doe" formControlName="nom_tuteur" />
                     </div>
@@ -287,11 +286,6 @@
                     <div class="field col-12">
                         <label For="tp">Prénom du tuteur</label>
                         <input pInputText type="text" id="tp" placeholder="John" formControlName="prenom_tuteur" />
-                    </div>
-
-                    <div class="field col-12">
-                        <label For="tiph">Indicatif télephone du tuteur</label>
-                        <input pInputText type="text" id="tiph" placeholder="+33" formControlName="indicatif_tuteur" />
                     </div>
 
                     <div class="field col-12">
@@ -310,8 +304,8 @@
                         <label For="erl">Adresse du tuteur</label>
                         <textarea pInputTextarea placeholder="15 Rue du louvre 75001 Paris, France"
                             formControlName="adresse_tuteur" autoResize rows="3" cols="30"></textarea>
-                    </div>
-                </div>
+                    </div>-->
+                </div> 
 
                 <div class="field col-12">
                     <label>Est une Personne à Mobilité Réduite ?</label>
@@ -320,18 +314,17 @@
                 </div>
 
                 <div class="field col-12"
-                    *ngIf="formAddEtudiant.value.isHandicaped==true || formAddEtudiant.value.isHandicaped.value==true">
+                    *ngIf="formAddEtudiant.value.isHandicaped==true">
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
 
                 <div>
-                    <button pButton label="Ajouter l'étudiant" type="submit"
-                        [disabled]="formAddEtudiant.invalid"></button>
+                    <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="formAddEtudiant.invalid"></button>
                 </div>
             </form>
 
             <a routerLink="/etudiants" style="float: right;"><i class="pi pi-caret-right"></i> Voir les étudiants</a>
         </div>
-    </div>
+    
 </div>

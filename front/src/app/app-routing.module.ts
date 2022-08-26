@@ -185,7 +185,8 @@ import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
                     { path: 'tuteur/:entreprise', component: TuteurComponent },
 
                     { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent , canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
-                    { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] } // Listes de tous les contrats d'alternances
+                    { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
+                    { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent }
 
                 ],
             },

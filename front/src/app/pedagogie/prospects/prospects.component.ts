@@ -120,7 +120,7 @@ export class ProspectsComponent implements OnInit {
       this.showAssignForm.validated_academic_level,
       this.AssignForm.value.statut.value == "Alternant",
       this.AssignForm.value.entreprise, this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur,//A faire pour Alternant
-      null, null//A faire pour PMR
+      null//A faire pour PMR
     )
     this.etudiantService.createfromPreinscris(etd).subscribe(data => {
       this.refreshProspect()

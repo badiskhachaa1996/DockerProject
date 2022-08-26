@@ -4,6 +4,8 @@ import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { Etudiant } from 'src/app/models/Etudiant';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 
 @Component({
@@ -32,10 +34,15 @@ export class ListeContratsComponent implements OnInit {
 
     this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
       this.ListeContrats = listeData;
-
-
     })
 
+
+
+  }
+
+  showPresence(alternant_id){
+    console.log(alternant_id)
+    this.router.navigate(["details/" + alternant_id]);
   }
 
 }

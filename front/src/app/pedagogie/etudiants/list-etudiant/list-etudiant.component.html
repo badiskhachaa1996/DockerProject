@@ -136,16 +136,6 @@
                         formControlName="sos_phone" />
                 </div>
 
-                <div class="field col-12">
-                    <label>Code Etudiant:</label>
-                    <div class="p-inputgroup">
-                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
-                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn"
-                            (click)="generateCustomCode()">
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Parcous Etudiant-->
                 <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -221,20 +211,37 @@
 
                 </div>
 
+                <div class="field col-12">
+                    <label>Entreprise<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                                emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
+                                filter="true" (onChange)="TuteurListLoad(entreprise_id)">
+                    </p-dropdown>
+                    <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
+                        formControlName="entreprise" /> -->
+                </div>
+
+                <div class="field col-12">
+                    <label>Tuteur<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise" optionLabel="libelle"
+                                emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
+                                filter="true">
+                    </p-dropdown>
+                </div>
 
 
-                <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant || formUpdateEtudiant.value.isOnStage">
+                <!-- <div class="col-12" *ngIf="formUpdateEtudiant.value.isAlternant || formUpdateEtudiant.value.isOnStage">
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
-                        <!-- <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                        <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
                                     emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
                                     filter="true">
-                        </p-dropdown> -->
+                        </p-dropdown> 
                         <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
                             formControlName="entreprise" />
-                    </div>
+                    </div> -->
 
-                    <div class="field col-12">
+                    <!-- <div class="field col-12">
                         <label For="tn">Nom du tuteur</label>
                         <input pInputText type="text" id="tn" placeholder="Doe" formControlName="nom_tuteur" />
                     </div>
@@ -266,7 +273,7 @@
                         <textarea pInputTextarea placeholder="15 Rue du louvre 75001 Paris, France"
                             formControlName="adresse_tuteur" autoResize rows="3" cols="30"></textarea>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="field col-12">
                     <label>Etes-vous une Personne à Mobilité Réduite ?</label>
@@ -430,7 +437,7 @@
                 </ng-template>
             </p-table>
 
-            <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant">
+            <!-- <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Tuteur </th>
@@ -462,7 +469,7 @@
                         </td>
                     </tr>
                 </ng-template>
-            </p-table>
+            </p-table> -->
 
             <p-table responsiveLayout="scroll" *ngIf="nom_rl">
                 <ng-template pTemplate="header">

@@ -23,9 +23,13 @@ export class PedagogieGuardService implements CanActivate {
 
     let currenttoken: any = jwt_decode(localStorage.getItem("token"))
     let role: string = currenttoken.role;
+    let type : string = currenttoken.type;
     let serviceName
 
     if (role == 'Admin') {
+      console.log("accés autorisé")
+      return true;
+    }else if(type == 'Tuteur'){
       console.log("accés autorisé")
       return true;
     }

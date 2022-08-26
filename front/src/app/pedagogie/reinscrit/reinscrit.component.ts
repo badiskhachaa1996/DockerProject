@@ -10,6 +10,8 @@ import { FileUpload } from 'primeng/fileupload';
 import { MessageService } from 'primeng/api';
 import { saveAs as importedSaveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { Entreprise } from 'src/app/models/Entreprise';
 
 @Component({
   selector: 'app-reinscrit',
@@ -25,6 +27,7 @@ export class ReinscritComponent implements OnInit {
   token;
   imageToShow;
   parcoursList = []
+  dropdownEntreprise = [];
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -59,13 +62,9 @@ export class ReinscritComponent implements OnInit {
     email_rl: [''],
     adresse_rl: [''],
     entreprise: [''],
-    nom_tuteur: [''],
-    prenom_tuteur: [''],
-    adresse_tuteur: [''],
-    email_tuteur: [''],
-    phone_tuteur: [''],
-    indicatif_tuteur: [''],
-    remarque: ['']
+    // indicatif_tuteur: [''],
+    remarque: [''],
+
   })
 
   initForm(etudiant: Etudiant) {
@@ -84,14 +83,8 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.patchValue({
         numero_ine: etudiant.numero_INE,
         numero_nir: etudiant.numero_NIR,
-        adresse_rl: etudiant.adresse_rl,
-        entreprise: etudiant.entreprise,
-        nom_tuteur: etudiant.nom_tuteur,
-        prenom_tuteur: etudiant.prenom_tuteur,
-        adresse_tuteur: etudiant.adresse_tuteur,
-        email_tuteur: etudiant.email_tuteur,
-        phone_tuteur: etudiant.phone_tuteur,
-        indicatif_tuteur: etudiant.indicatif_tuteur,
+        adresse_rl: etudiant.adresse_rl
+        // indicatif_tuteur: etudiant.indicatif_tuteur,
 
       })
     }
@@ -103,7 +96,7 @@ export class ReinscritComponent implements OnInit {
 
   groupeList = [];
   constructor(public etudiantService: EtudiantService, private messageService: MessageService,
-    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService) { }
+    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -116,6 +109,13 @@ export class ReinscritComponent implements OnInit {
       })
     })
     this.refreshEtudiant()
+
+    this.entrepriseService.getAll().subscribe(
+      (data) => {
+        data.forEach(entreprise =>{
+          this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id});
+        })
+      })
   }
 
   onAddEtudiant() {
@@ -131,8 +131,11 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
-      this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
-      , this.showAssignForm.isHandicaped, this.showAssignForm.suivi_handicaped, this.showAssignForm.entreprise, this.showAssignForm.diplome, this.parcoursList, this.AssignForm.value.remarque
+      this.showAssignForm.isHandicaped, 
+      this.showAssignForm.suivi_handicaped, 
+      this.showAssignForm.diplome, 
+      this.parcoursList, 
+      this.AssignForm.value.remarque
     )
     etd.custom_id = this.generateCode(etd)
     this.etudiantService.update(etd).subscribe(data => {

@@ -107,7 +107,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "A signé les documents" },
   ]
   dropdownDecision = [
-    { value: null, label: "Decision Admission" },
+    { value: null, label: "Tous" },
     { value: "Suspendu", label: "Suspendu" },
     { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
@@ -166,6 +166,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
   ]
 
   payementList = []
+  filterCampus = [
+    { value: null, label: "Tous" },
+  ]
 
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
@@ -300,6 +303,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
+                let tempList = []
+                responseAdmission.forEach(p => {
+                  if (tempList.includes(p.campus_choix_1) == false) {
+                    tempList.push(p.campus_choix_1)
+                    this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
+                  }
+                })
               }),
               ((error) => { console.error(error); })
             );
@@ -313,6 +323,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
                 response.forEach((user) => {
                   this.users[user._id] = user;
                 });
+                let tempList = []
+                responseAdmission.forEach(p => {
+                  if (tempList.includes(p.campus_choix_1) == false) {
+                    tempList.push(p.campus_choix_1)
+                    this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
+                  }
+                })
               }),
               ((error) => { console.error(error); })
             );
@@ -330,6 +347,13 @@ export class GestionPreinscriptionsComponent implements OnInit {
                   response.forEach((user) => {
                     this.users[user._id] = user;
                   });
+                  let tempList = []
+                  responseAdmission.forEach(p => {
+                    if (tempList.includes(p.campus_choix_1) == false) {
+                      tempList.push(p.campus_choix_1)
+                      this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
+                    }
+                  })
                 }),
                 ((error) => { console.error(error); })
               );
@@ -530,14 +554,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
     //Clean the data
     this.prospects.forEach(p => {
       let t = {}
-      t['NOM'] = p?.lastname?.toUpperCase()
-      t['Prenom'] = p.firstname
+
+      t['NOM'] = p?.user_id?.lastname
+      t['Prenom'] = p?.user_id?.firstname
       t['Date de la demande'] = p?.date_creation
       t['Date de naissance'] = p.date_naissance
       t['Pays de residence'] = p['pays_de_residence']
-      t['Nationalite'] = p['nationnalite']
-      t['Email'] = p['email']
-      t['Telephone'] = p['telephone']
+      t['Nationalite'] = p?.user_id?.nationnalite
+      t['Email'] = p?.user_id?.email
+      t['Telephone'] = p?.user_id?.indicatif + p?.user_id?.phone
       t['Ecole demande'] = p?.type_form
       t['1er choix'] = p.campus_choix_1
       t['2eme choix'] = p.campus_choix_2
@@ -561,7 +586,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut Payement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
-      t['Confirmation CF'] = p.validated_cf
+      t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
       if (p.agent_id && this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }

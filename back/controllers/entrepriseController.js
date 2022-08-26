@@ -63,14 +63,15 @@ app.post("/createNewContrat", (req, res, next) => {
     delete TuteurData._id;
    
     let ContratData = req.body.contratAlternance;
- 
+    console.log(ContratData)
     delete ContratData._id;
 
     let NewCeo = new User({ ...CeoData })
     let NewEntrepise = new Entreprise({ ...EntrepriseData })
     let NewTuteur = new User({ ...TuteurData })
     let NewContrat = new CAlternance({ ...ContratData })
-
+    NewContrat.alternant_id= ContratData.alternant_id
+    console.log(ContratData.alternant_id + ':' )
     //Verification de l'existence du mail CEO dans la BD
     User.findOne({ email: CeoData.email })
         .then((CeoFromDb) => {

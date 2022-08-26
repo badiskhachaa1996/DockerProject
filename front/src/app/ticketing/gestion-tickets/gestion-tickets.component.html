@@ -168,6 +168,9 @@
 			</i>
 
 			<h4 style="text-align: center;">Envoyer un message</h4>
+			<p *ngIf="commentForm.value.file">Fichier {{commentForm.value.file.filename | slice:0:15}} chargé</p>
+			<p style="color:red ;" *ngIf="value.invalid && value.errors?.maxlength">*Le fichier est trop volumineux
+				(20MB max).</p>
 			<form class="p-fluid p-formgrid grid" [formGroup]="commentForm" enctype="multipart/form-data"
 				(ngSubmit)="SendComment()">
 				<div class="field col-12">
@@ -184,16 +187,6 @@
 				<div class="field col-12 md:col-12">
 					<label For="statut">Statut du ticket :</label>
 					<p-dropdown [options]="statutList" optionLabel="value" formControlName="statut"></p-dropdown>
-				</div>
-
-				<div *ngIf="commentForm.value.file">
-					<span>{{commentForm.value.file.filename | slice:0:15}}</span>
-				</div>
-
-				<div *ngIf="value.invalid && value.errors?.maxlength">
-					<span>
-						*Le fichier est trop volumineux (20MB max).
-					</span>
 				</div>
 
 				<div>
@@ -380,7 +373,7 @@
 							*ngIf="userDic[rowData.createur_id].campus && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
 							{{userDic[rowData.createur_id].campus}}</td>
 						<td
-							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire')">
+							*ngIf="userDic[rowData.createur_id].formation && userDic[rowData.createur_id].type && (userDic[rowData.createur_id].type=='Etudiant' || userDic[rowData.createur_id].type=='Alternant/Stagiaire') && userDic[rowData.createur_id].formation && formationDic[userDic[rowData.createur_id].formation].nom_court">
 							{{formationDic[userDic[rowData.createur_id].formation].nom_court}}
 						</td>
 					</tr>
@@ -456,7 +449,7 @@
 					<th>Service</th>
 					<th>Sujet</th>
 					<th>Date d'acceptation</th>
-					<th>Temps de traitement</th>
+					<!--<th>Temps de traitement</th>-->
 					<th>Désignation</th>
 					<th>Statut</th>
 					<th>Action</th>
@@ -474,10 +467,10 @@
 					<td style="min-width: 12rem;">{{serviceList[sujetList[rowData.sujet_id].service_id]}}</td>
 					<td style="min-width: 8rem;">{{sujetList[rowData.sujet_id].label}}</td>
 					<td style="min-width: 10rem;">{{rowData.date_affec_accep | date:'dd/MM/yyyy HH:mm'}}</td>
-					<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
+					<!--<td *ngIf="rowData.statut == 'En cours de traitement'" style="min-width: 10rem;">
 						{{showWorkingTime(rowData)}}</td>
 					<td *ngIf="rowData.statut == 'Traité'" style="min-width: 10rem;">{{endDateOfTreatment(rowData)}}
-					</td>
+					</td>-->
 					<td *ngIf="rowData.isAffected" style="min-width: 10rem;">Affecté</td>
 					<td *ngIf="!rowData.isAffected" style="min-width: 10rem;">Accepté</td>
 					<td [pSelectableRow]="rowData" style="min-width: 10rem;">{{rowData.statut}}</td>

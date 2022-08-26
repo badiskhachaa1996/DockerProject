@@ -523,8 +523,8 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="temps_fonction_t1" type="number" placeholder="0"
                                     formControlName="temps_fonction_t1" />
-                                <div
-                                    *ngIf="temps_fonction_t1.invalid && (temps_fonction_t1.touched || temps_fonction_t1.dirty)">
+                                <div>
+                                    <!-- *ngIf="temps_fonction_t1.invalid && (temps_fonction_t1.touched || temps_fonction_t1.dirty)" -->
                                     <span style="color: red;" class="error" *ngIf="temps_fonction_t1.errors?.required">*
                                         Le
                                         champs est obligatoire.</span>
@@ -673,9 +673,9 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
                                     formControlName="code_commercial" />
-                                <div
-                                    *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="code_commercial.errors?.required">*
+                                <div>
+                                    <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
+                                    <span style="color: red;" class="error" >*
                                         Le
                                         champs est obligatoire.</span>
                                 </div>
@@ -687,6 +687,7 @@ Formation suivie :
                                 [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
                                  alternant.invalid ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
                                 (click)="nextPage(); "></button>
+
                         </div>
                     </div>
                     <div>
