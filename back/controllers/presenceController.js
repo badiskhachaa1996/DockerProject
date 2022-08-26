@@ -7,7 +7,8 @@ var Canvas = require('canvas');
 const { User } = require("../models/user");
 const { Seance } = require("../models/seance");
 const { Classe } = require("../models/classe");
-const { Etudiant } = require("../models/etudiant")
+const { Etudiant } = require("../models/etudiant");
+const { send } = require("process");
 
 //Récuperer une présence
 app.post("/getById/:id", (req, res) => {
@@ -192,44 +193,66 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
     })
 });
 
-
-
 app.post("/getAtt_ssiduitePDF/:id", (req, res) => {
-
+    console.log(req.params.id)
     etudiantData: Etudiant;
-    const pdfName = 'Ass_' + req.params.id + ".pdf"
+    const pdfName = 'Att_assiduite' + req.params.id + ".pdf"
 
+    function pad(s) { return (s < 10) ? '0' + s : s; }
+    function dateFormat(inputFormat) {
+        var d = new Date(inputFormat)
+        return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/')
+    }
+    function heureFormat(input) {
+        var d = new Date(input)
+        return [pad(d.getHours()), pad(d.getMinutes())].join(':')
+    }
     //Récupérer tous les presence d'une séance
 
-    Presence.find({ seance_id: req.params.id }).then((data) => {
-        res.status(200).send(data);
-    }).catch((error) => {
-        res.status(404).send(error);
-    })
-    Etudiant.findOne({ user_id: req.params.id }).populate({
-        path: 'user_id', populate: {
-            path: "entreprise"
-        }
-    }).populate('classe_id').populate({
-        path: 'formateur_id', populate: {
-            path: "user_id"
-        }
+    Etudiant.findOne({ _id: req.params.id }).populate({
+        path: 'user_id',
+    }).populate({
+        path: 'classe_id', populate: { path: 'diplome_id' }
     }).then((data) => {
         etudiantData = data
-        const canvas = Canvas.createCanvas(2300, 1500, 'pdf')
+        const canvas = Canvas.createCanvas(753, 911, 'pdf')
         const ctx = canvas.getContext('2d')
         const bg = new Canvas.Image()
-        bg.src = "assets/model_assiduite.png"
+        bg.src = "assets/attestation_assiduite.png"
         ctx.drawImage(bg, 0, 0)
-        ctx.font = '30px Arial';
+        ctx.font = '20px Arial';
         xi = 0;
         yi = 0;
         xif = 0;
         yif = 0;
-        const signForImage = new Canvas.Image()
-        const signImage = new Canvas.Image()
+      
 
+        ctx.fillText(etudiantData.user_id.civilite + " " + etudiantData.user_id.firstname + " " + etudiantData.user_id.lastname, 230, 400, (214 - 71));
+        ctx.fillText(etudiantData.classe_id.diplome_id.titre_long, 200, 540, (214 - 71));
+        ctx.fillText(dateFormat(etudiantData.classe_id.diplome_id.date_debut), 163,612, (214 - 71));
+        ctx.fillText(dateFormat(Date.now()), 414,612, (214 - 71));
+        ctx.addPage()
 
+        const buff = canvas.toBuffer('application/pdf', {
+            title: 'Attestation Assiduite ',
+            author: 'IMS',
+            subject: 'Attestation assiduité ',
+            modDate: new Date()
+        })
+        fs.writeFileSync("storage/" + pdfName, buff, function (err) {
+            if (err) {
+                console.error(err)
+            }
+        })
+        let base64PDF = fs.readFileSync("storage/" + pdfName, { encoding: 'base64' }, (err) => {
+            if (err) {
+                console.error(err);
+            }
+        });
+        res.status(200).send({ file: base64PDF })
+    }).catch((error) => {
+        console.error(error)
+        res.status(500).send(error);
     });
 });
 //Mets un étudiant en présent

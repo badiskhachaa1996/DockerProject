@@ -257,8 +257,17 @@ export class DetailsEtudiantComponent implements OnInit {
       }
     })
   }
+  getAtt_ssiduitePDF() {
+    this.presenceService.getAtt_ssiduitePDF(this.idEtudiant).subscribe((data) => {
+      
+      if (data) {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), (this.idEtudiant + "Att_Assiduite.pdf"))
+      }
+    })
+  }
 
-  
+
   ngAfterViewInit() {
     setTimeout(() => {
       this.chart2.data = this.barDataHor
