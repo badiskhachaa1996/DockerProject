@@ -23,7 +23,7 @@ const etudiantSchema = mongoose.Schema({
     adresse_rl: { type: String },
     dernier_diplome: { type: String },
     isAlternant: { type: Boolean, default: false },
-   
+
 
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
@@ -37,7 +37,8 @@ const etudiantSchema = mongoose.Schema({
     payment_reinscrit: {
         type: [mongoose.Schema.Types.Mixed],
         default: []
-    }
+    },
+    enic_naric: { type: Boolean, default: false }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
