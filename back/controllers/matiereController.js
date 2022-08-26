@@ -25,6 +25,8 @@ app.post("/create", (req, res, next) => {
         coeff: req.body.coeff,
         credit_ects: req.body.credit_ects,
         remarque: req.body.remarque,
+        semestre: req.body.semestre,
+        niveau: req.body.niveau
     });
 
     matiere.save()
@@ -116,8 +118,8 @@ app.get("/getAllVolume", (req, res, next) => {
                 let sd1 = new Date(seance.date_debut).getTime()
                 let sd2 = new Date(seance.date_fin).getTime()
                 let diff = sd2 - sd1
-                let nb = Math.floor((diff % 86400000) / 3600000);   
-                console.log(nb)            
+                let nb = Math.floor((diff % 86400000) / 3600000);
+                console.log(nb)
                 if (date < seance.date_debut) {
                     if (rPlan[seance.matiere_id]) {
                         rPlan[seance.matiere_id] += nb
