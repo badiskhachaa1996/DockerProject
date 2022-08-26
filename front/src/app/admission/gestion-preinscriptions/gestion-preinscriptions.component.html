@@ -199,8 +199,9 @@
 
             <p-toast></p-toast>
             <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
-                [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single" (onRowSelect)="expandRow($event.data)"
-                [globalFilterFields]="['customid', 'statut_actuel', 'validated_academic_level', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
+                [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                (onRowSelect)="expandRow($event.data)"
+                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -210,9 +211,13 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
-                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Tous" [options]="dropdownDecision"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Campus" [options]="filterCampus"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Decision Admission" [options]="dropdownDecision"
                         (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
-                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="decision"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
@@ -266,11 +271,11 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                    <tr [pRowToggler]="prospect" [pSelectableRow]="prospect" [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+                    <tr [pRowToggler]="prospect" [pSelectableRow]="prospect"
+                        [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
 
                         <td>
-                            <button type="button" pButton pRipple
-                                class="p-button-text p-button-rounded p-button-plain"
+                            <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
 

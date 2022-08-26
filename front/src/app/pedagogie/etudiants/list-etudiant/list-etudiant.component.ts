@@ -325,12 +325,29 @@ export class ListEtudiantComponent implements OnInit {
   get date_naissance2() { return this.formUpdateEtudiant.get('date_naissance'); }
 
 
-  generateCode(lastname) {
-    let random = Math.random().toString(36).substring(8).toUpperCase();
-    random = random.substring(0, 4)
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.users.length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
 
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
-    return nom + random;
   }
 
 
@@ -368,7 +385,6 @@ export class ListEtudiantComponent implements OnInit {
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
-      custom_id: [''],
       numero_INE: [''],
       numero_NIR: ['', Validators.pattern('[0-9]+')],
       isMinor: [false],
@@ -394,7 +410,6 @@ export class ListEtudiantComponent implements OnInit {
     let date_naissance = this.formUpdateEtudiant.get('date_naissance')?.value;
     let nationalite = this.formUpdateEtudiant.get('nationalite')?.value.value;
 
-    let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
     let isAlternant = this.formUpdateEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formUpdateEtudiant.get('isOnStage')?.value;
     
@@ -421,11 +436,11 @@ export class ListEtudiantComponent implements OnInit {
       statut, 
       nationalite, 
       date_naissance,
-      null, 
-      null, 
-      null, 
-      null, 
-      custom_id, 
+      this.etudiantToUpdate.code_partenaire, 
+      this.etudiantToUpdate.hasBeenBought, 
+      this.etudiantToUpdate.examenBought,
+      this.etudiantToUpdate.howMuchBought,
+      this.etudiantToUpdate.custom_id, 
       numero_INE, 
       numero_NIR, 
       sos_email, 
@@ -439,8 +454,8 @@ export class ListEtudiantComponent implements OnInit {
       isAlternant, 
       isHandicaped, 
       suivi_handicaped,
-      null, 
-      null, 
+      this.etudiantToUpdate.diplome,
+      this.etudiantToUpdate.parcours,
       remarque, 
       isOnStage 
       );
@@ -586,11 +601,6 @@ export class ListEtudiantComponent implements OnInit {
       });
     }
 
-  }
-
-  generateCustomCode() {
-    let code = this.generateCode(this.formUpdateEtudiant.value.lastname)
-    this.formUpdateEtudiant.patchValue({ custom_id: code })
   }
 
   parcoursList = []

@@ -46,8 +46,8 @@ export class AddEtudiantComponent implements OnInit {
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
   dropdownTuteur: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
-  dropdownTuteurByEntreprise : any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
-  tuteurs : Tuteur[]=[]
+  dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
+  tuteurs: Tuteur[] = []
   searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
 
   civiliteList = environment.civilite;
@@ -95,33 +95,33 @@ export class AddEtudiantComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
-    
+
     //Liste des tuteurs
     this.tuteurService.getAll().subscribe(
       (response) => {
         response.forEach((tuteur) => {
-          this.dropdownTuteur.push({libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id})
+          this.dropdownTuteur.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
           this.tuteurs = tuteur
         })
-    })
+      })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormAddEtudiant();
 
   }
 
-  TuteurListLoad(entreprise_id){
+  TuteurListLoad(entreprise_id) {
     //Liste des tuteurs par entreprise_id
     let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value;
     this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
       (response) => {
         response.forEach((tuteur) => {
-          this.dropdownTuteurByEntreprise.push({libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id})
+          this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
           console.log(this.dropdownTuteurByEntreprise)
         })
-    });this.dropdownTuteurByEntreprise = [];
+      }); this.dropdownTuteurByEntreprise = [];
   }
-  
+
 
 
   //Methode de recuperation des differentes classes
@@ -225,7 +225,6 @@ export class AddEtudiantComponent implements OnInit {
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
-      custom_id: [''],
       numero_INE: [''],
       numero_NIR: ['', Validators.pattern('[0-9]+')],
       isMinor: [false],
@@ -264,15 +263,30 @@ export class AddEtudiantComponent implements OnInit {
   get rue_adresse() { return this.formAddEtudiant.get('rue_adresse'); };
   get nationalite() { return this.formAddEtudiant.get('nationalite').value; };
   get date_naissance() { return this.formAddEtudiant.get('date_naissance'); };
-  generateCode(lastname) {
 
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.users.length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
 
-    let random = Math.random().toString(36).substring(8).toUpperCase();
-    random = random.substring(0, 4)
-
-
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
-    return nom + random;
   }
   changestage() {
     console.log(this.formAddEtudiant.get('isOnStage')?.value)
@@ -296,10 +310,10 @@ export class AddEtudiantComponent implements OnInit {
     let statut = this.formAddEtudiant.get('statut')?.value.value;
     let nationalite = this.formAddEtudiant.get('nationalite')?.value.value
     let date_naissance = this.formAddEtudiant.get('date_naissance')?.value;
-    let custom_id = (this.formAddEtudiant.get('custom_id')?.value != '') ? this.formAddEtudiant.get('custom_id').value : this.generateCode(lastname);
+    let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
     let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
-  
+
     let dernier_diplome = this.formAddEtudiant.get('dernier_diplome')?.value;
     let sos_email = this.formAddEtudiant.get('sos_email')?.value;
     let sos_phone = this.formAddEtudiant.get('sos_phone')?.value;
@@ -315,68 +329,68 @@ export class AddEtudiantComponent implements OnInit {
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
-   
+
 
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
-      null, 
-      firstname, 
-      lastname, 
-      indicatif, 
-      phone, 
-      email, 
-      null, 
-      '', 
-      'user', 
-      null, 
-      null, 
-      civilite, 
-      null, 
-      null, 
-      null, 
-      '', 
-      pays_adresse.value, 
-      ville_adresse, 
-      rue_adresse, 
-      numero_adresse, 
+      null,
+      firstname,
+      lastname,
+      indicatif,
+      phone,
+      email,
+      null,
+      '',
+      'user',
+      null,
+      null,
+      civilite,
+      null,
+      null,
+      null,
+      '',
+      pays_adresse.value,
+      ville_adresse,
+      rue_adresse,
+      numero_adresse,
       postal_adresse);
 
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(
-      null, 
-      '', 
-      classe_id, 
-      statut, 
-      nationalite, 
-      date_naissance, 
       null,
-      null, 
-      null, 
-      null, 
+      '',
+      classe_id,
+      statut,
+      nationalite,
+      date_naissance,
+      null,
+      null,
+      null,
+      null,
       custom_id,
-      numero_INE, 
-      numero_NIR, 
-      sos_email, 
-      sos_phone, 
-      nom_rl, 
-      prenom_rl, 
-      indicatif_rl + " " + phone_rl, 
-      email_rl, 
-      adresse_rl, 
-      dernier_diplome, 
-      isAlternant,  
-      isHandicaped, 
+      numero_INE,
+      numero_NIR,
+      sos_email,
+      sos_phone,
+      nom_rl,
+      prenom_rl,
+      indicatif_rl + " " + phone_rl,
+      email_rl,
+      adresse_rl,
+      dernier_diplome,
+      isAlternant,
+      isHandicaped,
       suivi_handicaped,
-      
-      null, 
-      null, 
-      this.formAddEtudiant.get('remarque').value, 
+
+      null,
+      null,
+      this.formAddEtudiant.get('remarque').value,
       isOnStage.value,
       null,
       null);
 
-      console.log(isAlternant)
+    console.log(isAlternant)
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
@@ -494,11 +508,6 @@ export class AddEtudiantComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
-  }
-
-  generateCustomCode() {
-    let code = this.generateCode(this.formAddEtudiant.value.lastname)
-    this.formAddEtudiant.patchValue({ custom_id: code })
   }
 
   onAddParcours() {

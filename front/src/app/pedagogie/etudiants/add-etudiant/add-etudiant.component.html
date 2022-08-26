@@ -183,16 +183,6 @@
                         formControlName="sos_phone" />
                 </div>
 
-                <div class="field col-12">
-                    <label>Code Etudiant:</label>
-                    <div class="p-inputgroup">
-                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
-                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn"
-                            (click)="generateCustomCode()">
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Parcous Etudiant-->
                 <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
