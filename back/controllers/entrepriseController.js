@@ -61,7 +61,9 @@ app.post("/createNewContrat", (req, res, next) => {
     delete EntrepriseData._id;
     let TuteurData = req.body.t1;
     delete TuteurData._id;
+   
     let ContratData = req.body.contratAlternance;
+ 
     delete ContratData._id;
 
     let NewCeo = new User({ ...CeoData })
@@ -88,7 +90,7 @@ app.post("/createNewContrat", (req, res, next) => {
                             //Creation d'une nouvelle entreprise
                             NewEntrepise.save().then((EntrepCreated) => {
 
-                                if (NewTuteur.email = CeoCreated.email) {
+                                if (NewTuteur.email === CeoCreated.email) {
 
                                     NewContrat.tuteur_id = NewCeo._id
                                     //Creation d'un nouveau contrat alternance
