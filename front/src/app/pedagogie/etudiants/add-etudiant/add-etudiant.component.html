@@ -45,8 +45,10 @@
                     <input pInputText id="nom" type="text" placeholder="Entrez votre nom" formControlName="lastname" />
 
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="lastname.errors?.required" style="color: red;">* Le nom est obligatoire </span>
-                        <span *ngIf="lastname.errors?.pattern" style="color: red;">Le nom n'est pas dans le bon format</span>
+                        <span style="color: red;" class="error" *ngIf="lastname.errors?.required" style="color: red;">*
+                            Le nom est obligatoire </span>
+                        <span *ngIf="lastname.errors?.pattern" style="color: red;">Le nom n'est pas dans le bon
+                            format</span>
                     </div>
                 </div>
 
@@ -56,8 +58,10 @@
                         formControlName="firstname" />
 
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="firstname.errors?.required" style="color: red;">* Le prénom est obligatoire </span>
-                        <span *ngIf="firstname.errors?.pattern" style="color: red;"> Le prénom n'est pas dans le bon format </span>
+                        <span style="color: red;" class="error" *ngIf="firstname.errors?.required" style="color: red;">*
+                            Le prénom est obligatoire </span>
+                        <span *ngIf="firstname.errors?.pattern" style="color: red;"> Le prénom n'est pas dans le bon
+                            format </span>
                     </div>
                 </div>
 
@@ -66,7 +70,8 @@
                     <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
 
                     <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">* L'indicatif téléphone est obligatoire </span>
+                        <span style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">*
+                            L'indicatif téléphone est obligatoire </span>
                     </div>
                 </div>
 
@@ -76,8 +81,10 @@
                         formControlName="phone" />
 
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="phone.errors?.required" style="color: red;">* Le numéro de téléphone est obligatoire </span>
-                        <span *ngIf="phone.errors?.pattern" style="color: red;"> Le numéro de téléphone n'est pas dans le bon format</span>
+                        <span style="color: red;" class="error" *ngIf="phone.errors?.required" style="color: red;">* Le
+                            numéro de téléphone est obligatoire </span>
+                        <span *ngIf="phone.errors?.pattern" style="color: red;"> Le numéro de téléphone n'est pas dans
+                            le bon format</span>
                     </div>
                 </div>
 
@@ -87,8 +94,10 @@
                         formControlName="email" />
 
                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">* L'email est obligatoire </span>
-                        <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon format, 'xxx@estya.com'</span>
+                        <span style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">*
+                            L'email est obligatoire </span>
+                        <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon format,
+                            'xxx@estya.com'</span>
                     </div>
                 </div>
 
@@ -183,16 +192,6 @@
                         formControlName="sos_phone" />
                 </div>
 
-                <div class="field col-12">
-                    <label>Code Etudiant:</label>
-                    <div class="p-inputgroup">
-                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
-                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn"
-                            (click)="generateCustomCode()">
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Parcous Etudiant-->
                 <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -257,6 +256,7 @@
 
                 </div>
 
+
                 <div class="field col-12">
                     <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                         formControlName="isAlternant"></p-selectButton>
@@ -272,8 +272,8 @@
                     <div class="field col-12">
                         <label>Entreprise<span style="color: red;"> * </span></label>
                         <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
-                                    emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
-                                    filter="true" (onChange)="TuteurListLoad(entreprise_id)">
+                            emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise" filter="true"
+                            (onChange)="TuteurListLoad(entreprise_id)">
                         </p-dropdown>
                         <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
                             formControlName="entreprise" /> -->
@@ -281,11 +281,12 @@
 
                     <div class="field col-12">
                         <label>Tuteur<span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise" optionLabel="libelle"
-                                    emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
-                                    filter="true">
+                        <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise"
+                            optionLabel="libelle" emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
+                            filter="true">
                         </p-dropdown>
                     </div>
+                    
                         <p-fieldset legend="Informations sur le contrat" [style]="{'color': 'red', 'font-weight': 'bold'}">
                             <div style="color: black;font-weight:normal">
                                 <div class="p-fluid p-formgrid grid">
@@ -325,18 +326,6 @@
                                                 champs est obligatoire.</span>
                                         </div> -->
                                     </div>
-                                    <!-- A RETIRER - CHAMPS REMPLIS AUTOMATIQUEMENT -->
-                                    <!-- <div class="field col-12 md:col-6">
-                                        <label For="alternant">Alternant<span style="color: red;"> *
-                                            </span></label>
-                                        <p-dropdown class="p-dropdown-clearable" [options]="listAlternantDD" dataKey="_id"
-                                            filter="true"
-                                            filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                            optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
-                                            formControlName="alternant" >
-                                        </p-dropdown>
-        
-                                    </div> -->
         
                                     <div class="field col-12 md:col-6">
                                         <label For="intitule">Intitulé<span style="color: red;"> *
@@ -413,7 +402,6 @@
                                 </div>
                         </p-fieldset>
       
-                <!-- COMMENT GERER DANS LE BACK -->
                         <div style="text-align: center;">
                             <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
                         </div>
@@ -451,18 +439,18 @@
                         formControlName="isHandicaped"></p-selectButton>
                 </div>
 
-                <div class="field col-12"
-                    *ngIf="formAddEtudiant.value.isHandicaped==true">
+                <div class="field col-12" *ngIf="formAddEtudiant.value.isHandicaped==true">
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
 
                 <div>
-                    <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="formAddEtudiant.invalid"></button>
+                    <button pButton label="Ajouter l'étudiant" type="submit"
+                        [disabled]="formAddEtudiant.invalid"></button>
                 </div>
             </form>
 
             <a routerLink="/etudiants" style="float: right;"><i class="pi pi-caret-right"></i> Voir les étudiants</a>
         </div>
-    
-</div>
+
+    </div>

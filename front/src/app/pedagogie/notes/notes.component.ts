@@ -719,7 +719,7 @@ export class NotesComponent implements OnInit {
         for (let diplome in this.diplomes) {
           if (this.diplomes[diplome]._id == this.classes[this.etudiantToGenerateBulletin.classe_id].diplome_id) {
             for (let campus in this.campus) {
-              if (this.campus[campus]._id == this.diplomes[diplome].campus_id) {
+              if (this.diplomes[diplome].campus_id.includes(this.campus[campus]._id)) {
                 this.activeCampus = this.campus[campus];
               }
             }

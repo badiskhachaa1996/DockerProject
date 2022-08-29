@@ -53,7 +53,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   civiliteList = environment.civilite;
   nationList = environment.nationalites;
   emailExist: boolean;
-  listAlternantDD : any = [] 
+  listAlternantDD: any = []
   formationList = []
 
   products: any[];
@@ -65,59 +65,59 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
 
 
-  get raison_sociale() { return this.RegisterForm.get('raison_sociale').value; }
-  get activite() { return this.RegisterForm.get('activite').value; }
-  get adresse_ss() { return this.RegisterForm.get('adresse_ss').value; }
-  get postal_ss() { return this.RegisterForm.get('postal_ss').value; }
-  get ville_ss() { return this.RegisterForm.get('ville_ss').value; }
+  get raison_sociale() { return this.RegisterForm.get('raison_sociale'); }
+  get activite() { return this.RegisterForm.get('activite'); }
+  get adresse_ss() { return this.RegisterForm.get('adresse_ss'); }
+  get postal_ss() { return this.RegisterForm.get('postal_ss'); }
+  get ville_ss() { return this.RegisterForm.get('ville_ss'); }
 
-  get adresse_ec() { return this.RegisterForm.get('adresse_ec').value; }
+  get adresse_ec() { return this.RegisterForm.get('adresse_ec'); }
 
-  get postal_ec() { return this.RegisterForm.get('postal_ec').value; }
+  get postal_ec() { return this.RegisterForm.get('postal_ec'); }
 
-  get ville_ec() { return this.RegisterForm.get('ville_ec').value; }
-  get crc() { return this.RegisterForm.get('crc').value; }
-  get convention() { return this.RegisterForm.get('convention').value; }
-  get idcc() { return this.RegisterForm.get('idcc').value; }
+  get ville_ec() { return this.RegisterForm.get('ville_ec'); }
+  get crc() { return this.RegisterForm.get('crc'); }
+  get convention() { return this.RegisterForm.get('convention'); }
+  get idcc() { return this.RegisterForm.get('idcc'); }
 
   get civilite() { return this.RegisterForm.get('civilite').value; }
-  get lastname() { return this.RegisterForm.get('lastname').value; }
-  get firstname() { return this.RegisterForm.get('firstname').value; }
-  get email() { return this.RegisterForm.get('email').value; }
-  get phone() { return this.RegisterForm.get('phone').value; }
-  get indicatif() { return this.RegisterForm.get('indicatif').value; }
-  get numero_whatsapp() { return this.RegisterForm.get('numero_whatsapp').value; }
-  get indicatif_whatsapp() { return this.RegisterForm.get('indicatif_whatsapp').value; }
-  get siret() { return this.RegisterForm.get('siret').value; }
-  get nb_salarie() { return this.RegisterForm.get('nb_salarie').value; }
-  get phone_ent() { return this.RegisterForm.get('phone_ent').value; }
-  get indicatif_ent() { return this.RegisterForm.get('indicatif_ent').value; }
-  get ape_naf() { return this.RegisterForm.get('ape_naf').value; }
-  get telecopie() { return this.RegisterForm.get('telecopie').value; }
-  get OPCO() { return this.RegisterForm.get('OPCO').value; }
-  get organisme_prevoyance() { return this.RegisterForm.get('organisme_prevoyance').value; }
+  get lastname() { return this.RegisterForm.get('lastname'); }
+  get firstname() { return this.RegisterForm.get('firstname'); }
+  get email() { return this.RegisterForm.get('email'); }
+  get phone() { return this.RegisterForm.get('phone'); }
+  get indicatif() { return this.RegisterForm.get('indicatif'); }
+  get numero_whatsapp() { return this.RegisterForm.get('numero_whatsapp'); }
+  get indicatif_whatsapp() { return this.RegisterForm.get('indicatif_whatsapp'); }
+  get siret() { return this.RegisterForm.get('siret'); }
+  get nb_salarie() { return this.RegisterForm.get('nb_salarie'); }
+  get phone_ent() { return this.RegisterForm.get('phone_ent'); }
+  get indicatif_ent() { return this.RegisterForm.get('indicatif_ent'); }
+  get ape_naf() { return this.RegisterForm.get('ape_naf'); }
+  get telecopie() { return this.RegisterForm.get('telecopie'); }
+  get OPCO() { return this.RegisterForm.get('OPCO'); }
+  get organisme_prevoyance() { return this.RegisterForm.get('organisme_prevoyance'); }
 
   get civilite_t1() { return this.RegisterForm.get('civilite_t1').value; }
-  get lastname_t1() { return this.RegisterForm.get('lastname_t1').value; }
-  get firstname_t1() { return this.RegisterForm.get('firstname_t1').value; }
-  get email_t1() { return this.RegisterForm.get('email_t1').value; }
-  get phone_t1() { return this.RegisterForm.get('phone_t1').value; }
-  get indicatif_t1() { return this.RegisterForm.get('indicatif_t1').value; }
+  get lastname_t1() { return this.RegisterForm.get('lastname_t1'); }
+  get firstname_t1() { return this.RegisterForm.get('firstname_t1'); }
+  get email_t1() { return this.RegisterForm.get('email_t1'); }
+  get phone_t1() { return this.RegisterForm.get('phone_t1'); }
+  get indicatif_t1() { return this.RegisterForm.get('indicatif_t1'); }
   get date_naissance_t1() { return this.RegisterForm.get('date_naissance_t1').value; }
-  get fonction_t1() { return this.RegisterForm.get('fonction_t1').value; }
-  get temps_fonction_t1() { return this.RegisterForm.get('temps_fonction_t1').value; }
-  get niv_formation_t1() { return this.RegisterForm.get('niv_formation_t1').value; }
+  get fonction_t1() { return this.RegisterForm.get('fonction_t1'); }
+  get temps_fonction_t1() { return this.RegisterForm.get('temps_fonction_t1'); }
+  get niv_formation_t1() { return this.RegisterForm.get('niv_formation_t1'); }
   get debut_contrat() { return this.RegisterForm.get('debut_contrat').value; }
   get fin_contrat() { return this.RegisterForm.get('fin_contrat').value; }
-  get horaire() { return this.RegisterForm.get('horaire').value; }
-  get alternant() { return this.RegisterForm.get('alternant'); }
-  get intitule() { return this.RegisterForm.get('intitule').value; }
-  get classification() { return this.RegisterForm.get('classification').value; }
-  get niv() { return this.RegisterForm.get('niv').value; }
-  get coeff_hier() { return this.RegisterForm.get('coeff_hier').value; }
-  get code_commercial() { return this.RegisterForm.get('code_commercial').value; }
+  get horaire() { return this.RegisterForm.get('horaire'); }
+  get alternant() { return this.RegisterForm.get('alternant').value; }
+  get intitule() { return this.RegisterForm.get('intitule'); }
+  get classification() { return this.RegisterForm.get('classification'); }
+  get niv() { return this.RegisterForm.get('niv'); }
+  get coeff_hier() { return this.RegisterForm.get('coeff_hier'); }
+  get code_commercial() { return this.RegisterForm.get('code_commercial'); }
   get form() { return this.RegisterForm.get('form').value; }
-  get donneePerso() { return this.RegisterForm.get('donneePerso').value; }
+  get donneePerso() { return this.RegisterForm.get('donneePerso'); }
 
 
 
@@ -159,11 +159,11 @@ export class InscriptionEntrepriseComponent implements OnInit {
       raison_sociale: new FormControl('', Validators.required),//
       activite: new FormControl('', Validators.required),//
       adresse_ss: new FormControl('', Validators.required),//
-      postal_ss: new FormControl('', Validators.required),//
+      postal_ss: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),//
       ville_ss: new FormControl('', Validators.required),//
 
       adresse_ec: new FormControl('', Validators.required),//
-      postal_ec: new FormControl('', Validators.required), //
+      postal_ec: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]), //
       ville_ec: new FormControl('', Validators.required), //
 
       crc: new FormControl('', Validators.required),   //
@@ -190,18 +190,18 @@ export class InscriptionEntrepriseComponent implements OnInit {
       civilite_t1: new FormControl(environment.civilite[0], [Validators.required]),
       lastname_t1: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
       firstname_t1: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-      email_t1: new FormControl('', [Validators.required, Validators.email]),
+      email_t1: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$")]),
       phone_t1: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       indicatif_t1: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
       date_naissance_t1: new FormControl('', [Validators.required]),
       fonction_t1: new FormControl('', [Validators.required]),
       temps_fonction_t1: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
-      niv_formation_t1: new FormControl('', [Validators.required, Validators.pattern('[0-9]+')]),
+      niv_formation_t1: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+')]),
       // ****** Informations de l'alternant ******
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
-      alternant: new FormControl(this.listAlternantDD[0]),
+      alternant: new FormControl(this.listAlternantDD[0], Validators.required),
       intitule: new FormControl('', Validators.required),
       classification: new FormControl('', Validators.required),
       niv: new FormControl('', Validators.required),
@@ -221,7 +221,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   nextPage() {
     this.ActiveIndex++
- 
+
   }
 
   previousPage() {
@@ -267,24 +267,24 @@ export class InscriptionEntrepriseComponent implements OnInit {
   //Methode d'ajout d'un nouveau prospect
   onAddProspect() {
     let CEO = new User(null,
-      this.firstname,
-      this.lastname,
-      this.indicatif,
-      this.phone,
-      this.email,
-      this.email,
+      this.firstname.value,
+      this.lastname.value,
+      this.indicatif.value,
+      this.phone.value,
+      this.email.value,
+      this.email.value,
       this.generatePassword(),
       'user', true, null,
       this.civilite.value,
       null,
       null,
       'CEO Entreprise',
-      this.raison_sociale,
+      this.raison_sociale.value,
       null,
-      this.ville_ss,
-      this.adresse_ss,
+      this.ville_ss.value,
+      this.adresse_ss.value,
       '',
-      this.postal_ss,
+      this.postal_ss.value,
       "",
       false
     );
@@ -316,36 +316,36 @@ export class InscriptionEntrepriseComponent implements OnInit {
       null,
       null,
       this.email.value,
-      this.phone_ent,
+      this.phone_ent.value,
       null,
       null,
       null,
       null,
       null,
       CEO,
-      this.activite,
-      this.adresse_ec,
-      this.postal_ec,
-      this.ville_ec,
-      this.crc,
-      this.convention,
-      this.telecopie,
-      this.nb_salarie,
-      this.idcc,
-      this.indicatif_ent,
-      this.OPCO,
-      this.organisme_prevoyance)
+      this.activite.value,
+      this.adresse_ec.value,
+      this.postal_ec.value,
+      this.ville_ec.value,
+      this.crc.value,
+      this.convention.value,
+      this.telecopie.value,
+      this.nb_salarie.value,
+      this.idcc.value,
+      this.indicatif_ent.value,
+      this.OPCO.value,
+      this.organisme_prevoyance.value)
 
     //Création du nouvel user
 
     let t1 = new User(
       null,
-      this.firstname_t1,
-      this.lastname_t1,
-      this.indicatif_t1,
-      this.phone_t1,
-      this.email_t1,
-      this.email_t1,
+      this.firstname_t1.value,
+      this.lastname_t1.value,
+      this.indicatif_t1.value,
+      this.phone_t1.value,
+      this.email_t1.value,
+      this.email_t1.value,
       this.generatePassword(),
       'user', true, null,
       this.civilite_t1.value, null, null,
@@ -360,8 +360,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
       false
     );
 
-    
-    let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire, this.alternant.value, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, null, this.code_commercial)
+
+    let contratAlternance = new ContratAlternance(this.debut_contrat.value, this.fin_contrat.value, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
 
     //Creation de lobjet a envoyer dans le back 
     let ObjetToSend = { CEO, entreprise, t1, contratAlternance }
@@ -369,12 +369,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
       ((response) => {
         if (response) {
           this.servService.getAServiceByLabel("Commercial").subscribe(serviceCommercial => {
-        
-          
+
+
             let notifToCreate = new Notification(null, null, null, "nouveau contrat Alternance ajouté", null, null, serviceCommercial.dataService?._id)
-            
+
             this.NotifService.create(notifToCreate).subscribe(notif => {
-            
+
               this.NotifService.newNotif(notif)
 
               this.messageService.add({ severity: 'success', summary: 'Le contrat alternance a été créé', detail: "Vérifiez vos mails pour les informations de connexion" });

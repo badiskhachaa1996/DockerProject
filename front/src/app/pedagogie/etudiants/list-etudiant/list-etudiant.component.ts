@@ -106,7 +106,7 @@ export class ListEtudiantComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date:"" })
+    this.payementList.push({ type: "", montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
@@ -192,17 +192,17 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  TuteurListLoad(entreprise_id){
+  TuteurListLoad(entreprise_id) {
     //Liste des tuteurs par entreprise_id
     let entrepriseId = this.formUpdateEtudiant.get('entreprise_id')?.value;
     console.log(entrepriseId.value)
     this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
       (response) => {
         response.forEach((tuteur) => {
-          this.dropdownTuteurByEntreprise.push({libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id})
+          this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
           console.log(this.dropdownTuteurByEntreprise)
         })
-    });this.dropdownTuteurByEntreprise = [];
+      }); this.dropdownTuteurByEntreprise = [];
   }
 
   confirmRighFile(file, etudiant) {
@@ -325,12 +325,29 @@ export class ListEtudiantComponent implements OnInit {
   get date_naissance2() { return this.formUpdateEtudiant.get('date_naissance'); }
 
 
-  generateCode(lastname) {
-    let random = Math.random().toString(36).substring(8).toUpperCase();
-    random = random.substring(0, 4)
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.users.length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
 
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 1).toUpperCase();;
-    return nom + random;
   }
 
 
@@ -368,7 +385,6 @@ export class ListEtudiantComponent implements OnInit {
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
-      custom_id: [''],
       numero_INE: [''],
       numero_NIR: ['', Validators.pattern('[0-9]+')],
       isMinor: [false],
@@ -382,6 +398,8 @@ export class ListEtudiantComponent implements OnInit {
       suivi_handicaped: [''],
       remarque: [''],
       isOnStage: [''],
+      enic_naric: [false]
+
     });
   }
 
@@ -394,10 +412,9 @@ export class ListEtudiantComponent implements OnInit {
     let date_naissance = this.formUpdateEtudiant.get('date_naissance')?.value;
     let nationalite = this.formUpdateEtudiant.get('nationalite')?.value.value;
 
-    let custom_id = this.formUpdateEtudiant.get('custom_id')?.value
     let isAlternant = this.formUpdateEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formUpdateEtudiant.get('isOnStage')?.value;
-    
+
     // let indicatif_tuteur = this.formUpdateEtudiant.get('indicatif_tuteur')?.value;
     let dernier_diplome = this.formUpdateEtudiant.get('dernier_diplome')?.value;
     let sos_email = this.formUpdateEtudiant.get('sos_email')?.value;
@@ -413,37 +430,41 @@ export class ListEtudiantComponent implements OnInit {
     let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
+    let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
 
     let etudiant = new Etudiant(
-      this.idEtudiantToUpdate, 
-      this.idUserOfEtudiantToUpdate, 
-      classe_id, 
-      statut, 
-      nationalite, 
+      this.idEtudiantToUpdate,
+      this.idUserOfEtudiantToUpdate,
+      classe_id,
+      statut,
+      nationalite,
       date_naissance,
-      null, 
-      null, 
-      null, 
-      null, 
-      custom_id, 
-      numero_INE, 
-      numero_NIR, 
-      sos_email, 
-      sos_phone, 
-      nom_rl, 
-      prenom_rl, 
-      phone_rl, 
-      email_rl, 
-      adresse_rl, 
+      this.etudiantToUpdate.code_partenaire,
+      this.etudiantToUpdate.hasBeenBought,
+      this.etudiantToUpdate.examenBought,
+      this.etudiantToUpdate.howMuchBought,
+      this.etudiantToUpdate.custom_id,
+      numero_INE,
+      numero_NIR,
+      sos_email,
+      sos_phone,
+      nom_rl,
+      prenom_rl,
+      phone_rl,
+      email_rl,
+      adresse_rl,
       dernier_diplome,
-      isAlternant, 
-      isHandicaped, 
+      isAlternant,
+      isHandicaped,
       suivi_handicaped,
-      null, 
-      null, 
-      remarque, 
-      isOnStage 
-      );
+      this.etudiantToUpdate.diplome,
+      this.etudiantToUpdate.parcours,
+      remarque,
+      isOnStage,
+      this.etudiantToUpdate.fileRight,
+      this.etudiantToUpdate.payment_reinscrit,
+      enic_naric
+    );
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
@@ -474,7 +495,7 @@ export class ListEtudiantComponent implements OnInit {
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage,
+          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric:this.etudiantToUpdate.enic_naric
         });
       }),
       ((error) => { console.error(error); })
@@ -586,11 +607,6 @@ export class ListEtudiantComponent implements OnInit {
       });
     }
 
-  }
-
-  generateCustomCode() {
-    let code = this.generateCode(this.formUpdateEtudiant.value.lastname)
-    this.formUpdateEtudiant.patchValue({ custom_id: code })
   }
 
   parcoursList = []

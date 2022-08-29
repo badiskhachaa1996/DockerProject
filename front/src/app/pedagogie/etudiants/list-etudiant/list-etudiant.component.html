@@ -53,8 +53,8 @@
                     </div>
                     <div class="field col-12 md:col-5">
                         <label>Date du paiement:</label><br>
-                        <input type="date" (change)="changeMontant(i,$event,'date')"
-                            [(value)]="payementList[i]['date']" pInputText>
+                        <input type="date" (change)="changeMontant(i,$event,'date')" [(value)]="payementList[i]['date']"
+                            pInputText>
                     </div>
                     <div class="field col-12 md:col-1">
                         <label>&nbsp;</label><br>
@@ -137,15 +137,10 @@
                 </div>
 
                 <div class="field col-12">
-                    <label>Code Etudiant:</label>
-                    <div class="p-inputgroup">
-                        <input type="text" formControlName="custom_id" pInputText placeholder="LNGX01">
-                        <button type="button" pButton pRipple icon="pi pi-refresh" styleClass="p-button-warn"
-                            (click)="generateCustomCode()">
-                        </button>
-                    </div>
+                    <label>ENIC NARIC :</label>
+                    <p-selectButton [options]="[{label:'Non Valide',value:false},{label:'Validé',value:true}]"
+                        formControlName="enic_naric"></p-selectButton>
                 </div>
-
                 <!-- Parcous Etudiant-->
                 <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -224,8 +219,8 @@
                 <div class="field col-12">
                     <label>Entreprise<span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
-                                emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
-                                filter="true" (onChange)="TuteurListLoad(entreprise_id)">
+                        emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise" filter="true"
+                        (onChange)="TuteurListLoad(entreprise_id)">
                     </p-dropdown>
                     <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
                         formControlName="entreprise" /> -->
@@ -234,8 +229,7 @@
                 <div class="field col-12">
                     <label>Tuteur<span style="color: red;"> * </span></label>
                     <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise" optionLabel="libelle"
-                                emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
-                                filter="true">
+                        emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -251,7 +245,7 @@
                             formControlName="entreprise" />
                     </div> -->
 
-                    <!-- <div class="field col-12">
+                <!-- <div class="field col-12">
                         <label For="tn">Nom du tuteur</label>
                         <input pInputText type="text" id="tn" placeholder="Doe" formControlName="nom_tuteur" />
                     </div>
@@ -481,6 +475,28 @@
                 </ng-template>
             </p-table> -->
 
+            <p-table responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ENIC NARIC </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td *ngIf="etudiant.enic_naric">
+                            Oui
+                        </td>
+                        <td *ngIf="!etudiant.enic_naric">
+                            Non
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
             <p-table responsiveLayout="scroll" *ngIf="nom_rl">
                 <ng-template pTemplate="header">
                     <tr>
@@ -527,8 +543,8 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{ prospects[etudiant.user_id].date_creation | date:'dd/MM/yyyy' }} </td>
-                        <td> {{ prospects[etudiant.user_id].nbDoc }} </td>
+                        <td> {{ prospects[etudiant?.user_id]?.date_traitement | date:'dd/MM/yyyy' }} </td>
+                        <td> {{ prospects[etudiant?.user_id]?.document_manquant }} </td>
                     </tr>
                 </ng-template>
             </p-table>

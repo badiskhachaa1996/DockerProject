@@ -43,10 +43,7 @@ export class AddFormateurComponent implements OnInit {
     /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
     { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
   ];
-  prestataireList = [
-    { label: 'EliteLabs', value: 'EliteLabs' },
-    { label: 'Autre', value: 'Autre' }
-  ];
+  prestataireList = [ ];
   matiereList = [];
   matiereDic = {};
   dropdownCampus = []
@@ -87,8 +84,12 @@ export class AddFormateurComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id")
+    else if (type == "matiere_id"){
       this.volumeHList[i][type] = event.value;
+      this.volumeHList[i]["volume_init"] = parseInt(event.target.value);
+    }
+      
+      //TODO Default volume_init
   }
 
   deleteMatiereAdd(i) {
@@ -98,7 +99,7 @@ export class AddFormateurComponent implements OnInit {
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
     private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService,
-    private CampusService: CampusService, private PrestataireService: EntrepriseService) { }
+    private CampusService: CampusService, private entrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
     this.diplomeService.getAll().subscribe(data => {
@@ -142,6 +143,12 @@ export class AddFormateurComponent implements OnInit {
       cData.forEach(c => {
         this.dropdownCampus.push({ label: c.libelle, value: c._id })
       });
+    })
+
+    this.entrepriseService.getAll().subscribe(entData=>{
+      entData.forEach(ent=>{
+        this.prestataireList.push({value:ent._id,label:ent.r_sociale})
+      })
     })
 
   }

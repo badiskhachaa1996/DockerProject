@@ -57,7 +57,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                     ]
                 },
-                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                 {
                     label: 'Gestions des étudiants', icon: 'pi pi-users',
@@ -456,7 +456,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                                     ]
                                 },
-                                { label: 'Gestion des pré-inscrits', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
+                                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
                                 { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
                                 {
                                     label: 'Gestions des étudiants', icon: 'pi pi-users',

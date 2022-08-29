@@ -229,7 +229,7 @@ export class EmergementComponent implements OnInit {
       this.seance = dataS
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = this.date_debut + (15 * 60000)
-      this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 5) * 60000)
+      this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(data => {
         data.forEach(etu => {

@@ -75,7 +75,14 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="raison_sociale" type="text" placeholder="Nom de l'entreprise "
                                     formControlName="raison_sociale" />
-
+                                <div *ngIf="raison_sociale.invalid && (raison_sociale.touched || raison_sociale.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.required">*
+                                        Les
+                                        activités sont obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">*
+                                        Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label For="activite">Activité de l'entreprise <span style="color: red;"> *
@@ -85,9 +92,9 @@ Formation suivie :
                                 </textarea>
                                 <div *ngIf="activite.invalid && (activite.touched || activite.dirty)">
                                     <span style="color: red;" class="error" *ngIf="activite.errors?.required">* Les
-                                        activités sont obligatoire.</span>
-                                    <!--<span style="color: red;" class="error" *ngIf="firstname.errors?.pattern">* Seul les
-                                        lettres sont acceptés.</span>-->
+                                        activités de l'entreprise sont obligatoires.</span>
+                                    <span style="color: red;" class="error" *ngIf="activite.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
                                 </div>
                             </div>
 
@@ -96,17 +103,23 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="crc" type="text" placeholder="KLESIA" formControlName="crc" />
                                 <div *ngIf="crc.invalid && (crc.touched || crc.dirty)">
-                                    <span style="color: red;" class="error" *ngIf="crc.errors?.required">*
-                                        La Caisse de retraite complémentaire est obligatoire</span>
-                                    <!--<span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">* Seul les
-                                        lettres sont acceptés</span>-->
+                                    <span style="color: red;" class="error" *ngIf="crc.errors?.required">* La
+                                        crc est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="crc.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
                                 </div>
                             </div>
                             <div class="field col-12 md:col-4">
                                 <label For="nb_salarie">Nombre de Salariés: <span style="color: red;"> *
                                     </span></label>
                                 <input pInputText type="number" placeholder="100" formControlName="nb_salarie" />
-
+                                <div *ngIf="nb_salarie.invalid && (nb_salarie.touched || nb_salarie.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.required">* Le
+                                        nombre de salariés est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
 
                             <div class="field col-12 md:col-8">
@@ -115,25 +128,47 @@ Formation suivie :
                                 <input pInputText id="convention" type="text"
                                     placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
                                     formControlName="convention" />
-
+                                <div *ngIf="convention.invalid && (convention.touched || convention.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="convention.errors?.required">* La
+                                        convention sont obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="convention.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-4">
                                 <label For="idcc">Code IDCC: <span style="color: red;"> *
                                     </span></label>
                                 <input pInputText type="number" placeholder="0000" formControlName="idcc" />
-
+                                <div *ngIf="idcc.invalid && (idcc.touched || idcc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="idcc.errors?.required">* Le
+                                        code IDCC est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="idcc.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-4 md:col-2">
                                 <label For="indicatif_ent">Indicatif<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText type="number" placeholder="+33" formControlName="indicatif_ent" />
-
+                                <div *ngIf="indicatif_ent.invalid && (indicatif_ent.touched || indicatif_ent.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif_ent.errors?.required">* Le
+                                        code indicatif est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatif_ent.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-8 md:col-6">
                                 <label For="phone_ent">Téléphone <small>(entreprise)</small><span style="color: red;">*
                                     </span></label>
                                 <input pInputText type="number" placeholder="0188008800" formControlName="phone_ent" />
-
+                                <div *ngIf="phone_ent.invalid && (phone_ent.touched || phone_ent.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone_ent.errors?.required">* Le
+                                        Numero de téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="phone_ent.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
 
                             <!--Adresse du siège social-->
@@ -143,14 +178,28 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="adresse_ss" type="text" placeholder="Numero et Nom de la rue"
                                     formControlName="adresse_ss" />
-
+                                <div *ngIf="adresse_ss.invalid && (adresse_ss.touched || adresse_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ss.errors?.required">*
+                                        L'adresse
+                                        téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="adresse_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-3">
                                 <label For="postal_ss">Code Postal du Siège sociale <span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="postal_ss" type="text" placeholder="75001"
                                     formControlName="postal_ss" />
-
+                                <div *ngIf="postal_ss.invalid && (postal_ss.touched || postal_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ss.errors?.required">*
+                                        Le code postal
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="postal_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-3">
                                 <label For="ville_ss">Ville du Siège sociale <span style="color: red;">
@@ -158,7 +207,14 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="ville_ss" type="text" placeholder="Paris"
                                     formControlName="ville_ss" />
-
+                                <div *ngIf="ville_ss.invalid && (ville_ss.touched || ville_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ss.errors?.required">*
+                                        La ville
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="ville_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <!--Adresse d’exécution du contrat -->
                             <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
@@ -168,13 +224,28 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="adresse_ec" type="text" placeholder="15 Rue du Louvre"
                                     formControlName="adresse_ec" />
-
+                                <div *ngIf="adresse_ec.invalid && (adresse_ec.touched || adresse_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ec.errors?.required">*
+                                        l'adresse
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="adresse_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-3">
                                 <label For="postal_ec">Code Postal<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="postal_ec" type="text" placeholder="75001"
                                     formControlName="postal_ec" />
+                                <div *ngIf="postal_ec.invalid && (postal_ec.touched || postal_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ec.errors?.required">*
+                                        Le code postal
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="postal_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
 
                             </div>
                             <div class="field col-12 md:col-3">
@@ -182,14 +253,28 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="ville_ec" type="text" placeholder="Paris"
                                     formControlName="ville_ec" />
+                                <div *ngIf="ville_ec.invalid && (ville_ec.touched || ville_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ec.errors?.required">*
+                                        La ville
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="ville_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
 
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="siret">Numero de Siret<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="siret" type="text" placeholder="XXXXXXXXXXXXXXX"
-                                    formControlName="siret" />
-
+                                <input pInputText id="siret" maxlength="15" type="number"
+                                    placeholder="XXXX-XXXX-XXXX-XXX" formControlName="siret" />
+                                <div *ngIf="siret.invalid && (siret.touched || siret.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="siret.errors?.required">*
+                                        Le numero de siret
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="siret.errors?.pattern">* Le numéro de
+                                        siret est composé de 15 chiffres</span>
+                                </div>
                             </div>
                             <div class="field col-12 md:col-6">
                                 <label For="ape_naf">Code NAF<span style="color: red;"> *
@@ -222,8 +307,8 @@ Formation suivie :
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]="! raison_sociale || ! activite || ! adresse_ss || ! postal_ss || ! ville_ss || 
-                              !  adresse_ec || ! postal_ec || ! ville_ec || ! crc || ! convention || ! idcc ||  ! siret || ! nb_salarie || ! phone_ent  || ! indicatif_ent || ! ape_naf || ! OPCO"
+                                [disabled]=" raison_sociale.invalid ||  activite.invalid ||  adresse_ss.invalid ||  postal_ss.invalid ||  ville_ss.invalid || 
+                                adresse_ec.invalid ||  postal_ec.invalid ||  ville_ec.invalid ||  crc.invalid ||  convention.invalid ||  idcc.invalid ||   siret.invalid ||  nb_salarie.invalid ||  phone_ent.invalid  ||  indicatif_ent.invalid ||  ape_naf.invalid ||  OPCO.invalid"
                                 (click)="nextPage()"></button>
                         </div>
 
@@ -321,8 +406,9 @@ Formation suivie :
                             </div>
                         </div>
                         <div>
-                            <button pButton type="button" label="Suivant" style="float: right;" [disabled]="! civilite ||  ! lastname || ! firstname || 
-                            ! email|| ! indicatif || ! phone || ! indicatif_whatsapp  || ! numero_whatsapp"
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" civilite.invalid ||   lastname.invalid ||  firstname.invalid || 
+                             email.invalid ||  indicatif.invalid ||  phone.invalid ||  indicatif_whatsapp.invalid  ||  numero_whatsapp.invalid"
                                 (click)="nextPage();verifEmailInBD()"></button>
                         </div>
                     </div>
@@ -393,6 +479,7 @@ Formation suivie :
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
+
                             <div class="field col-12 md:col-6">
                                 <label For="email_t1">Email du tuteur<span style="color: red;"> *
                                     </span></label>
@@ -459,8 +546,7 @@ Formation suivie :
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]="! civilite_t1 || ! lastname_t1 || ! firstname_t1 || 
-                            ! email_t1 || ! indicatif_t1 || ! phone_t1 || ! fonction_t1  || ! date_naissance_t1 || ! niv_formation_t1  || ! temps_fonction_t1  "
+                                [disabled]=" civilite_t1.invalid ||  lastname_t1.invalid ||  firstname_t1.invalid  || email_t1.invalid ||  indicatif_t1.invalid  ||  phone_t1.invalid  ||  fonction_t1.invalid   ||  date_naissance_t1.invalid  ||  niv_formation_t1.invalid   ||  temps_fonction_t1.invalid   "
                                 (click)="nextPage();verifEmailt1InBD()"></button>
                         </div>
                     </div>
@@ -519,7 +605,7 @@ Formation suivie :
                                     filter="true"
                                     filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
                                     optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
-                                    formControlName="alternant" >
+                                    formControlName="alternant">
                                 </p-dropdown>
 
                             </div>
@@ -590,7 +676,7 @@ Formation suivie :
                                     formControlName="code_commercial" />
                                 <div>
                                     <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
-                                    <span style="color: red;" class="error" >*
+                                    <span style="color: red;" class="error">*
                                         Le
                                         champs est obligatoire.</span>
                                 </div>
@@ -598,9 +684,9 @@ Formation suivie :
 
                         </div>
                         <div>
-
-                            <button pButton type="button" label="Suivant" style="float: right;" [disabled]="! debut_contrat || ! fin_contrat || ! classification || 
-                                ! alternant || ! intitule ||!  niv || ! coeff_hier  || ! form|| ! code_commercial "
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
+                                 alternant.invalid ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
                                 (click)="nextPage(); "></button>
 
                         </div>
@@ -645,7 +731,7 @@ Formation suivie :
                     <div>
                         <button pButton type="button" label="Précedent" style="float: left;"
                             (click)="previousPage()"></button>
-                        <button pButton type="button" label="Suivant" [disabled]="!donneePerso" type="submit"
+                        <button pButton type="button" label="Envoyer" [disabled]="donneePerso.invalid" type="submit"
                             style="float: right;"></button>
                     </div>
                 </p-fieldset>
@@ -655,16 +741,14 @@ Formation suivie :
     </div>
     <p-dialog header="Inscription Entreprise et enregistrement du contrat avec succes  " [(visible)]="MessageFormSubmit"
         [style]="{width: '50vw'}">
-        <p>{{ lastname | uppercase}} {{ lastname }} recevra par email les acces a la platforme IMS en
-            tant que CEO de
-            l'entreprise</p>
+        <p>{{ lastname.value | uppercase}} {{ lastname.value }} recevra par email les accès à la plate-forme IMS en tant
+            que CEO de l'entreprise</p>
 
-        <p>Une fois connecté sur la platforme avec le le mot de passe reçu par email, Vous aurez accés a
+        <p>Une fois connecté sur la plate-forme avec le mot de passe reçu par email, Vous aurez accès à
             la liste de vos
-            alternants et stagiéres suivants leurs formations dans une de nos écoles </p>
+            alternants qui sont étudiants dans une de nos écoles </p>
 
-        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Qui recerevons a leurs
-            tours les accés
+        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Et Auront un accés
             pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations
             concernant les
             formations suivis. </p>

@@ -61,14 +61,17 @@ app.post("/createNewContrat", (req, res, next) => {
     delete EntrepriseData._id;
     let TuteurData = req.body.t1;
     delete TuteurData._id;
+   
     let ContratData = req.body.contratAlternance;
+    console.log(ContratData)
     delete ContratData._id;
 
     let NewCeo = new User({ ...CeoData })
     let NewEntrepise = new Entreprise({ ...EntrepriseData })
     let NewTuteur = new User({ ...TuteurData })
     let NewContrat = new CAlternance({ ...ContratData })
-
+    NewContrat.alternant_id= ContratData.alternant_id
+    console.log(ContratData.alternant_id + ':' )
     //Verification de l'existence du mail CEO dans la BD
     User.findOne({ email: CeoData.email })
         .then((CeoFromDb) => {
@@ -89,7 +92,7 @@ app.post("/createNewContrat", (req, res, next) => {
                             //Creation d'une nouvelle entreprise
                             NewEntrepise.save().then((EntrepCreated) => {
 
-                                if (NewTuteur.email = CeoCreated.email) {
+                                if (NewTuteur.email === CeoCreated.email) {
 
                                     NewContrat.tuteur_id = NewCeo._id
                                     //Creation d'un nouveau contrat alternance
@@ -243,6 +246,8 @@ app.post("/createContratAlternance", (req, res, next) => {
     let NewContrat = new CAlternance({
         ...ContratData 
        })
+
+    ///manque vérification de l'existence du contrat dans la base
 
     //création du contrat
     NewContrat.save()
