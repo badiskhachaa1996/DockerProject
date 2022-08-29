@@ -215,9 +215,16 @@
                         (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
                     </p-dropdown>
-                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Decision Admission" [options]="dropdownDecision"
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Decision Admission"
+                        [options]="dropdownDecision"
                         (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
+                        [options]="[{value:null,label:'Tous'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
+                        (onChange)="dt1.filter($event.value, 'origin','equals')"
+                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
