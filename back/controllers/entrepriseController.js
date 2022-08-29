@@ -74,6 +74,7 @@ app.post("/createNewContrat", (req, res, next) => {
         .then((CeoFromDb) => {
             if (CeoFromDb) {
 
+
                 res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur-- Email deja Utilisé ' })
             }
             else {
@@ -234,6 +235,28 @@ app.post("/createNewContrat", (req, res, next) => {
         });
 
 });
+
+app.post("/createContratAlternance", (req, res, next) => {
+    let ContratData = req.body.contratAlternance;
+    delete ContratData._id;
+
+    let NewContrat = new CAlternance({
+        ...ContratData 
+       })
+
+    //création du contrat
+    NewContrat.save()
+        .then((NewContData) => {
+            console.log(NewContData);
+            res.status(200).send(NewContData);
+        })
+        .catch((error) => {
+            console.log(error)
+            res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+        })
+    
+})
+
 
 app.get("/getAllContrats/:idTuteur", (req, res, next) => {
     CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
