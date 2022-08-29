@@ -50,6 +50,11 @@ export class EntrepriseService {
     return this.httpClient.post<Entreprise>(registreUrl, objectTosend, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
   }
 
+  createContratAlternance(objt) {
+    let registreUrl = this.apiUrl + "createContratAlternance";
+    return this.httpClient.post<Entreprise>(registreUrl, objt, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   getAllContrats(idTuteur: string) {
     let registreUrl = this.apiUrl + "getAllContrats/" + idTuteur;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
