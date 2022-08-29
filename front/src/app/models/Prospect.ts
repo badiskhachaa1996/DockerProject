@@ -49,7 +49,8 @@ export class Prospect {
         public document_present?:string[],
         public remarque?:string,
         public dossier_traited_by?:string,
-        public haveDoc?:boolean
+        public haveDoc?:boolean,
+        public origin?:string
     ) { }
 
 }
