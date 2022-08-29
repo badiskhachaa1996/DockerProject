@@ -44,7 +44,7 @@ app.post("/create", (req, res, next) => {
     let etudiant = new Etudiant(
         {
             ...etudiantData
-        });  
+        });
     console.log(etudiant)
     //Creation du nouveau user
     let userData = req.body.newUser;
@@ -99,7 +99,7 @@ app.post("/create", (req, res, next) => {
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
                             .catch((error) => {
                                 console.error(error);
-                                res.status(400).send({ error })
+                                res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
                             });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
@@ -183,7 +183,7 @@ app.get("/getByUserid/:user_id", (req, res, next) => {
 
 //Recupere un étudiant via son user_id
 app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
-    Etudiant.findOne({ "user_id._id": req.params.user_id }).populate('user_id')
+    Etudiant.findOne({ "user_id": req.params.user_id }).populate('user_id')
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });

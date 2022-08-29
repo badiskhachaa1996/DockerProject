@@ -50,7 +50,7 @@ app.post("/getAssiduitePDF/:id", (req, res) => {
     let rangDate = req.body
 
     let dataTosend = [];
-    etudiantData: Etudiant;
+    let etudiantData;
     const pdfName = 'Ass_' + req.params.id + ".pdf"
     function pad(s) { return (s < 10) ? '0' + s : s; }
     function dateFormat(inputFormat) {

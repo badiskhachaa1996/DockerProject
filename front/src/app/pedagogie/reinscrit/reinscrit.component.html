@@ -184,19 +184,24 @@
             showPayement.user_id?.lastname | uppercase }}
         </h3>
         <div class="p-fluid p-formgrid grid">
-            <div class="col-12" *ngFor="let data of payementList; let i = index">
+            <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                 <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Type de payement:</label><br>
                     <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                         [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
                 </div>
-                <div class="field col-12 md:col-4">
+                <div class="field col-12 md:col-3">
                     <label>Montant:</label><br>
                     <input type="number" (change)="changeMontant(i,$event,'montant')"
                         [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
                 </div>
-                <div class="field col-12 md:col-2">
+                <div class="field col-12 md:col-5">
+                    <label>Date du paiement:</label><br>
+                    <input type="date" (change)="changeMontant(i,$event,'date')"
+                        [(value)]="payementList[i]['date']" pInputText>
+                </div>
+                <div class="field col-12 md:col-1">
                     <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
                 </div>
             </div>
@@ -212,7 +217,7 @@
 </div>
 <div class="col-12">
     <div class="card">
-        <h5>Liste des étudiants en réinscription</h5>
+        <h5>Liste des étudiants en réinscriptions</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
@@ -435,11 +440,25 @@
         </div>
         <div *ngIf="etudiant.payment_reinscrit && etudiant.payment_reinscrit.length!=0">
             <h5 style="color: red; text-align: center;">Payements</h5>
-            <ul>
-                <li *ngFor="let payement of etudiant.payment_reinscrit; index as i">
-                    <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>
-                </li>
-            </ul>
+            <p-table responsiveLayout="scroll" *ngIf="etudiant.payment_reinscrit" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type du Paiement</th>
+                        <th>Montant du Paiement</th>
+                        <th>Date du Paiement</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr *ngFor="let payement of etudiant.payment_reinscrit;">
+                        <td>{{ payement.type }}</td>
+                        <td>{{ payement.montant }}</td>
+                        <td>{{ payement.date | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
 
     </div>

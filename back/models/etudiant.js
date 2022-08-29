@@ -38,7 +38,10 @@ const etudiantSchema = mongoose.Schema({
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
-    enic_naric: { type: Boolean, default: false }
+    enic_naric: { type: Boolean, default: false },
+    campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
+    statut_dossier: { type: String, default: "Nouveau" },
+    filière: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

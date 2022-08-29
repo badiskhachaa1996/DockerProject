@@ -390,7 +390,6 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null);
 
-    console.log(isAlternant)
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
