@@ -203,9 +203,9 @@ export class InscriptionEntrepriseComponent implements OnInit {
       horaire: new FormControl(''),
       alternant: new FormControl(this.listAlternantDD[0], Validators.required),
       intitule: new FormControl('', Validators.required),
-      classification: new FormControl('', Validators.required),
+      classification: new FormControl(''),
       niv: new FormControl('', Validators.required),
-      coeff_hier: new FormControl('', Validators.required),
+      coeff_hier: new FormControl(''),
       form: new FormControl('', Validators.required),
       code_commercial: new FormControl(this.Tok_code_commercial),
 

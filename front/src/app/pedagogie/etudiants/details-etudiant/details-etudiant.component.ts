@@ -15,7 +15,7 @@ import { pipe } from 'rxjs';
 import { saveAs as importedSaveAs } from "file-saver";
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { ProgressBarModule } from 'primeng/progressbar';
-
+import { AdmissionService } from 'src/app/services/admission.service';
 @Component({
   selector: 'app-details-etudiant',
   templateUrl: './details-etudiant.component.html',
@@ -120,7 +120,7 @@ export class DetailsEtudiantComponent implements OnInit {
     }
       , 2000);
   }
-  constructor(private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+  constructor(private admissionService: AdmissionService,  private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -250,6 +250,7 @@ export class DetailsEtudiantComponent implements OnInit {
 
   }
   getAssiduitePDF(RangeDateForPDF) {
+    
     this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id, this.RangeDateForPDF).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -258,6 +259,11 @@ export class DetailsEtudiantComponent implements OnInit {
     })
   }
   getAtt_ssiduitePDF() {
+
+    // this.admissionService.getByUserId(this.idEtudiant).subscribe((ProspData)=>{
+    //   console.log(this.idEtudiant)
+    //   console.log(ProspData)
+    // })
     this.presenceService.getAtt_ssiduitePDF(this.idEtudiant).subscribe((data) => {
       
       if (data) {

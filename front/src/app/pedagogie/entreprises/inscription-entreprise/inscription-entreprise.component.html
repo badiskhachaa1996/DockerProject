@@ -496,9 +496,8 @@ Formation suivie :
                                         *
                                     </span></label>
                                 <p-calendar formControlName="date_naissance_t1" dateFormat="dd/mm/yy"
-                                    [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
-                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                    [yearRange]="rangeYear">
+                                    [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [locale]="fr"
+                                    [monthNavigator]="true" yearNavigator="true" [yearRange]="rangeYear">
                                 </p-calendar>
                                 <div
                                     *ngIf="date_naissance_t1.invalid && (date_naissance_t1.touched || date_naissance_t1.dirty)">
