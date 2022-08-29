@@ -30,6 +30,7 @@ export class Etudiant {
         public remarque?: string,
         public isOnStage?: boolean,
         public fileRight?: [],
-        public payment_reinscrit?: string
+        public payment_reinscrit?: string,
+        public enic_naric?: boolean,
     ) { }
 }

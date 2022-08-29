@@ -27,29 +27,18 @@
                     <input pInputText id="titre_long" type="text" formControlName="titre_long" />
                 </div>
 
-                <div class="field col-12">
-                    <label For="description">Description</label>
-                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize
-                        rows="3" cols="30" formControlName="description"></textarea>
+                <div class="field col-12 md:col-6">
+                    <label>Campus</label>
+                    <p-multiSelect [options]="campusList" formControlName="campus_id"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Campus</label>
-                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id"></p-dropdown>
-                </div>
-
-                <div class="field col-12 md:col-3">
                     <label>Type de diplôme</label>
                     <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
                 </div>
 
-                <div class="field col-12 md:col-3">
-                    <label>Type d'étude</label>
-                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude"></p-dropdown>
-                </div>
-
                 <div class="field col-12 md:col-6">
-                    <label>Domaine</label>
+                    <label>Departement</label>
                     <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
                 </div>
 
@@ -60,7 +49,7 @@
 
                 <div class="field col-12">
                     <label>Cette formation est-elle diplômante ?</label>
-                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified"></p-dropdown>
+                    <p-dropdown [options]="choiceList" formControlName="isCertified"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-8">
@@ -150,7 +139,6 @@
                     <label>Date de fin semestre 2</label>
                     <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_2"></p-calendar>
                 </div>
-
                 <div style="justify-content: right;">
                     <button pButton label="Modifier" type="submit" [disabled]="formUpdateDiplome.invalid"></button>
                 </div>
@@ -195,7 +183,7 @@
                         <th pSortableColumn="niveau" style="text-align: center;">Niveau <p-sortIcon field="niveau"></p-sortIcon>
                         </th>
                         <th style="text-align: center;">Titre</th>
-                        <th style="text-align: center;">Domaine</th>
+                        <th style="text-align: center;">Departement</th>
                         <th style="text-align: center;" pSortableColumn="code_RNCP">Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
                         </th>
                         <th style="text-align: center;" pSortableColumn="certificateur">Certificateur <p-sortIcon field="certificateur">

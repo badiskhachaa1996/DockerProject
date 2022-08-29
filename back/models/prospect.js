@@ -170,6 +170,10 @@ const prospect_schema = new mongoose.Schema({
     haveDoc:{
         type:Boolean,
         default:false
+    },
+    origin:{
+        type:String,
+        default:"Site Web"
     }
 });
 
