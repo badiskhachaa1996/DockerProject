@@ -56,7 +56,6 @@ export class ListEtudiantComponent implements OnInit {
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
-  classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choisissez une classe', value: null }];
   searchClass: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
@@ -257,7 +256,6 @@ export class ListEtudiantComponent implements OnInit {
       ((response) => {
         response.forEach(classe => {
           this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
-          this.classes[classe._id] = classe;
           this.searchClass.push({ label: classe.nom, value: classe._id });
         })
       }),

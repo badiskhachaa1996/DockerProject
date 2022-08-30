@@ -363,9 +363,9 @@
                             <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)=" showFormUpdateEtudiant = true; 
                                     showFormExportEtudiant = false; 
                                     idEtudiantToUpdate = etudiant._id; 
-                                    idUserOfEtudiantToUpdate = etudiant.user_id;
+                                    idUserOfEtudiantToUpdate = etudiant.user_id._id;
                                     statutToUpdate = etudiant.statut;
-                                    classeToUpdate = classes[etudiant.classe_id]?.nom;
+                                    classeToUpdate = etudiant.classe_id?.nom;
                                     nationaliteToUpdate = etudiant.nationalite;
                                     onGetbyId();" pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
 
