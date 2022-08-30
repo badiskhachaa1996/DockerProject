@@ -117,9 +117,18 @@ app.get("/getAllVolume", (req, res, next) => {
                 //Calcule du nb d'heure
                 let sd1 = new Date(seance.date_debut).getTime()
                 let sd2 = new Date(seance.date_fin).getTime()
-                let diff = sd2 - sd1
-                let nb = Math.floor((diff % 86400000) / 3600000);
-                console.log(nb)
+                let tmp = sd2 - sd1
+                let diff = {}
+                //let nb = Math.floor((tmp % 86400000) / 3600000);
+                tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates             
+                tmp = Math.floor((tmp - (tmp % 60)) / 60);    // Nombre de minutes (partie entière)
+                diff.min = tmp % 60;                    // Extraction du nombre de minutes
+
+                tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (entières)
+                diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+                let nb = diff.hour
+                if (diff.min > 40)
+                    nb++
                 if (date < seance.date_debut) {
                     if (rPlan[seance.matiere_id]) {
                         rPlan[seance.matiere_id] += nb

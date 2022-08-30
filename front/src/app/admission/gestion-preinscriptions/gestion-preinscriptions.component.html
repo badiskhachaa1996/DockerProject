@@ -224,8 +224,7 @@
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
                         [options]="[{value:null,label:'Tous'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
                         (onChange)="dt1.filter($event.value, 'origin','equals')"
-                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine"
-                        [style]="{'margin':'5px'}">
+                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine" [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
                         style="float: right;margin-left:2%" *ngIf="!code">
@@ -586,12 +585,25 @@
             <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
 
             <h5 style="color: red; text-align: center;">Paiements</h5>
-            <ul>
-                <li *ngFor="let payement of prospect.payement; index as i">
-                    <p><b>Type:</b> {{payement.type}} <b>Montant:</b> {{payement.montant}}€</p>
-                </li>
-            </ul>
+            <p-table responsiveLayout="scroll" *ngIf="prospect.payement" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type du Paiement</th>
+                        <th>Montant du Paiement</th>
+                        <th>Date du Paiement</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
 
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr *ngFor="let payement of prospect.payement;">
+                        <td>{{ payement.type }}</td>
+                        <td>{{ payement.montant }}</td>
+                        <td>{{ payement.date | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
         </td>
         </tr>

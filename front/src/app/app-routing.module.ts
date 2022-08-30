@@ -100,6 +100,7 @@ import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
 import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
+import { CompletionProfilGuard } from './guards/completion-profil.guard';
 
 
 @NgModule({
@@ -192,7 +193,7 @@ import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
             { path: 'demande-events', component: DemandeEventsComponent },
-            { path: 'completion-profil', canActivate: [AuthGuardService], component: FirstConnectionComponent },
+            { path: 'completion-profil', canActivate: [AuthGuardService,CompletionProfilGuard], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },

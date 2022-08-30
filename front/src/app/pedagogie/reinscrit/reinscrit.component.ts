@@ -165,7 +165,10 @@ export class ReinscritComponent implements OnInit {
   payementList = []
 
   onAddPayement() {
-    this.payementList.push({ type: "", montant: 0 })
+    if (this.payementList == null) {
+      this.payementList = []
+    }
+    this.payementList.push({ type: "", montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
@@ -212,7 +215,6 @@ export class ReinscritComponent implements OnInit {
       y = nom.indexOf(" ", y) + 1
     }
     let dn = new Date(prospect.date_naissance)
-    console.log(dn)
     let jour = dn.getDate()
     let mois = dn.getMonth() + 1
     let year = dn.getFullYear().toString().substring(2)

@@ -29,9 +29,6 @@ export class PedagogieGuardService implements CanActivate {
     if (role == 'Admin') {
       console.log("accés autorisé")
       return true;
-    }else if(type == 'Tuteur'){
-      console.log("accés autorisé")
-      return true;
     }
     else {
 

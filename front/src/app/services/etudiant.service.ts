@@ -26,6 +26,11 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  getAllEtudiantPopulate() {
+    let registreUrl = this.apiUrl + "getAllEtudiantPopulate";
+    return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   getAllAlternants() {
     let registreUrl = this.apiUrl + "getAllAlternants";
     return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });

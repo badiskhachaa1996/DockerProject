@@ -96,8 +96,11 @@ export class ListFormateursComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id")
+    else if (type == "matiere_id"){
       this.volumeHList[i][type] = event.value;
+      this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
+    }
+
   }
 
   deleteMatiereAdd(i) {

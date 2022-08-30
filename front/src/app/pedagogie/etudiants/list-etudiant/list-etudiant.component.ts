@@ -56,9 +56,8 @@ export class ListEtudiantComponent implements OnInit {
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
-  classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choisissez une classe', value: null }];
-  searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  searchClass: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteur: Tuteur[] = []
 
@@ -125,7 +124,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   addNewPayment() {
-    this.ProspectService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
@@ -138,8 +137,12 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   showPayementFC(etu: Etudiant) {
-    console.log(etu)
-    if (this.prospects[etu.user_id]) {
+    console.log(etu.user_id)
+    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
+      this.showPayement = p
+    })
+    this.payementList = etu.payment_reinscrit
+    /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
       this.payementList = this.showPayement.payement
     } else {
@@ -147,7 +150,7 @@ export class ListEtudiantComponent implements OnInit {
         this.showPayement = data
         this.payementList = data.payement
       })
-    }
+    }*/
   }
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
@@ -237,22 +240,23 @@ export class ListEtudiantComponent implements OnInit {
     });
 
   }
-
+  test(data) {
+    console.log(data)
+  }
 
   //Methode de recuperation des differentes classes
   onGetAllClasses() {
 
     this.dropdownUser = [];
     this.dropdownClasse = [{ libelle: 'Choisissez une classe', value: null }];
-    this.searchClass = [{ libelle: 'Toutes les classes', value: null }];
+    this.searchClass = [];
 
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
           this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
-          this.classes[classe._id] = classe;
-          this.searchClass.push({ libelle: classe.nom, value: classe._id });
+          this.searchClass.push({ label: classe.nom, value: classe._id });
         })
       }),
       ((error) => { console.error(error); })
@@ -266,57 +270,19 @@ export class ListEtudiantComponent implements OnInit {
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu;
           }),
           ((error) => { console.error(error); })
         );
       } else {
-        this.etudiantService.getAll().subscribe(
+        this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
-            console.log(responseEtu)
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  if (etu.classe_id != null)
-                    this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu
           }),
           ((error) => { console.error(error); })
         );
       }
-    })
-
-
+    });
 
   }
 
@@ -495,7 +461,7 @@ export class ListEtudiantComponent implements OnInit {
           dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
           numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
           adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric:this.etudiantToUpdate.enic_naric
+          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
         });
       }),
       ((error) => { console.error(error); })
@@ -547,7 +513,7 @@ export class ListEtudiantComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.presenceService.getAllAbsences(rowData?.user_id).subscribe(data => {
+    this.presenceService.getAllAbsences(rowData?.user_id._id).subscribe(data => {
       this.absences = data
     })
   }

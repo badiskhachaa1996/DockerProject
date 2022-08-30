@@ -21,7 +21,7 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
   styleUrls: ['./add-formateur.component.scss']
 })
 export class AddFormateurComponent implements OnInit {
-  display=false
+  display = false
   typeFormateur = [
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
@@ -43,7 +43,7 @@ export class AddFormateurComponent implements OnInit {
     /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
     { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
   ];
-  prestataireList = [ ];
+  prestataireList = [];
   matiereList = [];
   matiereDic = {};
   dropdownCampus = []
@@ -84,12 +84,10 @@ export class AddFormateurComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id"){
+    else if (type == "matiere_id") {
       this.volumeHList[i][type] = event.value;
-      this.volumeHList[i]["volume_init"] = parseInt(event.target.value);
+      this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
     }
-      
-      //TODO Default volume_init
   }
 
   deleteMatiereAdd(i) {
@@ -145,9 +143,9 @@ export class AddFormateurComponent implements OnInit {
       });
     })
 
-    this.entrepriseService.getAll().subscribe(entData=>{
-      entData.forEach(ent=>{
-        this.prestataireList.push({value:ent._id,label:ent.r_sociale})
+    this.entrepriseService.getAll().subscribe(entData => {
+      entData.forEach(ent => {
+        this.prestataireList.push({ value: ent._id, label: ent.r_sociale })
       })
     })
 
@@ -311,7 +309,7 @@ export class AddFormateurComponent implements OnInit {
 
   }
 
-  
+
   FileUpload(event) {
     if (event.files != null) {
       this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
