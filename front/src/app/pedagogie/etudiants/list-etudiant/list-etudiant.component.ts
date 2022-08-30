@@ -47,11 +47,6 @@ export class ListEtudiantComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
 
   etudiantToUpdate: Etudiant;
-  idEtudiantToUpdate: string;
-  idUserOfEtudiantToUpdate: string;
-  nationaliteToUpdate: string;
-  statutToUpdate: string;
-  classeToUpdate: string;
 
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
@@ -137,7 +132,6 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   showPayementFC(etu: Etudiant) {
-    console.log(etu.user_id)
     this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
       this.showPayement = p
     })
@@ -399,8 +393,8 @@ export class ListEtudiantComponent implements OnInit {
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
 
     let etudiant = new Etudiant(
-      this.idEtudiantToUpdate,
-      this.idUserOfEtudiantToUpdate,
+      this.etudiantToUpdate._id,
+      this.etudiantToUpdate.user_id,
       classe_id,
       statut,
       nationalite,
@@ -446,26 +440,19 @@ export class ListEtudiantComponent implements OnInit {
     );
   }
 
-
-  //Methôde de recuperation de l'etudiant à modifier
-  onGetbyId() {
-    //Recuperation de l'etudiant à modifier
-    this.etudiantService.getById(this.idEtudiantToUpdate).subscribe(
-      ((response) => {
-        this.etudiantToUpdate = response;
-        let date = new Date(this.etudiantToUpdate.date_naissance)
-        this.parcoursList = this.etudiantToUpdate.parcours
-        this.formUpdateEtudiant.patchValue({
-          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
-          isAlternant: this.etudiantToUpdate.isAlternant,
-          dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
-          numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
-          adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
+  showFUpdate(response:Etudiant) {
+    this.etudiantToUpdate = response;
+    let date = new Date(this.etudiantToUpdate.date_naissance)
+    this.parcoursList = this.etudiantToUpdate.parcours
+    let bypass : any = response.classe_id
+    this.formUpdateEtudiant.patchValue({
+      statut: { libelle: response.statut, value: this.etudiantToUpdate.statut }, classe_id: { libelle: bypass.nom, value: bypass._id }, nationalite: { value: response.nationalite, viewValue: response.nationalite }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
+      isAlternant: this.etudiantToUpdate.isAlternant,
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
+      numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
+    });
   }
 
   clickFile(rowData) {
