@@ -138,6 +138,16 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
+
+//Récupérer la liste de tous les étudiants
+app.get("/getAllEtudiantPopulate", (req, res, next) => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere')
+        .then((etudiantsFromDb) => {
+            res.status(200).send(etudiantsFromDb);
+        })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
 app.get("/getAllAlternants", (req, res, next) => {
 
     Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
@@ -457,7 +467,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null } }).then(result => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {

@@ -16,6 +16,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { CampusService } from 'src/app/services/campus.service';
+import { Ecole } from 'src/app/models/Ecole';
 
 @Component({
   selector: 'app-add-etudiant',
@@ -46,6 +49,8 @@ export class AddEtudiantComponent implements OnInit {
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
   dropdownTuteur: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
+  dropdownFiliere: any[] = [];
+  dropdownCampus: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteurs: Tuteur[] = []
   searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
@@ -53,6 +58,12 @@ export class AddEtudiantComponent implements OnInit {
   civiliteList = environment.civilite;
   statutList = environment.profil;
   display: boolean;
+  statutDossier = [
+    { value: "Document Manquant", label: "Document Manquant" },
+    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Abandon", label: "Abandon" }
+  ]
 
   entreprises: Entreprise[] = [];
   dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: '' }];
@@ -72,7 +83,8 @@ export class AddEtudiantComponent implements OnInit {
   isMinor = false;
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
-    private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService) { }
+    private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
+    private diplomeService: DiplomeService, private campusService: CampusService) { }
 
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
@@ -104,6 +116,22 @@ export class AddEtudiantComponent implements OnInit {
           this.tuteurs = tuteur
         })
       })
+
+    this.campusService.getAllPopulate().subscribe(data => {
+      data.forEach(c => {
+        let e: any = c.ecole_id
+        let n = e.libelle + " - " + c.libelle
+        this.dropdownCampus.push({ value: c._id, label: n })
+      })
+      this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
+    })
+
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.dropdownFiliere.push({ value: d._id, label: d.titre })
+      })
+      this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormAddEtudiant();
@@ -152,7 +180,7 @@ export class AddEtudiantComponent implements OnInit {
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            this.etudiants = [];
+            this.etudiants = responseEtu;
             //Recuperation de la liste des users
             this.userService.getAll().subscribe(
               ((response) => {
@@ -217,7 +245,7 @@ export class AddEtudiantComponent implements OnInit {
       postal_adresse: ['', [Validators.required, Validators.pattern('[0-9]+')]],
       classe_id: ['', Validators.required],
       statut: [this.statutList[0], Validators.required],
-      nationalite: [this.nationList[0], Validators.required],
+      nationalite: [this.nationList[0].value, Validators.required],
       date_naissance: [null, Validators.required],
       isAlternant: [false],
       isOnStage: [false],
@@ -237,19 +265,17 @@ export class AddEtudiantComponent implements OnInit {
       isHandicaped: [false],
       suivi_handicaped: [''],
       entreprise_id: [''],
-      remarque: ['']
+      remarque: [''],
+      campus_id: [' '],
+      filiere: ['', Validators.required],
+      statut_dossier: [this.statutDossier[0].value]
 
 
     });
   }
 
   resetAddEtudiant() {
-    this.formAddEtudiant.reset()
-    this.formAddEtudiant.patchValue({
-      civilite: this.civiliteList[0], statut: this.statutList[0],
-      pays_adresse: this.paysList[0],
-      nationalite: this.nationList[0], date_naissance: null
-    })
+    this.onInitFormAddEtudiant()
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
@@ -287,9 +313,6 @@ export class AddEtudiantComponent implements OnInit {
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
 
-  }
-  changestage() {
-    console.log(this.formAddEtudiant.get('isOnStage')?.value)
   }
   //Methode d'ajout d'un étudiant
   onAddEtudiant() {
@@ -329,6 +352,12 @@ export class AddEtudiantComponent implements OnInit {
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
+
+    let campus = this.formAddEtudiant.get("campus_id")?.value;
+
+    let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
+
+    let filiere = this.formAddEtudiant.get("filiere")?.value;
 
 
 
@@ -388,9 +417,10 @@ export class AddEtudiantComponent implements OnInit {
       this.formAddEtudiant.get('remarque').value,
       isOnStage.value,
       null,
-      null);
-
-    console.log(isAlternant)
+      null,
+      null,
+      campus, statut_dossier, filiere
+    );
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });

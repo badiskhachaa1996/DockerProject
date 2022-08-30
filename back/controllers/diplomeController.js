@@ -97,6 +97,16 @@ app.get("/getAll", (req, res) => {
         })
 });
 
+app.get("/getAllPopulate", (req, res) => {
+    //Récupérer tous les diplomes
+    Diplome.find().then(result => {
+        res.send(result.length > 0 ? result : [])
+    })
+        .catch(error => {
+            console.error(error);
+        })
+});
+
 app.get("/getById/:id", (req, res) => {
     //Récupérer un diplome via un id
     Diplome.findOne({ _id: req.params.id }).then((diplome) => {
