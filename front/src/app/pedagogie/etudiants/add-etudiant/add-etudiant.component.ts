@@ -28,8 +28,6 @@ import { Ecole } from 'src/app/models/Ecole';
 })
 export class AddEtudiantComponent implements OnInit {
 
-  etudiants: Etudiant[] = [];
-
   formAddEtudiant: FormGroup;
   showFormAddEtudiant: boolean = false;
 
@@ -171,62 +169,6 @@ export class AddEtudiantComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
-
-    //Recuperation de la liste des étudiants
-    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
-      if (!this.code && data && data.code_commercial_partenaire) {
-        this.code = data.code_commercial_partenaire
-      }
-      if (this.code) {
-        this.etudiantService.getAllByCode(this.code).subscribe(
-          ((responseEtu) => {
-            this.etudiants = responseEtu;
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
-          }),
-          ((error) => { console.error(error); })
-        );
-      } else {
-        this.etudiantService.getAll().subscribe(
-          ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
-          }),
-          ((error) => { console.error(error); })
-        );
-      }
-    });
   }
 
   //Methode d'initialisation du formulaire d'ajout d'un étudiant

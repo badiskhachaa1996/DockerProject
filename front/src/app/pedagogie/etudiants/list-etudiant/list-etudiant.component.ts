@@ -139,7 +139,7 @@ export class ListEtudiantComponent implements OnInit {
 
   showPayementFC(etu: Etudiant) {
     console.log(etu.user_id)
-    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p=>{
+    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
       this.showPayement = p
     })
     this.payementList = etu.payment_reinscrit
@@ -241,7 +241,7 @@ export class ListEtudiantComponent implements OnInit {
     });
 
   }
-  test(data){
+  test(data) {
     console.log(data)
   }
 
@@ -272,57 +272,19 @@ export class ListEtudiantComponent implements OnInit {
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu;
           }),
           ((error) => { console.error(error); })
         );
       } else {
-        this.etudiantService.getAll().subscribe(
+        this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
-            console.log(responseEtu)
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  if (etu.classe_id != null)
-                    this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu
           }),
           ((error) => { console.error(error); })
         );
       }
-    })
-
-
+    });
 
   }
 
@@ -553,7 +515,7 @@ export class ListEtudiantComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.presenceService.getAllAbsences(rowData?.user_id).subscribe(data => {
+    this.presenceService.getAllAbsences(rowData?.user_id._id).subscribe(data => {
       this.absences = data
     })
   }

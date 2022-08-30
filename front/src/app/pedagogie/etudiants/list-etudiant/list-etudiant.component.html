@@ -317,7 +317,7 @@
                             class="w-full" />
                     </span>
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-                        (onChange)="dt1.filter($event.value, 'classe_id','in');test($event.value)">
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)">
                     </p-multiSelect>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -341,7 +341,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-etudiant let-expanded="expanded">
-                    <tr>
+                    <tr *ngIf="etudiant.user_id">
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="etudiant"
                                 class="p-button-text p-button-rounded p-button-plain"
@@ -351,13 +351,13 @@
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 
                         <td>
-                            {{ etudiant?.firstname }} {{ etudiant?.lastname | uppercase }}
+                            {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
                         <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut_dossier }}</td>
                         <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
-                        <td style="min-width: 10rem;">{{ classes[etudiant.classe_id]?.nom }}</td>
-                        <td style="min-width: 10rem;">{{ etudiant.campus }}</td>
-                        <td style="min-width: 10rem;">{{ users[etudiant.user_id]?.email }}</td>
+                        <td style="min-width: 10rem;">{{ etudiant.classe_id?.nom }}</td>
+                        <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
+                        <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
                             <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)=" showFormUpdateEtudiant = true; 
@@ -409,19 +409,19 @@
                         <td>
                             <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
                         </td>
-                        <td *ngIf="users[etudiant.user_id]?.email_perso">
-                            {{ users[etudiant.user_id]?.email_perso }}
+                        <td *ngIf="etudiant.user_id.email_perso">
+                            {{ etudiant.user_id.email_perso }}
                         </td>
-                        <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
-                            {{ users[etudiant.user_id].numero_adresse }} {{ users[etudiant.user_id].rue_adresse }} {{
-                            users[etudiant.user_id].postal_adresse }} <br> {{ users[etudiant.user_id].ville_adresse }}
-                            {{ users[etudiant.user_id].pays_adresse }}
+                        <td *ngIf="etudiant.user_id">
+                            {{ etudiant.user_id.numero_adresse }} {{etudiant.user_id.rue_adresse }} {{
+                            etudiant.user_id.postal_adresse }} <br> {{ etudiant.user_id.ville_adresse }}
+                            {{ etudiant.user_id.pays_adresse }}
                         </td>
                         <td>
                             {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
                         </td>
-                        <td *ngIf="etudiant.user_id && users[etudiant.user_id]">
-                            {{ users[etudiant.user_id]?.phone }}
+                        <td *ngIf="etudiant.user_id">
+                            {{ etudiant.user_id?.phone }}
                         </td>
                         <td>
                             {{ etudiant.dernier_diplome }}
@@ -500,7 +500,7 @@
                             Non
                         </td>
                         <td>{{etudiant.statut}}</td>
-                        <td>{{etudiant.filiere}}</td>
+                        <td>{{etudiant?.filiere?.titre}}</td>
                     </tr>
 
                 </ng-template>
