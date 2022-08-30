@@ -160,6 +160,7 @@ export class ListEtudiantComponent implements OnInit {
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
+    console.log("J'arrive à ListEtudiant")
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -341,12 +342,13 @@ export class ListEtudiantComponent implements OnInit {
       nationalite: ['', Validators.required],
       date_naissance: ['', Validators.required],
       isAlternant: [false],
-      entreprise: [],
+      entreprise_id: [],
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
       adresse_tuteur: [""],
       email_tuteur: ["", Validators.email],
       phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
+      id_tuteur:[""],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
