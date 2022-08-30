@@ -138,6 +138,17 @@ resetAddTuteur() {
 resetUpdateTuteur() {
   this.onInitUpdateTuteurForm()
 }
+
+///Rafraissement de la liste des tuteurs
+refreshEvent() {
+  this.tuteurService.getAll().subscribe(
+    ((response) => {
+      response.forEach((tuteur) => {
+        this.tuteurs[tuteur._id] = tuteur;
+      });
+    })
+  );
+}
   
 //Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
   onInitFormAddTuteur() {
@@ -247,6 +258,10 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
         this.showFormAddTuteur = false;
+        this.tuteurService.getAll().subscribe(
+          ((responseT) => { this.tuteurs = responseT; }),
+          ((error) => { console.error(error) })
+        );
       }),
       ((error) => {
         console.error(error)
@@ -255,6 +270,7 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
     );
 
     this.resetAddTuteur()
+    this.refreshEvent()
 
   }
 
