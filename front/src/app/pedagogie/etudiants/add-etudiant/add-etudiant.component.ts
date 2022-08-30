@@ -87,6 +87,8 @@ export class AddEtudiantComponent implements OnInit {
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
+    console.log("J'arrive à addEtudiant")
+
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -191,6 +193,7 @@ export class AddEtudiantComponent implements OnInit {
       date_naissance: [null, Validators.required],
       isAlternant: [false],
       isOnStage: [false],
+      id_tuteur: [''],
 
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
