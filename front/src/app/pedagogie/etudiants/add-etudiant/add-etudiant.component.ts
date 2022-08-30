@@ -20,6 +20,10 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Ecole } from 'src/app/models/Ecole';
 
+import { Diplome } from 'src/app/models/Diplome';
+import { ContratAlternance } from 'src/app/models/ContratAlternance';
+
+
 @Component({
   selector: 'app-add-etudiant',
   templateUrl: './add-etudiant.component.html',
@@ -51,6 +55,9 @@ export class AddEtudiantComponent implements OnInit {
   dropdownCampus: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteurs: Tuteur[] = []
+
+  tuteurEtu: Tuteur;
+
   searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
 
   civiliteList = environment.civilite;
@@ -64,6 +71,7 @@ export class AddEtudiantComponent implements OnInit {
   ]
 
   entreprises: Entreprise[] = [];
+  entrepriseEtu: Entreprise;
   dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: '' }];
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
@@ -79,10 +87,13 @@ export class AddEtudiantComponent implements OnInit {
   showUploadFile;
   parcoursList = []
   isMinor = false;
+  formationList = []
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
     private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
     private diplomeService: DiplomeService, private campusService: CampusService) { }
+
+
 
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
@@ -116,6 +127,16 @@ export class AddEtudiantComponent implements OnInit {
           this.tuteurs = tuteur
         })
       })
+
+
+      this.diplomeService.getAll().subscribe(data => {
+
+        data.forEach(element => {
+          this.formationList.push({ label: element.titre, value: element._id });
+        });
+  
+      })
+
 
     this.campusService.getAllPopulate().subscribe(data => {
       data.forEach(c => {
@@ -193,8 +214,21 @@ export class AddEtudiantComponent implements OnInit {
       date_naissance: [null, Validators.required],
       isAlternant: [false],
       isOnStage: [false],
+      ///partie si alternant
+      entreprise_id: [''],
       id_tuteur: [''],
-
+      debut_contrat: [''],
+      fin_contrat: [''],
+      horaire: [''],
+      // alternant: [''],// remplissage auto
+      intitule: [''],
+      classification: [''],
+      niv: [''],
+      coeff_hier: [''],
+      form: [''],
+      code_commercial: [''],
+      donneePerso: [''],
+      ///Form ETUDIANT
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
@@ -209,7 +243,7 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      entreprise_id: [''],
+      
       remarque: [''],
       campus_id: [' '],
       filiere: ['', Validators.required],
@@ -231,9 +265,22 @@ export class AddEtudiantComponent implements OnInit {
   get email() { return this.formAddEtudiant.get('email'); };
   get pays_adresse() { return this.formAddEtudiant.get('pays_adresse'); };
   get ville_adresse() { return this.formAddEtudiant.get('ville_adresse'); };
+
+  get debut_contrat() { return this.formAddEtudiant.get('debut_contrat'); };
+  get fin_contrat() { return this.formAddEtudiant.get('fin_contrat').value; };
+  get horaire() { return this.formAddEtudiant.get('horaire'); };
+  get alternant() { return this.formAddEtudiant.get('alternant'); };
+  get intitule() { return this.formAddEtudiant.get('intitule').value; };
+  get classification() { return this.formAddEtudiant.get('classification'); };
+  get coeff_hie() { return this.formAddEtudiant.get('coeff_hie'); };
+  get form() { return this.formAddEtudiant.get('form').value; };
+  get code_commercial() { return this.formAddEtudiant.get('code_commercial'); };
+ 
+
   get rue_adresse() { return this.formAddEtudiant.get('rue_adresse'); };
   get nationalite() { return this.formAddEtudiant.get('nationalite').value; };
   get date_naissance() { return this.formAddEtudiant.get('date_naissance'); };
+
 
   generateCode(nationalite, firstname, lastname, date_naissance) {
     let code_pays = nationalite.substring(0, 3)
@@ -257,7 +304,6 @@ export class AddEtudiantComponent implements OnInit {
     nb = nb.substring(nb.length - 3)
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
-
   }
   //Methode d'ajout d'un étudiant
   onAddEtudiant() {
@@ -282,6 +328,25 @@ export class AddEtudiantComponent implements OnInit {
     let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
 
+
+
+    //// Partie contrat d'apprentissage
+    let entreprise_id = this.formAddEtudiant.get('entreprise_id')?.value.value;
+    let id_tuteur = this.formAddEtudiant.get('id_tuteur')?.value.value;
+    let debut_contrat = this.formAddEtudiant.get('debut_contrat')?.value;
+    let fin_contrat = this.formAddEtudiant.get('fin_contrat')?.value;
+    let horaire = this.formAddEtudiant.get('horaire')?.value;
+    // let alternant= this.formAddEtudiant.get('alternant')?.value;// remplissage auto
+    let intitule = this.formAddEtudiant.get('intitule')?.value;
+    let classification = this.formAddEtudiant.get('classification')?.value;
+    let niv = this.formAddEtudiant.get('niv')?.value;
+    let coeff_hier = this.formAddEtudiant.get('coeff_hier')?.value;
+    let form = this.formAddEtudiant.get('form')?.value.value;
+    let code_commercial = this.formAddEtudiant.get('code_commercial')?.value;
+
+    //Données Perso
+    let donneePerso = this.formAddEtudiant.get('donneePerso')?.value;
+
     let dernier_diplome = this.formAddEtudiant.get('dernier_diplome')?.value;
     let sos_email = this.formAddEtudiant.get('sos_email')?.value;
     let sos_phone = this.formAddEtudiant.get('sos_phone')?.value;
@@ -293,18 +358,24 @@ export class AddEtudiantComponent implements OnInit {
     let phone_rl = this.formAddEtudiant.get('phone_rl')?.value;
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formAddEtudiant.get('entreprise_id')?.value.value;
+
+    console.log(entreprise_id);
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
 
     let campus = this.formAddEtudiant.get("campus_id")?.value;
-
     let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
-
     let filiere = this.formAddEtudiant.get("filiere")?.value;
 
 
+    this.entrepriseService.getById(entreprise_id).subscribe(
+      ((response) => {
+        this.entrepriseEtu = response
+
+    this.tuteurService.getById(id_tuteur).subscribe(
+      ((response) => {
+        this.tuteurEtu = response
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
@@ -360,12 +431,30 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null,
       this.formAddEtudiant.get('remarque').value,
-      isOnStage.value,
+      isOnStage,
       null,
+      null);
+
+    let contratAlternance = new ContratAlternance(
+      debut_contrat,
+      fin_contrat,
+      horaire,
       null,
-      null,
-      campus, statut_dossier, filiere
+      intitule,
+      classification,
+      niv,
+      coeff_hier,
+      form,
+      id_tuteur,
+      code_commercial
     );
+
+    let t1 = this.tuteurEtu;
+    let entreprise = this.entrepriseEtu;
+    let CEO = this.entrepriseEtu.Directeur_id;
+
+    console.log(CEO);
+
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
@@ -380,7 +469,28 @@ export class AddEtudiantComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: error.error });
       })
     );
-  }
+
+    let alternant_id = newEtudiant._id
+    let objectTosend = { contratAlternance, t1, entreprise, alternant_id }
+    
+    if(objectTosend){
+      this.entrepriseService.createContratAlternance(objectTosend).subscribe(
+        ((responseContrat) => {
+          this.messageService.add({ severity: 'success', summary: 'Contrat ajouté' });
+        })
+      ),
+      ((error) => {
+        console.error(error)
+        this.messageService.add({ severity: 'error', summary: error.error });
+      })
+    }
+
+  })
+  )
+  })
+  )
+
+}
 
   isMinorFC() {
     // console.log("IW AS HERE")
@@ -506,3 +616,4 @@ export class AddEtudiantComponent implements OnInit {
   }
 
 }
+
