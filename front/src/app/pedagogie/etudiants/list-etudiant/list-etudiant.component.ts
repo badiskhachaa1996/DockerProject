@@ -391,9 +391,7 @@ export class ListEtudiantComponent implements OnInit {
       enic_naric: [false],
       campus_id: [' '],
       filiere: ['', Validators.required],
-      statut_dossier: [this.statutDossier[0].value],
-      id_tuteur: [''],
-      entreprise_id: ['']
+      statut_dossier: [this.statutDossier[0].value]
     });
   }
 
