@@ -89,7 +89,6 @@ export class ProspectsComponent implements OnInit {
       if (data && data.statut == 'Admin') {
         this.dataCommercial = data
       }
-      this.refreshProspect()
     })
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
@@ -104,6 +103,19 @@ export class ProspectsComponent implements OnInit {
         this.dicCommercial[c.code_commercial_partenaire]=c.partenaire_id
       })
     })
+  }
+  etudiants: Etudiant[] = [];
+  refreshEtudiant() {
+    this.etudiantService.getAllWait().subscribe(data => {
+      this.etudiants = data
+    })
+    this.userService.getAll().subscribe(
+      ((response) => {
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        });
+      })
+    );
   }
 
   onAddEtudiant() {
@@ -123,7 +135,6 @@ export class ProspectsComponent implements OnInit {
       null//A faire pour PMR
     )
     this.etudiantService.createfromPreinscris(etd).subscribe(data => {
-      this.refreshProspect()
       this.showAssignForm=null
     }, err => {
       console.error(err)
@@ -150,20 +161,6 @@ export class ProspectsComponent implements OnInit {
     } else {
       this.infoCommercialExpand = null
     }
-  }
-
-  refreshProspect() {
-    //Recuperation de la liste des utilisateurs
-    this.userService.getAll().subscribe(
-      ((response) => {
-        response.forEach((user) => {
-          this.users[user._id] = user;
-        });
-        this.admissionService.getAllWait().subscribe(d => {
-          this.prospects = d
-        })
-      })
-    );
   }
 
   downloadFile(id, i) {

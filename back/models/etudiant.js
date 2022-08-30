@@ -27,7 +27,7 @@ const etudiantSchema = mongoose.Schema({
 
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
-    diplome: { type: String, required: false },
+    diplome: { type: String, required: false }, //Formation souhaitée pour les reinscrits
     parcours: { type: mongoose.Schema.Types.Mixed, required: false }, // diplome: String, date: Date
     remarque: { type: String },
     isOnStage: { type: Boolean, default: false },
@@ -41,7 +41,7 @@ const etudiantSchema = mongoose.Schema({
     enic_naric: { type: Boolean, default: false },
     campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
     statut_dossier: { type: String, default: "Nouveau" },
-    filière: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
+    filiere: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

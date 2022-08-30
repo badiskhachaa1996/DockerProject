@@ -180,13 +180,13 @@ export const environment = {
   ],
 
   profil: [
-    { value: 'Salarié', viewValue: 'Salarié', actif: false },
-    { value: 'Apprenti', viewValue: 'Apprenti', actif: false },
-    { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi', actif: false },
-    { value: 'Paticulier', viewValue: 'Paticulier', actif: false },
-    { value: 'Autre', viewValue: 'Autre', actif: false },
-    { value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation', actif: false },
-    { value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage', actif: false },
+    { value: 'Salarié', viewValue: 'Salarié' },
+    { value: 'Apprenti', viewValue: 'Apprenti' },
+    { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi'},
+    { value: 'Paticulier', viewValue: 'Paticulier'},
+    { value: 'Autre', viewValue: 'Autre' },
+    { value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
+    { value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage'},
   ],
 
   statut: [

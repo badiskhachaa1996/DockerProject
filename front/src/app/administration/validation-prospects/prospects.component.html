@@ -1,3 +1,4 @@
+<!-- Partie ajout de documents -->
 <p-toast></p-toast>
 <div class="col-12" *ngIf="showUploadFile!=null">
     <div class="card">
@@ -19,6 +20,7 @@
         </form>
     </div>
 </div>
+
 <!-- partie Assignation à un Groupe -->
 <div class="col-12" *ngIf="showAssignForm!=null">
     <div class="card">
@@ -32,7 +34,7 @@
 
         <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAddEtudiant()">
             <div class="field col-12 md:col-6">
-                <label>Groupe <span style="color: red;">*</span></label>
+                <label>Groupe</label>
                 <p-dropdown [options]="groupeList" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
                     filter="true" formControlName="groupe"></p-dropdown>
             </div>
@@ -137,36 +139,11 @@
             </div>
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
-                <label for="adresse_rl">Adresse du répresentant légal</label>
-                <textarea pInputTextArea formControlName="adresse_rl"
+                <label for="adresse_rl">Email du répresentant légal</label>
+                <textarea pInputTextarea formControlName="adresse_rl"
                     placeholder="Adresse du répresentant légal"></textarea>
             </div>
             <!-- End -->
-
-            <!-- Parcous Etudiant-->
-            <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
-                <div class="field col-12 md:col-4">
-                    <label>Diplome du parcours:</label><br>
-                    <input pInputText type="text" [(value)]="parcoursList[i]['diplome']" placeholder="BTS"
-                        class="form-control">
-                </div>
-                <div class="field col-12 md:col-4">
-                    <label>Date du parcours:</label><br>
-                    <input type="date" [(value)]="parcoursList[i]['date']" pInputText>
-                </div>
-                <div class="field col-12 md:col-2">
-                    <i class="pi pi-trash" (click)="onRemoveParcours(i)" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="col-12">
-                <button type="button" (click)="onAddParcours()" pButton label="Ajouter un parcours"></button>
-            </div>
-
-            <div class="field col-12">
-                <label for="remarque">Remarque</label>
-                <textarea pInputTextarea formControlName="remarque" placeholder="Remarque"></textarea>
-            </div>
 
             <div>
                 <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
@@ -174,50 +151,10 @@
         </form>
     </div>
 </div>
-<!-- partie Voir/Ajouter des payements -->
-<div class="col-12" *ngIf="showPayement!=null">
-    <div class="card">
-        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPayement = null"
-            aria-hidden="true"> </i>
-        <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
-            showPayement.user_id?.firstname }} {{
-            showPayement.user_id?.lastname | uppercase }}
-        </h3>
-        <div class="p-fluid p-formgrid grid">
-            <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
-                <div class="field col-12 md:col-3">
-                    <label>Type de payement:</label><br>
-                    <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
-                        [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label>Montant:</label><br>
-                    <input type="number" (change)="changeMontant(i,$event,'montant')"
-                        [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
-                </div>
-                <div class="field col-12 md:col-5">
-                    <label>Date du paiement:</label><br>
-                    <input type="date" (change)="changeMontant(i,$event,'date')"
-                        [(value)]="payementList[i]['date']" pInputText>
-                </div>
-                <div class="field col-12 md:col-1">
-                    <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
-                </div>
-            </div>
-            <div class="col-6">
-                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
-            </div>
-            <div class="col-6">
-                <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
-            </div>
-        </div>
 
-    </div>
-</div>
 <div class="col-12">
     <div class="card">
-        <h5>Liste des étudiants en réinscriptions</h5>
+        <h5>Liste des étudiants en attente d'assignation de groupe</h5>
         <p-toast></p-toast>
         <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
@@ -277,7 +214,7 @@
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-euro"
                             (click)="showPayement=etudiant;payementList=etudiant.payment_reinscrit"
                             aria-hidden="true"></i>
-                        <i pTooltip="Assigner à un groupe" tooltipPosition="bottom" class="pi pi-bookmark"
+                        <i pTooltip="Valider les documents" tooltipPosition="bottom" class="pi pi-bookmark"
                             (click)="showAssignForm=etudiant;showUploadFile=null;initForm(etudiant)"
                             aria-hidden="true"></i>
                     </td>

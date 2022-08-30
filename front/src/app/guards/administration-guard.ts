@@ -34,7 +34,7 @@ export class AdministrationGuardService implements CanActivate {
       return this.serv.getAServiceByid(currenttoken.service_id).pipe(
         map(service => {
           serviceName = service.dataService.label
-          if (serviceName.includes("Administration")) {
+          if (serviceName.includes("dministration")) {
             console.log("Accés autorisé: (" + role + ")")
             return true
           }
