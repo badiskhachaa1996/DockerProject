@@ -16,6 +16,7 @@ import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Prospect } from 'src/app/models/Prospect';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-reinscrit',
@@ -85,6 +86,7 @@ export class ReinscritComponent implements OnInit {
 
 
   prospects: any[] = [];
+  dicCommercial: any= {};
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
@@ -106,7 +108,7 @@ export class ReinscritComponent implements OnInit {
   })
 
   groupeList = [];
-  constructor(public etudiantService: EtudiantService, private messageService: MessageService, private campusService: CampusService, private diplomeService: DiplomeService,
+  constructor(public etudiantService: EtudiantService, private messageService: MessageService, private campusService: CampusService, private diplomeService: DiplomeService, private commercialService: CommercialPartenaireService,
     private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService) { }
 
   ngOnInit(): void {
@@ -142,6 +144,14 @@ export class ReinscritComponent implements OnInit {
         this.dropdownFiliere.push({ value: d._id, label: d.titre })
       })
       this.AssignForm.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
+
+    this.commercialService.getAllPopulate().subscribe(dataC => {
+      dataC.forEach(c => {
+        if(c.code_commercial_partenaire && c.partenaire_id)
+          this.dicCommercial[c.code_commercial_partenaire] = c.partenaire_id
+      })
+      console.log(this.dicCommercial)
     })
   }
 
@@ -327,32 +337,7 @@ export class ReinscritComponent implements OnInit {
     }
   }
 
-  loadPP(rowData) {
-    this.imageToShow = "../assets/images/avatar.PNG"
-    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
-      if (data.error) {
-        this.imageToShow = "../assets/images/avatar.PNG"
-      } else {
-        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: data.documentType })
-        let reader: FileReader = new FileReader();
-        reader.addEventListener("load", () => {
-          this.imageToShow = reader.result;
-        }, false);
-        if (blob) {
-          this.imageToShow = "../assets/images/avatar.PNG"
-          reader.readAsDataURL(blob);
-        }
-      }
 
-    })
-    this.etudiantService.getFiles(rowData?._id).subscribe(
-      (data) => {
-        this.ListDocuments = data
-      },
-      (error) => { console.error(error) }
-    );
-  }
 
   //Verification si le prospect est mineure ou majeur
   onIsMinor(): boolean {
