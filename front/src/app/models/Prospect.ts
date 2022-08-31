@@ -50,7 +50,9 @@ export class Prospect {
         public remarque?:string,
         public dossier_traited_by?:string,
         public haveDoc?:boolean,
-        public origin?:string
+        public origin?:string,
+        public source?:string,
+        public rentree_scolaire?:string
     ) { }
 
 }
