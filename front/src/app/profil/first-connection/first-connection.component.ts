@@ -41,6 +41,7 @@ export class FirstConnectionComponent implements OnInit {
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
   token;
+  nbUser = 0
 
   statutList = [
     { value: "Etudiant", actif: false },
@@ -65,8 +66,8 @@ export class FirstConnectionComponent implements OnInit {
       rue_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
       numero_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
-      classe_id: new FormControl(this.dropdownClasse[0]),
-      nationalite: new FormControl(this.nationList[0]),
+      //classe_id: new FormControl(this.dropdownClasse[0]),
+      nationalite: new FormControl(this.nationList[0],Validators.required),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
       diplome: new FormControl(this.programReinscrit[0]),
@@ -77,7 +78,7 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-    
+
     this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
       if (data) {
         this.userConnected = data.user_id
@@ -106,7 +107,9 @@ export class FirstConnectionComponent implements OnInit {
         })
       }
 
-
+      this.AuthService.getNBUser().subscribe(r => {
+        this.nbUser = r.r
+      })
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
         this.programReinscrit = environment.ADGReinscrit;
       }
@@ -154,6 +157,32 @@ export class FirstConnectionComponent implements OnInit {
       }),
       ((error) => { console.error(error) })
     );
+  }
+
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.nbUser.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
   }
 
 
@@ -220,7 +249,7 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          "",
+          this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
           null,
           null,
           null,
@@ -232,15 +261,8 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           this.RegisterForm.value.type.value !== "Etudiant",
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null
-          // this.RegisterForm.value.diplome.value
+          null,null,
+          this.RegisterForm.value.diplome.value
         )
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
           localStorage.removeItem('modify')
@@ -282,7 +304,7 @@ export class FirstConnectionComponent implements OnInit {
   get numero_adresse() { return this.RegisterForm.get('numero_adresse'); }
   get postal_adresse() { return this.RegisterForm.get('postal_adresse'); }
 
-  get classe_id() { return this.RegisterForm.get('classe_id'); }
+  //get classe_id() { return this.RegisterForm.get('classe_id'); }
   get statut() { return this.RegisterForm.get('statut'); }
   get nationalite() { return this.RegisterForm.get('nationalite').value; }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }

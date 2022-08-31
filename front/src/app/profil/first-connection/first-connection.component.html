@@ -162,9 +162,8 @@
                             sont acceptés.</span>
                     </div>
                 </div>
-
                 <div class="field col-12 md:col-4">
-                    <button pButton type="submit" [disabled]="RegisterForm.invalid" label="Enregistrer"></button>
+                    <button pButton type="submit" [disabled]="RegisterForm.invalid || nationalite.value==null" label="Enregistrer"></button>
                 </div>
             </form>
 

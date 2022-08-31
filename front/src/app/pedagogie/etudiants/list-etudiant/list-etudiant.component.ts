@@ -22,6 +22,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Prospect } from 'src/app/models/Prospect';
+import { Diplome } from 'src/app/models/Diplome';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { CampusService } from 'src/app/services/campus.service';
 
 
 
@@ -47,18 +50,12 @@ export class ListEtudiantComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
 
   etudiantToUpdate: Etudiant;
-  idEtudiantToUpdate: string;
-  idUserOfEtudiantToUpdate: string;
-  nationaliteToUpdate: string;
-  statutToUpdate: string;
-  classeToUpdate: string;
 
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
-  classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choisissez une classe', value: null }];
-  searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  searchClass: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteur: Tuteur[] = []
 
@@ -76,6 +73,15 @@ export class ListEtudiantComponent implements OnInit {
   classeToExport: string;
   nationaliteToExport: string;
   dateDeNaissanceToExport: Date;
+
+  dropdownFiliere: any[] = [];
+  dropdownCampus: any[] = [];
+  statutDossier = [
+    { value: "Document Manquant", label: "Document Manquant" },
+    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Abandon", label: "Abandon" }
+  ]
 
   entreprises: Entreprise[] = [];
   dropdownEntreprise: any[] = [{ libelle: 'Choisissez une entreprise', value: '' }];
@@ -125,7 +131,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   addNewPayment() {
-    this.ProspectService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
@@ -138,8 +144,11 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   showPayementFC(etu: Etudiant) {
-    console.log(etu)
-    if (this.prospects[etu.user_id]) {
+    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
+      this.showPayement = p
+    })
+    this.payementList = etu.payment_reinscrit
+    /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
       this.payementList = this.showPayement.payement
     } else {
@@ -147,16 +156,17 @@ export class ListEtudiantComponent implements OnInit {
         this.showPayement = data
         this.payementList = data.payement
       })
-    }
+    }*/
   }
 
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
+    console.log("J'arrive à ListEtudiant")
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -184,6 +194,22 @@ export class ListEtudiantComponent implements OnInit {
         this.prospects[p.user_id] = p
       })
       console.log(this.prospects)
+    })
+
+    this.campusService.getAllPopulate().subscribe(data => {
+      data.forEach(c => {
+        let e: any = c.ecole_id
+        let n = e.libelle + " - " + c.libelle
+        this.dropdownCampus.push({ value: c._id, label: n })
+      })
+      this.formUpdateEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
+    })
+
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.dropdownFiliere.push({ value: d._id, label: d.titre })
+      })
+      this.formUpdateEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
     })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
@@ -237,22 +263,23 @@ export class ListEtudiantComponent implements OnInit {
     });
 
   }
-
+  test(data) {
+    console.log(data)
+  }
 
   //Methode de recuperation des differentes classes
   onGetAllClasses() {
 
     this.dropdownUser = [];
     this.dropdownClasse = [{ libelle: 'Choisissez une classe', value: null }];
-    this.searchClass = [{ libelle: 'Toutes les classes', value: null }];
+    this.searchClass = [];
 
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
           this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
-          this.classes[classe._id] = classe;
-          this.searchClass.push({ libelle: classe.nom, value: classe._id });
+          this.searchClass.push({ label: classe.nom, value: classe._id });
         })
       }),
       ((error) => { console.error(error); })
@@ -266,57 +293,19 @@ export class ListEtudiantComponent implements OnInit {
       if (this.code) {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu;
           }),
           ((error) => { console.error(error); })
         );
       } else {
-        this.etudiantService.getAll().subscribe(
+        this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
-            console.log(responseEtu)
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  if (etu.classe_id != null)
-                    this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
+            this.etudiants = responseEtu
           }),
           ((error) => { console.error(error); })
         );
       }
-    })
-
-
+    });
 
   }
 
@@ -375,12 +364,13 @@ export class ListEtudiantComponent implements OnInit {
       nationalite: ['', Validators.required],
       date_naissance: ['', Validators.required],
       isAlternant: [false],
-      entreprise: [],
+      entreprise_id: [],
       nom_tuteur: ["", Validators.pattern('[^0-9]+')],
       prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
       adresse_tuteur: [""],
       email_tuteur: ["", Validators.email],
       phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
+      id_tuteur:[""],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -398,8 +388,10 @@ export class ListEtudiantComponent implements OnInit {
       suivi_handicaped: [''],
       remarque: [''],
       isOnStage: [''],
-      enic_naric: [false]
-
+      enic_naric: [false],
+      campus_id: [' '],
+      filiere: ['', Validators.required],
+      statut_dossier: [this.statutDossier[0].value]
     });
   }
 
@@ -432,9 +424,15 @@ export class ListEtudiantComponent implements OnInit {
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
 
+    let campus = this.formUpdateEtudiant.get("campus_id")?.value;
+
+    let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
+
+    let filiere = this.formUpdateEtudiant.get("filiere")?.value;
+
     let etudiant = new Etudiant(
-      this.idEtudiantToUpdate,
-      this.idUserOfEtudiantToUpdate,
+      this.etudiantToUpdate._id,
+      this.etudiantToUpdate.user_id,
       classe_id,
       statut,
       nationalite,
@@ -463,7 +461,10 @@ export class ListEtudiantComponent implements OnInit {
       isOnStage,
       this.etudiantToUpdate.fileRight,
       this.etudiantToUpdate.payment_reinscrit,
-      enic_naric
+      enic_naric,
+      campus,
+      statut_dossier,
+      filiere
     );
 
     this.etudiantService.update(etudiant).subscribe(
@@ -480,26 +481,36 @@ export class ListEtudiantComponent implements OnInit {
     );
   }
 
+  showFUpdate(response: Etudiant) {
+    //Campus et Filiere, statut a vérifier
+    this.etudiantToUpdate = response;
+    let date = new Date(response.date_naissance)
+    console.log(response.date_naissance, date)
+    this.parcoursList = response.parcours
+    let bypass: any = response.classe_id
+    this.formUpdateEtudiant.patchValue({
+      statut: { viewValue: response.statut, value: response.statut }, classe_id: { libelle: bypass.nom, value: bypass._id }, nationalite: { value: response.nationalite, viewValue: response.nationalite },
+      isAlternant: this.etudiantToUpdate.isAlternant,
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
+      numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
+    });
+    bypass = response.campus
+    let bypassv2 : any = response.filiere
+    this.formUpdateEtudiant.patchValue({ campus_id: bypass?._id, filiere: bypassv2?._id, date_naissance: this.formatDate(date) })
+    this.showFormUpdateEtudiant = true;
+    this.showFormExportEtudiant = false;
+  }
 
-  //Methôde de recuperation de l'etudiant à modifier
-  onGetbyId() {
-    //Recuperation de l'etudiant à modifier
-    this.etudiantService.getById(this.idEtudiantToUpdate).subscribe(
-      ((response) => {
-        this.etudiantToUpdate = response;
-        let date = new Date(this.etudiantToUpdate.date_naissance)
-        this.parcoursList = this.etudiantToUpdate.parcours
-        this.formUpdateEtudiant.patchValue({
-          statut: { libelle: this.statutToUpdate, value: this.etudiantToUpdate.statut }, classe_id: { libelle: this.classeToUpdate, value: this.etudiantToUpdate.classe_id }, nationalite: { value: this.nationaliteToUpdate, viewValue: this.nationaliteToUpdate }, date_naissance: new Date(date.getUTCFullYear(), (date.getMonth() + 1), date.getDate()),
-          isAlternant: this.etudiantToUpdate.isAlternant,
-          dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
-          numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
-          adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-          remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric:this.etudiantToUpdate.enic_naric
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
+  private formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
   }
 
   clickFile(rowData) {
@@ -547,7 +558,7 @@ export class ListEtudiantComponent implements OnInit {
       },
       (error) => { console.error(error) }
     );
-    this.presenceService.getAllAbsences(rowData?.user_id).subscribe(data => {
+    this.presenceService.getAllAbsences(rowData?.user_id._id).subscribe(data => {
       this.absences = data
     })
   }

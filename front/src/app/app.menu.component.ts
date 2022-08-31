@@ -57,8 +57,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                     ]
                 },
-                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
-                { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
+                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/assignation-inscrit'] },
                 {
                     label: 'Gestions des étudiants', icon: 'pi pi-users',
                     items: [
@@ -128,6 +127,7 @@ export class AppMenuComponent implements OnInit {
                         { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
                     ]
                 },
+                { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
             ]
         },
         {
@@ -411,13 +411,6 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Alternants sous ma tutelle', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
                             ]
                         },
-                        {
-                            label: "",
-                            items: [
-
-
-                            ]
-                        },
                     ]
 
 
@@ -456,8 +449,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des formateurs', icon: 'pi pi-sort-alpha-down', routerLink: ['/formateurs'] },
                                     ]
                                 },
-                                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/prospects'] },
-                                { label: 'Gestion des réinscriptions', icon: 'pi pi-user-plus', routerLink: ['/reinscrit'] },
+                                { label: 'Gestion des inscrits en attente d\'assignation', icon: 'pi pi-user-plus', routerLink: ['/assignation-inscrit'] },
                                 {
                                     label: 'Gestions des étudiants', icon: 'pi pi-users',
                                     items: [
@@ -527,6 +519,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
                                     ]
                                 },
+                                { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
                             ]
                         },
                     ]

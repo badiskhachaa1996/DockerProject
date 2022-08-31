@@ -26,6 +26,11 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "getAll";
     return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  getAllEtudiantPopulate() {
+    let registreUrl = this.apiUrl + "getAllEtudiantPopulate";
+    return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   getAllAlternants() {
     let registreUrl = this.apiUrl + "getAllAlternants";
     return this.httpClient.get<any[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
@@ -127,6 +132,11 @@ export class EtudiantService {
 
   addNewPayment(_id: string, data: any) {
     let url = this.apiUrl + "addNewPayment/" + _id
+    return this.httpClient.post<Etudiant>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  validateProspect(data: Etudiant, user_id, email_ims) {
+    let url = this.apiUrl + "validateProspect/" + user_id + "/" + email_ims
     return this.httpClient.post<Etudiant>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 

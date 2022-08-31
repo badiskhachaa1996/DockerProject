@@ -44,7 +44,7 @@ app.post("/create", (req, res, next) => {
     let etudiant = new Etudiant(
         {
             ...etudiantData
-        });  
+        });
     console.log(etudiant)
     //Creation du nouveau user
     let userData = req.body.newUser;
@@ -99,7 +99,7 @@ app.post("/create", (req, res, next) => {
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
                             .catch((error) => {
                                 console.error(error);
-                                res.status(400).send({ error })
+                                res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
                             });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
@@ -138,6 +138,16 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
+
+//Récupérer la liste de tous les étudiants
+app.get("/getAllEtudiantPopulate", (req, res, next) => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere')
+        .then((etudiantsFromDb) => {
+            res.status(200).send(etudiantsFromDb);
+        })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
 app.get("/getAllAlternants", (req, res, next) => {
 
     Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
@@ -161,7 +171,7 @@ app.get("/getAllByClasseId/:id", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants en attente d'assignation
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null })
+    Etudiant.find({ classe_id: null }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -183,7 +193,7 @@ app.get("/getByUserid/:user_id", (req, res, next) => {
 
 //Recupere un étudiant via son user_id
 app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
-    Etudiant.findOne({ "user_id._id": req.params.user_id }).populate('user_id')
+    Etudiant.findOne({ "user_id": req.params.user_id }).populate('user_id')
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });
@@ -457,7 +467,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null } }).then(result => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
@@ -603,6 +613,31 @@ app.post('/addNewPayment/:id', (req, res) => {
             res.status(500).send(err)
         } else {
             res.status(201).send(data)
+        }
+    })
+})
+
+app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
+    User.findByIdAndUpdate(req.params.user_id, {
+        type: "Etudiant",
+        email: req.params.email_ims
+    }, { new: true }, (err, updatedUser) => {
+        if (err) {
+            console.error(err)
+        } else {
+            delete req.body._id
+            let etu = new Etudiant({
+                ...req.body
+            })
+            etu.save((errEtu, newEtu) => {
+                if (errEtu) {
+                    console.error(errEtu)
+                } else {
+                    Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
+                        res.send(newP)
+                    })
+                }
+            })
         }
     })
 })

@@ -11,7 +11,7 @@ app.post("/create", (req, res) => {
             diplome_id: req.body.diplome_id,
             nom: req.body.nom,
             active: req.body.active,
-            abbrv:req.body.abbrv
+            abbrv: req.body.abbrv
         });
 
     classe.save()
@@ -22,12 +22,12 @@ app.post("/create", (req, res) => {
 
 //Modification d'une classe
 app.post("/updateById", (req, res) => {
-    Classe.findOneAndUpdate({ _id: req.body._id}, 
+    Classe.findOneAndUpdate({ _id: req.body._id },
         {
             diplome_id: req.body.diplome_id,
             nom: req.body.nom,
             active: req.body.active,
-            abbrv:req.body.abbrv
+            abbrv: req.body.abbrv
         })
         .then((classeUpdated) => { res.status(201).send(classeUpdated); })
         .catch((error) => { res.status(400).send('Modification impossible' + error) });
@@ -56,6 +56,13 @@ app.get("/getPopulate/:id", (req, res) => {
 //Récuperer tous les classes
 app.get("/getAll", (req, res) => {
     Classe.find()
+        .then((classes) => { res.status(200).send(classes); })
+        .catch((err) => { res.status(500).send('Impossible de recuperer la liste des classes'); })
+});
+
+//Récuperer tous les classes
+app.get("/getAllPopulate", (req, res) => {
+    Classe.find().populate('diplome_id')
         .then((classes) => { res.status(200).send(classes); })
         .catch((err) => { res.status(500).send('Impossible de recuperer la liste des classes'); })
 });

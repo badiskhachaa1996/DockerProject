@@ -593,7 +593,7 @@ app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null], user_id: { $ne: null } }).then(prospects => {
+    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null], user_id: { $ne: null } }).populate('user_id').populate('agent_id').then(prospects => {
         res.send(prospects)
     }).catch((error) => { res.status(500).send(error); });
 })

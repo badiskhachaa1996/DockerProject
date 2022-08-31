@@ -25,7 +25,7 @@ import { Historique } from 'src/app/models/Historique';
 export class AddAgentComponent implements OnInit {
 
   serviceList: any[];
-  display: Boolean= false;
+  display: Boolean = false;
   currentRoot: String = this.router.url;
   IsAdmin: boolean = false;
   User_role: String;
@@ -42,28 +42,30 @@ export class AddAgentComponent implements OnInit {
     civilite: new FormControl(environment.civilite[0], [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com))$")]),
-    indicatif: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
-    phone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.minLength(10), Validators.maxLength(14)]),
-    role: new FormControl('user', Validators.required),
-    service_id: new FormControl(""),
+    email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")]),
+    indicatif: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+    phone: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
+    role: new FormControl('', Validators.required),
+    service_id: new FormControl("", Validators.required),
     entreprise: new FormControl(""),
     type: new FormControl(this.statutList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
-    pays_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-    ville_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-    rue_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
-    postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
+    pays_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
+    ville_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
+    rue_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
+    postal_adresse: new FormControl("", [Validators.pattern('[0-9]+')]),
     campus: new FormControl(""),
     formation: new FormControl(""),
+    departement: new FormControl('')
   })
 
- 
+
   get lastname() { return this.RegisterForm.get('lastname'); }
   get firstname() { return this.RegisterForm.get('firstname'); }
   get email() { return this.RegisterForm.get('email'); }
   get indicatif() { return this.RegisterForm.get('indicatif'); }
   get phone() { return this.RegisterForm.get('phone'); }
   get role() { return this.RegisterForm.get('role').value; }
+  get departement() { return this.RegisterForm.get('departement').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
   get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
@@ -78,7 +80,7 @@ export class AddAgentComponent implements OnInit {
 
   constructor(private router: Router, private AuthService: AuthService, private messageService: MessageService, private servService: ServService,
     private entrepriseService: EntrepriseService, private campusService: CampusService, private formationService: DiplomeService, private HistoriqueService: HistoriqueService) { }
-   
+
 
   ngOnInit(): void {
     this.servService.getAll().subscribe((data) => {
@@ -92,9 +94,9 @@ export class AddAgentComponent implements OnInit {
     }
     this.IsAdmin = this.User_role == "Admin"
     if (this.User_role == "Responsable") {
-      this.roleList = [this.roleList[0], this.roleList[1]]
+      this.roleList = [{ value: "Responsable" }, { value: "Agent" }]
     } else if (this.IsAdmin) {
-      this.roleList = [this.roleList[0], this.roleList[1], { value: "Admin" }]
+      this.roleList = [{ value: "Responsable" }, { value: "Agent" }, { value: "Admin" }]
     }
 
     this.entrepriseService.getAll().subscribe(
@@ -130,7 +132,7 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.email,
       this.RegisterForm.value.email,
       null,
-      this.RegisterForm.value.role.value ,
+      this.RegisterForm.value.role.value,
       false,
       this.RegisterForm.value.service_id,
       this.RegisterForm.value.civilite.value,
@@ -142,7 +144,8 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.ville_adresse,
       this.RegisterForm.value.rue_adresse,
       this.RegisterForm.value.numero_adresse,
-      this.RegisterForm.value.postal_adresse, null, null,null
+      this.RegisterForm.value.postal_adresse, null, null, null,
+      this.RegisterForm.value.departement
 
     );
 
@@ -150,7 +153,7 @@ export class AddAgentComponent implements OnInit {
       user.role = "user"
     }
     this.AuthService.registerAdmin(user).subscribe((data: any) => {
-     
+      this.messageService.add({ severity: 'success', summary: 'Création d\'agent', detail: 'Création d\'agent réussie' });
 
       if (this.router.url == "/register") {
         this.router.navigateByUrl('/login')
@@ -166,7 +169,7 @@ export class AddAgentComponent implements OnInit {
       console.error(error)
       if (error.status == 400 || error.includes("400") || error.keyValue.includes("email")) {
         //Bad Request (Email déjà utilisé)
-        this.messageService.add({ severity: 'error', summary:  'Erreur d\'inscription', detail: 'Email déjà utilisé' });
+        this.messageService.add({ severity: 'error', summary: 'Erreur d\'inscription', detail: 'Email déjà utilisé' });
         this.emailExists = true;
       } else if (error.status == 500 || error.includes("500")) {
         //Bad Request (Champ non fourni)

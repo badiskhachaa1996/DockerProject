@@ -15,14 +15,13 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { TuteurService } from 'src/app/services/tuteur.service';
+import { Tuteur } from 'src/app/models/Tuteur';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { CampusService } from 'src/app/services/campus.service';
+import { Ecole } from 'src/app/models/Ecole';
 
 import { Diplome } from 'src/app/models/Diplome';
-import { DiplomeService } from 'src/app/services/diplome.service';
-
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
-
-
-import { Tuteur } from 'src/app/models/Tuteur';
 
 
 @Component({
@@ -32,8 +31,6 @@ import { Tuteur } from 'src/app/models/Tuteur';
   styleUrls: ['./add-etudiant.component.scss']
 })
 export class AddEtudiantComponent implements OnInit {
-
-  etudiants: Etudiant[] = [];
 
   formAddEtudiant: FormGroup;
   showFormAddEtudiant: boolean = false;
@@ -54,15 +51,24 @@ export class AddEtudiantComponent implements OnInit {
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
   dropdownTuteur: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
+  dropdownFiliere: any[] = [];
+  dropdownCampus: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteurs: Tuteur[] = []
 
   tuteurEtu: Tuteur;
+
   searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
   display: boolean;
+  statutDossier = [
+    { value: "Document Manquant", label: "Document Manquant" },
+    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Abandon", label: "Abandon" }
+  ]
 
   entreprises: Entreprise[] = [];
   entrepriseEtu: Entreprise;
@@ -84,11 +90,16 @@ export class AddEtudiantComponent implements OnInit {
   formationList = []
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
-    private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService, private formationService: DiplomeService) { }
+    private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
+    private diplomeService: DiplomeService, private campusService: CampusService) { }
+
+
 
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
+    console.log("J'arrive à addEtudiant")
+
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -118,14 +129,30 @@ export class AddEtudiantComponent implements OnInit {
       })
 
 
-    this.formationService.getAll().subscribe(data => {
+      this.diplomeService.getAll().subscribe(data => {
 
-      data.forEach(element => {
-        this.formationList.push({ label: element.titre, value: element._id });
-      });
+        data.forEach(element => {
+          this.formationList.push({ label: element.titre, value: element._id });
+        });
+  
+      })
 
+
+    this.campusService.getAllPopulate().subscribe(data => {
+      data.forEach(c => {
+        let e: any = c.ecole_id
+        let n = e.libelle + " - " + c.libelle
+        this.dropdownCampus.push({ value: c._id, label: n })
+      })
+      this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
     })
 
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.dropdownFiliere.push({ value: d._id, label: d.titre })
+      })
+      this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormAddEtudiant();
@@ -143,6 +170,8 @@ export class AddEtudiantComponent implements OnInit {
         })
       }); this.dropdownTuteurByEntreprise = [];
   }
+
+
 
   //Methode de recuperation des differentes classes
   onGetAllClasses() {
@@ -163,62 +192,6 @@ export class AddEtudiantComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
-
-    //Recuperation de la liste des étudiants
-    this.CommercialService.getByUserId(this.token.id).subscribe(data => {
-      if (!this.code && data && data.code_commercial_partenaire) {
-        this.code = data.code_commercial_partenaire
-      }
-      if (this.code) {
-        this.etudiantService.getAllByCode(this.code).subscribe(
-          ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
-          }),
-          ((error) => { console.error(error); })
-        );
-      } else {
-        this.etudiantService.getAll().subscribe(
-          ((responseEtu) => {
-            this.etudiants = [];
-            //Recuperation de la liste des users
-            this.userService.getAll().subscribe(
-              ((response) => {
-                response.forEach(user => {
-                  this.dropdownUser.push({ libelle: user.lastname + ' ' + user.firstname, value: user._id });
-                  this.users[user._id] = user;
-                })
-                responseEtu.forEach(etu => {
-                  if (this.users[etu.user_id] && this.users[etu.user_id].lastname)
-                    etu.lastname = this.users[etu.user_id].lastname
-                  if (this.users[etu.user_id] && this.users[etu.user_id].firstname)
-                    etu.firstname = this.users[etu.user_id].firstname
-                  this.etudiants.push(etu)
-                })
-              }),
-              ((error) => { console.error(error); })
-            );
-          }),
-          ((error) => { console.error(error); })
-        );
-      }
-    });
   }
 
   //Methode d'initialisation du formulaire d'ajout d'un étudiant
@@ -237,7 +210,7 @@ export class AddEtudiantComponent implements OnInit {
       postal_adresse: ['', [Validators.required, Validators.pattern('[0-9]+')]],
       classe_id: ['', Validators.required],
       statut: [this.statutList[0], Validators.required],
-      nationalite: [this.nationList[0], Validators.required],
+      nationalite: [this.nationList[0].value, Validators.required],
       date_naissance: [null, Validators.required],
       isAlternant: [false],
       isOnStage: [false],
@@ -270,17 +243,18 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      remarque: ['']
+      
+      remarque: [''],
+      campus_id: [' '],
+      filiere: ['', Validators.required],
+      statut_dossier: [this.statutDossier[0].value]
+
+
     });
   }
 
   resetAddEtudiant() {
-    this.formAddEtudiant.reset()
-    this.formAddEtudiant.patchValue({
-      civilite: this.civiliteList[0], statut: this.statutList[0],
-      pays_adresse: this.paysList[0],
-      nationalite: this.nationList[0], date_naissance: null
-    })
+    this.onInitFormAddEtudiant()
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
@@ -301,6 +275,7 @@ export class AddEtudiantComponent implements OnInit {
   get coeff_hie() { return this.formAddEtudiant.get('coeff_hie'); };
   get form() { return this.formAddEtudiant.get('form').value; };
   get code_commercial() { return this.formAddEtudiant.get('code_commercial'); };
+ 
 
   get rue_adresse() { return this.formAddEtudiant.get('rue_adresse'); };
   get nationalite() { return this.formAddEtudiant.get('nationalite').value; };
@@ -329,10 +304,6 @@ export class AddEtudiantComponent implements OnInit {
     nb = nb.substring(nb.length - 3)
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
-
-  }
-  changestage() {
-    console.log(this.formAddEtudiant.get('isOnStage')?.value)
   }
   //Methode d'ajout d'un étudiant
   onAddEtudiant() {
@@ -356,6 +327,7 @@ export class AddEtudiantComponent implements OnInit {
     let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
     let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
+
 
 
     //// Partie contrat d'apprentissage
@@ -387,11 +359,14 @@ export class AddEtudiantComponent implements OnInit {
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
 
-
     console.log(entreprise_id);
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
+
+    let campus = this.formAddEtudiant.get("campus_id")?.value;
+    let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
+    let filiere = this.formAddEtudiant.get("filiere")?.value;
 
 
     this.entrepriseService.getById(entreprise_id).subscribe(
@@ -426,7 +401,6 @@ export class AddEtudiantComponent implements OnInit {
       numero_adresse,
       postal_adresse);
 
-
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(
       null,
@@ -457,7 +431,6 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null,
       this.formAddEtudiant.get('remarque').value,
-
       isOnStage,
       null,
       null);
@@ -480,9 +453,7 @@ export class AddEtudiantComponent implements OnInit {
     let entreprise = this.entrepriseEtu;
     let CEO = this.entrepriseEtu.Directeur_id;
 
-
-
-    console.log(isAlternant)
+    console.log(CEO);
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
@@ -491,9 +462,7 @@ export class AddEtudiantComponent implements OnInit {
         this.onGetAllClasses();
 
         this.showFormAddEtudiant = false;
-          
         this.resetAddEtudiant();
-
       }),
       ((error) => {
         console.error(error)
@@ -518,9 +487,10 @@ export class AddEtudiantComponent implements OnInit {
 
   })
   )
-})
-)
-  }
+  })
+  )
+
+}
 
   isMinorFC() {
     // console.log("IW AS HERE")
@@ -644,4 +614,6 @@ export class AddEtudiantComponent implements OnInit {
       this.parcoursList.splice(i)
     }
   }
+
 }
+
