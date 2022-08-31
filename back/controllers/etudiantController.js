@@ -171,7 +171,7 @@ app.get("/getAllByClasseId/:id", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants en attente d'assignation
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null })
+    Etudiant.find({ classe_id: null }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -613,6 +613,31 @@ app.post('/addNewPayment/:id', (req, res) => {
             res.status(500).send(err)
         } else {
             res.status(201).send(data)
+        }
+    })
+})
+
+app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
+    User.findByIdAndUpdate(req.params.user_id, {
+        type: "Etudiant",
+        email: req.params.email_ims
+    }, { new: true }, (err, updatedUser) => {
+        if (err) {
+            console.error(err)
+        } else {
+            delete req.body._id
+            let etu = new Etudiant({
+                ...req.body
+            })
+            etu.save((errEtu, newEtu) => {
+                if (errEtu) {
+                    console.error(errEtu)
+                } else {
+                    Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
+                        res.send(newP)
+                    })
+                }
+            })
         }
     })
 })

@@ -79,6 +79,7 @@ export class ReinscritComponent implements OnInit {
     remarque: [''],
     campus_id: [' '],
     statut_dossier: [this.statutDossier[0].value],
+    email_ims: ['', Validators.required]
 
   })
 
@@ -145,13 +146,13 @@ export class ReinscritComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    let bypass : any = this.showAssignForm.user_id
+    let bypass: any = this.showAssignForm.user_id
     let etd: Etudiant = new Etudiant(
       this.showAssignForm._id,
-      this.showAssignForm.user_id,
+      bypass._id,
       null,
       this.AssignForm.value.statut.value,
-      bypass.nationalite,
+      bypass.nationnalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_partenaire,
       null, null, null, null,
@@ -163,7 +164,7 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.prenom_rl,
       this.AssignForm.value.phone_rl,
       this.AssignForm.value.email_rl,
-      
+
       this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
@@ -180,9 +181,13 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere
     )
-    etd.custom_id = this.generateCode(etd)
-    this.etudiantService.update(etd).subscribe(data => {
-      this.refreshProspect()
+    etd.custom_id = this.generateCode(this.showAssignForm)
+    this.etudiantService.validateProspect(etd, bypass._id, this.AssignForm.value.email_ims).subscribe(data => {
+      this.prospects.forEach((val, index) => {
+        if (val._id == data._id) {
+          this.prospects.splice(index, 1)
+        }
+      })
       this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
       this.showAssignForm = null
     }, err => {

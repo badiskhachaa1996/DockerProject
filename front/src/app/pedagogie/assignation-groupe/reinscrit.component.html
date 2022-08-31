@@ -3,8 +3,7 @@
     <div class="card">
         <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null" aria-hidden="true">
         </i>
-        <h3 *ngIf="showUploadFile.user_id" class="text-center"
-            style="font-weight: bold;">Ajouter un document à : {{
+        <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
             showUploadFile.user_id?.firstname }} {{
             showUploadFile.user_id?.lastname | uppercase }}</h3>
         <form class="col-8 col-offset-2">
@@ -50,6 +49,11 @@
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
                 <p-dropdown [options]="statutDossier" formControlName="statut"></p-dropdown>
+            </div>
+
+            <div class="field col-12">
+                <label for="ine">Email IMS<span style="color: red;">*</span></label>
+                <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>
 
             <!-- Si c'est un alternant -->
