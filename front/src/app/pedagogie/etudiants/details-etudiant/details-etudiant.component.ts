@@ -109,7 +109,7 @@ export class DetailsEtudiantComponent implements OnInit {
     })
   }
   load() {
-    console.log(this.RangeDateForPDF)
+
     this.messageService.add({ severity: 'info', summary: 'Telechargement du Fichier', detail: 'Telechargement en cours, veuillez patienter ...' });
 
     this.PDFisLoading = true;
@@ -120,7 +120,7 @@ export class DetailsEtudiantComponent implements OnInit {
     }
       , 2000);
   }
-  constructor(private admissionService: AdmissionService,  private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
+  constructor(private admissionService: AdmissionService, private messageService: MessageService, private PresenceService: PresenceService, private matiereService: MatiereService, private seanceService: SeanceService, private presenceService: PresenceService, private etudiantService: EtudiantService, private activeRoute: ActivatedRoute, private userService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -128,26 +128,29 @@ export class DetailsEtudiantComponent implements OnInit {
     //Recuperation de l'etudiant à modifier
     this.etudiantService.getById(this.idEtudiant).subscribe((response) => {
       this.EtudiantDetail = response;
-      console.log(this.EtudiantDetail)
+
 
       this.userService.getById(this.EtudiantDetail.user_id).subscribe((userdata) => {
         this.Etudiant_userdata = jwt_decode(userdata.userToken)['userFromDb']
-        console.log(this.Etudiant_userdata)
+
       }),
         ((error) => { console.error(error); })
+      this.seanceService.getAllFinishedByClasseId(this.EtudiantDetail.classe_id, this.EtudiantDetail.user_id).subscribe((seanceData) => {
+        this.ListeSeance = seanceData
 
-      this.presenceService.getAllByUser(this.EtudiantDetail.user_id).subscribe((presenceData) => {
-        this.AssiduiteListe = presenceData
-        console.log(this.AssiduiteListe)
-        this.seanceService.getAllByClasseId(this.EtudiantDetail.classe_id).subscribe((seanceData) => {
-          this.ListeSeance = seanceData
+        this.presenceService.getAllByUser(this.EtudiantDetail.user_id).subscribe((presenceData) => {
+          this.AssiduiteListe = presenceData
 
+          console.log("nb presences etudiant " + this.AssiduiteListe.length)
+
+          console.log("nb seance classe" + this.ListeSeance.length)
           this.ListeSeance.forEach(seance => {
 
 
             this.ListeSeanceDIC[seance._id] = seance;
 
           });
+
 
           this.matiereService.getAll().subscribe(data => {
             data.forEach(m => {
@@ -159,28 +162,29 @@ export class DetailsEtudiantComponent implements OnInit {
 
           // boucle liste des presences totales de l'étudiants.
           this.AssiduiteListe.forEach(item => {
+            console.log(item)
 
             if (item.isPresent != true) {
               // absence ++1
               let month: string = item.seance_id?.date_debut.slice(5, 7)
-              console.log(month)
-              this.nb_absences++
-              this.barData.datasets[0].data[Number(month) - 1]++
+
+
 
               if (item.justificatif != true) {
                 // absence non justifié ++1
                 let month: string = item.seance_id?.date_debut.slice(5, 7)
-                console.log(month)
                 this.nb_absencesNJ++
                 this.barData.datasets[2].data[Number(month) - 1]++
-
-
+              }
+              else {
+                this.nb_absences++
+                this.barData.datasets[0].data[Number(month) - 1]++
               }
             }
             else {
               //presence ++1
               let month: string = item.seance_id?.date_debut.slice(5, 7)
-              console.log(month)
+
               this.nb_presences++;
               this.barData.datasets[1].data[Number(month) - 1]++
 
@@ -188,13 +192,13 @@ export class DetailsEtudiantComponent implements OnInit {
             }
           });
           this.barDataHor.datasets[0].data.push(this.nb_presences)
-          console.log(this.barDataHor)
+
           this.barDataHor.datasets[0].data.push(this.nb_absences)
 
           this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
 
           this.pourcentageAssiduite = 100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length)
-          console.log(this.pourcentageAssiduite)
+
 
         })
 
@@ -250,7 +254,7 @@ export class DetailsEtudiantComponent implements OnInit {
 
   }
   getAssiduitePDF(RangeDateForPDF) {
-    
+
     this.presenceService.getAssiduitePDF(this.EtudiantDetail.user_id, this.RangeDateForPDF).subscribe((data) => {
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
@@ -265,7 +269,7 @@ export class DetailsEtudiantComponent implements OnInit {
     //   console.log(ProspData)
     // })
     this.presenceService.getAtt_ssiduitePDF(this.idEtudiant).subscribe((data) => {
-      
+
       if (data) {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         importedSaveAs(new Blob([byteArray], { type: 'application/pdf' }), (this.idEtudiant + "Att_Assiduite.pdf"))
@@ -279,6 +283,6 @@ export class DetailsEtudiantComponent implements OnInit {
       this.chart2.data = this.barDataHor
       this.chart.data = this.barData
       this.barDataHorAJ = this.barDataHor
-    }, 500);
+    }, 200);
   }
 }

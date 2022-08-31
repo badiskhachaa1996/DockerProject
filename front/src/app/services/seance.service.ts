@@ -66,6 +66,10 @@ export class SeanceService {
     let registreUrl = this.apiUrl + "getAllByClasseId/" + id;
     return this.httpClient.get<Seance[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAllFinishedByClasseId(id: string, user_id: string) {
+    let registreUrl = this.apiUrl + "getAllFinishedByClasseId/" + id;
+    return this.httpClient.post<any>(registreUrl,{ user_id},{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
 
   getAllByDiplomeID(id: string) {
