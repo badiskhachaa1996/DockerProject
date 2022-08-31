@@ -43,6 +43,14 @@ app.get("/getAllByUser/:id", (req, res) => {
         res.status(404).send(error);
     })
 });
+//Récupérer tous les presence d'une séance
+app.get("/getAllBySeance/:id", (req, res) => {
+    Presence.find({ seance_id: req.params.id }).then((data) => {
+        res.status(200).send(data);
+    }).catch((error) => {
+        res.status(404).send(error);
+    })
+});
 
 
 app.post("/getAssiduitePDF/:id", (req, res) => {

@@ -188,7 +188,7 @@ export class AppMenuComponent implements OnInit {
                 this.isReponsable = dataUser.role == "Responsable"
                 this.isCeoEntreprise = dataUser.type == "CEO Entreprise"
                 this.isTuteurAlternance = dataUser.type == "Tuteur"
-                console.log('isTuteur: ', this.isTuteurAlternance)
+                
                 let service: any = dataUser.service_id
                 if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')

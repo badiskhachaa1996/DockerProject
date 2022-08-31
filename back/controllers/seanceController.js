@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
+const { Presence } = require("./../models/presence");
 const { Classe } = require("./../models/classe")
 app.disable("x-powered-by");
 const path = require('path');
@@ -127,6 +128,70 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
         });
 });
 
+app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
+    let ListSeanceFinished;
+    let ListPresences = [];
+    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } })
+        .then((SeanceFromdb) => {
+            ListSeanceFinished = SeanceFromdb;
+            let dernierS = SeanceFromdb[SeanceFromdb.length-1]
+
+
+            ListSeanceFinished.forEach( async SF => {
+
+                Presence.find({
+                    user_id: req.body.user_id, seance_id: SF.id
+                }).then((data) => {
+                    console.log("data")
+                    console.log(data)
+                    if (data.length > 0) {
+
+                        console.log("Prensence Trouvé")
+                        ListPresences.push(data);
+                        console.log(ListPresences)
+                        if(dernierS._id==SF.id){
+                            console.log("res to send: " + ListPresences.length)
+                            res.status(200).send(ListPresences);
+                        }
+                    }
+                    else {
+
+                        let presence = new Presence({
+                            seance_id: SF.id,
+                            user_id: req.body.user_id,
+                            isPresent: false,
+                            signature: false,
+                            justificatif: false,
+                            date_signature: null,
+                            allowedByFormateur: false,
+                        });
+                        presence.save((err, dataCreated) => {
+                            //Sauvegarde de la signature si il y en a une
+                            if (err) {
+                                console.error(err)
+                                res.send(err)
+                            } else {
+                                ListPresences.push(dataCreated)
+
+                                console.log("added pre")
+                                console.log(ListPresences)
+                            }
+                            if(dernierS._id==SF.id){
+                                console.log("res to send: " + ListPresences.length)
+                                res.status(200).send(ListPresences);
+                            }
+                        })
+
+                    }
+                }, (err) => { console.log(err) })
+
+            });
+
+
+
+        })
+
+});
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByDiplomeID/:id', (req, res, next) => {
     let cids = []
