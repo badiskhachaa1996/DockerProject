@@ -54,12 +54,15 @@ export class ListCollaborateurComponent implements OnInit {
     { label: 'Externe', value: 'Externe' }
   ];
 
+  canDelete = false
+
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
     private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.canDelete = (this.token && (this.token['role'] == 'Admin' || this.token['role'] == "Responsable"))
     //Recuperation des données
     this.onGetData();
 

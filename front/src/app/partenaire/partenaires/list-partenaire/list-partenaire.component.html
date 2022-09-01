@@ -52,7 +52,7 @@
 							<i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
 								(click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
 							<i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
-								(click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+								(click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px" *ngIf="canDelete"></i>
 						</td>
 					</tr>
 				</ng-template>

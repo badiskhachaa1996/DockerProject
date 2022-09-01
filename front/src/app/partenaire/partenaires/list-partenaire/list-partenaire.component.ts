@@ -53,10 +53,13 @@ export class ListPartenaireComponent implements OnInit {
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
 
+  canDelete = false
+
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
 
   ngOnInit(): void {
-
+    let tkn = jwt_decode(localStorage.getItem("token"))
+    this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
     this.updateList();
     this.onInitRegisterForm();
 
@@ -121,7 +124,7 @@ export class ListPartenaireComponent implements OnInit {
 
   delete(rowData: Partenaire) {
     if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs prospects\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
-      this.partenaireService.delete(rowData._id).subscribe(p=>{
+      this.partenaireService.delete(rowData._id).subscribe(p => {
         this.partenaires.forEach((val, index) => {
           if (val._id == p._id) {
             this.partenaires.splice(index, 1)
