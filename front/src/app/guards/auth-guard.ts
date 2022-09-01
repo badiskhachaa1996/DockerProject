@@ -92,10 +92,8 @@ export class AuthGuardService implements CanActivate {
                 return false
             }
             else {
-                console.log('TEST 2')
                 return this.authService.HowIsIt(currenttoken.id).pipe(
                     map(stateOfUser => {
-                        console.log('TEST 3')
                         if (stateOfUser.name == 'Profil complet' || state.url == "/completion-profil") {
                             return true
                         }
@@ -109,6 +107,11 @@ export class AuthGuardService implements CanActivate {
                         else {
                             this.router.navigate(['/login']);
                         }
+                    }),
+                    catchError(err => {
+                        localStorage.removeItem('token')
+                        this.router.navigate(['/login']);
+                        throw err;
                     }))
             }
         }
