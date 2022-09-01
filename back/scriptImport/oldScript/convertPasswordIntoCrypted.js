@@ -1,7 +1,7 @@
-const { User } = require("../models/user");
+const { User } = require("../../models/user");
 const mongoose = require("mongoose");
-const { Partenaire } = require('../models/partenaire')
-const { CommercialPartenaire } = require('../models/CommercialPartenaire')
+const { Partenaire } = require('../../models/partenaire')
+const { CommercialPartenaire } = require('../../models/CommercialPartenaire')
 const bcrypt = require("bcryptjs");
 var XLSX = require('xlsx')
 var workbook = XLSX.readFile('dataC.xlsx', { cellDates: true });
