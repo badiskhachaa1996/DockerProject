@@ -1,29 +1,34 @@
 <div class="grid">
-    <div class="col-12">
+	<div class="col-12">
 		<div class="card">
 			<h5>Liste des partenaires</h5>
-			<p-table #dt1 [value]="partenaires" 
-                     dataKey="_id" [rows]="10" 
-                     [rowHover]="true" 
-                     [totalRecords]="partenaires.length"
-                     [paginator]="true" [pageLinks]="5"
-                     [globalFilterFields]="['nom','code_partenaire','email']"
-                     responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines">
+			<p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="10" [rowHover]="true"
+				[totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5"
+				[globalFilterFields]="['nom','code_partenaire','email']" responsiveLayout="scroll"
+				selectionMode="single" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
 						<span class="p-input-icon-left mb-2">
 							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+							<input pInputText type="text" #filter
+								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+								class="w-full" />
 						</span>
 					</div>
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="code" style="text-align: center;"> ID Partenaire <p-sortIcon field="code"></p-sortIcon></th>
-						<th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe"></p-sortIcon></th>
-						
-						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="code" style="text-align: center;"> ID Partenaire <p-sortIcon field="code">
+							</p-sortIcon>
+						</th>
+						<th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe">
+							</p-sortIcon>
+						</th>
+
+						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
+							</p-sortIcon>
+						</th>
 						<th style="text-align: center;">Action</th>
 					</tr>
 				</ng-template>
@@ -41,15 +46,17 @@
 						</td>
 						<td style="min-width: 10rem;">
 							<i pTooltip="Voir les Collaborateurs" tooltipPosition="bottom" class="pi pi-sitemap"
-                                (click)="seeUnderPartenaire(rowData)" aria-hidden="true"></i>
-                            <i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
-                                (click)="seeRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
-                            <i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
-                                (click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+								(click)="seeUnderPartenaire(rowData)" aria-hidden="true"></i>
+							<i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
+								(click)="seeRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+							<i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
+								(click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+							<i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
+								(click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
 						</td>
 					</tr>
 				</ng-template>
-    		</p-table>
+			</p-table>
 		</div>
 
 	</div>

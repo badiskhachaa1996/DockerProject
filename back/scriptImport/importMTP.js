@@ -1,6 +1,7 @@
 var XLSX = require('xlsx')
 const mongoose = require("mongoose");
 const { User } = require("../models/user");
+const { Campus } = require('../models/campus')
 const { Etudiant } = require('../models/etudiant')
 var workbook = XLSX.readFile('data MTP.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames; // Classes Name
@@ -15,85 +16,143 @@ mongoose
     })
     .then(() => {
         console.log("L'api s'est connecté à MongoDB.");
-        User.find().then(data => {
-            users = data
-            let EmailList = []
-            data.forEach(us => {
-                EmailList.push(us?.email)
-            })
-            sheet_name_list.forEach(sheet => {
-                var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-                xlData.forEach(data => {
-                    let dn = data['Date de naissance']
-                    let di = data["Date d'inscription"]
-                    if (typeof (dn) == typeof ('str')) {
-                        dn.replace(' ', '')
-                        dn = new Date(convertDate(dn))
-                        if (dn == "Invalid Date")
-                            dn = new Date()
-                    }
-                    if (typeof (di) == typeof ('str')) {
-                        if (di.indexOf('-') != -1) {
-                            di.replace(' ', '')
-                            di = new Date(convertDate(di))
-                        }
-                        di = new Date(di)
-                        if (di == "Invalid Date")
-                            di = null
-                    }
+        Campus.findOne({ libelle: { $in: "Montpellier" }, "ecole_id.libelle": { $in: "Estya" } }).then(campus => {
+            if (campus)
+                User.find().then(data => {
+                    users = data
+                    let EmailList = []
+                    data.forEach(us => {
+                        EmailList.push(us?.email)
+                    })
+                    sheet_name_list.forEach(sheet => {
+                        var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+                        xlData.forEach(data => {
+                            let dn = data['Date de naissance']
+                            let di = data["Date d'inscription"]
+                            if (typeof (dn) == typeof ('str')) {
+                                dn.replace(' ', '')
+                                dn = new Date(convertDate(dn))
+                                if (dn == "Invalid Date")
+                                    dn = new Date()
+                            }
+                            if (typeof (di) == typeof ('str')) {
+                                if (di.indexOf('-') != -1) {
+                                    di.replace(' ', '')
+                                    di = new Date(convertDate(di))
+                                }
+                                di = new Date(di)
+                                if (di == "Invalid Date")
+                                    di = null
+                            }
 
-                    if (data['Compte ESTYA']) {
-                        let mail = data['Compte ESTYA']
-                        if (EmailList.includes(mail)) {
-                            let adresse = giveAddress(data['Adresse étudiant'])
-                            User.findOneAndUpdate({ email: data['Compte ESTYA'] }, {
-                                firstname: toCamelCase(data['Prénom']),
-                                lastname: data['Nom'].toUpperCase(),
-                                phone: data['Telephone mobile'],
-                                email: data['Compte ESTYA'],
-                                email_perso: data['Mail personnel'],
-                                civilite: null,
-                                type: "Etudiant",
-                                pays_adresse: "France",
-                                ville_adresse: adresse['Ville'],
-                                rue_adresse: adresse['Rue'],
-                                numero_adresse: adresse['Numero'],
-                                postal_adresse: adresse['Postal'],
-                                nationnalite: data['Nationnalité'],
-                                verifedEmail: true,
-                                date_creation: di
-                            }, { new: true }, (err, newU) => {
-                                if (!err) {
-                                    let code = ""
-                                    if (dn && data['Nationnalité']) {
-                                        code = generateCode(newU, dn)
-                                    } else {
-                                        newU.nationnalite = "Inconnu"
-                                        code = generateCode(newU, new Date())
-                                        console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
-                                    }
-                                    Etudiant.findOne({ user_id: newU._id }).then(dataU => {
-                                        if (dataU) {
-                                            Etudiant.findByIdAndUpdate(dataU._id, {
-                                                classe_id: null,
-                                                statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
-                                                nationalite: data['Nationnalité'],
-                                                date_naissance: dn,
-                                                custom_id: code,
-                                                dernier_diplome: data['Formation'],
-                                                isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
-                                                diplome: data['Formation'],
-                                                remarque: getRemarque(data, sheet)
-                                            }, { new: true }, (err, newE) => {
-                                                if (err) {
-                                                    console.error(err)
+                            if (data['Compte ESTYA']) {
+                                let mail = data['Compte ESTYA']
+                                if (EmailList.includes(mail)) {
+                                    let adresse = giveAddress(data['Adresse étudiant'])
+                                    User.findOneAndUpdate({ email: data['Compte ESTYA'] }, {
+                                        firstname: toCamelCase(data['Prénom']),
+                                        lastname: data['Nom'].toUpperCase(),
+                                        phone: data['Telephone mobile'],
+                                        email: data['Compte ESTYA'],
+                                        email_perso: data['Mail personnel'],
+                                        civilite: null,
+                                        type: "Etudiant",
+                                        pays_adresse: "France",
+                                        ville_adresse: adresse['Ville'],
+                                        rue_adresse: adresse['Rue'],
+                                        numero_adresse: adresse['Numero'],
+                                        postal_adresse: adresse['Postal'],
+                                        nationnalite: data['Nationnalité'],
+                                        verifedEmail: true,
+                                        date_creation: di
+                                    }, { new: true }, (err, newU) => {
+                                        if (!err) {
+                                            let code = ""
+                                            if (dn && data['Nationnalité']) {
+                                                code = generateCode(newU, dn)
+                                            } else {
+                                                newU.nationnalite = "Inconnu"
+                                                code = generateCode(newU, new Date())
+                                                console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
+                                            }
+                                            Etudiant.findOne({ user_id: newU._id }).then(dataU => {
+                                                if (dataU) {
+                                                    Etudiant.findByIdAndUpdate(dataU._id, {
+                                                        classe_id: null,
+                                                        statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
+                                                        nationalite: data['Nationnalité'],
+                                                        date_naissance: dn,
+                                                        custom_id: code,
+                                                        dernier_diplome: data['Formation'],
+                                                        isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
+                                                        diplome: data['Formation'],
+                                                        remarque: getRemarque(data, sheet)
+                                                    }, { new: true }, (err, newE) => {
+                                                        if (err) {
+                                                            console.error(err)
+                                                        } else {
+                                                            console.log(newU.email, " mis à jour x2")
+                                                        }
+                                                    })
                                                 } else {
-                                                    console.log(newU.email, " mis à jour x2")
+                                                    let etu = new Etudiant({
+                                                        user_id: newU._id,
+                                                        classe_id: null,
+                                                        statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
+                                                        nationalite: data['Nationnalité'],
+                                                        date_naissance: dn,
+                                                        custom_id: code,
+                                                        dernier_diplome: data['Formation'],
+                                                        isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
+                                                        diplome: data['Formation'],
+                                                        remarque: getRemarque(data, sheet)
+                                                    })
+                                                    etu.save((errEtu, newEtu) => {
+                                                        if (errEtu) {
+                                                            console.error(errEtu)
+                                                        } else {
+                                                            console.log(newU.email, " mis à jour")
+                                                        }
+                                                    })
                                                 }
                                             })
                                         } else {
+                                            console.error(err, newU)
+                                        }
+                                    })
+                                } else {
+                                    EmailList.push(mail)
+                                    let adresse = giveAddress(data['Adresse étudiant'])
+                                    let u = new User({
+                                        firstname: toCamelCase(data['Prénom']),
+                                        lastname: data['Nom'].toUpperCase(),
+                                        phone: data['Telephone mobile'],
+                                        email: data['Compte ESTYA'],
+                                        email_perso: data['Mail personnel'],
+                                        civilite: null,
+                                        type: "Etudiant",
+                                        pays_adresse: "France",
+                                        ville_adresse: adresse['Ville'],
+                                        rue_adresse: adresse['Rue'],
+                                        numero_adresse: adresse['Numero'],
+                                        postal_adresse: adresse['Postal'],
+                                        nationnalite: data['Nationnalité'],
+                                        verifedEmail: true,
+                                        date_creation: di
+                                    })
+                                    u.save((err, newUser) => {
+                                        users.push(newUser)
+                                        let code = ""
+                                        if (dn && data['Nationnalité']) {
+                                            code = generateCode(u, dn)
+                                        } else {
+                                            newUser.nationnalite = "Inconnu"
+                                            code = generateCode(newUser, new Date())
+                                            console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
+                                        }
+                                        if (!err) {
                                             let etu = new Etudiant({
-                                                user_id: newU._id,
+                                                user_id: newUser._id,
                                                 classe_id: null,
                                                 statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
                                                 nationalite: data['Nationnalité'],
@@ -108,84 +167,32 @@ mongoose
                                                 if (errEtu) {
                                                     console.error(errEtu)
                                                 } else {
-                                                    console.log(newU.email, " mis à jour")
+                                                    console.log(etu?.custom_id)
                                                 }
                                             })
-                                        }
-                                    })
-                                } else {
-                                    console.error(err, newU)
-                                }
-                            })
-                        } else {
-                            EmailList.push(mail)
-                            let adresse = giveAddress(data['Adresse étudiant'])
-                            let u = new User({
-                                firstname: toCamelCase(data['Prénom']),
-                                lastname: data['Nom'].toUpperCase(),
-                                phone: data['Telephone mobile'],
-                                email: data['Compte ESTYA'],
-                                email_perso: data['Mail personnel'],
-                                civilite: null,
-                                type: "Etudiant",
-                                pays_adresse: "France",
-                                ville_adresse: adresse['Ville'],
-                                rue_adresse: adresse['Rue'],
-                                numero_adresse: adresse['Numero'],
-                                postal_adresse: adresse['Postal'],
-                                nationnalite: data['Nationnalité'],
-                                verifedEmail: true,
-                                date_creation: di
-                            })
-                            u.save((err, newUser) => {
-                                users.push(newUser)
-                                let code = ""
-                                if (dn && data['Nationnalité']) {
-                                    code = generateCode(u, dn)
-                                } else {
-                                    newUser.nationnalite = "Inconnu"
-                                    code = generateCode(newUser, new Date())
-                                    console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
-                                }
-                                if (!err) {
-                                    let etu = new Etudiant({
-                                        user_id: newUser._id,
-                                        classe_id: null,
-                                        statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
-                                        nationalite: data['Nationnalité'],
-                                        date_naissance: dn,
-                                        custom_id: code,
-                                        dernier_diplome: data['Formation'],
-                                        isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
-                                        diplome: data['Formation'],
-                                        remarque: getRemarque(data, sheet)
-                                    })
-                                    etu.save((errEtu, newEtu) => {
-                                        if (errEtu) {
-                                            console.error(errEtu)
                                         } else {
-                                            console.log(etu?.custom_id)
+                                            console.error(err, u)
                                         }
                                     })
-                                } else {
-                                    console.error(err, u)
+
                                 }
-                            })
+                            } else {
+                                if (data['Prénom']) {
+                                    console.error("Email not found", data['Prénom'], sheet)
+                                } else {
+                                    console.error("Prenom not found", data)
+                                }
 
-                        }
-                    } else {
-                        if (data['Prénom']) {
-                            console.error("Email not found", data['Prénom'], sheet)
-                        } else {
-                            console.error("Prenom not found", data)
-                        }
+                            }
+                        })
 
-                    }
+                    })
+                    console.log("FINISH")
                 })
-
-            })
-            console.log("FINISH")
+            else
+                console.error("Campus not found")
         })
+
     })
     .catch(err => {
         console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);

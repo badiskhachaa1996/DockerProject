@@ -53,7 +53,7 @@ export class ListPartenaireComponent implements OnInit {
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
 
-  constructor(private formBuilder: FormBuilder, private messageService: ToastService, private entrepriseService: EntrepriseService, private formationService: DiplomeService, private campusService: CampusService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
 
   ngOnInit(): void {
 
@@ -117,6 +117,17 @@ export class ListPartenaireComponent implements OnInit {
 
   seeUnderPartenaire(rowData) {
     this.router.navigate(["/collaborateur/" + rowData._id])
+  }
+
+  delete(rowData: Partenaire) {
+    if (confirm("La suppression de ce partenaire, supprimera aussi tous les commerciaux/collaborateurs avec leurs comptes IMS et enlevera leurs codes commerciaux de tous leurs prospects\n L'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppresion\nEtes-vous sûr de vouloir faire cela ?"))
+      this.partenaireService.delete(rowData._id).subscribe(p=>{
+        this.partenaires.forEach((val, index) => {
+          if (val._id == p._id) {
+            this.partenaires.splice(index, 1)
+          }
+        })
+      })
   }
 
 
