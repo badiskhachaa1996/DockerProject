@@ -177,7 +177,7 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
+                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
                     { path: 'list-events', component: ListEventsComponent },

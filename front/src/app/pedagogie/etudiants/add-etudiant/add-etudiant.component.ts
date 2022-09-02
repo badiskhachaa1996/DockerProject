@@ -88,6 +88,7 @@ export class AddEtudiantComponent implements OnInit {
   parcoursList = []
   isMinor = false;
   formationList = []
+  alternant_id;
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
     private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
@@ -98,7 +99,6 @@ export class AddEtudiantComponent implements OnInit {
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
-    console.log("J'arrive à addEtudiant")
 
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
@@ -328,8 +328,6 @@ export class AddEtudiantComponent implements OnInit {
     let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
 
-
-
     //// Partie contrat d'apprentissage
     let entreprise_id = this.formAddEtudiant.get('entreprise_id')?.value.value;
     let id_tuteur = this.formAddEtudiant.get('id_tuteur')?.value.value;
@@ -358,8 +356,6 @@ export class AddEtudiantComponent implements OnInit {
     let phone_rl = this.formAddEtudiant.get('phone_rl')?.value;
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
-
-    console.log(entreprise_id);
 
     let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
@@ -435,11 +431,28 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null);
 
+    this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
+      ((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
+        //Recuperation de la liste des differentes informations
+        this.alternant_id = response._id
+        console.log(response)
+        this.onGetAllClasses();
+  
+        this.showFormAddEtudiant = false;
+        this.resetAddEtudiant();
+      }),
+      ((error) => {
+        console.error(error)
+        this.messageService.add({ severity: 'error', summary: error.error });
+      })
+    );
+
     let contratAlternance = new ContratAlternance(
       debut_contrat,
       fin_contrat,
       horaire,
-      null,
+      this.alternant_id,
       intitule,
       classification,
       niv,
@@ -453,25 +466,9 @@ export class AddEtudiantComponent implements OnInit {
     let entreprise = this.entrepriseEtu;
     let CEO = this.entrepriseEtu.Directeur_id;
 
-    console.log(CEO);
-
-    this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
-      ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
-        //Recuperation de la liste des differentes informations
-        this.onGetAllClasses();
-
-        this.showFormAddEtudiant = false;
-        this.resetAddEtudiant();
-      }),
-      ((error) => {
-        console.error(error)
-        this.messageService.add({ severity: 'error', summary: error.error });
-      })
-    );
-
-    let alternant_id = newEtudiant._id
-    let objectTosend = { contratAlternance, t1, entreprise, alternant_id }
+    console.log(this.alternant_id);
+    console.log(contratAlternance);
+    let objectTosend = { contratAlternance, t1, entreprise }
     
     if(objectTosend){
       this.entrepriseService.createContratAlternance(objectTosend).subscribe(
