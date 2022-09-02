@@ -35,17 +35,22 @@ app.post("/create", (req, res, next) => {
     let partenaire = new Partenaire(
         {
             user_id: null,
-            nom: partenaireData.nom,
             code_partenaire: partenaireData.code_partenaire,
+            nom: partenaireData.nom,
             lastname: partenaireData.lastname,
             firstname: partenaireData.firstname,
             phone: partenaireData.phone,
             email: partenaireData.email,
             number_TVA: partenaireData.number_TVA,
             SIREN: partenaireData.SIREN,
+            SIRET: partenaireData.SIRET,
             APE: partenaireData.APE,
             Services: partenaireData.Services,
-            Pays: partenaireData.Pays
+            Pays: partenaireData.Pays,
+            type: partenaireData.type,
+            WhatsApp: partenaireData.WhatsApp,
+            indicatifPhone: partenaireData.indicatifPhone,
+            indicatifWhatsApp: partenaireData.indicatifWhatsApp,
         });
 
     //Verification de l'existence de l'Utilisateur
@@ -55,7 +60,7 @@ app.post("/create", (req, res, next) => {
                 res.status(400).json({ error: 'Ce partenaire existe déja' });
             } else {
                 partenaire.save()
-                    .then((partenaireSaved) => { res.status(201).json({ success: "Partenaure ajouté dans la BD!", data: partenaireSaved }) })
+                    .then((partenaireSaved) => { res.status(201).json({ success: "Partenaire ajouté dans la BD!", data: partenaireSaved }) })
                     .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter ce partenaire " + error.message }) });
 
             }
@@ -72,16 +77,17 @@ app.post("/inscription", (req, res, next) => {
         {
             user_id: null,
             code_partenaire: partenaireData.code_partenaire,
-            lastname: partenaireData.lastname,
-            firstname: partenaireData.firstname,
+            nom : partenaireData.nom,
             phone: partenaireData.phone,
             email: partenaireData.email,
             number_TVA: partenaireData.number_TVA,
             SIREN: partenaireData.SIREN,
+            SIRET: partenaireData.SIRRET,
+            format_juridique: partenaireData.format_juridique,
+            type: partenaireData.type,
             APE: partenaireData.APE,
             Services: partenaireData.Services,
             Pays: partenaireData.Pays,
-            type: partenaireData.type,
             WhatsApp: partenaireData.WhatsApp,
             indicatifPhone: partenaireData.indicatifPhone,
             indicatifWhatsApp: partenaireData.indicatifWhatsApp,
@@ -245,6 +251,38 @@ app.get("/getAllCodeCommercial/:code_partenaire", (req, res, next) => {
         .catch((error) => { res.status(500).send(error); });
 });
 
+
+//Modification d'un partenaire via son id
+app.put("/updatePartenaire", (req, res, next) => {
+
+    //Récupération des infos du partenaire
+    const partenaireData = req.body;
+    console.log(partenaireData);
+    //Mise à jour du partenaire
+    Partenaire.findOneAndUpdate({ _id: partenaireData._id },
+        {
+            user_id: partenaireData.user_id,
+            nom: partenaireData.nom,
+            phone: partenaireData.phone,
+            email: partenaireData.email,
+            number_TVA: partenaireData.number_TVA,
+            SIREN: partenaireData.SIREN,
+            SIRET: partenaireData.SIRET,
+            format_juridique: partenaireData.format_juridique,
+            type: partenaireData.type,
+            APE: partenaireData.APE,
+            Services: partenaireData.Services,
+            Pays: partenaireData.Pays,
+            WhatsApp: partenaireData.WhatsApp,
+            indicatifPhone: partenaireData.indicatifPhone,
+            indicatifWhatsapp: partenaireData.indicatifWhatsapp,
+        })
+        .then((partenaireFromDB) => {
+            res.status(200).json({ message: 'Le partenaire a bien été modifié !' });
+        })
+        .catch((error) => { console.log(error)
+             res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' }); })
+});
 app.get('/delete/:id', (req, res) => {
     Partenaire.findById(req.params.id).then(p => {
         User.findByIdAndRemove(p.user_id, {}, (err, u) => {

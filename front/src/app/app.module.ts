@@ -148,7 +148,6 @@ import { ListAnneeScolaireComponent } from './administration/annees-scolaires/li
 import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
-import { AddPartenaireComponent } from './partenaire/partenaires/add-partenaire/add-partenaire.component';
 import { ListDiplomeComponent } from './administration/diplomes/list-diplome/list-diplome.component';
 import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
 import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
@@ -338,7 +337,6 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     ErrorComponent,
     NotfoundComponent,
     AccessComponent,
-    AddPartenaireComponent,
     ListPartenaireComponent,
     ListCollaborateurComponent,
     AddAnneeScolaireComponent,

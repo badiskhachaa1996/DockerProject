@@ -114,8 +114,16 @@ export class AdmissionService {
     let url = this.apiUrl + "etatTraitement/" + id + "/" + etat
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) })
   }
+
+  getInfoDashboardAdmission()
+  {
+    let url = this.apiUrl + "getInfoDashboardAdmission";
+    return this.httpClient.get<{nb_all_etudiant: number, nb_nouvelle_inscrit: number, nb_retour_etudiant: number }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+    
   createProspectWhileEtudiant(user_id) {
     let url = this.apiUrl + "createProspectWhileEtudiant/" + user_id
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+
   }
 }
