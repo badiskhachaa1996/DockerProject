@@ -10,6 +10,8 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { Inscription } from 'src/app/models/Inscription';
+import { AdmissionService } from 'src/app/services/admission.service';
 
 @Component({
     templateUrl: './dashboard.component.html',
@@ -41,7 +43,12 @@ export class DashboardComponent implements OnInit {
     isReinscrit = false
     isUnknow = false
 
-    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService, private EtuService: EtudiantService) { }
+    numberTotalInscription : number = 0;
+    numberNewStudentInscription : number = 0;
+    numberStudentWaiting : number = 0;
+
+
+    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService, private EtuService: EtudiantService, private admissionService: AdmissionService) { }
 
     ngOnInit() {
         this.token = jwt_decode(localStorage.getItem('token'));
@@ -66,12 +73,6 @@ export class DashboardComponent implements OnInit {
                 this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)
             }
         })
-
-
-
-
-
-
 
         //SAKAI Default
         this.config = this.configService.config;
@@ -107,6 +108,18 @@ export class DashboardComponent implements OnInit {
                 }
             ]
         };
+
+        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
+            this.numberTotalInscription = dataStudent.nb_all_etudiant
+        });
+
+        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
+            this.numberNewStudentInscription = dataStudent.nb_nouvelle_inscrit
+        });
+
+        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
+            this.numberStudentWaiting = dataStudent.nb_retour_etudiant
+        });
     }
 
     SCIENCE() {
@@ -180,5 +193,13 @@ export class DashboardComponent implements OnInit {
                 },
             }
         };
+    }
+
+    getDateNow() 
+    {
+        var d = new Date();
+        var date = d.getDate() +'-'+ (d.getMonth()+1) +'-'+ d.getFullYear();
+        var hours = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+        var fullDate = date +' '+ hours;
     }
 }

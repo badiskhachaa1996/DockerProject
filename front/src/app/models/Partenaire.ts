@@ -17,6 +17,6 @@ export class Partenaire {
         public Pays?: string,
         public WhatsApp?: string,
         public indicatifPhone?:string,
-        public indicatifWhatsApp?:string
+        public indicatifWhatsapp?:string
     ) { }
 }

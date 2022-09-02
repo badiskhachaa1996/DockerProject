@@ -16,6 +16,7 @@ export class PartenaireService {
 
   constructor(private httpClient: HttpClient) { }
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
+  //N'est plus utilisé
   create(newPartenaire: Partenaire) {
     let registreUrl = this.apiUrl + "create";
     return this.httpClient.post<any>(registreUrl, { newPartenaire }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
@@ -39,5 +40,11 @@ export class PartenaireService {
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Partenaire>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  //Modification d'un partenaire
+  updatePartenaire(partenaire: Partenaire) {
+    let registreUrl = this.apiUrl + "updatePartenaire";
+    return this.httpClient.put<any>(registreUrl, partenaire, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

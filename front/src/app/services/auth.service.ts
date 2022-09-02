@@ -4,6 +4,7 @@ import { User } from '../models/User';
 const io = require("socket.io-client");
 import { environment } from 'src/environments/environment';
 import { Etudiant } from '../models/Etudiant';
+import { Inscription } from '../models/Inscription';
 
 
 @Injectable({
@@ -149,9 +150,7 @@ export class AuthService {
   reinitPwd(pwdTokenID,pwd) {
     let url = this.apiUrl + "reinitPwd/" +pwdTokenID;
     return this.http.post<any>(url, {pwd},{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
-  }
-
-  
+  }  
 
   /*TESTMAIL(){
     let url = this.apiUrl	+"TESTMAIL"

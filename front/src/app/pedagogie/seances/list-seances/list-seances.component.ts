@@ -13,6 +13,7 @@ import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import { SeanceService } from 'src/app/services/seance.service';
 import { environment } from 'src/environments/environment';
+import { User } from 'src/app/models/User';
 
 @Component({
   selector: 'app-list-seances',
@@ -23,7 +24,8 @@ export class ListSeancesComponent implements OnInit {
   seances: Seance[] = [];
   matieres: Matiere[] = [];
   classes: Classe[] = [];
-  formateurs: Formateur[] = [];
+  formateurs = [];
+  user: User[] = []
 
   //Variable d'affichage par rapport à la provenance des séances
   titre: String = "";
@@ -93,7 +95,8 @@ export class ListSeancesComponent implements OnInit {
       ((response) => {
         for (let formateurId in response) {
           this.dropdownFormateur.push({ nom: response[formateurId].firstname + ' ' + response[formateurId].lastname, value: response[formateurId]._id });
-          this.formateurs[response[formateurId]._id] = response[formateurId];
+          this.formateurs[formateurId] = response[formateurId]
+
         }
       }),
       ((error) => { console.error(error) })

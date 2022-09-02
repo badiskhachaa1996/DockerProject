@@ -108,7 +108,7 @@ app.get("/getAll", (req, res, next) => {
 });
 
 
-//Recuperation d'une  selon son id
+//Recuperation d'une s selon son id
 app.get('/getById/:id', (req, res, next) => {
     Seance.findOne({ _id: req.params.id })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))

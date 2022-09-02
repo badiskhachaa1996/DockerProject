@@ -706,5 +706,19 @@ app.get('/etatTraitement/:id/:etat', (req, res) => {
     }).catch((error) => { res.status(500).send(error); });
 })
 
+//Requête de récupération du nombre de nouvelle inscrits, du nombre total d'inscrit et du nombre d'étudiant en attente
+app.get("/getInfoDashboardAdmission", (req, res, next) => {
+    Prospect.find({ etat_traitement: 'Nouvelle' })
+        .then((nouvelle_inscrit) => {
+            Prospect.find({ etat_traitement: 'Retour Etudiant' })
+                .then((retour_etudiant) => {
+                    Prospect.find({archived: [false, null] })
+                        .then((all_etudiant) => { res.status(200).send({nb_all_etudiant: all_etudiant.length, nb_nouvelle_inscrit: nouvelle_inscrit.length, nb_retour_etudiant: retour_etudiant.length });})
+                })
+                .catch((error) => { res.status(500).send(error); })
+        })
+        .catch((error) => { res.status(500).send(error); })
+});
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

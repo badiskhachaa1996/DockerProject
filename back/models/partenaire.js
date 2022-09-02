@@ -11,13 +11,13 @@ const sch = mongoose.Schema({
     SIREN: { type: String },
     SIRET: { type: String },
     format_juridique: { type: String },
+    type: { type: String },
     APE: { type: String },
     Services: { type: String },
     Pays: { type: String },
-    type: { type: String },
     WhatsApp: { type: String },
     indicatifPhone: { type: String },
-    indicatifWhatsApp: { type: String }
+    indicatifWhatsapp: { type: String }
 
 });
 
