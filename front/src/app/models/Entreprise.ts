@@ -1,3 +1,5 @@
+import { User } from "./User";
+
 export class Entreprise {
 
     constructor(
@@ -31,6 +33,21 @@ export class Entreprise {
         public financeur?: string,
         public nda?: string,
         public type_soc?: string,
-    ){}
+        public categorie?: string[],
+        public Directeur_id?: User,
+        public activite?: string,
+        public adresse_ec?: string,
+        public postal_ec?: string,
+        public ville_ec?: string,
+        public crc?: string,
+        public convention?: string,
+        public telecopie?: string,
+        public nb_salarie?: string,
+        public idcc?: string,
+        public indicatif?: string,
+        public OPCO?: string,
+        public organisme_prevoyance?: string,
+
+    ) { }
 
 }

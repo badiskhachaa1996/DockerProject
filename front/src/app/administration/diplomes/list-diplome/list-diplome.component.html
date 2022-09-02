@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="grid">
 
     <!-- formulaire de modification d'un diplome -->
@@ -12,68 +13,57 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDiplome" (ngSubmit)="onUpdateDiplome()">
 
                 <div class="field col-12 md:col-8">
-                    <label For="titre">Titre RNCP du diplôme</label>
+                    <label For="titre">Titre RNCP du diplôme <span style="color:red ;">*</span></label>
                     <input pInputText id="titre" type="text" formControlName="titre" />
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label For="code_RNCP">Code RNCP</label>
+                    <label For="code_RNCP">Code RNCP<span style="color:red ;">*</span></label>
                     <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" />
                 </div>
 
                 <div class="field col-12">
-                    <label For="titre_long">Titre long du diplôme</label>
+                    <label For="titre_long">Titre long du diplôme<span style="color:red ;">*</span></label>
                     <input pInputText id="titre_long" type="text" formControlName="titre_long" />
                 </div>
 
-                <div class="field col-12">
-                    <label For="description">Description</label>
-                    <textarea id="description" pInputTextarea placeholder="Description de ce diplôme" autoResize
-                        rows="3" cols="30" formControlName="description"></textarea>
+                <div class="field col-12 md:col-6">
+                    <label>Campus<span style="color:red ;">*</span></label>
+                    <p-multiSelect [options]="campusList" formControlName="campus_id"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Campus</label>
-                    <p-dropdown [options]="campusList" optionLabel="libelle" formControlName="campus_id"></p-dropdown>
-                </div>
-
-                <div class="field col-12 md:col-3">
-                    <label>Type de diplôme</label>
+                    <label>Type de diplôme<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
                 </div>
 
-                <div class="field col-12 md:col-3">
-                    <label>Type d'étude</label>
-                    <p-dropdown [options]="typeEtude" optionLabel="value" formControlName="type_etude"></p-dropdown>
-                </div>
-
                 <div class="field col-12 md:col-6">
-                    <label>Domaine</label>
+                    <label>Departement<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'étude</label>
+                    <label>Niveau d'étude<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"></p-dropdown>
                 </div>
 
                 <div class="field col-12">
-                    <label>Cette formation est-elle diplômante ?</label>
-                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified"></p-dropdown>
+                    <label>Cette formation est-elle diplômante ?<span style="color:red ;">*</span></label>
+                    <p-dropdown [options]="choiceList" formControlName="isCertified"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-8">
-                    <label For="certificateur">Certificateur</label>
+                    <label For="certificateur">Certificateur<span style="color:red ;">*</span></label>
                     <input pInputText id="certificateur" type="text" formControlName="certificateur" />
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label For="code_diplome">Code diplôme</label>
+                    <label For="code_diplome">Code diplôme<span style="color:red ;">*</span></label>
                     <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
                 </div>
 
                 <div class="field col-12 md:col-2">
-                    <label For="nb_heure">Durée en heure</label>
+                    <label For="nb_heure">Durée en heure<span style="color:red ;">*</span></label>
                     <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
                 </div>
 
@@ -88,7 +78,7 @@
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label>Rythme de la formation</label>
+                    <label>Rythme de la formation<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"></p-dropdown>
                 </div>
 
@@ -130,6 +120,29 @@
                     </p-dropdown>
                 </div>
 
+                <div class="field col-12 md:col-6">
+                    <label>Date de début semestre 1</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_1">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin semestre 1</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_1">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de début semestre 2</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_debut_semestre_2">
+                    </p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de fin semestre 2</label>
+                    <p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="date_fin_semestre_2">
+                    </p-calendar>
+                </div>
                 <div style="justify-content: right;">
                     <button pButton label="Modifier" type="submit" [disabled]="formUpdateDiplome.invalid"></button>
                 </div>
@@ -147,34 +160,47 @@
     <!-- Affichage des diplomes -->
     <div class="col-12">
         <div class="card">
+            <div style="float: right;">
+                <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
+            </div>
             <h5>Liste des diplômes</h5>
             <p-toast></p-toast>
-            <p-table class="p-datatable-gridlines" #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id" [expandedRowKeys]="expandedRows"
-                responsiveLayout="scroll" [globalFilterFields]="['niveau', 'titre_long', 'domaine', 'code_RNCP']"
-                [rows]="15" [pageLinks]="5" [paginator]="true" [totalRecords]="diplomes.length" styleClass="p-datatable-gridlines">
+            <p-table class="p-datatable-gridlines" #dt1 rowExpandMode="single" [value]="diplomes" dataKey="_id"
+                [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
+                [globalFilterFields]="['niveau', 'titre_long', 'code_RNCP']" [rows]="10" [pageLinks]="5"
+                [paginator]="true" [totalRecords]="diplomes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
 
-                    <div class="col-12 mb-2 lg:col-4 lg:mb-0">
-                        <span class="p-input-icon-right">
-                            <input pInputText type="text" placeholder="Recherche"
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                            <i class="pi pi-search"></i>
-                        </span>
-                    </div>
-
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <p-dropdown filter="true" placeholder="Département" [options]="[{value:null,label:'Tous les départements'},
+                    {value:'Informatique',label:'Informatique'},
+                    {value:'Commerce',label:'Commerce'},
+                    {value:'Construction',label:'Construction'},
+                    {value:'Tertiaire',label:'Tertiaire'}]" (onChange)="dt1.filter($event.value, 'domaine','equals')"
+                        emptyFilterMessage="Pas de département trouvé" filterPlaceholder="Département"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
                     <div class="flex table-header">
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th pSortableColumn="niveau" style="text-align: center;">Niveau <p-sortIcon field="niveau"></p-sortIcon>
+                        <th pSortableColumn="niveau" style="text-align: center;">Niveau <p-sortIcon field="niveau">
+                            </p-sortIcon>
                         </th>
                         <th style="text-align: center;">Titre</th>
-                        <th style="text-align: center;">Domaine</th>
-                        <th style="text-align: center;" pSortableColumn="code_RNCP">Code RNCP <p-sortIcon field="code_RNCP"></p-sortIcon>
+                        <th style="text-align: center;">Département</th>
+                        <th style="text-align: center;" pSortableColumn="code_RNCP">Code RNCP <p-sortIcon
+                                field="code_RNCP"></p-sortIcon>
                         </th>
-                        <th style="text-align: center;" pSortableColumn="certificateur">Certificateur <p-sortIcon field="certificateur">
+                        <th style="text-align: center;" pSortableColumn="certificateur">Certificateur <p-sortIcon
+                                field="certificateur">
                             </p-sortIcon>
                         </th>
                         <th style="text-align: center;">Action </th>
@@ -196,8 +222,9 @@
                             <i style="margin-left: 2%;" pTooltip="Modifier" *ngIf="!this.isCommercial"
                                 (click)="showFormUpdateDiplome = true; idDiplomeToUpdate = diplome._id; onGetbyId(diplome);"
                                 class="pi pi-pencil" aria-hidden="true"></i>
-                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file" *ngIf="!this.isCommercial"
-                                (click)="clickFile(diplome)" style="margin-left: 2%;" aria-hidden="true"></i>
+                            <i pTooltip="Ajouter un fichier" tooltipPosition="bottom" class="pi pi-file"
+                                *ngIf="!this.isCommercial" (click)="clickFile(diplome)" style="margin-left: 2%;"
+                                aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -212,10 +239,6 @@
                         <th>Code Diplome</th>
                         <th>Début</th>
                         <th>Fin</th>
-                        <th>Modules</th>
-                        <th>Volume Initiale</th>
-                        <th>Volume Consommé</th>
-                        <th>Volume Planifié</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-diplome>
@@ -227,46 +250,93 @@
                         <td>{{diplome.code_diplome}}</td>
                         <td>{{diplome.date_debut | date:'dd/MM/yyyy'}}</td>
                         <td>{{diplome.date_fin | date :'dd/MM/yyyy'}}</td>
-                        <td>
-                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
-                                <span *ngIf="index==0">{{matiere.abbrv}}</span>
-                                <span *ngIf="index!=0">, {{matiere.abbrv}}</span>
-                            </span>
-                        </td>
-                        <td>
-                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
-                                <span *ngIf="index==0">{{matiere.volume_init}}</span>
-                                <span *ngIf="index!=0">, {{matiere.volume_init}}</span>
-                            </span>
-                        </td>
-                        <td>
-                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
-                                <span
-                                    *ngIf="index==0 && matiereVolume.rCons[matiere._id]">{{matiereVolume.rCons[matiere._id]}}</span>
-                                <span *ngIf="index==0 && matiereVolume.rCons[matiere._id]==undefined">0</span>
-                                <span *ngIf="index!=0 && matiereVolume.rCons[matiere._id]">,
-                                    {{matiereVolume.rCons[matiere._id]}}</span>
-                                <span *ngIf="index!=0 && matiereVolume.rCons[matiere._id]==undefined">, 0</span>
-                            </span>
-                        </td>
-                        <td>
-                            <span *ngFor="let matiere of dicMatiere[diplome._id];let index = index">
-                                <span *ngIf="index==0 && matiereVolume.rPlan[matiere._id]!=undefined">
-                                    {{matiereVolume.rPlan[matiere._id]}}</span>
-                                <span *ngIf="index==0 && matiereVolume.rPlan[matiere._id]==undefined">0</span>
-                                <span *ngIf="index!=0 && matiereVolume.rPlan[matiere._id]!=undefined">,
-                                    {{matiereVolume.rPlan[matiere._id]}}</span>
-                                <span *ngIf="index!=0 && matiereVolume.rPlan[matiere._id]==undefined">, 0</span>
-                            </span>
-                        </td>
+
                     </tr>
                 </ng-template>
             </p-table>
         </div>
         </td>
         </tr>
+
+        <!-- Partie dedié à l'affichage du Volume Horaire-->
+        <tr>
+            <td colspan="8">
+                <div class="p-3">
+                    <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                        <ng-template pTemplate="header">
+        <tr>
+            <th>Module</th>
+            <th>Niveau</th>
+            <th>Semestre</th>
+            <th>Volume Initiale</th>
+            <th>Volume Consommé</th>
+            <th>Volume Planifié</th>
+        </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-diplome>
+
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr *ngFor="let matiere of dicMatiere[diplome._id]">
+                <td>
+                    {{matiere.nom}}
+                </td>
+                <td>
+                    {{matiere.niveau}}
+                </td>
+                <td>
+                    {{matiere.semestre}}
+                </td>
+                <td>
+                    {{matiere.volume_init}}
+                </td>
+                <td>
+                    <span *ngIf="matiereVolume.rCons[matiere._id]">{{matiereVolume.rCons[matiere._id]}}</span>
+                    <span *ngIf="!matiereVolume.rCons[matiere._id]">0</span>
+                </td>
+                <td>
+                    <span *ngIf="matiereVolume.rPlan[matiere._id]">
+                        {{matiereVolume.rPlan[matiere._id]}}</span>
+                    <span *ngIf="!matiereVolume.rPlan[matiere._id]">0</span>
+                </td>
+            </tr>
         </ng-template>
         </p-table>
     </div>
+    </td>
+    </tr>
+
+    <!-- Partie dedié à l'affichage des dates des semestres -->
+
+    <tr>
+        <td colspan="8">
+            <div class="p-3">
+                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                    <ng-template pTemplate="header">
+    <tr>
+        <th>Date de début semestre 1</th>
+        <th>Date de fin semestre 1</th>
+        <th>Date de début semestre 2</th>
+        <th>Date de fin semestre 2</th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-diplome>
+
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td>{{diplome.date_debut_semestre_1 | date:'dd/MM/yyyy'}}</td>
+            <td>{{diplome.date_fin_semestre_1 | date :'dd/MM/yyyy'}}</td>
+            <td>{{diplome.date_debut_semestre_2 | date:'dd/MM/yyyy'}}</td>
+            <td>{{diplome.date_fin_semestre_2 | date :'dd/MM/yyyy'}}</td>
+        </tr>
+    </ng-template>
+    </p-table>
+</div>
+</td>
+</tr>
+</ng-template>
+</p-table>
+</div>
 </div>
 </div>

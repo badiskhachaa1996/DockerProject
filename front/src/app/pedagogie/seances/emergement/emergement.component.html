@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="grid" *ngIf="showCanvas || (presence && presence.allowedByFormateur && presence.signature==false)">
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
@@ -66,7 +67,7 @@
         </div>
     </div>
 </div>
-<div class="card" *ngIf="presence==null || !presence.isPresent">
+<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
         <div class="col-12">
@@ -88,6 +89,7 @@
         </div>
     </div>
 </div>
+
 <div class="grid">
     <p-fieldset class="col-12" *ngIf="seance" legend="{{seance.libelle}}">
         <div class="p-fluid grid" style="color: black;font-weight:normal;">
@@ -165,7 +167,7 @@
         </div>
     </p-fieldset>
 </div>
-<p-toast></p-toast>
+
 <div class="card" *ngIf="showAddEtudiant">
     <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showAddEtudiant = false" aria-hidden="true">
     </i>

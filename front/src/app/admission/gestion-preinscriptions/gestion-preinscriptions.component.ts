@@ -51,6 +51,31 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
+// L1 L2 L3 M1 M2 BAC Lycée
+  DocPresent = [
+    { label: "Relevé de note de semestre L1" },
+    { label: "Relevé de note de semestre L2" },
+    { label: "Relevé de note de semestre L3" },
+    { label: "Relevé de note de semestre M1" },
+    { label: "Relevé de note de semestre M2" },
+    { label: "Relevé de note de semestre BAC" },
+    { label: "Relevé de note de semestre Lycée" },
+    { label: "Diplôme BAC" },
+    { label: "Diplôme Licence" },
+    { label: "Diplôme Master" },
+    { label: "Curriculum Vitae" },
+    { label: "Lettre de motivation" },
+    { label: "Passeport" },
+    { label: "Carte d'identité nationale" },
+    { label: "Pièce d'identité" },
+    { label: "Attestation de travail" },
+    { label: "Attestation de stage" },
+    { label: "Certifications (tout type de certification)" },
+    { label: "Lettre de recommandation" },
+    { label: "Attestation d'inscription en Licence niveau X" },
+    { label: "Attestation de fréquentation" },
+    { label: "Attestation de Réussite" },
+  ]
 
   DocTypes2: any[] = [
     { value: 'piece_identite', label: 'Pièce d\'identité', },
@@ -61,10 +86,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
   statutList: any[] = [
-    { value: "Documents manquants" },
-    { value: "Dossier passable" },
-    { value: "Dossier complet" },
-    { value: "Manque d'orientation" }
+    { value: "Manquants" },
+    { value: "Passable" },
+    { value: "Complet" },
+    { value: "Manque orientation" }
   ]
   statutVisible = [
     { value: "Dossier suspendu - En attente du prospect" },
@@ -74,8 +99,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   listFR = [
     { value: "Pas de TCF - Pays non Francophone" },
     { value: "TCF B2 ou plus" },
-    { value: "ILC B2 ou plus" },
-    { value: "Moins de B2" },
+    { value: "ELC B2 ou plus" },
+    { value: "En cours de formation ILTS" },
     { value: "Non concerné" }
   ]
   decisionList = [
@@ -85,9 +110,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Accepté sur réserve" },
     { value: "Non Retenu" },
     { value: "Payée" },
+    { value: "A signé les documents" },
   ]
   dropdownDecision = [
-    { value: null, label: "Decision Admission" },
+    { value: null, label: "Toutes les décisions" },
     { value: "Suspendu", label: "Suspendu" },
     { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
@@ -108,12 +134,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Aucune" },
     { value: "Choix de formation" },
     { value: "Changement de campus" },
-    { value: "Manquant" },
-    { value: "Rupture d'étude" },
-    { value: "Sous Dossier" },
-    { value: "Envoyé à Eduhorizons" },
-    { value: "En attente du retour ELC" },
-    { value: "Demande équivalence envoyée" },
+    { value: "Document Manquant" },
+    { value: "Ajouté sur la base ILTS" },
+    //{ value: "Sous Dossier" },
+    { value: "Orientation E2E par Eduhorizons" },
+    { value: "En attente retour ILTS" },
+    //{ value: "Demande équivalence envoyée" },
   ]
 
   statutPayement = [
@@ -125,17 +151,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   listAgent = [
     { value: "Aucun" },
-    { value: "Haitham" },
-    { value: "Dhekra" },
-    { value: "Moez" },
-    { value: "Dhouha" },
-    { value: "Maroua N" },
-    { value: "Malek" },
+    { value: "Haitham ELKADHI" },
+    { value: "Dhekra Ben HAMIDA" },
+    { value: "Moez BEN JABALLAH" },
+    { value: "Dhouha KOBROSLY" },
+    { value: "Maroua NOURI" },
+    { value: "Malek KOBROSLY" },
     { value: "Feryel" },
-    { value: "Elyes" },
-    { value: "Rania" },
-    { value: "Asma" },
-    { value: "Islem" },
+    { value: "Elyes HAJJI" },
+    { value: "Rania WARDENI" },
+    { value: "Asma NJAH" },
+    { value: "Islem DRIDI" },
     { value: "SLIM" },
     { value: "Achraf" },
   ]
@@ -146,17 +172,25 @@ export class GestionPreinscriptionsComponent implements OnInit {
   ]
 
   payementList = []
+  filterCampus = [
+    { value: null, label: "Tous les campus" },
+  ]
+
+  filterPays = [
+    { value: null, label: "Tous les pays" }
+  ]
 
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
+  filterEcole = [{ value: null, label: "Toutes les écoles" },];
 
 
   onAddPayement() {
-    if(this.payementList==null){
-      this.payementList=[]
+    if (this.payementList == null) {
+      this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0 })
+    this.payementList.push({ type: "", montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
@@ -177,7 +211,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
   addNewPayment() {
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshProspect()
+      this.prospects.forEach((p, index) => {
+        if (p._id == data._id)
+          this.prospects[index].payement = data.payement
+      })
+      this.showPayement = null
+      this.payementList = null
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
@@ -228,8 +267,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   }
 
-  expandRow(prospect: Prospect) {
+  onRowSelect(event) {
+    this.messageService.add({ severity: 'info', summary: 'Product Selected', detail: event });
+  }
 
+  expandRow(prospect: Prospect) {
     this.admissionService.getFiles(prospect?._id).subscribe(
       (data) => {
         this.ListDocuments = data
@@ -256,45 +298,37 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
+    this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        });
         if (this.code) {
           //Si il y a un code de Commercial
-          if (this.token != null && this.dataCommercial != null) {
+          if (this.code.length > 20) {
             //Si il est considéré comme Admin dans son Partenaire
-            this.admissionService.getAllByCodeAdmin(this.dataCommercial.partenaire_id).subscribe(
-              ((responseAdmission) => {
-                this.prospects = responseAdmission
-                response.forEach((user) => {
-                  this.users[user._id] = user;
-                });
-              }),
+            console.log("Admin Commercial")
+            this.admissionService.getAllByCodeAdmin(this.code).subscribe(
+              ((responseAdmission) => this.afterProspectload(responseAdmission)),
               ((error) => { console.error(error); })
             );
           } else {
+            console.log("Agent Commercial")
             //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
-              ((responseAdmission) => {
-                this.prospects = responseAdmission
-                response.forEach((user) => {
-                  this.users[user._id] = user;
-                });
-              }),
+              ((responseAdmission) => this.afterProspectload(responseAdmission)),
               ((error) => { console.error(error); })
             );
           }
 
         } else {
+          console.log("Admission")
           this.userService.getPopulate(this.token.id).subscribe(dataU => {
-            let service : any = dataU.service_id
-            if (dataU.role == "Admin" || (dataU.role == "Agent" && service && service.label.includes('Admission'))) {
+            let service: any = dataU.service_id
+            if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
-                ((responseAdmission) => {
-                  this.prospects = responseAdmission
-                  response.forEach((user) => {
-                    this.users[user._id] = user;
-                  });
-                }),
+                ((responseAdmission) => this.afterProspectload(responseAdmission)),
                 ((error) => { console.error(error); })
               );
             }
@@ -305,16 +339,42 @@ export class GestionPreinscriptionsComponent implements OnInit {
     );
   }
 
+  afterProspectload(data: Prospect[]) {
+    this.prospects = data
+    this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
+    let tempList = []
+    let tempType = []
+    let tempPays = []
+    data.forEach(p => {
+      if (tempList.includes(p.campus_choix_1) == false) {
+        tempList.push(p.campus_choix_1)
+        this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
+      }
+      if (tempType.includes(p.type_form) == false) {
+        tempType.push(p.type_form)
+        this.filterEcole.push({ label: p.type_form, value: p.type_form })
+      }
+      let u: any = p.user_id
+      if (u && u.pays_adresse && tempPays.includes(u.pays_adresse) == false) {
+        tempPays.push(u.pays_adresse)
+        this.filterPays.push({ label: u.pays_adresse, value: u.pays_adresse })
+      }
+    })
+  }
+
   changeStateForm: FormGroup = new FormGroup({
     statut: new FormControl(this.statutList[0], Validators.required),
-    typeDoc: new FormControl(""),
     statut_fr: new FormControl(this.listFR[0]),
     decision_admission: new FormControl(this.decisionList[0]),
     phase_complementaire: new FormControl(this.phaseComplementaire[0]),
     statut_payement: new FormControl(this.statutPayement[0]),
     traited_by: new FormControl(this.listAgent[0]),
     validated_cf: new FormControl(false),
-    avancement_visa: new FormControl(false)
+    avancement_visa: new FormControl(false),
+    dossier_traited_by: new FormControl(this.listAgent[0]),
+    remarque: new FormControl(""),
+    document_present: new FormControl(""),
+    document_manquant: new FormControl(""),
   })
 
 
@@ -332,7 +392,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       customid: prospect.customid,
       traited_by: { value: prospect.traited_by },
       validated_cf: prospect.validated_cf,
-      avancement_visa: prospect.avancement_visa
+      avancement_visa: prospect.avancement_visa,
+      remarque: prospect.remarque,
+      dossier_traited_by: { value: prospect.dossier_traited_by },
+      document_present: prospect.document_present,
+      document_manquant: prospect.document_manquant
     })
   }
 
@@ -365,9 +429,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
   changeStateBtn() {
     let p = {
       _id: this.inscriptionSelected._id,
+      dossier_traited_by: this.changeStateForm.value.dossier_traited_by.value,
+      document_present: this.changeStateForm.value.document_present,
       statut_dossier: this.changeStateForm.value.statut.value,
       tcf: this.changeStateForm.value.statut_fr.value,
-      document_manquant: this.changeStateForm.value.typeDoc,
+      document_manquant: this.changeStateForm.value.document_manquant,
       agent_id: this.token.id,
       decision_admission: this.changeStateForm.value.decision_admission.value,
       phase_complementaire: this.changeStateForm.value.phase_complementaire.value,
@@ -376,7 +442,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
       traited_by: this.changeStateForm.value.traited_by.value,
       validated_cf: this.changeStateForm.value.validated_cf,
       avancement_visa: this.changeStateForm.value.avancement_visa,
-      etat_traitement: "Traité"
+      etat_traitement: "Traité",
+      remarque: this.changeStateForm.value.remarque
     }
     this.admissionService.updateStatut(this.inscriptionSelected._id, p).subscribe((dataUpdated) => {
 
@@ -461,10 +528,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
       formData.append('file', event.files[0])
       this.admissionService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
-        this.socket.emit("UpdatedProspect", this.prospects[this.inscriptionSelected._id]);
+
         this.expandRow(this.showUploadFile)
+        this.prospects.forEach(p => {
+          if (p._id == this.showUploadFile._id) {
+            this.prospects[this.prospects.indexOf(p)].haveDoc = true
+            this.socket.emit("UpdatedProspect", this.prospects[this.prospects.indexOf(p)]);
+          }
+        })
         event.target = null;
         this.showUploadFile = null;
+
         this.fileInput.clear()
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
@@ -477,14 +551,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
     //Clean the data
     this.prospects.forEach(p => {
       let t = {}
-      t['NOM'] = p.lastname.toUpperCase()
-      t['Prenom'] = p.firstname
+
+      t['NOM'] = p?.user_id?.lastname
+      t['Prenom'] = p?.user_id?.firstname
       t['Date de la demande'] = p?.date_creation
       t['Date de naissance'] = p.date_naissance
       t['Pays de residence'] = p['pays_de_residence']
-      t['Nationalite'] = p['nationnalite']
-      t['Email'] = p['email']
-      t['Telephone'] = p['telephone']
+      t['Nationalite'] = p?.user_id?.nationnalite
+      t['Email'] = p?.user_id?.email
+      t['Telephone'] = p?.user_id?.indicatif + p?.user_id?.phone
       t['Ecole demande'] = p?.type_form
       t['1er choix'] = p.campus_choix_1
       t['2eme choix'] = p.campus_choix_2
@@ -497,18 +572,18 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut pro actuel'] = p.statut_actuel
       t['Langues'] = p.languages
       t['Experiences pro'] = p.professional_experience
-      t['Nom du garant'] = p?.nomGarant.toUpperCase()
+      t['Nom du garant'] = p?.nomGarant?.toUpperCase()
       t['Prenom du garant'] = p?.prenomGarant
       t['Nom de l\'agence'] = p?.nomAgence
       t['Code du commercial'] = p?.code_commercial
       t['Autre'] = p.other
-      t['Nombre de documents'] = p.nbDoc
+      t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
       t['Decision Admission'] = p.decision_admission
       t['Phase complémentaire'] = p.phase_complementaire
       t['Statut Payement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
-      t['Confirmation CF'] = p.validated_cf
+      t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
       if (p.agent_id && this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname
       }

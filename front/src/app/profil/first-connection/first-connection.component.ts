@@ -14,6 +14,7 @@ import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Diplome } from 'src/app/models/Diplome';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
   selector: 'app-first-connection',
@@ -22,7 +23,8 @@ import { Diplome } from 'src/app/models/Diplome';
 })
 export class FirstConnectionComponent implements OnInit {
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService, private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
+    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
@@ -32,12 +34,14 @@ export class FirstConnectionComponent implements OnInit {
   nationList = environment.nationalites;
   paysList = environment.pays;
   programReinscrit = environment.formationReinscrit
-  maxYear = new Date().getFullYear() - 16
+  maxYear = new Date().getFullYear() - 13
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
   fr = environment.fr
+  token;
+  nbUser = 0
 
   statutList = [
     { value: "Etudiant", actif: false },
@@ -62,8 +66,8 @@ export class FirstConnectionComponent implements OnInit {
       rue_adresse: new FormControl("", [Validators.required, Validators.pattern('[^0-9]+')]),
       numero_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
-      classe_id: new FormControl(this.dropdownClasse[0]),
-      nationalite: new FormControl(this.nationList[0]),
+      //classe_id: new FormControl(this.dropdownClasse[0]),
+      nationalite: new FormControl(this.nationList[0],Validators.required),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
       diplome: new FormControl(this.programReinscrit[0]),
@@ -74,16 +78,38 @@ export class FirstConnectionComponent implements OnInit {
     this.onGetAllClasses();
     this.onInitRegisterForm();
     let token = jwt_decode(localStorage.getItem("token"))
-    this.AuthService.getById(token['id']).subscribe((data) => {
-      console.log(data)
-      this.userConnected = jwt_decode(data.userToken)['userFromDb']
-      console.log(jwt_decode(data.userToken))
 
-      this.RegisterForm.patchValue({
-        lastname: this.userConnected.lastname,
-        firstname: this.userConnected.firstname
+    this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
+      if (data) {
+        this.userConnected = data.user_id
+        this.RegisterForm.patchValue({
+          lastname: this.userConnected.lastname,
+          firstname: this.userConnected.firstname,
+          ville_adresse: this.userConnected?.ville_adresse,
+          rue_adresse: this.userConnected?.rue_adresse,
+          numero_adresse: this.userConnected?.numero_adresse,
+          postal_adresse: this.userConnected?.postal_adresse,
+          phone: this.userConnected?.phone,
+          date_naissance: new Date(data?.date_naissance)
+        })
+      } else {
+        this.AuthService.getById(token['id']).subscribe(dataU => {
+          this.userConnected = jwt_decode(dataU.userToken)['userFromDb']
+          this.RegisterForm.patchValue({
+            lastname: this.userConnected.lastname,
+            firstname: this.userConnected.firstname,
+            ville_adresse: this.userConnected?.ville_adresse,
+            rue_adresse: this.userConnected?.rue_adresse,
+            numero_adresse: this.userConnected?.numero_adresse,
+            postal_adresse: this.userConnected?.postal_adresse,
+            phone: this.userConnected?.phone,
+          })
+        })
+      }
+
+      this.AuthService.getNBUser().subscribe(r => {
+        this.nbUser = r.r
       })
-
       if (this.userConnected.email.endsWith("@adgeducation.com")) {
         this.programReinscrit = environment.ADGReinscrit;
       }
@@ -131,6 +157,32 @@ export class FirstConnectionComponent implements OnInit {
       }),
       ((error) => { console.error(error) })
     );
+  }
+
+  generateCode(nationalite, firstname, lastname, date_naissance) {
+
+    let code_pays = nationalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[nationalite] && code[nationalite] != undefined) {
+        code_pays = code[nationalite]
+      }
+    })
+    let prenom = firstname.substring(0, 1)
+    let nom = lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = this.nbUser.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
   }
 
 
@@ -197,7 +249,7 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          "",
+          this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
           null,
           null,
           null,
@@ -209,20 +261,12 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           this.RegisterForm.value.type.value !== "Etudiant",
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          this.RegisterForm.value.entreprise,
+          null,null,
           this.RegisterForm.value.diplome.value
         )
         this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
-          this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           localStorage.removeItem('modify')
+          this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.ss.connected()
             this.router.navigate(["/"]);
@@ -260,7 +304,7 @@ export class FirstConnectionComponent implements OnInit {
   get numero_adresse() { return this.RegisterForm.get('numero_adresse'); }
   get postal_adresse() { return this.RegisterForm.get('postal_adresse'); }
 
-  get classe_id() { return this.RegisterForm.get('classe_id'); }
+  //get classe_id() { return this.RegisterForm.get('classe_id'); }
   get statut() { return this.RegisterForm.get('statut'); }
   get nationalite() { return this.RegisterForm.get('nationalite').value; }
   get date_naissance() { return this.RegisterForm.get('date_naissance'); }

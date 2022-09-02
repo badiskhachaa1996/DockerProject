@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
@@ -51,6 +52,7 @@ export class ListSeancesComponent implements OnInit {
     public formateurService: FormateurService, public CampusService: CampusService, private messageService: MessageService, private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
+
     this.seanceService.getAll().subscribe(
       (datas) => {
         this.loadEvents(datas)
@@ -248,5 +250,42 @@ export class ListSeancesComponent implements OnInit {
     });
   }
 
+  /*date_filter_debut: Date = null;
+  date_filter_fin: Date = null;*/
+
+  calendar_value: Date[] = null
+
+  filterRange(value) {
+    /*if (this.date_filter_debut && !this.date_filter_fin && value > this.date_filter_debut) {
+      this.date_filter_fin = value
+    }
+    else {
+      this.date_filter_debut = value
+      this.date_filter_fin = null
+    }
+    if (this.date_filter_debut && this.date_filter_fin) {
+      this.seanceService.getAllByRange(this.date_filter_debut, this.date_filter_fin).subscribe(
+        (datas) => {
+          this.loadEvents(datas)
+        },
+      );
+    }*/
+    if (this.calendar_value[0] && this.calendar_value[1])
+      this.seanceService.getAllByRange(this.calendar_value[0], this.calendar_value[1]).subscribe(
+        (datas) => {
+          this.loadEvents(datas)
+        },
+      );
+  }
+  clearFilter() {
+    /*this.date_filter_debut = null
+    this.date_filter_fin = null*/
+    this.calendar_value = null
+    this.seanceService.getAll().subscribe(
+      (datas) => {
+        this.loadEvents(datas)
+      },
+    );
+  }
 
 }

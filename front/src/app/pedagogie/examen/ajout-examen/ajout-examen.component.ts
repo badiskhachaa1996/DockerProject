@@ -25,14 +25,14 @@ export class AjoutExamenComponent implements OnInit {
   formateurs: Formateur[] = [];
 
   matieres: Matiere[] = [];
-  dropdownMatiere: any[] = [{ libelle: "", value: "" }];
+  dropdownMatiere: any[] = [{ libelle: "Choisir une matière", value: null }];
 
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: "Toutes les classes", value: null }];
+  dropdownClasse: any[] = [{ libelle: "Choisir une classe", value: null }];
 
 
-  dropdownFormateur: any[] = [{ libelle: "", value: "" }];
+  dropdownFormateur: any[] = [{ libelle: "Choisir un formateur", value: null }];
 
 
   dropdownNiveau: any[] = [
@@ -45,7 +45,9 @@ export class AjoutExamenComponent implements OnInit {
     { label: "Ponctuelle orale", value: "Ponctuelle orale" },
     { label: "Ponctuelle écrite", value: "Ponctuelle écrite" },
     { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
-    { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" }
+    { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
+    { label: "Devoir Sur Table", value: "Devoir Sur Table" },
+    { label: "BTS Blanc", value: "BTS Blanc" }
   ]
 
 

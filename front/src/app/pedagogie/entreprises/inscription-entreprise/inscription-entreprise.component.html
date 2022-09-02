@@ -1,0 +1,763 @@
+<!-- Appelation -->
+<!-- Activité -->
+<!-- Adresse du siège social -->
+<!-- Adresse du contrat -->
+<!-- Caisse de retraite complémentaire -->
+<!-- Convention Collective -->
+<!-- Code IDCC -->
+<!-- N° de Siret -->
+<!-- Nombre de salariés -->
+<!-- Indicatif + Téléphone -->
+<!-- Code NAF -->
+<!-- OPCO -->
+<!-- Informations du dirigeant
+Nom et Prénom du Gérant ou du Dirigeant :
+	
+Téléphone :
+		E-mail :	
+ -->
+<!-- Informations des tuteurs
+Nom, Prénom & Date de naissance du Tuteur : 
+		Né le : 	
+Fonction :		Ancienneté dans la fonction occupée :	
+Téléphone :		E-mail :	
+Niveau de formation du tuteur : 	
+
+-->
+<!--
+    
+CONTRAT DE L’ALTERNANT
+
+Date de début du Contrat:
+		Date de fin de Contrat :	
+Horaires de l’entreprise :
+	
+Nom de l’Alternant:
+		Date & lieu de naissance :	
+Intitulé de l’emploi occupé par l’Alternant : 
+	
+Classification de l’emploi dans la convention collective (pour contract) :
+	
+Niveau :
+		Coefficient hiérarchique :	
+Formation suivie :
+	
+
+-->
+
+<!--
+    Date et signature du Responsable de l’entreprise : 	Date et signature du tuteur : 
+-->
+<p-toast></p-toast>
+<div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+    <div class="card" styleClass="p-card-shadow">
+        <h4 style="text-align: center;">Formulaire de creation de contrats d'alternances </h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+        <div>
+
+            <p-steps [model]="formSteps" [activeIndex]="ActiveIndex"></p-steps>
+        </div>
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect();showBasicDialogFin()">
+            <div *ngIf="ActiveIndex==0">
+                <div style="text-align: center;">
+                    <small></small><br>
+                </div>
+                <p-fieldset legend="Informations de l'entreprise" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+
+                            <div class="field col-12 md:col-12">
+                                <label For="raison_sociale">Raison Sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="raison_sociale" type="text" placeholder="Nom de l'entreprise "
+                                    formControlName="raison_sociale" />
+                                <div *ngIf="raison_sociale.invalid && (raison_sociale.touched || raison_sociale.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.required">*
+                                        Les
+                                        activités sont obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="raison_sociale.errors?.pattern">*
+                                        Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label For="activite">Activité de l'entreprise <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pInputTextarea autoResize="autoResize" id="activite" type="text"
+                                    placeholder="Description des activités de l'entreprise" formControlName="activite">
+                                </textarea>
+                                <div *ngIf="activite.invalid && (activite.touched || activite.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="activite.errors?.required">* Les
+                                        activités de l'entreprise sont obligatoires.</span>
+                                    <span style="color: red;" class="error" *ngIf="activite.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-8">
+                                <label For="crc">Caisse de retraite complémentaire : <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="crc" type="text" placeholder="KLESIA" formControlName="crc" />
+                                <div *ngIf="crc.invalid && (crc.touched || crc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="crc.errors?.required">* La
+                                        crc est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="crc.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="nb_salarie">Nombre de Salariés: <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText type="number" placeholder="100" formControlName="nb_salarie" />
+                                <div *ngIf="nb_salarie.invalid && (nb_salarie.touched || nb_salarie.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.required">* Le
+                                        nombre de salariés est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-8">
+                                <label For="convention">Convention Collective : <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="convention" type="text"
+                                    placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
+                                    formControlName="convention" />
+                                <div *ngIf="convention.invalid && (convention.touched || convention.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="convention.errors?.required">* La
+                                        convention sont obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="convention.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="idcc">Code IDCC: <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText type="number" placeholder="0000" formControlName="idcc" />
+                                <div *ngIf="idcc.invalid && (idcc.touched || idcc.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="idcc.errors?.required">* Le
+                                        code IDCC est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="idcc.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-4 md:col-2">
+                                <label For="indicatif_ent">Indicatif<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText type="number" placeholder="+33" formControlName="indicatif_ent" />
+                                <div *ngIf="indicatif_ent.invalid && (indicatif_ent.touched || indicatif_ent.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif_ent.errors?.required">* Le
+                                        code indicatif est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatif_ent.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-8 md:col-6">
+                                <label For="phone_ent">Téléphone <small>(entreprise)</small><span style="color: red;">*
+                                    </span></label>
+                                <input pInputText type="number" placeholder="0188008800" formControlName="phone_ent" />
+                                <div *ngIf="phone_ent.invalid && (phone_ent.touched || phone_ent.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone_ent.errors?.required">* Le
+                                        Numero de téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="phone_ent.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+
+                            <!--Adresse du siège social-->
+                            <h3 class="field col-12">Adresse du siège social</h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ss">Adresse du Siège sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="adresse_ss" type="text" placeholder="Numero et Nom de la rue"
+                                    formControlName="adresse_ss" />
+                                <div *ngIf="adresse_ss.invalid && (adresse_ss.touched || adresse_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ss.errors?.required">*
+                                        L'adresse
+                                        téléphone est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="adresse_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ss">Code Postal du Siège sociale <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="postal_ss" type="text" placeholder="75001"
+                                    formControlName="postal_ss" />
+                                <div *ngIf="postal_ss.invalid && (postal_ss.touched || postal_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ss.errors?.required">*
+                                        Le code postal
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="postal_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ss">Ville du Siège sociale <span style="color: red;">
+                                        *
+                                    </span></label>
+                                <input pInputText id="ville_ss" type="text" placeholder="Paris"
+                                    formControlName="ville_ss" />
+                                <div *ngIf="ville_ss.invalid && (ville_ss.touched || ville_ss.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ss.errors?.required">*
+                                        La ville
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="ville_ss.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <!--Adresse d’exécution du contrat -->
+                            <h3 class="field col-12"> Adresse d’exécution du contrat </h3>
+                            <div class="field col-12 md:col-6">
+                                <label For="adresse_ec">Adresse de l’exécution du contrat<span style="color: red;">
+                                        *
+                                    </span></label>
+                                <input pInputText id="adresse_ec" type="text" placeholder="15 Rue du Louvre"
+                                    formControlName="adresse_ec" />
+                                <div *ngIf="adresse_ec.invalid && (adresse_ec.touched || adresse_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="adresse_ec.errors?.required">*
+                                        l'adresse
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="adresse_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="postal_ec">Code Postal<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="postal_ec" type="text" placeholder="75001"
+                                    formControlName="postal_ec" />
+                                <div *ngIf="postal_ec.invalid && (postal_ec.touched || postal_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="postal_ec.errors?.required">*
+                                        Le code postal
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="postal_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="ville_ec">Ville de l’exécution du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="ville_ec" type="text" placeholder="Paris"
+                                    formControlName="ville_ec" />
+                                <div *ngIf="ville_ec.invalid && (ville_ec.touched || ville_ec.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="ville_ec.errors?.required">*
+                                        La ville
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="ville_ec.errors?.pattern">* Seul
+                                        les
+                                        lettres sont acceptés.</span>
+                                </div>
+
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="siret">Numero de Siret<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="siret" maxlength="15" type="number"
+                                    placeholder="XXXX-XXXX-XXXX-XXX" formControlName="siret" />
+                                <div *ngIf="siret.invalid && (siret.touched || siret.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="siret.errors?.required">*
+                                        Le numero de siret
+                                        est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="siret.errors?.pattern">* Le numéro de
+                                        siret est composé de 15 chiffres</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="ape_naf">Code NAF<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="ape_naf" type="text" placeholder="CODE NAF"
+                                    formControlName="ape_naf" />
+
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="lastname">Télécopie</label>
+                                <input pInputText id="telecopie" type="text" placeholder="Télécopie"
+                                    formControlName="telecopie" />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="OPCO">OPCO <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO" />
+
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="organisme_prevoyance">Organisme de prevoyance</label>
+                                <input pInputText id="organisme_prevoyance" type="text"
+                                    placeholder="Organisme de prevoyance" formControlName="organisme_prevoyance" />
+
+
+                            </div>
+
+                        </div>
+                        <div>
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" raison_sociale.invalid ||  activite.invalid ||  adresse_ss.invalid ||  postal_ss.invalid ||  ville_ss.invalid || 
+                                adresse_ec.invalid ||  postal_ec.invalid ||  ville_ec.invalid ||  crc.invalid ||  convention.invalid ||  idcc.invalid ||   siret.invalid ||  nb_salarie.invalid ||  phone_ent.invalid  ||  indicatif_ent.invalid ||  ape_naf.invalid ||  OPCO.invalid"
+                                (click)="nextPage()"></button>
+                        </div>
+
+                    </div>
+                </p-fieldset>
+            </div>
+            <div *ngIf="ActiveIndex==1">
+                <p-fieldset legend="Informations du dirigeant de l'entreprise"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-2">
+                                <label For="civilite">Civilité<span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                                    formControlName="civilite"></p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-10"></div>
+                            <div class="field col-12 md:col-6">
+                                <label For="lastname">Nom<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="lastname" type="text" placeholder="Nom du dirigeant"
+                                    formControlName="lastname" />
+                                <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="firstname">Prenom<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="firstname" type="text" placeholder="Prenom du dirigeant"
+                                    formControlName="firstname" />
+                                <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="email">Email du dirigeant<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="email" type="email" placeholder="Email du dirigeant"
+                                    formControlName="email" />
+                                <div *ngIf="email.invalid && (email.touched || email.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="email.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-3 md:col-2">
+                                <label For="indicatif">Indicatif<span style="color: red;">*
+                                    </span></label>
+                                <input pInputText id="indicatif" type="number" placeholder="indicatif du dirigeant"
+                                    formControlName="indicatif" />
+                                <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-9 md:col-4">
+                                <label For="phone">Téléphone <small>(dirigeant)</small> <span style="color: red;">*
+                                    </span></label>
+                                <input pInputText id="phone" type="tel" placeholder="télephone du dirigeant"
+                                    formControlName="phone" />
+                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-3 md:col-2">
+                                <label For="indicatif_whatsapp">indicatif <small>(WhatsApp)</small><span
+                                        style="color: red;">*
+                                    </span></label>
+                                <input pInputText id="indicatif_whatsapp" type="number"
+                                    placeholder="indicatif_whatsapp du dirigeant"
+                                    formControlName="indicatif_whatsapp" />
+                                <div
+                                    *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
+                                    <span style="color: red;" class="error"
+                                        *ngIf="indicatif_whatsapp.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-9 md:col-4">
+                                <label For="numero_whatsapp">Numéro<small>(WhatsApp)</small><span style="color: red;">*
+                                    </span></label>
+
+                                <input pInputText id="numero_whatsapp" type="tel" placeholder="numero whatsapp "
+                                    formControlName="numero_whatsapp" />
+                                <div
+                                    *ngIf="numero_whatsapp.invalid && (numero_whatsapp.touched || numero_whatsapp.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="numero_whatsapp.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" civilite.invalid ||   lastname.invalid ||  firstname.invalid || 
+                             email.invalid ||  indicatif.invalid ||  phone.invalid ||  indicatif_whatsapp.invalid  ||  numero_whatsapp.invalid"
+                                (click)="nextPage();verifEmailInBD()"></button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+
+                    </div>
+                </p-fieldset>
+            </div>
+
+
+            <div *ngIf="ActiveIndex==2">
+                <p-fieldset legend="Informations du Tuteur de stage dans l'entreprise"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label For="civilite">Civilité<span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
+                                    formControlName="civilite_t1"></p-dropdown>
+                            </div>
+
+                            <div class="field col-12 md:col-4">
+                                <label For="lastname_t1">Nom<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="lastname_t1" type="text" placeholder="Nom du tuteur"
+                                    formControlName="lastname_t1" />
+                                <div *ngIf="lastname_t1.invalid && (lastname_t1.touched || lastname_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="lastname_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-4">
+                                <label For="firstname_t1">Prenom<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="firstname_t1" type="text" placeholder="Prenom du dirigeant"
+                                    formControlName="firstname_t1" />
+                                <div *ngIf="firstname_t1.invalid && (firstname_t1.touched || firstname_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="firstname_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-3 md:col-2">
+                                <label For="indicatif">Indicatif<span style="color: red;">*
+                                    </span></label>
+                                <input pInputText id="indicatif_t1" type="number" placeholder="indicatif "
+                                    formControlName="indicatif_t1" />
+                                <div *ngIf="indicatif_t1.invalid && (indicatif_t1.touched || indicatif_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-9 md:col-4">
+                                <label For="phone_t1">Téléphone du tuteur<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="phone_t1" type="tel" placeholder="téléphone du tuteur"
+                                    formControlName="phone_t1" />
+                                <div *ngIf="phone_t1.invalid && (phone_t1.touched || phone_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone_t1.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="email_t1">Email du tuteur<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="email_t1" type="email" placeholder="Email du dirigeant"
+                                    formControlName="email_t1" />
+                                <div *ngIf="email_t1.invalid && (email_t1.touched || email_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="email_t1.errors?.required">* Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="date_naissance_t1">Date de naissance du tuteur<span style="color: red;">
+                                        *
+                                    </span></label>
+                                <p-calendar formControlName="date_naissance_t1" dateFormat="dd/mm/yy"
+                                    [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [locale]="fr"
+                                    [monthNavigator]="true" yearNavigator="true" [yearRange]="rangeYear">
+                                </p-calendar>
+                                <div
+                                    *ngIf="date_naissance_t1.invalid && (date_naissance_t1.touched || date_naissance_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="date_naissance_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="fonction_t1">Fonction du tuteur<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="fonction_t1" type="text" placeholder="fonction du tuteur"
+                                    formControlName="fonction_t1" />
+                                <div *ngIf="fonction_t1.invalid && (fonction_t1.touched || fonction_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="fonction_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="temps_fonction_t1">Ancienneté dans la fonction en
+                                    années<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="temps_fonction_t1" type="number" placeholder="0"
+                                    formControlName="temps_fonction_t1" />
+                                <div>
+                                    <!-- *ngIf="temps_fonction_t1.invalid && (temps_fonction_t1.touched || temps_fonction_t1.dirty)" -->
+                                    <span style="color: red;" class="error" *ngIf="temps_fonction_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="niv_formation_t1">Niveau d'études du tuteur <span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="niv_formation_t1" type="text" placeholder="Bac+3"
+                                    formControlName="niv_formation_t1" />
+                                <div
+                                    *ngIf="niv_formation_t1.invalid && (niv_formation_t1.touched || niv_formation_t1.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="niv_formation_t1.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" civilite_t1.invalid ||  lastname_t1.invalid ||  firstname_t1.invalid  || email_t1.invalid ||  indicatif_t1.invalid  ||  phone_t1.invalid  ||  fonction_t1.invalid   ||  date_naissance_t1.invalid  ||  niv_formation_t1.invalid   ||  temps_fonction_t1.invalid   "
+                                (click)="nextPage();verifEmailt1InBD()"></button>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==3">
+                <p-fieldset legend="Informations sur le contrat" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
+                                    [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
+                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                    [yearRange]="rangeYearC">
+                                </p-calendar>
+                                <div *ngIf="debut_contrat.invalid && (debut_contrat.touched || debut_contrat.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="debut_contrat.errors?.required">*
+                                        Le champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
+                                    </span></label>
+                                <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
+                                    [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
+                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                    [yearRange]="rangeYearC">
+                                </p-calendar>
+                                <div *ngIf="fin_contrat.invalid && (fin_contrat.touched || fin_contrat.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="fin_contrat.errors?.required">*
+                                        Le champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="horaire">Horaires par semaine semaine</label>
+                                <input pInputText id="horaire" type="text" placeholder="35 h/semaine"
+                                    formControlName="horaire" />
+                                <div *ngIf="horaire.invalid && (horaire.touched || horaire.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="horaire.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="alternant">Alternant<span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown class="p-dropdown-clearable" [options]="listAlternantDD" dataKey="_id"
+                                    filter="true"
+                                    filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
+                                    optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
+                                    formControlName="alternant">
+                                </p-dropdown>
+
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="intitule">Intitulé<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="intitule" type="text" placeholder="Intitulé du poste"
+                                    formControlName="intitule" />
+                                <div *ngIf="intitule.invalid && (intitule.touched || intitule.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="intitule.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="classification">Classification<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="classification" type="text" placeholder="Classification"
+                                    formControlName="classification" />
+                                <div *ngIf="classification.invalid && (classification.touched || classification.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="classification.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+
+                            <div class="field col-12 md:col-6">
+                                <label For="niv">Niveau de la formation<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="niv" type="text" placeholder="Bac+3" formControlName="niv" />
+                                <div *ngIf="niv.invalid && (niv.touched || niv.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="niv.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="coeff_hier" type="text" placeholder="Coefficient hiérarchique"
+                                    formControlName="coeff_hier" />
+                                <div *ngIf="coeff_hier.invalid && (coeff_hier.touched || coeff_hier.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="coeff_hier.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label For="form">Formation<span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
+                                    id="form" formControlName="form">
+                                </p-dropdown>
+                                <div *ngIf="form.invalid && (form.touched || form.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="form.errors?.required">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="code_commercial">Code commercial<span style="color: red;"> *
+                                    </span></label>
+                                <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
+                                    formControlName="code_commercial" />
+                                <div>
+                                    <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
+                                    <span style="color: red;" class="error">*
+                                        Le
+                                        champs est obligatoire.</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div>
+                            <button pButton type="button" label="Suivant" style="float: right;"
+                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
+                                 alternant.invalid ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
+                                (click)="nextPage(); "></button>
+
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==4">
+                <div style="text-align: center;">
+                    <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
+                </div>
+                <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div class="grid" style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="ui-g-12 ui-md-12">
+                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
+                                        target="_blank">mentions
+                                        légales</a> et accepte que mes données
+                                    soient
+                                    utiliseés
+                                    dans le cadre de mon accompagnement
+                                    et dans le traitement de ma demande ?</h6>
+                                <div>
+                                    <p-radioButton value=true name="donneePerso" formControlName="donneePerso">
+                                    </p-radioButton>
+                                    <label for="oui"> Oui</label>
+                                </div>
+                                <div style="margin-top: 2px;">
+                                    <p-radioButton value=false name="donneePerso" formControlName="donneePerso">
+                                    </p-radioButton>
+                                    <label for="non"> Non</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Envoyer" [disabled]="donneePerso.invalid" type="submit"
+                            style="float: right;"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+        </form>
+
+    </div>
+    <p-dialog header="Inscription Entreprise et enregistrement du contrat avec succes  " [(visible)]="MessageFormSubmit"
+        [style]="{width: '50vw'}">
+        <p>{{ lastname.value | uppercase}} {{ lastname.value }} recevra par email les accès à la plate-forme IMS en tant
+            que CEO de l'entreprise</p>
+
+        <p>Une fois connecté sur la plate-forme avec le mot de passe reçu par email, Vous aurez accès à
+            la liste de vos
+            alternants qui sont étudiants dans une de nos écoles </p>
+
+        <p>Vous aurez aussi la possibilité d'ajouter d'autres tuteurs de stages. Et Auront un accés
+            pour suivre l'assiduité des cours de leurs apprentis et avoir accés a divers informations
+            concernant les
+            formations suivis. </p>
+        <p>Si vous rencontrez des difficultés pour accéder a la platforme. N'hesitez pas a nous contact
+            par email sur
+            l'adresse : contact@intedgroup.com</p>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" (click)="router.navigate(['/']);" label="Fermer" styleClass="p-button-text">
+            </p-button>
+        </ng-template>
+    </p-dialog>
+
+</div>

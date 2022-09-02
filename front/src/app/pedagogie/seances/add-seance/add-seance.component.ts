@@ -47,12 +47,19 @@ export class AddSeanceComponent implements OnInit {
     salle_name: new FormControl(this.salleNames[0]),
     isPlanified: new FormControl(false),
     campus_id: new FormControl([], Validators.required),
-    nbseance: new FormControl("")
+    nbseance: new FormControl(""),
+    isUnique: new FormControl(true, Validators.required),
+    date_fin_plannification: new FormControl(''),
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
 
   type = this.route.snapshot.paramMap.get('type');
+
+  seanceOptions = [
+    { name: 'Répéter sur plusieurs jours', value: false }, 
+    {name: 'Séance unique', value: true },
+  ]
 
   display: boolean;
   constructor(private EtudiantService: EtudiantService, private matiereService: MatiereService, private formateurService: FormateurService, private seanceService: SeanceService, private classeService: ClasseService, private messageService: MessageService, private router: Router, private route: ActivatedRoute,
@@ -120,29 +127,28 @@ export class AddSeanceComponent implements OnInit {
 
   showSalles(value) {
     this.salleNames = []
-    value.forEach(cid=>{
+    value.forEach(cid => {
       this.campus[cid].salles.forEach(s => {
+        console.log(s)
         this.salleNames.push({ value: s, label: s })
       })
     })
-    this.seanceForm.patchValue({salle_name:this.salleNames[0].value})
-  }
+    if (this.salleNames.length != 0)
+      this.seanceForm.patchValue({ salle_name: this.salleNames[0].value })
+    else if (this.isPresentiel.value != "Distanciel")
+      this.messageService.add({ severity: "error", summary: "Choix des salles", detail: "Ces campus ne contiennent aucune salle." })
 
-  testAffichage(date) {
-    var targetTime = new Date(date);
-    //get the timezone offset from local time in minutes
-    var tzDifference = targetTime.getTimezoneOffset();
-    //convert the offset to milliseconds, add to targetTime, and make a new Date
-    var offsetTime = new Date(targetTime.getTime() + tzDifference * 60000);
-    console.log(offsetTime)
-    return offsetTime
   }
-
-  /*convertDatetoUTC0(date,tz="Africa/Dakar"){
-    return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("en-US", {timeZone: tz}));   
-  }*/
 
   saveSeance() {
+    let date_debut = this.seanceForm.get('date_debut').value;
+    let dateDebut = date_debut.substr(0, 9);
+    let date_fin = this.seanceForm.get('date_fin_plannification').value;
+
+    console.log(dateDebut);
+    console.log(date_fin);
+
+
     //TODO get nbSeance
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
@@ -251,7 +257,6 @@ export class AddSeanceComponent implements OnInit {
 
       });
     })
-
   }
 
   getScoreString(s: String) {

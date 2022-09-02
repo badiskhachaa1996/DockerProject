@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <!--<p>Local timezone: {{now|date:"long"}}</p>
     <p>Local timezone +2: {{now|date:'long':'+2'}}</p>
     <p>Timezone Diff : {{testForScience()}}</p>
@@ -66,7 +67,7 @@
         <div class="col-12 xl:col-6">
             <div class="card">
                 <h5>Recent Sales</h5>
-                <p-table [value]="products" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                <p-table [value]="products" [paginator]="true" [rows]="10" responsiveLayout="scroll">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Image</th>
@@ -258,6 +259,13 @@
     </div>
 </div>
 
+
+
+<h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
+<h3>Le tableau de bord est actuellement en construction pour votre statut!</h3>
+<h4>Pour naviguer sur l'application, merci d'utiliser le menu à gauche</h4>
+<h5>Merci de votre patience!</h5>
+
 <div *ngIf="this.isEtudiant">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -271,8 +279,46 @@
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
         <p>Merci de votre patience!</p>
     </div>
+
+
+        <div class="col-12 md:col-6">
+            <div class="card" >
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <div>
+                        <h4 class="col-12">Planning journée</h4>
+                    </div>
+               
+                        <div class="col-12" *ngIf="type==null">
+                            <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
+                        </div>  
+                    </div>
+
+            </div>
+        </div>
+
+        <div class="col-12 md:col-6">
+            <div class="card" *ngIf="notes">
+                <h5>Dernières notes obtenues</h5>
+                <p-table [value]="dernotes">
+                    <ng-template pTemplate="header">
+                        <tr> 
+                            <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon></th>
+                            <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon></th>
+                        </tr>
+                    </ng-template> 
+                    <ng-template pTemplate="body" let-note>
+                            <tr>
+                                <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
+                                <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+                            </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+     
+
     <!-- Afficher les derniers notes obtenus-->
     <!-- Afficher les cours de la journée-->
+</div>
 </div>
 
 <div *ngIf="this.isAdmin">
@@ -440,4 +486,9 @@
 <div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
+
 </div>
+
+
+
+

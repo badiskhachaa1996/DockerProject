@@ -61,12 +61,6 @@
                     <input pInputText type="text" formControlName="libelle" placeholder="Examen"
                         class="form-control col-12">
                 </div>
-                <!--<p class="col-12 md:col-12" *ngIf="seanceForm.value.date_debut">
-                    {{seanceForm.value.date_debut | date:"long"}}<br>
-                    {{seanceForm.value.date_debut | json}}<br>
-                    {{testAffichage(seanceForm.value.date_debut)| json}}<br>
-                    {{testAffichage(seanceForm.value.date_debut)| date:"long"}}<br>
-                </p>-->
                 <div class="field col-12 md:col-6">
                     <label>Début: <span style="color: red;"> * </span></label>
                     <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
@@ -108,10 +102,22 @@
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 
                 </div>
+                {{isPresentiel.value | json}}
                 <div class="field col-12 md:col-12" *ngIf="isPresentiel.value!='Distanciel' && salleNames.length!=0">
                     <label>Salle Présentiel:</label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames">
                     </p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <p-selectButton [options]="seanceOptions" 
+                                    optionLabel="name" 
+                                    optionValue="value"
+                                    formControlName="isUnique">
+                    </p-selectButton>
+                </div>
+                <div class="col-6 md:col-12" *ngIf="!seanceForm.value.isUnique">
+                    <label>Veuillez saisir la date de fin: <span style="color: red;"> * </span></label>
+                    <input type="datetime" formControlName="date_fin_plannification" pInputText>
                 </div>
                 <div>
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"

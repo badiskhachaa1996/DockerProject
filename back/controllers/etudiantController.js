@@ -44,7 +44,9 @@ app.post("/create", (req, res, next) => {
     let etudiant = new Etudiant(
         {
             ...etudiantData
-        });  //Creation du nouveau user
+        });
+    console.log(etudiant)
+    //Creation du nouveau user
     let userData = req.body.newUser;
     let user = new User(
         {
@@ -78,6 +80,7 @@ app.post("/create", (req, res, next) => {
                             res.status(400).json({ error: 'Cet étudiant existe déja' });
                         } else {
                             etudiant.user_id = userFromDb._id;
+                            console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
 
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
@@ -91,11 +94,12 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         etudiant.user_id = userCreated._id;
+                        console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
                             .catch((error) => {
                                 console.error(error);
-                                res.status(400).send({ error })
+                                res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
                             });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
@@ -135,6 +139,29 @@ app.get("/getAll", (req, res, next) => {
 });
 
 
+//Récupérer la liste de tous les étudiants
+app.get("/getAllEtudiantPopulate", (req, res, next) => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere')
+        .then((etudiantsFromDb) => {
+            res.status(200).send(etudiantsFromDb);
+        })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
+app.get("/getAllAlternants", (req, res, next) => {
+
+    Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
+        .then((alternantsFromDb) => {
+
+            res.status(200).send(alternantsFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).send('Impossible de recuperer la liste des étudiant');
+        })
+});
+
+
 //Récupérer la liste de tous les étudiants via un Id de classe
 app.get("/getAllByClasseId/:id", (req, res, next) => {
     Etudiant.find({ classe_id: req.params.id })
@@ -144,7 +171,7 @@ app.get("/getAllByClasseId/:id", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants en attente d'assignation
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null })
+    Etudiant.find({ classe_id: null }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -160,6 +187,13 @@ app.get("/getById/:id", (req, res, next) => {
 //Recupere un étudiant via son user_id
 app.get("/getByUserid/:user_id", (req, res, next) => {
     Etudiant.findOne({ user_id: req.params.user_id })
+        .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
+});
+
+//Recupere un étudiant via son user_id
+app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
+    Etudiant.findOne({ "user_id": req.params.user_id }).populate('user_id')
         .then((etudiantFromDb) => { res.status(200).send(etudiantFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer cet étudiant ' + error.message); })
 });
@@ -340,11 +374,13 @@ app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
+    //TODO Mettre les moy sur 20 et calculer les coeffs des examens
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
     let r = []
-    let moy_tt = 0
+    let moy_tt = 0.00000000001
+    let haveDispensed = false
     Etudiant.findById(req.params.etudiant_id).then(chosenOne => {
         Etudiant.find({ classe_id: chosenOne.classe_id }).then(etudiants => {
             let listEtudiantID = []
@@ -383,7 +419,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 listEtudiantID.forEach(e_id => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
-                        listMoyenneEtudiants[e_id][m_nom] = 0.00000
+                        listMoyenneEtudiants[e_id][m_nom] = 0.00000000001
                         if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
                             listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
                         }
@@ -407,19 +443,23 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                         if (dicRB[dicMatiere[m_nom]._id]) {
                             old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                             isDispensed = dicRB[dicMatiere[m_nom]._id].isDispensed
+                            //TODO listMoyenneEtudiants ne prends pas en compte les absences
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
-                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
+                        r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, ects: dicMatiere[m_nom].credit_ects, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
                         if (!isDispensed) {
                             moy_tt += listMoyenneEtudiants[req.params.etudiant_id][m_nom] * dicMatiere[m_nom].coeff
                             sumMoy += dicMatiere[m_nom].coeff
+                        } else {
+                            haveDispensed = true
                         }
+
                         listMoyChoose[dicMatiere[m_nom]._id] = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                     })
                     if (sumMoy != 0) {
                         moy_tt = moy_tt / sumMoy
                     }
-                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose })
+                    res.status(201).send({ data: r, moyenneEtudiant: moy_tt, listMoyEtu: listMoyChoose, haveDispensed })
                 })
             })
         })
@@ -427,7 +467,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null } }).then(result => {
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
@@ -573,6 +613,36 @@ app.post('/addNewPayment/:id', (req, res) => {
             res.status(500).send(err)
         } else {
             res.status(201).send(data)
+        }
+    })
+})
+
+app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
+    User.findByIdAndUpdate(req.params.user_id, {
+        type: "Etudiant",
+        email: req.params.email_ims
+    }, { new: true }, (err, updatedUser) => {
+        if (err) {
+            console.error(err)
+        } else {
+            delete req.body._id
+            let etu = new Etudiant({
+                ...req.body
+            })
+            etu.save((errEtu, newEtu) => {
+                if (errEtu) {
+                    console.error(errEtu)
+                } else {
+                    Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
+                        res.send(newP)
+                        //Transfert file TODO
+                        fs.rename("../storage/prospect/" + newP._id, "../storage/etudiant/" + newEtu._id, (err) => {
+                            if (err)
+                                console.error(err)
+                        })
+                    })
+                }
+            })
         }
     })
 })

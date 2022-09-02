@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
+const { Presence } = require("./../models/presence");
+const { Classe } = require("./../models/classe")
 app.disable("x-powered-by");
 const path = require('path');
 var mime = require('mime-types')
@@ -126,10 +128,98 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
         });
 });
 
+app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
+    let ListSeanceFinished;
+    let ListPresences = [];
+    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } })
+        .then((SeanceFromdb) => {
+            ListSeanceFinished = SeanceFromdb;
+            let dernierS = SeanceFromdb[SeanceFromdb.length-1]
+
+
+            ListSeanceFinished.forEach( async SF => {
+
+                Presence.find({
+                    user_id: req.body.user_id, seance_id: SF.id
+                }).then((data) => {
+                    console.log("data")
+                    console.log(data)
+                    if (data.length > 0) {
+
+                        console.log("Prensence Trouvé")
+                        ListPresences.push(data);
+                        console.log(ListPresences)
+                        if(dernierS._id==SF.id){
+                            console.log("res to send: " + ListPresences.length)
+                            res.status(200).send(ListPresences);
+                        }
+                    }
+                    else {
+
+                        let presence = new Presence({
+                            seance_id: SF.id,
+                            user_id: req.body.user_id,
+                            isPresent: false,
+                            signature: false,
+                            justificatif: false,
+                            date_signature: null,
+                            allowedByFormateur: false,
+                        });
+                        presence.save((err, dataCreated) => {
+                            //Sauvegarde de la signature si il y en a une
+                            if (err) {
+                                console.error(err)
+                                res.send(err)
+                            } else {
+                                ListPresences.push(dataCreated)
+
+                                console.log("added pre")
+                                console.log(ListPresences)
+                            }
+                            if(dernierS._id==SF.id){
+                                console.log("res to send: " + ListPresences.length)
+                                res.status(200).send(ListPresences);
+                            }
+                        })
+
+                    }
+                }, (err) => { console.log(err) })
+
+            });
+
+
+
+        })
+
+});
+//Recuperation de toute les s selon l'id d'une classe
+app.get('/getAllByDiplomeID/:id', (req, res, next) => {
+    let cids = []
+    Classe.find({ diplome_id: req.params.id }).then(classe => {
+        classe.forEach(c => {
+            cids.push(c._id)
+        })
+        Seance.find({ classe_id: { $in: cids } })
+            .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+            .catch(error => {
+                console.error(error)
+                res.status(400).send(error)
+            });
+    })
+});
+
 
 //Recuperation de toute les s selon l'identifiant du formateur
 app.get('/getAllbyFormateur/:id', (req, res, next) => {
     Seance.find({ formateur_id: req.params.id })
+        .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
+        .catch(error => res.status(400).send(error));
+});
+
+app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
+    let dd = new Date(req.params.date_debut)
+    let df = new Date(req.params.date_fin)
+    Seance.find({ date_debut: { $gte: dd, $lt: df } })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -256,6 +346,40 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
         })
     }
 
+}, (error) => { res.status(500).send(error); })
+
+app.get('/getFormateurFromClasseID/:classe_id/:semestre', (req, res, next) => {
+    Seance.find({ classe_id: req.params.classe_id }).then(seanceList => {
+        //TODO Enlever les seances en dehors du semestre
+        let dicMatiere = {}//matiere_id:{formateur_id:nb,formateur_id:nb}
+        let r = {}//matiere_id:formateur_id
+        seanceList.forEach(seance => {
+            if (dicMatiere[seance.matiere_id]) {
+                if (dicMatiere[seance.matiere_id][seance.formateur_id]) {
+                    dicMatiere[seance.matiere_id][seance.formateur_id] += 1
+                } else {
+                    dicMatiere[seance.matiere_id][seance.formateur_id] = 1
+                }
+            } else {
+                dicMatiere[seance.matiere_id] = {}
+                dicMatiere[seance.matiere_id][seance.formateur_id] = 1
+            }
+        })
+        Object.keys(dicMatiere).forEach(matiere => {
+            let fList = dicMatiere[matiere]
+            let chosenOne = Object.keys(fList)[0]
+            let highest = fList[chosenOne]
+            Object.keys(fList).forEach(f_id => {
+                let nb = fList[f_id]
+                if (nb > highest) {
+                    highest = nb
+                    chosenOne = f_id
+                }
+            })
+            r[matiere] = chosenOne
+        })
+        res.status(201).send(r)
+    })
 }, (error) => { res.status(500).send(error); })
 
 module.exports = app;

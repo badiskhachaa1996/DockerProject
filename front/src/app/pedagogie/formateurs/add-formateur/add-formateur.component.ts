@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
 
 @Component({
   selector: 'app-add-formateur',
@@ -20,7 +21,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
   styleUrls: ['./add-formateur.component.scss']
 })
 export class AddFormateurComponent implements OnInit {
-
+  display = false
   typeFormateur = [
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
@@ -29,7 +30,6 @@ export class AddFormateurComponent implements OnInit {
   fr = environment.fr;
 
   formAddFormateur: FormGroup;
-  showFormAddFormateur: boolean = false;
 
   users: User[] = [];
   civiliteList = environment.civilite;
@@ -43,10 +43,7 @@ export class AddFormateurComponent implements OnInit {
     /*{ label: "Contrat d'apprentissage", value: "Contrat d'apprentissage" },
     { label: "Contrat de professionalisation", value: "Contrat de professionalisation" },*/
   ];
-  prestataireList = [
-    { label: 'EliteLabs', value: 'EliteLabs' },
-    { label: 'Autre', value: 'Autre' }
-  ];
+  prestataireList = [];
   matiereList = [];
   matiereDic = {};
   dropdownCampus = []
@@ -62,6 +59,8 @@ export class AddFormateurComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
   token;
   diplomesListe = [];
+
+  showUploadFile: Formateur = null
 
   onAddJ_diplome() {
     this.jury_diplomesList.push({ diplome_id: "", cout_h: 0 })
@@ -85,8 +84,10 @@ export class AddFormateurComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id")
+    else if (type == "matiere_id") {
       this.volumeHList[i][type] = event.value;
+      this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
+    }
   }
 
   deleteMatiereAdd(i) {
@@ -95,7 +96,8 @@ export class AddFormateurComponent implements OnInit {
 
 
   constructor(private formateurService: FormateurService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router,
-    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService) { }
+    private ServService: ServService, private diplomeService: DiplomeService, private MatiereService: MatiereService, private SeanceService: SeanceService,
+    private CampusService: CampusService, private entrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
     this.diplomeService.getAll().subscribe(data => {
@@ -139,6 +141,12 @@ export class AddFormateurComponent implements OnInit {
       cData.forEach(c => {
         this.dropdownCampus.push({ label: c.libelle, value: c._id })
       });
+    })
+
+    this.entrepriseService.getAll().subscribe(entData => {
+      entData.forEach(ent => {
+        this.prestataireList.push({ value: ent._id, label: ent.r_sociale })
+      })
     })
 
   }
@@ -281,26 +289,43 @@ export class AddFormateurComponent implements OnInit {
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
-      console.log(newUser)
-    /*
-  this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
-    ((response) => {
-      if (response.success) {
-        this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
-        this.onInitFormAddFormateur();
-        this.showFormAddFormateur = false;
-        this.resetAddFormateur();
-      } else {
-        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
-      }
-    }),
-    ((error) => {
-      this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
-      console.error(error);
-    })
-  );*/
+
+    this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
+      ((response) => {
+        if (response.success) {
+          this.messageService.add({ severity: 'success', summary: 'Ajout de formateur', detail: response.success });
+          response.data.user_id = response.dataUser
+          this.onInitFormAddFormateur();
+          this.showUploadFile = response.data
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: response.error });
+        }
+      }),
+      ((error) => {
+        this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'ajout du formateur', detail: error });
+        console.error(error);
+      })
+    );
 
   }
+
+
+  FileUpload(event) {
+    if (event.files != null) {
+      this.messageService.add({ severity: 'info', summary: 'Envoi de Fichier', detail: 'Envoi en cours, veuillez patienter ...' });
+      const formData = new FormData();
+      formData.append('id', this.showUploadFile._id)
+      formData.append('file', event.files[0])
+      this.formateurService.uploadFile(formData, this.showUploadFile._id).subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
+        event.target = null;
+        this.showUploadFile = null;
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
+      });
+    }
+  }
+
 
 
   onGetStatut() {

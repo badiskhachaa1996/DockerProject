@@ -34,6 +34,13 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des formateur " + error.Message }) })
 });
 
+//Recupère la liste des formateurs
+app.get("/getAllPopulate", (req, res, next) => {
+    Formateur.find().populate('user_id')
+        .then((formateursFromDb) => { res.status(200).send(formateursFromDb) })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des formateur " + error.Message }) })
+});
+
 //Recupère la liste d'un formateur via un id formateur
 app.get("/getById/:id", (req, res, next) => {
     Formateur.findById(req.params.id)
@@ -119,7 +126,7 @@ app.post("/create", (req, res, next) => {
                         } else {
                             formateur.user_id = userFromDb._id;
                             formateur.save()
-                                .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved }) })
+                                .then((formateurSaved) => { res.status(201).json({ success: "Formateur ajouté dans la BD!", data: formateurSaved, dataUser: userFromDb }) })
                                 .catch((error) => { res.status(400).json({ msg: "Impossible d'ajouter ce formateur ", error }) });
 
                         }
@@ -131,8 +138,10 @@ app.post("/create", (req, res, next) => {
                     .then((userCreated) => {
                         formateur.user_id = userCreated._id;
                         formateur.save()
-                            .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée' }) })
-                            .catch((error) => { res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
+                            .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée', data: formateurCreated, dataUser: userCreated }) })
+                            .catch((error) => { 
+                                console.error(error)
+                                res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }

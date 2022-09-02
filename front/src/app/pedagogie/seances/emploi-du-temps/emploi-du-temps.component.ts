@@ -33,6 +33,10 @@ export class EmploiDuTempsComponent implements OnInit {
   classes: Classe[] = [];
   formateurs: Formateur[] = [];
 
+  //Variables de filtre
+  diplomeFilter: [{ label: string, value: string }];
+  groupeFilter: [{ label: string, value: string }];
+
   //variables du calendrier
   @ViewChild('calendar') private calendar: FullCalendar;
 
@@ -155,6 +159,7 @@ export class EmploiDuTempsComponent implements OnInit {
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }
+
       }),
       ((error) => { console.error(error) })
     );
@@ -179,15 +184,51 @@ export class EmploiDuTempsComponent implements OnInit {
       }),
       ((error) => { console.error(error) })
     );
+  }
+
+  customIncludes(l: [{ label: string, value: string }], d: { label: string, value: string }) {
+    let r = false
+    l.forEach(e => {
+      if (e.label == d.label && e.value == d.value) {
+        r = true
+      }
+    })
+    return r
+  }
+
+  filiereFilter(value) {
+    //set groupeFilter
+    //getAllByFiliereID()
+    //this.seanceService.getAllByClasseId()
+    if (value)
+      this.seanceService.getAllByDiplomeID(value).subscribe(data => {
+        this.showEvents(data, false)
+      })
+    else
+      this.showPlanifiedSeance(this.btnPlan)
 
   }
 
-  showEvents(data) {
+  classeFilter(value) {
+    if (value)
+      this.seanceService.getAllByClasseId(value).subscribe(data => {
+        this.showEvents(data, false)
+      })
+    else
+      this.showPlanifiedSeance(this.btnPlan)
+  }
+
+  showEvents(data, refreshFilter = true) {
     this.seances = []
     let seancesCal = [];
     let classeID = [{}];
     let index = 0
     let diplomeList = {}
+    if (refreshFilter) {
+      this.diplomeFilter = [{ label: "Toutes les filières", value: null }]
+      this.groupeFilter = [{ label: "Tout les groupes", value: null }]
+    }
+
 
     let dicClasse = {}
     let dicDiplome = {}
@@ -204,6 +245,17 @@ export class EmploiDuTempsComponent implements OnInit {
           if (dicDiplome[dicClasse[d.classe_id[0]]?.diplome_id] && dicClasse[d.classe_id[0]]) {
             d.diplome_titre = dicDiplome[dicClasse[d.classe_id[0]].diplome_id].titre
             d.classe_abbrv = dicClasse[d.classe_id[0]].abbrv
+            if (refreshFilter) {
+              let v = { label: d.diplome_titre, value: dicClasse[d.classe_id[0]].diplome_id }
+              if (this.customIncludes(this.diplomeFilter, v) == false) {
+                this.diplomeFilter.push(v)
+              }
+              let v2 = { label: d.classe_abbrv, value: d.classe_id[0] }
+              if (this.customIncludes(this.groupeFilter, v2) == false) {
+                this.groupeFilter.push(v2)
+              }
+            }
+
             this.seances.push(d)
           }
         })
@@ -252,6 +304,7 @@ export class EmploiDuTempsComponent implements OnInit {
         },
       );
     } else if (this.type && this.type == "classe" && this.ID) {
+      console.log(this.ID)
       this.seanceService.getAllByClasseId(this.ID).subscribe(
         (datas) => {
           this.showEvents(datas)

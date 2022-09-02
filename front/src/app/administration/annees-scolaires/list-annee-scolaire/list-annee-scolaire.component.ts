@@ -55,21 +55,6 @@ export class ListAnneeScolaireComponent implements OnInit {
       this.anneeScolaires = data;
     })
   }
-
-  saveAnneeScolaire() {
-    var str = String(this.anneeScolaireForm.value.libelle)
-    var splited = str.split(',').join('/');
-    let anneeScolaire = new AnneeScolaire(null, splited, String(this.anneeScolaireForm.value.etat.value))
-
-    this.ASService.create(anneeScolaire).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des années scolaires', detail: 'Votre année scolaire a bien été ajouté' });
-      this.anneeScolaires.push(data)
-      this.showFormAddAnneeScolaire = false;
-      this.anneeScolaireForm.reset();
-    }, (error) => {
-      console.error(error)
-    });
-  }
   navigatetoEcole(rowData: AnneeScolaire) {
     this.router.navigate(['/ecole', rowData._id]);
   }
@@ -104,5 +89,11 @@ export class ListAnneeScolaireComponent implements OnInit {
       console.error(error)
     });
 
+  }
+
+  //Methode de redirection vers la page d'ajout d'année scolaire
+  onRedirect()
+  {
+    this.router.navigate(['/ajout-annee-scolaire']);
   }
 }

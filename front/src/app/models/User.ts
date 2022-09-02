@@ -24,7 +24,8 @@ export class User {
         public postal_adresse?:string,
         public nationnalite?: string,
         public verifedEmail?: boolean,
-        public date_creation?:Date
+        public date_creation?:Date,
+        public departement?:string
     ){}
     
 

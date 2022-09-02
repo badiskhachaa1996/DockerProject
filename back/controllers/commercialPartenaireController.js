@@ -3,6 +3,7 @@ const app = express();
 app.disable("x-powered-by");
 const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { User } = require('../models/user');
+const { Prospect } = require("../models/prospect");
 const bcrypt = require("bcryptjs");
 
 //Recuperation de la liste des commerciales
@@ -149,5 +150,24 @@ app.put("/update", (req, res, next) => {
         .catch((error) => { res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' }); })
 
 });
+
+app.get('/delete/:id', (req, res) => {
+    CommercialPartenaire.findById(req.params.id).then(c => {
+        Prospect.updateMany({ code_commercial: { $regex: "^" + c.code_commercial_partenaire } }, { code_commercial: "" }, {}, (err, u) => {
+            if (err)
+                console.error(err)
+        })
+        User.findByIdAndRemove(c.user_id, {}, (err, u) => {
+            if (err)
+                console.error(err)
+        })
+        CommercialPartenaire.findByIdAndRemove(c._id, {}, (err, cdeleted) => {
+            if (err)
+                console.error(err)
+            else
+                res.send(cdeleted)
+        })
+    })
+})
 
 module.exports = app;

@@ -8,6 +8,8 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-list-groupe',
@@ -28,10 +30,22 @@ export class ListGroupeComponent implements OnInit {
   diplomes: Diplome[] = [];
   dropdownDiplome: any[] = [{ libelle: "Touts les diplômes", value: null }];
   diplomeToUpdate: string;
+  diplomeFilter = []
   token;
+  user: User;
 
   constructor(private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
-    , private router: Router, private EtudiantService: EtudiantService) { }
+    , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService) { }
+
+  customIncludes(l: any, d: { label: string, value: string }) {
+    let r = false
+    l.forEach(e => {
+      if (e.label == d.label && e.value == d.value) {
+        r = true
+      }
+    })
+    return r
+  }
 
   ngOnInit(): void {
     try {
@@ -44,20 +58,31 @@ export class ListGroupeComponent implements OnInit {
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
     }
-    this.diplomes = [];
+    this.authService.getPopulate(this.token.id).subscribe(u => {
+      this.user = u
+    })
 
-    this.classeService.getAll().subscribe(
-      ((response) => { this.classes = response; }),
+    this.classeService.getAllPopulate().subscribe(
+      ((response) => {
+        this.classes = response;
+        this.diplomeFilter = [{ label: "Tous les diplomes", value: null }]
+        response.forEach(c => {
+          let bypass: any = c.diplome_id
+          let v = { value: bypass._id, label: bypass.titre }
+          if (this.customIncludes(this.diplomeFilter, v) == false)
+            this.diplomeFilter.push(v)
+        })
+      }),
       ((error) => { console.error(error); })
     );
 
     this.EtudiantService.getAll().subscribe(
       ((etudiants) => {
         etudiants.forEach(data => {
-          if(this.numberClasse[data.classe_id]){
-            this.numberClasse[data.classe_id]+=1
-          }else{
-            this.numberClasse[data.classe_id]=1
+          if (this.numberClasse[data.classe_id]) {
+            this.numberClasse[data.classe_id] += 1
+          } else {
+            this.numberClasse[data.classe_id] = 1
           }
         })
       })
@@ -67,7 +92,6 @@ export class ListGroupeComponent implements OnInit {
       ((responseD) => {
         responseD.forEach(diplome => {
           this.dropdownDiplome.push({ libelle: diplome.titre, value: diplome._id });
-          this.diplomes[diplome._id] = diplome;
         })
       }),
       ((error) => { console.error(error); })
@@ -91,16 +115,15 @@ export class ListGroupeComponent implements OnInit {
     let diplome_id = this.formUpdateClasse.get('diplome_id')?.value.value;
     let abbrv = this.formUpdateClasse.get('abbrv')?.value;
 
-    let classe = new Classe(this.idClasseToUpdate, diplome_id, libelle,true,abbrv);
+    let classe = new Classe(this.idClasseToUpdate, diplome_id, libelle, true, abbrv);
 
     this.classeService.update(classe).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Votre classe a bien été modifié' });
-
-        this.classeService.getAll().subscribe(
-          ((responseC) => { this.classes = responseC; }),
-          ((error) => { console.error(error); })
-        );
+        this.classes.forEach((v, i) => {
+          if (classe._id == response._id)
+            this.classes[i] = response
+        })
 
         this.showFormUpdateClasse = false;
         this.formUpdateClasse.reset();
@@ -115,7 +138,7 @@ export class ListGroupeComponent implements OnInit {
     this.classeService.get(this.idClasseToUpdate).subscribe(
       ((response) => {
         this.classeToUpdate = response;
-        this.formUpdateClasse.patchValue({ libelle: this.classeToUpdate.nom, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id },abbrv:this.classeToUpdate.abbrv });
+        this.formUpdateClasse.patchValue({ libelle: this.classeToUpdate.nom, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
       }),
       ((error) => { console.error(error); })
     );
@@ -125,7 +148,7 @@ export class ListGroupeComponent implements OnInit {
   get abbrv() { return this.formUpdateClasse.get('abbrv'); }
 
 
-  hide(classe: Classe) {
+  /*hide(classe: Classe) {
     this.classeService.hide(classe._id).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Gestion des classes', detail: classe.nom + ' ne s\'affichera plus dans la liste' });
 
@@ -151,7 +174,7 @@ export class ListGroupeComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
-  }
+  }*/
 
   onGetColor(color: boolean) {
     if (!color) {
@@ -159,22 +182,25 @@ export class ListGroupeComponent implements OnInit {
     }
   }
 
-  showCalendar(rowData){
-    this.router.navigate(['/emploi-du-temps/classe/'+rowData._id])
+  showCalendar(rowData) {
+    this.router.navigate(['/emploi-du-temps/classe/' + rowData._id])
   }
 
-  sendCalendar(rowData){
-    this.EtudiantService.sendEDT(rowData._id).subscribe(data=>{
-      this.messageService.add({severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé"})
-    },error=>{
+  sendCalendar(rowData) {
+    this.EtudiantService.sendEDT(rowData._id).subscribe(data => {
+      this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé" })
+    }, error => {
       console.error(error)
-      this.messageService.add({severity: 'error', summary: 'Erreur avec les emplois du temps', detail: "Contacte un Admin"})
+      this.messageService.add({ severity: 'error', summary: 'Erreur avec les emplois du temps', detail: "Contacte un Admin" })
     })
   }
 
-  sendNotes(rowData: Classe)
-  {
+  sendNotes(rowData: Classe) {
     this.router.navigate(['/pv', rowData._id]);
+  }
+
+  onRedirect() {
+    this.router.navigate(['ajout-groupe']);
   }
 
 }

@@ -40,6 +40,14 @@ app.get("/getAll", (req, res) => {
 });
 
 
+app.get("/getAllPopulate", (req, res) => {
+    //Récupérer tous les campus
+    Campus.find().populate('ecole_id')
+        .then((result) => { res.status(200).send(result); })
+        .catch((err) => { res.status(500).send('Impossible de recuperer la liste des classes'); })
+});
+
+
 
 app.get("/getById/:id", (req, res) => {
     //Récupérer un campus via un id
