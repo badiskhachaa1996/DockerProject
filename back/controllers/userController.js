@@ -740,11 +740,10 @@ app.get("/HowIsIt/:id", (req, res) => {
                 }
             }).catch((error) => {
                 console.error(error)
-                res.status(404).send(error);
+                res.status(201).send(error);
             })
         }
     });
 });
-
 
 module.exports = app;

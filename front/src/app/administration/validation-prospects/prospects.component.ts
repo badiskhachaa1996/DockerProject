@@ -98,11 +98,6 @@ export class ProspectsComponent implements OnInit {
         groupe: this.groupeList[0].value
       })
     })
-    this.commercialService.getAllPopulate().subscribe(dataC => {
-      dataC.forEach(c => {
-        this.dicCommercial[c.code_commercial_partenaire] = c.partenaire_id
-      })
-    })
     this.refreshEtudiant()
   }
   etudiants: Etudiant[] = [];
@@ -116,6 +111,33 @@ export class ProspectsComponent implements OnInit {
           this.users[user._id] = user;
         });
       })
+    );
+  }
+  imageToShow: any = "../assets/images/avatar.PNG"
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+    this.etudiantService.getFiles(rowData?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+      },
+      (error) => { console.error(error) }
     );
   }
 

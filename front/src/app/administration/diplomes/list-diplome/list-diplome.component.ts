@@ -39,12 +39,10 @@ export class ListDiplomeComponent implements OnInit {
   ]
 
   domaineEtude = [
-    { value: "Commerce" },
-    { value: "Ressource Humaines" },
     { value: "Informatique" },
-    { value: "Gestion" },
-    { value: "Construction" },
-    { value: "Santé, Sanitaire et Social" }
+    { value: "Commerce" },
+    { value: "Construction"},
+    { value: "Tertiaire" },
   ]
 
   typeDiplome = [
@@ -256,7 +254,7 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.rythme = this.formUpdateDiplome.get('rythme')?.value.value;
     this.diplomeToUpdate.frais = this.formUpdateDiplome.get('frais')?.value;
     this.diplomeToUpdate.frais_en_ligne = this.formUpdateDiplome.get('frais_en_ligne')?.value;
-    console.log(this.formUpdateDiplome.get('isCertified')?.value)
+
     this.diplomeToUpdate.isCertified = this.formUpdateDiplome.get('isCertified')?.value;
     this.diplomeToUpdate.date_debut_examen = this.formUpdateDiplome.get('date_debut_examen')?.value;
     this.diplomeToUpdate.date_fin_examen = this.formUpdateDiplome.get('date_fin_examen')?.value;
@@ -267,7 +265,10 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.date_debut_semestre_2 = this.formUpdateDiplome.get('date_debut_semestre_2')?.value;
     this.diplomeToUpdate.date_fin_semestre_2 = this.formUpdateDiplome.get('date_fin_semestre_2')?.value;
     this.diplomeToUpdate.code_diplome = this.formUpdateDiplome.get('code_diplome')?.value;
-    this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
+    if(this.formUpdateDiplome.get('formateur_id')?.value)
+      this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
+    else
+    this.diplomeToUpdate.formateur_id = null
 
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
       ((response) => {

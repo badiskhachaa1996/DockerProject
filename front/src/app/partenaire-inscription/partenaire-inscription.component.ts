@@ -59,6 +59,8 @@ export class PartenaireInscriptionComponent implements OnInit {
     format_juridique: new FormControl(this.formatJuridique[0]),
     indicatifPhone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     phone_partenaire: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    indicatif_whatsapp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
+    WhatsApp: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+')]),
     email_partenaire: new FormControl('', [Validators.required, Validators.email]),
     number_TVA: new FormControl(''),
     SIREN: new FormControl('', [Validators.pattern('[0-9]+')]),
@@ -177,6 +179,7 @@ export class PartenaireInscriptionComponent implements OnInit {
         this.RegisterForm.value.Pays,
         this.RegisterForm.value.whatsApp,
         this.RegisterForm.value.indicatifPhone,
+        this.RegisterForm.value.indicatifWhatsapp,
 
       )
 

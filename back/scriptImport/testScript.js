@@ -1,2 +1,4 @@
-let str ="123456789"
-console.log(str,str.substring(-3),str.substring(0,str.length-3))
+const fs = require("fs")
+fs.rename("../storage/prospect/TEST", "../storage/etudiant/TEST",(err)=>{
+    console.error(err)
+})

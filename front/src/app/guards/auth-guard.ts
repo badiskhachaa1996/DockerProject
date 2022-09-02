@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, catchError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { EventEmitterService } from '../services/event-emitter.service';
 import { MessageService } from 'primeng/api';
@@ -92,7 +92,6 @@ export class AuthGuardService implements CanActivate {
                 return false
             }
             else {
-
                 return this.authService.HowIsIt(currenttoken.id).pipe(
                     map(stateOfUser => {
                         if (stateOfUser.name == 'Profil complet' || state.url == "/completion-profil") {
@@ -108,8 +107,12 @@ export class AuthGuardService implements CanActivate {
                         else {
                             this.router.navigate(['/login']);
                         }
+                    }),
+                    catchError(err => {
+                        localStorage.removeItem('token')
+                        this.router.navigate(['/login']);
+                        throw err;
                     }))
-
             }
         }
         else {

@@ -635,6 +635,11 @@ app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
                 } else {
                     Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
                         res.send(newP)
+                        //Transfert file TODO
+                        fs.rename("../storage/prospect/" + newP._id, "../storage/etudiant/" + newEtu._id, (err) => {
+                            if (err)
+                                console.error(err)
+                        })
                     })
                 }
             })

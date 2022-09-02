@@ -1,9 +1,10 @@
 var XLSX = require('xlsx')
 const mongoose = require("mongoose");
+const { Ecole } = require('../models/ecole')
 const { User } = require("../models/user");
 const { Campus } = require('../models/campus')
 const { Etudiant } = require('../models/etudiant')
-var workbook = XLSX.readFile('data MTP.xlsx', { cellDates: true });
+var workbook = XLSX.readFile('BAC+2.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames; // Classes Name
 //sheet_name_list = [workbook.SheetNames[24]]
 let users = []
@@ -38,7 +39,7 @@ mongoose
                     sheet_name_list.forEach(sheet => {
                         var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
                         xlData.forEach(data => {
-                            let dn = data['Date de naissance']
+                            let dn = data['Date de naissance ']
                             let di = data["Date d'inscription"]
                             if (typeof (dn) == typeof ('str')) {
                                 dn.replace(' ', '')
@@ -56,15 +57,15 @@ mongoose
                                     di = null
                             }
 
-                            if (data['Compte ESTYA']) {
-                                let mail = data['Compte ESTYA']
+                            if (data['Mail école']) {
+                                let mail = data['Mail école']
                                 if (EmailList.includes(mail)) {
-                                    let adresse = giveAddress(data['Adresse étudiant'])
-                                    User.findOneAndUpdate({ email: data['Compte ESTYA'] }, {
+                                    let adresse = giveAddress(data['Adresses étudiants'])
+                                    User.findOneAndUpdate({ email: data['Mail école'] }, {
                                         firstname: toCamelCase(data['Prénom']),
                                         lastname: data['Nom'].toUpperCase(),
                                         phone: data['Telephone mobile'],
-                                        email: data['Compte ESTYA'],
+                                        email: data['Mail école'],
                                         email_perso: data['Mail personnel'],
                                         civilite: null,
                                         type: "Etudiant",
@@ -73,13 +74,13 @@ mongoose
                                         rue_adresse: adresse['Rue'],
                                         numero_adresse: adresse['Numero'],
                                         postal_adresse: adresse['Postal'],
-                                        nationnalite: data['Nationnalité'],
+                                        nationnalite: data['Nationalité '],
                                         verifedEmail: true,
                                         date_creation: di
                                     }, { new: true }, (err, newU) => {
                                         if (!err) {
                                             let code = ""
-                                            if (dn && data['Nationnalité']) {
+                                            if (dn && data['Nationalité ']) {
                                                 code = generateCode(newU, dn)
                                             } else {
                                                 newU.nationnalite = "Inconnu"
@@ -90,13 +91,13 @@ mongoose
                                                 if (dataU) {
                                                     Etudiant.findByIdAndUpdate(dataU._id, {
                                                         classe_id: null,
-                                                        statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
-                                                        nationalite: data['Nationnalité'],
+                                                        statut: data["Statut (Init/Alt) "],
+                                                        nationalite: data['Nationalité '],
                                                         date_naissance: dn,
                                                         custom_id: code,
-                                                        dernier_diplome: data['Formation'],
-                                                        isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
-                                                        diplome: data['Formation'],
+                                                        dernier_diplome: sheet,
+                                                        isAlternant: (data["Statut (Init/Alt) "].toUpperCase().includes("ALT")),
+                                                        diplome: sheet,
                                                         remarque: getRemarque(data, sheet)
                                                     }, { new: true }, (err, newE) => {
                                                         if (err) {
@@ -109,22 +110,21 @@ mongoose
                                                     let etu = new Etudiant({
                                                         user_id: newU._id,
                                                         classe_id: null,
-                                                        statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
-                                                        nationalite: data['Nationnalité'],
+                                                        statut: data["Statut (Init/Alt) "],
+                                                        nationalite: data['Nationalité '],
                                                         date_naissance: dn,
                                                         custom_id: code,
-                                                        dernier_diplome: data['Formation'],
-                                                        isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
-                                                        diplome: data['Formation'],
+                                                        dernier_diplome: sheet,
+                                                        isAlternant: (data["Statut (Init/Alt) "].toUpperCase().includes("ALT")),
+                                                        diplome: sheet,
                                                         remarque: getRemarque(data, sheet),
                                                         campus: campus._id
                                                     })
                                                     etu.save((errEtu, newEtu) => {
-                                                        if (errEtu) {
+                                                        if (errEtu)
                                                             console.error(errEtu)
-                                                        } else {
+                                                        else
                                                             console.log(newEtu.email, " mis à jour")
-                                                        }
                                                     })
                                                 }
                                             })
@@ -134,12 +134,12 @@ mongoose
                                     })
                                 } else {
                                     EmailList.push(mail)
-                                    let adresse = giveAddress(data['Adresse étudiant'])
+                                    let adresse = giveAddress(data['Adresses étudiants'])
                                     let u = new User({
                                         firstname: toCamelCase(data['Prénom']),
                                         lastname: data['Nom'].toUpperCase(),
                                         phone: data['Telephone mobile'],
-                                        email: data['Compte ESTYA'],
+                                        email: data['Mail école'],
                                         email_perso: data['Mail personnel'],
                                         civilite: null,
                                         type: "Etudiant",
@@ -148,14 +148,14 @@ mongoose
                                         rue_adresse: adresse['Rue'],
                                         numero_adresse: adresse['Numero'],
                                         postal_adresse: adresse['Postal'],
-                                        nationnalite: data['Nationnalité'],
+                                        nationnalite: data['Nationalité '],
                                         verifedEmail: true,
                                         date_creation: di
                                     })
                                     u.save((err, newUser) => {
                                         users.push(newUser)
                                         let code = ""
-                                        if (dn && data['Nationnalité']) {
+                                        if (dn && data['Nationalité ']) {
                                             code = generateCode(u, dn)
                                         } else {
                                             newUser.nationnalite = "Inconnu"
@@ -166,13 +166,13 @@ mongoose
                                             let etu = new Etudiant({
                                                 user_id: newUser._id,
                                                 classe_id: null,
-                                                statut: (data['statut'].toUpperCase().includes("ALTERNANCE")) ? "INITIAL" : "Alternant",
-                                                nationalite: data['Nationnalité'],
+                                                statut: data["Statut (Init/Alt) "],
+                                                nationalite: data['Nationalité '],
                                                 date_naissance: dn,
                                                 custom_id: code,
-                                                dernier_diplome: data['Formation'],
-                                                isAlternant: (data['statut'].toUpperCase().includes("ALTERNANCE")),
-                                                diplome: data['Formation'],
+                                                dernier_diplome: sheet,
+                                                isAlternant: (data["Statut (Init/Alt) "].toUpperCase().includes("ALT")),
+                                                diplome: sheet,
                                                 remarque: getRemarque(data, sheet),
                                                 campus: campus._id
                                             })
@@ -211,26 +211,6 @@ mongoose
         console.error("L'api n'a pas reussi à se connecter à MongoDB :(", err);
     });
 
-function giveStatut(dataStatut) {
-    try {
-        if (dataStatut != undefined) {
-            let statut = dataStatut.toLowerCase()
-            if (statut.indexOf('initial') != -1) {
-                return "Etudiant"
-            } else {
-                return "Alternant"
-            }
-        } else {
-            return "Etudiant"
-        }
-    } catch (error) {
-        console.error(error, dataStatut)
-        return "Etudiant"
-    }
-
-
-}
-
 function giveAddress(adresse) {
     //22 rue de Paris 91120 Massy Palaiseau
     if (adresse && !adresse.toUpperCase().includes('NON')) {
@@ -267,8 +247,8 @@ function getRemarque(data, sheet) {
         str = str + "Ville de naissance: " + data['Ville de Naissance'] + "\n"
     if (data['Pays de Naissance'])
         str = str + "Pays de naissance: " + data['Pays de Naissance'] + "\n"
-    if (data['Adresse étudiant'])
-        str = str + "Adresse: " + data['Adresse étudiant'] + "\n"
+    if (data['Mail personnel'])
+        str = str + "Adresse: " + data['Mail personnel'] + "\n"
     return str
 }
 
