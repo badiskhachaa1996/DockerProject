@@ -457,7 +457,6 @@ export class FormulaireAdmissionComponent implements OnInit {
             console.log(serviceAdmission)
 
             this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
-              console.log(notif)
               this.NotifService.newNotif(notif)
             }, (error) => {
               console.error(error)

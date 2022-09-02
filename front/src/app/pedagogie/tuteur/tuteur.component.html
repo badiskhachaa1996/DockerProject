@@ -3,13 +3,15 @@
 <div class="grid" *ngIf="showFormAddTuteur">
     <div class="col-12">
         <div class="card">
-        <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormAddTuteur = false;" aria-hidden="true"> </i>
-        <form class="p-fluid p-formgrid grid" [formGroup]="addTuteurForm" (ngSubmit)="onAddTuteur()">
-    <!--  -->
-            
+            <i class="pi pi-times-circle"
+                style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+                (click)="showFormAddTuteur = false;" aria-hidden="true"> </i>
+            <form class="p-fluid p-formgrid grid" [formGroup]="addTuteurForm" (ngSubmit)="onAddTuteur()">
+                <!--  -->
+
                 <h4 class="col-12" style="text-align: center;">Ajoutez un tuteur</h4>
-                <p class="col-12" style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                    style="color: red;"> * </span> sont obligatoires</p>
+                <p class="col-12" style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix
+                    <span style="color: red;"> * </span> sont obligatoires</p>
 
                 <div class="field col-12 md:col-2">
                     <label For="civilite">Civilité<span style="color: red;"> * </span></label>
@@ -18,8 +20,7 @@
                 </div>
                 <div class="field col-12 md:col-5">
                     <label For="prenom">Prénom <span style="color: red;"> * </span></label>
-                    <input pInputText id="firstname" type="text" placeholder="Entrez votre prénom"
-                        formControlName="firstname" />
+                    <input pInputText id="firstname" type="text" placeholder="John" formControlName="firstname" />
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
                         <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le
                             prénom est obligatoire.</span>
@@ -30,8 +31,7 @@
 
                 <div class="field col-12 md:col-5">
                     <label For="nom">Nom <span style="color: red;"> * </span></label>
-                    <input pInputText id="lastname" type="text" placeholder="Entrez votre nom"
-                        formControlName="lastname" />
+                    <input pInputText id="lastname" type="text" placeholder="Smith" formControlName="lastname" />
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                         <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom
                             est obligatoire</span>
@@ -39,14 +39,14 @@
                             lettres sont acceptés</span>
                     </div>
                 </div>
-               
+
 
                 <div class="field col-12 md:col-6">
                     <label For="Indicatif">Indicatif <span style="color: red;"> * </span></label>
-                    <input pInputText id="indicatif" type="text" placeholder="Entrez l'indicatif téléphonique"
-                        formControlName="indicatif" />
+                    <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
                     <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
-                        <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* La fonction est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* La fonction est
+                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
@@ -54,10 +54,11 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Téléphone">Téléphone <span style="color: red;"> * </span></label>
-                    <input pInputText id="phone" type="text" placeholder="Entrez l'ancienneté du tuteur" name="phone"
+                    <input pInputText id="phone" type="text" placeholder="0683838383" name="phone"
                         formControlName="phone" />
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                        <span style="color: red;" class="error" *ngIf="phone.errors?.required">* L'ancienneté est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="phone.errors?.required">* L'ancienneté est
+                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
@@ -65,18 +66,20 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Fonction">Fonction <span style="color: red;"> * </span></label>
-                    <input pInputText id="fonction" type="text" placeholder="Entrez la fonction du tuteur"
+                    <input pInputText id="fonction" type="text" placeholder="Chef Marketing"
                         formControlName="fonction" />
                     <div *ngIf="fonction.invalid && (fonction.touched || fonction.dirty)">
-                        <span style="color: red;" class="error" *ngIf="fonction.errors?.required">* La fonction est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="fonction.errors?.required">* La fonction est
+                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="fonction.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
                 </div>
 
-                <div class="field col-12 md:col-6" *ngIf = "!this.isCEO">
+                <div class="field col-12 md:col-6" *ngIf="!this.isCEO">
                     <label For="Entreprise">Entreprise<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownEntreprise" id="entreprise" optionLabel="libelle" [filter]="true" formControlName="entreprise"></p-dropdown>
+                    <p-dropdown [options]="dropdownEntreprise" id="entreprise" optionLabel="libelle" [filter]="true"
+                        formControlName="entreprise"></p-dropdown>
                     <!-- <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
                         <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.required">* Le
                             niveau de formation est obligatoire.</span>
@@ -87,10 +90,10 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Ancienneté">Ancienneté <span style="color: red;"> * </span></label>
-                    <input pInputText id="anciennete" type="text" placeholder="Entrez la fonction du tuteur"
-                        formControlName="anciennete" />
+                    <input pInputText id="anciennete" type="text" placeholder="5 ans" formControlName="anciennete" />
                     <div *ngIf="anciennete.invalid && (anciennete.touched || anciennete.dirty)">
-                        <span style="color: red;" class="error" *ngIf="anciennete.errors?.required">* La fonction est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="anciennete.errors?.required">* La fonction est
+                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="anciennete.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
@@ -98,10 +101,11 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="niveau_formation">Niveau de formation <span style="color: red;"> * </span></label>
-                    <input pInputText id="niveau_formation" type="text" placeholder="Entrez la fonction du tuteur"
+                    <input pInputText id="niveau_formation" type="text" placeholder="BAC +5"
                         formControlName="niveau_formation" />
                     <div *ngIf="niveau_formation.invalid && (niveau_formation.touched || niveau_formation.dirty)">
-                        <span style="color: red;" class="error" *ngIf="niveau_formation.errors?.required">* La fonction est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="niveau_formation.errors?.required">* La fonction
+                            est obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="niveau_formation.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
@@ -109,10 +113,11 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Email">Email <span style="color: red;"> * </span></label>
-                    <input pInputText id="email_perso" type="text" placeholder="Entrez l'indicatif téléphonique"
+                    <input pInputText id="email_perso" type="text" placeholder="email@email.com"
                         formControlName="email_perso" />
                     <div *ngIf="email_perso.invalid && (email_perso.touched || email_perso.dirty)">
-                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.required">* La fonction est obligatoire.</span>
+                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.required">* La fonction est
+                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="email_perso.errors?.pattern">* Seul les
                             lettres sont acceptés.</span>
                     </div>
@@ -120,7 +125,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Numéro de l'adresse">Numéro de la rue<span style="color: red;"> * </span></label>
-                    <input pInputText id="numero_adresse" type="text" placeholder="Entrez le niveau de formation du tuteur"
+                    <input pInputText id="numero_adresse" type="text" placeholder="55"
                         formControlName="numero_adresse" />
                     <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
                         <span style="color: red;" class="error" *ngIf="numero_adresse.errors?.required">* Le
@@ -132,7 +137,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="rue_adresse">Nom de la rue<span style="color: red;"> * </span></label>
-                    <input pInputText id="rue_adresse" type="text" placeholder="Entrez le niveau de formation du tuteur"
+                    <input pInputText id="rue_adresse" type="text" placeholder="Rue du Faubourg Saint-Honoré"
                         formControlName="rue_adresse" />
                     <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
                         <span style="color: red;" class="error" *ngIf="rue_adresse.errors?.required">* Le
@@ -144,7 +149,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="Code postale">Code postale<span style="color: red;"> * </span></label>
-                    <input pInputText id="postal_adresse" type="text" placeholder="Entrez le niveau de formation du tuteur"
+                    <input pInputText id="postal_adresse" type="text" placeholder="75008"
                         formControlName="postal_adresse" />
                     <div *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">
                         <span style="color: red;" class="error" *ngIf="postal_adresse.errors?.required">* Le
@@ -155,7 +160,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="Ville">Ville<span style="color: red;"> * </span></label>
-                    <input pInputText id="ville_adresse" type="text" placeholder="Entrez le niveau de formation du tuteur"
+                    <input pInputText id="ville_adresse" type="text" placeholder="Paris"
                         formControlName="ville_adresse" />
                     <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
                         <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.required">* Le
@@ -165,45 +170,48 @@
                     </div>
                 </div>
                 <div class="field col-12 md:col-6">
-                        <label For="Pays">Pays<span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
-                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Pays" filter="true">
-                        </p-dropdown>
+                    <label For="Pays">Pays<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Pays" filter="true">
+                    </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
-                        <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
-                        <p-dropdown formControlName="nationnalite" [options]="nationList" optionLabel="viewValue"
-                            emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
-                        </p-dropdown>
-                
-                </div> 
+                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="nationnalite" [options]="nationList" optionLabel="viewValue"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
+                    </p-dropdown>
+
+                </div>
 
                 <div class="field col-12 md:col-6">
-                    <label for="date_naissance" >Date de naissance <span style="color: red;"> * </span></label>
-                        <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy"
-                            [minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [readonlyInput]="true"
-                            [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                            [yearRange]="rangeYear"></p-calendar>
+                    <label for="date_naissance">Date de naissance <span style="color: red;"> * </span></label>
+                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
+                        [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
+                        [yearNavigator]="true" [yearRange]="rangeYear"></p-calendar>
                     <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
-                        <span class="error" *ngIf="date_naissance.errors?.required" style="color: red;">* La date de naissance est obligatoire.</span>
-                        <span class="error" *ngIf="date_naissance.errors?.pattern" style="color: red;">* Le format ne correspond pas à une date dd/MM/YYYY.</span>
+                        <span class="error" *ngIf="date_naissance.errors?.required" style="color: red;">* La date de
+                            naissance est obligatoire.</span>
+                        <span class="error" *ngIf="date_naissance.errors?.pattern" style="color: red;">* Le format ne
+                            correspond pas à une date dd/MM/YYYY.</span>
                     </div>
                 </div>
-                
-                <button pButton label="Ajouter le tuteur" type="submit"></button>
+
+                <button pButton label="Ajouter le tuteur" type="submit" [disabled]="addTuteurForm.invalid"></button>
             </form>
-            </div>
-        </div>           
-</div> 
+        </div>
+    </div>
+</div>
 
 
 <!-- FORMULAIRE DE MODIFICATION -->
 <div class="grid" *ngIf="showFormModifTuteur">
     <div class="col-12 ">
         <div class="card p-fluid">
-            <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" (click)="showFormModifTuteur = false;" aria-hidden="true"> </i>
-            <form [formGroup]="updateTuteurForm" (ngSubmit)="onUpdateTuteur()">
-            <h5>Modifier un tuteur</h5>
+            <i class="pi pi-times-circle"
+                style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+                (click)="showFormModifTuteur = false;" aria-hidden="true"> </i>
+            <form class="grid" [formGroup]="updateTuteurForm" (ngSubmit)="onUpdateTuteur()">
+                <h5 class="col-12">Modifier un tuteur</h5>
                 <div class="field col-12 md:col-6">
                     <label For="Fonction">Fonction <span style="color: red;"> * </span></label>
                     <input pInputText id="fonction" type="text" placeholder="Entrez la fonction du tuteur"
@@ -236,54 +244,58 @@
                             lettres sont acceptés.</span>
                     </div> -->
                 </div>
-                <button pButton label="Modifier" type="submit"></button>
-                       
+                <button pButton label="Modifier" type="submit" [disabled]="updateTuteurForm.invalid"></button>
+
             </form>
         </div>
     </div>
-</div> 
+</div>
 
 <!-- LISTE DES TUTEURS -->
 <div class="col-12" *ngIf="!isCEO">
     <div class="card">
         <div style="float: right;">
-            <button pButton label="Ajouter un tuteur" (click)="showFormAddTuteur = true; showFormModifTuteur = false" ></button>
+            <button pButton label="Ajouter un tuteur"
+                (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
         </div>
-        <h5>Liste des tuteur</h5>
-        <p-table #dt1 rowExpandMode="single" [value]="tuteurs"
-                 dataKey="_id" [rows]="10" 
-                 [rowHover]="true"
-                 [totalRecords]="tuteurs.length" 
-                 styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-                 responsiveLayout="scroll">
+        <h5>Liste des tuteurs</h5>
+        <p-table #dt1 rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
+            [totalRecords]="tuteurs.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
+            responsiveLayout="scroll">
 
-                 <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
-                        </span>
-                    </div>
-                </ng-template>
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th> Nom <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center">Action</th>              
+                    <th> Nom <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center">Action</th>
             </ng-template>
             <ng-template pTemplate="body" let-tuteur>
                 <tr>
                     <td style="min-width: 12rem;">
                         {{ tuteur.user_id.lastname }}
-                        
+
                     </td>
                     <td style="min-width: 12rem;">
-                       {{ tuteur.user_id.firstname }}
+                        {{ tuteur.user_id.firstname }}
                     </td>
-                    <td >
+                    <td>
                         {{ tuteur.user_id.phone }}
                     </td>
                     <td>
@@ -307,51 +319,55 @@
 <div class="col-12" *ngIf="isCEO">
     <div class="card">
         <div style="float: right;">
-            <button pButton label="Ajouter un tuteur" (click)="showFormAddTuteur = true; showFormModifTuteur = false" ></button>
+            <button pButton label="Ajouter un tuteur"
+                (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
         </div>
         <h5>Liste des tuteur de l'entreprise </h5>
         <!-- {{ tuteur.user_id.entreprise }} -->
-        <p-table #dt1 rowExpandMode="single" [value]="tuteurList"
-                 dataKey="_id" [rows]="10" 
-                 [rowHover]="true"
-                 styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-                 responsiveLayout="scroll">
+        <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="10" [rowHover]="true"
+            styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
 
-                 <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <div class="field">                                
-                            <span style="margin-left: 2px;">
-                                <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                            (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
-                                            emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
-                                </p-dropdown>
-                            </span>
-                        </div>
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="field">
+                        <span style="margin-left: 2px;">
+                            <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
+                                (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
+                                emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
+                            </p-dropdown>
                         </span>
                     </div>
-                </ng-template>
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th> Nom <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon></th>
-                    
-                    <th style="text-align:center">Action</th>              
+                    <th> Nom <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
+                    </th>
+                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon>
+                    </th>
+
+                    <th style="text-align:center">Action</th>
             </ng-template>
-            <ng-template pTemplate="body" let-tuteur >
+            <ng-template pTemplate="body" let-tuteur>
                 <tr>
                     <td style="min-width: 12rem;" *ngIf="tuteur?.user_id">
-                        {{ tuteur.user_id.lastname }}  
+                        {{ tuteur.user_id.lastname }}
                     </td>
                     <td style="min-width: 12rem;">
-                       {{ tuteur.user_id.firstname }}
+                        {{ tuteur.user_id.firstname }}
                     </td>
-                    <td >
+                    <td>
                         {{ tuteur.user_id.phone }}
                     </td>
                     <td>
@@ -370,8 +386,3 @@
         </p-table>
     </div>
 </div>
-
-
-
-
-
