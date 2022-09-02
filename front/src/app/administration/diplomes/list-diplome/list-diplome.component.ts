@@ -39,12 +39,10 @@ export class ListDiplomeComponent implements OnInit {
   ]
 
   domaineEtude = [
-    { value: "Commerce" },
-    { value: "RH" },
     { value: "Informatique" },
-    { value: "Gestion" },
-    { value: "Construction" },
-    { value: "Santé, Sanitaire et Social" }
+    { value: "Commerce" },
+    { value: "Construction"},
+    { value: "Tertiaire" },
   ]
 
   typeDiplome = [
@@ -97,7 +95,7 @@ export class ListDiplomeComponent implements OnInit {
   token;
   uploadDiplome: Diplome = null
 
-  isCommercial : boolean = false;
+  isCommercial: boolean = false;
 
   constructor(private productService: ProductService, private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
@@ -119,11 +117,12 @@ export class ListDiplomeComponent implements OnInit {
         (data) => { this.diplomes = data; },
         (error) => { console.error(error) }
       );
+    this.campusList = []
     this.campusService.getAll().subscribe(
       (data) => {
-        this.campusList = data
         data.forEach(d => {
           this.dicCampus[d._id] = d
+          this.campusList.push({ value: d._id, label: d.libelle })
         });
       }
     )
@@ -175,7 +174,7 @@ export class ListDiplomeComponent implements OnInit {
   onGetbyId(diplome) {
     //Recuperation du diplome à modifier
     this.diplomeToUpdate = diplome;
-    this.formUpdateDiplome.patchValue({ campus_id: this.dicCampus[diplome.campus_id] })
+    this.formUpdateDiplome.patchValue({ campus_id: diplome.campus_id })
     if (diplome.formateur_id && diplome.formateur_id != null) {
       this.dropdownFormateur.forEach(f => {
         if (f.value == diplome.formateur_id) {
@@ -187,8 +186,8 @@ export class ListDiplomeComponent implements OnInit {
     }
 
     this.formUpdateDiplome.patchValue({
-      titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long, description: this.diplomeToUpdate.description,
-      type_diplome: { value: this.diplomeToUpdate.type_diplome }, type_etude: { value: this.diplomeToUpdate.type_etude }, domaine: { value: this.diplomeToUpdate.domaine },
+      titre: this.diplomeToUpdate.titre, titre_long: this.diplomeToUpdate.titre_long,
+      type_diplome: { value: this.diplomeToUpdate.type_diplome }, domaine: { value: this.diplomeToUpdate.domaine },
       niveau: { value: this.diplomeToUpdate.niveau }, certificateur: this.diplomeToUpdate.certificateur, code_RNCP: this.diplomeToUpdate.code_RNCP,
       nb_heure: this.diplomeToUpdate.nb_heure, date_debut: this.diplomeToUpdate.date_debut, date_fin: this.diplomeToUpdate.date_fin,
       rythme: { value: this.diplomeToUpdate.rythme }, frais: this.diplomeToUpdate.frais,
@@ -198,6 +197,10 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_examen: this.diplomeToUpdate.date_fin_examen,
       date_debut_stage: this.diplomeToUpdate.date_debut_stage,
       date_fin_stage: this.diplomeToUpdate.date_fin_stage,
+      date_debut_semestre_1: this.diplomeToUpdate.date_debut_semestre_1,
+      date_fin_semestre_1: this.diplomeToUpdate.date_fin_semestre_1,
+      date_debut_semestre_2: this.diplomeToUpdate.date_debut_semestre_2,
+      date_fin_semestre_2: this.diplomeToUpdate.date_fin_semestre_2,
       code_diplome: this.diplomeToUpdate.code_diplome
     });
 
@@ -209,9 +212,7 @@ export class ListDiplomeComponent implements OnInit {
       titre: ['', Validators.required],
       titre_long: ['', Validators.required],
       campus_id: ['', Validators.required],
-      description: ['', Validators.required],
       type_diplome: ['', Validators.required],
-      type_etude: ['', Validators.required],
       domaine: ['', Validators.required],
       niveau: ['', Validators.required],
       certificateur: ['', Validators.required],
@@ -227,6 +228,10 @@ export class ListDiplomeComponent implements OnInit {
       date_fin_examen: [''],
       date_debut_stage: [''],
       date_fin_stage: [''],
+      date_debut_semestre_1: [''],
+      date_fin_semestre_1: [''],
+      date_debut_semestre_2: [''],
+      date_fin_semestre_2: [''],
       code_diplome: ['', Validators.required],
       formateur_id: ['']
     });
@@ -237,10 +242,8 @@ export class ListDiplomeComponent implements OnInit {
     //Mis à jour du diplome et envoi dans la base de données
     this.diplomeToUpdate.titre = this.formUpdateDiplome.get('titre')?.value;
     this.diplomeToUpdate.titre_long = this.formUpdateDiplome.get('titre_long')?.value;
-    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value._id;
-    this.diplomeToUpdate.description = this.formUpdateDiplome.get('description')?.value;
+    this.diplomeToUpdate.campus_id = this.formUpdateDiplome.get('campus_id')?.value;
     this.diplomeToUpdate.type_diplome = this.formUpdateDiplome.get('type_diplome')?.value.value;
-    this.diplomeToUpdate.type_etude = this.formUpdateDiplome.get('type_etude')?.value.value;
     this.diplomeToUpdate.domaine = this.formUpdateDiplome.get('domaine')?.value.value;
     this.diplomeToUpdate.niveau = this.formUpdateDiplome.get('niveau')?.value.value;
     this.diplomeToUpdate.certificateur = this.formUpdateDiplome.get('certificateur')?.value;
@@ -251,13 +254,21 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.rythme = this.formUpdateDiplome.get('rythme')?.value.value;
     this.diplomeToUpdate.frais = this.formUpdateDiplome.get('frais')?.value;
     this.diplomeToUpdate.frais_en_ligne = this.formUpdateDiplome.get('frais_en_ligne')?.value;
-    this.diplomeToUpdate.isCertified = this.formUpdateDiplome.get('isCertified')?.value.value;
+
+    this.diplomeToUpdate.isCertified = this.formUpdateDiplome.get('isCertified')?.value;
     this.diplomeToUpdate.date_debut_examen = this.formUpdateDiplome.get('date_debut_examen')?.value;
     this.diplomeToUpdate.date_fin_examen = this.formUpdateDiplome.get('date_fin_examen')?.value;
     this.diplomeToUpdate.date_debut_stage = this.formUpdateDiplome.get('date_debut_stage')?.value;
     this.diplomeToUpdate.date_fin_stage = this.formUpdateDiplome.get('date_fin_stage')?.value;
+    this.diplomeToUpdate.date_debut_semestre_1 = this.formUpdateDiplome.get('date_debut_semestre_1')?.value;
+    this.diplomeToUpdate.date_fin_semestre_1 = this.formUpdateDiplome.get('date_fin_semestre_1')?.value;
+    this.diplomeToUpdate.date_debut_semestre_2 = this.formUpdateDiplome.get('date_debut_semestre_2')?.value;
+    this.diplomeToUpdate.date_fin_semestre_2 = this.formUpdateDiplome.get('date_fin_semestre_2')?.value;
     this.diplomeToUpdate.code_diplome = this.formUpdateDiplome.get('code_diplome')?.value;
-    this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
+    if(this.formUpdateDiplome.get('formateur_id')?.value)
+      this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
+    else
+    this.diplomeToUpdate.formateur_id = null
 
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
       ((response) => {
@@ -337,7 +348,24 @@ export class ListDiplomeComponent implements OnInit {
     )
   }
 
+  onRedirect() {
+    this.router.navigate(['ajout-diplome']);
+  }
 
+  get titre() { return this.formUpdateDiplome.get('titre'); }
+  get titre_long() { return this.formUpdateDiplome.get('titre_long'); }
+  get campus_id() { return this.formUpdateDiplome.get('campus_id'); }
+  get description() { return this.formUpdateDiplome.get('description'); }
+  get type_diplome() { return this.formUpdateDiplome.get('type_diplome'); }
+  get type_etude() { return this.formUpdateDiplome.get('type_etude'); }
+  get domaine() { return this.formUpdateDiplome.get('domaine'); }
+  get niveau() { return this.formUpdateDiplome.get('niveau'); }
+  get certificateur() { return this.formUpdateDiplome.get('certificateur'); }
+  get code_RNCP() { return this.formUpdateDiplome.get('code_RNCP'); }
+  get nb_heure() { return this.formUpdateDiplome.get('nb_heure'); }
+  get rythme() { return this.formUpdateDiplome.get('rythme'); }
+  get isCertified() { return this.formUpdateDiplome.get('isCertified'); }
+  get code_diplome() { return this.formUpdateDiplome.get('code_diplome'); }
 
   // expandAll() {
   //   if(!this.isExpanded){

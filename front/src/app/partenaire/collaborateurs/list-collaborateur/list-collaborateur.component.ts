@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import * as FileSaver from 'file-saver';
@@ -54,11 +54,15 @@ export class ListCollaborateurComponent implements OnInit {
     { label: 'Externe', value: 'Externe' }
   ];
 
-  constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService, private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder) { }
+  canDelete = false
+
+  constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
+    private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.canDelete = (this.token && (this.token['role'] == 'Admin' || this.token['role'] == "Responsable"))
     //Recuperation des données
     this.onGetData();
 
@@ -233,7 +237,7 @@ export class ListCollaborateurComponent implements OnInit {
   }
 
 
-
+  listPartenaire = {}
 
   //Methode de recuperation des données user et commercial
   onGetData() {
@@ -260,6 +264,11 @@ export class ListCollaborateurComponent implements OnInit {
         ((error) => { console.error(error); })
       );
     }
+    this.partenaireService.getAll().subscribe(data => {
+      data.forEach(p => {
+        this.listPartenaire[p._id] = p
+      })
+    })
 
   }
 
@@ -268,12 +277,23 @@ export class ListCollaborateurComponent implements OnInit {
     //Clean the data
     this.commercialPartenaires.forEach(p => {
       let user: User = this.users[p.user_id]
+      let partenaire: Partenaire = this.listPartenaire[p.partenaire_id]
       if (user && user.lastname && user.lastname && p.code_commercial_partenaire) {
         let t = {}
-        t['NOM'] = user.lastname.toUpperCase()
-        t['Prenom'] = user.firstname
-        t['Code Commercial'] = p.code_commercial_partenaire
+        t['NOM'] = user?.lastname.toUpperCase()
+        t['Prenom'] = user?.firstname
+        t['Code Commercial'] = p?.code_commercial_partenaire
         t['Est Admin'] = (p.isAdmin) ? "Oui" : "Non";
+        t['ID'] = p._id
+        t['Email'] = user?.email_perso
+        t['phone'] = user?.phone
+        t['Nationalite'] = user?.nationnalite
+        t['password'] = user.password
+
+        t['p_nom'] = partenaire.nom
+        t['p_email'] = partenaire.email
+        t['services'] = partenaire.Services
+        t['Pays'] = partenaire.Pays
         dataExcel.push(t)
       }
     })
@@ -285,6 +305,26 @@ export class ListCollaborateurComponent implements OnInit {
     });
     FileSaver.saveAs(data, "partenaires" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+
+  seePreRecruted(rowData: CommercialPartenaire) {
+    this.router.navigate(["/gestion-preinscriptions/" + rowData.code_commercial_partenaire])
+  }
+
+  seeRecruted(rowData: CommercialPartenaire) {
+    this.router.navigate(["/etudiants/" + rowData.code_commercial_partenaire])
+  }
+
+  delete(rowData: CommercialPartenaire) {
+    if (confirm("La suppression de ce commercial, supprimera aussi son compte IMS et enlevera les codes commerciaux de ces prospects\nL'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppression\nEtes-vous sûr de vouloir faire cela ?"))
+      this.commercialPartenaireService.delete(rowData._id).subscribe(p => {
+        this.commercialPartenaires.forEach((val, index) => {
+          if (val._id == rowData._id) {
+            this.commercialPartenaires.splice(index, 1)
+          }
+        })
+      })
   }
 
 

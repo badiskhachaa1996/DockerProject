@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const { User } = require("./../models/user");
 const { CommercialPartenaire } = require("./../models/CommercialPartenaire");
 const nodemailer = require('nodemailer');
+const { Prospect } = require("../models/prospect");
 let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
     let argProd = process.argv[2]
@@ -250,6 +251,7 @@ app.get("/getAllCodeCommercial/:code_partenaire", (req, res, next) => {
         .catch((error) => { res.status(500).send(error); });
 });
 
+
 //Modification d'un partenaire via son id
 app.put("/updatePartenaire", (req, res, next) => {
 
@@ -281,5 +283,32 @@ app.put("/updatePartenaire", (req, res, next) => {
         .catch((error) => { console.log(error)
              res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' }); })
 });
+app.get('/delete/:id', (req, res) => {
+    Partenaire.findById(req.params.id).then(p => {
+        User.findByIdAndRemove(p.user_id, {}, (err, u) => {
+            if (err)
+                console.error(err)
+        })
+        CommercialPartenaire.find({ code_commercial_partenaire: { $regex: "^" + p.code_partenaire } }).then(commercials => {
+            commercials.forEach(c => {
+                User.findByIdAndRemove(c.user_id)
+            })
+            CommercialPartenaire.deleteMany({ code_commercial_partenaire: { $regex: "^" + p.code_partenaire } }, {}, (err, u) => {
+                if (err)
+                    console.error(err)
+            })
+        })
+        Prospect.updateMany({ code_commercial: { $regex: "^" + p.code_partenaire } }, { code_commercial: "" }, {}, (err, u) => {
+            if (err)
+                console.error(err)
+        })
+        Partenaire.findByIdAndRemove(req.params.id, {}, (err, pdeleted) => {
+            if (err)
+                console.error(err)
+            else
+                res.send(pdeleted)
+        })
+    })
+})
 
 module.exports = app;

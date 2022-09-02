@@ -23,6 +23,7 @@ export class AppComponent {
     constructor(private primengConfig: PrimeNGConfig, public renderer: Renderer2, private ss: EventEmitterService, private router: Router, private AuthService: AuthService) { }
 
     ngOnInit() {
+        this.primengConfig.setTranslation(environment.filterFR)
         this.primengConfig.ripple = true;
         document.documentElement.style.fontSize = '14px';
         

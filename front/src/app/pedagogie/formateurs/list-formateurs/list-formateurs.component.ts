@@ -30,7 +30,7 @@ export class ListFormateursComponent implements OnInit {
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
   ];
-
+  
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];
@@ -96,8 +96,11 @@ export class ListFormateursComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id")
+    else if (type == "matiere_id"){
       this.volumeHList[i][type] = event.value;
+      this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
+    }
+
   }
 
   deleteMatiereAdd(i) {
@@ -479,5 +482,10 @@ export class ListFormateursComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+
+  onRedirect()
+  {
+    this.router.navigate(['ajout-formateur']);
   }
 }

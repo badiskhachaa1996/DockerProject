@@ -8,7 +8,7 @@ app.post("/addService", (req, res) => {
     let data = req.body;
     let service = new Service({
         label: data.label,
-        active : data.active,
+        active: data.active,
     })
     service.save().then((servFromDb) => {
         res.status(200).send(servFromDb);
@@ -34,6 +34,18 @@ app.get("/getAll", (req, res) => {
 app.get("/getById/:id", (req, res) => {
     //Récupérer un service par id
     Service.findOne({ _id: req.params.id }).then((dataService) => {
+        res.status(200).send({ dataService });
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+});
+app.get("/getByLabel/:label", (req, res) => {
+    //Récupérer un service par id
+    console.log( req.params.label )
+    Service.findOne({
+        label: { $regex: req.params.label }
+    }).then((dataService) => {
+        console.log(dataService)
         res.status(200).send({ dataService });
     }).catch((error) => {
         res.status(404).send("erreur :" + error);

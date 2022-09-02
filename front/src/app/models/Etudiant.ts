@@ -3,7 +3,7 @@ export class Etudiant {
         public _id?: string,
         public user_id?: string,
         public classe_id?: string,
-        public statut?: string,
+        public statut?: string, // Statut pro
         public nationalite?: string,
         public date_naissance?: Date,
         public code_partenaire?: string,
@@ -22,21 +22,19 @@ export class Etudiant {
         public adresse_rl?: string,
         public dernier_diplome?: string,
         public isAlternant?: boolean,
-        // public entreprise_id?: string,
-        public nom_tuteur?: string,
-        public prenom_tuteur?: string,
-        public adresse_tuteur?: string,
-        public email_tuteur?: string,
-        public phone_tuteur?: string,
-        public indicatif_tuteur?: string,
+        // public indicatif_tuteur?: string,
         public isHandicaped?: boolean,
         public suivi_handicaped?: string,
-        public entreprise?: string,
-        public diplome?: string,
+        public diplome?: string, // Pour les étudiants en reinscription NE PAS UTILISER DE ID
         public parcours?: any,
         public remarque?: string,
         public isOnStage?: boolean,
         public fileRight?: [],
-        public payment_reinscrit?: string
+        public payment_reinscrit?: [],
+        public enic_naric?: boolean,
+        public campus?: string, // Campus ID
+        public statut_dossier?: string,
+        public filiere?: string
+
     ) { }
 }

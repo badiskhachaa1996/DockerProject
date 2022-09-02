@@ -49,7 +49,6 @@ export class FormulaireAdmissionComponent implements OnInit {
   rangeYear = this.minYear + ":" + this.maxYear
   minDateCalendar = new Date("01/01/" + this.minYear)
   maxDateCalendar = new Date("01/01/" + this.maxYear)
-  token = localStorage.getItem('token')
   service_admission_id;
   formSteps: any[] = [
     "Infos",
@@ -78,13 +77,13 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   campusDropdown =
     [
-      { value: "Campus Paris - France" },
-      { value: "Campus Montpellier - France" },
-      { value: "Campus Athène - Grèce" },
-      { value: "Campus Valence - Espagne" },
-      { value: "Campus Florence - Italie" },
-      { value: "Campus UAE - Dubai" },
-      { value: "Campus Tunis - Tunisie" },
+      { value: "Paris - France" },
+      { value: "Montpellier - France" },
+      { value: "Athène - Grèce" },
+      { value: "Valence - Espagne" },
+      { value: "Florence - Italie" },
+      { value: "UAE - Dubai" },
+      { value: "Tunis - Tunisie" },
 
     ];
 
@@ -154,33 +153,33 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     if (this.form_origin == "eduhorizons") {
       this.campusDropdown = [
-        { value: "Campus France - Paris" },
-        { value: "Campus France - Montpellier" },
-        { value: "Campus Valence - Espagne" },
-        { value: "Campus Florence - Italie" },
-        { value: "Campus UAE - Dubai" },
-        { value: "Campus Tunisie - Tunis" },
-        { value: "Campus Montréal - Canada" },
-        { value: "Campus Malte " },
-        { value: "Campus Congo" },
-        { value: "Campus Maroc" },
-        { value: "Campus USA" },
-        { value: "Campus En ligne" }
+        { value: "France - Paris" },
+        { value: "France - Montpellier" },
+        { value: "Valence - Espagne" },
+        { value: "Florence - Italie" },
+        { value: "UAE - Dubai" },
+        { value: "Tunisie - Tunis" },
+        { value: "Montréal - Canada" },
+        { value: "Malte " },
+        { value: "Congo" },
+        { value: "Maroc" },
+        { value: "USA" },
+        { value: "En ligne" }
       ]
     } else if (this.form_origin == "estya") {
       this.campusDropdown = [
-        { value: "Campus Paris - France" },
-        { value: "Campus Montpellier - France" },
-        { value: "Campus Brazzaville - Congo" },
-        { value: "Campus Rabat - Maroc " },
-        { value: "Campus Malte" },
-        { value: "Campus En ligne" }
+        { value: "Paris - France" },
+        { value: "Montpellier - France" },
+        { value: "Brazzaville - Congo" },
+        { value: "Rabat - Maroc " },
+        { value: "Malte" },
+        { value: "En ligne" }
       ]
     } else if (this.form_origin == "adg") {
       this.campusDropdown = [
-        { value: "Campus Paris - France" },
-        { value: "Campus Montpellier - France" },
-        { value: "Campus En ligne" }
+        { value: "Paris - France" },
+        { value: "Montpellier - France" },
+        { value: "En ligne" }
       ]
 
       this.programeFrDropdown = [
@@ -212,9 +211,9 @@ export class FormulaireAdmissionComponent implements OnInit {
       ]
     } else if (this.form_origin == "espic") {
       this.campusDropdown = [
-        { value: "Campus France - Paris" },
-        { value: "Campus Athène - Grèce" },
-        { value: "Campus En ligne" }
+        { value: "France - Paris" },
+        { value: "Athène - Grèce" },
+        { value: "En ligne" }
       ]
 
     }
@@ -267,7 +266,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
-      //****** Notre partenaire d'accompagnement Eduhorizons *******
+      //****** Notre partenaire d'accompagnement EduHorizons *******
       servicesEh_1: new FormControl(false, [Validators.required]),
       servicesEh_2: new FormControl(false, [Validators.required]),
       servicesEh_3: new FormControl(false, [Validators.required]),
@@ -343,7 +342,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get nir() { return this.RegisterForm.get('nir'); }
   get mobilite_reduite() { return this.RegisterForm.get('mobilite_reduite'); }
   get sportif_hn() { return this.RegisterForm.get('sportif_hn'); }
-  //****** Notre partenaire d'accompagnement Eduhorizons *******
+  //****** Notre partenaire d'accompagnement EduHorizons *******
   get servicesEh() { return this.RegisterForm.get('servicesEh'); }
   get isGarant() { return this.RegisterForm.get('isGarant'); }
   get nomGarant() { return this.RegisterForm.get('nomGarant'); }
@@ -427,7 +426,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       programme = null
       formation = null
     }
-    //****** Notre partenaire d'accompagnement Eduhorizons *******
+    //****** Notre partenaire d'accompagnement EduHorizons *******
     let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value];
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;
@@ -441,24 +440,32 @@ export class FormulaireAdmissionComponent implements OnInit {
     let nomAgence = this.RegisterForm.get('nomAgence').value;
     let donneePerso = this.RegisterForm.get('donneePerso').value;
 
+    let source = (code_commercial != "" || hors_Admission) ? "Partenaire" : "Interne";
+
     //Création du nouvel user
-    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite, hors_Admission);
+    let user = new User(null, firstname, lastname, this.RegisterForm.get('indicatif').value, phone, '', email, firstname + '@2022', 'user', null, null, civilite, null, null, 'Prospect', null, pays_adresse.value, null, null, null, null, nationalite);
 
     //Creation du nouveau prospect
 
-    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial, "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, null, nir, mobilite_reduite, sportif_hn,);
+    let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
+      "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
+      hors_Admission, null, null, null, null, null, null, null, source,"Decalée");
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {
-          this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, "62555405607a7a55050430bc")).pipe(map(notif => {
-            console.log(notif)
-            this.NotifService.newNotif(notif)
-          }, (error) => {
-            console.error(error)
-          }));
+          this.servService.getAServiceByLabel("Admission").subscribe(serviceAdmission => {
+            console.log(serviceAdmission)
 
-          this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
-          this.getFilesAccess(response.dataUser._id)
+            this.NotifService.create(new Notification(null, null, null, "nouvelle demande admission", null, null, serviceAdmission._id)).pipe(map(notif => {
+              console.log(notif)
+              this.NotifService.newNotif(notif)
+            }, (error) => {
+              console.error(error)
+            }));
+
+            this.messageService.add({ severity: 'success', summary: 'La demande d\'admission a été envoyé', detail: "Vérifiez vos mails pour les informations de connexion" });
+            this.getFilesAccess(response.dataUser._id)
+          })
         } else {
           this.messageService.add({ severity: 'error', summary: 'Impossible de finaliser la pré-inscription', detail: "Votre email est peut-être déjà utilisé" });
           console.error(response)

@@ -24,42 +24,49 @@ import { Appreciation } from 'src/app/models/Appreciation';
 import { AppreciationService } from 'src/app/services/appreciation.service';
 import { RachatBulletinService } from 'src/app/services/rachat-bulletin.service';
 import { RachatBulletin } from 'src/app/models/RachatBulletin';
+import { SeanceService } from 'src/app/services/seance.service';
+import { FormateurService } from 'src/app/services/formateur.service';
 
 @Component({
   selector: 'app-notes',
   templateUrl: './notes.component.html',
+  providers: [MessageService],
   styleUrls: ['./notes.component.scss']
 })
 export class NotesComponent implements OnInit {
 
   notes: Note[] = [];
 
-  formAddNote: FormGroup;
-  showFormAddNote: boolean = false;
   showBulletin: boolean = false
   formUpdateNote: FormGroup;
   showFormUpdateNote: boolean = false;
 
   users: User[] = [];
   userList: any[] = [];
+  formateurs = {}
 
   etudiants: Etudiant[] = [];
   dropdownEtudiant: any[] = [];
 
   examens: Examen[] = [];
-  dropdownExamen: any[] = [{ libelle: '', value: '' }];
+  dropdownExamen: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  filterCampus: any[] = [
+    { label: "Tous les campus", value: null }
+  ]
   classes: Classe[] = [];
   showPVAnnuel = false
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
+  isAnneeScolaire: boolean = true;
+
   //Données de la dropdown semestre
   dropdownSemestre: any = [
     { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
-    { libelle: 'Semestre 1', value: 'Semestre 1', actif: false },
-    { libelle: 'Semestre 2', value: 'Semestre 2', actif: false },
-    { libelle: 'Semestre 3', value: 'Semestre 3', actif: false }
+    { libelle: '1er', value: 'Semestre 1', actif: false },
+    { libelle: '2ème', value: 'Semestre 2', actif: false },
+    { libelle: 'Annuel', value: 'Annuel', actif: false }
   ];
 
   //Données liées à la saisie de notes
@@ -80,15 +87,15 @@ export class NotesComponent implements OnInit {
 
   showTableAddnotes: boolean = false;
 
-  dropdownExamByClasse: any[] = [{ libelle: '', value: '' }];
+  dropdownExamByClasse: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
   appreciationModules = {}
+  dicFormateurMatiere = {}
 
   initAppreciation(mode) {
+
     if (mode == "set") {
-      this.notesForGenerateBulletin.forEach(n => {
-        this.appreciationModules[n.matiere_id] = ""
-      })
+
     } else {
       this.notesForGenerateBulletin.forEach(n => {
         if (this.appreciationToUpdate.appreciation_matiere && this.appreciationToUpdate.appreciation_matiere[n.matiere_id]) {
@@ -109,9 +116,10 @@ export class NotesComponent implements OnInit {
   initRachatEtudiant() {
     this.rachatEtudiant = []
     this.matiereRachat = []
+
     this.RBService.getByUserID(this.etudiantToGenerateBulletin.user_id, this.semestreChoose).subscribe(rbs => {
       rbs.forEach(rb => {
-        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed })
+        this.rachatEtudiant.push({ matiere_id: rb.matiere_id, fixed_moy: rb.fixed_moy['$numberDecimal'], isNew: false, _id: rb._id, dispensed: rb.isDispensed, semestre: rb.semestre })
       })
     })
     this.notesForGenerateBulletin.forEach(n => {
@@ -119,7 +127,7 @@ export class NotesComponent implements OnInit {
     })
   }
   addRachatEtudiant() {
-    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false })
+    this.rachatEtudiant.push({ matiere_id: this.matiereRachat[0].value, fixed_moy: 10.0, isNew: true, dispensed: false, semestre: this.semestreChoose })
   }
 
   updateRachatEtudiant(i, value, type) {
@@ -150,7 +158,7 @@ export class NotesComponent implements OnInit {
     this.rachatEtudiant.forEach(rb => {
       if (!rb.isNew) {
         //Update
-        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
+        let RBU = new RachatBulletin(rb._id, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, rb.semestre, rb.dispensed)
         this.RBService.update(RBU).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -159,7 +167,7 @@ export class NotesComponent implements OnInit {
         })
       } else {
         //Create
-        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, this.semestreChoose, rb.dispensed)
+        let RBC = new RachatBulletin(null, rb.matiere_id, this.etudiantToGenerateBulletin.user_id, rb.fixed_moy, rb.semestre, rb.dispensed)
         this.RBService.create(RBC).subscribe(data => {
           testlast(rb, this)
         }, err => {
@@ -203,6 +211,7 @@ export class NotesComponent implements OnInit {
   notesBySemestre: Note[] = [];
   matiere_id: string;
   moyEtudiant: number;
+  moyEtudiantAnnuel: { 'Semestre 1': number, 'Semestre 2': number, 'Annuel': number } = { 'Semestre 1': 0, 'Semestre 2': 0, 'Annuel': 0 }
   semestreForGenerateBulletin: string;
 
   showGenerateBulletin: boolean = false;
@@ -230,7 +239,7 @@ export class NotesComponent implements OnInit {
   constructor(private appreciationService: AppreciationService, private diplomeService: DiplomeService, private campusService: CampusService,
     private anneeScolaireService: AnneeScolaireService, private matiereService: MatiereService, private classeService: ClasseService, private examenService: ExamenService,
     private etudiantService: EtudiantService, private fromBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService,
-    private noteService: NoteService, private RBService: RachatBulletinService) { }
+    private noteService: NoteService, private RBService: RachatBulletinService, private seanceService: SeanceService, private formateurService: FormateurService) { }
 
   ngOnInit(): void {
     //Recuperation de l'année scolaire en cours
@@ -251,6 +260,9 @@ export class NotesComponent implements OnInit {
     this.campusService.getAll().subscribe(
       ((response) => {
         this.campus = response;
+        this.campus.forEach(c => {
+          this.filterCampus.push({ label: c.libelle, value: c._id })
+        })
       }),
       ((error) => { console.error(error); })
     );
@@ -268,7 +280,7 @@ export class NotesComponent implements OnInit {
     );
 
     //Recuperation de la liste des notes
-    this.noteService.getAll().subscribe(
+    this.noteService.getAllPopulate().subscribe(
       ((response) => {
         this.notes = response;
       }),
@@ -310,6 +322,7 @@ export class NotesComponent implements OnInit {
 
         this.examenService.getAllEvaluation().subscribe(
           (responseE) => {
+            console.log(responseE);
             responseE.forEach((examen) => {
 
               responseM.forEach((matiere) => {
@@ -340,7 +353,6 @@ export class NotesComponent implements OnInit {
 
     //Initialisation des formulaires
     this.onInitFormSelectClasse();
-    this.onInitFormAddNote();
     this.onInitFormUpdateNote();
     this.onInitFormGenerateBulletin();
     this.onInitFormSelectExam();
@@ -353,8 +365,8 @@ export class NotesComponent implements OnInit {
   //Methode d'initialisation du formulaire de selection d'une classe
   onInitFormSelectClasse() {
     this.formSelectClasse = this.fromBuilder.group({
-      classe: ['', Validators.required],
-      semestre: ['', Validators.required],
+      classe: [''],
+      semestre: [''],
     });
   }
 
@@ -368,30 +380,13 @@ export class NotesComponent implements OnInit {
   //Formulaire d'initialisation du formulaire d'ajout de note par classe et par examen et par semestre
   onInitFormAddNoteByClasseByExam() {
     this.formAddNoteByClasseByExam = this.fromBuilder.group({
-      note_val: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      note_val: ['', [Validators.required]],
       etudiant_id: ['', Validators.required],
       appreciation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàù .]+$")]],
+      isAbsent: [false]
     });
   }
 
-  //Methode d'initialisation du formulaire d'ajout de notes
-  onInitFormAddNote() {
-    this.formAddNote = this.fromBuilder.group({
-      note_val: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
-      semestre: ['', Validators.required],
-      etudiant_id: ['', Validators.required],
-      examen_id: ['', Validators.required],
-      appreciation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàù .]+$")]],
-    });
-  }
-
-  //pour la partie de traitement des erreurs sur le formulaire
-  get note_val() {
-    return this.formAddNote.get("note_val");
-  }
-  get appreciation() {
-    return this.formAddNote.get("appreciation");
-  }
 
   get note_val_esm() {
     return this.formAddNoteByClasseByExam.get("note_val");
@@ -421,12 +416,36 @@ export class NotesComponent implements OnInit {
 
   //Methode de selection d'une classe et d'un semestre
   onSelectClasse() {
-    this.semestreSelected = this.formSelectClasse.get('semestre').value.value;
+    // this.semestreSelected = this.formSelectClasse.get('semestre').value.value;
+    //Recuperation de la date du jour
+    let date = new Date();
 
     //Selection de la classe 
     for (let classe in this.classes) {
       if (this.classes[classe]._id == this.formSelectClasse.get('classe').value.value) {
         this.classeSelected = this.classes[classe];
+
+        //Recuperation du diplome et attribution du semestre
+        this.diplomeService.getById(this.classeSelected.diplome_id).subscribe(
+          ((response) => {
+
+            if (date >= response.date_debut_semestre_1 && date <= response.date_fin_semestre_1) {
+              this.semestreSelected = 'Semestre 1';
+              this.isAnneeScolaire = true;
+            }
+
+            else if (date >= response.date_debut_semestre_2 && date <= response.date_fin_semestre_2) {
+              this.semestreSelected = 'Semestre 2';
+              this.isAnneeScolaire = true;
+            }
+
+            else {
+              this.isAnneeScolaire = false;
+              this.messageService.add({ key: 'tst', severity: 'error', summary: 'Ajout impossible', detail: 'Vous êtes hors année scolaire, impossible d\'ajouter une note!' });
+            }
+          }),
+          ((error) => { console.error(error); })
+        );
       }
     }
 
@@ -434,7 +453,7 @@ export class NotesComponent implements OnInit {
     this.examenService.getAllByClasseId(this.classeSelected._id).subscribe(
       ((response) => {
 
-        this.dropdownExamByClasse = [{ libelle: '', value: '' }];
+        this.dropdownExamByClasse = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
         response.forEach((examen) => {
           for (let matiere in this.matieres) {
@@ -488,9 +507,12 @@ export class NotesComponent implements OnInit {
     let note_val = this.formAddNoteByClasseByExam.get('note_val').value;
     let etudiant_id = this.formAddNoteByClasseByExam.get('etudiant_id').value.value;
     let appreciation = this.formAddNoteByClasseByExam.get('appreciation').value;
+    let isAbsent = this.formAddNoteByClasseByExam.get('isAbsent').value;
 
     let classe_id = this.classeSelected._id;
     let matiere_id = this.examSelected.matiere_id;
+
+
 
 
     this.examenService.getById(this.examSelected._id).subscribe(
@@ -519,7 +541,7 @@ export class NotesComponent implements OnInit {
               }
               else if (response.success) {
                 //Création de la nouvelle note à créer dans la BD
-                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id);
+                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id, isAbsent);
 
                 this.noteService.create(note).subscribe(
                   ((response) => {
@@ -536,9 +558,6 @@ export class NotesComponent implements OnInit {
                       ((error) => { console.error(error); })
                     );
 
-                    this.showFormAddNote = false;
-                    this.formAddNote.reset();
-
                   }),
                   ((error) => {
                     this.messageService.add({
@@ -552,75 +571,6 @@ export class NotesComponent implements OnInit {
             ((error) => { console.error(error); })
           );
 
-        }
-      }),
-      ((error) => { console.error(error); })
-    );
-  }
-
-
-  //Methode d'ajout d'une note
-  onAddNote() {
-    //Recuperation des infos du formulaire
-    let note_val = this.formAddNote.get('note_val').value;
-    let semestre = this.formAddNote.get('semestre').value.value;
-    let etudiant_id = this.formAddNote.get('etudiant_id').value.value;
-    let examen_id = this.formAddNote.get('examen_id').value.value;
-    let appreciation = this.formAddNote.get('appreciation').value;
-
-    let classe_id: string;
-    let matiere_id: string;
-
-    for (let exam in this.examens) {
-      if (this.examens[exam]._id == examen_id) {
-        classe_id = this.examens[exam].classe_id;
-        matiere_id = this.examens[exam].matiere_id;
-      }
-    }
-
-    this.examenService.getById(examen_id).subscribe(
-      ((response) => {
-
-        //verification si la note max n'est pas depassé
-        if (response.note_max < note_val) {
-
-          this.messageService.add({
-            severity: "error",
-            summary: "Impossible d'attribuer une note, la note maximale pour cet examen est " + response.note_max,
-          });
-
-        }
-        else {
-
-          //Création de la nouvelle note à créer dans la BD
-          let note = new Note(null, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id);
-
-          this.noteService.create(note).subscribe(
-            ((response) => {
-              this.messageService.add({
-                severity: "success",
-                summary: "Nouvelle note attribuée",
-              });
-
-              //Recuperation de la liste des notes
-              this.noteService.getAll().subscribe(
-                ((response) => {
-                  this.notes = response;
-                }),
-                ((error) => { console.error(error); })
-              );
-
-              this.showFormAddNote = false;
-              this.formAddNote.reset();
-
-            }),
-            ((error) => {
-              this.messageService.add({
-                severity: "error",
-                summary: "Impossible d'attribuer une note, veuillez contacter un administrateur.",
-              });
-            })
-          );
         }
       }),
       ((error) => { console.error(error); })
@@ -769,7 +719,7 @@ export class NotesComponent implements OnInit {
         for (let diplome in this.diplomes) {
           if (this.diplomes[diplome]._id == this.classes[this.etudiantToGenerateBulletin.classe_id].diplome_id) {
             for (let campus in this.campus) {
-              if (this.campus[campus]._id == this.diplomes[diplome].campus_id) {
+              if (this.diplomes[diplome].campus_id.includes(this.campus[campus]._id)) {
                 this.activeCampus = this.campus[campus];
               }
             }
@@ -819,24 +769,74 @@ export class NotesComponent implements OnInit {
   GenerateBulletin2(etudiant_id, semestre) {
     //Par Morgan
     this.notesForGenerateBulletin = []
-    this.semestreChoose = semestre
-    this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
-      console.log(data)
-      this.moyEtudiant = data.moyenneEtudiant
-      this.notesForGenerateBulletin = data.data
-      this.showBulletin = true
-    }, error => {
-      console.error(error)
-    })
-    this.etudiantService.getById(etudiant_id).subscribe(data => {
-      this.etudiantToGenerateBulletin = data
-    })
+    if (semestre != "Annuel") {
+      this.semestreChoose = semestre
+      this.etudiantService.getBulletin(etudiant_id, semestre).subscribe(data => {
+        this.moyEtudiant = data.moyenneEtudiant
+        this.notesForGenerateBulletin = data.data
+        this.showBulletin = true
+        this.onGetAppreciationGenerale(data.haveDispensed)
+      }, error => {
+        console.error(error)
+      })
+      this.etudiantService.getById(etudiant_id).subscribe(data => {
+        this.etudiantToGenerateBulletin = data
+        this.seanceService.getFormateurFromClasseID(data.classe_id, semestre).subscribe(d => {
+          this.dicFormateurMatiere = d
+        })
+      })
+    } else {
+      this.semestreChoose = "Annuel"
+      this.GenerateBulletinAnnuel(etudiant_id)
+    }
   }
 
   GenerateBulletinAnnuel(etudiant_id) {
     //Par Morgan
     this.notesForGenerateBulletin = []
-    this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
+    this.etudiantService.getBulletin(etudiant_id, 'Semestre 1').subscribe(dataS1 => {
+      this.moyEtudiantAnnuel['Semestre 1'] = dataS1.moyenneEtudiant
+      let notesS1 = dataS1.data
+      this.etudiantService.getBulletin(etudiant_id, 'Semestre 2').subscribe(dataS2 => {
+        this.moyEtudiantAnnuel['Semestre 2'] = dataS2.moyenneEtudiant
+        this.moyEtudiantAnnuel['Annuel'] = this.getMoyAnnuel(dataS1.moyenneEtudiant, dataS2.moyenneEtudiant)
+        let notesS2 = dataS2.data
+        console.log(notesS1, notesS2)
+        dataS1.data.forEach(NS1 => {
+          dataS2.data.forEach(NS2 => {
+            if (NS1.matiere_id == NS2.matiere_id) {
+              this.notesForGenerateBulletin.push({ "Semestre 1": NS1, "Semestre 2": NS2, "Annuel": this.getNoteAnnuel(NS1, NS2), 'matiere_name': NS1.matiere_name, 'coef': NS1.coef, 'matiere_id': NS1.matiere_id, 'ects': NS1.ects })
+              notesS1.splice(notesS1.indexOf(NS1), 1)
+              notesS2.splice(notesS2.indexOf(NS2), 1)
+            }
+          })
+        })
+        if (notesS1.length != 0) {
+          notesS1.forEach(n => {
+            this.notesForGenerateBulletin.push({ "Semestre 1": n, "Semestre 2": null, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+          })
+        }
+        if (notesS2.length != 0) {
+          notesS2.forEach(n => {
+            this.notesForGenerateBulletin.push({ "Semestre 1": null, "Semestre 2": n, "Annuel": n, 'matiere_name': n.matiere_name, 'coef': n.coef, 'matiere_id': n.matiere_id, 'ects': n.ects })
+          })
+        }
+        console.log(notesS2, notesS1)
+        this.showPVAnnuel = true
+        this.onGetAppreciationGenerale(dataS1.haveDispensed || dataS2.haveDispensed)
+      }, error => {
+        console.error(error)
+      })
+    }, error => {
+      console.error(error)
+    })
+    this.etudiantService.getById(etudiant_id).subscribe(data => {
+      this.etudiantToGenerateBulletin = data
+      this.seanceService.getFormateurFromClasseID(data.classe_id, "Annuel").subscribe(d => {
+        this.dicFormateurMatiere = d
+      })
+    })
+    /*this.etudiantService.getBulletinAnnuel(etudiant_id).subscribe(data => {
       console.log(data)
       this.moyEtudiant = data.moyenneEtudiant
       this.notesForGenerateBulletin = data.data
@@ -846,7 +846,38 @@ export class NotesComponent implements OnInit {
     })
     this.etudiantService.getById(etudiant_id).subscribe(data => {
       this.etudiantToGenerateBulletin = data
-    })
+      this.seanceService.getFormateurFromClasseID(data.classe_id, "Annuel").subscribe(d => {
+        this.dicFormateurMatiere = d
+      })
+    })*/
+  }
+
+  getMoyAnnuel(ns1: number, ns2: number) {
+    console.log(ns1, ns2)
+    let moy_etu = (ns1 + ns2) / 2
+    if (ns1 == 0.00000000001) {
+      moy_etu = ns2
+    }
+    else if (ns2 == 0.00000000001) {
+      moy_etu = ns1
+    }
+    return moy_etu
+  }
+
+  getNoteAnnuel(ns1: { coef: number, isDispensed: Boolean, matiere_id: string, matiere_name: string, max_classe: number, min_classe: number, moy_classe: number, moy_etu: number }, ns2: { coef: number, isDispensed: Boolean, matiere_id: string, matiere_name: string, max_classe: number, min_classe: number, moy_classe: number, moy_etu: number }) {
+    let moy_etu = (ns1.moy_etu + ns2.moy_etu) / 2
+    if (ns1.moy_etu == 0.00000000001) {
+      moy_etu = ns2.moy_etu
+    }
+    else if (ns2.moy_etu == 0.00000000001) {
+      moy_etu = ns1.moy_etu
+    }
+    return {
+      coef: ns1.coef, isDispensed: ns1.isDispensed && ns2.isDispensed, matiere_id: ns1.matiere_id, matiere_name: ns1.matiere_name,
+      max_classe: (ns1.max_classe + ns2.max_classe) / 2, min_classe: (ns1.min_classe + ns2.min_classe) / 2, moy_classe: (ns1.moy_classe + ns2.moy_classe) / 2,
+      moy_etu: moy_etu
+    }
+
   }
 
   avg(arr: [number]) {
@@ -856,8 +887,6 @@ export class NotesComponent implements OnInit {
     })
     return total / arr.length
   }
-
-
   //Methode d'initialisation du formulaire de saisie d'appréciation générale
   onInitFormAppreciationGenerale() {
     this.formAppreciationGenerale = this.fromBuilder.group({
@@ -884,13 +913,13 @@ export class NotesComponent implements OnInit {
     this.appreciationService.create(appreciation).subscribe(
       ((response) => {
         this.appreciationGenerale = response;
-        this.onGetNotes();
-        this.onGetAppreciationGenerale();
-        this.showBulletin = true;
-        this.showGenerateBulletin = true;
-        this.showFormAppreciationGenerale = false;
+        this.showAppreciationGenerale = true;
+        this.showBtnAddAppreciationGenerale = false;
         this.showBtnUpdateAppreciationGenerale = true;
-        this.appreciationModules = response.appreciation_matiere
+        this.showFormUpdateAppreciationGenerale = false;
+        this.showGenerateBulletin = true;
+        if (response.appreciation_matiere)
+          this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -912,7 +941,8 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
-        this.appreciationModules = response.appreciation_matiere
+        if (response.appreciation_matiere)
+          this.appreciationModules = response.appreciation_matiere
       }),
       ((error) => { console.error(error); })
     );
@@ -920,17 +950,37 @@ export class NotesComponent implements OnInit {
 
 
   //Recuperation de l'appreciation générale
-  onGetAppreciationGenerale() {
+  onGetAppreciationGenerale(haveDispensed = false) {
+    this.appreciationModules = {}
+    this.appreciationGenerale = {}
     this.appreciationService.get(this.etudiantToGenerateBulletin._id, this.semestreForGenerateBulletin).subscribe(
       ((response) => {
-        if (response != null) {
+        if (response != null && response.appreciation != "") {
           this.appreciationGenerale = response;
-          this.showAppreciationGenerale = true;
           this.showBtnAddAppreciationGenerale = false;
           this.showBtnUpdateAppreciationGenerale = true;
-          this.appreciationModules = response.appreciation_matiere
+          if (response.appreciation_matiere)
+            this.appreciationModules = response.appreciation_matiere
           this.formUpdateAppreciationGenerale.patchValue({ appreciation: response.appreciation });
         }
+
+        if (response == null || response.appreciation == "") {
+          //Si semesestre Validé : Semestre Validée
+          if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant >= 10)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Validée", this.semestreChoose, null, null)
+          if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant < 10)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Non Validée", this.semestreChoose, null, null)
+          //Si Année validé : Année Validée
+          if (this.moyEtudiantAnnuel['Annuel'] && this.semestreChoose == "Annuel" && this.moyEtudiantAnnuel['Annuel'] >= 10)
+            this.appreciationGenerale = new Appreciation(null, "Année Validée", "Annuel", null, null)
+          if (this.moyEtudiantAnnuel['Annuel'] && this.semestreChoose == "Annuel" && this.moyEtudiantAnnuel['Annuel'] < 10)
+            this.appreciationGenerale = new Appreciation(null, "Année Non Validée", "Annuel", null, null)
+          //Si validé avec Rachat: Année Validée avec Rachat
+          if (haveDispensed)
+            this.appreciationGenerale.appreciation = this.appreciationGenerale.appreciation + " avec rachat"
+          console.log(this.appreciationGenerale)
+        }
+        this.showAppreciationGenerale = true;
       }),
       ((error) => { console.error(error); })
     );
@@ -947,7 +997,7 @@ export class NotesComponent implements OnInit {
 
   //Methode de generation du bulletin de note
   onGenerateBulletin(id = 'content') {
-
+    console.log(id)
     var element = document.getElementById(id);
     var opt = {
       margin: 0,

@@ -8,7 +8,6 @@ const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const mongoose = require("mongoose");
 const fs = require("fs");
-const { Inscription } = require("../models/inscription");
 const { Formateur } = require("../models/formateur")
 const { Etudiant } = require("../models/etudiant")
 const { pwdToken } = require("../models/pwdToken")
@@ -130,17 +129,19 @@ app.post("/login", (req, res) => {
         email_perso: data.email,
     }).then((userFromDb) => {
         if (!userFromDb || !bcrypt.compareSync(data.password, userFromDb.password)) {
+            console.log(userFromDb)
+            console.log(bcrypt.compareSync(data.password, userFromDb.password))
             res.status(404).send({ message: "Email ou Mot de passe incorrect" });
         }
         else {
             if (userFromDb.verifedEmail) {
-                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
+                let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id, type: userFromDb.type }, "126c43168ab170ee503b686cd857032d", { expiresIn: '7d' })
                 res.status(200).send({ token });
             }
             else { res.status(304).send({ message: "Compte pas activé", data }); }
         }
     }).catch((error) => {
-        console.error(error)
+        console.log(error)
         res.status(404).send(error);
     })
 });
@@ -170,7 +171,7 @@ app.get("/getInfoById/:id", (req, res, next) => {
 //Recuperation des infos user
 app.get("/getPopulate/:id", (req, res, next) => {
     User.findOne({ _id: req.params.id }).populate("service_id")
-        .then((userfromDb) => { res.status(200).send(userfromDb); })
+        ?.then((userfromDb) => { res.status(200).send(userfromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
 
@@ -180,6 +181,18 @@ app.get("/getAll", (req, res) => {
     User.find()
         .then(result => {
             res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(404).send(err);
+        })
+});
+
+//Récupération de tous les users
+app.get("/getNBUser", (req, res) => {
+    User.find()
+        .then(result => {
+            res.send({ r: result.length });
         })
         .catch(err => {
             console.error(err);
@@ -315,7 +328,9 @@ app.post("/updateEtudiant/:id", (req, res) => {
             ville_adresse: req.body.user.ville_adresse,
             rue_adresse: req.body.user.rue_adresse,
             numero_adresse: req.body.user.numero_adresse,
-            postal_adresse: req.body.user.postal_adresse
+            postal_adresse: req.body.user.postal_adresse,
+            statut: req.body.user.statut,
+            type: req.body.user.type,
             // diplome : req.body.user.diplome
 
         }, { new: true }, (err, user) => {
@@ -725,7 +740,7 @@ app.get("/HowIsIt/:id", (req, res) => {
                 }
             }).catch((error) => {
                 console.error(error)
-                res.status(404).send(error);
+                res.status(201).send(error);
             })
         }
     });

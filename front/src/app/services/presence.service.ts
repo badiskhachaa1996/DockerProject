@@ -72,6 +72,12 @@ export class PresenceService {
     let registreUrl = this.apiUrl + "getAssiduitePDF/" + user_id;
     return this.http.post<any>(registreUrl, RangeDateForPDF, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+  getAtt_ssiduitePDF(id:any) {
+    let registreUrl = this.apiUrl + "getAtt_ssiduitePDF/" +id;
+    return this.http.post<any>(registreUrl, id, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+
 
   getAllAbsences(id: string) {
     let url = this.apiUrl + "getAllAbsences/" + id;

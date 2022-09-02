@@ -27,6 +27,9 @@ export class ListEcoleComponent implements OnInit {
   ecoleToUpdate: Ecole;
   AnneeSelected : AnneeScolaire;
 
+  showFormAddImage: boolean = false;
+  ecoleSelected: Ecole;
+
   ecoleFormUpdate: FormGroup = new FormGroup({
 
     libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
@@ -43,6 +46,11 @@ export class ListEcoleComponent implements OnInit {
   columns = [
   ]
   token;
+
+  logo: any;
+  cachet: any;
+  pied_de_page: any;
+
   constructor(private EcoleService: EcoleService, private messageService: MessageService, private anneeScolaireService: AnneeScolaireService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
@@ -117,6 +125,124 @@ export class ListEcoleComponent implements OnInit {
 
     this.router.navigate(['/campus', rowData._id]);
 
+  }
+
+  //Click sur le logo
+  clickLogo()
+  {
+    document.getElementById('selectLogo').click();
+  }
+
+  //Methode de selection du logo
+  selectLogo(event)
+  {
+    if(event.target.files.length > 0) 
+    {
+      this.logo = event.target.files[0];
+      console.log(this.logo);
+    }
+  }
+
+  //Methode d'ajout d'un nouveau logo
+  onAddLogo(ecole: Ecole)
+  {
+    ecole = this.ecoleSelected;
+    ecole.logo = this.logo.name;
+
+    let formData = new FormData();
+    formData.append('id', ecole._id);
+    formData.append('file', this.logo);
+    
+    //Mise à jour de l'école
+    this.EcoleService.edit(ecole).subscribe(
+      ((response) => { 
+        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Le logo a bien été modifié' });
+      
+        this.EcoleService.sendLogo(formData).subscribe(
+          ((response) => {  }),
+          ((error) => { console.error(error); })
+        );
+
+      }),
+      ((error) => { console.error(error); })
+    );
+    //this.showFormAddImage = false;
+  }
+
+
+  //Methode de selection du pied de page
+  selectPp(event)
+  {
+    if(event.target.files.length > 0)
+    {
+      this.pied_de_page = event.target.files[0];
+      console.log(this.pied_de_page);
+    }
+  }
+
+  //Methode d'ajout d'un pied de page
+  onAddPp(ecole: Ecole)
+  {
+    ecole = this.ecoleSelected;
+    ecole.pied_de_page = this.pied_de_page.name;
+
+    let formData = new FormData();
+    formData.append('id', ecole._id);
+    formData.append('file', this.pied_de_page);
+
+    this.EcoleService.edit(ecole).subscribe(
+      ((response) => {
+        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Le pied de page a bien été modifié' });
+
+        this.EcoleService.sendPp(formData).subscribe(
+          ((response) => {
+            
+          }),
+          ((error) => { console.error(error); })
+        );
+      }),
+      ((error) => { console.error(error); })
+    );
+  }
+
+  //Methode de selection d'un cachet
+  selectCachet(event)
+  {
+    if(event.target.files.length > 0)
+    {
+      this.cachet = event.target.files[0]
+    }
+  }
+
+  //Methode d'ajout d'un cachet
+  onAddCachet(ecole: Ecole)
+  {
+    ecole = this.ecoleSelected;
+    ecole.cachet = this.cachet.name;
+
+    let formData = new FormData();
+    formData.append('id', ecole._id);
+    formData.append('file', this.cachet);
+
+    this.EcoleService.edit(ecole).subscribe(
+      ((response) => {
+        this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Le cachet a bien été modifié' });
+
+        this.EcoleService.sendCachet(formData).subscribe(
+          ((response) => {}),
+          ((error) => { console.error(error); })
+        );
+      }),
+      ((error) => { console.error(error); })
+    );
+  }
+
+
+
+  //Methode pour rediriger vers le formulaire d'ajout d'une école
+  onRedirect()
+  {
+    this.router.navigate(['/ajout-ecole']);
   }
 
 }

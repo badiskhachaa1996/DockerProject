@@ -21,9 +21,16 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Non', value: false },
   ];
 
+  categorieList = [
+    'Sous-traitant',
+    "Alternant",
+    "Autre" 
+  ]
+
   constructor(private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
+
 
     //Initialisation du formulaire d'ajout d'une entreprise
     this.onInitFormAddEntreprise();
@@ -61,9 +68,10 @@ export class AddEntrepriseComponent implements OnInit {
       financeur: [''],
       nda: [''],
       type_soc: [''],
-      indicatif_1er : [''],
-      indicatif_2nd : [''],
-      indicatif_ent : ['']
+      indicatif_1er: [''],
+      indicatif_2nd: [''],
+      indicatif_ent: [''],
+      categorie: [[]]
     })
   }
 
@@ -97,13 +105,16 @@ export class AddEntrepriseComponent implements OnInit {
     let phone = this.formAddEntreprise.get('indicatif_ent')?.value + this.formAddEntreprise.get('phone')?.value;
     let website = this.formAddEntreprise.get('website')?.value;
     let financeur = this.formAddEntreprise.get('financeur')?.value;
+    let nda = this.formAddEntreprise.get('nda')?.value
+    let categorie = this.formAddEntreprise.get('categorie')?.value;
+    let type_soc = this.formAddEntreprise.get('type_soc')?.value;
 
-    let entreprise = new Entreprise(null, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd, fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website, financeur);
+    let entreprise = new Entreprise(null, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd, fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website, financeur, nda, type_soc, categorie);
     this.entrepriseService.create(entreprise).subscribe(
       ((response) => {
 
         this.messageService.add({ severity: 'success', summary: 'Ajout de l\entreprise' });
-
+        this.formAddEntreprise.reset();
       }),
       ((error) => { console.error(error); })
     );

@@ -25,6 +25,8 @@ app.post("/create", (req, res, next) => {
         coeff: req.body.coeff,
         credit_ects: req.body.credit_ects,
         remarque: req.body.remarque,
+        semestre: req.body.semestre,
+        niveau: req.body.niveau
     });
 
     matiere.save()
@@ -50,11 +52,12 @@ app.post("/updateById", (req, res, next) => {
             formation_id: req.body.formation_id,
             volume_init: req.body.volume_init,
             abbrv: req.body.abbrv,
-            classe_id: req.body.classe_id,
             seance_max: req.body.seance_max,
             coeff: req.body.coeff,
             credit_ects: req.body.credit_ects,
             remarque: req.body.remarque,
+            semestre: req.body.semestre,
+            niveau: req.body.niveau
         })
         .then((matiereUpdated) => { res.status(200).send(matiereUpdated) })
         .catch((error) => { res.status(500).send(error) })
@@ -114,8 +117,18 @@ app.get("/getAllVolume", (req, res, next) => {
                 //Calcule du nb d'heure
                 let sd1 = new Date(seance.date_debut).getTime()
                 let sd2 = new Date(seance.date_fin).getTime()
-                let diff = sd2 - sd1
-                let nb = Math.floor((diff % 86400000) / 3600000);               
+                let tmp = sd2 - sd1
+                let diff = {}
+                //let nb = Math.floor((tmp % 86400000) / 3600000);
+                tmp = Math.floor(tmp / 1000);             // Nombre de secondes entre les 2 dates             
+                tmp = Math.floor((tmp - (tmp % 60)) / 60);    // Nombre de minutes (partie entière)
+                diff.min = tmp % 60;                    // Extraction du nombre de minutes
+
+                tmp = Math.floor((tmp - diff.min) / 60);    // Nombre d'heures (entières)
+                diff.hour = tmp % 24;                   // Extraction du nombre d'heures
+                let nb = diff.hour
+                if (diff.min > 40)
+                    nb++
                 if (date < seance.date_debut) {
                     if (rPlan[seance.matiere_id]) {
                         rPlan[seance.matiere_id] += nb
@@ -130,6 +143,7 @@ app.get("/getAllVolume", (req, res, next) => {
                     }
                 }
             })
+            console.log({ rPlan, rCons })
             res.status(200).send({ rPlan, rCons })
         })
         .catch((error) => {

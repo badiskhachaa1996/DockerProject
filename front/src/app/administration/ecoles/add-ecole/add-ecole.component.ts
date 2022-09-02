@@ -26,18 +26,18 @@ export class AddEcoleComponent implements OnInit {
 
   addecoleForm: FormGroup = new FormGroup({
     libelle: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
-    email: new FormControl('', [Validators.required,Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@academiedesgouvernantes+\.com))$")]),
+    email: new FormControl('', Validators.required),
     site: new FormControl('', Validators.required),
     annee_id: new FormControl('', Validators.required),
     telephone: new FormControl('', [Validators.required, Validators.pattern('[- +()0-9]+'), Validators.maxLength(14)]),
     adresse: new FormControl('', Validators.required),
-    ville: new FormControl('PARIS', [Validators.required,Validators.pattern('[^0-9]+')]),
+    ville: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
     pays: new FormControl('', [Validators.required,Validators.pattern('[^0-9]+')]),
-
   });
 
   columns = []
   token;
+  logo;
 
   constructor(private EcoleService: EcoleService, private messageService: MessageService, private anneeScolaireService: AnneeScolaireService, private route: ActivatedRoute, private router: Router) { }
 
@@ -71,11 +71,12 @@ export class AddEcoleComponent implements OnInit {
   }
 
   saveEcole() {
-    let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone)
+    let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone, this.logo.name)
     this.EcoleService.create(ecole).subscribe((data) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
+
+      this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
       this.ecoles.push(data);
-      this.addecoleForm.reset();
+      this.addecoleForm.reset(); 
     }, (error) => {
       console.error(error)
     });

@@ -10,22 +10,21 @@ const user_schema = new mongoose.Schema({
         type: String,
         required: false
     },
-    indicatif:{
-        type: String, 
+    indicatif: {
+        type: String,
         required: false
     },
     phone: {
-        type: String, 
+        type: String,
         required: false
     },
     email: {
         type: String,
-        required: false,
-        unique:true
+        required: false
     },
     email_perso: {
         type: String,
-        required:false,
+
     },
     password: {
         type: String,
@@ -83,20 +82,21 @@ const user_schema = new mongoose.Schema({
         required: false
     },
     IsWhatsApp: {
-        type : Boolean,
+        type: Boolean,
         required: false
     },
-    nationnalite : { 
-        type : String,
-        required : false
+    nationnalite: {
+        type: String,
+        required: false
     },
     verifedEmail: {
-        type : Boolean,
+        type: Boolean,
         required: false,
         default: false
     },
     date_creation: { type: Date, required: false },
-    
+    departement: { type: String }
+
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
 const User = mongoose.model("user", user_schema);

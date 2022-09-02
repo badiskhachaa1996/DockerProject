@@ -14,6 +14,7 @@ const { Service } = require("./../models/service");
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
+const { Etudiant } = require('../models/etudiant');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -120,7 +121,7 @@ app.post("/create", (req, res, next) => {
                             prospect.user_id = userFromDb._id;
                             prospect.save()
                                 .then((prospectSaved) => {
-                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d")
+                                    let token = jwt.sign({ id: userFromDb._id, role: userFromDb.role, service_id: userFromDb.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                                     res.status(201).json({ success: 'Prospect ajouté dans la BD', dataUser: userFromDb, token });
                                 })
                                 .catch((error) => { res.status(400).json({ error: 'Impossible d\ajouter ce prospect' }) });
@@ -132,17 +133,11 @@ app.post("/create", (req, res, next) => {
             else {
                 user.save()
                     .then((userCreated) => {
-                        console.log("creation user pour prospect")
-                        console.log(userCreated)
+
                         prospect.user_id = userCreated._id;
-                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d")
-                        console.log(token)
+                        let token = jwt.sign({ id: userCreated._id, role: userCreated.role, service_id: userCreated.service_id }, "126c43168ab170ee503b686cd857032d", { expiresIn: "7d" })
                         prospect.save()
                             .then((prospectSaved) => {
-                                console.log("tok after save pros")
-                                console.log(token)
-
-
                                 if (prospectSaved.type_form == "estya") {
                                     let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
                                     temp = temp.replace('eMailduProSpect', userCreated.email_perso)
@@ -168,17 +163,11 @@ app.post("/create", (req, res, next) => {
                                     transporterEstya.sendMail(mailOptions, function (error, info) {
                                         if (error) {
                                             console.error(error);
-
                                         }
-
-
-
                                     });
 
                                 }
                                 else if (prospectSaved.type_form == "eduhorizons") {
-
-
                                     let htmlmail =
                                         "<p>Bonjour,</p><p>Votre demande d'inscription sur notre plateforme a été enregistré avec succès. Merci d'activer votre compte en cliquant sur le lien ci dessous afin de vous connecter avec votre mail et votre mot de passe : <strong> " +
                                         r + "</strong></p>" +
@@ -345,36 +334,24 @@ app.post("/create", (req, res, next) => {
     })
 });
 
+app.get('/getAllEtudiant', (req, res, next) => {
+    let u = []
+    Etudiant.find({ user_id: { $ne: null } }).then(data => {
+        data.forEach(etu => {
+            u.push(etu.user_id)
+        })
+        Prospect.find({ user_id: { $in: u } }).then(dataP => {
+            res.send(dataP)
+        })
+    })
+
+})
 
 //Recuperation de la liste des prospect
 app.get("/getAll", (req, res, next) => {
 
-    Prospect.find({ archived: [false, null] }).populate("user_id").populate('agent_id')
+    Prospect.find({ archived: [false, null], user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then((prospectsFromDb) => {
-
-            prospectsFromDb.forEach(function (element, index) {
-                let nb = 0
-                try {
-                    let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                    fileList.forEach(file => {
-                        if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                            nb += 1
-                        }
-                        else {
-                            let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                            files.forEach(f => {
-                                nb += 1
-                            });
-                        }
-                    });
-                } catch (e) {
-                    if (e.code != "ENOENT") {
-                        console.error(e)
-                    }
-                }
-                prospectsFromDb[index]["nbDoc"] = nb
-            });
-
             res.status(201).send(prospectsFromDb)
         })
         .catch((error) => { res.status(500).send(error.message); });
@@ -402,7 +379,7 @@ app.get("/getByUserId/:user_id", (req, res, next) => {
 app.get("/getTokenByUserId/:user_id", (req, res, next) => {
     Prospect.findOne({ user_id: req.params.user_id }).populate("user_id").then(prospectFromDb => {
         if (prospectFromDb) {
-            prospectFromDb = jwt.sign({ prospectFromDb }, '126c43168ab170ee503b686cd857032d')
+            prospectFromDb = jwt.sign({ prospectFromDb }, '126c43168ab170ee503b686cd857032d', { expiresIn: "7d" })
             res.status(201).send({ token: prospectFromDb });
         } else {
             res.status(200).send(null);
@@ -463,7 +440,6 @@ app.put("/update", (req, res, next) => {
 // });
 app.post("/updateStatut/:id", (req, res, next) => {
     let d = new Date()
-    //let document_manquant = req.body.document_manquant
     Prospect.findByIdAndUpdate(req.params.id, {
         statut_dossier: req.body.statut_dossier,
         tcf: req.body.tcf,
@@ -476,8 +452,11 @@ app.post("/updateStatut/:id", (req, res, next) => {
         traited_by: req.body.traited_by,
         validated_cf: req.body.validated_cf,
         avancement_visa: req.body.avancement_visa,
-        etat_traitement: req.body.etat_traitement
-
+        etat_traitement: req.body.etat_traitement,
+        dossier_traited_by: req.body.dossier_traited_by,
+        document_manquant: req.body.document_manquant,
+        document_present: req.body.document_present,
+        remarque: req.body.remarque
     }, { new: true }).populate('user_id').populate('agent_id').exec(function (err, results) {
         if (err) {
             res.status(500).send(err)
@@ -582,48 +561,22 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
         error.httpStatusCode = 400
         res.status(400).send(error)
     } else {
-
+        Prospect.findByIdAndUpdate(req.body.id, { haveDoc: true }, { new: true }, ((err, newProspect) => {
+            if (err) {
+                console.log(err)
+            }
+        }))
         res.status(201).json({ dossier: "dossier mise à jour" });
     }
 
 }, (error) => { res.status(500).send(error); })
 
 app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
-    Partenaire.findOne({ _id: req.params.id_partenaire }).populate("user_id").populate('agent_id')
+    Partenaire.findOne({ _id: req.params.id_partenaire })
         .then((partenaireFromDB) => {
             if (partenaireFromDB) {
-                Prospect.find().then(prospects => {
-                    CommercialPartenaire.find({ partenaire_id: partenaireFromDB._id }).then(commercials => {
-                        let listProspects = []
-                        commercials.forEach(c => {
-                            prospects.forEach(p => {
-                                if (p.code_commercial == c.code_commercial_partenaire) {
-                                    let nb = 0
-                                    try {
-                                        let fileList = fs.readdirSync('./storage/prospect/' + p._id + "/")
-                                        fileList.forEach(file => {
-                                            if (!fs.lstatSync('./storage/prospect/' + p._id + "/" + file).isDirectory()) {
-                                                nb += 1
-                                            }
-                                            else {
-                                                let files = fs.readdirSync('./storage/prospect/' + p._id + "/" + file)
-                                                files.forEach(f => {
-                                                    nb += 1
-                                                });
-                                            }
-                                        });
-                                    } catch (e) {
-                                        if (e.code != "ENOENT") {
-                                            console.error(e)
-                                        }
-                                    }
-                                    p["nbDoc"] = nb
-                                    listProspects.push(p)
-                                }
-                            })
-                        })
-                        res.status(200).send(listProspects)
-                    })
+                Prospect.find({ code_commercial: { $regex: "^" + partenaireFromDB.code_partenaire }, user_id: { $ne: null } }).populate("user_id").populate('agent_id').then(prospects => {
+                    res.status(200).send(prospects)
                 })
             } else {
                 res.status(400).send("Code incorrect, Aucun partenaire trouvé");
@@ -633,64 +586,20 @@ app.get("/getAllByCodeAdmin/:id_partenaire", (req, res, next) => {
 })
 
 app.get("/getAllByCodeCommercial/:code_partenaire", (req, res, next) => {
-    Prospect.find({ code_commercial: req.params.code_partenaire }).populate("user_id").populate('agent_id')
+    Prospect.find({ code_commercial: req.params.code_partenaire, user_id: { $ne: null } }).populate("user_id").populate('agent_id')
         .then(prospects => {
-            prospects.forEach(function (element, index) {
-                let nb = 0
-                try {
-                    let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                    fileList.forEach(file => {
-                        if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                            nb += 1
-                        }
-                        else {
-                            let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                            files.forEach(f => {
-                                nb += 1
-                            });
-                        }
-                    });
-                } catch (e) {
-                    if (e.code != "ENOENT") {
-                        console.error(e)
-                    }
-                }
-                prospects[index]["nbDoc"] = nb
-            });
             res.send(prospects)
         }).catch((error) => { res.status(500).send(error); });
 })
 
 app.get('/getAllWait', (req, res, next) => {
-    Prospect.find({ decision_admission: "Payée", archived: [false, null] }).then(prospects => {
-        prospects.forEach(function (element, index) {
-            let nb = 0
-            try {
-                let fileList = fs.readdirSync('./storage/prospect/' + element._id + "/")
-                fileList.forEach(file => {
-                    if (!fs.lstatSync('./storage/prospect/' + element._id + "/" + file).isDirectory()) {
-                        nb += 1
-                    }
-                    else {
-                        let files = fs.readdirSync('./storage/prospect/' + element._id + "/" + file)
-                        files.forEach(f => {
-                            nb += 1
-                        });
-                    }
-                });
-            } catch (e) {
-                if (e.code != "ENOENT") {
-                    console.error(e)
-                }
-            }
-            prospects[index]["nbDoc"] = nb
-        });
+    Prospect.find({ decision_admission: ["Payée", "A signé les documents"], archived: [false, null], user_id: { $ne: null } }).populate('user_id').populate('agent_id').then(prospects => {
         res.send(prospects)
     }).catch((error) => { res.status(500).send(error); });
 })
 
 app.post('/updatePayement/:id', (req, res) => {
-    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }, function (err, data) {
+    Prospect.findByIdAndUpdate(req.params.id, { payement: req.body.payement }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(500).send(err)
@@ -706,6 +615,7 @@ app.get('/etatTraitement/:id/:etat', (req, res) => {
     }).catch((error) => { res.status(500).send(error); });
 })
 
+
 //Requête de récupération du nombre de nouvelle inscrits, du nombre total d'inscrit et du nombre d'étudiant en attente
 app.get("/getInfoDashboardAdmission", (req, res, next) => {
     Prospect.find({ etat_traitement: 'Nouvelle' })
@@ -719,6 +629,17 @@ app.get("/getInfoDashboardAdmission", (req, res, next) => {
         })
         .catch((error) => { res.status(500).send(error); })
 });
+
+app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
+    let p = Prospect({
+        user_id: req.params.user_id,
+        archived: true,
+        etat_traitement: "Fini"
+    })
+    p.save().then(data => {
+        res.status(201).send(data)
+    })
+})
 
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

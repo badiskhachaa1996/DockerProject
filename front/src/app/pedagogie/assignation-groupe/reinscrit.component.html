@@ -1,25 +1,23 @@
-  <!-- Partie ajout de documents -->
-  <div class="col-12" *ngIf="showUploadFile!=null">
+<p-toast></p-toast>
+<div class="col-12" *ngIf="showUploadFile!=null">
     <div class="card">
-        <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null"
-            aria-hidden="true"> </i>
-        <h3 *ngIf="showUploadFile.user_id && users[showUploadFile.user_id]" class="text-center"
-            style="font-weight: bold;">Ajouter un document à : {{
-            users[showUploadFile.user_id]?.firstname }} {{
-            users[showUploadFile.user_id]?.lastname | uppercase }}</h3>
+        <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showUploadFile = null" aria-hidden="true">
+        </i>
+        <h3 *ngIf="showUploadFile.user_id" class="text-center" style="font-weight: bold;">Ajouter un document à : {{
+            showUploadFile.user_id?.firstname }} {{
+            showUploadFile.user_id?.lastname | uppercase }}</h3>
         <form class="col-8 col-offset-2">
             <div class="p-grid">
                 <div style="margin-left: 32%;">
-                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic"
-                        chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
-                        accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true" #fileInput>
+                    <p-fileUpload (uploadHandler)="FileUpload($event)" mode="basic" chooseLabel="Ajouter un Document"
+                        customUpload="true" fileLimit="1" accept=".docx,.pdf,.doc,.jpg,.png,.jpeg"
+                        maxFileSize="10000000" [auto]="true" #fileInput>
                     </p-fileUpload>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
 <!-- partie Assignation à un Groupe -->
 <div class="col-12" *ngIf="showAssignForm!=null">
     <div class="card">
@@ -27,19 +25,35 @@
             aria-hidden="true"> </i>
         <h3 *ngIf="showAssignForm.user_id && users[showAssignForm.user_id]" class="text-center"
             style="font-weight: bold;">Assignation de : {{
-            users[showAssignForm.user_id]?.firstname }} {{
-            users[showAssignForm.user_id]?.lastname | uppercase }}
+            showAssignForm.user_id?.firstname }} {{
+            showAssignForm.user_id?.lastname | uppercase }}
         </h3>
 
         <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAddEtudiant()">
             <div class="field col-12 md:col-6">
-                <label>Groupe</label>
-                <p-dropdown [options]="groupeList" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
-                    filter="true" formControlName="groupe"></p-dropdown>
+                <label>Filière <span style="color: red;">*</span></label>
+                <p-dropdown [options]="dropdownFiliere" emptyFilterMessage="Pas de filière trouvé"
+                    filterPlaceholder="Filière" filter="true" formControlName="filiere"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6">
+                <label For="campus">Campus</label>
+                <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus" formControlName="campus_id"
+                    emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
+                </p-dropdown>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Statut</label>
+                <label>Statut Professionel</label>
                 <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Statut Dossier</label>
+                <p-dropdown [options]="statutDossier" formControlName="statut"></p-dropdown>
+            </div>
+
+            <div class="field col-12">
+                <label for="ine">Email IMS<span style="color: red;">*</span></label>
+                <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>
 
             <!-- Si c'est un alternant -->
@@ -61,45 +75,6 @@
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="sos_phone">Téléphone d'urgence</label>
                 <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
-            </div>
-
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="entreprise">Entreprise</label>
-                <input pInputText type="text" formControlName="entreprise"
-                    placeholder="Veuillez saisir le nom de l'entreprise">
-            </div>
-
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="nom_tuteur">Nom du tuteur</label>
-                <input pInputText type="text" formControlName="nom_tuteur" placeholder="Nom du tuteur d'alternance">
-            </div>
-
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="prenom_tuteur">Prenom du tuteur</label>
-                <input pInputText type="text" formControlName="prenom_tuteur"
-                    placeholder="Prenom du tuteur d'alternance">
-            </div>
-
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="adresse_tuteur">Adresse du tuteur</label>
-                <textarea pInputText type="text" formControlName="adresse_tuteur"
-                    placeholder="Adresse du tuteur d'alternance"></textarea>
-            </div>
-
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="email_tuteur">Adresse email du tuteur</label>
-                <input pInputText type="email" formControlName="email_tuteur"
-                    placeholder="Adresse email du tuteur d'alternance">
-            </div>
-
-            <div class="field col-4 md:col-3" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="indicatif_tuteur">Indicatif</label>
-                <input pInputText type="text" formControlName="indicatif_tuteur" placeholder="Exemple: 00223">
-            </div>
-
-            <div class="field col-8 md:col-9" *ngIf="AssignForm.value.statut.value == 'Alternant'">
-                <label for="phone_tuteur">Numéro de téléphone du tuteur</label>
-                <input pInputText type="text" formControlName="phone_tuteur" placeholder="Exemple: 667717326">
             </div>
             <!-- End -->
 
@@ -138,11 +113,36 @@
             </div>
 
             <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
-                <label for="adresse_rl">Email du répresentant légal</label>
-                <textarea pInputTextarea formControlName="adresse_rl"
+                <label for="adresse_rl">Adresse du répresentant légal</label>
+                <textarea pInputTextArea formControlName="adresse_rl"
                     placeholder="Adresse du répresentant légal"></textarea>
             </div>
             <!-- End -->
+
+            <!-- Parcous Etudiant-->
+            <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
+                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <div class="field col-12 md:col-4">
+                    <label>Diplome du parcours:</label><br>
+                    <input pInputText type="text" [(value)]="parcoursList[i]['diplome']" placeholder="BTS"
+                        class="form-control">
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label>Date du parcours:</label><br>
+                    <input type="date" [(value)]="parcoursList[i]['date']" pInputText>
+                </div>
+                <div class="field col-12 md:col-2">
+                    <i class="pi pi-trash" (click)="onRemoveParcours(i)" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-12">
+                <button type="button" (click)="onAddParcours()" pButton label="Ajouter un parcours"></button>
+            </div>
+
+            <div class="field col-12">
+                <label for="remarque">Remarque</label>
+                <textarea pInputTextarea formControlName="remarque" placeholder="Remarque"></textarea>
+            </div>
 
             <div>
                 <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
@@ -150,12 +150,52 @@
         </form>
     </div>
 </div>
+<!-- partie Voir/Ajouter des payements -->
+<div class="col-12" *ngIf="showPayement!=null">
+    <div class="card">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPayement = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+            showPayement.user_id?.firstname }} {{
+            showPayement.user_id?.lastname | uppercase }}
+        </h3>
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <div class="field col-12 md:col-3">
+                    <label>Type de payement:</label><br>
+                    <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                        [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Montant:</label><br>
+                    <input type="number" (change)="changeMontant(i,$event,'montant')"
+                        [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label>Date du paiement:</label><br>
+                    <input type="date" (change)="changeMontant(i,$event,'date')" [(value)]="payementList[i]['date']"
+                        pInputText>
+                </div>
+                <div class="field col-12 md:col-1">
+                    <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-6">
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+            </div>
+            <div class="col-6">
+                <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
+            </div>
+        </div>
 
+    </div>
+</div>
 <!-- Liste des prospects en attente d'une assignation de groupe-->
 <div class="col-12">
     <div class="card">
-        <h5>Liste des prospects en attente d'assignation</h5>
-        <p-toast></p-toast>
+        <h5>Liste des inscrits en attente de validation</h5>
+
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
             [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"
@@ -164,7 +204,8 @@
             <ng-template pTemplate="caption">
                 <span class="p-input-icon-left mb-2">
                     <i class="pi pi-search"></i>
-                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full" />
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" class="w-full" />
                 </span>
                 <p-dropdown filter="true" placeholder="Tous" [options]="dropdownDecision"
                     (onChange)="dt1.filter($event.value, 'decision_admission', 'equals')"
@@ -180,16 +221,19 @@
                 <tr>
                     <th style="width: 3rem" scope="col"></th>
                     <th pSortableColumn="customid" scope="col">
-                        ID Etudiant <p-sortIcon field="customid"></p-sortIcon>
+                        ID Prospect <p-sortIcon field="customid"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="lastname" scope="col">
-                        Nom & Prénom <p-sortIcon field="lastname"></p-sortIcon>
+                    <th scope="col">
+                        Email perso <p-sortIcon field="email_perso"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="user_id" scope="col">
+                        Prénom & Nom<p-sortIcon field="user_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="type_form" scope="col">
                         Etablissement <p-sortIcon field="type_form"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="formation" scope="col">
-                        Formation <p-sortIcon field="formation"></p-sortIcon>
+                    <th pSortableColumn="filiere" scope="col">
+                        Filière <p-sortIcon field="filiere"></p-sortIcon>
                     </th>
                     <th pSortableColumn="campus_choix_1" scope="col">
                         Campus Choix 1 <p-sortIcon field="campus_choix_1"></p-sortIcon>
@@ -200,13 +244,16 @@
                     <th pSortableColumn="statut_dossier" scope="col">
                         Statut Dossier <p-sortIcon field="statut_dossier"></p-sortIcon>
                     </th>
+                    <th pSortableColumn="date_creation" scope="col">
+                        Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
+                    </th>
                     <th pSortableColumn="action" scope="col">
                         Action
                     </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-prospect let-expanded="expanded">
-                <tr>
+                <tr *ngIf="prospect.user_id">
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="prospect"
                             class="p-button-text p-button-rounded p-button-plain"
@@ -216,10 +263,12 @@
                     <td>
                         {{ prospect.customid }}
                     </td>
-                    <td
-                        *ngIf="prospect.user_id && users[prospect.user_id] && users[prospect.user_id].lastname && users[prospect.user_id].firstname">
-                        {{ users[prospect.user_id].lastname | uppercase }}
-                        {{ users[prospect.user_id].firstname | titlecase }}
+                    <td>
+                        {{ prospect.user_id?.email_perso }}
+                    </td>
+                    <td>
+                        {{ prospect.user_id?.firstname | titlecase }}
+                        {{ prospect.user_id?.lastname | uppercase }}
                     </td>
                     <td>
                         {{ prospect.type_form | titlecase }}
@@ -237,8 +286,12 @@
                         {{ prospect.statut_dossier }}
                     </td>
                     <td>
-                        <i pTooltip="Assigner à un groupe" tooltipPosition="bottom" class="pi pi-bookmark"
-                            (click)="showAssignForm=prospect;showUploadFile=null" aria-hidden="true"></i>
+                        {{prospect.date_creation | date :'dd/MM/yyyy' }}
+                    </td>
+                    <td>
+                        <i pTooltip="Vérifier le dossier" tooltipPosition="bottom" class="pi pi-bookmark"
+                            (click)="showAssignForm=prospect;showUploadFile=null;initForm(prospect)"
+                            aria-hidden="true"></i>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                             (click)="showUploadFile=prospect" aria-hidden="true"></i>
                     </td>
@@ -259,19 +312,16 @@
                     <th>Téléphone</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-prospect>
-
-            </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
                     <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                    <td>{{users[prospect.user_id].nationnalite}}</td>
-                    <td>{{users[prospect.user_id].pays_adresse}}</td>
-                    <td>{{users[prospect.user_id].email}}</td>
+                    <td>{{prospect.user_id.nationnalite}}</td>
+                    <td>{{prospect.user_id.pays_adresse}}</td>
+                    <td>{{prospect.user_id.email}}</td>
                     <td>{{prospect.statut_actuel}}</td>
                     <td>
-                        {{ users[prospect.user_id].indicatif }}
-                        {{ users[prospect.user_id].phone }}
+                        {{ prospect.user_id.indicatif }}
+                        {{ prospect.user_id.phone }}
                     </td>
                 </tr>
             </ng-template>
@@ -327,34 +377,34 @@
                 </tr>
             </ng-template>
         </p-table>
-
-        <h5 style="text-align: center; color: red;">Service Eduhorizon</h5>
-        <ul *ngIf="prospect.servicesEh.includes(true)">
-            <li *ngIf="prospect.servicesEh[0]">Orientation et accompagnement à l'admission</li>
-            <li *ngIf="prospect.servicesEh[1]">
-                Prépa internationale : formation de 3 mois pour augmenter vos chances de
-                réussite de votre orientation
-            </li>
-            <li *ngIf="prospect.servicesEh[2]">
-                Accompagnement dossier visa
-            </li>
-            <li *ngIf="prospect.servicesEh[3]">Logement</li>
-            <li *ngIf="prospect.servicesEh[4]">
-                Attestation de virement irrévocable (AVI)
-            </li>
-        </ul>
-        <p *ngIf="!prospect.servicesEh.includes(true)">Aucun service EH choisis</p>
-
-        <h5 style="text-align: center; color: red;">Garant</h5>
-        <p *ngIf="prospect.nomGarant">{{ prospect.nomGarant }} {{ prospect.prenomGarant }}</p>
-        <p *ngIf="!prospect.nomGarant"><strong>Aucun garant declaré</strong></p>
+        <div *ngIf="prospect.servicesEh.includes(true)">
+            <h5 style="text-align: center; color: red;">Service Eduhorizon</h5>
+            <ul>
+                <li *ngIf="prospect.servicesEh[0]">Orientation et accompagnement à l'admission</li>
+                <li *ngIf="prospect.servicesEh[1]">
+                    Prépa internationale : formation de 3 mois pour augmenter vos chances de
+                    réussite de votre orientation
+                </li>
+                <li *ngIf="prospect.servicesEh[2]">
+                    Accompagnement dossier visa
+                </li>
+                <li *ngIf="prospect.servicesEh[3]">Logement</li>
+                <li *ngIf="prospect.servicesEh[4]">
+                    Attestation de virement irrévocable (AVI)
+                </li>
+            </ul>
+        </div>
+        <div *ngIf="prospect.nomGarant">
+            <h5 style="text-align: center; color: red;">Garant</h5>
+            <p>{{ prospect.nomGarant }} {{ prospect?.prenomGarant }}</p>
+        </div>
 
         <h5 style="text-align: center; color: red;">Commercial</h5>
-
+        
         <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Code commercial</th>
+                    <th>ID Commercial</th>
                     <th>Commercial</th>
                     <th>Agence</th>
                     <th>Date de la demande</th>
@@ -373,10 +423,12 @@
                         {{ users[infoCommercialExpand.user_id].lastname | titlecase | uppercase }}
                         {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
                     </td>
-                    <td *ngIf="!infoCommercialExpand"></td>
+                    <td *ngIf="!infoCommercialExpand || !infoCommercialExpand.user_id"></td>
                     <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
-                    <td *ngIf="!prospect.nomAgence && !prospect.code_commercial" style="color: red;">Ce prospect ne vient pas d'une agence</td>
-                    <td *ngIf="!prospect.nomAgence && prospect.code_commercial && dicCommercial[prospect.code_commercial] && dicCommercial[prospect.code_commercial].nom" style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td>
+                    <td *ngIf="!prospect.nomAgence && (!prospect.code_commercial || !dicCommercial[prospect.code_commercial])" style="color: red;">Ce prospect ne
+                        vient pas d'une agence</td>
+                    <td *ngIf="!prospect.nomAgence && prospect.code_commercial && dicCommercial[prospect.code_commercial] && dicCommercial[prospect.code_commercial].nom"
+                        style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td> 
                     <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
 
                 </tr>
@@ -413,10 +465,10 @@
                 <tr>
                     <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
                     <td>{{ prospect.tcf }}</td>
-                    <td *ngIf="prospect.agent_id && users[prospect.agent_id] && users[prospect.agent_id]">
-                        {{ users[prospect.agent_id].civilite }}
-                        {{ users[prospect.agent_id].lastname | titlecase | uppercase}}
-                        {{ users[prospect.agent_id].firstname | titlecase }}
+                    <td *ngIf="prospect.agent_id">
+                        {{ prospect.agent_id.civilite }}
+                        {{ prospect.agent_id.lastname | titlecase | uppercase}}
+                        {{ prospect.agent_id.firstname | titlecase }}
                     </td>
                     <td>{{prospect.phase_complementaire}}</td>
                     <td>{{prospect.statut_payement}}</td>
@@ -464,4 +516,3 @@
     </ng-template>
     </p-table>
 </div>
- 

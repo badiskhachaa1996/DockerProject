@@ -6,7 +6,7 @@ const formateurSchema = mongoose.Schema({
     type_contrat: { type: String, required: true },
     taux_h: { type: Number, required: false },
     taux_j: { type: Number, required: false },
-    prestataire_id: { type: String, required: false },
+    prestataire_id: { type: mongoose.Schema.Types.ObjectId, ref: 'entreprise', required: false },
     volume_h: { type: mongoose.Schema.Types.Mixed, required: false },
     volume_h_consomme: { type: mongoose.Schema.Types.Mixed, required: false },
     monday_available: { type: mongoose.Schema.Types.Mixed, default: { state: false, h_debut: null, h_fin: null, remarque: "" } },

@@ -97,7 +97,7 @@ import { AppFooterComponent } from './app.footer.component';
 import { AppConfigComponent } from './app.config.component';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitemComponent } from './app.menuitem.component';
-
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -184,10 +184,10 @@ import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_I
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
-import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
+import { ProspectsComponent } from './administration/validation-prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
+import { ReinscritComponent } from './pedagogie/assignation-groupe/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
@@ -195,6 +195,13 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
 import { ContactComponent } from './contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
+import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
+import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
+
+import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
+import { DemandeEventsComponent } from './demande-events/demande-events.component';
+import { ListEventsComponent } from './demande-events/list-events/list-events.component';
+import { ArrToStrPipe } from './arr-to-str.pipe';
 @NgModule({
   imports: [
     BrowserModule,
@@ -285,7 +292,8 @@ import { PolitiqueConfidentialiteComponent } from './footer/politique-confidenti
     VirtualScrollerModule,
     AppCodeModule,
     StyleClassModule,
-    FullCalendarModule
+    FullCalendarModule,
+    NgxIntlTelInputModule
   ],
   declarations: [
     AppComponent,
@@ -374,7 +382,14 @@ import { PolitiqueConfidentialiteComponent } from './footer/politique-confidenti
     NotificationComponent,
     MpOublieComponent,
     ResetMpComponent,
-    ContactComponent
+    ContactComponent,
+    InscriptionEntrepriseComponent,
+    TuteurComponent,
+    ListeContratsComponent,
+    DemandeEventsComponent,
+    ListEventsComponent,
+    ListeContratsComponent,
+    ArrToStrPipe
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
