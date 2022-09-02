@@ -133,12 +133,9 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'documentation', component: DocumentationComponent },
                     /***************************/
                     { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-<<<<<<< HEAD
                     { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
-=======
                     { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
->>>>>>> c9a13f3b75ef77c0e61d89ceed723569a8711a07
+                    { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },

@@ -10,10 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 
 import { EtudiantService } from 'src/app/services/etudiant.service';
-<<<<<<< HEAD
-import { Inscription } from 'src/app/models/Inscription';
-import { AdmissionService } from 'src/app/services/admission.service';
-=======
 import { FullCalendar } from 'primeng/fullcalendar';
 import { Seance } from 'src/app/models/Seance';
 import { Matiere } from 'src/app/models/Matiere';
@@ -32,7 +28,6 @@ import { Note } from 'src/app/models/Note';
 import { NoteService } from 'src/app/services/note.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { Formateur } from 'src/app/models/Formateur';
->>>>>>> c9a13f3b75ef77c0e61d89ceed723569a8711a07
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -96,17 +91,8 @@ export class DashboardComponent implements OnInit {
     defaultView: "timeGridDay"
   }
 
-<<<<<<< HEAD
-    numberTotalInscription : number = 0;
-    numberNewStudentInscription : number = 0;
-    numberStudentWaiting : number = 0;
-
-
-    constructor(private productService: ProductService, public configService: ConfigService, private UserService: AuthService, private EtuService: EtudiantService, private admissionService: AdmissionService) { }
-=======
   events: any[];
   dernotes: Note[] = [];
->>>>>>> c9a13f3b75ef77c0e61d89ceed723569a8711a07
 
   eventClickFC(col) {
     this.router.navigate(['/emergement/' + col.event.id])
@@ -161,95 +147,6 @@ export class DashboardComponent implements OnInit {
       }
     );
 
-<<<<<<< HEAD
-        //SAKAI Default
-        this.config = this.configService.config;
-        this.subscription = this.configService.configUpdate$.subscribe(config => {
-            this.config = config;
-            this.updateChartOptions();
-        });
-        this.productService.getProductsSmall().then(data => this.products = data);
-
-        this.items = [
-            { label: 'Add New', icon: 'pi pi-fw pi-plus' },
-            { label: 'Remove', icon: 'pi pi-fw pi-minus' }
-        ];
-
-        this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: '#2f4860',
-                    borderColor: '#2f4860',
-                    tension: .4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: '#00bb7e',
-                    borderColor: '#00bb7e',
-                    tension: .4
-                }
-            ]
-        };
-
-        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
-            this.numberTotalInscription = dataStudent.nb_all_etudiant
-        });
-
-        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
-            this.numberNewStudentInscription = dataStudent.nb_nouvelle_inscrit
-        });
-
-        this.admissionService.getInfoDashboardAdmission().subscribe(dataStudent => {
-            this.numberStudentWaiting = dataStudent.nb_retour_etudiant
-        });
-    }
-
-    SCIENCE() {
-        console.log("PAS TOUCHE")
-
-    }
-
-    updateChartOptions() {
-        if (this.config.dark)
-            this.applyDarkTheme();
-        else
-            this.applyLightTheme();
-
-    }
-
-    applyDarkTheme() {
-        this.chartOptions = {
-            plugins: {
-                legend: {
-                    labels: {
-                        color: '#ebedef'
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#ebedef'
-                    },
-                    grid: {
-                        color: 'rgba(160, 167, 181, .3)',
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: '#ebedef'
-                    },
-                    grid: {
-                        color: 'rgba(160, 167, 181, .3)',
-                    }
-                },
-=======
     // recuperation de la liste des notes par étudiant
     this.EtuService.getByUser_id(this.token.id).subscribe(
       (responseEtu) => {
@@ -308,7 +205,6 @@ export class DashboardComponent implements OnInit {
             index++
             if (index > environment.colorPaletteGreen.length - 1) {
               index = 0
->>>>>>> c9a13f3b75ef77c0e61d89ceed723569a8711a07
             }
           }
 
@@ -320,36 +216,6 @@ export class DashboardComponent implements OnInit {
             "extendedProps": {
               "description": d.infos
             },
-<<<<<<< HEAD
-            scales: {
-                x: {
-                    ticks: {
-                        color: '#495057'
-                    },
-                    grid: {
-                        color: '#ebedef',
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: '#495057'
-                    },
-                    grid: {
-                        color: '#ebedef',
-                    }
-                },
-            }
-        };
-    }
-
-    getDateNow() 
-    {
-        var d = new Date();
-        var date = d.getDate() +'-'+ (d.getMonth()+1) +'-'+ d.getFullYear();
-        var hours = d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-        var fullDate = date +' '+ hours;
-    }
-=======
             "color": classeID[diplomeList[d.classe_id[0]]]
           });
         }
@@ -360,5 +226,4 @@ export class DashboardComponent implements OnInit {
     })
 
   }
->>>>>>> c9a13f3b75ef77c0e61d89ceed723569a8711a07
 }
