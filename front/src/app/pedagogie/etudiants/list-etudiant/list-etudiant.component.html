@@ -92,9 +92,32 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateEtudiant" (ngSubmit)="onUpdateEtudiant()">
 
                 <div class="field col-12 md:col-6">
-                    <label For="statut">Statut<span style="color: red;"> * </span></label>
+                    <label For="statut">Statut Professionel<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutList" optionLabel="viewValue" placeholder="Choissisez un statut"
                         formControlName="statut"></p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="statut">Statut Dossier</label>
+                    <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                </div>
+
+
+                <div class="field col-12 md:col-6">
+                    <label For="campus">Campus</label>
+                    <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus"
+                        formControlName="campus_id" emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
+                        filter="true">
+                    </p-dropdown>
+                </div>
+
+
+                <div class="field col-12 md:col-6">
+                    <label For="campus">Filière<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownFiliere" placeholder="Choissisez une filière"
+                        formControlName="filiere" emptyFilterMessage="Pas de filière trouvé" filterPlaceholder="Filière"
+                        filter="true">
+                    </p-dropdown>
                 </div>
 
                 <!-- liste à retirer car récupérer -->
@@ -105,6 +128,7 @@
                         filter="true">
                     </p-dropdown>
                 </div>
+
 
                 <div class="field col-12 md:col-6">
                     <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
@@ -118,7 +142,7 @@
                     <input formControlName="date_naissance" pInputText (onChange)="isMinorFC()" type="date" />
                 </div>
 
-                <div class="field col-12">
+                <div class="field col-6">
                     <label For="ville">Dernier diplome obtenu</label>
                     <input pInputText type="text" id="ville" placeholder="Licence en DEV WEB & WEB Mobile"
                         formControlName="dernier_diplome" />
@@ -459,8 +483,7 @@
                         <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)=" showFormUpdateEtudiant = true; 
-                                    showFormExportEtudiant = false; 
+                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)="
                                     showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <!--

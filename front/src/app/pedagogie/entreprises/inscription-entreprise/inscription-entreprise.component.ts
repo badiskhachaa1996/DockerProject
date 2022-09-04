@@ -47,7 +47,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   rangeYearC = this.minYear + ":" + this.maxYearC
   minDateCalendarC = new Date("01/01/" + this.minYearC)
   maxDateCalendarC = new Date("01/01/" + this.maxYearC)
-  ActiveIndex = 0;
+  ActiveIndex = 3;
   RegisterForm: FormGroup;
   paysList = environment.pays;
   civiliteList = environment.civilite;
@@ -111,6 +111,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   get fin_contrat() { return this.RegisterForm.get('fin_contrat').value; }
   get horaire() { return this.RegisterForm.get('horaire'); }
   get alternant() { return this.RegisterForm.get('alternant').value; }
+  get alternantValidite() { return this.RegisterForm.get('alternant').invalid; }
   get intitule() { return this.RegisterForm.get('intitule'); }
   get classification() { return this.RegisterForm.get('classification'); }
   get niv() { return this.RegisterForm.get('niv'); }

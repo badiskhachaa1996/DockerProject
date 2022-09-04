@@ -167,13 +167,21 @@ const prospect_schema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    haveDoc:{
-        type:Boolean,
-        default:false
+    haveDoc: {
+        type: Boolean,
+        default: false
     },
-    origin:{
-        type:String,
-        default:"Site Web"
+    origin: {
+        type: String,
+        default: "Site Web"
+    },
+    source: {
+        type: String,
+        default: "Interne"
+    },
+    rentree_scolaire: {
+        type: String,
+        default: "Principale"
     }
 });
 

@@ -13,57 +13,57 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDiplome" (ngSubmit)="onUpdateDiplome()">
 
                 <div class="field col-12 md:col-8">
-                    <label For="titre">Titre RNCP du diplôme</label>
+                    <label For="titre">Titre RNCP du diplôme <span style="color:red ;">*</span></label>
                     <input pInputText id="titre" type="text" formControlName="titre" />
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label For="code_RNCP">Code RNCP</label>
+                    <label For="code_RNCP">Code RNCP<span style="color:red ;">*</span></label>
                     <input pInputText id="code_RNCP" type="text" formControlName="code_RNCP" />
                 </div>
 
                 <div class="field col-12">
-                    <label For="titre_long">Titre long du diplôme</label>
+                    <label For="titre_long">Titre long du diplôme<span style="color:red ;">*</span></label>
                     <input pInputText id="titre_long" type="text" formControlName="titre_long" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Campus</label>
+                    <label>Campus<span style="color:red ;">*</span></label>
                     <p-multiSelect [options]="campusList" formControlName="campus_id"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Type de diplôme</label>
+                    <label>Type de diplôme<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="typeDiplome" optionLabel="value" formControlName="type_diplome"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Departement</label>
+                    <label>Departement<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="domaineEtude" optionLabel="value" formControlName="domaine"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'étude</label>
+                    <label>Niveau d'étude<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="niveauEtude" optionLabel="value" formControlName="niveau"></p-dropdown>
                 </div>
 
                 <div class="field col-12">
-                    <label>Cette formation est-elle diplômante ?</label>
+                    <label>Cette formation est-elle diplômante ?<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="choiceList" formControlName="isCertified"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-8">
-                    <label For="certificateur">Certificateur</label>
+                    <label For="certificateur">Certificateur<span style="color:red ;">*</span></label>
                     <input pInputText id="certificateur" type="text" formControlName="certificateur" />
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label For="code_diplome">Code diplôme</label>
+                    <label For="code_diplome">Code diplôme<span style="color:red ;">*</span></label>
                     <input pInputText id="code_diplome" type="text" formControlName="code_diplome" />
                 </div>
 
                 <div class="field col-12 md:col-2">
-                    <label For="nb_heure">Durée en heure</label>
+                    <label For="nb_heure">Durée en heure<span style="color:red ;">*</span></label>
                     <input pInputText id="nb_heure" type="number" formControlName="nb_heure" />
                 </div>
 
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="field col-12 md:col-4">
-                    <label>Rythme de la formation</label>
+                    <label>Rythme de la formation<span style="color:red ;">*</span></label>
                     <p-dropdown [options]="rythmeList" optionLabel="value" formControlName="rythme"></p-dropdown>
                 </div>
 

@@ -1,4 +1,5 @@
 <p-toast></p-toast>
+
 <div class="grid">
     <div class="grid card col-12 ">
         <div class=" col-12 md:col-6 ">
@@ -26,9 +27,11 @@
             <p-progressBar class="customProgress2" [value]="pourcentageAssiduite">
             </p-progressBar>
         </div>
+        
         <div class="col-1 sd:col-1 text-align:center" *ngIf="pourcentageAssiduite>=80">
+            
             <button pButton label="" icon="pi pi-file" (click)="getAtt_ssiduitePDF()"
-                style="width:50px ;height:2px;margin-top: 14px;" class="p-button-success"
+                style="height:2px;margin-top: 14px;" class="p-button-success" label="PDF"
                 pTooltip="Telecharger Attestation d'assiduité" tooltipPosition="bottom" aria-hidden="true"
                 [loading]="PDFisLoading"></button>
 

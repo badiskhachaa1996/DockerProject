@@ -194,6 +194,9 @@
                     (click)="openNewForm('formulaire-admission/espic')"></button>
                 <button style="margin-left: 2px;" pButton icon="pi pi-plus-circle" label="Nouvelle demande EH"
                     (click)="openNewForm('formulaire-admission/eduhorizons')"></button>
+                <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
+                </button>
             </div>
             <h5>Liste des prospects</h5>
 
@@ -211,9 +214,34 @@
                             (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                             class="w-full" />
                     </span>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Source"
+                        [options]="[{value:null,label:'Tous les sources'},{value:'Interne',label:'Interne'},{value:'Partenaire',label:'Partenaire'},{value:'Eduhorizons',label:'Eduhorizons'}]"
+                        (onChange)="dt1.filter($event.value, 'source','equals')"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source" [style]="{'margin':'5px'}">
+                    </p-dropdown>
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Campus" [options]="filterCampus"
                         (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
                         emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="filterEcole"
+                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
+                        [options]="[{value:null,label:'Tous les origines'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
+                        (onChange)="dt1.filter($event.value, 'origin','equals')"
+                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Paiement"
+                        [options]="[
+                    {value:null,label:'Tous les paiements'},
+                    { value: 'Aucun',label:'Aucun' },
+                    { value: 'Pré-inscription',label:'Pré-inscription' }, { value: 'Inscription',label:'Inscription' }, { value: 'Inscription définitive',label:'Inscription définitive' }, ]"
+                        (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
+                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                        [style]="{'margin':'5px'}">
                     </p-dropdown>
                     <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Decision Admission"
                         [options]="dropdownDecision"
@@ -221,25 +249,30 @@
                         emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
                         [style]="{'margin':'5px'}">
                     </p-dropdown>
-                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
-                        [options]="[{value:null,label:'Tous'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
-                        (onChange)="dt1.filter($event.value, 'origin','equals')"
-                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine" [style]="{'margin':'5px'}">
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Pays" [options]="filterPays"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
                     </p-dropdown>
-                    <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
-                        style="float: right;margin-left:2%" *ngIf="!code">
-                    </button>
                     <div class="flex table-header">
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem" scope="col"></th>
+                        <th pSortableColumn="origine" scope="col" style="text-align: center;">
+                            Origine <p-sortIcon field="origine"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="source" scope="col" style="text-align: center;">
+                            Source <p-sortIcon field="source"></p-sortIcon>
+                        </th>
                         <th pSortableColumn="customid" scope="col" style="text-align: center;">
                             ID Prospect <p-sortIcon field="customid"></p-sortIcon>
                         </th>
                         <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
                             Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation" scope="col" style="text-align: center;">
+                            Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="type_form" scope="col" style="text-align: center;">
                             Etablissement <p-sortIcon field="type_form"></p-sortIcon>
@@ -247,8 +280,8 @@
                         <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
                             Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
                         </th>
-                        <th style="text-align: center;">
-                            Email perso
+                        <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
+                            Email perso <p-sortIcon field="user_id.email_perso"></p-sortIcon>
                         </th>
                         <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
                             ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
@@ -262,8 +295,8 @@
                         <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
                             Decision Admission<p-sortIcon field="statut_dossier"></p-sortIcon>
                         </th>
-                        <th scope="col" style="text-align: center;">
-                            Paiement
+                        <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
+                            Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
                         </th>
                         <th scope="col" style="text-align: center;">
                             Visa
@@ -286,6 +319,14 @@
                         </td>
 
                         <td>
+                            {{ prospect.origin }}
+                        </td>
+
+                        <td>
+                            {{ prospect.source }}
+                        </td>
+
+                        <td>
                             {{ prospect.customid }}
                         </td>
 
@@ -295,6 +336,9 @@
                         </td>
                         <td *ngIf="!prospect.user_id">
                             Error Smith
+                        </td>
+                        <td>
+                            {{ prospect.formation | titlecase }}
                         </td>
                         <td>
                             {{ prospect.type_form | titlecase }}
@@ -390,10 +434,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Numéro whatsapp</th>
-                        <th>Langues</th>
-                        <th>Expériences pro</th>
                         <th>Programme choisi</th>
-                        <th>Rythme</th>
                         <th>Niveau Académique</th>
                         <th>Statut actuel</th>
                     </tr>
@@ -404,10 +445,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ prospect.indicatif_whatsapp }} {{ prospect.numero_whatsapp }}</td>
-                        <td>{{ prospect.languages }}</td>
-                        <td>{{ prospect.professional_experience }}</td>
                         <td>{{ prospect.programme }}</td>
-                        <td>{{ prospect.rythme_formation}}</td>
                         <td>{{ prospect.validated_academic_level }}</td>
                         <td>{{ prospect.statut_actuel }}</td>
                     </tr>
@@ -419,6 +457,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Formation</th>
+                        <th>Rentrée scolaire</th>
                         <th>Campus Choix 1</th>
                         <th>Campus Choix 2</th>
                         <th>Campus Choix 3</th>
@@ -430,6 +469,7 @@
                 <ng-template pTemplate="emptymessage">
                     <tr>
                         <td>{{ prospect.formation}}</td>
+                        <td>{{ prospect.rentree_scolaire}}</td>
                         <td>{{ prospect.campus_choix_1 }}</td>
                         <td>{{ prospect.campus_choix_2 }}</td>
                         <td>{{ prospect.campus_choix_3 }}</td>
@@ -465,6 +505,7 @@
                     <tr>
                         <th>ID Commercial</th>
                         <th>Commercial</th>
+                        <th>Email Commercial</th>
                         <th>Agence</th>
                         <th>Date de la demande</th>
 
@@ -483,6 +524,12 @@
                             {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
                         </td>
                         <td *ngIf="!infoCommercialExpand"></td>
+                        <td *ngIf="!infoCommercialExpand"></td>
+                        <td
+                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
+                            {{ users[infoCommercialExpand.user_id].email_perso }} {{
+                            users[infoCommercialExpand.user_id].email }}
+                        </td>
                         <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
                         <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
                         <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
@@ -491,23 +538,13 @@
                 </ng-template>
             </p-table>
 
-            <p *ngIf="prospect.donneePerso">
-                <strong>Ce prospect <span style="color: green;">accepte</span> que ses données personnelles soient
-                    utilisées</strong>
-            </p>
-
-            <p *ngIf="!prospect.donneePerso">
-                <strong>Ce prospect <span style="color: red;">réfuse</span> que ses données personnelles soient
-                    utilisées</strong>
-            </p>
-
             <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
 
             <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Date du dernier traitement</th>
-                        <th>Désignation du TCF</th>
+                        <th>Niveau de Langue</th>
                         <th>Dossier traité par</th>
                         <th>Décision Admission</th>
                         <th>Phase complémentaire</th>

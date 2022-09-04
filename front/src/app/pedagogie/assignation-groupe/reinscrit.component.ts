@@ -12,6 +12,11 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { environment } from 'src/environments/environment';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Entreprise } from 'src/app/models/Entreprise';
+import { CampusService } from 'src/app/services/campus.service';
+import { DiplomeService } from 'src/app/services/diplome.service';
+import { AdmissionService } from 'src/app/services/admission.service';
+import { Prospect } from 'src/app/models/Prospect';
+import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 
 @Component({
   selector: 'app-reinscrit',
@@ -22,12 +27,21 @@ export class ReinscritComponent implements OnInit {
 
   @ViewChild('fileInput') fileInput: FileUpload;
   showUploadFile: Etudiant;
-  etudiants: Etudiant[] = [];
+
   users = {};
   token;
   imageToShow;
   parcoursList = []
   dropdownEntreprise = [];
+
+  dropdownFiliere: any[] = [];
+  dropdownCampus: any[] = [];
+  statutDossier = [
+    { value: "Document Manquant", label: "Document Manquant" },
+    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Abandon", label: "Abandon" }
+  ]
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -50,7 +64,7 @@ export class ReinscritComponent implements OnInit {
   showAssignForm: Etudiant = null;
 
   AssignForm: FormGroup = this.formBuilder.group({
-    groupe: ["", Validators.required],
+    filiere: ["", Validators.required],
     statut: [this.statutList[0], Validators.required],
     numero_ine: [''],
     numero_nir: [''],
@@ -64,30 +78,29 @@ export class ReinscritComponent implements OnInit {
     entreprise: [''],
     // indicatif_tuteur: [''],
     remarque: [''],
+    campus_id: [' '],
+    statut_dossier: [this.statutDossier[0].value],
+    email_ims: ['', Validators.required]
 
   })
 
-  initForm(etudiant: Etudiant) {
-    let s = (etudiant.statut == "Etudiant") ? "Etudiant" : "Alternant";
-    this.AssignForm.patchValue({
-      customid: etudiant.custom_id,
-      statut: { value: s },
-      sos_email: etudiant.sos_email,
-      sos_phone: etudiant.sos_phone,
-      nom_rl: etudiant.nom_rl,
-      prenom_rl: etudiant.prenom_rl,
-      phone_rl: etudiant.phone_rl,
-      email_rl: etudiant.email_rl,
-    })
-    if (s == "Alternant") {
-      this.AssignForm.patchValue({
-        numero_ine: etudiant.numero_INE,
-        numero_nir: etudiant.numero_NIR,
-        adresse_rl: etudiant.adresse_rl
-        // indicatif_tuteur: etudiant.indicatif_tuteur,
 
-      })
-    }
+  prospects: any[] = [];
+  dicCommercial: any= {};
+
+  refreshProspect() {
+    //Recuperation de la liste des utilisateurs
+    this.admissionService.getAllWait().subscribe(d => {
+      this.prospects = d
+    })
+  }
+
+  initForm(etudiant: Prospect) {
+    let s = (etudiant?.rythme_formation == "Initial") ? "Initial" : "Alternant";
+    this.AssignForm.patchValue({
+      customid: etudiant?.customid,
+      statut: { value: s }
+    })
   }
 
   uploadFileForm: FormGroup = new FormGroup({
@@ -95,8 +108,8 @@ export class ReinscritComponent implements OnInit {
   })
 
   groupeList = [];
-  constructor(public etudiantService: EtudiantService, private messageService: MessageService,
-    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService) { }
+  constructor(public etudiantService: EtudiantService, private messageService: MessageService, private campusService: CampusService, private diplomeService: DiplomeService, private commercialService: CommercialPartenaireService,
+    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -108,56 +121,89 @@ export class ReinscritComponent implements OnInit {
         groupe: this.groupeList[0].value
       })
     })
-    this.refreshEtudiant()
+    this.refreshProspect()
 
     this.entrepriseService.getAll().subscribe(
       (data) => {
-        data.forEach(entreprise =>{
-          this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id});
+        data.forEach(entreprise => {
+          this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
         })
       })
+
+    this.campusService.getAllPopulate().subscribe(data => {
+      data.forEach(c => {
+        let e: any = c.ecole_id
+        let n = e.libelle + " - " + c.libelle
+        this.dropdownCampus.push({ value: c._id, label: n })
+      })
+      this.AssignForm.patchValue({ campus_id: this.dropdownCampus[0].value })
+    })
+
+    this.diplomeService.getAll().subscribe(data => {
+      data.forEach(d => {
+        this.dropdownFiliere.push({ value: d._id, label: d.titre })
+      })
+      this.AssignForm.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
+
+    this.commercialService.getAllPopulate().subscribe(dataC => {
+      dataC.forEach(c => {
+        if(c.code_commercial_partenaire && c.partenaire_id)
+          this.dicCommercial[c.code_commercial_partenaire] = c.partenaire_id
+      })
+      console.log(this.dicCommercial)
+    })
   }
 
   onAddEtudiant() {
+    let bypass: any = this.showAssignForm.user_id
     let etd: Etudiant = new Etudiant(
       this.showAssignForm._id,
-      this.showAssignForm.user_id,
-      this.AssignForm.value.groupe,
+      bypass._id,
+      null,
       this.AssignForm.value.statut.value,
-      this.users[this.showAssignForm.user_id].nationalite,
+      bypass.nationnalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_partenaire,
       null, null, null, null,
-      this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
+      this.AssignForm.value.numero_ine,
+      this.AssignForm.value.numero_nir,
+      this.AssignForm.value.sos_email,
+      this.AssignForm.value.sos_phone,
+      this.AssignForm.value.nom_rl,
+      this.AssignForm.value.prenom_rl,
+      this.AssignForm.value.phone_rl,
+      this.AssignForm.value.email_rl,
+
+      this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.dernier_diplome,
       this.AssignForm.value.statut.value == "Alternant",
-      this.showAssignForm.isHandicaped, 
-      this.showAssignForm.suivi_handicaped, 
-      this.showAssignForm.diplome, 
-      this.parcoursList, 
-      this.AssignForm.value.remarque
+      this.showAssignForm.isHandicaped,
+      this.showAssignForm.suivi_handicaped,
+      this.showAssignForm.diplome,
+      this.parcoursList,
+      this.AssignForm.value.remarque,
+      null,//TODO
+      null,
+      null,//TODO
+      null,
+      this.AssignForm.value.campus_id,
+      this.AssignForm.value.statut_dossier,
+      this.AssignForm.value.filiere
     )
-    etd.custom_id = this.generateCode(etd)
-    this.etudiantService.update(etd).subscribe(data => {
-      this.refreshEtudiant()
+    etd.custom_id = this.generateCode(this.showAssignForm)
+    this.etudiantService.validateProspect(etd, bypass._id, this.AssignForm.value.email_ims).subscribe(data => {
+      this.prospects.forEach((val, index) => {
+        if (val._id == data._id) {
+          this.prospects.splice(index, 1)
+        }
+      })
       this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
       this.showAssignForm = null
     }, err => {
       this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
       console.error(err)
     })
-  }
-  refreshEtudiant() {
-    this.etudiantService.getAllWait().subscribe(data => {
-      this.etudiants = data
-    })
-    this.userService.getAll().subscribe(
-      ((response) => {
-        response.forEach((user) => {
-          this.users[user._id] = user;
-        });
-      })
-    );
   }
 
   showPayement: Etudiant;
@@ -187,19 +233,17 @@ export class ReinscritComponent implements OnInit {
   }
 
   addNewPayment() {
-    console.log(this.payementList)
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshEtudiant()
+      this.refreshProspect()
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
     })
   }
 
-  generateCode(prospect: Etudiant) {
-    let user: User = this.users[prospect.user_id]
-    console.log(user)
+  generateCode(prospect: Prospect) {
+    let user: any = prospect.user_id
     let code_pays = user.nationnalite.substring(0, 3)
     environment.dicNationaliteCode.forEach(code => {
       if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
@@ -293,32 +337,7 @@ export class ReinscritComponent implements OnInit {
     }
   }
 
-  loadPP(rowData) {
-    this.imageToShow = "../assets/images/avatar.PNG"
-    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
-      if (data.error) {
-        this.imageToShow = "../assets/images/avatar.PNG"
-      } else {
-        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([byteArray], { type: data.documentType })
-        let reader: FileReader = new FileReader();
-        reader.addEventListener("load", () => {
-          this.imageToShow = reader.result;
-        }, false);
-        if (blob) {
-          this.imageToShow = "../assets/images/avatar.PNG"
-          reader.readAsDataURL(blob);
-        }
-      }
 
-    })
-    this.etudiantService.getFiles(rowData?._id).subscribe(
-      (data) => {
-        this.ListDocuments = data
-      },
-      (error) => { console.error(error) }
-    );
-  }
 
   //Verification si le prospect est mineure ou majeur
   onIsMinor(): boolean {

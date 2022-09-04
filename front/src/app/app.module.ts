@@ -148,7 +148,6 @@ import { ListAnneeScolaireComponent } from './administration/annees-scolaires/li
 import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
-import { AddPartenaireComponent } from './partenaire/partenaires/add-partenaire/add-partenaire.component';
 import { ListDiplomeComponent } from './administration/diplomes/list-diplome/list-diplome.component';
 import { AddDiplomeComponent } from './administration/diplomes/add-diplome/add-diplome.component';
 import { AddGroupeComponent } from './administration/groupes/add-groupe/add-groupe.component';
@@ -185,10 +184,10 @@ import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_I
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
-import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
+import { ProspectsComponent } from './administration/validation-prospects/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
+import { ReinscritComponent } from './pedagogie/assignation-groupe/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
@@ -197,7 +196,6 @@ import { ContactComponent } from './contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
-
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
@@ -339,7 +337,6 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
     ErrorComponent,
     NotfoundComponent,
     AccessComponent,
-    AddPartenaireComponent,
     ListPartenaireComponent,
     ListCollaborateurComponent,
     AddAnneeScolaireComponent,

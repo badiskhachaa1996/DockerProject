@@ -51,9 +51,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-
+// L1 L2 L3 M1 M2 BAC Lycée
   DocPresent = [
-    { label: "Relevé de note de semestre X" },
+    { label: "Relevé de note de semestre L1" },
+    { label: "Relevé de note de semestre L2" },
+    { label: "Relevé de note de semestre L3" },
+    { label: "Relevé de note de semestre M1" },
+    { label: "Relevé de note de semestre M2" },
+    { label: "Relevé de note de semestre BAC" },
+    { label: "Relevé de note de semestre Lycée" },
     { label: "Diplôme BAC" },
     { label: "Diplôme Licence" },
     { label: "Diplôme Master" },
@@ -107,7 +113,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "A signé les documents" },
   ]
   dropdownDecision = [
-    { value: null, label: "Tous" },
+    { value: null, label: "Toutes les décisions" },
     { value: "Suspendu", label: "Suspendu" },
     { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
@@ -128,12 +134,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Aucune" },
     { value: "Choix de formation" },
     { value: "Changement de campus" },
-    { value: "Manquant" },
-    { value: "Rupture d'étude" },
-    { value: "Sous Dossier" },
-    { value: "Envoyé à EduHorizons" },
-    { value: "En attente du retour ELC" },
-    { value: "Demande équivalence envoyée" },
+    { value: "Document Manquant" },
+    { value: "Ajouté sur la base ILTS" },
+    //{ value: "Sous Dossier" },
+    { value: "Orientation E2E par Eduhorizons" },
+    { value: "En attente retour ILTS" },
+    //{ value: "Demande équivalence envoyée" },
   ]
 
   statutPayement = [
@@ -167,12 +173,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   payementList = []
   filterCampus = [
-    { value: null, label: "Tous" },
+    { value: null, label: "Tous les campus" },
+  ]
+
+  filterPays = [
+    { value: null, label: "Tous les pays" }
   ]
 
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
+  filterEcole = [{ value: null, label: "Toutes les écoles" },];
 
 
   onAddPayement() {
@@ -290,47 +301,23 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.messageService.add({ severity: "info", summary: "Chargement des données ..." })
     this.userService.getAll().subscribe(
       ((response) => {
-
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        });
         if (this.code) {
           //Si il y a un code de Commercial
           if (this.code.length > 20) {
             //Si il est considéré comme Admin dans son Partenaire
             console.log("Admin Commercial")
             this.admissionService.getAllByCodeAdmin(this.code).subscribe(
-              ((responseAdmission) => {
-                this.prospects = responseAdmission
-                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
-                response.forEach((user) => {
-                  this.users[user._id] = user;
-                });
-                let tempList = []
-                responseAdmission.forEach(p => {
-                  if (tempList.includes(p.campus_choix_1) == false) {
-                    tempList.push(p.campus_choix_1)
-                    this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
-                  }
-                })
-              }),
+              ((responseAdmission) => this.afterProspectload(responseAdmission)),
               ((error) => { console.error(error); })
             );
           } else {
             console.log("Agent Commercial")
             //Si il n'est pas considéré Admin dans son partenaire
             this.admissionService.getAllCodeCommercial(this.code).subscribe(
-              ((responseAdmission) => {
-                this.prospects = responseAdmission
-                this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
-                response.forEach((user) => {
-                  this.users[user._id] = user;
-                });
-                let tempList = []
-                responseAdmission.forEach(p => {
-                  if (tempList.includes(p.campus_choix_1) == false) {
-                    tempList.push(p.campus_choix_1)
-                    this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
-                  }
-                })
-              }),
+              ((responseAdmission) => this.afterProspectload(responseAdmission)),
               ((error) => { console.error(error); })
             );
           }
@@ -341,20 +328,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
             let service: any = dataU.service_id
             if (dataU.role == "Admin" || (dataU.role != "user" && service && service.label.includes('Admission'))) {
               this.admissionService.getAll().subscribe(
-                ((responseAdmission) => {
-                  this.prospects = responseAdmission
-                  this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
-                  response.forEach((user) => {
-                    this.users[user._id] = user;
-                  });
-                  let tempList = []
-                  responseAdmission.forEach(p => {
-                    if (tempList.includes(p.campus_choix_1) == false) {
-                      tempList.push(p.campus_choix_1)
-                      this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
-                    }
-                  })
-                }),
+                ((responseAdmission) => this.afterProspectload(responseAdmission)),
                 ((error) => { console.error(error); })
               );
             }
@@ -363,6 +337,29 @@ export class GestionPreinscriptionsComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
+  }
+
+  afterProspectload(data: Prospect[]) {
+    this.prospects = data
+    this.messageService.add({ severity: "success", summary: "Chargement des données terminé" })
+    let tempList = []
+    let tempType = []
+    let tempPays = []
+    data.forEach(p => {
+      if (tempList.includes(p.campus_choix_1) == false) {
+        tempList.push(p.campus_choix_1)
+        this.filterCampus.push({ label: p.campus_choix_1, value: p.campus_choix_1 })
+      }
+      if (tempType.includes(p.type_form) == false) {
+        tempType.push(p.type_form)
+        this.filterEcole.push({ label: p.type_form, value: p.type_form })
+      }
+      let u: any = p.user_id
+      if (u && u.pays_adresse && tempPays.includes(u.pays_adresse) == false) {
+        tempPays.push(u.pays_adresse)
+        this.filterPays.push({ label: u.pays_adresse, value: u.pays_adresse })
+      }
+    })
   }
 
   changeStateForm: FormGroup = new FormGroup({

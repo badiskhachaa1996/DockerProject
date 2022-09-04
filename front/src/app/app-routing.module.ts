@@ -30,7 +30,6 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AccessComponent } from './components/access/access.component';
 /***************************/
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
-import { AddPartenaireComponent } from './partenaire/partenaires/add-partenaire/add-partenaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
 import { ListAnneeScolaireComponent } from './administration/annees-scolaires/list-annee-scolaire/list-annee-scolaire.component';
 import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
@@ -75,9 +74,9 @@ import { PedagogieGuardService } from './guards/pedagogie-guard';
 import { AdministrationGuardService } from './guards/administration-guard';
 
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ProspectsComponent } from './pedagogie/prospects/prospects.component';
+import { ProspectsComponent } from './administration/validation-prospects/prospects.component';
 import { ProspectGuard } from './guards/prospect-guard';
-import { ReinscritComponent } from './pedagogie/reinscrit/reinscrit.component';
+import { ReinscritComponent } from './pedagogie/assignation-groupe/reinscrit.component';
 import { LoginGuard } from './guards/login-guard';
 import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
@@ -134,8 +133,9 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'documentation', component: DocumentationComponent },
                     /***************************/
                     { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
                     { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
@@ -164,8 +164,8 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
-                    { path: 'prospects', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'reinscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'assignation-inscrit', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
                     { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial

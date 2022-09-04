@@ -88,7 +88,7 @@
 
                 <div class="field col-12">
                     <label>Cette formation est-elle diplômante ? <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="choiceList" optionLabel="label" formControlName="isCertified" ></p-dropdown>
+                    <p-dropdown [options]="choiceList" formControlName="isCertified" ></p-dropdown>
                     <div *ngIf="isCertified.invalid && (isCertified.touched || isCertified.dirty)">
                         <span  style="color: red;" class="error" *ngIf="isCertified.errors?.required" style="color: red;">* Choix obligatoire </span>
                     </div> 

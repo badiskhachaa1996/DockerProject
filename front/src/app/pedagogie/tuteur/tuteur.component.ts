@@ -19,11 +19,11 @@ import { Entreprise } from 'src/app/models/Entreprise';
 })
 export class TuteurComponent implements OnInit {
 
-  
-//Déclaration 
+
+  //Déclaration 
   addTuteurForm: FormGroup;
   showFormAddTuteur = false;
-  updateTuteurForm : FormGroup;
+  updateTuteurForm: FormGroup;
   showFormModifTuteur = false;
 
   civiliteList = environment.civilite;
@@ -31,20 +31,20 @@ export class TuteurComponent implements OnInit {
   paysList = environment.pays;
 
   entrepriseId: string;
-  
+
   entreprises: Entreprise[] = [];
-  entrepriseDirector : Entreprise;
-  entrepriseDirectorId : string;
+  entrepriseDirector: Entreprise;
+  entrepriseDirectorId: string;
   updateTuteurId: string;
-  tuteurList : Tuteur[] = [];
-  tuteurs : Tuteur[] = [];
+  tuteurList: Tuteur[] = [];
+  tuteurs: Tuteur[] = [];
   entrepriseList = [];
   userList = [];
-  users : User[]=[];
+  users: User[] = [];
   dropdownUser = [];
-  tuteurUpdate : Tuteur;
-  updateTuteur : Tuteur;
-  
+  tuteurUpdate: Tuteur;
+  updateTuteur: Tuteur;
+
 
   isAdmin = false
   isAgent = false
@@ -53,157 +53,161 @@ export class TuteurComponent implements OnInit {
 
   token;
   dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: null }];
-  
- 
-  
 
-//constructeur - injection des services
-  constructor(private formBuilder: FormBuilder, 
-    private router: Router, private tuteurService : TuteurService, 
-    private messageService : MessageService, private UserService : AuthService,
-    private entrepriseService : EntrepriseService, private ActiveRoute :ActivatedRoute) { }
 
-//Initialisateur -
+
+
+  //constructeur - injection des services
+  constructor(private formBuilder: FormBuilder,
+    private router: Router, private tuteurService: TuteurService,
+    private messageService: MessageService, private UserService: AuthService,
+    private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute) { }
+
+  //Initialisateur -
   ngOnInit(): void {
-    
+
     this.token = jwt_decode(localStorage.getItem('token'));
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
-            if (dataUser) {
-              let isAdmin = dataUser.role == "Admin"
-              let isAgent = dataUser.role == "Agent"
-              let isCEO = dataUser.type == "CEO Entreprise"  
-            }
-            
-            if(this.isCEO){
-             
-              // récupération de l'entreprise du user
-              this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
-                ((response) => { 
-                  //recupere l'entreprise avec l'id
-                this.entrepriseDirector = response
-                //selectionne l'id de l'entreprise             
-                this.entrepriseId = this.entrepriseDirector._id
-                
-                // console.log(this.entrepriseDirector)
-                // récupération de la liste des tuteur par l'entreprise id
-                this.tuteurService.getAllByEntrepriseId(this.entrepriseId).subscribe(
-                  ((responseTuteur) => {
-                    this.tuteurList=responseTuteur
-                  })
-                )
-              }))
-            }
-            if(!this.isCEO){
-            //recupération des entreprises
-                    console.log(this.entreprises)
-                    //récupération des tuteur
-                      this.tuteurService.getAll().subscribe(
-                        (dataTuteur) => {
-                          dataTuteur.forEach(tuteur => {
-                            this.tuteurs.push(tuteur);
-                          })
-                        }
-                      );
-                      console.log(this.tuteurs)
+      if (dataUser) {
+        let isAdmin = dataUser.role == "Admin"
+        let isAgent = dataUser.role == "Agent"
+        let isCEO = dataUser.type == "CEO Entreprise"
+      }
 
-                    //récupération des user
-                        this.UserService.getAll().subscribe(
-                          (dataUser) => {
-                            dataUser.forEach(user => {
-                              this.users.push(user);
-                            })
-                          }
-                        );
-                    //Liste des entreprises
-                        this.entrepriseService.getAll().subscribe(
-                          (data) => {
-                            data.forEach(entreprise =>{
-                              this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id});
-                            })
-                          })
-                        }
-                      })
-                            
-                      this.onInitFormAddTuteur()
-                      this.onInitUpdateTuteurForm()
+      if (this.isCEO) {
+
+        // récupération de l'entreprise du user
+        this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
+          ((response) => {
+            //recupere l'entreprise avec l'id
+            this.entrepriseDirector = response
+            //selectionne l'id de l'entreprise             
+            this.entrepriseId = this.entrepriseDirector._id
+
+            // console.log(this.entrepriseDirector)
+            // récupération de la liste des tuteur par l'entreprise id
+            this.tuteurService.getAllByEntrepriseId(this.entrepriseId).subscribe(
+              ((responseTuteur) => {
+                this.tuteurList = responseTuteur
+              })
+            )
+          }))
+      }
+      if (!this.isCEO) {
+        //recupération des entreprises
+        console.log(this.entreprises)
+        //récupération des tuteur
+        this.tuteurService.getAll().subscribe(
+          (dataTuteur) => {
+            dataTuteur.forEach(tuteur => {
+              this.tuteurs.push(tuteur);
+            })
+          }
+        );
+        console.log(this.tuteurs)
+
+        //récupération des user
+        this.UserService.getAll().subscribe(
+          (dataUser) => {
+            dataUser.forEach(user => {
+              this.users.push(user);
+            })
+          }
+        );
+        //Liste des entreprises
+        this.entrepriseService.getAll().subscribe(
+          (data) => {
+            data.forEach(entreprise => {
+              this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
+            })
+          })
+      }
+    })
+
+    this.onInitFormAddTuteur()
+    this.onInitUpdateTuteurForm()
   }
 
-//
-resetAddTuteur() {
-  this.onInitFormAddTuteur()
- 
-}
+  //
+  resetAddTuteur() {
+    this.onInitFormAddTuteur()
 
-//
-resetUpdateTuteur() {
-  this.onInitUpdateTuteurForm()
-}
+  }
 
-///Rafraissement de la liste des tuteurs
-refreshEvent() {
-  this.tuteurService.getAll().subscribe(
-    ((response) => {
-      response.forEach((tuteur) => {
-        this.tuteurs[tuteur._id] = tuteur;
-      });
-    })
-  );
-}
-  
-//Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
+  //
+  resetUpdateTuteur() {
+    this.onInitUpdateTuteurForm()
+  }
+
+  ///Rafraissement de la liste des tuteurs
+  refreshEvent() {
+    this.tuteurService.getAll().subscribe(
+      ((response) => {
+        response.forEach((tuteur) => {
+          this.tuteurs[tuteur._id] = tuteur;
+        });
+      })
+    );
+  }
+
+  //Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
   onInitFormAddTuteur() {
     this.addTuteurForm = this.formBuilder.group({
       civilite: [this.civiliteList[0], Validators.required],
-      firstname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      lastname: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
+      firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      fonction: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
+      fonction: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       entreprise: [''],
-      anciennete: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      niveau_formation: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      email_perso: [''],
+      anciennete: ['', [Validators.required]],
+      niveau_formation: ['', [Validators.required]],
+      email_perso: ['', [Validators.required, Validators.email]],
       numero_adresse: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      rue_adresse: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
+      rue_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       postal_adresse: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      ville_adresse: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      pays_adresse: [this.paysList[0], Validators.required],
-      nationnalite: [this.nationList[0], Validators.required],
+      ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      pays_adresse: [this.paysList[76], Validators.required],
+      nationnalite: [this.nationList[0].value, Validators.required],
       date_naissance: ['', [Validators.required]]
     })
 
-  }
-  
-//Récupération des valeur des champs - pour la partie de traitement des erreurs sur le formulaire
-get civilite() { return this.addTuteurForm.get('civilite').value; };
-get firstname() { return this.addTuteurForm.get('firstname'); };
-get lastname() { return this.addTuteurForm.get('lastname'); };
-get indicatif() { return this.addTuteurForm.get('indicatif'); };
-get phone() { return this.addTuteurForm.get('phone'); };
-get fonction() { return this.addTuteurForm.get('fonction').value; };
-get entreprise() { return this.addTuteurForm.get('entreprise').value.value; };
-get anciennete() { return this.addTuteurForm.get('anciennete').value; };
-get niveau_formation() { return this.addTuteurForm.get('niveau_formation').value; };
-get email_perso() { return this.addTuteurForm.get('email_perso'); };
-get numero_adresse() { return this.addTuteurForm.get('numero_adresse'); };
-get rue_adresse() { return this.addTuteurForm.get('rue_adresse'); };
-get postal_adresse() { return this.addTuteurForm.get('postal_adresse'); };
-get ville_adresse() { return this.addTuteurForm.get('ville_adresse'); };
-get pays_adresse() { return this.addTuteurForm.get('pays_adresse'); };
-get nationnalite() { return this.addTuteurForm.get('nationnalite'); };
-get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
+    if (!this.isCEO) {
+      this.addTuteurForm.controls.entreprise.setValidators([Validators.required])
+    }
 
-//méthode d'ajout du tuteur
-  onAddTuteur(){
+  }
+
+  //Récupération des valeur des champs - pour la partie de traitement des erreurs sur le formulaire
+  get civilite() { return this.addTuteurForm.get('civilite').value; };
+  get firstname() { return this.addTuteurForm.get('firstname'); };
+  get lastname() { return this.addTuteurForm.get('lastname'); };
+  get indicatif() { return this.addTuteurForm.get('indicatif'); };
+  get phone() { return this.addTuteurForm.get('phone'); };
+  get fonction() { return this.addTuteurForm.get('fonction').value; };
+  get entreprise() { return this.addTuteurForm.get('entreprise').value.value; };
+  get anciennete() { return this.addTuteurForm.get('anciennete').value; };
+  get niveau_formation() { return this.addTuteurForm.get('niveau_formation').value; };
+  get email_perso() { return this.addTuteurForm.get('email_perso'); };
+  get numero_adresse() { return this.addTuteurForm.get('numero_adresse'); };
+  get rue_adresse() { return this.addTuteurForm.get('rue_adresse'); };
+  get postal_adresse() { return this.addTuteurForm.get('postal_adresse'); };
+  get ville_adresse() { return this.addTuteurForm.get('ville_adresse'); };
+  get pays_adresse() { return this.addTuteurForm.get('pays_adresse'); };
+  get nationnalite() { return this.addTuteurForm.get('nationnalite'); };
+  get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
+
+  //méthode d'ajout du tuteur
+  onAddTuteur() {
     let civilite = this.addTuteurForm.get('civilite')?.value.value;
     let firstname = this.addTuteurForm.get('firstname')?.value;
     let lastname = this.addTuteurForm.get('lastname')?.value;
     let indicatif = this.addTuteurForm.get('indicatif')?.value;
     let phone = this.addTuteurForm.get('phone')?.value;
     let fonction = this.addTuteurForm.get('fonction')?.value;
-    if(this.isCEO){
+    if (this.isCEO) {
       var entreprise = this.entrepriseId
-    }else if(!this.isCEO){
+    } else if (!this.isCEO) {
       entreprise = this.addTuteurForm.get('entreprise')?.value.value;
     }
     let anciennete = this.addTuteurForm.get('anciennete')?.value;
@@ -219,9 +223,9 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
       null,
-      firstname, 
-      lastname, 
-      indicatif, 
+      firstname,
+      lastname,
+      indicatif,
       phone,
       null,// email estya
       email_perso,
@@ -234,15 +238,15 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
       null, //typeImageProfil
       'Tuteur',
       entreprise,
-      pays_adresse.value, 
-      ville_adresse, 
-      rue_adresse, 
-      numero_adresse, 
+      pays_adresse.value,
+      ville_adresse,
+      rue_adresse,
+      numero_adresse,
       postal_adresse,
       nationnalite,
       null,//verifedEmail
       null);//date creation
-      console.log(newUser) 
+    console.log(newUser)
 
     let newTuteur = new Tuteur(
       entreprise,//entreprise id
@@ -254,7 +258,7 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
     );
     console.log(newTuteur)
 
-    this.tuteurService.create({ 'newTuteur': newTuteur, 'newUser': newUser}).subscribe(
+    this.tuteurService.create({ 'newTuteur': newTuteur, 'newUser': newUser }).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
         this.showFormAddTuteur = false;
@@ -275,65 +279,60 @@ get date_naissance() { return this.addTuteurForm.get('date_naissance'); };
   }
 
 
-////Modification du tuteur
-//Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
-onInitUpdateTuteurForm() {
-  this.updateTuteurForm = this.formBuilder.group({
-    fonction: [''],
-    anciennete: [''],
-    niveau_formation: [''],
-    
-  })
- 
-}
+  ////Modification du tuteur
+  //Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
+  onInitUpdateTuteurForm() {
+    this.updateTuteurForm = this.formBuilder.group({
+      fonction: [''],
+      anciennete: [''],
+      niveau_formation: [''],
 
-//récupération du tuteur à modifier
-OnGetByIdTuteur(rowData : Tuteur){
-  this.tuteurService.getById(this.updateTuteurId).subscribe(
-    (response) => {
-      this.updateTuteur = response;
-      this.updateTuteurForm.patchValue({
-        fonction: rowData.fonction,
-        anciennete: rowData.anciennete,
-        niveau_formation: rowData.niveau_formation,
-      });
     })
-   
-   
+
   }
 
-onUpdateTuteur(){
-  
-  let fonction = this.updateTuteurForm.get('fonction').value;
-  let anciennete = this.updateTuteurForm.get('anciennete').value;
-  let niveau_formation = this.updateTuteurForm.get('niveau_formation').value;
+  //récupération du tuteur à modifier
+  OnGetByIdTuteur(rowData: Tuteur) {
+    this.tuteurService.getById(this.updateTuteurId).subscribe(
+      (response) => {
+        this.updateTuteur = response;
+        this.updateTuteurForm.patchValue({
+          fonction: rowData.fonction,
+          anciennete: rowData.anciennete,
+          niveau_formation: rowData.niveau_formation,
+        });
+      })
 
-  this.tuteurUpdate = new Tuteur(
-    null,
-    null,
-    fonction,
-    anciennete,
-    niveau_formation,
-    null
-  );
 
-  console.log(this.tuteurUpdate);
-  
-  this.tuteurService.updateById(this.updateTuteurId, this.tuteurUpdate).subscribe(
-    ((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
-      console.log(this.tuteurUpdate);
-    }),
-    ((error) => {
-      console.error(error)
-      this.messageService.add({ severity: 'error', summary: error.error });
-    })
-   
-  );
+  }
 
-  this.resetUpdateTuteur()
+  onUpdateTuteur() {
 
-}
+    let fonction = this.updateTuteurForm.get('fonction').value;
+    let anciennete = this.updateTuteurForm.get('anciennete').value;
+    let niveau_formation = this.updateTuteurForm.get('niveau_formation').value;
+
+    this.tuteurUpdate = {
+      fonction,
+      anciennete,
+      niveau_formation,
+    }
+
+    this.tuteurService.updateById(this.updateTuteurId, this.tuteurUpdate).subscribe(
+      ((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
+        console.log(this.tuteurUpdate);
+      }),
+      ((error) => {
+        console.error(error)
+        this.messageService.add({ severity: 'error', summary: error.error });
+      })
+
+    );
+
+    this.resetUpdateTuteur()
+
+  }
 
 
 }

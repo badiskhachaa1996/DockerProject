@@ -27,7 +27,7 @@ export class CommercialPartenaireService {
 
   //Recuperation de la liste des commercial
   getAllByPartenaireID(partenaire_id: string) {
-    let registreUrl = this.apiurl + "getAllByPartenaireId/"+partenaire_id;
+    let registreUrl = this.apiurl + "getAllByPartenaireId/" + partenaire_id;
     return this.httpClient.get<CommercialPartenaire[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -55,8 +55,13 @@ export class CommercialPartenaireService {
     return this.httpClient.put<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getCommercialDataFromCommercialCode(code:string){
-    let registreUrl = this.apiurl + "getCommercialDataFromCommercialCode/"+code;
+  getCommercialDataFromCommercialCode(code: string) {
+    let registreUrl = this.apiurl + "getCommercialDataFromCommercialCode/" + code;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  delete(id: string) {
+    let registreUrl = this.apiurl + "delete/" + id;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 

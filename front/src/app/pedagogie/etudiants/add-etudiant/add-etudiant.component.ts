@@ -90,6 +90,7 @@ export class AddEtudiantComponent implements OnInit {
   formationList = []
   alternant_id;
 
+
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
     private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
     private diplomeService: DiplomeService, private campusService: CampusService) { }
@@ -431,22 +432,21 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null);
 
+   
+
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
+        console.log(response.data)
+        this.alternant_id = response.data._id
+        console.log(this.alternant_id)
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
         //Recuperation de la liste des differentes informations
-        this.alternant_id = response._id
-        console.log(response)
         this.onGetAllClasses();
   
         this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-      }),
-      ((error) => {
-        console.error(error)
-        this.messageService.add({ severity: 'error', summary: error.error });
-      })
-    );
+
+ 
 
     let contratAlternance = new ContratAlternance(
       debut_contrat,
@@ -462,12 +462,13 @@ export class AddEtudiantComponent implements OnInit {
       code_commercial
     );
 
+    console.log(contratAlternance)
+
     let t1 = this.tuteurEtu;
     let entreprise = this.entrepriseEtu;
     let CEO = this.entrepriseEtu.Directeur_id;
+    
 
-    console.log(this.alternant_id);
-    console.log(contratAlternance);
     let objectTosend = { contratAlternance, t1, entreprise }
     
     if(objectTosend){
@@ -481,6 +482,14 @@ export class AddEtudiantComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: error.error });
       })
     }
+
+  }),
+  ((error) => {
+    console.error(error)
+    this.messageService.add({ severity: 'error', summary: error.error });
+  })
+);
+
 
   })
   )

@@ -54,12 +54,15 @@ export class ListCollaborateurComponent implements OnInit {
     { label: 'Externe', value: 'Externe' }
   ];
 
+  canDelete = false
+
   constructor(private partenaireService: PartenaireService, private activatedRoute: ActivatedRoute, private messageService: MessageService,
     private commercialPartenaireService: CommercialPartenaireService, private userService: AuthService, private formBuilder: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.canDelete = (this.token && (this.token['role'] == 'Admin' || this.token['role'] == "Responsable"))
     //Recuperation des données
     this.onGetData();
 
@@ -234,7 +237,7 @@ export class ListCollaborateurComponent implements OnInit {
   }
 
 
-  listPartenaire={}
+  listPartenaire = {}
 
   //Methode de recuperation des données user et commercial
   onGetData() {
@@ -261,9 +264,9 @@ export class ListCollaborateurComponent implements OnInit {
         ((error) => { console.error(error); })
       );
     }
-    this.partenaireService.getAll().subscribe(data=>{
-      data.forEach(p=>{
-        this.listPartenaire[p._id]=p
+    this.partenaireService.getAll().subscribe(data => {
+      data.forEach(p => {
+        this.listPartenaire[p._id] = p
       })
     })
 
@@ -287,10 +290,10 @@ export class ListCollaborateurComponent implements OnInit {
         t['Nationalite'] = user?.nationnalite
         t['password'] = user.password
 
-        t['p_nom']=partenaire.nom
-        t['p_email']=partenaire.email
-        t['services']=partenaire.Services
-        t['Pays']=partenaire.Pays
+        t['p_nom'] = partenaire.nom
+        t['p_email'] = partenaire.email
+        t['services'] = partenaire.Services
+        t['Pays'] = partenaire.Pays
         dataExcel.push(t)
       }
     })
@@ -311,6 +314,17 @@ export class ListCollaborateurComponent implements OnInit {
 
   seeRecruted(rowData: CommercialPartenaire) {
     this.router.navigate(["/etudiants/" + rowData.code_commercial_partenaire])
+  }
+
+  delete(rowData: CommercialPartenaire) {
+    if (confirm("La suppression de ce commercial, supprimera aussi son compte IMS et enlevera les codes commerciaux de ces prospects\nL'équipe IMS ne sera pas responsable si cela occasione un problème du à la suppression\nEtes-vous sûr de vouloir faire cela ?"))
+      this.commercialPartenaireService.delete(rowData._id).subscribe(p => {
+        this.commercialPartenaires.forEach((val, index) => {
+          if (val._id == rowData._id) {
+            this.commercialPartenaires.splice(index, 1)
+          }
+        })
+      })
   }
 
 

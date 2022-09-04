@@ -680,12 +680,12 @@ Formation suivie :
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
-
+                            {{ debut_contrat.invalid }}
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
                                 [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
-                                 alternant.invalid ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
+                                alternantValidite ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
                                 (click)="nextPage(); "></button>
 
                         </div>

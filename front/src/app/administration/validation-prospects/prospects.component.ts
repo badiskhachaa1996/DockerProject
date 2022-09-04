@@ -89,7 +89,6 @@ export class ProspectsComponent implements OnInit {
       if (data && data.statut == 'Admin') {
         this.dataCommercial = data
       }
-      this.refreshProspect()
     })
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
@@ -99,11 +98,47 @@ export class ProspectsComponent implements OnInit {
         groupe: this.groupeList[0].value
       })
     })
-    this.commercialService.getAllPopulate().subscribe(dataC=>{
-      dataC.forEach(c=>{
-        this.dicCommercial[c.code_commercial_partenaire]=c.partenaire_id
-      })
+    this.refreshEtudiant()
+  }
+  etudiants: Etudiant[] = [];
+  refreshEtudiant() {
+    this.etudiantService.getAllWait().subscribe(data => {
+      this.etudiants = data
     })
+    this.userService.getAll().subscribe(
+      ((response) => {
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        });
+      })
+    );
+  }
+  imageToShow: any = "../assets/images/avatar.PNG"
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+    this.etudiantService.getFiles(rowData?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+      },
+      (error) => { console.error(error) }
+    );
   }
 
   onAddEtudiant() {
@@ -123,8 +158,7 @@ export class ProspectsComponent implements OnInit {
       null//A faire pour PMR
     )
     this.etudiantService.createfromPreinscris(etd).subscribe(data => {
-      this.refreshProspect()
-      this.showAssignForm=null
+      this.showAssignForm = null
     }, err => {
       console.error(err)
     })
@@ -150,20 +184,6 @@ export class ProspectsComponent implements OnInit {
     } else {
       this.infoCommercialExpand = null
     }
-  }
-
-  refreshProspect() {
-    //Recuperation de la liste des utilisateurs
-    this.userService.getAll().subscribe(
-      ((response) => {
-        response.forEach((user) => {
-          this.users[user._id] = user;
-        });
-        this.admissionService.getAllWait().subscribe(d => {
-          this.prospects = d
-        })
-      })
-    );
   }
 
   downloadFile(id, i) {
@@ -220,8 +240,7 @@ export class ProspectsComponent implements OnInit {
   }
 
   //Verification si le prospect est mineure ou majeur
-  onIsMinor(): boolean 
-  {
+  onIsMinor(): boolean {
     let result: boolean = false;
 
     //recuperation de l'année actuelle
@@ -230,11 +249,9 @@ export class ProspectsComponent implements OnInit {
     let anneeDeNaissance = new Date(this.showAssignForm.date_naissance).getFullYear();
 
     //Calcule de la difference
-    if(anneeActuel - anneeDeNaissance >= 18)
-    {
+    if (anneeActuel - anneeDeNaissance >= 18) {
       result = false;
-    } else
-    {
+    } else {
       result = true;
     }
 
