@@ -47,7 +47,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   rangeYearC = this.minYear + ":" + this.maxYearC
   minDateCalendarC = new Date("01/01/" + this.minYearC)
   maxDateCalendarC = new Date("01/01/" + this.maxYearC)
-  ActiveIndex = 3;
+  ActiveIndex = 0;
   RegisterForm: FormGroup;
   paysList = environment.pays;
   civiliteList = environment.civilite;
