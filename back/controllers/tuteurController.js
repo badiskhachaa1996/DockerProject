@@ -100,7 +100,7 @@ app.get('/getAllByEntrepriseId/:entrepriseId', (req, res, next) => {
 
 //Recuperation des données d'un tuteur
 app.get('/getById/:id', (req, res, next) => {
-    Tuteur.findOne({ _id: req.params.id })
+    Tuteur.findOne({ _id: req.params.id }).populate('user_id')
         .then((TuteurFromdb) => res.status(200).send(TuteurFromdb))
         .catch(error => {
             console.error(error)
@@ -109,18 +109,23 @@ app.get('/getById/:id', (req, res, next) => {
 });
 
 //Recuperation liste de tuteurs
-// app.get("/getAll", (req, res, next) => {
-//     Tuteur.find()
-//         .then((TuteurFromdb) => {
-//             res.status(200).send(TuteurFromdb);
-//         })
-//         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des tuteurs'); })
-// });
 
 app.get("/getAll", (req, res, next) => {
     Tuteur.find().populate('user_id')
         .then((TuteurFromdb) => { res.status(200).send(TuteurFromdb) })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des tuteurs " + error.Message }) })
 });
+
+//recupération d'un tuteur via l'user id
+app.get('/getByUserId/:id', (req, res, next) => {
+    Tuteur.findOne({ user_id: req.params.id })
+        .then((data) => res.status(200).send(data))
+        .catch(error => {
+            console.error(error)
+            res.status(400).send(error)
+        });
+});
+
+
 
 module.exports = app;
