@@ -187,7 +187,8 @@ export class AppMenuComponent implements OnInit {
                 this.isReponsable = dataUser.role == "Responsable"
                 this.isCeoEntreprise = dataUser.type == "CEO Entreprise"
                 this.isTuteurAlternance = dataUser.type == "Tuteur"
-                
+                console.log(dataUser)
+
                 let service: any = dataUser.service_id
                 if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')
@@ -377,7 +378,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: "Contrats Alternances",
                             items: [
-                                { label: 'Listes des alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
+                                { label: 'Listes des alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
                             ]
                         },
                     ]

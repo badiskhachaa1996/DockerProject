@@ -96,7 +96,7 @@ app.post("/create", (req, res, next) => {
                         etudiant.user_id = userCreated._id;
                         console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
-                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
+                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated })})
                             .catch((error) => {
                                 console.error(error);
                                 res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })

@@ -22,7 +22,7 @@ mongoose
                     seances.forEach(s => {
                         Presence.findOne({ seance_id: s._id, user_id: e.user_id._id }).then(p => {
                             if (!p || !p.isPresent) {
-                                //Envoie de mail Attention vous avez été noté
+                                //Envoie de mail Attention vous avez été noté Absent veuillez justifié
                                 console.log(s, e)
                             }
                         })
@@ -31,3 +31,12 @@ mongoose
             })
         })
     })
+/*
+                                if (dicAbsence[s.matiere_id]) {
+                                    dicAbsence[s.matiere_id] += 1
+                                    if (dicAbsence[s.matiere_id] == 2) {
+                                        //Attention après une nouvelle Absence votre examen à MODULE vous sera retiré
+                                    }
+                                } else {
+                                    dicAbsence[s.matiere_id] = 1
+                                }*/
