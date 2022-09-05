@@ -1,63 +1,277 @@
 <div class="grid">
-	<div class="col-12">
-		<div class="card">
-			<h5>Liste des partenaires</h5>
-			<p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="10" [rowHover]="true"
-				[totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5"
-				[globalFilterFields]="['nom','code_partenaire','email']" responsiveLayout="scroll"
-				selectionMode="single" styleClass="p-datatable-gridlines">
+    <div class="col-12" *ngIf="showFormModifPartenaire">
+        <div class="card">
+            <h4 style="text-align: center;">Modifier ce partenaire </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormModifPartenaire = false; formModifPartenaire.reset()" aria-hidden="true"></i>
 
-				<ng-template pTemplate="caption">
-					<div class="flex justify-content-between flex-column sm:flex-row">
-						<span class="p-input-icon-left mb-2">
-							<i class="pi pi-search"></i>
-							<input pInputText type="text" #filter
-								(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-								class="w-full" />
-						</span>
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th pSortableColumn="code" style="text-align: center;"> ID Partenaire <p-sortIcon field="code">
-							</p-sortIcon>
-						</th>
-						<th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe">
-							</p-sortIcon>
-						</th>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formModifPartenaire" (ngSubmit)="onModdifPartenaire();">
+                <div class="field col-12 md:col-12">
+                    <label For="societe">Nom de la société <span style="color: red;"> * </span></label>
+                    <input pInputText id="societe" type="text" formControlName="nomSoc" />
+                    <div *ngIf="nomSoc_m.invalid && (nomSoc_m.touched || nomSoc_m.dirty)">
+                        <span class="error" *ngIf="nomSoc_m.errors?.required">
+                            <span style="color: red;">* Le nom est obligatoire </span>
+                        </span>
+                    </div>
+                </div>
+                <div class="field col-6 md:col-6">
+                    <label>Type</label>
+                    <p-dropdown [options]="typeSoc" optionLabel="value"
+                        filterPlaceholder="Choissisez le type de la societe" formControlName="type"
+                        optionDisabled="actif"></p-dropdown>
+                </div>
+                <div class="field col-6 md:col-6">
+                    <label>Format juridique</label>
+                    <p-dropdown [options]="formatJuridique" optionLabel="value" formControlName="format_juridique"
+                        optionDisabled="actif"></p-dropdown>
+                </div>
+                <div class="field col-4 md:col-2">
+                    <label For="Indicatif">Indicatif <span style="color: red;"> * </span></label>
+                    <input pInputText id="Indicatif" type="text" formControlName="indicatif" />
+                    <div *ngIf="indicatif_m.invalid && (indicatif_m.touched || indicatif_m.dirty)">
+                        <span style="color: red;" class="error" *ngIf="indicatif_m.errors?.required">*
+                            L'indicatif est obligatoire</span>
+                        <span style="color: red;" class="error" *ngIf="indicatif_m.errors?.pattern">* Seul les
+                            chiffres sont acceptés</span>
+                    </div>
+                </div>
 
-						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
-							</p-sortIcon>
-						</th>
-						<th style="text-align: center;">Action</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-rowData>
-					<tr>
-						<td style="min-width: 12rem;">
-							{{ rowData.code_partenaire }}
-						</td>
-						<td style="min-width: 12rem;">
-							{{ rowData.nom | titlecase }}
-						</td>
+                <div class="field col-8 md:col-10">
+                    <label For="tel">Téléphone <span style="color: red;"> * </span></label>
+                    <input pInputText id="tel" type="tel" formControlName="phonePartenaire" />
+                    <div *ngIf="phonePartenaire_m.invalid && (phonePartenaire_m.touched || phonePartenaire_m.dirty)">
+                        <span class="error" *ngIf="phonePartenaire_m.errors?.required">
+                            <span style="color: red;">* Le téléphone est obligatoire.</span>
+                        </span>
+                        <span class="error" *ngIf="phonePartenaire_m.errors?.pattern">
+                            <span style="color: red;">* Le téléphone n'est pas dans le bon format.</span>
+                        </span>
+                    </div>
+                </div>
 
-						<td style="min-width: 14rem;">
-							{{ rowData.email}}
-						</td>
-						<td style="min-width: 10rem;">
-							<i pTooltip="Voir les Collaborateurs" tooltipPosition="bottom" class="pi pi-sitemap"
-								(click)="seeUnderPartenaire(rowData)" aria-hidden="true"></i>
-							<i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
-								(click)="seeRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
-							<i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
-								(click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
-							<i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
-								(click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px" *ngIf="canDelete"></i>
-						</td>
-					</tr>
-				</ng-template>
-			</p-table>
-		</div>
+                <div class="field col-4 md:col-2">
+                    <label For="Indicatif">Indicatif Whatsapp <span style="color: red;"> * </span></label>
+                    <input pInputText id="Indicatif" type="text" formControlName="indicatif_whatsapp" />
+                    <div
+                        *ngIf="indicatif_whatsapp_m.invalid && (indicatif_whatsapp_m.touched || indicatif_whatsapp_m.dirty)">
+                        <span style="color: red;" class="error" *ngIf="indicatif_whatsapp_m.errors?.required">*
+                            L'indicatif est obligatoire</span>
+                        <span style="color: red;" class="error" *ngIf="indicatif_whatsapp_m.errors?.pattern">* Seul les
+                            chiffres sont acceptés</span>
+                    </div>
+                </div>
+                <div class="field col-8 md:col-10">
+                    <label For="tel">Téléphone Whatsapp <span style="color: red;"> * </span></label>
+                    <input pInputText id="tel" type="tel" formControlName="WhatsApp" />
 
-	</div>
+                    <div *ngIf="WhatsApp_m.invalid && (WhatsApp_m.touched || WhatsApp_m.dirty)">
+                        <span class="error" *ngIf="WhatsApp_m.errors?.required">
+                            <span style="color: red;">* Le téléphone est obligatoire.</span>
+                        </span>
+                        <span class="error" *ngIf="WhatsApp_m.errors?.pattern">
+                            <span style="color: red;"> * Le téléphone n'est pas dans le bon format.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="email">Email <span style="color: red;"> * </span></label>
+                    <input pInputText id="email" type="email" formControlName="emailPartenaire" />
+                    <div *ngIf="emailPartenaire_m.invalid && (emailPartenaire_m.touched || emailPartenaire_m.dirty)">
+                        <span class="error" *ngIf="emailPartenaire_m.errors">
+                            <span style="color: red;">* L'email est obligatoire.</span>
+                        </span>
+                        <span style="color: red;" class="error" *ngIf="emailPartenaire_m.errors?.email"
+                            style="color: red;">* L'email n'est pas dans le bon format </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="tva">TVA <span style="color: red;"> * </span></label>
+                    <input pInputText id="tva" type="text" formControlName="number_TVA" />
+                    <div *ngIf="number_TVA_m.invalid && (number_TVA_m.touched || number_TVA_m.dirty)">
+                        <span class="error" *ngIf="number_TVA_m.errors">
+                            <span style="color: red;">* Le numéro de TVA est obligatoire.</span>
+                        </span>
+                        <span class="error" *ngIf="number_TVA_m.errors?.pattern">
+                            <span style="color: red;">* Le numéro de TVA semble incorrect.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="siren">SIREN</label>
+                    <input pInputText id="siren" type="text" formControlName="SIREN" />
+                    <div *ngIf="SIREN_m.invalid && (SIREN_m.touched || SIREN_m.dirty)">
+                        <span class="error" *ngIf="SIREN_m.errors?.pattern">
+                            <span style="color: red;">* Le numéro de SIREN semble incorrect.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="siret">SIRET</label>
+                    <input pInputText id="siret" type="text" formControlName="SIRET" />
+                    <div *ngIf="SIRET_m.invalid && (SIRET_m.touched || SIRET_m.dirty)">
+                        <span class="error" *ngIf="SIRET_m.errors?.pattern">
+                            <span style="color: red;">* Le numéro de SIRET semble incorrect.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12 md:col-4">
+                    <label For="ape">Code APE </label>
+                    <input pInputText id="ape" type="text" formControlName="APE" />
+                </div>
+
+                <div class="field col-12">
+                    <label For="service">Services proposés <span style="color: red;"> * </span></label>
+                    <textarea id="service" pInputTextarea placeholder="Services proposés" autoResize rows="3" cols="30"
+                        formControlName="Services"></textarea>
+                    <div *ngIf="Services_m.invalid && (Services_m.touched || Services_m.dirty)">
+                        <span class="error" *ngIf="Services_m.errors?.required">
+                            <span style="color: red;">* Les services proposés sont obligatoires.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field col-12">
+                    <label For="pays">Pays d'activité <span style="color: red;"> * </span></label>
+                    <textarea id="pays" pInputTextarea placeholder="Pays d'activité" autoResize rows="3" cols="30"
+                        formControlName="Pays"></textarea>
+                    <div *ngIf="Pays_m.invalid && (Pays_m.touched || Pays_m.dirty)">
+                        <span class="error" *ngIf="Pays_m.errors?.required">
+                            <span style="color: red;">* Les pays d'activités sont obligatoires.</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div style="justify-content: right;">
+                    <button pButton label="Modifier le partenaire" [disabled]="formModifPartenaire.invalid"></button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right">
+                <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
+            </div>
+            <h5>Liste des partenaires</h5>
+            <p-table #dt1 [value]="partenaires" dataKey="_id" [rows]="10" [rowHover]="true"
+                [totalRecords]="partenaires.length" [paginator]="true" [pageLinks]="5" [expandedRowKeys]="expandedRows"
+                rowExpandMode="single" [globalFilterFields]="['libelle','email','site','ville','pays']"
+                responsiveLayout="scroll" selectionMode="single" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="societe" style="text-align: center;"> Société <p-sortIcon field="societe">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="code" style="text-align: center;"> Code <p-sortIcon field="code">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
+                            </p-sortIcon>
+                        </th>
+                        <th style="text-align: center;">Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="rowData"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData.nom | uppercase }}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ rowData.code_partenaire }}
+                        </td>
+                        <td style="min-width: 14rem;">
+                            {{ rowData.email}}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            <i pTooltip="Voir les Collaborateurs" tooltipPosition="bottom" class="pi pi-sitemap"
+                                (click)="seeUnderPartenaire(rowData)" aria-hidden="true"></i>
+                            <i pTooltip="Voir les Eleves affiliés" tooltipPosition="bottom" class="pi pi-users"
+                                (click)="seeRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i pTooltip="Voir les Prospects affiliés" tooltipPosition="bottom" class="pi pi-envelope"
+                                (click)="seePreRecruted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                style="margin-left: 7px" aria-hidden="true"
+                                (click)="showFormModifPartenaire = true; idPartenaireToUpdate = rowData._id; onGetbyId(rowData)"></i>
+                            <i pTooltip="Supprimer le partenaire" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="delete(rowData)" aria-hidden="true" style="margin-left: 7px"
+                                *ngIf="canDelete"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-rowData>
+                    <tr>
+                        <td colspan="7">
+                            <div class="p-3">
+                                <p-table class="p-datatable-gridlines" responsiveLayout="scroll"
+                                    styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type</th>
+                        <th>Format juridique</th>
+                        <th>Numéro téléphone</th>
+                        <th>Numéro WhatsApp</th>
+                        <th>Email</th>
+                        <th>TVA</th>
+                        <th>SIREN</th>
+                        <th>SIRET</th>
+                        <th>Code APE</th>
+                        <th>Service proposés</th>
+                        <th>Pays d'activités</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{rowData.type}}</td>
+                        <td>{{rowData.format_juridique}}</td>
+                        <td>{{rowData.phone}}</td>
+                        <td>{{rowData.WhatsApp}}</td>
+                        <td>{{rowData.email}}</td>
+                        <td>{{rowData.number_TVA}}</td>
+                        <td>{{rowData.SIREN}}</td>
+                        <td>{{rowData.SIRET}}</td>
+                        <td>{{rowData.APE}}</td>
+                        <td>{{rowData.Services}}</td>
+                        <td>{{rowData.Pays}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
 </div>

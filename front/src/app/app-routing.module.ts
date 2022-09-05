@@ -30,7 +30,6 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { AccessComponent } from './components/access/access.component';
 /***************************/
 import { ListPartenaireComponent } from './partenaire/partenaires/list-partenaire/list-partenaire.component';
-import { AddPartenaireComponent } from './partenaire/partenaires/add-partenaire/add-partenaire.component';
 import { ListCollaborateurComponent } from './partenaire/collaborateurs/list-collaborateur/list-collaborateur.component';
 import { ListAnneeScolaireComponent } from './administration/annees-scolaires/list-annee-scolaire/list-annee-scolaire.component';
 import { AddAnneeScolaireComponent } from './administration/annees-scolaires/add-annee-scolaire/add-annee-scolaire.component';
@@ -134,8 +133,9 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'documentation', component: DocumentationComponent },
                     /***************************/
                     { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
                     { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: AddPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+                    { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
                     { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
                     { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
@@ -177,7 +177,7 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
                     { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [PedagogieGuardService] },
+                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
                     { path: 'list-events', component: ListEventsComponent },
