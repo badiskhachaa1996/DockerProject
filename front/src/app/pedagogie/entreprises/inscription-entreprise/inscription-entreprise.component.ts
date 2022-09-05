@@ -111,6 +111,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   get fin_contrat() { return this.RegisterForm.get('fin_contrat').value; }
   get horaire() { return this.RegisterForm.get('horaire'); }
   get alternant() { return this.RegisterForm.get('alternant').value; }
+  get alternantValidite() { return this.RegisterForm.get('alternant').invalid; }
   get intitule() { return this.RegisterForm.get('intitule'); }
   get classification() { return this.RegisterForm.get('classification'); }
   get niv() { return this.RegisterForm.get('niv'); }
@@ -266,6 +267,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   //Methode d'ajout d'un nouveau prospect
   onAddProspect() {
+   
     let CEO = new User(null,
       this.firstname.value,
       this.lastname.value,
@@ -361,7 +363,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
     );
 
 
-    let contratAlternance = new ContratAlternance(this.debut_contrat.value, this.fin_contrat.value, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
+    let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
 
     //Creation de lobjet a envoyer dans le back 
     let ObjetToSend = { CEO, entreprise, t1, contratAlternance }

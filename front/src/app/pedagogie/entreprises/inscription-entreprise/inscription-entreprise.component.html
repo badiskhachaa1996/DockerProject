@@ -673,20 +673,21 @@ Formation suivie :
                                     </span></label>
                                 <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
                                     formControlName="code_commercial" />
-                                <div>
-                                    <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
+                                <div
+                                    *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
                                     <span style="color: red;" class="error">*
                                         Le
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
-
+                            {{ debut_contrat.invalid }}
                         </div>
                         <div>
+                            {{ form.value}}
                             <button pButton type="button" label="Suivant" style="float: right;"
                                 [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
-                                 alternant.invalid ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
-                                (click)="nextPage(); "></button>
+                                alternantValidite ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
+                                (click)="nextPage();"></button>
 
                         </div>
                     </div>
