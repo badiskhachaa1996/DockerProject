@@ -47,7 +47,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   rangeYearC = this.minYear + ":" + this.maxYearC
   minDateCalendarC = new Date("01/01/" + this.minYearC)
   maxDateCalendarC = new Date("01/01/" + this.maxYearC)
-  ActiveIndex = 0;
+  ActiveIndex = 3;
   RegisterForm: FormGroup;
   paysList = environment.pays;
   civiliteList = environment.civilite;
@@ -361,8 +361,8 @@ export class InscriptionEntrepriseComponent implements OnInit {
       false
     );
 
-
-    let contratAlternance = new ContratAlternance(this.debut_contrat.value, this.fin_contrat.value, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
+   
+    let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
 
     //Creation de lobjet a envoyer dans le back 
     let ObjetToSend = { CEO, entreprise, t1, contratAlternance }
