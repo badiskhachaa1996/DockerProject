@@ -310,7 +310,9 @@
                             <label>Semestre: </label>
                             <p-dropdown [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
                             { libelle: '1er', value: 'Semestre 1', actif: false },
-                            { libelle: '2ème', value: 'Semestre 2', actif: false }]" optionLabel="libelle"
+                            { libelle: '2ème', value: 'Semestre 2', actif: false },
+                            { libelle: '3ème', value: 'Semestre 3', actif: false },
+                            { libelle: '4ème', value: 'Semestre 4', actif: false }]" optionLabel="libelle"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'semestre')"
                                 emptyFilterMessage="Pas de semestre trouvé" filterPlaceholder="Semestre"
                                 optionDisabled="actif" filter="true">
@@ -408,13 +410,14 @@
                         <tr>
                             <th colspan="3"></th>
                             <th colspan="1" style="text-align: center;">Etudiant</th>
-                            <th colspan="3" style="text-align: center;">Promotion</th>
+                            <th colspan="3" style="text-align: center;">Groupe</th>
                         </tr>
                         <tr>
                             <th style="text-align: center;">Modules</th>
                             <th style="text-align: center;">Formateur</th>
                             <th style="text-align: center;">Coef</th>
-                            <th colspan="2" style="text-align: center;">Moyenne</th>
+                            <th style="text-align: center;">Moyenne</th>
+                            <th style="text-align: center;">Moyenne</th>
                             <!--<th style="width: 5em;">Moy. S2</th>
                             <th style="width: 5em;">Moy. Annuel</th>
                             <th style="width: 5em;">Moy.</th>-->
@@ -469,12 +472,12 @@
                             <td colspan="2">Décision du conseil de classe</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Semestre validé</td>
+                            <td colspan="2">Semestre validée</td>
                             <td *ngIf="moyEtudiant >= 10">X</td>
                             <td *ngIf="moyEtudiant < 10"></td>
                         </tr>
                         <tr>
-                            <td colspan="2">Semestre non validé</td>
+                            <td colspan="2">Semestre non validée</td>
                             <td *ngIf="moyEtudiant >= 10"></td>
                             <td *ngIf="moyEtudiant < 10">X</td>
                         </tr>
@@ -563,7 +566,7 @@
                             <th style="text-align: center;">Coef</th>
                             <th style="width: 8em;text-align: center;">Semestre 1</th>
                             <th style="width: 8em;text-align: center;">Semestre 2</th>
-                            <th style="text-align: center;">Annuel</th>
+                            <th style="text-align: center;">Annuelle</th>
                             <th style="text-align: center;">Moy.</th>
                             <th style="text-align: center;">Min.</th>
                             <th style="text-align: center;">Max.</th>
@@ -640,12 +643,12 @@
                             <td colspan="2">Décision du conseil de classe</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Année validé</td>
+                            <td colspan="2">Année validée</td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10">X</td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10"></td>
                         </tr>
                         <tr>
-                            <td colspan="2">Année non validé</td>
+                            <td colspan="2">Année non validée</td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] >= 10"></td>
                             <td *ngIf="moyEtudiantAnnuel['Annuel'] < 10">X</td>
                         </tr>

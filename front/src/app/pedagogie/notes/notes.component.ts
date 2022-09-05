@@ -66,6 +66,8 @@ export class NotesComponent implements OnInit {
     { libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
     { libelle: '1er', value: 'Semestre 1', actif: false },
     { libelle: '2ème', value: 'Semestre 2', actif: false },
+    { libelle: '3ème', value: 'Semestre 3', actif: false },
+    { libelle: '4ème', value: 'Semestre 4', actif: false },
     { libelle: 'Annuel', value: 'Annuel', actif: false }
   ];
 
@@ -440,7 +442,8 @@ export class NotesComponent implements OnInit {
             }
 
             else {
-              this.isAnneeScolaire = false;
+              this.isAnneeScolaire = true;
+              this.semestreSelected = 'Semestre 1';
               this.messageService.add({ key: 'tst', severity: 'error', summary: 'Ajout impossible', detail: 'Vous êtes hors année scolaire, impossible d\'ajouter une note!' });
             }
           }),

@@ -609,6 +609,7 @@
                         <th>ENIC NARIC </th>
                         <th>Statut Professionel </th>
                         <th>Formation</th>
+                        <th>Date d'ajout IMS</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -625,6 +626,7 @@
                         </td>
                         <td>{{etudiant.statut}}</td>
                         <td>{{etudiant?.filiere?.titre}}</td>
+                        <td>{{etudiant?.user_id?.date_creation| date:'dd/MM/yyyy'}}</td>
                     </tr>
 
                 </ng-template>

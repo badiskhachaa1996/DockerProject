@@ -42,6 +42,7 @@ const etudiantSchema = mongoose.Schema({
     campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
     statut_dossier: { type: String, default: "Nouveau" },
     filiere: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
+    absencesModules: { type: mongoose.Schema.Types.Mixed, default: {} }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

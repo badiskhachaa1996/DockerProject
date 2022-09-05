@@ -9,11 +9,11 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddExamen"
                 (ngSubmit)="onAddExamen();">
                 <div class="field col-12 ">
-                    <small>Tout les champs marqués d'un asterix * sont obligatoires</small>
+                    <small>Tout les champs marqués d'un asterix <span style="color:red">*</span> sont obligatoires</small>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="classe">Classe*:</label><br>
+                    <label For="classe">Classe<span style="color:red">*</span>:</label><br>
 
                     <p-dropdown [options]="dropdownClasse" optionLabel="libelle" formControlName="classe_id">
                     </p-dropdown>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Module*:</label><br>
+                    <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" formControlName="matiere_id">
                         </p-dropdown>
@@ -29,14 +29,14 @@
                 </div>
 
                 <div class="field col-12 md:col-12">
-                    <label>Libellé*:</label><br>
+                    <label>Libellé<span style="color:red">*</span>:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
                         placeholder="Intitulé de l'examen/ évaluation" pInputText>
 
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Formateur*:</label><br>
+                    <label>Formateur<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownFormateur" optionLabel="libelle" formControlName="formateur_id">
                         </p-dropdown>
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Note max*:</label><br>
+                    <label>Note max<span style="color:red">*</span>:</label><br>
                     <input type="text" formControlName="note_max" class="form-control col-12"
                         placeholder="Note maximal à attribuer pour les étudiants lors de cet examen" pInputText>
 
@@ -56,18 +56,18 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Coefficient*:</label><br>
+                    <label>Coefficient<span style="color:red">*</span>:</label><br>
                     <input type="number" formControlName="coef" class="form-control col-12"
                         placeholder="Coefficient de cet examen" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Date*:</label><br>
+                    <label>Date<span style="color:red">*</span>:</label><br>
                     <input type="datetime-local" formControlName="date" class="form-control col-12" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'examen*:</label><br>
+                    <label>Niveau d'examen<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownNiveau" formControlName="niveau">
                         </p-dropdown>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Type d'examen*:</label><br>
+                    <label>Type d'examen<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownType" formControlName="type">
                         </p-dropdown>
