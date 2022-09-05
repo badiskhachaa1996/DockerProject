@@ -38,6 +38,12 @@
                 showPayement.user_id?.firstname }} {{
                 showPayement.user_id?.lastname | uppercase }}
             </h3>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDossier">
+                <div class="field col-12 md:col-6">
+                    <label For="statut">Statut Dossier</label>
+                    <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                </div>
+            </form>
             <div class="p-fluid p-formgrid grid">
                 <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                     <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -69,7 +75,7 @@
                     <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
                 </div>
                 <div class="col-6">
-                    <button pButton label="Valider" (click)="addNewPayment()"></button>
+                    <button pButton label="Valider" (click)="addNewPayment();onDossierUpdate()"></button>
                 </div>
             </div>
 
@@ -483,7 +489,7 @@
                         <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial" (click)="
+                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial && !this.isAdministration" (click)="
                                     showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <!--
@@ -500,8 +506,9 @@
                             <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
                                 tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
-                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
-                                class="pi pi-money-bill" (click)="showPayementFC(etudiant)" aria-hidden="true"></i>
+                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements"
+                                tooltipPosition="bottom" class="pi pi-money-bill" (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant"
+                                aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
