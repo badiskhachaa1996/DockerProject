@@ -115,9 +115,9 @@
                                     formControlName="isUnique">
                     </p-selectButton>
                 </div>
-                <div class="col-6 md:col-12" *ngIf="!seanceForm.value.isUnique">
+                <div class="col-12" *ngIf="!seanceForm.value.isUnique && seanceForm.value.date_debut">
                     <label>Veuillez saisir la date de fin: <span style="color: red;"> * </span></label>
-                    <input type="datetime" formControlName="date_fin_plannification" pInputText>
+                    <input type="date" formControlName="date_fin_plannification" min="{{ seanceForm.value.date_debut | date:'yyyy-MM-dd' }}" pInputText>
                 </div>
                 <div>
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"
