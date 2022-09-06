@@ -262,69 +262,53 @@
 
 
 <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
-<h3>Le tableau de bord est actuellement en construction pour votre statut!</h3>
-<h4>Pour naviguer sur l'application, merci d'utiliser le menu à gauche</h4>
-<h5>Merci de votre patience!</h5>
 
 <div *ngIf="this.isEtudiant">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
-    <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\construction.jpg" style="width: 40%;">
+    <div class="col-12 md:col-6">
+        <div class="card">
+            <div class="col-12 flex justify-content-center flex-wrap card-container">
+                <div>
+                    <h4 class="col-12">Planning journée</h4>
+                </div>
+
+                <div class="col-12" *ngIf="type==null">
+                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu">
+                    </p-fullCalendar>
+                </div>
+            </div>
+
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
-        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
-        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
-                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
-        <p>Merci de votre patience!</p>
     </div>
 
-
-        <div class="col-12 md:col-6">
-            <div class="card" >
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <div>
-                        <h4 class="col-12">Planning journée</h4>
-                    </div>
-               
-                        <div class="col-12" *ngIf="type==null">
-                            <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
-                        </div>  
-                    </div>
-
-            </div>
+    <div class="col-12 md:col-6">
+        <div class="card" *ngIf="notes">
+            <h5>Dernières notes obtenues</h5>
+            <p-table [value]="dernotes">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-note>
+                    <tr>
+                        <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
+                        <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
         </div>
 
-        <div class="col-12 md:col-6">
-            <div class="card" *ngIf="notes">
-                <h5>Dernières notes obtenues</h5>
-                <p-table [value]="dernotes">
-                    <ng-template pTemplate="header">
-                        <tr> 
-                            <th pSortableColumn="note">Note <p-sortIcon field="note_val"></p-sortIcon></th>
-                            <th pSortableColumn="price">Matière <p-sortIcon field="price"></p-sortIcon></th>
-                        </tr>
-                    </ng-template> 
-                    <ng-template pTemplate="body" let-note>
-                            <tr>
-                                <td style="width: 35%; min-width: 7rem;">{{ note.note_val }}</td>
-                                <td style="width: 35%; min-width: 7rem;">{{ matieres[note.matiere_id].nom }}</td>
-                            </tr>
-                    </ng-template>
-                </p-table>
-            </div>
-     
 
-    <!-- Afficher les derniers notes obtenus-->
-    <!-- Afficher les cours de la journée-->
-</div>
+        <!-- Afficher les derniers notes obtenus-->
+        <!-- Afficher les cours de la journée-->
+    </div>
 </div>
 
 <div *ngIf="this.isAdmin">
     <!--remettre this.isFormateur-->
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
     <div class="card">
         <div style="text-align: center;">
             <h5>Informations sur mes séances</h5>
@@ -340,8 +324,8 @@
                 <p class="text-yellow-700 mt-2 mb-0"><span class="font-medium">10/09/2021</span></p>
             </div>
             <div class="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0"><span
-                    class="bg-yellow-400 text-yellow-900 font-bold text-sm py-1 px-2"
-                    style="border-radius: 10px;">EN COURS</span>
+                    class="bg-yellow-400 text-yellow-900 font-bold text-sm py-1 px-2" style="border-radius: 10px;">EN
+                    COURS</span>
             </div>
         </li>
         <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3"
@@ -379,8 +363,6 @@
 </div>
 
 <div *ngIf="this.isAdmission">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
     <!-- Afficher le nombre total d'inscrit (DONE)-->
     <!-- Afficher le nombre de nouvelle inscrit (etat_traitement=='Nouvelle') (DONE) -->
     <!-- Afficher le nombre d'etudiant en attente (etat_traitement=='Retour Etudiant') (DONE) -->
@@ -433,8 +415,6 @@
 </div>
 
 <div *ngIf="this.isPedagogie">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
     <div class="card">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
@@ -452,8 +432,6 @@
 </div>
 
 <div *ngIf="this.isCommercial">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
     <div class="card">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
@@ -469,26 +447,14 @@
 </div>
 
 <div *ngIf="this.isReinscrit">
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
     <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\construction.jpg" style="width: 40%;">
-        </div>
-        <p>Votre demande de reinscription est en cours de traitement</p>
-        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
-        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
-                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
-        <p>Merci de votre patience!</p>
+        <h2>Votre demande de reinscription est en cours de traitement.</h2>
+        <h3>Le statut de votre dossier est: En attente de la validation par l'administration.</h3>
     </div>
 </div>
 
-<div *ngIf="isAdmin">
+<!--<div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
 
-</div>
-
-
-
-
+</div>-->
