@@ -292,7 +292,6 @@
                             <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
                         </div>  
                     </div>
-
             </div>
         </div>
 
@@ -323,59 +322,22 @@
 
 <div *ngIf="this.isAdmin">
     <!--remettre this.isFormateur-->
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
-    </h2>
-    <div class="card">
-        <div style="text-align: center;">
-            <h5>Informations sur mes séances</h5>
-        </div><br><br>
-        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3"
-            style="border-radius: 10px; background-color: rgba(234,179,10,.1); border-color: rgba(234,179,10,.5);">
-            <div>
-                <div><span
-                        class="inline-flex justify-content-center align-items-center w-2rem h-2rem border-circle border-1"
-                        style="border-color: rgba(234,179,10,.5);"><i
-                            class="pi pi-clock text-yellow-700"></i></span><span
-                        class="text-yellow-700 font-bold ml-2">Séances en cours</span></div>
-                <p class="text-yellow-700 mt-2 mb-0"><span class="font-medium">10/09/2021</span></p>
-            </div>
-            <div class="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0"><span
-                    class="bg-yellow-400 text-yellow-900 font-bold text-sm py-1 px-2"
-                    style="border-radius: 10px;">EN COURS</span>
-            </div>
-        </li>
-        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3"
-            style="border-radius: 10px; background-color: rgba(33,197,94,.1); border-color: rgba(33,197,94,.5);">
-            <div>
-                <div><span
-                        class="inline-flex justify-content-center align-items-center w-2rem h-2rem border-circle border-1"
-                        style="border-color: rgba(33,197,94,.5);"><i
-                            class="pi pi-check-circle text-green-600"></i></span><span
-                        class="text-green-700 font-bold ml-2">Séances terminées</span></div>
-                <p class="text-green-700 mt-2 mb-0"><span class="font-medium">21/10/2021</span></p>
-            </div>
-            <div class="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0"><span
-                    class="bg-green-400 text-green-900 font-bold text-sm py-1 px-2"
-                    style="border-radius: 10px;">TERMINER</span>
-            </div>
-        </li>
-        <li class="flex flex-column md:flex-row md:align-items-center md:justify-content-between p-3 border-1 mb-3"
-            style="border-radius: 10px; background-color: rgba(330,81,60,.1); border-color: rgba(330,81,60,.5);">
-            <div>
-                <div><span
-                        class="inline-flex justify-content-center align-items-center w-2rem h-2rem border-circle border-1"
-                        style="border-color: rgba(330,81,60,.5);"><i
-                            class="pi pi-times-circle text-pink-500"></i></span><span
-                        class="text-pink-500 font-bold ml-2">Séances annulées</span></div>
-                <p class="text-pink-500 mt-2 mb-0"><span class="font-medium">01/05/2021</span></p>
-            </div>
-            <div class="flex align-items-center justify-content-between md:justify-content-end mt-3 md:mt-0"><span
-                    class="bg-pink-400 text-pink-50 font-bold text-sm py-1 px-2"
-                    style="border-radius: 10px;">ANNULER</span>
-            </div>
-        </li>
-    </div>
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h2>
+
     <!-- Afficher les cours de la journée-->
+    <div class="col-12 md:col-12">
+        <div class="card" >
+            <div class="col-12 flex justify-content-center flex-wrap card-container">
+                <div>
+                    <h4 class="col-12">Planning pour la journée d'aujourd'hui</h4>
+                </div>
+           
+                    <div class="col-12" *ngIf="type==null">
+                        <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
+                    </div>  
+                </div>
+        </div>
+    </div>
 </div>
 
 <div *ngIf="this.isAdmission">
