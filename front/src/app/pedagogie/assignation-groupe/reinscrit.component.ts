@@ -53,7 +53,7 @@ export class ReinscritComponent implements OnInit {
   ListDocuments: String[] = []
   ListPiped: String[] = []
   DocTypes: any[] = [
-    { value: null, label: "Choississez le type de fichier", },
+    { value: null, label: "Choisissez le type de fichier", },
     { value: 'piece_identite', label: 'Pièce d\'identité', },
     { value: 'CV', label: "CV" },
     { value: 'LM', label: "LM" },

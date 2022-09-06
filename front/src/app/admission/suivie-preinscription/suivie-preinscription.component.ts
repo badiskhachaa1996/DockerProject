@@ -35,7 +35,7 @@ export class SuiviePreinscriptionComponent implements OnInit {
   TCFTest: boolean = false;
   codeCommercial;
   DocTypes: any[] = [
-    { value: null, label: "Choississez le type de fichier", },
+    { value: null, label: "Choisissez le type de fichier", },
     { value: 'Carte_vitale', label: 'Carte vitale', },
     { value: 'Carte_sejour', label: "Carte séjour" },
     { value: 'Carte_etudiant', label: "Carte étudiant" },
