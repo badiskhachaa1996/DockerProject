@@ -61,7 +61,7 @@ export class ReinscritComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-  showAssignForm: Etudiant = null;
+  showAssignForm: Prospect = null;
 
   AssignForm: FormGroup = this.formBuilder.group({
     filiere: ["", Validators.required],
@@ -164,7 +164,7 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.statut.value,
       bypass.nationnalite,
       this.showAssignForm.date_naissance,
-      this.showAssignForm.code_partenaire,
+      this.showAssignForm.code_commercial,
       null, null, null, null,
       this.AssignForm.value.numero_ine,
       this.AssignForm.value.numero_nir,
@@ -176,11 +176,11 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.email_rl,
 
       this.AssignForm.value.adresse_rl,//A faire pour Alternant
-      this.showAssignForm.dernier_diplome,
+      this.showAssignForm.professional_experience,
       this.AssignForm.value.statut.value == "Alternant",
-      this.showAssignForm.isHandicaped,
-      this.showAssignForm.suivi_handicaped,
-      this.showAssignForm.diplome,
+      this.showAssignForm.mobilite_reduite,
+      this.showAssignForm.nir,
+      this.showAssignForm.formation,
       this.parcoursList,
       this.AssignForm.value.remarque,
       null,//TODO

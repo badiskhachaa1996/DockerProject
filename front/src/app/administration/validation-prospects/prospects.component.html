@@ -39,7 +39,11 @@
                     filter="true" formControlName="groupe"></p-dropdown>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Statut</label>
+                <label>Statut Dossier</label>
+                <p-multiSelect  [options]="statutDossier" formControlName="statut_dossier" optionLabel="value"></p-multiSelect>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Statut Professionel</label>
                 <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value"></p-dropdown>
             </div>
 
@@ -216,7 +220,7 @@
                             (click)="showPayement=etudiant;payementList=etudiant.payment_reinscrit"
                             aria-hidden="true"></i>
                         <i pTooltip="Valider les documents" tooltipPosition="bottom" class="pi pi-bookmark"
-                            (click)="showAssignForm=etudiant;showUploadFile=null;initForm(etudiant)"
+                            (click)="showAssignForm=etudiant;showUploadFile=null;"
                             aria-hidden="true"></i>
                     </td>
                 </tr>

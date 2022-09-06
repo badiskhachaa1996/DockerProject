@@ -53,6 +53,13 @@ export class ProspectsComponent implements OnInit {
     { value: "Alternant" }
   ]
 
+  statutDossier = [
+    { value: "Document Manquant", label: "Document Manquant" },
+    { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Abandon", label: "Abandon" }
+  ]
+
   constructor(private ActiveRoute: ActivatedRoute, private userService: AuthService, private admissionService: AdmissionService,
     private messageService: MessageService, private commercialService: CommercialPartenaireService, private classeService: ClasseService,
     private etudiantService: EtudiantService, private formBuilder: FormBuilder) { }
@@ -81,6 +88,7 @@ export class ProspectsComponent implements OnInit {
     email_tuteur: [''],
     phone_tuteur: [''],
     indicatif_tuteur: [''],
+    statut_dossier: ['']
   })
 
   ngOnInit(): void {
@@ -142,21 +150,24 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
+    console.log(this.showAssignForm.user_id)
+    let bypass: any = this.showAssignForm.user_id
     let etd: Etudiant = new Etudiant(
-      this.showAssignForm._id,
-      this.showAssignForm.user_id,
+      null,
+      bypass._id,
       this.AssignForm.value.groupe,
       this.AssignForm.value.statut.value,
-      this.users[this.showAssignForm.user_id].nationalite,
+      bypass?.nationalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_commercial,
       null, null, null, this.showAssignForm.customid,
       this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
       this.showAssignForm.validated_academic_level,
       this.AssignForm.value.statut.value == "Alternant",
-      this.AssignForm.value.entreprise, this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur,//A faire pour Alternant
-      null//A faire pour PMR
+      null, null,//isHandicaped
+      null, null, this.showAssignForm.remarque, null
     )
+    //this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
     this.etudiantService.createfromPreinscris(etd).subscribe(data => {
       this.showAssignForm = null
     }, err => {

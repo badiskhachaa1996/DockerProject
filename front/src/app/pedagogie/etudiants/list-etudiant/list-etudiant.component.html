@@ -482,14 +482,13 @@
                         <td>
                             {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
-                        <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut_dossier }}</td>
-                        <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
+                        <td style="min-width: 8rem;">{{ etudiant.statut_dossier }} {{ etudiant.date_dernier_modif_dossier | date : 'dd/MM hh:mm' }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.classe_id?.nom }}</td>
                         <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="!this.isCommercial && !this.isAdministration" (click)="
+                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <!--
