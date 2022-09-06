@@ -25,6 +25,7 @@ import { Prospect } from 'src/app/models/Prospect';
 import { Diplome } from 'src/app/models/Diplome';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { Service } from 'src/app/models/Service';
 
 
 
@@ -41,6 +42,8 @@ export class ListEtudiantComponent implements OnInit {
   etudiants: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
+
+  formUpdateDossier: FormGroup;
   showFormUpdateEtudiant: boolean = false;
 
   nationList = environment.nationalites;
@@ -78,7 +81,7 @@ export class ListEtudiantComponent implements OnInit {
   dropdownCampus: any[] = [];
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
-    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Paiement non finalisé", label: "Paiement non finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
@@ -100,6 +103,7 @@ export class ListEtudiantComponent implements OnInit {
 
   isMinor = false;
   isCommercial: boolean = false;
+  isAdministration: boolean = false;
 
   prospects = {}
 
@@ -144,10 +148,12 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   showPayementFC(etu: Etudiant) {
-    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
+    let bypass: any = etu.user_id
+    this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
     })
     this.payementList = etu.payment_reinscrit
+    this.formUpdateDossier.patchValue({statut_dossier:etu.statut_dossier})
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
       this.payementList = this.showPayement.payement
@@ -175,7 +181,7 @@ export class ListEtudiantComponent implements OnInit {
 
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
-
+    this.onGetRole()
     /* Specialement pour la partie dexport des données */
     this.dropdownEntreprise = [{ libelle: 'Choisissez une entreprise', value: '' }];
     //Recuperation de la liste des entreprises
@@ -370,7 +376,7 @@ export class ListEtudiantComponent implements OnInit {
       adresse_tuteur: [""],
       email_tuteur: ["", Validators.email],
       phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
-      id_tuteur:[""],
+      id_tuteur: [""],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -393,8 +399,23 @@ export class ListEtudiantComponent implements OnInit {
       filiere: ['', Validators.required],
       statut_dossier: [this.statutDossier[0].value]
     });
+    this.formUpdateDossier = this.formBuilder.group({
+      statut_dossier: [this.statutDossier[0].value]
+    });
   }
 
+  onDossierUpdate() {
+    let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+    this.etudiantService.updateDossier(this.etudiantToUpdate._id, statut_dossier).subscribe(
+      ((responde) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
+        //Recuperation de la liste des differentes informations
+        this.onGetAllClasses();
+        //this.resetForms();
+      }),
+      ((error) => { console.error(error); })
+    );
+  }
 
   //Methode de modification d'un étudiant
   onUpdateEtudiant() {
@@ -497,7 +518,7 @@ export class ListEtudiantComponent implements OnInit {
       remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
     });
     bypass = response.campus
-    let bypassv2 : any = response.filiere
+    let bypassv2: any = response.filiere
     this.formUpdateEtudiant.patchValue({ campus_id: bypass?._id, filiere: bypassv2?._id, date_naissance: this.formatDate(date) })
     this.showFormUpdateEtudiant = true;
     this.showFormExportEtudiant = false;
@@ -642,15 +663,20 @@ export class ListEtudiantComponent implements OnInit {
     }
   }
 
-  onGetCommercialePartenaire() {
+  onGetRole() {
     this.CommercialService.getByUserId(this.token.id).subscribe(data => {
       this.isCommercial = data != null
-    }
-    )
+    })
+    this.userService.getPopulate(this.token.id).subscribe(dataU => {
+      let bypass: any = dataU?.service_id
+      console.log(this.token.role, bypass, (bypass?.label.includes('sministration') || this.token.role == "Admin"))
+      this.isAdministration = bypass?.label.includes('sministration') || this.token.role == "Admin"
+    })
   }
 
   onRedirect() {
     this.router.navigate(['ajout-etudiant']);
   }
+
 
 }

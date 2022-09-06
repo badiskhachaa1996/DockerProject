@@ -38,7 +38,7 @@ export class ReinscritComponent implements OnInit {
   dropdownCampus: any[] = [];
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
-    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Paiement non finalisé", label: "Paiement non finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]

@@ -34,7 +34,7 @@ export class AppMenuComponent implements OnInit {
             label: 'Ticketing', icon: 'pi pi-ticket',
             items: [
                 { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                 { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
             ]
         },
@@ -208,7 +208,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Ticketing',
                                     items: [
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                     ]
                                 },
                                 {
@@ -237,7 +237,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Ticketing',
                                     items: [
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                     ]
                                 },
                                 {
@@ -252,7 +252,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'Ticketing',
                                     items: [
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                     ]
                                 }
                             ];
@@ -269,7 +269,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Ticketing', icon: 'pi pi-ticket',
                                     items: [
                                         { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                     ]
                                 },
                                 {
@@ -289,7 +289,7 @@ export class AppMenuComponent implements OnInit {
                                     label: 'Ticketing', icon: 'pi pi-ticket',
                                     items: [
                                         { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                        { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                        { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                     ]
                                 },
                                 {
@@ -316,7 +316,7 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Ticketing', icon: 'pi pi-ticket',
                                 items: [
                                     { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                    { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                    { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                 ]
                             },
                             {
@@ -338,7 +338,7 @@ export class AppMenuComponent implements OnInit {
                                 label: 'Ticketing', icon: 'pi pi-ticket',
                                 items: [
                                     { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                    { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                    { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                 ]
                             },
                             {
@@ -371,7 +371,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
 
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
 
                             ]
                         },
@@ -399,7 +399,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
 
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
 
                             ]
                         },
@@ -426,7 +426,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
                                 { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                                 { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
                             ]
                         },
@@ -536,7 +536,7 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
 
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
 
                             ]
                         },
@@ -553,7 +553,7 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'Ticketing',
                             items: [
-                                { label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                             ]
                         }
                     ]
@@ -577,7 +577,7 @@ export class AppMenuComponent implements OnInit {
         //         label: 'Ticketing', icon: 'pi pi-ticket',
         //         items: [
         //             {label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets']},
-        //             {label: 'Suivis de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket']},
+        //             {label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket']},
         //             {label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services']},
         //         ]
         //     },

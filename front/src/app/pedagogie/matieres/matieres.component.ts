@@ -77,8 +77,8 @@ export class MatieresComponent implements OnInit {
   //methode d'initialisation du formulaire d'ajout de matière
   onInitFormAddMatiere() {
     this.formAddMatiere = this.formBuilder.group({
-      nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: ['', [Validators.required, Validators.pattern("^[0-9]+$")]],
+      nom: ['', [Validators.required]],
+      volume: ['', [Validators.required]],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
