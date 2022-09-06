@@ -339,7 +339,6 @@ export class ListEtudiantComponent implements OnInit {
 
   }
 
-
   isMinorFC() {
     var today = new Date();
     var birthDate = new Date(this.formUpdateEtudiant.value.date_naissance);
@@ -351,11 +350,6 @@ export class ListEtudiantComponent implements OnInit {
     this.isMinor = !(age < 18);
   }
 
-
-
-
-
-
   //Methode d'initialisation du formulaire de modification d'un étudiant
   onInitFormUpdateEtudiant() {
     this.formUpdateEtudiant = this.formBuilder.group({
@@ -365,11 +359,6 @@ export class ListEtudiantComponent implements OnInit {
       date_naissance: ['', Validators.required],
       isAlternant: [false],
       entreprise_id: [],
-      nom_tuteur: ["", Validators.pattern('[^0-9]+')],
-      prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
-      adresse_tuteur: [""],
-      email_tuteur: ["", Validators.email],
-      phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       id_tuteur:[""],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],

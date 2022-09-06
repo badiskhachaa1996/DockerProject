@@ -71,7 +71,7 @@ export class AddEcoleComponent implements OnInit {
   }
 
   saveEcole() {
-    let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone, this.logo.name)
+    let ecole = new Ecole(null, this.addecoleForm.value.libelle, this.addecoleForm.value.annee_id.value, this.addecoleForm.value.ville, this.addecoleForm.value.pays, this.addecoleForm.value.adresse, this.addecoleForm.value.email, this.addecoleForm.value.site, this.addecoleForm.value.telephone, this.logo)
     this.EcoleService.create(ecole).subscribe((data) => {
 
       this.messageService.add({ key: 'tst', severity: 'success', summary: 'Gestion des écoles', detail: 'Votre ecole a bien été ajouté' });
