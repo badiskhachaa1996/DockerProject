@@ -40,14 +40,13 @@
             </div>
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
-                <p-multiSelect  [options]="statutDossier" formControlName="statut_dossier" optionLabel="value"></p-multiSelect>
+                <p-multiSelect [options]="statutDossier" formControlName="statut_dossier" optionLabel="value">
+                </p-multiSelect>
             </div>
-            <div class="field col-12 md:col-6">
+            <!--<div class="field col-12 md:col-6">
                 <label>Statut Professionel</label>
                 <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value"></p-dropdown>
             </div>
-
-            <!-- Si c'est un alternant -->
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Alternant'">
                 <label for="ine">Numéro INE</label>
                 <input pInputText type="text" formControlName="numero_ine" placeholder="Numéro INE">
@@ -106,10 +105,7 @@
                 <label for="phone_tuteur">Numéro de téléphone du tuteur</label>
                 <input pInputText type="text" formControlName="phone_tuteur" placeholder="Exemple: 667717326">
             </div>
-            <!-- End -->
 
-
-            <!-- Si c'est un étudiant -->
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
                 <label for="sos_email">Email d'urgence</label>
                 <input pInputText type="text" formControlName="sos_email" placeholder="Adresse email d'un proche">
@@ -118,9 +114,7 @@
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
                 <label for="sos_phone">Téléphone d'urgence</label>
                 <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
-            </div>
-
-            <!-- Si c'est un étudiant mineur -->
+                </div>
             <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
                 <label for="nom_rl">Nom du répresentant légal</label>
                 <input pInputText type="text" formControlName="nom_rl" placeholder="Nom du répresentant légal">
@@ -147,10 +141,10 @@
                 <textarea pInputTextarea formControlName="adresse_rl"
                     placeholder="Adresse du répresentant légal"></textarea>
             </div>
-            <!-- End -->
+             -->
 
             <div>
-                <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
+                <button pButton label="Enregistrer l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
             </div>
         </form>
     </div>
@@ -216,12 +210,8 @@
                     <td>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                             (click)="showUploadFile=etudiant" aria-hidden="true"></i>
-                        <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-euro"
-                            (click)="showPayement=etudiant;payementList=etudiant.payment_reinscrit"
-                            aria-hidden="true"></i>
                         <i pTooltip="Valider les documents" tooltipPosition="bottom" class="pi pi-bookmark"
-                            (click)="showAssignForm=etudiant;showUploadFile=null;"
-                            aria-hidden="true"></i>
+                            (click)="showAssignForm=etudiant;showUploadFile=null;" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -253,8 +243,8 @@
                     </td>
                     <td>
                         {{ etudiant.user_id.numero_adresse }} {{etudiant.user_id.rue_adresse }} {{
-                            etudiant.user_id.postal_adresse }} <br> {{ etudiant.user_id.ville_adresse }} {{
-                                etudiant.user_id.pays_adresse }}
+                        etudiant.user_id.postal_adresse }} <br> {{ etudiant.user_id.ville_adresse }} {{
+                        etudiant.user_id.pays_adresse }}
                     </td>
                     <td>
                         {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}

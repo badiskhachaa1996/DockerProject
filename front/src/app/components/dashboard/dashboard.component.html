@@ -300,21 +300,22 @@
                 </ng-template>
             </p-table>
 
-        <div class="col-12 md:col-6">
-            <div class="card" >
-                <div class="col-12 flex justify-content-center flex-wrap card-container">
-                    <div>
-                        <h4 class="col-12">Planning journée</h4>
-                    </div>
-               
+            <div class="col-12 md:col-6">
+                <div class="card">
+                    <div class="col-12 flex justify-content-center flex-wrap card-container">
+                        <div>
+                            <h4 class="col-12">Planning journée</h4>
+                        </div>
+
                         <div class="col-12" *ngIf="type==null">
-                            <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
-                        </div>  
+                            <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu">
+                            </p-fullCalendar>
+                        </div>
                     </div>
+                </div>
             </div>
+
         </div>
-
-
         <!-- Afficher les derniers notes obtenus-->
         <!-- Afficher les cours de la journée-->
     </div>
@@ -322,20 +323,22 @@
 
 <div *ngIf="this.isFormateur">
     <!--remettre this.isFormateur-->
-    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h2>
+    <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname |
+        titlecase}}</h2>
 
     <!-- Afficher les cours de la journée-->
     <div class="col-12 md:col-12">
-        <div class="card" >
+        <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
                 <div>
                     <h4 class="col-12">Planning pour la journée d'aujourd'hui</h4>
                 </div>
-           
-                    <div class="col-12" *ngIf="type==null">
-                        <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu"></p-fullCalendar>
-                    </div>  
+
+                <div class="col-12" *ngIf="type==null">
+                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu">
+                    </p-fullCalendar>
                 </div>
+            </div>
         </div>
     </div>
 </div>
@@ -424,10 +427,16 @@
     <!-- Afficher le nombre total d'étudiants avec leur code -->
 </div>
 
-<div *ngIf="this.isReinscrit">
+<div *ngIf="isReinscrit">
     <div class="card">
+        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+            <img src="assets\images\Validation Dossier.jpg" style="max-width: 60%;">
+        </div>
         <h2>Votre demande de reinscription est en cours de traitement.</h2>
-        <h3>Le statut de votre dossier est: En attente de la validation par l'administration.</h3>
+        <h3 *ngIf="dataEtudiant && !dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de la validation par
+            l'administration.</h3>
+        <h3 *ngIf="dataEtudiant && dataEtudiant.valided_by_admin">Le statut de votre dossier est: En attente de l'assignation au groupe
+            scolaire par la pédagogie.</h3>
     </div>
 </div>
 

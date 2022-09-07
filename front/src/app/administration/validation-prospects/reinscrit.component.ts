@@ -46,7 +46,7 @@ export class ReinscritComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   statutList = [
-    { value: "Etudiant" },
+    { value: "Initial" },
     { value: "Alternant" }
   ]
 

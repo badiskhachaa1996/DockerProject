@@ -150,7 +150,6 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    console.log(this.showAssignForm.user_id)
     let bypass: any = this.showAssignForm.user_id
     let etd: Etudiant = new Etudiant(
       null,

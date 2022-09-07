@@ -74,9 +74,9 @@ import { PedagogieGuardService } from './guards/pedagogie-guard';
 import { AdministrationGuardService } from './guards/administration-guard';
 
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ProspectsComponent } from './administration/validation-prospects/prospects.component';
+import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
 import { ProspectGuard } from './guards/prospect-guard';
-import { ReinscritComponent } from './pedagogie/assignation-groupe/reinscrit.component';
+import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { LoginGuard } from './guards/login-guard';
 import { FormAdmissionGuard } from './guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';

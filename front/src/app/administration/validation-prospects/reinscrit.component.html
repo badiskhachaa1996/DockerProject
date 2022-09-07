@@ -145,7 +145,7 @@
             </div>
 
             <div>
-                <button pButton label="Ajouter l'étudiant" type="submit" [disabled]="AssignForm.invalid"></button>
+                <button pButton label="Assigner à la pédagogie" type="submit" [disabled]="AssignForm.invalid"></button>
             </div>
         </form>
     </div>
@@ -159,6 +159,12 @@
             showPayement.user_id?.firstname }} {{
             showPayement.user_id?.lastname | uppercase }}
         </h3>
+        <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDossier">
+            <div class="field col-12 md:col-6">
+                <label For="statut">Statut Dossier</label>
+                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+            </div>
+        </form>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                 <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
@@ -185,7 +191,7 @@
                 <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
             </div>
             <div class="col-6">
-                <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
+                <button pButton label="Mettre à jour les payements" (click)="addNewPayment();onDossierUpdate()"></button>
             </div>
         </div>
 
@@ -198,7 +204,7 @@
 
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
-            [globalFilterFields]="['type_form', 'statut_actuel', 'validated_academic_level', 'programme','lastname','firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"
+            [globalFilterFields]="['type_form','user_id.email_perso', 'statut_actuel', 'validated_academic_level', 'programme','user_id.lastname','user_id.firstname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','customid']"
             responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
             <ng-template pTemplate="caption">
@@ -292,6 +298,9 @@
                         <i pTooltip="Vérifier le dossier" tooltipPosition="bottom" class="pi pi-bookmark"
                             (click)="showAssignForm=prospect;showUploadFile=null;initForm(prospect)"
                             aria-hidden="true"></i>
+                        <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-euro"
+                            (click)="showPayement=etudiant;payementList=etudiant.payment_reinscrit"
+                            aria-hidden="true"></i><!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                             (click)="showUploadFile=prospect" aria-hidden="true"></i>
                     </td>
@@ -299,7 +308,7 @@
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-prospect>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="11">
                         <div class="p-3">
                             <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                 <ng-template pTemplate="header">
@@ -400,7 +409,7 @@
         </div>
 
         <h5 style="text-align: center; color: red;">Commercial</h5>
-        
+
         <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="header">
                 <tr>
@@ -425,10 +434,11 @@
                     </td>
                     <td *ngIf="!infoCommercialExpand || !infoCommercialExpand.user_id"></td>
                     <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
-                    <td *ngIf="!prospect.nomAgence && (!prospect.code_commercial || !dicCommercial[prospect.code_commercial])" style="color: red;">Ce prospect ne
+                    <td *ngIf="!prospect.nomAgence && (!prospect.code_commercial || !dicCommercial[prospect.code_commercial])"
+                        style="color: red;">Ce prospect ne
                         vient pas d'une agence</td>
                     <td *ngIf="!prospect.nomAgence && prospect.code_commercial && dicCommercial[prospect.code_commercial] && dicCommercial[prospect.code_commercial].nom"
-                        style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td> 
+                        style="color: red;">{{dicCommercial[prospect.code_commercial].nom}}</td>
                     <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
 
                 </tr>
