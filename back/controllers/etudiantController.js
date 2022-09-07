@@ -150,7 +150,7 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 
 app.get("/getAllAlternants", (req, res, next) => {
 
-    Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
+    Etudiant.find({ classe_id: { $ne: null } , isAlternant: true }).populate('user_id')
         .then((alternantsFromDb) => {
 
             res.status(200).send(alternantsFromDb);
