@@ -159,6 +159,11 @@ export class AppMenuComponent implements OnInit {
             items: [
                 { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
             ]
+        }, {
+            label: 'Support',
+            items: [
+                { label: 'Etudiants en attente de leur compte IMS', icon: 'pi pi-user-plus', routerLink: ['/assign-ims'] },
+            ]
         },
     ];
     model: any[];

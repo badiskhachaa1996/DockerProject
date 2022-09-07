@@ -149,4 +149,14 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "getAllWaitForVerif";
     return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  getAllWaitForCreateAccount() {
+    let registreUrl = this.apiUrl + "getAllWaitForCreateAccount";
+    return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  assignEmail(etudiant_id, email_ims) {
+    let registreUrl = this.apiUrl + "assignEmail/" + etudiant_id + "/" + email_ims;
+    return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }
