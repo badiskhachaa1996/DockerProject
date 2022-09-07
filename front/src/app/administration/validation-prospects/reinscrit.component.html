@@ -203,6 +203,54 @@
 
     </div>
 </div>
+
+<!-- partie Voir/Ajouter des payements -->
+<div class="col-12" *ngIf="showPayementEtu!=null">
+    <div class="card">
+        <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPayementEtu = null"
+            aria-hidden="true"> </i>
+        <h3 *ngIf="showPayementEtu.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+            showPayementEtu.user_id?.firstname }} {{
+            showPayementEtu.user_id?.lastname | uppercase }}
+        </h3>
+        <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDossier">
+            <div class="field col-12 md:col-6">
+                <label For="statut">Statut Dossier</label>
+                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+            </div>
+        </form>
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
+                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <div class="field col-12 md:col-3">
+                    <label>Type de payement:</label><br>
+                    <input pInputText type="text" (change)="changeMontant(i,$event,'type')"
+                        [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label>Montant:</label><br>
+                    <input type="number" (change)="changeMontant(i,$event,'montant')"
+                        [(value)]="payementList[i]['montant']" placeholder="20" value="0" pInputText>
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label>Date du paiement:</label><br>
+                    <input type="date" (change)="changeMontant(i,$event,'date')" [(value)]="payementList[i]['date']"
+                        pInputText>
+                </div>
+                <div class="field col-12 md:col-1">
+                    <i class="pi pi-trash" (click)="deletePayement(i)" aria-hidden="true"></i>
+                </div>
+            </div>
+            <div class="col-6">
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+            </div>
+            <div class="col-6">
+                <button pButton label="Mettre à jour les payements" (click)="addNewPaymentEtu()"></button>
+            </div>
+        </div>
+
+    </div>
+</div>
 <!-- Liste des prospects en attente d'une assignation de groupe-->
 <div class="col-12">
     <div class="card">

@@ -272,6 +272,16 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
+  addNewPaymentEtu() {
+    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.onDossierUpdate()
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: "error", summary: "Erreur" })
+    })
+  }
+
   onDossierUpdate() {
     let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
     this.admissionService.updateDossier(this.showPayement._id, statut_dossier).subscribe(
