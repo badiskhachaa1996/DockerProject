@@ -71,7 +71,7 @@ export class UserProfilComponent implements OnInit {
         this.RegisterForm.patchValue({ entreprise: this.entrepriseDic[this.InfoUser.entreprise] })
       }
     }
-    if (event.value.value == "Etudiant" || event.value.value == "Alternant/Stagiaire") {
+    if (event.value.value == "Initial" || event.value.value == "Alternant/Stagiaire") {
       if (this.InfoUser.formation != null) {
         this.RegisterForm.patchValue({ formations: this.formationDic[this.InfoUser.formation] })
       }

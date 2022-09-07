@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 import { NotificationService } from 'src/app/services/notification.service';
 import { StepsModule } from 'primeng/steps';
 import { MenuItem } from 'primeng/api';
+import { Tuteur } from 'src/app/models/Tuteur';
 
 @Component({
   selector: 'app-inscription-entreprise',
@@ -111,6 +112,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   get fin_contrat() { return this.RegisterForm.get('fin_contrat').value; }
   get horaire() { return this.RegisterForm.get('horaire'); }
   get alternant() { return this.RegisterForm.get('alternant').value; }
+
   get alternantValidite() { return this.RegisterForm.get('alternant').invalid; }
   get intitule() { return this.RegisterForm.get('intitule'); }
   get classification() { return this.RegisterForm.get('classification'); }
@@ -127,13 +129,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
   }
   ngOnInit(): void {
 
-
     this.onInitRegisterForm();
 
 
     this.etudiantService.getAllAlternants().subscribe(alternatsdata => {
 
-
+      console.log(alternatsdata)
       this.listAlternant = alternatsdata
 
       alternatsdata.forEach(alt => {
@@ -142,7 +143,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
         this.listAlternantDD.push(alt)
       }, (error) => { console.log(error) })
 
-    }, (error) => { console.log(error) })
+    }, (error) => { console.log(error) });
     this.formationService.getAll().subscribe(data => {
 
       data.forEach(element => {
@@ -202,7 +203,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
-      alternant: new FormControl(this.listAlternantDD[0], Validators.required),
+      alternant: new FormControl('', Validators.required),
       intitule: new FormControl('', Validators.required),
       classification: new FormControl(''),
       niv: new FormControl('', Validators.required),
@@ -222,7 +223,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   nextPage() {
     this.ActiveIndex++
-
+    console.log(this.alternant);
   }
 
   previousPage() {
@@ -259,15 +260,13 @@ export class InscriptionEntrepriseComponent implements OnInit {
       })
   }
 
-
-
   generatePassword() {
     return "mot dep asse"
   }
 
   //Methode d'ajout d'un nouveau prospect
   onAddProspect() {
-   
+
     let CEO = new User(null,
       this.firstname.value,
       this.lastname.value,
@@ -275,7 +274,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       this.phone.value,
       this.email.value,
       this.email.value,
-      this.generatePassword(),
+      "password",
       'user', true, null,
       this.civilite.value,
       null,
@@ -348,7 +347,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       this.phone_t1.value,
       this.email_t1.value,
       this.email_t1.value,
-      this.generatePassword(),
+      "password",
       'user', true, null,
       this.civilite_t1.value, null, null,
       'Tuteur',
@@ -361,12 +360,13 @@ export class InscriptionEntrepriseComponent implements OnInit {
       null,
       false
     );
+    let TuteurObject = new Tuteur(null,null,this.fonction_t1.value,this.temps_fonction_t1.value,this.niv_formation_t1.value,this.date_naissance_t1,null)
 
 
-    let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
-
+    let contratAlternance = new ContratAlternance(null,this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant._id, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
+  console.log(contratAlternance)
     //Creation de lobjet a envoyer dans le back 
-    let ObjetToSend = { CEO, entreprise, t1, contratAlternance }
+    let ObjetToSend = { CEO, entreprise, t1, contratAlternance,TuteurObject }
     this.entrepriseService.createNewContrat(ObjetToSend).subscribe(
       ((response) => {
         if (response) {

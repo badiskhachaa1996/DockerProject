@@ -522,7 +522,6 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantToUpdate = response;
     console.log(response)
     let date = new Date(response.date_naissance)
-    console.log(response.date_naissance, date)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
     let alternantId = response._id
@@ -541,15 +540,13 @@ export class ListEtudiantComponent implements OnInit {
 
 
     this.formUpdateEtudiant.patchValue({
-      statut: { viewValue: response.statut, value: response.statut },
+      statut: { value: response.statut, viewValue: response.statut },
       classe_id: { libelle: bypass.nom, value: bypass._id },
       nationalite: { value: response.nationalite, viewValue: response.nationalite },
       isAlternant: this.etudiantToUpdate.isAlternant,
-      entreprise_id: { },
       dernier_diplome: this.etudiantToUpdate.dernier_diplome,
       sos_email: this.etudiantToUpdate.sos_email,
       sos_phone: this.etudiantToUpdate.sos_phone,
-      custom_id: this.etudiantToUpdate.custom_id,
       numero_INE: this.etudiantToUpdate.numero_INE,
       numero_NIR: this.etudiantToUpdate.numero_NIR,
       nom_rl: this.etudiantToUpdate.nom_rl,
@@ -565,7 +562,11 @@ export class ListEtudiantComponent implements OnInit {
     });
     bypass = response.campus
     let bypassv2: any = response.filiere
-    this.formUpdateEtudiant.patchValue({ campus_id: bypass?._id, filiere: bypassv2?._id, date_naissance: this.formatDate(date) })
+    this.formUpdateEtudiant.patchValue({
+      campus_id: bypass?._id,
+      filiere: bypassv2?._id,
+      date_naissance: this.formatDate(date)
+    })
     this.showFormUpdateEtudiant = true;
     this.showFormExportEtudiant = false;
   }

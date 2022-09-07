@@ -22,10 +22,6 @@ export class ListeContratsComponent implements OnInit {
   token;
   ListeContrats: ContratAlternance[] = []
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
-  tuteurs: Tuteur[] = [];
-  IDTuteur: Tuteur;
-  alternantId=[];
-  contrats : ContratAlternance[]=[]
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router,
     private authService: AuthService, private tuteurService: TuteurService) { }
@@ -34,30 +30,42 @@ export class ListeContratsComponent implements OnInit {
 
     this.token = jwt_decode(localStorage.getItem("token"))
     console.log(this.token)
-    // let idTuteur = this.token._id
 
-    if (!this.idTuteur && this.token){
-    //get tuteur By UserID => idTUTEUR
-      this.idTuteur = this.token.id
- 
-      this.tuteurService.getByUserId(this.idTuteur).subscribe(tuteur => {
-        this.IDTuteur = tuteur
-        this.idTuteur = this.IDTuteur._id 
-        console.log(this.idTuteur)
-        this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
+    if (!this.idTuteur && this.token && this.token.type != "Tuteur") {
+
+      this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
+        console.log(entrepriseData)
+        this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(listeData => {
+
           this.ListeContrats = listeData;
           console.log(listeData)
-          this.contrats= listeData
-          // this.alternantId = this.ListeContrats.alternant_id
-          
-        })    
+        })
+      }, (eror) => { console.log(eror) })
+
+    }
+    else if (this.token.type == "Tuteur") {
+
+      this.idTuteur = this.token.id;
+      console.log(this.idTuteur )
+      this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
+
+        this.ListeContrats = listeData;
+        console.log(listeData)
       })
     }
+
+
+  }
+  showPresence(alternant_id) {
+    console.log(alternant_id)
+    this.router.navigate(["details/" + alternant_id]);
+  }
+
 
   // showPresence(alternant_id) {
   //   console.log(alternant_id)
   //   this.router.navigate(["details/" + alternant_id]);
   // }
 
-}
+
 }

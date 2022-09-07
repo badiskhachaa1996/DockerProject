@@ -111,21 +111,17 @@ app.post("/create", (req, res, next) => {
 
 
 
-app.post("/createfromPreinscrit", (req, res, next) => {
+app.post("/assignToGroupe", (req, res, next) => {
     //creation du nouvel étudiant
     let etudiantData = req.body;
-    let etudiant = new Etudiant(
-        {
-            ...etudiantData
-        });
-    etudiant.save()
-        .then((etudiantFromDb) => {
-            Prospect.findByIdAndUpdate(req.body._id, { archived: true }).then()
-            res.status(201).json({
-                success: "Etudiant ajouté dans la BD!", data: etudiantFromDb
-            })
-        })
-        .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
+    Etudiant.findByIdAndUpdate(req.body._id, { statut_dossier: etudiantData.statut_dossier, classe_id: etudiantData.groupe }, { new: true }, function (err, data) {
+        if (err) {
+            console.error(err)
+            res.status(400).send(err)
+        } else {
+            res.status(201).send(data)
+        }
+    })
 });
 
 
@@ -150,7 +146,7 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 
 app.get("/getAllAlternants", (req, res, next) => {
 
-    Etudiant.find({ classe_id: { $ne: null }, isAlternant: true }).populate('user_id')
+    Etudiant.find({ classe_id: { $ne: null } , isAlternant: true }).populate('user_id')
         .then((alternantsFromDb) => {
 
             res.status(200).send(alternantsFromDb);
@@ -169,9 +165,16 @@ app.get("/getAllByClasseId/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
-//Récupérer la liste de tous les étudiants en attente d'assignation
+//Récupérer la liste de tous les étudiants en attente d'assignation de groupe
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null }).populate('filiere').populate('user_id')
+    Etudiant.find({ classe_id: null, valided_by_admin: true }).populate('filiere').populate('user_id')
+        .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
+//Récupérer la liste de tous les étudiants en de validation par l'administration
+app.get("/getAllWaitForVerif", (req, res, next) => {
+    Etudiant.find({ valided_by_admin: { $ne: true } }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });

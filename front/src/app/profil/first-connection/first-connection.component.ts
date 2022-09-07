@@ -44,7 +44,7 @@ export class FirstConnectionComponent implements OnInit {
   nbUser = 0
 
   statutList = [
-    { value: "Etudiant", actif: false },
+    { value: "Initial", actif: false },
     { value: "Alternant", actif: false },]
 
   classes: Classe[] = [];
@@ -260,7 +260,7 @@ export class FirstConnectionComponent implements OnInit {
           null,
           null,
           null,
-          this.RegisterForm.value.type.value !== "Etudiant",
+          this.RegisterForm.value.type.value !== "Initial",
           null,null,
           this.RegisterForm.value.diplome.value
         )

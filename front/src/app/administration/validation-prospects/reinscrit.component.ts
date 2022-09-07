@@ -46,7 +46,7 @@ export class ReinscritComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   statutList = [
-    { value: "Etudiant" },
+    { value: "Initial" },
     { value: "Alternant" }
   ]
 
@@ -80,13 +80,13 @@ export class ReinscritComponent implements OnInit {
     remarque: [''],
     campus_id: [' '],
     statut_dossier: [this.statutDossier[0].value],
-    email_ims: ['', Validators.required]
+    //email_ims: ['', Validators.required]
 
   })
 
 
   prospects: any[] = [];
-  dicCommercial: any= {};
+  dicCommercial: any = {};
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
@@ -94,8 +94,29 @@ export class ReinscritComponent implements OnInit {
       this.prospects = d
     })
   }
+  etudiants: Etudiant[] = []
+  refreshEtudiant() {
+    this.etudiantService.getAllWaitForVerif().subscribe(d => {
+      this.etudiants = d
+    })
+  }
+  showAssignFormEtu: Etudiant = null
+
+  initFormEtu(etudiant: Etudiant) {
+    this.showAssignFormEtu = etudiant;
+    this.showUploadFile = null;
+    this.showAssignForm = null
+    let s = (etudiant?.statut == "Initial") ? "Initial" : "Alternant";
+    this.AssignForm.patchValue({
+      customid: etudiant?.custom_id,
+      statut: { value: s }
+    })
+  }
 
   initForm(etudiant: Prospect) {
+    this.showAssignForm = etudiant;
+    this.showAssignFormEtu = null
+    this.showUploadFile = null;
     let s = (etudiant?.rythme_formation == "Initial") ? "Initial" : "Alternant";
     this.AssignForm.patchValue({
       customid: etudiant?.customid,
@@ -122,7 +143,7 @@ export class ReinscritComponent implements OnInit {
       })
     })
     this.refreshProspect()
-
+    this.refreshEtudiant()
     this.entrepriseService.getAll().subscribe(
       (data) => {
         data.forEach(entreprise => {
@@ -148,10 +169,64 @@ export class ReinscritComponent implements OnInit {
 
     this.commercialService.getAllPopulate().subscribe(dataC => {
       dataC.forEach(c => {
-        if(c.code_commercial_partenaire && c.partenaire_id)
+        if (c.code_commercial_partenaire && c.partenaire_id)
           this.dicCommercial[c.code_commercial_partenaire] = c.partenaire_id
       })
       console.log(this.dicCommercial)
+    })
+  }
+
+  onUpdateEtudiant() {
+    let bypass: any = this.showAssignFormEtu.user_id
+    let etd: Etudiant = new Etudiant(
+      this.showAssignFormEtu._id,
+      bypass._id,
+      null,
+      this.AssignForm.value.statut,
+      bypass.nationnalite,
+      this.showAssignFormEtu.date_naissance,
+      this.showAssignFormEtu.code_partenaire,
+      null, null, null, null,
+      this.AssignForm.value.numero_ine,
+      this.AssignForm.value.numero_nir,
+      this.AssignForm.value.sos_email,
+      this.AssignForm.value.sos_phone,
+      this.AssignForm.value.nom_rl,
+      this.AssignForm.value.prenom_rl,
+      this.AssignForm.value.phone_rl,
+      this.AssignForm.value.email_rl,
+
+      this.AssignForm.value.adresse_rl,
+      this.showAssignFormEtu.dernier_diplome,
+      this.AssignForm.value.statut == "Alternant",
+      this.showAssignFormEtu.isHandicaped,
+      this.showAssignFormEtu.suivi_handicaped,
+      this.showAssignFormEtu.diplome,
+      this.parcoursList,
+      this.AssignForm.value.remarque,
+      null,//TODO
+      null,
+      null,//TODO
+      null,
+      this.AssignForm.value.campus_id,
+      this.AssignForm.value.statut_dossier,
+      this.AssignForm.value.filiere,
+      true
+    )
+    if (!this.showAssignFormEtu.custom_id)
+      etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
+    //this.AssignForm.value.email_ims
+    this.etudiantService.update(etd).subscribe(data => {
+      this.etudiants.forEach((val, index) => {
+        if (val._id == data._id) {
+          this.etudiants.splice(index, 1)
+        }
+      })
+      this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+      this.showAssignFormEtu = null
+    }, err => {
+      this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
+      console.error(err)
     })
   }
 
@@ -161,7 +236,7 @@ export class ReinscritComponent implements OnInit {
       this.showAssignForm._id,
       bypass._id,
       null,
-      this.AssignForm.value.statut.value,
+      this.AssignForm.value.statut,
       bypass.nationnalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_commercial,
@@ -175,9 +250,9 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.phone_rl,
       this.AssignForm.value.email_rl,
 
-      this.AssignForm.value.adresse_rl,//A faire pour Alternant
+      this.AssignForm.value.adresse_rl,
       this.showAssignForm.professional_experience,
-      this.AssignForm.value.statut.value == "Alternant",
+      this.AssignForm.value.statut == "Alternant",
       this.showAssignForm.mobilite_reduite,
       this.showAssignForm.nir,
       this.showAssignForm.formation,
@@ -189,10 +264,12 @@ export class ReinscritComponent implements OnInit {
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
-      this.AssignForm.value.filiere
+      this.AssignForm.value.filiere,
+      true
     )
     etd.custom_id = this.generateCode(this.showAssignForm)
-    this.etudiantService.validateProspect(etd, bypass._id, this.AssignForm.value.email_ims).subscribe(data => {
+    //this.AssignForm.value.email_ims
+    this.etudiantService.validateProspect(etd, bypass._id, "").subscribe(data => {
       this.prospects.forEach((val, index) => {
         if (val._id == data._id) {
           this.prospects.splice(index, 1)
@@ -206,7 +283,29 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
-  showPayement: Etudiant;
+  showPayement: Prospect;
+  formUpdateDossier: FormGroup = this.formBuilder.group({
+    statut_dossier: [this.statutDossier[0].value]
+  });
+
+  showPayementFC(etu: Prospect) {
+    let bypass: any = etu.user_id
+    this.admissionService.getPopulateByUserid(bypass._id).subscribe(p => {
+      console.log(p, bypass)
+      this.showPayement = p
+    })
+    this.payementList = etu.payement
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
+  }
+  showPayementEtu: Etudiant = null
+  showPayementEtuFC(etu: Etudiant) {
+    let bypass: any = etu.user_id
+    this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
+      this.showPayementEtu = p
+    })
+    this.payementList = etu.payment_reinscrit
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
+  }
 
   payementList = []
 
@@ -233,16 +332,73 @@ export class ReinscritComponent implements OnInit {
   }
 
   addNewPayment() {
-    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+    this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshProspect()
+      let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+      this.admissionService.updateDossier(this.showPayement._id, statut_dossier).subscribe(
+        ((responde) => {
+          this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
+          this.showPayement = null
+          this.refreshProspect()
+          //Recuperation de la liste des differentes informations
+          //this.resetForms();
+        }),
+        ((error) => { console.error(error); })
+      );
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
     })
   }
 
+  addNewPaymentEtu() {
+    this.etudiantService.addNewPayment(this.showPayementEtu._id, { payement: this.payementList }).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+      console.log(statut_dossier)
+      this.etudiantService.updateDossier(this.showPayementEtu._id, statut_dossier).subscribe(
+        ((responde) => {
+          this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
+          this.showPayementEtu = null
+          this.refreshEtudiant()
+          //Recuperation de la liste des differentes informations
+          //this.resetForms();
+        }),
+        ((error) => { console.error(error); })
+      );
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: "error", summary: "Erreur" })
+    })
+  }
   generateCode(prospect: Prospect) {
+    let user: any = prospect.user_id
+    let code_pays = user.nationnalite.substring(0, 3)
+    environment.dicNationaliteCode.forEach(code => {
+      if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
+        code_pays = code[user.nationnalite]
+      }
+    })
+    let prenom = user.firstname.substring(0, 1)
+    let nom = user.lastname.substring(0, 1)
+    let y = 0
+    for (let i = 0; i < (nom.match(" ") || []).length; i++) {
+      console.log(nom)
+      nom = nom + nom.substring(nom.indexOf(" ", y), nom.indexOf(" ", y) + 1)
+      y = nom.indexOf(" ", y) + 1
+    }
+    let dn = new Date(prospect.date_naissance)
+    let jour = dn.getDate()
+    let mois = dn.getMonth() + 1
+    let year = dn.getFullYear().toString().substring(2)
+    let nb = Object.keys(this.users).length.toString()
+    nb = nb.substring(nb.length - 3)
+    let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
+    return r
+
+  }
+
+  generateCodeEtu(prospect: Etudiant) {
     let user: any = prospect.user_id
     let code_pays = user.nationnalite.substring(0, 3)
     environment.dicNationaliteCode.forEach(code => {
