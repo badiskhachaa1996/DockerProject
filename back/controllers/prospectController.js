@@ -609,6 +609,15 @@ app.post('/updatePayement/:id', (req, res) => {
     })
 })
 
+app.get('/getPopulateByUserid/:user_id', (req, res) => {
+    Prospect.findOne({ user_id: req.params.user_id }).populate('user_id').then(data => {
+        res.status(200).send(data)
+    }, (error) => {
+        console.error(error)
+        res.status(400).send(error)
+    })
+})
+
 app.get('/etatTraitement/:id/:etat', (req, res) => {
     Prospect.findByIdAndUpdate(req.params.id, { etat_traitement: req.params.etat }).then(data => {
         res.status(200).send(data)
@@ -622,8 +631,8 @@ app.get("/getInfoDashboardAdmission", (req, res, next) => {
         .then((nouvelle_inscrit) => {
             Prospect.find({ etat_traitement: 'Retour Etudiant' })
                 .then((retour_etudiant) => {
-                    Prospect.find({archived: [false, null] })
-                        .then((all_etudiant) => { res.status(200).send({nb_all_etudiant: all_etudiant.length, nb_nouvelle_inscrit: nouvelle_inscrit.length, nb_retour_etudiant: retour_etudiant.length });})
+                    Prospect.find({ archived: [false, null] })
+                        .then((all_etudiant) => { res.status(200).send({ nb_all_etudiant: all_etudiant.length, nb_nouvelle_inscrit: nouvelle_inscrit.length, nb_retour_etudiant: retour_etudiant.length }); })
                 })
                 .catch((error) => { res.status(500).send(error); })
         })
@@ -638,6 +647,17 @@ app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
     })
     p.save().then(data => {
         res.status(201).send(data)
+    })
+})
+
+app.get('/updateDossier/:id/:statut_dossier', (req, res) => {
+    Prospect.findByIdAndUpdate(req.params.id, { statut_dossier: req.params.statut_dossier }, { new: true }, function (err, data) {
+        if(err){
+            console.error(err)
+            res.status(400).send(err)
+        }else{
+            res.status(201).send(data)
+        }
     })
 })
 

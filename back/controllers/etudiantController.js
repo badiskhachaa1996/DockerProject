@@ -111,21 +111,17 @@ app.post("/create", (req, res, next) => {
 
 
 
-app.post("/createfromPreinscrit", (req, res, next) => {
+app.post("/assignToGroupe", (req, res, next) => {
     //creation du nouvel étudiant
     let etudiantData = req.body;
-    let etudiant = new Etudiant(
-        {
-            ...etudiantData
-        });
-    etudiant.save()
-        .then((etudiantFromDb) => {
-            Prospect.findByIdAndUpdate(req.body._id, { archived: true }).then()
-            res.status(201).json({
-                success: "Etudiant ajouté dans la BD!", data: etudiantFromDb
-            })
-        })
-        .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
+    Etudiant.findByIdAndUpdate(req.body._id, { statut_dossier: etudiantData.statut_dossier, classe_id: etudiantData.groupe }, { new: true }, function (err, data) {
+        if (err) {
+            console.error(err)
+            res.status(400).send(err)
+        } else {
+            res.status(201).send(data)
+        }
+    })
 });
 
 

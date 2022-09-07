@@ -424,13 +424,17 @@ export class AddEtudiantComponent implements OnInit {
       isAlternant,
       isHandicaped,
       suivi_handicaped,
-
       null,
       null,
       this.formAddEtudiant.get('remarque').value,
       isOnStage,
       null,
-      null);
+      null,
+      null,
+      campus,//campus
+      statut_dossier,//StatutDossier
+      filiere,//filiere
+      false);
 
    
 

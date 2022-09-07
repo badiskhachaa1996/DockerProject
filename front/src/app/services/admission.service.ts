@@ -58,7 +58,7 @@ export class AdmissionService {
   }
 
   getAllEtudiant() {
-    let registreUrl = this.apiUrl+'getAllEtudiant';
+    let registreUrl = this.apiUrl + 'getAllEtudiant';
     return this.httpClient.get<Prospect[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -115,15 +115,23 @@ export class AdmissionService {
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem(token)) })
   }
 
-  getInfoDashboardAdmission()
-  {
+  getInfoDashboardAdmission() {
     let url = this.apiUrl + "getInfoDashboardAdmission";
-    return this.httpClient.get<{nb_all_etudiant: number, nb_nouvelle_inscrit: number, nb_retour_etudiant: number }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<{ nb_all_etudiant: number, nb_nouvelle_inscrit: number, nb_retour_etudiant: number }>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-    
+
   createProspectWhileEtudiant(user_id) {
     let url = this.apiUrl + "createProspectWhileEtudiant/" + user_id
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+  }
 
+  getPopulateByUserid(user_id) {
+    let url = this.apiUrl + "getPopulateByUserid/" + user_id
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
+  }
+
+  updateDossier(id, statut_dossier) {
+    let url = this.apiUrl + "updateDossier/" + id + "/" + statut_dossier
+    return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
   }
 }

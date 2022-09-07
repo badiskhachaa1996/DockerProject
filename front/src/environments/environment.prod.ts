@@ -83,13 +83,11 @@ export const environment = {
     { value: 'Responsable' }
   ],
 
-  typeUser: [{
-    value: "Etudiant",
-  }, {
-    value: "Salarié"
-  }, {
-    value: "Alternant/Stagiaire"
-  }],
+  typeUser: [
+    { value: "Initial", actif: false },
+    { value: "Salarié", actif: false },
+    { value: "Alternant/Stagiaire", actif: false },
+  ],
 
   campus: [
     { value: "Paris" },

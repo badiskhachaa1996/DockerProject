@@ -49,7 +49,7 @@ export class ProspectsComponent implements OnInit {
   groupeList = [];
 
   statutList = [
-    { value: "Etudiant" },
+    { value: "Initial" },
     { value: "Alternant" }
   ]
 
@@ -71,24 +71,7 @@ export class ProspectsComponent implements OnInit {
 
   AssignForm: FormGroup = this.formBuilder.group({
     groupe: ["", Validators.required],
-    statut: [this.statutList[0], Validators.required],
-    numero_ine: [''],
-    numero_nir: [''],
-    sos_email: [''],
-    sos_phone: [''],
-    nom_rl: [''],
-    prenom_rl: [''],
-    phone_rl: [''],
-    email_rl: [''],
-    adresse_rl: [''],
-    entreprise: [''],
-    nom_tuteur: [''],
-    prenom_tuteur: [''],
-    adresse_tuteur: [''],
-    email_tuteur: [''],
-    phone_tuteur: [''],
-    indicatif_tuteur: [''],
-    statut_dossier: ['']
+    statut_dossier: [[this.statutDossier[0].value], Validators.required],
   })
 
   ngOnInit(): void {
@@ -150,24 +133,10 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    let bypass: any = this.showAssignForm.user_id
-    let etd: Etudiant = new Etudiant(
-      null,
-      bypass._id,
-      this.AssignForm.value.groupe,
-      this.AssignForm.value.statut.value,
-      bypass?.nationalite,
-      this.showAssignForm.date_naissance,
-      this.showAssignForm.code_commercial,
-      null, null, null, this.showAssignForm.customid,
-      this.AssignForm.value.numero_ine, this.AssignForm.value.numero_nir, this.AssignForm.value.sos_email, this.AssignForm.value.sos_phone, this.AssignForm.value.nom_rl, this.AssignForm.value.prenom_rl, this.AssignForm.value.phone_rl, this.AssignForm.value.email_rl, this.AssignForm.value.adresse_rl,//A faire pour Alternant
-      this.showAssignForm.validated_academic_level,
-      this.AssignForm.value.statut.value == "Alternant",
-      null, null,//isHandicaped
-      null, null, this.showAssignForm.remarque, null
-    )
+    let data = { _id: this.showAssignForm._id, statut_dossier: this.AssignForm.value.statut, groupe: this.AssignForm.value.groupe }
     //this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
-    this.etudiantService.createfromPreinscris(etd).subscribe(data => {
+    this.etudiantService.assignToGroupe(data).subscribe(data => {
+      this.messageService.add({ severity: "success", summary: "Etudiant assigné à un groupe", detail: "L'étudiant a été assigné" })
       this.showAssignForm = null
     }, err => {
       console.error(err)
