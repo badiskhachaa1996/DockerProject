@@ -24,7 +24,7 @@
                 <div class="field col-12 md:col-4">
                     <label>Contenu de dossier </label>
                     <p-multiSelect [options]="DocPresent" optionValue="label"
-                        defaultLabel="Choississez le type de fichier" formControlName="document_present">
+                        defaultLabel="Choisissez le type de fichier" formControlName="document_present">
                     </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="field col-12 md:col-4" *ngIf="changeStateForm.value.statut.value=='Documents manquants'">
                     <label>Document manquant </label>
-                    <p-multiSelect [options]="DocTypes2" defaultLabel="Choississez le type de fichier"
+                    <p-multiSelect [options]="DocTypes2" defaultLabel="Choisissez le type de fichier"
                         formControlName="document_manquant"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4"

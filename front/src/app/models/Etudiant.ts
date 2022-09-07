@@ -33,7 +33,7 @@ export class Etudiant {
         public payment_reinscrit?: [],
         public enic_naric?: boolean,
         public campus?: string, // Campus ID
-        public statut_dossier?: string,
+        public statut_dossier?: string[],
         public filiere?: string
 
     ) { }

@@ -277,6 +277,20 @@ app.get("/getAllContrats/:idTuteur", (req, res, next) => {
         });
 });
 
+app.get("/getAllContratAlternance/", (req, res, next) => {
+    CAlternance.find()
+        .then((CAFromDb) => {
+            console.log(CAFromDb);
+            res.status(200).send(CAFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            req.status(500).json({
+                error: "Impossible de recuperer la liste des contrats " + error.message
+            });
+        });
+});
+
 
 
 

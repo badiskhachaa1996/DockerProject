@@ -193,7 +193,7 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
             { path: 'demande-events', component: DemandeEventsComponent },
-            { path: 'completion-profil'},
+            { path: 'completion-profil', component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },

@@ -96,7 +96,7 @@ app.post("/create", (req, res, next) => {
                         etudiant.user_id = userCreated._id;
                         console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
-                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated })})
+                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated }) })
                             .catch((error) => {
                                 console.error(error);
                                 res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
@@ -643,6 +643,17 @@ app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
                     })
                 }
             })
+        }
+    })
+})
+
+app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
+    Etudiant.findByIdAndUpdate(req.params.etudiant_id, { statut_dossier: req.params.statut_dossier, date_dernier_modif_dossier: new Date() }, { new: true }, (err, doc) => {
+        if (err) {
+            console.error(err)
+            res.status(400).send(err)
+        } else {
+            res.status(201).send(doc)
         }
     })
 })

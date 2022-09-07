@@ -23,20 +23,45 @@ mongoose
                         Presence.findOne({ seance_id: s._id, user_id: e.user_id._id }).then(p => {
                             if (!p || !p.isPresent) {
                                 //Envoie de mail Attention vous avez été noté Absent veuillez justifié
-                                console.log(s, e)
+                                sendEmailForJustify(e, s)
                             }
                         })
                     })
                 })
             })
         })
-    })
-/*
+        Etudiant.find().populate('user_id').then(etudiants => {
+            etudiants.forEach(e => {
+                let dicAbsence = {}
+                Seance.find({ classe_id: e.classe_id, date_fin: { $lt: new Date() } }).then(seances => {
+                    seances.forEach(s => {
+                        Presence.findOne({ seance_id: s._id, user_id: e.user_id._id }).then(p => {
+                            if (!p || !p.isPresent) {
                                 if (dicAbsence[s.matiere_id]) {
                                     dicAbsence[s.matiere_id] += 1
-                                    if (dicAbsence[s.matiere_id] == 2) {
-                                        //Attention après une nouvelle Absence votre examen à MODULE vous sera retiré
-                                    }
                                 } else {
                                     dicAbsence[s.matiere_id] = 1
-                                }*/
+                                }
+                            }
+                            if (s._id == seances[seance.length - 1]._id) {
+                                Etudiant.findByIdAndUpdate(e._id, dicAbsence, { new: true }, (err, val) => {
+                                    if (val._id == etudiants[etudiants.length - 1]._id) {
+                                        //Envoie de mail Attention vous avez été noté Absent veuillez justifié
+                                        sendEmailWarningFor2AbsencesInModule(val)
+                                    }
+                                })
+                            }
+                        })
+                    })
+                })
+
+            })
+        })
+    })
+
+function sendEmailForJustify(etudiant, seance) {
+
+}
+function sendEmailWarningFor2AbsencesInModule(etudiant) {
+
+}

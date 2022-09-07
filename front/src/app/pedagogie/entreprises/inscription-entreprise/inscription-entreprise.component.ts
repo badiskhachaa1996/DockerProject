@@ -267,6 +267,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
 
   //Methode d'ajout d'un nouveau prospect
   onAddProspect() {
+   
     let CEO = new User(null,
       this.firstname.value,
       this.lastname.value,
@@ -362,7 +363,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
     );
 
 
-    let contratAlternance = new ContratAlternance(this.debut_contrat.value, this.fin_contrat.value, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
+    let contratAlternance = new ContratAlternance(this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant.value, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
 
     //Creation de lobjet a envoyer dans le back 
     let ObjetToSend = { CEO, entreprise, t1, contratAlternance }

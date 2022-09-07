@@ -141,14 +141,6 @@ export class AddSeanceComponent implements OnInit {
   }
 
   saveSeance() {
-    let date_debut = this.seanceForm.get('date_debut').value;
-    let dateDebut = date_debut.substr(0, 9);
-    let date_fin = this.seanceForm.get('date_fin_plannification').value;
-
-    console.log(dateDebut);
-    console.log(date_fin);
-
-
     //TODO get nbSeance
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
@@ -257,6 +249,166 @@ export class AddSeanceComponent implements OnInit {
 
       });
     })
+
+
+    //Partie qui s'execute si la séance se répète sur plusieurs jours
+    if(!this.seanceForm.get('isUnique').value)
+    {
+      let numeroSeance = this.seanceForm.get('nbseance').value; 
+      let date_debut = this.seanceForm.get('date_debut').value;
+      let date_de_debut = new Date(date_debut);
+      let date_fin = new Date(this.seanceForm.get('date_fin').value);
+      let dateDebut = new Date(date_debut.substr(0, 10));
+      let dateFinPlan = new Date(this.seanceForm.get('date_fin_plannification').value);
+      dateFinPlan.setDate(dateFinPlan.getDate() + 1);
+
+      let newNumeroSeance = numeroSeance;
+      let i = 0;
+
+      while(date_de_debut <= dateFinPlan)
+      {
+        i += 7;
+
+        date_de_debut.setDate(date_de_debut.getDate() + i);
+
+        let newDateDebut = new Date(date_debut);
+        newDateDebut.setDate(newDateDebut.getDate() + i);
+
+        let newDateFin = new Date(date_debut);
+        newDateFin.setDate(newDateFin.getDate() + i);
+
+        newDateFin.setHours(date_fin.getHours());
+        newDateFin.setMinutes(date_fin.getMinutes());
+        newDateFin.setSeconds(date_fin.getSeconds());
+
+        console.log(' ---------- ' + date_de_debut + ' ---------- ');
+
+        
+        newNumeroSeance +=  1;
+        
+        //TODO get nbSeance
+        let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
+        this.seanceForm.value.classe.forEach((c, index) => {
+          if (index != 0)
+            classeStr = classeStr + "," + this.dicClasse[c.value].abbrv
+        })
+        classeStr.slice(classeStr.lastIndexOf(',') - 1)
+
+        let classeList = []
+        this.seanceForm.value.classe.forEach(c => {
+          classeList.push(c.value)
+        })
+        let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, newDateDebut, newDateFin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom,
+          this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle);
+        console.log(seance)
+        seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + newNumeroSeance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+        let calc = newDateFin.getHours() - newDateDebut.getHours()
+        let choice = true
+        this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
+          if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
+            choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
+          } else {
+            if (data.hasOwnProperty("volume_h_consomme") && data.volume_h_consomme[this.seanceForm.value.matiere.value] == Number && data.volume_h_consomme[this.seanceForm.value.matiere.value] + calc > data.volume_h[this.seanceForm.value.matiere.value]) {
+              choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
+            }
+          }
+          if (choice && data.type_contrat == "Prestation et Vacation") {
+            let date_debut = this.getScoreDate(newDateDebut)
+            let date_fin = this.getScoreDate(newDateFin)
+            let score_debut = 0
+            let score_fin = 10000
+            //TODO if day_debut!=day_fin
+            let available = true
+            let rmq = ""
+            let day = newDateDebut.getDay()
+            if (day == 1 && data.monday_available && data.monday_available.state && data.monday_available.h_debut && data.monday_available.h_fin) {
+              //Monday
+              score_debut = this.getScoreString(data.monday_available.h_debut)
+              score_fin = this.getScoreString(data.monday_available.h_fin)
+              rmq = data.monday_available.remarque
+            } else if (day == 2 && data.tuesday_available && data.tuesday_available.state && data.tuesday_available.h_debut && data.tuesday_available.h_fin) {
+              //Tuesday
+              score_debut = this.getScoreString(data.tuesday_available.h_debut)
+              score_fin = this.getScoreString(data.tuesday_available.h_fin)
+              rmq = data.tuesday_available.remarque
+            } else if (day == 3 && data.wednesday_available && data.wednesday_available.state && data.wednesday_available.h_debut && data.wednesday_available.h_fin) {
+              //Wednesday
+              score_debut = this.getScoreString(data.wednesday_available.h_debut)
+              score_fin = this.getScoreString(data.wednesday_available.h_fin)
+              rmq = data.wednesday_available.remarque
+            } else if (day == 4 && data.thursday_available && data.thursday_available.state && data.thursday_available.h_debut && data.thursday_available.h_fin) {
+              //Thursday
+              score_debut = this.getScoreString(data.thursday_available.h_debut)
+              score_fin = this.getScoreString(data.thursday_available.h_fin)
+              rmq = data.thursday_available.remarque
+            } else if (day == 5 && data.friday_available && data.friday_available.state && data.friday_available.h_debut && data.friday_available.h_fin) {
+              //Friday
+              score_debut = this.getScoreString(data.friday_available.h_debut)
+              score_fin = this.getScoreString(data.friday_available.h_fin)
+              rmq = data.friday_available.remarque
+            } else {
+              available = false
+            }
+            if (!(score_debut < date_debut) || !(date_fin < score_fin)) {
+              available = false
+            }
+            if (available) {
+              let dd = newDateDebut
+              data.absences.forEach(d => {
+                available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
+              })
+            }
+            if (!available) {
+              let txt = ""
+              if (rmq != "") {
+                txt = "\nRemarque: " + rmq
+              }
+              choice = confirm("Le formateur n'est pas disponible pour toute la séance à cause de ses jours de disponibilité\nVoulez-vous quand même créer cette séance ?" + txt)
+            }
+          } else if (choice) {
+            if (this.matieres[seance.matiere_id].seance_max < seance.nbseance) {
+              choice = confirm("Le nombre de séance prévu pour ce module va être depassé\nVoulez-vous quand même créer cette séance ?")
+            }
+          }
+          if (choice)
+            console.log(seance)
+          this.seanceService.create(seance).subscribe((data) => {
+            console.log(data)
+            this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
+          }, (error) => {
+            console.error(error)
+            let serror: Seance = error.error.seance
+            this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
+            let classeStr = ""
+            serror.classe_id.forEach(c => {
+              classeStr = classeStr + this.classes[c].abbrv + ","
+            })
+            this.messageService.add({
+              severity: 'error', summary: "Informations de :" + error.seance, detail:
+                "Debut: " + this.convertDate(new Date(serror.date_debut)) +
+                "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
+                "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
+                "\nModule: " + this.matieres[serror.matiere_id].nom +
+                "\nClasse: " + classeStr
+            })
+
+          });
+        })
+        
+          
+      }
+    }
+    
+    
+  }
+
+  //Focntion qui calcul le nombre de jour entre 2dates
+  getDaysBetweenTwoDates(date1, date2)
+  {
+    let t = date2.getTime() - date1.getTime();
+    let days = t / (1000 * 3600 * 24);
+
+    return (days);
   }
 
   getScoreString(s: String) {

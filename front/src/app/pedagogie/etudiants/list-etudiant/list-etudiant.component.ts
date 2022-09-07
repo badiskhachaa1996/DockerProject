@@ -17,6 +17,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
+import { ContratAlternance } from 'src/app/models/ContratAlternance';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
@@ -25,6 +26,7 @@ import { Prospect } from 'src/app/models/Prospect';
 import { Diplome } from 'src/app/models/Diplome';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
+import { Service } from 'src/app/models/Service';
 
 
 
@@ -41,6 +43,8 @@ export class ListEtudiantComponent implements OnInit {
   etudiants: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
+
+  formUpdateDossier: FormGroup;
   showFormUpdateEtudiant: boolean = false;
 
   nationList = environment.nationalites;
@@ -58,6 +62,7 @@ export class ListEtudiantComponent implements OnInit {
   searchClass: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteur: Tuteur[] = []
+  entrepriseID: Tuteur [] = [];
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
@@ -78,13 +83,14 @@ export class ListEtudiantComponent implements OnInit {
   dropdownCampus: any[] = [];
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
-    { value: "Payment Manquant", label: "Payment Manquant" },
+    { value: "Paiement non finalisé", label: "Paiement non finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
 
   entreprises: Entreprise[] = [];
   dropdownEntreprise: any[] = [{ libelle: 'Choisissez une entreprise', value: '' }];
+
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -100,12 +106,15 @@ export class ListEtudiantComponent implements OnInit {
 
   isMinor = false;
   isCommercial: boolean = false;
+  isAdministration: boolean = false;
+ 
 
   prospects = {}
 
   absences: Presence[] = []
 
   showPayement: Prospect
+  contrats: ContratAlternance[] = [];
 
   payementList = []
   onAddPayement() {
@@ -144,10 +153,12 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   showPayementFC(etu: Etudiant) {
-    this.etudiantService.getPopulateByUserid(etu.user_id).subscribe(p => {
+    let bypass: any = etu.user_id
+    this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
     })
     this.payementList = etu.payment_reinscrit
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
       this.payementList = this.showPayement.payement
@@ -166,7 +177,6 @@ export class ListEtudiantComponent implements OnInit {
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
-    console.log("J'arrive à ListEtudiant")
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -175,7 +185,7 @@ export class ListEtudiantComponent implements OnInit {
 
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
-
+    this.onGetRole()
     /* Specialement pour la partie dexport des données */
     this.dropdownEntreprise = [{ libelle: 'Choisissez une entreprise', value: '' }];
     //Recuperation de la liste des entreprises
@@ -212,13 +222,16 @@ export class ListEtudiantComponent implements OnInit {
       this.formUpdateEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
     })
 
+    //liste des contrats
+   
+
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormUpdateEtudiant();
 
   }
 
 
-  TuteurListLoad(entreprise_id) {
+  entrepriseIDLoad(entreprise_id) {
     //Liste des tuteurs par entreprise_id
     let entrepriseId = this.formUpdateEtudiant.get('entreprise_id')?.value;
     console.log(entrepriseId.value)
@@ -359,7 +372,19 @@ export class ListEtudiantComponent implements OnInit {
       date_naissance: ['', Validators.required],
       isAlternant: [false],
       entreprise_id: [],
-      id_tuteur:[""],
+      id_tuteur: [],
+      //contrat alternance
+      debut_contrat: [''],
+      fin_contrat: [''],
+      horaire: [''],
+      // alternant: [''],// remplissage auto
+      intitule: [''],
+      classification: [''],
+      niv: [''],
+      coeff_hier: [''],
+      form: [''],
+      code_commercial: [''],
+      donneePerso: [''],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -382,8 +407,23 @@ export class ListEtudiantComponent implements OnInit {
       filiere: ['', Validators.required],
       statut_dossier: [this.statutDossier[0].value]
     });
+    this.formUpdateDossier = this.formBuilder.group({
+      statut_dossier: [this.statutDossier[0].value]
+    });
   }
 
+  onDossierUpdate() {
+    let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+    this.etudiantService.updateDossier(this.etudiantToUpdate._id, statut_dossier).subscribe(
+      ((responde) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
+        //Recuperation de la liste des differentes informations
+        this.onGetAllClasses();
+        //this.resetForms();
+      }),
+      ((error) => { console.error(error); })
+    );
+  }
 
   //Methode de modification d'un étudiant
   onUpdateEtudiant() {
@@ -404,10 +444,11 @@ export class ListEtudiantComponent implements OnInit {
     let numero_NIR = this.formUpdateEtudiant.get('numero_NIR')?.value;
     let nom_rl = this.formUpdateEtudiant.get('nom_rl')?.value;
     let prenom_rl = this.formUpdateEtudiant.get('prenom_rl')?.value;
+    let indicatif_rl = this.formUpdateEtudiant.get('indicatif_rl')?.value;
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value;
+    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
     let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
@@ -418,6 +459,10 @@ export class ListEtudiantComponent implements OnInit {
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
 
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
+
+    let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
+    let isMinor = this.formUpdateEtudiant.get("isMinor")?.value;
+
 
     let etudiant = new Etudiant(
       this.etudiantToUpdate._id,
@@ -470,23 +515,56 @@ export class ListEtudiantComponent implements OnInit {
     );
   }
 
+  entrepriseList: any []= [{ libelle: ' ', value: '' }];
+
   showFUpdate(response: Etudiant) {
     //Campus et Filiere, statut a vérifier
     this.etudiantToUpdate = response;
+    console.log(response)
     let date = new Date(response.date_naissance)
     console.log(response.date_naissance, date)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
+    let alternantId = response._id
+
+    // this.entrepriseService.getByEtudiantId(alternantId).subscribe(data => {
+
+    // })
+
+
+
+    // this.entrepriseService.getAllContratAlternance().subscribe(data => {
+    //   this.contrats = data
+    //   let contratAlernantId = this.contrats.alternant_id
+    //   console.log(data)
+    // });
+
+
     this.formUpdateEtudiant.patchValue({
-      statut: { viewValue: response.statut, value: response.statut }, classe_id: { libelle: bypass.nom, value: bypass._id }, nationalite: { value: response.nationalite, viewValue: response.nationalite },
+      statut: { viewValue: response.statut, value: response.statut },
+      classe_id: { libelle: bypass.nom, value: bypass._id },
+      nationalite: { value: response.nationalite, viewValue: response.nationalite },
       isAlternant: this.etudiantToUpdate.isAlternant,
-      dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
-      numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
-      adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-      remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
+      entreprise_id: { },
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome,
+      sos_email: this.etudiantToUpdate.sos_email,
+      sos_phone: this.etudiantToUpdate.sos_phone,
+      custom_id: this.etudiantToUpdate.custom_id,
+      numero_INE: this.etudiantToUpdate.numero_INE,
+      numero_NIR: this.etudiantToUpdate.numero_NIR,
+      nom_rl: this.etudiantToUpdate.nom_rl,
+      prenom_rl: this.etudiantToUpdate.prenom_rl,
+      phone_rl: this.etudiantToUpdate.phone_rl,
+      email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl,
+      isHandicaped: this.etudiantToUpdate.isHandicaped,
+      suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque,
+      isOnStage: this.etudiantToUpdate.isOnStage,
+      enic_naric: this.etudiantToUpdate.enic_naric,
     });
     bypass = response.campus
-    let bypassv2 : any = response.filiere
+    let bypassv2: any = response.filiere
     this.formUpdateEtudiant.patchValue({ campus_id: bypass?._id, filiere: bypassv2?._id, date_naissance: this.formatDate(date) })
     this.showFormUpdateEtudiant = true;
     this.showFormExportEtudiant = false;
@@ -631,15 +709,20 @@ export class ListEtudiantComponent implements OnInit {
     }
   }
 
-  onGetCommercialePartenaire() {
+  onGetRole() {
     this.CommercialService.getByUserId(this.token.id).subscribe(data => {
       this.isCommercial = data != null
-    }
-    )
+    })
+    this.userService.getPopulate(this.token.id).subscribe(dataU => {
+      let bypass: any = dataU?.service_id
+      console.log(this.token.role, bypass, (bypass?.label.includes('sministration') || this.token.role == "Admin"))
+      this.isAdministration = bypass?.label.includes('sministration') || this.token.role == "Admin"
+    })
   }
 
   onRedirect() {
     this.router.navigate(['ajout-etudiant']);
   }
+
 
 }

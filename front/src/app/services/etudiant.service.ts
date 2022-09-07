@@ -140,4 +140,8 @@ export class EtudiantService {
     return this.httpClient.post<Etudiant>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  updateDossier(etudiant_id, statut_dossier) {
+    let url = this.apiUrl + "updateDossier/" + etudiant_id + "/" + statut_dossier
+    return this.httpClient.get<Etudiant>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }

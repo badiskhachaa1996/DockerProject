@@ -45,7 +45,7 @@ const user_schema = new mongoose.Schema({
     },
     civilite: {
         type: String,
-        default: "Monsieur"
+        default: null
     },
     pathImageProfil: {
         type: String,

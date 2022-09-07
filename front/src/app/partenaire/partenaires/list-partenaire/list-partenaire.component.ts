@@ -35,6 +35,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
     `]
 })
 export class ListPartenaireComponent implements OnInit {
+  expandedRows = {};
   FjTopatch: any;
   Ttopatch: any;
   partenaires = []
@@ -57,6 +58,7 @@ export class ListPartenaireComponent implements OnInit {
   idPartenaireToUpdate: string;
   idUserOfPartenaireToUpdate: string;
   showFormModifPartenaire = false;
+  partenaireList: any ={};
 
   @ViewChild('filter') filter: ElementRef;
   @ViewChild('dt') table: Table;
@@ -66,6 +68,9 @@ export class ListPartenaireComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private messageService: ToastService, private partenaireService: PartenaireService, private route: ActivatedRoute, private router: Router, private UserService: AuthService) { }
 
   ngOnInit(): void {
+
+    //this.getPartenaireList();
+
     let tkn = jwt_decode(localStorage.getItem("token"))
     this.canDelete = (tkn && (tkn['role'] == 'Admin' || tkn['role'] == "Responsable"))
     this.updateList();
@@ -208,7 +213,6 @@ export class ListPartenaireComponent implements OnInit {
     let APE_m = this.formModifPartenaire.get('APE').value;
     let Services_m = this.formModifPartenaire.get('Services').value;
     let Pays_m = this.formModifPartenaire.get('Pays').value;
-    console.log(format_juridique_m.value,)
     this.partenaireToUpdate = new Partenaire(
       this.idPartenaireToUpdate,
       null,
@@ -228,7 +232,6 @@ export class ListPartenaireComponent implements OnInit {
       indicatif_m,
       indicatif_whatsapp_m,
     );
-    console.log(this.partenaireToUpdate);
 
     this.partenaireService.updatePartenaire(this.partenaireToUpdate).subscribe(
       ((reponses) => {
@@ -250,6 +253,15 @@ export class ListPartenaireComponent implements OnInit {
   onRedirect() {
     this.router.navigate(['partenaireInscription']);
   }
+
+  /*getPartenaireList() 
+  {
+    this.partenaireService.getAll().subscribe((data) =>{
+      this.partenaireList = data;
+    }, error => {
+      console.error(error)
+    })
+  }*/
 
 }
 

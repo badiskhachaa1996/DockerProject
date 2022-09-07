@@ -25,7 +25,7 @@ export class AjoutExamenComponent implements OnInit {
   formateurs: Formateur[] = [];
 
   matieres: Matiere[] = [];
-  dropdownMatiere: any[] = [{ libelle: "Choisir une matière", value: null }];
+  dropdownMatiere: any[] = [{ libelle: "Choisir un module", value: null }];
 
 
   classes: Classe[] = [];
@@ -47,7 +47,8 @@ export class AjoutExamenComponent implements OnInit {
     { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
     { label: "Devoir Sur Table", value: "Devoir Sur Table" },
-    { label: "BTS Blanc", value: "BTS Blanc" }
+    { label: "BTS Blanc", value: "BTS Blanc" },
+    { label: "Participation", value: "Participation" }
   ]
 
 
