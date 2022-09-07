@@ -44,7 +44,8 @@ const etudiantSchema = mongoose.Schema({
     filiere: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
     absencesModules: { type: mongoose.Schema.Types.Mixed, default: {} },
     date_dernier_modif_dossier: { type: Date, default: null },
-    valided_by_admin: { type: Boolean, default: false }
+    valided_by_admin: { type: Boolean, default: false },
+    valided_by_support: { type: Boolean, default: false}
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

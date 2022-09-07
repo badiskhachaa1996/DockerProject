@@ -78,7 +78,8 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="vol_horaire">Volume horaire <span style="color: red;"> * </span></label>
-                        <input pInputText id="vol_horaire" type="number" step="0.1" formControlName="volume" placeholder="0" />
+                        <input pInputText id="vol_horaire" type="number" step="0.1" formControlName="volume"
+                            placeholder="0" />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="coeff">Coefficient <span style="color: red;"> * </span></label>
@@ -220,6 +221,12 @@
                         <th pSortableColumn="diplome" style="text-align:center"> Diplôme <p-sortIcon field="diplome">
                             </p-sortIcon>
                         </th>
+                        <th pSortableColumn="semestre" style="text-align:center">Semestre <p-sortIcone field="semestre">
+                            </p-sortIcone>
+                        </th>
+                        <th pSortableColumn="niveau" style="text-align:center">Niveau <p-sortIcone field="niveau">
+                            </p-sortIcone>
+                        </th>
                         <th pSortableColumn="volume_init" style="text-align:center"> Volume initiale <p-sortIcon
                                 field="volume_init"></p-sortIcon>
                         </th>
@@ -238,12 +245,6 @@
                         <th pSortableColumn="remarque" style="text-align:center">Remarque <p-sortIcone field="remarque">
                             </p-sortIcone>
                         </th>
-                        <th pSortableColumn="semestre" style="text-align:center">Semestre <p-sortIcone field="semestre">
-                            </p-sortIcone>
-                        </th>
-                        <th pSortableColumn="niveau" style="text-align:center">Niveau <p-sortIcone field="niveau">
-                            </p-sortIcone>
-                        </th>
                         <th style="text-align:center">Action</th>
                 </ng-template>
                 <ng-template pTemplate="body" let-matiere>
@@ -256,6 +257,12 @@
                         </td>
                         <td *ngIf="formationDic[matiere.formation_id]!=undefined" style="min-width: 12rem;">
                             {{ formationDic[matiere.formation_id].titre }}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.semestre}}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{matiere.niveau}}
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.volume_init}}
@@ -284,12 +291,6 @@
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.remarque}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{matiere.semestre}}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{matiere.niveau}}
                         </td>
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
