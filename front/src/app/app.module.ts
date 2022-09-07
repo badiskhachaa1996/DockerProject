@@ -184,10 +184,10 @@ import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_I
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
-import { ProspectsComponent } from './administration/validation-prospects/prospects.component';
+import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
 import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
-import { ReinscritComponent } from './pedagogie/assignation-groupe/reinscrit.component';
+import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';

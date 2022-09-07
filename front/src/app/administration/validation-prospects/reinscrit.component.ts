@@ -46,7 +46,7 @@ export class ReinscritComponent implements OnInit {
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   statutList = [
-    { value: "Etudiant" },
+    { value: "Initial" },
     { value: "Alternant" }
   ]
 
@@ -80,18 +80,24 @@ export class ReinscritComponent implements OnInit {
     remarque: [''],
     campus_id: [' '],
     statut_dossier: [this.statutDossier[0].value],
-    email_ims: ['', Validators.required]
+    //email_ims: ['', Validators.required]
 
   })
 
 
   prospects: any[] = [];
-  dicCommercial: any= {};
+  dicCommercial: any = {};
 
   refreshProspect() {
     //Recuperation de la liste des utilisateurs
     this.admissionService.getAllWait().subscribe(d => {
       this.prospects = d
+    })
+  }
+  etudiants: Etudiant[] = []
+  refreshEtudiant() {
+    this.etudiantService.getAllWaitForVerif().subscribe(d => {
+      this.etudiants = d
     })
   }
 
@@ -122,7 +128,7 @@ export class ReinscritComponent implements OnInit {
       })
     })
     this.refreshProspect()
-
+    this.refreshEtudiant()
     this.entrepriseService.getAll().subscribe(
       (data) => {
         data.forEach(entreprise => {
@@ -148,7 +154,7 @@ export class ReinscritComponent implements OnInit {
 
     this.commercialService.getAllPopulate().subscribe(dataC => {
       dataC.forEach(c => {
-        if(c.code_commercial_partenaire && c.partenaire_id)
+        if (c.code_commercial_partenaire && c.partenaire_id)
           this.dicCommercial[c.code_commercial_partenaire] = c.partenaire_id
       })
       console.log(this.dicCommercial)
@@ -161,7 +167,7 @@ export class ReinscritComponent implements OnInit {
       this.showAssignForm._id,
       bypass._id,
       null,
-      this.AssignForm.value.statut.value,
+      this.AssignForm.value.statut,
       bypass.nationnalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_commercial,
@@ -175,9 +181,9 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.phone_rl,
       this.AssignForm.value.email_rl,
 
-      this.AssignForm.value.adresse_rl,//A faire pour Alternant
+      this.AssignForm.value.adresse_rl,
       this.showAssignForm.professional_experience,
-      this.AssignForm.value.statut.value == "Alternant",
+      this.AssignForm.value.statut == "Alternant",
       this.showAssignForm.mobilite_reduite,
       this.showAssignForm.nir,
       this.showAssignForm.formation,
@@ -189,10 +195,12 @@ export class ReinscritComponent implements OnInit {
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
-      this.AssignForm.value.filiere
+      this.AssignForm.value.filiere,
+      true
     )
     etd.custom_id = this.generateCode(this.showAssignForm)
-    this.etudiantService.validateProspect(etd, bypass._id, this.AssignForm.value.email_ims).subscribe(data => {
+    //this.AssignForm.value.email_ims
+    this.etudiantService.validateProspect(etd, bypass._id, "").subscribe(data => {
       this.prospects.forEach((val, index) => {
         if (val._id == data._id) {
           this.prospects.splice(index, 1)
@@ -206,7 +214,29 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
-  showPayement: Etudiant;
+  showPayement: Prospect;
+  formUpdateDossier: FormGroup = this.formBuilder.group({
+    statut_dossier: [this.statutDossier[0].value]
+  });
+
+  showPayementFC(etu: Prospect) {
+    let bypass: any = etu.user_id
+    this.admissionService.getPopulateByUserid(bypass._id).subscribe(p => {
+      console.log(p, bypass)
+      this.showPayement = p
+    })
+    this.payementList = etu.payement
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
+  }
+  showPayementEtu: Etudiant = null
+  showPayementEtuFC(etu: Etudiant) {
+    let bypass: any = etu.user_id
+    this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
+      this.showPayementEtu = p
+    })
+    this.payementList = etu.payment_reinscrit
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
+  }
 
   payementList = []
 
@@ -233,15 +263,28 @@ export class ReinscritComponent implements OnInit {
   }
 
   addNewPayment() {
-    this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
+    this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
-      this.refreshProspect()
+      this.onDossierUpdate()
     }, err => {
       console.error(err)
       this.messageService.add({ severity: "error", summary: "Erreur" })
     })
   }
 
+  onDossierUpdate() {
+    let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
+    this.admissionService.updateDossier(this.showPayement._id, statut_dossier).subscribe(
+      ((responde) => {
+        this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });
+        this.showPayement = null
+        this.refreshProspect()
+        //Recuperation de la liste des differentes informations
+        //this.resetForms();
+      }),
+      ((error) => { console.error(error); })
+    );
+  }
   generateCode(prospect: Prospect) {
     let user: any = prospect.user_id
     let code_pays = user.nationnalite.substring(0, 3)

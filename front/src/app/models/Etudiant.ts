@@ -34,7 +34,8 @@ export class Etudiant {
         public enic_naric?: boolean,
         public campus?: string, // Campus ID
         public statut_dossier?: string[],
-        public filiere?: string
+        public filiere?: string,
+        public valided_by_admin?: boolean
 
     ) { }
 }

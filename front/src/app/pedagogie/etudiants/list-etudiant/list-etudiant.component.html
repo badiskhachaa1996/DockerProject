@@ -105,7 +105,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label For="statut">Statut Dossier</label>
-                    <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                    <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
                 </div>
 
 
@@ -245,177 +245,148 @@
 
 
                 </div>
-
-                <div class="field col-12">
-                    <label>Entreprise<span style="color: red;"> * </span></label>
-                    <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
-                        emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise" filter="true"
-                        (onChange)="TuteurListLoad(entreprise_id)">
-                    </p-dropdown>
-                    <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
+                <div *ngIf="formUpdateEtudiant.value.isAlternant">
+                    <div class="field col-12">
+                        <label>Entreprise<span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
+                            emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise" filter="true"
+                            (onChange)="TuteurListLoad(entreprise_id)">
+                        </p-dropdown>
+                        <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
                         formControlName="entreprise" /> -->
-                </div>
+                    </div>
 
-                <div class="field col-12">
-                    <label>Tuteur<span style="color: red;"> * </span></label>
-                    <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise" optionLabel="libelle"
-                        emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur" filter="true">
-                    </p-dropdown>
-                </div>
+                    <div class="field col-12">
+                        <label>Tuteur<span style="color: red;"> * </span></label>
+                        <p-dropdown formControlName="id_tuteur" [options]="dropdownTuteurByEntreprise"
+                            optionLabel="libelle" emptyFilterMessage="Pas de tuteur trouvé" filterPlaceholder="Tuteur"
+                            filter="true">
+                        </p-dropdown>
+                    </div>
 
-                <p-fieldset legend="Informations sur le contrat" [style]="{'color': 'red', 'font-weight': 'bold'}">
-                    <div style="color: black;font-weight:normal">
-                        <div class="p-fluid p-formgrid grid">
-                            <div class="field col-12 md:col-6">
-                                <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
-                                    </span></label>
-                                <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
-                                    [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                    [yearRange]="rangeYearC">
-                                </p-calendar>
-                                <!-- <div *ngIf="debut_contrat.invalid && (debut_contrat.touched || debut_contrat.dirty)">
+                    <p-fieldset legend="Informations sur le contrat" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                        <div style="color: black;font-weight:normal">
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="field col-12 md:col-6">
+                                    <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
+                                        </span></label>
+                                    <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
+                                        [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
+                                        [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                        [yearRange]="rangeYearC">
+                                    </p-calendar>
+                                    <!-- <div *ngIf="debut_contrat.invalid && (debut_contrat.touched || debut_contrat.dirty)">
                                         <span style="color: red;" class="error" *ngIf="debut_contrat.errors?.required">*
                                             Le champs est obligatoire.</span>
                                     </div> -->
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
-                                    </span></label>
-                                <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
-                                    [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                    [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                    [yearRange]="rangeYearC">
-                                </p-calendar>
-                                <!-- <div *ngIf="fin_contrat.invalid && (fin_contrat.touched || fin_contrat.dirty)">
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
+                                        </span></label>
+                                    <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
+                                        [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
+                                        [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
+                                        [yearRange]="rangeYearC">
+                                    </p-calendar>
+                                    <!-- <div *ngIf="fin_contrat.invalid && (fin_contrat.touched || fin_contrat.dirty)">
                                         <span style="color: red;" class="error" *ngIf="fin_contrat.errors?.required">*
                                             Le champs est obligatoire.</span>
                                     </div> -->
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <label For="horaire">Horaires par semaine semaine</label>
-                                <input pInputText id="horaire" type="text" placeholder="35 h/semaine"
-                                    formControlName="horaire" />
-                                <!-- <div *ngIf="horaire.invalid && (horaire.touched || horaire.dirty)">
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="horaire">Horaires par semaine semaine</label>
+                                    <input pInputText id="horaire" type="text" placeholder="35 h/semaine"
+                                        formControlName="horaire" />
+                                    <!-- <div *ngIf="horaire.invalid && (horaire.touched || horaire.dirty)">
                                         <span style="color: red;" class="error" *ngIf="horaire.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
+                                </div>
 
-                            <div class="field col-12 md:col-6">
-                                <label For="intitule">Intitulé<span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="intitule" type="text" placeholder="Intitulé du poste"
-                                    formControlName="intitule" />
-                                <!-- <div *ngIf="intitule.invalid && (intitule.touched || intitule.dirty)">
+                                <div class="field col-12 md:col-6">
+                                    <label For="intitule">Intitulé<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="intitule" type="text" placeholder="Intitulé du poste"
+                                        formControlName="intitule" />
+                                    <!-- <div *ngIf="intitule.invalid && (intitule.touched || intitule.dirty)">
                                         <span style="color: red;" class="error" *ngIf="intitule.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <label For="classification">Classification<span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="classification" type="text" placeholder="Classification"
-                                    formControlName="classification" />
-                                <!-- <div *ngIf="classification.invalid && (classification.touched || classification.dirty)">
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="classification">Classification<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="classification" type="text" placeholder="Classification"
+                                        formControlName="classification" />
+                                    <!-- <div *ngIf="classification.invalid && (classification.touched || classification.dirty)">
                                         <span style="color: red;" class="error" *ngIf="classification.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
+                                </div>
 
 
-                            <div class="field col-12 md:col-6">
-                                <label For="niv">Niveau de la formation<span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="niv" type="text" placeholder="Bac+3" formControlName="niv" />
-                                <!-- <div *ngIf="niv.invalid && (niv.touched || niv.dirty)">
+                                <div class="field col-12 md:col-6">
+                                    <label For="niv">Niveau de la formation<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="niv" type="text" placeholder="Bac+3" formControlName="niv" />
+                                    <!-- <div *ngIf="niv.invalid && (niv.touched || niv.dirty)">
                                         <span style="color: red;" class="error" *ngIf="niv.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
+                                </div>
 
-                            <div class="field col-12 md:col-6">
-                                <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="coeff_hier" type="text" placeholder="Coefficient hiérarchique"
-                                    formControlName="coeff_hier" />
-                                <!-- <div *ngIf="coeff_hier.invalid && (coeff_hier.touched || coeff_hier.dirty)">
+                                <div class="field col-12 md:col-6">
+                                    <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="coeff_hier" type="text" placeholder="Coefficient hiérarchique"
+                                        formControlName="coeff_hier" />
+                                    <!-- <div *ngIf="coeff_hier.invalid && (coeff_hier.touched || coeff_hier.dirty)">
                                         <span style="color: red;" class="error" *ngIf="coeff_hier.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
+                                </div>
 
-                            <div class="field col-12 md:col-6">
-                                <label For="form">Formation<span style="color: red;"> *
-                                    </span></label>
-                                <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
-                                    id="form" formControlName="form">
-                                </p-dropdown>
-                                <!-- <div *ngIf="form.invalid && (form.touched || form.dirty)">
+                                <div class="field col-12 md:col-6">
+                                    <label For="form">Formation<span style="color: red;"> *
+                                        </span></label>
+                                    <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
+                                        id="form" formControlName="form">
+                                    </p-dropdown>
+                                    <!-- <div *ngIf="form.invalid && (form.touched || form.dirty)">
                                         <span style="color: red;" class="error" *ngIf="form.errors?.required">*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
-                            </div>
-                            <div class="field col-12 md:col-6">
-                                <label For="code_commercial">Code commercial<span style="color: red;"> *
-                                    </span></label>
-                                <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
-                                    formControlName="code_commercial" />
-                                <!-- <div> -->
-                                <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
-                                <!-- <span style="color: red;" class="error" >*
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="code_commercial">Code commercial<span style="color: red;"> *
+                                        </span></label>
+                                    <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
+                                        formControlName="code_commercial" />
+                                    <!-- <div> -->
+                                    <!-- *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)"  *ngIf="code_commercial.errors?.required"-->
+                                    <!-- <span style="color: red;" class="error" >*
                                             Le
                                             champs est obligatoire.</span>
                                     </div> -->
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </p-fieldset>
-
-                <div style="text-align: center;">
-                    <small>C'est la dernière étapes, nous avons presques terminé !</small><br>
+                    </p-fieldset>
                 </div>
-                <p-fieldset legend="Notre partenaire d'accompagnement Eduhorizons"
-                    [style]="{'color': 'red', 'font-weight': 'bold'}">
-                    <div class="grid" style="color: black;font-weight:normal">
-                        <div class="p-fluid p-formgrid grid">
-                            <div class="ui-g-12 ui-md-12">
-                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
-                                        target="_blank">mentions
-                                        légales</a> et accepte que mes données
-                                    soient
-                                    utiliseés
-                                    dans le cadre de mon accompagnement
-                                    et dans le traitement de ma demande ?</h6>
-                                <div>
-                                    <p-radioButton value=true name="donneePerso" formControlName="donneePerso">
-                                    </p-radioButton>
-                                    <label for="oui"> Oui</label>
-                                </div>
-                                <div style="margin-top: 2px;">
-                                    <p-radioButton value=false name="donneePerso" formControlName="donneePerso">
-                                    </p-radioButton>
-                                    <label for="non"> Non</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div><br>
-                </p-fieldset>
-
                 <div class="field col-12">
-                    <label>Etes-vous une Personne à Mobilité Réduite ?</label>
+                    <label>Est une Personne à Mobilité Réduite ?</label>
                     <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
                         formControlName="isHandicaped"></p-selectButton>
                 </div>
 
                 <div class="field col-12" *ngIf="formUpdateEtudiant.value.isHandicaped">
-                    <label>Avez-vous besoin d'un suivi particulier ?</label>
+                    <label>As t-il/elle besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
 
@@ -482,13 +453,15 @@
                         <td>
                             {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
-                        <td style="min-width: 8rem;">{{ etudiant.statut_dossier }} {{ etudiant.date_dernier_modif_dossier | date : 'dd/MM hh:mm' }}</td>
+                        <td style="min-width: 8rem;">{{ etudiant.statut_dossier }} {{
+                            etudiant.date_dernier_modif_dossier | date : 'dd/MM hh:mm' }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.classe_id?.nom }}</td>
                         <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
-                            <i style="margin-left: 2%;" class="pi pi-pencil" *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
+                            <i style="margin-left: 2%;" class="pi pi-pencil"
+                                *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <!--
@@ -505,8 +478,8 @@
                             <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
                                 tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
-                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements"
-                                tooltipPosition="bottom" class="pi pi-money-bill" (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant"
+                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                                class="pi pi-money-bill" (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant"
                                 aria-hidden="true"></i>
                         </td>
                     </tr>

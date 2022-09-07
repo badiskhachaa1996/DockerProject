@@ -174,6 +174,7 @@ export class AppMenuComponent implements OnInit {
     isTuteurAlternance: Boolean = false;
     isCeoEntreprise: Boolean = false;
     isEvent = false
+    isAdministration: Boolean = false;
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService) { }
 
@@ -187,13 +188,13 @@ export class AppMenuComponent implements OnInit {
                 this.isReponsable = dataUser.role == "Responsable"
                 this.isCeoEntreprise = dataUser.type == "CEO Entreprise"
                 this.isTuteurAlternance = dataUser.type == "Tuteur"
-                console.log(dataUser)
 
                 let service: any = dataUser.service_id
                 if ((this.isAgent || this.isReponsable) && service != null) {
                     this.isAdmission = service.label.includes('Admission')
                     this.isPedagogie = service.label.includes('dagogie')
                     this.isEvent = service.label.includes('Event')
+                    this.isAdministration = service.label.includes('dministration')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -547,6 +548,82 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Gestion des participantes pour les événements', icon: 'pi pi-envelope', routerLink: ['/list-events'] },
                             ]
                         },
+                    ]
+                } else if (this.isAdministration) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: 'Administration',
+                            items: [
+                                {
+                                    label: 'Gestions des années scolaires', icon: 'pi pi-calendar',
+                                    items: [
+                                        { label: 'Ajouter une année scolaire', icon: 'pi pi-calendar-plus', routerLink: ['/ajout-annee-scolaire'] },
+                                        { label: 'Liste des années scolaires', icon: 'pi pi-sort-alpha-down', routerLink: ['/annee-scolaire'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des écoles', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter une école', icon: 'pi pi-plus-circle', routerLink: ['/ajout-ecole'] },
+                                        { label: 'Liste des écoles', icon: 'pi pi-sort-alpha-down', routerLink: ['/ecole'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des campus', icon: 'pi pi-home',
+                                    items: [
+                                        { label: 'Ajouter un campus', icon: 'pi pi-plus-circle', routerLink: ['/ajout-campus'] },
+                                        { label: 'Liste des campus', icon: 'pi pi-sort-alpha-down', routerLink: ['/campus'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
+                                    items: [
+                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
+                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des groupes', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
+                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des agents', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un agent', icon: 'pi pi-user-plus', routerLink: ['/admin/ajout-agent'] },
+                                        { label: 'Liste des agents', icon: 'pi pi-sort-alpha-down', routerLink: ['/admin/agents'] },
+                                    ]
+                                },
+                                { label: 'Validations des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
+                            ]
+                        },
+                        {
+                            label: "Pédagogie",
+                            items: [
+                                {
+                                    label: 'Gestions des étudiants', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Liste des étudiants', icon: 'pi pi-sort-alpha-down', routerLink: ['etudiants'] },
+                                    ]
+                                },
+                            ]
+                        }
                     ]
                 } else {
                     this.model = [

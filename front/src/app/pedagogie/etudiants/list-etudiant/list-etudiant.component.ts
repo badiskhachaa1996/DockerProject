@@ -153,7 +153,7 @@ export class ListEtudiantComponent implements OnInit {
       this.showPayement = p
     })
     this.payementList = etu.payment_reinscrit
-    this.formUpdateDossier.patchValue({statut_dossier:etu.statut_dossier})
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
       this.payementList = this.showPayement.payement
@@ -371,13 +371,16 @@ export class ListEtudiantComponent implements OnInit {
       date_naissance: ['', Validators.required],
       isAlternant: [false],
       entreprise_id: [],
-      nom_tuteur: ["", Validators.pattern('[^0-9]+')],
-      prenom_tuteur: ["", Validators.pattern('[^0-9]+')],
-      adresse_tuteur: [""],
-      email_tuteur: ["", Validators.email],
-      phone_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       id_tuteur: [""],
-      // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
+      debut_contrat: [""],
+      fin_contrat: [""],
+      horaire: [""],
+      intitule: [""],
+      classification: [""],
+      niv: [""],
+      coeff_hier: [""],
+      form: [""],
+      code_commercial: [''],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
@@ -440,7 +443,7 @@ export class ListEtudiantComponent implements OnInit {
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
     let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value;
-    let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
+    let remarque = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
@@ -450,7 +453,6 @@ export class ListEtudiantComponent implements OnInit {
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
 
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
-
     let etudiant = new Etudiant(
       this.etudiantToUpdate._id,
       this.etudiantToUpdate.user_id,
@@ -506,20 +508,36 @@ export class ListEtudiantComponent implements OnInit {
     //Campus et Filiere, statut a vérifier
     this.etudiantToUpdate = response;
     let date = new Date(response.date_naissance)
-    console.log(response.date_naissance, date)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
     this.formUpdateEtudiant.patchValue({
-      statut: { viewValue: response.statut, value: response.statut }, classe_id: { libelle: bypass.nom, value: bypass._id }, nationalite: { value: response.nationalite, viewValue: response.nationalite },
+      statut: { value: response.statut, viewValue: response.statut },
+      classe_id: { libelle: bypass.nom, value: bypass._id },
+      nationalite: { value: response.nationalite, viewValue: response.nationalite },
       isAlternant: this.etudiantToUpdate.isAlternant,
-      dernier_diplome: this.etudiantToUpdate.dernier_diplome, sos_email: this.etudiantToUpdate.sos_email, sos_phone: this.etudiantToUpdate.sos_phone, custom_id: this.etudiantToUpdate.custom_id,
-      numero_INE: this.etudiantToUpdate.numero_INE, numero_NIR: this.etudiantToUpdate.numero_NIR, nom_rl: this.etudiantToUpdate.nom_rl, prenom_rl: this.etudiantToUpdate.prenom_rl, phone_rl: this.etudiantToUpdate.phone_rl, email_rl: this.etudiantToUpdate.email_rl,
-      adresse_rl: this.etudiantToUpdate.adresse_rl, isHandicaped: this.etudiantToUpdate.isHandicaped, suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-      remarque: this.etudiantToUpdate.remarque, isOnStage: this.etudiantToUpdate.isOnStage, enic_naric: this.etudiantToUpdate.enic_naric
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome,
+      sos_email: this.etudiantToUpdate.sos_email,
+      sos_phone: this.etudiantToUpdate.sos_phone,
+      numero_INE: this.etudiantToUpdate.numero_INE,
+      numero_NIR: this.etudiantToUpdate.numero_NIR,
+      nom_rl: this.etudiantToUpdate.nom_rl,
+      prenom_rl: this.etudiantToUpdate.prenom_rl,
+      phone_rl: this.etudiantToUpdate.phone_rl,
+      email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl,
+      isHandicaped: this.etudiantToUpdate.isHandicaped,
+      suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque,
+      isOnStage: this.etudiantToUpdate.isOnStage,
+      enic_naric: this.etudiantToUpdate.enic_naric
     });
     bypass = response.campus
     let bypassv2: any = response.filiere
-    this.formUpdateEtudiant.patchValue({ campus_id: bypass?._id, filiere: bypassv2?._id, date_naissance: this.formatDate(date) })
+    this.formUpdateEtudiant.patchValue({
+      campus_id: bypass?._id,
+      filiere: bypassv2?._id,
+      date_naissance: this.formatDate(date)
+    })
     this.showFormUpdateEtudiant = true;
     this.showFormExportEtudiant = false;
   }
