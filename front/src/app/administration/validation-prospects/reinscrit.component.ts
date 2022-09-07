@@ -94,6 +94,12 @@ export class ReinscritComponent implements OnInit {
       this.prospects = d
     })
   }
+  etudiants: Etudiant[] = []
+  refreshEtudiant() {
+    this.etudiantService.getAllWaitForVerif().subscribe(d => {
+      this.etudiants = d
+    })
+  }
 
   initForm(etudiant: Prospect) {
     let s = (etudiant?.rythme_formation == "Initial") ? "Initial" : "Alternant";
@@ -122,7 +128,7 @@ export class ReinscritComponent implements OnInit {
       })
     })
     this.refreshProspect()
-
+    this.refreshEtudiant()
     this.entrepriseService.getAll().subscribe(
       (data) => {
         data.forEach(entreprise => {
@@ -216,20 +222,20 @@ export class ReinscritComponent implements OnInit {
   showPayementFC(etu: Prospect) {
     let bypass: any = etu.user_id
     this.admissionService.getPopulateByUserid(bypass._id).subscribe(p => {
-      console.log(p,bypass)
+      console.log(p, bypass)
       this.showPayement = p
     })
     this.payementList = etu.payement
     this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
-    /*if (this.prospects[etu.user_id]) {
-      this.showPayement = this.prospects[etu.user_id]
-      this.payementList = this.showPayement.payement
-    } else {
-      this.ProspectService.createProspectWhileEtudiant(etu.user_id).subscribe(data => {
-        this.showPayement = data
-        this.payementList = data.payement
-      })
-    }*/
+  }
+  showPayementEtu: Etudiant = null
+  showPayementEtuFC(etu: Etudiant) {
+    let bypass: any = etu.user_id
+    this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
+      this.showPayementEtu = p
+    })
+    this.payementList = etu.payment_reinscrit
+    this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
   }
 
   payementList = []

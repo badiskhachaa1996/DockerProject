@@ -532,3 +532,256 @@
     </ng-template>
     </p-table>
 </div>
+<div class="col-12">
+    <div class="card">
+        <h5>Liste des inscrits en attente de validation</h5>
+        <p-toast></p-toast>
+        <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
+            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
+            styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="formation"> Formation souhaitée<p-sortIcon field="formation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="email_perso"> Email Perso<p-sortIcon field="email"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="entreprise"> Entreprise <p-sortIcon field="entreprise"></p-sortIcon>
+                    </th>
+                    <th>Action </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-etudiant let-expanded="expanded">
+                <tr *ngIf="etudiant.user_id">
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="etudiant"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                            (click)="loadPP(etudiant)"></button>
+                    </td>
+                    <td>{{ etudiant.custom_id }}</td>
+                    <td style="min-width: 10rem;">
+                        {{ etudiant.user_id.firstname }}
+                        {{ etudiant.user_id.lastname | uppercase }}
+                    </td>
+                    <td *ngIf="!etudiant.isAlternant" style="min-width: 8rem;">{{ etudiant.statut }}</td>
+                    <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
+                    <td style="min-width: 10rem;" *ngIf="etudiant.filiere">{{ etudiant?.filiere?.titre }}</td>
+                    <td style="min-width: 10rem;" *ngIf="!etudiant.filiere">{{ etudiant.diplome }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.entreprise }}</td>
+                    <td>
+                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                            (click)="showUploadFile=etudiant" aria-hidden="true"></i>
+                        <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
+                            (click)="showPayementEtu=etudiant;showPayementEtuFC(etudiant)" aria-hidden="true"></i>
+                        <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
+                        <i pTooltip="Vérifier le dossier" tooltipPosition="bottom" class="pi pi-check"
+                            (click)="showAssignFormEtu=etudiant;showUploadFile=null;initFormEtu(etudiant)"
+                            aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-etudiant>
+                <tr>
+                    <td colspan="8">
+                        <div class="p-3">
+                            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th></th>
+                    <th>Adresse </th>
+                    <th>Date de naissance </th>
+                    <th>Téléphone </th>
+                    <th>Dernier diplôme obtenu </th>
+                    <th>Email d'urgence </th>
+                    <th>Téléphone d'urgence</th>
+                    <th>Numéro INE</th>
+                    <th>Numéro NIR </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>
+                        <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
+                    </td>
+                    <td>
+                        {{ etudiant.user_id.numero_adresse }} {{etudiant.user_id.rue_adresse }} {{
+                        etudiant.user_id.postal_adresse }} <br> {{ etudiant.user_id.ville_adresse }} {{
+                        etudiant.user_id.pays_adresse }}
+                    </td>
+                    <td>
+                        {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                    </td>
+                    <td>
+                        {{ etudiant.user_id?.phone }}
+                    </td>
+                    <td>
+                        {{ etudiant.dernier_diplome }}
+                    </td>
+                    <td>
+                        {{ etudiant.sos_email }}
+                    </td>
+                    <td>
+                        {{ etudiant.sos_phone }}
+                    </td>
+                    <td>
+                        {{ etudiant.numero_INE }}
+                    </td>
+                    <td>
+                        {{ etudiant.numero_NIR }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p-table responsiveLayout="scroll" *ngIf="etudiant.isAlternant" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Tuteur </th>
+                    <th>Adresse du tuteur </th>
+                    <th>Email du tuteur </th>
+                    <th>Téléphone du tuteur </th>
+                    <th>Entreprise</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>
+                        {{ etudiant.nom_tuteur }} {{ etudiant.prenom_tuteur }}
+                    </td>
+                    <td>
+                        {{ etudiant.adresse_tuteur }}
+                    </td>
+                    <td>
+                        {{ etudiant.email_tuteur }}
+                    </td>
+                    <td>
+                        {{ etudiant.indicatif_tuteur }} {{ etudiant.phone_tuteur }}
+                    </td>
+                    <td>
+                        {{ etudiant.entreprise }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+        <p-table responsiveLayout="scroll" *ngIf="nom_rl" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Représentant légal </th>
+                    <th>Adresse du Représentant légal </th>
+                    <th>Email du représentant légal </th>
+                    <th>Téléphone du représentant légal </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+
+
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td>
+                        {{ etudiant.nom_rl | uppercase }} {{ etudiant.prenom_rl }}
+                    </td>
+                    <td>
+                        {{ etudiant.adresse_rl }}
+                    </td>
+                    <td>
+                        {{ etudiant.email_rl }}
+                    </td>
+                    <td>
+                        {{ etudiant.indicatif_rl }} {{ etudiant.phone_rl }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+        <div class="col-12">
+
+
+            <div *ngIf="ListDocuments==null || ListDocuments.length==0" style="margin: 0 auto;
+                                    width: auto;">
+                <h4>Aucun document n'a été chargé !</h4>
+            </div>
+
+
+            <div *ngFor="let file of ListDocuments; index as i" class="grid">
+
+                <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                    <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                        pTooltip="Visualiser dans un nouvel onglet" (click)="VisualiserFichier(etudiant._id,i)"></i>
+                    <em (click)="VisualiserFichier(etudiant._id,i)" [id]="i" style="cursor: pointer;"
+                        pTooltip=" Visualiser dans un nouvel onglet">
+                        {{ ListDocuments[i] }}
+                    </em>
+                </div>
+                <div class="field col-1">
+                    <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                        style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                        (click)="downloadFile(etudiant._id,i)"></i>
+                </div>
+                <div class="field col-1">
+                    <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                        pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(etudiant._id,i)"
+                        aria-hidden="true"> </i>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="etudiant.payment_reinscrit && etudiant.payment_reinscrit.length!=0">
+            <h5 style="color: red; text-align: center;">Payements</h5>
+            <p-table responsiveLayout="scroll" *ngIf="etudiant.payment_reinscrit" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type du Paiement</th>
+                        <th>Montant du Paiement</th>
+                        <th>Date du Paiement</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr *ngFor="let payement of etudiant.payment_reinscrit;">
+                        <td>{{ payement.type }}</td>
+                        <td>{{ payement.montant }}</td>
+                        <td>{{ payement.date | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>
+</div>

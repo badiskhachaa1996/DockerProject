@@ -165,9 +165,16 @@ app.get("/getAllByClasseId/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
-//Récupérer la liste de tous les étudiants en attente d'assignation
+//Récupérer la liste de tous les étudiants en attente d'assignation de groupe
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null }).populate('filiere').populate('user_id')
+    Etudiant.find({ classe_id: null, valided_by_admin: true }).populate('filiere').populate('user_id')
+        .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
+//Récupérer la liste de tous les étudiants en de validation par l'administration
+app.get("/getAllWaitForVerif", (req, res, next) => {
+    Etudiant.find({ valided_by_admin: { $ne: true } }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });

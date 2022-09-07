@@ -92,6 +92,7 @@ export class ProspectsComponent implements OnInit {
     this.refreshEtudiant()
   }
   etudiants: Etudiant[] = [];
+
   refreshEtudiant() {
     this.etudiantService.getAllWait().subscribe(data => {
       this.etudiants = data
@@ -104,6 +105,7 @@ export class ProspectsComponent implements OnInit {
       })
     );
   }
+  
   imageToShow: any = "../assets/images/avatar.PNG"
   loadPP(rowData) {
     this.imageToShow = "../assets/images/avatar.PNG"

@@ -144,4 +144,9 @@ export class EtudiantService {
     let url = this.apiUrl + "updateDossier/" + etudiant_id + "/" + statut_dossier
     return this.httpClient.get<Etudiant>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  getAllWaitForVerif() {
+    let registreUrl = this.apiUrl + "getAllWaitForVerif";
+    return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 }
