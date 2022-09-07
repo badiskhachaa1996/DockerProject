@@ -80,7 +80,7 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "export";
     return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  assignToGroupe(data: { _id: string, statut_dossier: [string], groupe: string }) {
+  assignToGroupe(data: { _id: string, groupe: string }) {
     let registreUrl = this.apiUrl + "assignToGroupe";
     return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

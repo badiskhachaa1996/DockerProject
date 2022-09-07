@@ -393,7 +393,7 @@
 <!-- Liste des prospects en attente d'une assignation de groupe-->
 <div class="col-12">
     <div class="card">
-        <h5>Liste des inscrits de l'admission en attente de validation</h5>
+        <h5>Liste des inscriptions de l'admission en attente de validation</h5>
 
         <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
             [value]="prospects" [paginator]="true" [pageLinks]="5"
@@ -488,12 +488,13 @@
                         {{prospect.date_creation | date :'dd/MM/yyyy' }}
                     </td>
                     <td>
+                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                        (click)="showUploadFile=prospect" aria-hidden="true"></i>
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayement=prospect;showPayementFC(prospect)" aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
-                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
-                            (click)="showUploadFile=prospect" aria-hidden="true"></i>
-                        <i pTooltip="Vérifier le dossier" tooltipPosition="bottom" class="pi pi-check"
+
+                        <i pTooltip="Inscription" tooltipPosition="bottom" class="pi pi-check"
                             (click)="initForm(prospect)" aria-hidden="true"></i>
                     </td>
                 </tr>
@@ -720,17 +721,17 @@
 </div>
 <div class="col-12">
     <div class="card">
-        <h5>Liste des inscrits en attente de validation</h5>
+        <h5>Liste des réinscriptions en attente de validation</h5>
         <p-toast></p-toast>
-        <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
+        <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
+            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id']" [rows]="10"
             [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">
                     <span class="p-input-icon-left mb-2">
                         <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        <input pInputText type="text" (input)="dt2.filterGlobal($event.target.value, 'contains')"
                             placeholder="Recherche" class="w-full" />
                     </span>
                 </div>
@@ -782,7 +783,7 @@
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayementEtu=etudiant;showPayementEtuFC(etudiant)" aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
-                        <i pTooltip="Vérifier le dossier" tooltipPosition="bottom" class="pi pi-check"
+                        <i pTooltip="Réinscription" tooltipPosition="bottom" class="pi pi-check"
                             (click)="initFormEtu(etudiant)" aria-hidden="true"></i>
                     </td>
                 </tr>

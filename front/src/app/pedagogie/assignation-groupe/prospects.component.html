@@ -33,16 +33,16 @@
         </h3>
 
         <form class="p-fluid p-formgrid grid" [formGroup]="AssignForm" (ngSubmit)="onAddEtudiant()">
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-12">
                 <label>Groupe</label>
                 <p-dropdown [options]="groupeList" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
                     filter="true" formControlName="groupe"></p-dropdown>
             </div>
-            <div class="field col-12 md:col-6">
+            <!--<div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
                 <p-multiSelect [options]="statutDossier" formControlName="statut_dossier" optionLabel="value">
                 </p-multiSelect>
-            </div>
+            </div>-->
             <!--<div class="field col-12 md:col-6">
                 <label>Statut Professionel</label>
                 <p-dropdown [options]="statutList" formControlName="statut" optionLabel="value"></p-dropdown>
@@ -182,7 +182,7 @@
                     </th>
                     <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="entreprise"> Entreprise <p-sortIcon field="entreprise"></p-sortIcon>
+                    <th pSortableColumn="statut_dossier"> Statut du dossier <p-sortIcon field="statut_dossier"></p-sortIcon>
                     </th>
                     <th>Action </th>
                 </tr>
@@ -206,7 +206,7 @@
                     <td style="min-width: 10rem;" *ngIf="!etudiant.filiere">{{ etudiant.diplome }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
-                    <td style="min-width: 10rem;">{{ etudiant.entreprise }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.statut_dossier }}</td>
                     <td>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
                             (click)="showUploadFile=etudiant" aria-hidden="true"></i>

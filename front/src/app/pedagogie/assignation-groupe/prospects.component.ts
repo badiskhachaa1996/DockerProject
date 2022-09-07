@@ -135,7 +135,7 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    let data = { _id: this.showAssignForm._id, statut_dossier: this.AssignForm.value.statut, groupe: this.AssignForm.value.groupe }
+    let data = { _id: this.showAssignForm._id,groupe: this.AssignForm.value.groupe }
     //this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
     this.etudiantService.assignToGroupe(data).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Etudiant assigné à un groupe", detail: "L'étudiant a été assigné" })
