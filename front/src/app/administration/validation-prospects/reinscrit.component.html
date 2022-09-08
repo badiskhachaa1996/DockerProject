@@ -32,7 +32,8 @@
             <div class="field col-12 md:col-6">
                 <label>Filière <span style="color: red;">*</span></label>
                 <p-dropdown [options]="dropdownFiliere" emptyFilterMessage="Pas de filière trouvé"
-                    filterPlaceholder="Filière" filter="true" formControlName="filiere"></p-dropdown>
+                    (onChange)="getPayementRestantEtu($event.value)" filterPlaceholder="Filière" filter="true"
+                    formControlName="filiere"></p-dropdown>
             </div>
 
             <div class="field col-12 md:col-6">
@@ -52,9 +53,9 @@
                 <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
 
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
                 <label>Payement restant :</label>
-                <p>{{getPayementRestantEtu()}}</p>
+                <p>{{montantPayement}}</p>
             </div>
 
             <!--<div class="field col-12">
@@ -166,8 +167,7 @@
     <div class="card">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showAssignForm = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showAssignForm.user_id" class="text-center"
-            style="font-weight: bold;">Assignation de : {{
+        <h3 *ngIf="showAssignForm.user_id" class="text-center" style="font-weight: bold;">Assignation de : {{
             showAssignForm.user_id?.firstname }} {{
             showAssignForm.user_id?.lastname | uppercase }}
         </h3>
@@ -176,7 +176,8 @@
             <div class="field col-12 md:col-6">
                 <label>Filière <span style="color: red;">*</span></label>
                 <p-dropdown [options]="dropdownFiliere" emptyFilterMessage="Pas de filière trouvé"
-                    filterPlaceholder="Filière" filter="true" formControlName="filiere"></p-dropdown>
+                    (onChange)="getPayementRestant($event.value)" filterPlaceholder="Filière" filter="true"
+                    formControlName="filiere"></p-dropdown>
             </div>
 
             <div class="field col-12 md:col-6">
@@ -193,13 +194,13 @@
 
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
-                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
 
-            
-            <div class="field col-12 md:col-6">
+
+            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
                 <label>Payement restant :</label>
-                <p>{{getPayementRestant()}}</p>
+                <p>{{montantPayement}}</p>
             </div>
 
             <!--<div class="field col-12">
@@ -318,7 +319,7 @@
         <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDossier">
             <div class="field col-12 md:col-6">
                 <label For="statut">Statut Dossier</label>
-                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
         </form>
         <div class="p-fluid p-formgrid grid">
@@ -500,7 +501,7 @@
                     </td>
                     <td>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
-                        (click)="showUploadFile=prospect" aria-hidden="true"></i>
+                            (click)="showUploadFile=prospect" aria-hidden="true"></i>
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayement=prospect;showPayementFC(prospect)" aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
@@ -735,8 +736,8 @@
         <h5>Liste des réinscriptions en attente de validation</h5>
         <p-toast></p-toast>
         <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id']" [rows]="10"
-            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
+            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id']"
+            [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <div class="flex justify-content-between flex-column sm:flex-row">

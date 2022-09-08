@@ -103,6 +103,7 @@ export class ReinscritComponent implements OnInit {
   showAssignFormEtu: Etudiant = null
 
   initFormEtu(etudiant: Etudiant) {
+    this.montantPayement = "D"
     this.showAssignFormEtu = etudiant;
     this.showUploadFile = null;
     this.showAssignForm = null
@@ -116,6 +117,7 @@ export class ReinscritComponent implements OnInit {
   }
 
   initForm(etudiant: Prospect) {
+    this.montantPayement = "D"
     this.showAssignForm = etudiant;
     this.showAssignFormEtu = null
     this.showUploadFile = null;
@@ -573,12 +575,38 @@ export class ReinscritComponent implements OnInit {
     }
   }
 
-  getPayementRestant(){
-    return "Test"
+  montantPayement = "D"
+
+  getPayementRestant(value) {
+    //Initial
+    this.diplomeService.getById(value).subscribe(diplome => {
+      let nbPayement = 0
+      this.showAssignForm.payement.forEach(e => {
+        nbPayement += e['montant']
+      })
+      nbPayement - parseInt(diplome.frais)
+      this.montantPayement = "D"
+      if (diplome.frais == "0" || diplome.frais == null || !diplome.frais || diplome.frais == '')
+        this.montantPayement = "Les frais ne sont pas paramétrés pour cette filière"
+      else
+        this.montantPayement = nbPayement.toString()
+    })
   }
 
-  getPayementRestantEtu(){
-    
+  getPayementRestantEtu(value) {
+    //Intial
+    this.diplomeService.getById(value).subscribe(diplome => {
+      let nbPayement = 0
+      this.showAssignFormEtu.payment_reinscrit.forEach(e => {
+        nbPayement += e['montant']
+      })
+      nbPayement = nbPayement - parseInt(diplome.frais)
+      this.montantPayement = "D"
+      if (parseInt(diplome.frais) == 0 || diplome.frais == null || !diplome.frais || diplome.frais == '')
+        this.montantPayement = "Les frais ne sont pas paramétrés pour cette filière"
+      else
+        this.montantPayement = nbPayement.toString()
+    })
   }
 
 }
