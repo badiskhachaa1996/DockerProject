@@ -76,7 +76,7 @@ export class AddGroupeComponent implements OnInit {
 
   onInitFormAddClasse() {
     this.formAddClasse = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      libelle: ['', [Validators.required]],
       diplome_id: ['', Validators.required],
       abbrv: ['', Validators.required],
     });

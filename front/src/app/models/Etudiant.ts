@@ -35,7 +35,8 @@ export class Etudiant {
         public campus?: string, // Campus ID
         public statut_dossier?: string[],
         public filiere?: string,
-        public valided_by_admin?: boolean
+        public valided_by_admin?: boolean,
+        public valided_by_support?:boolean
 
     ) { }
 }

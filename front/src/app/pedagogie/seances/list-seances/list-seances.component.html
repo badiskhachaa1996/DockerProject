@@ -150,8 +150,8 @@
                         </td>
 
                         <td *ngIf="type!='formateur'" style="min-width: 12rem;">
-                            {{ formateurs[rowData.formateur_id]?.firstname }} {{
-                            formateurs[rowData.formateur_id]?.lastname }}
+                            {{ rowData.formateur_id?.firstname }} {{
+                                rowData.formateur_id?.lastname }}
                         </td>
                         <td style="min-width: 12rem;">
                             {{ rowData.libelle }}

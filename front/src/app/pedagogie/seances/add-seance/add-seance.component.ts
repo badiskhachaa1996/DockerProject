@@ -57,9 +57,13 @@ export class AddSeanceComponent implements OnInit {
   type = this.route.snapshot.paramMap.get('type');
 
   seanceOptions = [
-    { name: 'Répéter sur plusieurs jours', value: false }, 
-    {name: 'Séance unique', value: true },
+    { name: 'Répéter sur plusieurs jours', value: false },
+    { name: 'Séance unique', value: true },
   ]
+
+  listMatiere: Matiere[] = []
+
+  diplomeDic = {}
 
   display: boolean;
   constructor(private EtudiantService: EtudiantService, private matiereService: MatiereService, private formateurService: FormateurService, private seanceService: SeanceService, private classeService: ClasseService, private messageService: MessageService, private router: Router, private route: ActivatedRoute,
@@ -68,6 +72,7 @@ export class AddSeanceComponent implements OnInit {
   ngOnInit(): void {
     this.matiereService.getAll().subscribe(
       ((response) => {
+        this.listMatiere = response
         response.forEach(item => {
           this.dropdownMatiere.push({ nom: item.nom, value: item._id });
           this.matieres[item._id] = item;
@@ -108,13 +113,14 @@ export class AddSeanceComponent implements OnInit {
           diplomes.forEach(diplome => {
             diplomeDic[diplome._id] = diplome
           })
+          this.diplomeDic = diplomeDic
           this.CampusService.getAll().subscribe(campus => {
             campus.forEach(campus => {
               campusDic[campus._id] = campus
             })
             for (let classeID in response) {
               let label = response[classeID].nom + " - " + campusDic[diplomeDic[response[classeID]?.diplome_id]?.campus_id]?.libelle
-              this.dropdownClasse.push({ nom: label, value: response[classeID]._id });
+              this.dropdownClasse.push({ nom: label, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
               this.dropdownClasse[response[classeID]._id] = response[classeID];
             }
           })
@@ -142,6 +148,7 @@ export class AddSeanceComponent implements OnInit {
 
   saveSeance() {
     //TODO get nbSeance
+
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
       if (index != 0)
@@ -155,7 +162,6 @@ export class AddSeanceComponent implements OnInit {
     })
     let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom,
       this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle);
-    console.log(seance)
     seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
     let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
@@ -252,9 +258,8 @@ export class AddSeanceComponent implements OnInit {
 
 
     //Partie qui s'execute si la séance se répète sur plusieurs jours
-    if(!this.seanceForm.get('isUnique').value)
-    {
-      let numeroSeance = this.seanceForm.get('nbseance').value; 
+    if (!this.seanceForm.get('isUnique').value) {
+      let numeroSeance = this.seanceForm.get('nbseance').value;
       let date_debut = this.seanceForm.get('date_debut').value;
       let date_de_debut = new Date(date_debut);
       let date_fin = new Date(this.seanceForm.get('date_fin').value);
@@ -265,8 +270,7 @@ export class AddSeanceComponent implements OnInit {
       let newNumeroSeance = numeroSeance;
       let i = 0;
 
-      while(date_de_debut <= dateFinPlan)
-      {
+      while (date_de_debut <= dateFinPlan) {
         i += 7;
 
         date_de_debut.setDate(date_de_debut.getDate() + i);
@@ -283,9 +287,9 @@ export class AddSeanceComponent implements OnInit {
 
         console.log(' ---------- ' + date_de_debut + ' ---------- ');
 
-        
-        newNumeroSeance +=  1;
-        
+
+        newNumeroSeance += 1;
+
         //TODO get nbSeance
         let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
         this.seanceForm.value.classe.forEach((c, index) => {
@@ -394,17 +398,16 @@ export class AddSeanceComponent implements OnInit {
 
           });
         })
-        
-          
+
+
       }
     }
-    
-    
+
+
   }
 
   //Focntion qui calcul le nombre de jour entre 2dates
-  getDaysBetweenTwoDates(date1, date2)
-  {
+  getDaysBetweenTwoDates(date1, date2) {
     let t = date2.getTime() - date1.getTime();
     let days = t / (1000 * 3600 * 24);
 
@@ -428,6 +431,31 @@ export class AddSeanceComponent implements OnInit {
     let minutes = date.getMinutes()
     let str = days + "/" + month + " " + hours + ":" + minutes
     return str
+  }
+
+  changeGroupe(event) {
+    console.log(event)
+    let listIDs = []
+    event.forEach(d => {
+      listIDs.push(d.diplome_id)
+    })
+    console.log(listIDs)
+    this.dropdownMatiere = []
+    this.listMatiere.forEach(m => {
+      if (this.customIncludes(m.formation_id, listIDs) == true)
+        this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[m.formation_id].titre, value: m._id });
+    })
+    console.log(this.dropdownMatiere)
+  }
+
+  customIncludes(l: any, d: any[]) {
+    let r = false
+    d.forEach(e => {
+      if (e == l) {
+        r = true
+      }
+    })
+    return r
   }
 
 }

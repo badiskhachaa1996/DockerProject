@@ -179,6 +179,13 @@ app.get("/getAllWaitForVerif", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
+//Récupérer la liste de tous les étudiants en de validation par l'administration
+app.get("/getAllWaitForCreateAccount", (req, res, next) => {
+    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true } }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
+        .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
+        .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
+});
+
 
 //Recupere un étudiant via son identifiant
 app.get("/getById/:id", (req, res, next) => {
@@ -620,10 +627,9 @@ app.post('/addNewPayment/:id', (req, res) => {
     })
 })
 
-app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
+app.post('/validateProspect/:user_id', (req, res) => {
     User.findByIdAndUpdate(req.params.user_id, {
-        type: "Etudiant",
-        email: req.params.email_ims
+        type: "Etudiant"
     }, { new: true }, (err, updatedUser) => {
         if (err) {
             console.error(err)
@@ -638,7 +644,6 @@ app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
                 } else {
                     Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
                         res.send(newP)
-                        //Transfert file TODO
                         fs.rename("../storage/prospect/" + newP._id, "../storage/etudiant/" + newEtu._id, (err) => {
                             if (err)
                                 console.error(err)
@@ -659,5 +664,29 @@ app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
             res.status(201).send(doc)
         }
     })
+})
+
+app.get('/assignEmail/:etudiant_id/:email_ims', (req, res) => {
+    User.findOne({ email: req.params.email_ims }).then(dataU => {
+        if (!dataU)
+            Etudiant.findByIdAndUpdate(req.params.etudiant_id, { valided_by_support: true }, { new: true }, function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(400).send(err)
+                }
+                else
+                    User.findByIdAndUpdate(data.user_id, { email: req.params.email_ims }, { new: true }, function (err2, dataU) {
+                        if (err2) {
+                            console.error(err2)
+                            res.status(400).send(err2)
+                        } else {
+                            res.status(201).send({ dataEtu: data, dataUser: dataU })
+                        }
+                    })
+            })
+        else
+            res.status(500).send(dataU)
+    })
+
 })
 module.exports = app;

@@ -1,9 +1,8 @@
 <p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
     <div class="col-12">
-        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance"
-            [(visible)]="display" modal="modal" showEffect="fade" [style]="{width: '30vw'}"
-            [breakpoints]="{'960px': '75vw'}">
+        <p-dialog header="Merci de suivre ces instructions avant d'ajouter une nouvelle séance" [(visible)]="display"
+            modal="modal" showEffect="fade" [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
                 Veillez à correctement selectionner le diplôme.
             </p>
@@ -26,27 +25,32 @@
         <div class="card">
             <h4 style="text-align: center;">Ajouter un groupe</h4>
             <div style="text-align: center;">
-                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont obligatoires</small><br>
+                <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                    obligatoires</small><br>
             </div>
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddClasse" (ngSubmit)="saveClasse()">
                 <div class="field col-12">
                     <label For="libelle">Diplôme <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id" (onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
+                    <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"
+                        (onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
 
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="nom_groupe">Nom du groupe <span style="color: red;"> * </span></label>
-                    <input pInputText id="nom_groupe" placeholder="Nom du groupe" type="text" formControlName="libelle" />
+                    <input pInputText id="nom_groupe" placeholder="EU FR BTS MCO 1A (2022)" type="text"
+                        formControlName="libelle" />
 
                     <div *ngIf="libelle.invalid && (libelle.touched || libelle.dirty)">
-                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.required" style="color: red;">* Le nom du groupe est obligatoire </span>
-                        <span  style="color: red;" class="error" *ngIf="libelle.errors?.pattern" style="color: red;">* Le nom du groupe n'est pas dans le bon format </span>
-                    </div> 
+                        <span style="color: red;" class="error" *ngIf="libelle.errors?.required" style="color: red;">*
+                            Le nom du groupe est obligatoire </span>
+                        <span style="color: red;" class="error" *ngIf="libelle.errors?.pattern" style="color: red;">* Le
+                            nom du groupe n'est pas dans le bon format </span>
+                    </div>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
-                    <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="MCI A" />
+                    <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="MCO1A" />
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit" [disabled]="formAddClasse.invalid"></button>
@@ -57,6 +61,3 @@
         </div>
     </div>
 </div>
-
-
-
