@@ -13,7 +13,7 @@
             </div>
         </form>
         <div class="col-12">
-            <button pButton label="Valider" (click)="AssignEmailForm()"></button>
+            <button pButton label="Assigner un email" (click)="AssignEmailForm()"></button>
         </div>
     </div>
 </div>
@@ -76,7 +76,7 @@
                     <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                     <td>
                         <i style="margin-left: 2%;" class="pi pi-check" (click)="showAssignForm=etudiant"
-                            pTooltip="Modifier" aria-hidden="true" tooltipPosition="bottom"></i>
+                            pTooltip="Assigner un email" aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>
             </ng-template>

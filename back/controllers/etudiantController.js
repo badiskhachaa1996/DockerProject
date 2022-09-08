@@ -181,7 +181,7 @@ app.get("/getAllWaitForVerif", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants en de validation par l'administration
 app.get("/getAllWaitForCreateAccount", (req, res, next) => {
-    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true } }).populate('filiere').populate('user_id')
+    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true } }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -627,10 +627,9 @@ app.post('/addNewPayment/:id', (req, res) => {
     })
 })
 
-app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
+app.post('/validateProspect/:user_id', (req, res) => {
     User.findByIdAndUpdate(req.params.user_id, {
-        type: "Etudiant",
-        email: req.params.email_ims
+        type: "Etudiant"
     }, { new: true }, (err, updatedUser) => {
         if (err) {
             console.error(err)
@@ -645,7 +644,6 @@ app.post('/validateProspect/:user_id/:email_ims', (req, res) => {
                 } else {
                     Prospect.findOneAndUpdate({ user_id: req.params.user_id }, { archived: true }, { new: true }, (err, newP) => {
                         res.send(newP)
-                        //Transfert file TODO
                         fs.rename("../storage/prospect/" + newP._id, "../storage/etudiant/" + newEtu._id, (err) => {
                             if (err)
                                 console.error(err)

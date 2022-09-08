@@ -52,6 +52,11 @@
                 <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
 
+            <div class="field col-12 md:col-6">
+                <label>Payement restant :</label>
+                <p>{{getPayementRestantEtu()}}</p>
+            </div>
+
             <!--<div class="field col-12">
                 <label for="ine">Email IMS<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
@@ -189,6 +194,12 @@
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
                 <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+            </div>
+
+            
+            <div class="field col-12 md:col-6">
+                <label>Payement restant :</label>
+                <p>{{getPayementRestant()}}</p>
             </div>
 
             <!--<div class="field col-12">

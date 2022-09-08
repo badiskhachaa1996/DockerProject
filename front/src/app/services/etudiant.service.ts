@@ -135,8 +135,8 @@ export class EtudiantService {
     return this.httpClient.post<Etudiant>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  validateProspect(data: Etudiant, user_id, email_ims) {
-    let url = this.apiUrl + "validateProspect/" + user_id + "/" + email_ims
+  validateProspect(data: Etudiant, user_id) {
+    let url = this.apiUrl + "validateProspect/" + user_id
     return this.httpClient.post<Etudiant>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 

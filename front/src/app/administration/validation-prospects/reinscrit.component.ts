@@ -107,6 +107,7 @@ export class ReinscritComponent implements OnInit {
     this.showUploadFile = null;
     this.showAssignForm = null
     let s = (etudiant?.statut == "Initial") ? "Initial" : "Alternant";
+    this.payementList = etudiant.payment_reinscrit
     this.AssignForm.patchValue({
       customid: etudiant?.custom_id,
       statut: { value: s },
@@ -119,6 +120,7 @@ export class ReinscritComponent implements OnInit {
     this.showAssignFormEtu = null
     this.showUploadFile = null;
     let s = (etudiant?.rythme_formation == "Initial") ? "Initial" : "Alternant";
+    this.payementList = etudiant.payement
     this.AssignForm.patchValue({
       customid: etudiant?.customid,
       statut: { value: s },
@@ -217,8 +219,8 @@ export class ReinscritComponent implements OnInit {
     )
     if (!this.showAssignFormEtu.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé'))
-      if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
+    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
+      if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?")) {
         this.etudiantService.update(etd).subscribe(data => {
           this.etudiants.forEach((val, index) => {
             if (val._id == data._id) {
@@ -231,6 +233,21 @@ export class ReinscritComponent implements OnInit {
           this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
           console.error(err)
         })
+      }
+    }
+    else
+      this.etudiantService.update(etd).subscribe(data => {
+        this.etudiants.forEach((val, index) => {
+          if (val._id == data._id) {
+            this.etudiants.splice(index, 1)
+          }
+        })
+        this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+        this.showAssignFormEtu = null
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
+        console.error(err)
+      })
   }
 
   onAddEtudiant() {
@@ -273,9 +290,9 @@ export class ReinscritComponent implements OnInit {
     if (!this.showAssignForm.customid)
       etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé'))
+    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
       if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
-        this.etudiantService.validateProspect(etd, bypass._id, "").subscribe(data => {
+        this.etudiantService.validateProspect(etd, bypass._id).subscribe(data => {
           this.prospects.forEach((val, index) => {
             if (val._id == data._id) {
               this.prospects.splice(index, 1)
@@ -287,6 +304,23 @@ export class ReinscritComponent implements OnInit {
           this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
           console.error(err)
         })
+    }
+    else {
+      this.etudiantService.validateProspect(etd, bypass._id).subscribe(data => {
+        this.prospects.forEach((val, index) => {
+          if (val._id == data._id) {
+            this.prospects.splice(index, 1)
+          }
+        })
+        this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+        this.showAssignForm = null
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
+        console.error(err)
+      })
+
+    }
+
   }
 
   showPayement: Prospect;
@@ -537,6 +571,14 @@ export class ReinscritComponent implements OnInit {
     if (confirm("Voulez-vous supprimer le parcours ?")) {
       this.parcoursList.splice(i)
     }
+  }
+
+  getPayementRestant(){
+    return "Test"
+  }
+
+  getPayementRestantEtu(){
+    
   }
 
 }
