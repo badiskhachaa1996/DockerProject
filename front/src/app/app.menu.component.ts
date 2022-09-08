@@ -477,6 +477,20 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                                {
+                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
+                                    items: [
+                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
+                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des groupes', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
+                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
+                                    ]
+                                },
                             ]
 
                         },
@@ -504,20 +518,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des campus', icon: 'pi pi-sort-alpha-down', routerLink: ['/campus'] },
                                     ]
                                 },
-                                {
-                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
-                                    items: [
-                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
-                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
-                                    ]
-                                },
-                                {
-                                    label: 'Gestions des groupes', icon: 'pi pi-users',
-                                    items: [
-                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
-                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
-                                    ]
-                                },
+
                                 {
                                     label: 'Gestions des agents', icon: 'pi pi-users',
                                     items: [

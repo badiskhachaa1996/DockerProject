@@ -109,7 +109,8 @@ export class ReinscritComponent implements OnInit {
     let s = (etudiant?.statut == "Initial") ? "Initial" : "Alternant";
     this.AssignForm.patchValue({
       customid: etudiant?.custom_id,
-      statut: { value: s }
+      statut: { value: s },
+      statut_dossier: etudiant.statut_dossier
     })
   }
 
@@ -120,7 +121,8 @@ export class ReinscritComponent implements OnInit {
     let s = (etudiant?.rythme_formation == "Initial") ? "Initial" : "Alternant";
     this.AssignForm.patchValue({
       customid: etudiant?.customid,
-      statut: { value: s }
+      statut: { value: s },
+      statut_dossier: etudiant.statut_dossier
     })
   }
 
@@ -186,7 +188,7 @@ export class ReinscritComponent implements OnInit {
       bypass.nationnalite,
       this.showAssignFormEtu.date_naissance,
       this.showAssignFormEtu.code_partenaire,
-      null, null, null, null,
+      null, null, null, this.showAssignFormEtu.custom_id,
       this.AssignForm.value.numero_ine,
       this.AssignForm.value.numero_nir,
       this.AssignForm.value.sos_email,
@@ -215,19 +217,20 @@ export class ReinscritComponent implements OnInit {
     )
     if (!this.showAssignFormEtu.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
-    //this.AssignForm.value.email_ims
-    this.etudiantService.update(etd).subscribe(data => {
-      this.etudiants.forEach((val, index) => {
-        if (val._id == data._id) {
-          this.etudiants.splice(index, 1)
-        }
-      })
-      this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
-      this.showAssignFormEtu = null
-    }, err => {
-      this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
-      console.error(err)
-    })
+    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé'))
+      if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
+        this.etudiantService.update(etd).subscribe(data => {
+          this.etudiants.forEach((val, index) => {
+            if (val._id == data._id) {
+              this.etudiants.splice(index, 1)
+            }
+          })
+          this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+          this.showAssignFormEtu = null
+        }, err => {
+          this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
+          console.error(err)
+        })
   }
 
   onAddEtudiant() {
@@ -240,7 +243,7 @@ export class ReinscritComponent implements OnInit {
       bypass.nationnalite,
       this.showAssignForm.date_naissance,
       this.showAssignForm.code_commercial,
-      null, null, null, null,
+      null, null, null, this.showAssignForm.customid,
       this.AssignForm.value.numero_ine,
       this.AssignForm.value.numero_nir,
       this.AssignForm.value.sos_email,
@@ -267,20 +270,23 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.filiere,
       true
     )
-    etd.custom_id = this.generateCode(this.showAssignForm)
+    if (!this.showAssignForm.customid)
+      etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims
-    this.etudiantService.validateProspect(etd, bypass._id, "").subscribe(data => {
-      this.prospects.forEach((val, index) => {
-        if (val._id == data._id) {
-          this.prospects.splice(index, 1)
-        }
-      })
-      this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
-      this.showAssignForm = null
-    }, err => {
-      this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
-      console.error(err)
-    })
+    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé'))
+      if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
+        this.etudiantService.validateProspect(etd, bypass._id, "").subscribe(data => {
+          this.prospects.forEach((val, index) => {
+            if (val._id == data._id) {
+              this.prospects.splice(index, 1)
+            }
+          })
+          this.messageService.add({ severity: "success", summary: "Etudiant réinscrit avec succès" })
+          this.showAssignForm = null
+        }, err => {
+          this.messageService.add({ severity: "error", summary: "Problème avec la réinscription", detail: err })
+          console.error(err)
+        })
   }
 
   showPayement: Prospect;
@@ -355,7 +361,6 @@ export class ReinscritComponent implements OnInit {
     this.etudiantService.addNewPayment(this.showPayementEtu._id, { payement: this.payementList }).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
       let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
-      console.log(statut_dossier)
       this.etudiantService.updateDossier(this.showPayementEtu._id, statut_dossier).subscribe(
         ((responde) => {
           this.messageService.add({ severity: 'success', summary: 'Statut du dossier mis à jour: ' + statut_dossier });

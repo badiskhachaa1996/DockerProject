@@ -49,7 +49,7 @@
 
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
-                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
 
             <!--<div class="field col-12">
@@ -355,7 +355,7 @@
         <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateDossier">
             <div class="field col-12 md:col-6">
                 <label For="statut">Statut Dossier</label>
-                <p-dropdown [options]="statutDossier" formControlName="statut_dossier"></p-dropdown>
+                <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
         </form>
         <div class="p-fluid p-formgrid grid">
