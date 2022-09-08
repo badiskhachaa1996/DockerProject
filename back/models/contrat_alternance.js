@@ -11,8 +11,9 @@ const contrat_alternanceSch = mongoose.Schema({
     coeff_hierachique: { type: String, required: true },
     formation: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
     alternant_id: { type: mongoose.Schema.Types.ObjectId, ref: "etudiant" },
-    tuteur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    tuteur_id: { type: mongoose.Schema.Types.ObjectId, ref: "tuteur" },
     code_commercial: { type: String, required: false }
+    
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema
