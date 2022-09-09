@@ -323,7 +323,7 @@
             <button pButton label="Ajouter un tuteur"
                 (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
         </div>
-        <h5>Liste des tuteur de l'entreprise </h5>
+        <h5>Liste des tuteurs de l'entreprise </h5>
         <!-- {{ tuteur.user_id.entreprise }} -->
         <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="10" [rowHover]="true"
             styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
@@ -355,8 +355,7 @@
                     </th>
                     <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
                     </th>
-                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon>
-                    </th>
+
 
                     <th style="text-align:center">Action</th>
             </ng-template>
@@ -374,9 +373,7 @@
                     <td>
                         {{ tuteur.user_id.email_perso}}
                     </td>
-                    <td>
-                        {{ tuteur.user_id.entreprise}}
-                    </td>
+
                     <td>
                         <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                             (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; OnGetByIdTuteur(tuteur); showFormAddTuteur = false;"

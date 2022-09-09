@@ -282,7 +282,7 @@ app.post("/createContratAlternance", (req, res, next) => {
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
         .then((CAFromDb) => {
             console.log(CAFromDb);
             res.status(200).send(CAFromDb);
@@ -320,8 +320,9 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 
 app.get("/getAllContrats/", (req, res, next) => {
     console.log("getAllContrats")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id' }).populate({ path: 'formation' })
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path:"user_id" } }).populate({ path: 'formation' })
         .then((CAFromDb) => {
+
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
