@@ -9,7 +9,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Nom du groupe</label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse"
-                        defaultLabel="Selection des classes" optionLabel="nom" filter="true"></p-multiSelect>
+                        defaultLabel="Selection des groupes" optionLabel="nom" filter="true"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
@@ -19,7 +19,7 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
-                    <label>Libelle</label><br>
+                    <label>Remarque</label><br>
                     <input pInputText type="text" formControlName="libelle" placeholder="libelle de la séance"
                         class="form-control col-12">
                 </div>
@@ -34,13 +34,6 @@
                         placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Nom du formateur</label><br>
-                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
-                        placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
-                        filterPlaceholder="Nom de formateur" filter="true">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6">
                     <label>Campus</label><br>
                     <p-multiSelect formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
@@ -48,11 +41,25 @@
                     </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
+                    <label>Nom du formateur</label><br>
+                    <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
+                        placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
+                        filterPlaceholder="Nom de formateur" filter="true">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Numéro de séance</label><br>
+                    <input pInputText type="number" formControlName="nbseance" placeholder="1"
+                        class="form-control col-8">
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Type de séance <span style="color: red;"> * </span></label>
                     <p-selectButton
                         [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
                         formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
+                    <br>
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
                 </div>
@@ -93,8 +100,10 @@
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">
                         </p-dropdown>
                         <span>
-                            <p-calendar [(ngModel)]="calendar_value" (onSelect)="filterRange($event)" selectionMode="range" [readonlyInput]="true"></p-calendar>
-                            <i *ngIf="calendar_value && calendar_value[0] && calendar_value[1]" class="pi pi-filter-slash" (click)="clearFilter()"></i>
+                            <p-calendar [(ngModel)]="calendar_value" (onSelect)="filterRange($event)"
+                                selectionMode="range" [readonlyInput]="true"></p-calendar>
+                            <i *ngIf="calendar_value && calendar_value[0] && calendar_value[1]"
+                                class="pi pi-filter-slash" (click)="clearFilter()"></i>
                         </span>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
@@ -148,10 +157,9 @@
                         <td style="min-width: 12rem;">
                             {{ matieres[rowData.matiere_id]?.nom }}
                         </td>
-
                         <td *ngIf="type!='formateur'" style="min-width: 12rem;">
-                            {{ rowData.formateur_id?.firstname }} {{
-                                rowData.formateur_id?.lastname }}
+                            {{ formateurs[rowData.formateur_id]?.firstname }}
+                            {{ formateurs[rowData.formateur_id]?.lastname }}
                         </td>
                         <td style="min-width: 12rem;">
                             {{ rowData.libelle }}

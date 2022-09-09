@@ -58,7 +58,7 @@ export class AddEtudiantComponent implements OnInit {
 
   tuteurEtu: Tuteur;
 
-  searchClass: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  searchClass: any[] = [{ libelle: 'Toutes les groupes', value: null }];
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
@@ -179,7 +179,7 @@ export class AddEtudiantComponent implements OnInit {
 
     this.dropdownUser = [];
     this.dropdownClasse = [];
-    this.searchClass = [{ libelle: 'Toutes les classes', value: null }];
+    this.searchClass = [{ libelle: 'Toutes les groupes', value: null }];
 
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
