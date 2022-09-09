@@ -69,16 +69,16 @@ export class TuteurComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
-        let isAdmin = dataUser.role == "Admin"
-        let isAgent = dataUser.role == "Agent"
-        let isCEO = dataUser.type == "CEO Entreprise"
-      }
-
+        this.isAdmin = dataUser.role == "Admin"
+        this.isAgent = dataUser.role == "Agent"
+        this.isCEO = dataUser.type == "CEO Entreprise"
+      } 
       if (this.isCEO) {
 
         // récupération de l'entreprise du user
         this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
           ((response) => {
+            console.log(response)
             //recupere l'entreprise avec l'id
             this.entrepriseDirector = response
             //selectionne l'id de l'entreprise             
@@ -88,12 +88,13 @@ export class TuteurComponent implements OnInit {
             // récupération de la liste des tuteur par l'entreprise id
             this.tuteurService.getAllByEntrepriseId(this.entrepriseId).subscribe(
               ((responseTuteur) => {
+                console.log(responseTuteur)
                 this.tuteurList = responseTuteur
               })
             )
           }))
       }
-      if (!this.isCEO) {
+      else if (!this.isCEO) {
         //recupération des entreprises
         console.log(this.entreprises)
         //récupération des tuteur

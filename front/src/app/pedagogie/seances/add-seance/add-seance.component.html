@@ -46,7 +46,7 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="seanceForm" (ngSubmit)="saveSeance()">
                 <div class="field col-12 md:col-6" *ngIf="type!='classe'">
                     <label>Nom du groupe <span style="color: red;"> * </span></label><br>
-                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse" (onChange)="changeGroupe($event.value)"
                         defaultLabel="Selection des classes" optionLabel="nom"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">

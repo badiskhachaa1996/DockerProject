@@ -18,7 +18,8 @@ export class Formateur {
         public campus_id?: string[],
         public nda?: string,
         public IsJury?: any,
-        public absences?: Date[]
+        public absences?: Date[],
+        public devise?: string
     ) { }
 
 }

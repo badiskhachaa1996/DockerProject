@@ -55,9 +55,18 @@ export class EntrepriseService {
     return this.httpClient.post<Entreprise>(registreUrl, objt, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllContrats(idTuteur: string) {
-    let registreUrl = this.apiUrl + "getAllContrats/" + idTuteur;
+  getAllContratsbyTuteur(idTuteur: string) {
+    let registreUrl = this.apiUrl + "getAllContratsbyTuteur/" + idTuteur;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+  getAllContratsbyEntreprise(entreprise_id: string) {
+    let registreUrl = this.apiUrl + "getAllContratsbyEntreprise/" + entreprise_id;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) });
+  }
+
+  getAllContrats() {
+    let registreUrl = this.apiUrl + "getAllContrats/";
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
   }
 
 }

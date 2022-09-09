@@ -266,7 +266,7 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="siret">Numero de Siret<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="siret" maxlength="15" type="number"
+                                <input pInputText id="siret" maxlength=15 minlength=15 type="number"
                                     placeholder="XXXX-XXXX-XXXX-XXX" formControlName="siret" />
                                 <div *ngIf="siret.invalid && (siret.touched || siret.dirty)">
                                     <span style="color: red;" class="error" *ngIf="siret.errors?.required">*
@@ -600,11 +600,10 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="alternant">Alternant<span style="color: red;"> *
                                     </span></label>
-                                <p-dropdown class="p-dropdown-clearable" [options]="listAlternantDD" dataKey="_id"
-                                    filter="true"
+                                <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
+                                    [options]="listAlternantDD" dataKey="_id" filter="true"
                                     filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                    optionLabel="nomcomplet" optionDisabled="actif" id="alternant"
-                                    formControlName="alternant">
+                                    optionLabel="nomcomplet" id="alternant" formControlName="alternant">
                                 </p-dropdown>
 
                             </div>
@@ -671,8 +670,8 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="code_commercial">Code commercial<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="code_commercial" type="text" placeholder="Code commercial"
-                                    formControlName="code_commercial" />
+                                <input pInputText id="code_commercial" type="text" disabled=true
+                                    placeholder="Code commercial" formControlName="code_commercial" />
                                 <div
                                     *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
                                     <span style="color: red;" class="error">*
@@ -683,7 +682,6 @@ Formation suivie :
                             {{ debut_contrat.invalid }}
                         </div>
                         <div>
-                            {{ form.value}}
                             <button pButton type="button" label="Suivant" style="float: right;"
                                 [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
                                 alternantValidite ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
