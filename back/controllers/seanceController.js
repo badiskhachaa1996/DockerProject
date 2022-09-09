@@ -134,10 +134,10 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
     Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } })
         .then((SeanceFromdb) => {
             ListSeanceFinished = SeanceFromdb;
-            let dernierS = SeanceFromdb[SeanceFromdb.length-1]
+            let dernierS = SeanceFromdb[SeanceFromdb.length - 1]
 
 
-            ListSeanceFinished.forEach( async SF => {
+            ListSeanceFinished.forEach(async SF => {
 
                 Presence.find({
                     user_id: req.body.user_id, seance_id: SF.id
@@ -149,7 +149,7 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                         console.log("Prensence Trouvé")
                         ListPresences.push(data);
                         console.log(ListPresences)
-                        if(dernierS._id==SF.id){
+                        if (dernierS._id == SF.id) {
                             console.log("res to send: " + ListPresences.length)
                             res.status(200).send(ListPresences);
                         }
@@ -176,7 +176,7 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
                                 console.log("added pre")
                                 console.log(ListPresences)
                             }
-                            if(dernierS._id==SF.id){
+                            if (dernierS._id == SF.id) {
                                 console.log("res to send: " + ListPresences.length)
                                 res.status(200).send(ListPresences);
                             }
@@ -215,7 +215,20 @@ app.get('/getAllbyFormateur/:id', (req, res, next) => {
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
-
+app.get('/getAllbyFormateurToday/:id', (req, res, next) => {
+    var start = new Date();
+    start.setHours(0, 0, 0, 0);
+    var end = new Date();
+    end.setHours(23, 59, 59, 999)
+    Seance.find({ formateur_id: req.params.id, date_debut: { $gte: start, $lt: end } })
+        .then((SeanceFromdb) => {
+            console.log(SeanceFromdb)
+            res.status(200).send(SeanceFromdb)
+        })
+        .catch(error => {
+            res.status(400).send(error);
+        });
+});
 app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
     let dd = new Date(req.params.date_debut)
     let df = new Date(req.params.date_fin)
