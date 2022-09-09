@@ -334,8 +334,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;">
-							{{userList[formateur._id].lastname | titlecase}}
-							{{userList[formateur._id].firstname | titlecase | uppercase}}
+							{{userList[formateur._id].lastname | uppercase}}
+							{{userList[formateur._id].firstname | titlecase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
