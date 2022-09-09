@@ -198,35 +198,102 @@
                     <input pInputText id="site_entreprise" type="text" placeholder="Site internet de l'entreprise"
                         formControlName="website" />
                 </div>
-                <div class="field col-6 md:col-6">
+                <div class="field col-12    ">
                     <label For="organisme_financeur">Organisme financeur</label>
                     <input pInputText id="organisme_financeur" type="text" placeholder="Organisme financeur"
                         formControlName="financeur" />
                 </div>
-                <div class="grid col-12" *ngIf="formAddEntreprise.get('categorie')?.value == 'Alternance'">
+                <div class="grid col-12" *ngIf="formAddEntreprise.get('categorie')?.value.includes('Alternant')">
                     <div class="field col-12 md:col-12">
                         <label For="activite">Activité<span style="color: red;"> *
-                        </span></label>
+                            </span></label>
                         <input pInputText id="activite" type="text" placeholder="Commercial"
                             formControlName="activite" />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="adresse_ec">Adresse de l'exécution du contrat<span style="color: red;"> *
-                        </span></label>
+                            </span></label>
                         <input pInputText id="adresse_ec" type="text" placeholder="55 Rue du Faubourg Saint-Honoré"
                             formControlName="adresse_ec" />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="ville_ec">Ville<span style="color: red;"> *
                             </span></label>
-                        <input pInputText id="ville_ec" type="text" placeholder="Paris"
-                            formControlName="ville_ec" />
+                        <input pInputText id="ville_ec" type="text" placeholder="Paris" formControlName="ville_ec" />
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="postal_ec">Code postale<span style="color: red;"> *
-                        </span></label>
-                        <input pInputText id="postal_ec" type="text" placeholder="75001"
-                            formControlName="postal_ec" />
+                            </span></label>
+                        <input pInputText id="postal_ec" type="text" placeholder="75001" formControlName="postal_ec" />
+                    </div>
+
+                    <div class="field col-12 md:col-8">
+                        <label For="crc">Caisse de retraite complémentaire : <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="crc" type="text" placeholder="KLESIA" formControlName="crc" />
+                        <!--<div *ngIf="crc.invalid && (crc.touched || crc.dirty)">
+                            <span style="color: red;" class="error" *ngIf="crc.errors?.required">* La
+                                crc est obligatoire.</span>
+                            <span style="color: red;" class="error" *ngIf="crc.errors?.pattern">* Seul les
+                                lettres sont acceptés.</span>
+                        </div>-->
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="nb_salarie">Nombre de Salariés: <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText type="number" placeholder="100" formControlName="nb_salarie" />
+                        <!--<div *ngIf="nb_salarie.invalid && (nb_salarie.touched || nb_salarie.dirty)">
+                            <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.required">* Le
+                                nombre de salariés est obligatoire.</span>
+                            <span style="color: red;" class="error" *ngIf="nb_salarie.errors?.pattern">* Seul
+                                les
+                                lettres sont acceptés.</span>
+                        </div>-->
+                    </div>
+
+                    <div class="field col-12 md:col-8">
+                        <label For="convention">Convention Collective : <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="convention" type="text"
+                            placeholder="Bureaux d'études techniques, cabinets d'ingénieurs-conseils et sociétés de conseils"
+                            formControlName="convention" />
+                        <!-- <div *ngIf="convention.invalid && (convention.touched || convention.dirty)">
+                            <span style="color: red;" class="error" *ngIf="convention.errors?.required">* La
+                                convention sont obligatoire.</span>
+                            <span style="color: red;" class="error" *ngIf="convention.errors?.pattern">* Seul
+                                les
+                                lettres sont acceptés.</span>
+                        </div>-->
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="idcc">Code IDCC: <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText type="number" placeholder="0000" formControlName="idcc" />
+                        <!--<div *ngIf="idcc.invalid && (idcc.touched || idcc.dirty)">
+                            <span style="color: red;" class="error" *ngIf="idcc.errors?.required">* Le
+                                code IDCC est obligatoire.</span>
+                            <span style="color: red;" class="error" *ngIf="idcc.errors?.pattern">* Seul les
+                                lettres sont acceptés.</span>
+                        </div>-->
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="lastname">Télécopie</label>
+                        <input pInputText id="telecopie" type="text" placeholder="Télécopie"
+                            formControlName="telecopie" />
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label For="OPCO">OPCO <span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="OPCO" type="text" placeholder="OPCO" formControlName="OPCO" />
+
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label For="organisme_prevoyance">Organisme de prevoyance</label>
+                        <input pInputText id="organisme_prevoyance" type="text" placeholder="Organisme de prevoyance"
+                            formControlName="organisme_prevoyance" />
+
+
                     </div>
 
                 </div>

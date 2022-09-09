@@ -430,6 +430,45 @@
                 </ng-template>
             </p-table>
 
+            <h5 *ngIf="entreprise.categorie.includes('Alternant')" style="text-align:center;">
+                Informations Alternance</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise.categorie.includes('Alternant')"
+                styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Activité</th>
+                        <th>Adresse de l'exécution du contrat</th>
+                        <th>Ville</th>
+                        <th>Code postale</th>
+                        <th>Caisse de retraite complémentaire </th>
+                        <th>Nombre de Salariés </th>
+                        <th>Convention Collective </th>
+                        <th>IDCC</th>
+                        <th>Télécopie</th>
+                        <th>OPCO</th>
+                        <th>Organisme de prevoyance</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-order>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.activite}}</td>
+                        <td>{{entreprise.adresse_ec}}</td>
+                        <td>{{entreprise.ville_ec}}</td>
+                        <td>{{entreprise.postal_ec}}</td>
+                        <td>{{entreprise.crc}}</td>
+                        <td>{{entreprise.nb_salarie}}</td>
+                        <td>{{entreprise.convention}}</td>
+                        <td>{{entreprise.idcc}}</td>
+                        <td>{{entreprise.telecopie}}</td>
+                        <td>{{entreprise.OPCO}}</td>
+                        <td>{{entreprise.organisme_prevoyance}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
         </div>
         </td>
         </tr>
