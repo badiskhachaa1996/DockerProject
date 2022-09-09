@@ -82,7 +82,7 @@ export class MatieresComponent implements OnInit {
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
-      coeff: ['', [Validators.required, Validators.pattern("^[0-9]$")]],
+      coeff: ['', [Validators.required]],
       credit_ects: ['', Validators.required],
       remarque: [''],
       semestre: ['', Validators.required],
@@ -162,8 +162,8 @@ export class MatieresComponent implements OnInit {
   //Methode d'initialisation du formulaire de modification d'une matière
   onInitFormModifMatiere() {
     this.formModifMatiere = this.formBuilder.group({
-      nom: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô/ -]+$")]],
-      volume: ['', Validators.pattern("^[0-9]+$")],
+      nom: ['', [Validators.required]],
+      volume: ['',Validators.required],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
