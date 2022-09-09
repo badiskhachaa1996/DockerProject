@@ -414,7 +414,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Liste de tous les alternants ', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
                                 { label: 'Liste des tuteurs', icon: 'pi pi-list', routerLink: ['/tuteur'] },
-                                { label: 'Alternants sous ma tutelle', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
+                                { label: 'Mes alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
                             ]
                         },
                     ]
