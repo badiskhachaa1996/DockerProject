@@ -21,10 +21,12 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Non', value: false },
   ];
 
+
+
   categorieList = [
     'Sous-traitant',
     "Alternant",
-    "Autre" 
+    "Autre"
   ]
 
   constructor(private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
@@ -71,7 +73,11 @@ export class AddEntrepriseComponent implements OnInit {
       indicatif_1er: [''],
       indicatif_2nd: [''],
       indicatif_ent: [''],
-      categorie: [[]]
+      categorie: [[]],
+      activite: [''],
+      adresse_ec: [''],
+      postal_ec: [''],
+      ville_ec: [''],
     })
   }
 
