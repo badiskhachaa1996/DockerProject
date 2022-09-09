@@ -313,15 +313,6 @@
                     </tr>
                 </ng-template>
             </p-table>
-<<<<<<< HEAD
-        </div>
-    </div>
-</div>
-
-<div *ngIf="isFormateur">
-    <h2 style="text-align: center;">Bienvenue {{user?.lastname | uppercase}} {{user?.firstname |
-        titlecase}} </h2>
-=======
 
             <div class="col-12 md:col-6">
                 <div class="card">
@@ -348,7 +339,6 @@
     <!--remettre this.isFormateur-->
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname |
         titlecase}}</h2>
->>>>>>> 419c3b8bfb3ea31f8fcb8fd1af93143ce67bf574
 
     <!-- Afficher les cours de la journée-->
     <div class="col-12 md:col-12">
@@ -359,11 +349,7 @@
                 </div>
 
                 <div class="col-12" *ngIf="type==null">
-<<<<<<< HEAD
                     <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsforma">
-=======
-                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsetu">
->>>>>>> 419c3b8bfb3ea31f8fcb8fd1af93143ce67bf574
                     </p-fullCalendar>
                 </div>
             </div>
