@@ -38,12 +38,12 @@
                         placeholder="Raison sociale" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="forme_juridique">Forme juridique <span style="color: red;"> * </span></label>
+                    <label For="forme_juridique">Forme juridique </label>
                     <input pInputText id="forme_juridique" formControlName="fm_juridique" type="text"
                         placeholder="Forme juridique" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="vip">VIP <span style="color: red;"> * </span></label>
+                    <label For="vip">VIP </label>
                     <input pInputText id="vip" type="text" formControlName="vip" placeholder="VIP" />
                 </div>
                 <div class="field col-12 md:col-6">
@@ -51,47 +51,45 @@
                     <input type="text" formControlName="nda" class="form-control col-12" placeholder="NDA" pInputText>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="type_entreprise">Type d'entreprise <span style="color: red;"> * </span></label>
+                    <label For="type_entreprise">Type d'entreprise </label>
                     <input pInputText id="type_entreprise" formControlName="type_ent" type="text"
                         placeholder="Type d'entreprise" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="categorie">Catégorie <span style="color: red;"> * </span></label>
+                    <label For="categorie">Catégorie </label>
                     <p-multiSelect [options]="categorieList" defaultLabel="Choisissez la catégorie"
                         formControlName="categorie"></p-multiSelect>
                 </div>
-                <!-- vérifier dans le ts remplacer var bool-->
                 <div class="field col-12 md:col-4">
                     <label For="isInterne">Entreprise Interne ou Externe ?<span style="color: red;"> *
                         </span></label>
                     <p-selectButton [options]="choiceList" formControlName="isInterne"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="siret">Numéro de SIRET <span style="color: red;"> * </span></label>
+                    <label For="siret">Numéro de SIRET </label>
                     <input pInputText id="siret" formControlName="siret" type="text" placeholder="Numéro de SIRET" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="code_ape">Code APE NAF <span style="color: red;"> * </span></label>
+                    <label For="code_ape">Code APE NAF </label>
                     <input pInputText id="code_ape" formControlName="code_ape_naf" type="text"
                         placeholder="Code APE NAF" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="tva">Numéro TVA <span style="color: red;"> * </span></label>
+                    <label For="tva">Numéro TVA </label>
                     <input pInputText id="tva" formControlName="num_tva" type="text" placeholder="Numéro TVA" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="nom_contact">Nom du contact principal <span style="color: red;"> * </span></label>
+                    <label For="nom_contact">Nom du contact principal </label>
                     <input pInputText id="nom_contact" formControlName="nom_contact" type="text"
                         placeholder="Nom du contact principal" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="prenom_contact">Prénom du contact principal <span style="color: red;"> * </span></label>
+                    <label For="prenom_contact">Prénom du contact principal </label>
                     <input pInputText id="prenom_contact" formControlName="prenom_contact" type="text"
                         placeholder="Prénom du contact principal" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="fonction_contact">Fonction du contact principal dans l'entreprise<span
-                            style="color: red;"> * </span></label>
+                    <label For="fonction_contact">Fonction du contact principal dans l'entreprise</label>
                     <input pInputText id="fonction_contact" type="text" formControlName="fc_contact"
                         placeholder="Fonction du contact principal dans l'entreprise" />
                 </div>
@@ -108,18 +106,17 @@
                         pInputText>
                 </div>
                 <div class="field col-12 md:col-8">
-                    <label For="num_contact">Numéro de téléphone du contact principal<span style="color: red;"> *
-                        </span></label>
+                    <label For="num_contact">Numéro de téléphone du contact principal</label>
                     <input pInputText id="num_contact" type="text" formControlName="phone_contact"
                         placeholder="Numéro de téléphone du contact principal" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="nom_second">Nom du contact sécondaire <span style="color: red;"> * </span></label>
+                    <label For="nom_second">Nom du contact sécondaire </label>
                     <input pInputText id="nom_second" type="text" placeholder="Nom du contact sécondaire"
                         formControlName="nom_contact_2nd" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="prenom_second">Prénom du contact sécondaire <span style="color: red;"> * </span></label>
+                    <label For="prenom_second">Prénom du contact sécondaire </label>
                     <input pInputText id="adresse_contact" type="text" formControlName="prenom_contact_2nd"
                         placeholder="Adresse mail du contact principal" />
                 </div>
@@ -173,12 +170,12 @@
                         placeholder="Nom de la rue où se situe l'entreprise" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="code_postale_entreprise">Code postale<span style="color: red;"> * </span></label>
+                    <label For="code_postale_entreprise">Code postale</label>
                     <input pInputText id="code_postale_entreprise" type="text" placeholder="Code postale"
                         formControlName="postal_adresse" />
                 </div>
                 <div class="field col-12 md:col-4">
-                    <label For="email_entreprise">Email de l'entreprise<span style="color: red;"> * </span></label>
+                    <label For="email_entreprise">Email de l'entreprise</label>
                     <input pInputText id="email_entreprise" type="text" placeholder="Email de l'entreprise"
                         formControlName="email" />
                 </div>
@@ -201,18 +198,47 @@
                     <input pInputText id="site_entreprise" type="text" placeholder="Site internet de l'entreprise"
                         formControlName="website" />
                 </div>
-                <div class="field col-12 md:col-12">
-                    <label For="organisme_financeur">Organisme financeur<span style="color: red;"> * </span></label>
+                <div class="field col-6 md:col-6">
+                    <label For="organisme_financeur">Organisme financeur</label>
                     <input pInputText id="organisme_financeur" type="text" placeholder="Organisme financeur"
                         formControlName="financeur" />
                 </div>
+                <div class="grid col-12" *ngIf="formAddEntreprise.get('categorie')?.value == 'Alternance'">
+                    <div class="field col-12 md:col-12">
+                        <label For="activite">Activité<span style="color: red;"> *
+                        </span></label>
+                        <input pInputText id="activite" type="text" placeholder="Commercial"
+                            formControlName="activite" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="adresse_ec">Adresse de l'exécution du contrat<span style="color: red;"> *
+                        </span></label>
+                        <input pInputText id="adresse_ec" type="text" placeholder="55 Rue du Faubourg Saint-Honoré"
+                            formControlName="adresse_ec" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="ville_ec">Ville<span style="color: red;"> *
+                            </span></label>
+                        <input pInputText id="ville_ec" type="text" placeholder="Paris"
+                            formControlName="ville_ec" />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label For="postal_ec">Code postale<span style="color: red;"> *
+                        </span></label>
+                        <input pInputText id="postal_ec" type="text" placeholder="75001"
+                            formControlName="postal_ec" />
+                    </div>
+
+                </div>
+
                 <div>
                     <button pButton label="Ajouter l'entreprise" [disabled]="formAddEntreprise.invalid"
                         type="submit"></button>
                 </div>
             </form>
 
-            <a routerLink="/entreprises" style="float: right;"><i class="pi pi-caret-right"></i> Voir les entreprises</a>
+            <a routerLink="/entreprises" style="float: right;"><i class="pi pi-caret-right"></i> Voir les
+                entreprises</a>
         </div>
     </div>
 </div>

@@ -207,8 +207,7 @@ export class ListFormateursComponent implements OnInit {
           remarque: this.formateurToUpdate.remarque,
           campus: c,
           nda: this.formateurToUpdate?.nda,
-          absences: arr,
-          devise: this.formateurToUpdate?.devise
+          absences: arr
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -306,8 +305,7 @@ export class ListFormateursComponent implements OnInit {
       campus: [''],
       nda: [""],
       IsJury: [""],
-      absences: [""],
-      devise: ['']
+      absences: [""]
     });
   }
 
@@ -370,7 +368,6 @@ export class ListFormateursComponent implements OnInit {
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
     this.formateurToUpdate.absences = this.formUpdateFormateur.get('absences').value
-    this.formateurToUpdate.devise = this.formUpdateFormateur.get('devise').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
         if (data.error) {
