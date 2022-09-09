@@ -30,7 +30,7 @@ export class ListFormateursComponent implements OnInit {
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
   ];
-  
+
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];
@@ -96,7 +96,7 @@ export class ListFormateursComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id"){
+    else if (type == "matiere_id") {
       this.volumeHList[i][type] = event.value;
       this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
     }
@@ -207,7 +207,8 @@ export class ListFormateursComponent implements OnInit {
           remarque: this.formateurToUpdate.remarque,
           campus: c,
           nda: this.formateurToUpdate?.nda,
-          absences: arr
+          absences: arr,
+          devise: this.formateurToUpdate?.devise
         });
         if (this.formateurToUpdate.monday_available) {
           this.formUpdateFormateur.patchValue({
@@ -252,7 +253,7 @@ export class ListFormateursComponent implements OnInit {
         let dicF = response.IsJury
         let kF = [];
         this.jury_diplomesList = [];
-        if (response.IsJury && response.IsJury.keys().length!=0) {
+        if (response.IsJury && response.IsJury.keys().length != 0) {
           kF = Object.keys(dicF)
           kF.forEach(key => {
             this.jury_diplomesList.push({ titre: key, cout_h: parseInt(response.IsJury[key]), isNew: false })
@@ -306,6 +307,7 @@ export class ListFormateursComponent implements OnInit {
       nda: [""],
       IsJury: [""],
       absences: [""],
+      devise: ['']
     });
   }
 
@@ -368,6 +370,7 @@ export class ListFormateursComponent implements OnInit {
       remarque: this.formUpdateFormateur.get('friday_remarque').value,
     }
     this.formateurToUpdate.absences = this.formUpdateFormateur.get('absences').value
+    this.formateurToUpdate.devise = this.formUpdateFormateur.get('devise').value
     this.formateurService.updateById(this.formateurToUpdate).subscribe(
       ((data) => {
         if (data.error) {
@@ -484,8 +487,7 @@ export class ListFormateursComponent implements OnInit {
     }
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-formateur']);
   }
 }

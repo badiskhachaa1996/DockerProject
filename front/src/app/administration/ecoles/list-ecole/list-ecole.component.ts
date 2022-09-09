@@ -139,7 +139,6 @@ export class ListEcoleComponent implements OnInit {
     if(event.target.files.length > 0) 
     {
       this.logo = event.target.files[0];
-      console.log(this.logo);
     }
   }
 
@@ -176,7 +175,6 @@ export class ListEcoleComponent implements OnInit {
     if(event.target.files.length > 0)
     {
       this.pied_de_page = event.target.files[0];
-      console.log(this.pied_de_page);
     }
   }
 

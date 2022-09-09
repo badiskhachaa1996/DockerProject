@@ -195,6 +195,7 @@ export class AddFormateurComponent implements OnInit {
       absences: [''],
       nda: [""],
       IsJury: [""],
+      devise: ['']
     });
   }
 
@@ -217,6 +218,7 @@ export class AddFormateurComponent implements OnInit {
   get campus() { return this.formAddFormateur.get('campus'); };
   get nda() { return this.formAddFormateur.get('nda'); };
   get IsJury() { return this.formAddFormateur.get('IsJury'); };
+  get devise() { return this.formAddFormateur.get('devise'); };
 
   //Methode d'ajout du nouveau formateur dans la base de données
   onAddFormateur() {
@@ -236,7 +238,7 @@ export class AddFormateurComponent implements OnInit {
     let type_contrat = this.formAddFormateur.get('type_contrat')?.value.value;
     let taux_h = this.formAddFormateur.get('taux_h')?.value;
     let taux_j = this.formAddFormateur.get('taux_j')?.value;
-    let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
+    //let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
     let volumeH_i = {};
     let volumeH_consomme = {};
     let campus = this.formAddFormateur.get('campus')?.value;
@@ -284,11 +286,13 @@ export class AddFormateurComponent implements OnInit {
 
     let absences = this.formAddFormateur.get('absences').value
 
+    let devise = this.formAddFormateur.get('devise').value
+
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'Formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
     //création et envoie du nouvelle objet formateur
-    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, prestataire_id, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
-      jury, absences);
+    let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, null, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
+      jury, absences, devise);
 
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {

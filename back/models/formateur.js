@@ -17,8 +17,9 @@ const formateurSchema = mongoose.Schema({
     remarque: { type: String },
     campus_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'campus', default: [] },
     nda: { type: String, required: false },
-    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {  } },
-    absences: { type: [Date], default: [] }
+    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {} },
+    absences: { type: [Date], default: [] },
+    devise: { type: String, default: "Euro Français" }
 });
 
 //Création de la table formateur via le schema de données

@@ -57,6 +57,8 @@ export class DashboardComponent implements OnInit {
   isReinscrit = false
   isUnknow = false
 
+  dataEtudiant: Etudiant = null
+
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
   seance = []
@@ -149,15 +151,18 @@ export class DashboardComponent implements OnInit {
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         if (this.isEtudiant) {
+          console.log(dataUser)
           this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
+            this.dataEtudiant = dataEtu
             if (dataEtu) {
-              this.refreshEvent(dataEtu)
               this.isReinscrit = (dataEtu && dataEtu.classe_id == null)
+              if (dataEtu.classe_id)
+                this.refreshEvent(dataEtu)
               this.isEtudiant = !this.isReinscrit;
             } else {
               this.isEtudiant = false
             }
-
+            console.log(dataEtu)
           })
         }
         this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)

@@ -43,12 +43,8 @@ this.Notifications= []
         let serviceName = service.dataService.label
         if (serviceName.includes("Admission")) {
           this.NotificationService.getAdmissionNotifi().subscribe(notifAdmission => {
-            console.log(notifAdmission)
-
             if (notifAdmission.length != 0) {
               notifAdmission.forEach(ad_notif => {
-                console.log("push notif admission")
-                console.log(ad_notif)
                 this.Notifications.push(ad_notif)
 
               });

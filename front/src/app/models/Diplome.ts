@@ -14,7 +14,7 @@ export class Diplome{
         public date_debut?:     Date,
         public date_fin?:       Date,
         public rythme?:         string,
-        public frais?:          number,
+        public frais?:          string,
         public frais_en_ligne?: number,
         public isCertified?: boolean,
         public date_debut_examen?: Date,
