@@ -77,6 +77,12 @@
         </div>
     </div>
 </div>
+<div>
+    <!-- A ENLEVER -->
+    <h2>Bonjour cette page possède des problèmes actuellement en travaux par l'équipe dev MERCI</h2>
+    <p>{{seances|json}}</p>
+    <p>{{diplomeFilter|json}} <====> {{groupeFilter|json}}</p>
+</div>
 <div class="col-12">
     <div class="card">
         <div style="float: right;">
@@ -115,14 +121,14 @@
 
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th pSortableColumn="abbrv" scope="col" *ngIf="type!='classe'" style="text-align:center">
+                        <th pSortableColumn="abbrv" scope="col" style="text-align:center">
                             Code Grp <p-sortIcon field="abbrv"></p-sortIcon>
                         </th>
 
                         <th pSortableColumn="matiere" scope="col" style="text-align:center">
                             Module <p-sortIcon field="matiere"></p-sortIcon>
                         </th>
-                        <th *ngIf="type!='formateur'" pSortableColumn="formateur_id" scope="col"
+                        <th pSortableColumn="formateur_id" scope="col"
                             style="text-align:center">
                             Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
