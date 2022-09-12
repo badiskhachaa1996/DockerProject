@@ -250,7 +250,7 @@
                         <label>Entreprise<span style="color: red;"> * </span></label>
                         <p-dropdown formControlName="entreprise_id" [options]="dropdownEntreprise" optionLabel="libelle"
                             emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise" filter="true"
-                            (onChange)="TuteurListLoad(entreprise_id)">
+                            (onChange)="entrepriseIDLoad($event.value)">
                         </p-dropdown>
                         <!-- <input pInputText type="text" placeholder="Veuillez saisir le nom de l'entreprise"
                         formControlName="entreprise" /> -->
