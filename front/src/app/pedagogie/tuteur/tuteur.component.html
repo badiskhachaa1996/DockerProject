@@ -11,7 +11,8 @@
 
                 <h4 class="col-12" style="text-align: center;">Ajoutez un tuteur</h4>
                 <p class="col-12" style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix
-                    <span style="color: red;"> * </span> sont obligatoires</p>
+                    <span style="color: red;"> * </span> sont obligatoires
+                </p>
 
                 <div class="field col-12 md:col-2">
                     <label For="civilite">Civilité<span style="color: red;"> * </span></label>
@@ -308,13 +309,13 @@
                         <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                             (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; OnGetByIdTuteur(tuteur); showFormAddTuteur = false;"
                             aria-hidden="true"></i>
+
                     </td>
                 </tr>
             </ng-template>
         </p-table>
     </div>
 </div>
-
 <!-- LISTE DES TUTEURS PAR CEO-->
 <div class="col-12" *ngIf="isCEO">
     <div class="card">
@@ -322,7 +323,7 @@
             <button pButton label="Ajouter un tuteur"
                 (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
         </div>
-        <h5>Liste des tuteur de l'entreprise </h5>
+        <h5>Liste des tuteurs de l'entreprise </h5>
         <!-- {{ tuteur.user_id.entreprise }} -->
         <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="10" [rowHover]="true"
             styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
@@ -354,8 +355,7 @@
                     </th>
                     <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
                     </th>
-                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon>
-                    </th>
+
 
                     <th style="text-align:center">Action</th>
             </ng-template>
@@ -373,13 +373,14 @@
                     <td>
                         {{ tuteur.user_id.email_perso}}
                     </td>
-                    <td>
-                        {{ tuteur.user_id.entreprise}}
-                    </td>
+
                     <td>
                         <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                             (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; OnGetByIdTuteur(tuteur); showFormAddTuteur = false;"
                             aria-hidden="true"></i>
+                        <span> | </span>
+                        <i pTooltip="Liste Alternants" tooltipPosition="bottom" class="pi pi-align-justify"
+                            [routerLink]="['/liste-contrats/'+tuteur._id]" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>

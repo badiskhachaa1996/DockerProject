@@ -88,8 +88,8 @@ import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';
-import { DemandeEventsComponent} from './demande-events/demande-events.component';
-import { ListEventsComponent} from './demande-events/list-events/list-events.component';
+import { DemandeEventsComponent } from './demande-events/demande-events.component';
+import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 
 import { MsalModule, MsalRedirectComponent, MsalGuard } from '@azure/msal-angular'; // MsalGuard added to imports
 import { AppComponent } from './app.component';
@@ -100,6 +100,7 @@ import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/l
 import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './guards/completion-profil.guard';
+import { CreateAccountComponent } from './support/create-account/create-account.component';
 
 
 @NgModule({
@@ -146,9 +147,9 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
                     { path: 'campus/:id', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
                     { path: 'ajout-campus', component: AddCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+                    { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'diplomes/:id', component: ListDiplomeComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ajout-diplome', component: AddDiplomeComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+                    { path: 'ajout-diplome', component: AddDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'groupes', component: ListGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-groupe', component: AddGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'admin/agents', component: ListAgentComponent, canActivate: [AuthGuardService, AdminGuardService] },
@@ -181,11 +182,12 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
                     { path: 'list-events', component: ListEventsComponent },
+                    { path: 'assign-ims', component: CreateAccountComponent },
 
                     { path: 'tuteur', component: TuteurComponent },
                     { path: 'tuteur/:entreprise', component: TuteurComponent },
 
-                    { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent , canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+                    { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent }
 
@@ -193,7 +195,7 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
             { path: 'demande-events', component: DemandeEventsComponent },
-            { path: 'completion-profil', component: FirstConnectionComponent },
+            { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'partenaireInscription', component: PartenaireInscriptionComponent },

@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit {
 
   user: User;
   etudiant: Etudiant;
+  formateur: Formateur;
   classe: Classe[] = [];
 
   seances: Seance[] = [];
@@ -60,6 +61,7 @@ export class DashboardComponent implements OnInit {
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
+  seance = []
 
   date: Date = new Date();
 
@@ -75,7 +77,7 @@ export class DashboardComponent implements OnInit {
     events: []
   }
 
-  //Options du calendrier
+  //Options du calendrier etudiant
   optionsetu = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     defaultDate: new Date(),
@@ -93,8 +95,29 @@ export class DashboardComponent implements OnInit {
     defaultView: "timeGridDay"
   }
 
-  events: any[];
   dernotes: Note[] = [];
+
+  //Options du calendrier formateur
+  optionsforma = {
+    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+    defaultDate: new Date(),
+    titleFormat: { year: 'numeric', month: 'numeric', day: 'numeric' },
+    header: {
+      left: "title",
+      right: 'prev,next'
+    },
+    locale: 'fr',
+    timeZone: 'local',
+    contentHeight: 500,
+    eventClick: this.eventClickFC.bind(this),
+    events: [],
+    defaultView: "timeGridDay"
+  }
+
+  seanceNow: Seance[] = [];
+
+  events: any[];
+
 
   eventClickFC(col) {
     this.router.navigate(['/emergement/' + col.event.id])
@@ -107,13 +130,16 @@ export class DashboardComponent implements OnInit {
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService) { }
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService
+    ) { }
 
 
   ngOnInit() {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
+        this.user = dataUser;
+        // console.log(dataUser.type);
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent" || dataUser.role == "Responsable"
         let service: any = dataUser.service_id
@@ -121,8 +147,8 @@ export class DashboardComponent implements OnInit {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
         }
-        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant",
-          this.isFormateur = dataUser.type == "Formateur"
+        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant"
+        this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         if (this.isEtudiant) {
           console.log(dataUser)
@@ -164,6 +190,22 @@ export class DashboardComponent implements OnInit {
             }));
         }
       });
+
+    //Récupération des séances par formateur 
+    //On récupére d'abord le formarteur via son id
+    this.formateurService.getByUserId(this.token.id).subscribe(
+      (resFor) => {
+        if (resFor) {
+          this.formateur = resFor;
+          //On récupére ensuite les séances du formateur via l'id de la séance
+          this.seanceService.getAllbyFormateurToday(this.formateur._id).subscribe(
+            ((resSea) => {
+              console.log(resSea);
+              this.seance = resSea;
+            }));
+        }
+      });
+
   }
 
   SCIENCE() {

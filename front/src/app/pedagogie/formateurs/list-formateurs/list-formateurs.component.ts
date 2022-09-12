@@ -30,7 +30,7 @@ export class ListFormateursComponent implements OnInit {
     { label: 'Interne', value: true },
     { label: 'Externe', value: false },
   ];
-  
+
   fr = environment.fr;
   formateurs: Formateur[] = [];
   dropdownCampus = [];
@@ -96,7 +96,7 @@ export class ListFormateursComponent implements OnInit {
   changeVolumeH(i, event, type) {
     if (type == "volume_init")
       this.volumeHList[i][type] = parseInt(event.target.value);
-    else if (type == "matiere_id"){
+    else if (type == "matiere_id") {
       this.volumeHList[i][type] = event.value;
       this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
     }
@@ -252,7 +252,7 @@ export class ListFormateursComponent implements OnInit {
         let dicF = response.IsJury
         let kF = [];
         this.jury_diplomesList = [];
-        if (response.IsJury && response.IsJury.keys().length!=0) {
+        if (response.IsJury && response.IsJury.keys().length != 0) {
           kF = Object.keys(dicF)
           kF.forEach(key => {
             this.jury_diplomesList.push({ titre: key, cout_h: parseInt(response.IsJury[key]), isNew: false })
@@ -305,7 +305,7 @@ export class ListFormateursComponent implements OnInit {
       campus: [''],
       nda: [""],
       IsJury: [""],
-      absences: [""],
+      absences: [""]
     });
   }
 
@@ -484,8 +484,7 @@ export class ListFormateursComponent implements OnInit {
     }
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-formateur']);
   }
 }

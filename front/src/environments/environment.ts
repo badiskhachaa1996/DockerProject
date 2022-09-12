@@ -184,9 +184,8 @@ export const environment = {
     { value: 'Apprenti', viewValue: 'Apprenti' },
     { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi'},
     { value: 'Paticulier', viewValue: 'Paticulier'},
-    { value: 'Autre', viewValue: 'Autre' },
     { value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
-    { value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage'},
+    { value: 'Autre', viewValue: 'Autre' },
   ],
 
   statut: [

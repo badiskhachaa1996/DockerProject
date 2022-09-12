@@ -21,7 +21,9 @@ export class ListeContratsComponent implements OnInit {
 
   token;
   ListeContrats: ContratAlternance[] = []
+  tuteurInfoPerso: any;
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
+  ParmTuteur = this.route.snapshot.paramMap.get('idTuteur');
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router,
     private authService: AuthService, private tuteurService: TuteurService) { }
@@ -31,7 +33,19 @@ export class ListeContratsComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"))
     console.log(this.token)
 
-    if (!this.idTuteur && this.token && this.token.type != "Tuteur") {
+
+    //LISTE A AFFICHER POUR LADMIN
+    if (this.token.role == "Admin") {
+
+      this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
+        console.log(Allcontrats)
+        this.ListeContrats = Allcontrats;
+
+      })
+
+    }
+    //LISTE A AFFICHER POUR LES CEO ENTREPRISE 
+    else if (!this.idTuteur && this.token.type == "CEO Entreprise") {
 
       this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
         console.log(entrepriseData)
@@ -43,14 +57,33 @@ export class ListeContratsComponent implements OnInit {
       }, (eror) => { console.log(eror) })
 
     }
+    // LISTE A AFFICHER POUR LES TUTEURS
     else if (this.token.type == "Tuteur") {
+      this.tuteurService.getByUserId(this.token.id).subscribe(TutData => {
+        this.idTuteur = TutData._id
 
-      this.idTuteur = this.token.id;
-      console.log(this.idTuteur )
-      this.entrepriseService.getAllContrats(this.idTuteur).subscribe(listeData => {
+
+        console.log(this.idTuteur)
+        this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
+
+          this.ListeContrats = listeData;
+          console.log(listeData)
+        })
+      })
+    }
+    else {
+      this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
 
         this.ListeContrats = listeData;
         console.log(listeData)
+        this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
+          this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
+            console.log(TuteurInfoPerso)
+            this.tuteurInfoPerso = TuteurInfoPerso
+          })
+
+
+        })
       })
     }
 

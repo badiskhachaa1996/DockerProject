@@ -314,13 +314,13 @@
                         </p-tabView>
                     </div>
 
-                    <div class="field col-12 md:col-6"
+                    <div class="field col-12 md:col-4"
                         *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
-                        <input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
+                        <input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
                             formControlName="taux_h" />
                     </div>
-                    <div class="field col-12 md:col-6"
+                    <div class="field col-12 md:col-4"
                         *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="cout_journalier">Coût journalier</label>
                         <input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
@@ -339,8 +339,9 @@
                                 </div>
                                 <div class="col-6 md:col-4">
                                     <label>Volume Horaire: </label>
-                                    <input type="number"  (onChange)="changeVolumeH(i,$event,'volume_init')"
-                                        placeholder="Volume horaire" [(value)]="volumeHList[i]['volume_init']" pInputText>
+                                    <input type="number" (onChange)="changeVolumeH(i,$event,'volume_init')"
+                                        placeholder="Volume horaire" [(value)]="volumeHList[i]['volume_init']"
+                                        pInputText>
                                 </div>
                                 <div class="col-12 md:col-2">
                                     <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteMatiereAdd(i)"

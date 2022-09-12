@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const formateurSchema = mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
     type_contrat: { type: String, required: true },
-    taux_h: { type: Number, required: false },
+    taux_h: { type: String, required: false },
     taux_j: { type: Number, required: false },
     prestataire_id: { type: mongoose.Schema.Types.ObjectId, ref: 'entreprise', required: false },
     volume_h: { type: mongoose.Schema.Types.Mixed, required: false },
@@ -17,7 +17,7 @@ const formateurSchema = mongoose.Schema({
     remarque: { type: String },
     campus_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'campus', default: [] },
     nda: { type: String, required: false },
-    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {  } },
+    IsJury: { type: mongoose.Schema.Types.Mixed, required: false, default: {} },
     absences: { type: [Date], default: [] }
 });
 

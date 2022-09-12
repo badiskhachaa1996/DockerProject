@@ -33,7 +33,7 @@ let transporterINTED = nodemailer.createTransport({
 app.get("/getAll", (req, res, next) => {
     Entreprise.find()
         .then((entreprisesFromDb) => { res.status(200).send(entreprisesFromDb); })
-        .catch((error) => { req.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des entreprises " + error.message }); });
 });
 
 
@@ -97,49 +97,53 @@ app.post("/createNewContrat", (req, res, next) => {
                             NewEntrepise.save().then((EntrepCreated) => {
 
                                 if (NewTuteur.email === CeoCreated.email) {
+                                    NewtuteurObject.entreprise_id = EntrepCreated._id
+                                    NewtuteurObject.save().then(NewobjTuteur => {
+                                        NewContrat.tuteur_id = NewobjTuteur._id
+                                        //Creation d'un nouveau contrat alternance
+                                        NewContrat.save().then((NewContData) => {
+                                            // Initialisation et Envoi des accés par email pour le CEO et le tuteur 
 
-                                    NewContrat.tuteur_id = NewCeo._id
-                                    //Creation d'un nouveau contrat alternance
-                                    NewContrat.save().then((NewContData) => {
-                                        // Initialisation et Envoi des accés par email pour le CEO et le tuteur 
-
-                                        let Ceo_htmlmail =
-                                            "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
-                                            Ceo_Pwd + "</strong></p>" +
-                                            "<p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
-                                            " <a href=\"" + origin[0] + "/#/validation-email/" + CeoCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
-                                            "<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
-                                            "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
-                                            " <p>Cordialement.</p>";
-
-
-                                        let Ceo_mailOptions = {
-                                            from: "ims@intedgroup.com",
-                                            to: CeoCreated.email_perso,
-                                            subject: 'Votre acces [IMS] ',
-                                            html: Ceo_htmlmail,
-                                            // attachments: [{
-                                            //     filename: 'Image1.png',
-                                            //     path: 'assets/Image1.png',
-                                            //     cid: 'Image1' //same cid value as in the html img src
-                                            // }]
-                                        };
-                                        transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                            console.log('Acces CEO Envoyés')
-                                            if (error) {
-                                                console.error(error);
-                                            }
-                                        });
+                                            let Ceo_htmlmail =
+                                                "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
+                                                Ceo_Pwd + "</strong></p>" +
+                                                "<p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                                " <a href=\"" + origin[0] + "/#/validation-email/" + CeoCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                                "<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
+                                                "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                                " <p>Cordialement.</p>";
 
 
+                                            let Ceo_mailOptions = {
+                                                from: "ims@intedgroup.com",
+                                                to: CeoCreated.email_perso,
+                                                subject: 'Votre acces [IMS] ',
+                                                html: Ceo_htmlmail,
+                                                // attachments: [{
+                                                //     filename: 'Image1.png',
+                                                //     path: 'assets/Image1.png',
+                                                //     cid: 'Image1' //same cid value as in the html img src
+                                                // }]
+                                            };
+                                            transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                console.log('Acces CEO Envoyés')
+                                                if (error) {
+                                                    console.error(error);
+                                                }
+                                            });
 
 
-                                        res.status(200).send([NewContData, EntrepCreated, CeoCreated])
+
+
+                                            res.status(200).send([NewContData, EntrepCreated, CeoCreated])
+                                        }).catch((errorCt) => {
+
+                                            res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message })
+                                        })
                                     }).catch((errorCt) => {
 
                                         res.status(400).json({ error: 'impossible de creer un nouveau Contrat' + errorCt.message })
                                     })
-
 
                                 }
                                 else {
@@ -277,15 +281,15 @@ app.post("/createContratAlternance", (req, res, next) => {
 })
 
 
-app.get("/getAllContrats/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
+app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
         .then((CAFromDb) => {
             console.log(CAFromDb);
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
             console.log(error);
-            req.status(500).json({
+            res.status(500).json({
                 error: "Impossible de recuperer la liste des contrats " + error.message
             });
         });
@@ -298,7 +302,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 
             CAFromDb.forEach(async Contrat => {
                 console.log(Contrat)
-                if (Contrat.tuteur_id?.entreprise == req.params.entreprise_id) {
+                if (Contrat.tuteur_id?.entreprise_id == req.params.entreprise_id) {
                     CAbyEntreprise.push(Contrat)
                 }
 
@@ -314,7 +318,21 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
         });
 });
 
+app.get("/getAllContrats/", (req, res, next) => {
+    console.log("getAllContrats")
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path:"user_id" } }).populate({ path: 'formation' })
+        .then((CAFromDb) => {
 
+            res.status(200).send(CAFromDb);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500).json({
+                error: "Impossible de recuperer la liste des contrats " + error.message
+            });
+        });
+
+});
 
 //Recuperation d'une entreprise selon un id
 app.get("/getById/:id", (req, res, next) => {

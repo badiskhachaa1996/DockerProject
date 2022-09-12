@@ -159,6 +159,11 @@ export class AppMenuComponent implements OnInit {
             items: [
                 { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
             ]
+        }, {
+            label: 'Support',
+            items: [
+                { label: 'Etudiants en attente de leur compte IMS', icon: 'pi pi-user-plus', routerLink: ['/assign-ims'] },
+            ]
         },
     ];
     model: any[];
@@ -409,7 +414,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Liste de tous les alternants ', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
                                 { label: 'Liste des tuteurs', icon: 'pi pi-list', routerLink: ['/tuteur'] },
-                                { label: 'Alternants sous ma tutelle', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
+                                { label: 'Mes alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
                             ]
                         },
                     ]
@@ -472,6 +477,20 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                                {
+                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
+                                    items: [
+                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
+                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des groupes', icon: 'pi pi-users',
+                                    items: [
+                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
+                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
+                                    ]
+                                },
                             ]
 
                         },
@@ -499,20 +518,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des campus', icon: 'pi pi-sort-alpha-down', routerLink: ['/campus'] },
                                     ]
                                 },
-                                {
-                                    label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
-                                    items: [
-                                        { label: 'Ajouter un diplôme', icon: 'pi pi-plus-circle', routerLink: ['/ajout-diplome'] },
-                                        { label: 'Liste des diplômes', icon: 'pi pi-sort-alpha-down', routerLink: ['/diplomes'] },
-                                    ]
-                                },
-                                {
-                                    label: 'Gestions des groupes', icon: 'pi pi-users',
-                                    items: [
-                                        { label: 'Ajouter un groupe', icon: 'pi pi-plus-circle', routerLink: ['/ajout-groupe'] },
-                                        { label: 'Liste des groupes', icon: 'pi pi-sort-alpha-down', routerLink: ['/groupes'] },
-                                    ]
-                                },
+
                                 {
                                     label: 'Gestions des agents', icon: 'pi pi-users',
                                     items: [

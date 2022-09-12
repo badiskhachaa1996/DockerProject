@@ -194,7 +194,7 @@ export class AddFormateurComponent implements OnInit {
       friday_remarque: [""],
       absences: [''],
       nda: [""],
-      IsJury: [""],
+      IsJury: [""]
     });
   }
 

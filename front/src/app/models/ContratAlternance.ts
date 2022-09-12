@@ -1,5 +1,6 @@
 import { Diplome } from "./Diplome";
 import { Etudiant } from "./Etudiant";
+import { Tuteur } from "./Tuteur";
 import { User } from "./User";
 
 export class ContratAlternance {
@@ -14,7 +15,7 @@ export class ContratAlternance {
         public niveau_formation?: String,
         public coeff_hierachique?: String,
         public formation?: Diplome,
-        public tuteur_id?: User,
+        public tuteur_id?: Tuteur,
         public code_commercial?: string,
     ) { }
 

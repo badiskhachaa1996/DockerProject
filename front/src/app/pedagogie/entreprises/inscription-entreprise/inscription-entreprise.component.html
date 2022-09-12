@@ -360,7 +360,7 @@ Formation suivie :
                             <div class="field col-3 md:col-2">
                                 <label For="indicatif">Indicatif<span style="color: red;">*
                                     </span></label>
-                                <input pInputText id="indicatif" type="number" placeholder="indicatif du dirigeant"
+                                <input pInputText id="indicatif" type="number" placeholder="+01"
                                     formControlName="indicatif" />
                                 <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
                                     <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* Le
@@ -370,7 +370,7 @@ Formation suivie :
                             <div class="field col-9 md:col-4">
                                 <label For="phone">Téléphone <small>(dirigeant)</small> <span style="color: red;">*
                                     </span></label>
-                                <input pInputText id="phone" type="tel" placeholder="télephone du dirigeant"
+                                <input pInputText id="phone" type="tel" placeholder="0188880050"
                                     formControlName="phone" />
                                 <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
                                     <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le
@@ -382,7 +382,7 @@ Formation suivie :
                                         style="color: red;">*
                                     </span></label>
                                 <input pInputText id="indicatif_whatsapp" type="number"
-                                    placeholder="indicatif_whatsapp du dirigeant"
+                                    placeholder="+01"
                                     formControlName="indicatif_whatsapp" />
                                 <div
                                     *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
@@ -395,7 +395,7 @@ Formation suivie :
                                 <label For="numero_whatsapp">Numéro<small>(WhatsApp)</small><span style="color: red;">*
                                     </span></label>
 
-                                <input pInputText id="numero_whatsapp" type="tel" placeholder="numero whatsapp "
+                                <input pInputText id="numero_whatsapp" type="tel" placeholder="0770101090 "
                                     formControlName="numero_whatsapp" />
                                 <div
                                     *ngIf="numero_whatsapp.invalid && (numero_whatsapp.touched || numero_whatsapp.dirty)">
@@ -460,7 +460,7 @@ Formation suivie :
                             <div class="field col-3 md:col-2">
                                 <label For="indicatif">Indicatif<span style="color: red;">*
                                     </span></label>
-                                <input pInputText id="indicatif_t1" type="number" placeholder="indicatif "
+                                <input pInputText id="indicatif_t1" type="number" placeholder="+33 "
                                     formControlName="indicatif_t1" />
                                 <div *ngIf="indicatif_t1.invalid && (indicatif_t1.touched || indicatif_t1.dirty)">
                                     <span style="color: red;" class="error" *ngIf="indicatif_t1.errors?.required">*
@@ -472,7 +472,7 @@ Formation suivie :
                             <div class="field col-9 md:col-4">
                                 <label For="phone_t1">Téléphone du tuteur<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="phone_t1" type="tel" placeholder="téléphone du tuteur"
+                                <input pInputText id="phone_t1" type="tel" placeholder="0125252525"
                                     formControlName="phone_t1" />
                                 <div *ngIf="phone_t1.invalid && (phone_t1.touched || phone_t1.dirty)">
                                     <span style="color: red;" class="error" *ngIf="phone_t1.errors?.required">* Le
@@ -622,7 +622,7 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="classification">Classification<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="classification" type="text" placeholder="Classification"
+                                <input pInputText id="classification" type="text" placeholder="Classe A"
                                     formControlName="classification" />
                                 <div *ngIf="classification.invalid && (classification.touched || classification.dirty)">
                                     <span style="color: red;" class="error" *ngIf="classification.errors?.required">*
@@ -646,7 +646,7 @@ Formation suivie :
                             <div class="field col-12 md:col-6">
                                 <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
                                     </span></label>
-                                <input pInputText id="coeff_hier" type="text" placeholder="Coefficient hiérarchique"
+                                <input pInputText id="coeff_hier" type="text" placeholder="5.2"
                                     formControlName="coeff_hier" />
                                 <div *ngIf="coeff_hier.invalid && (coeff_hier.touched || coeff_hier.dirty)">
                                     <span style="color: red;" class="error" *ngIf="coeff_hier.errors?.required">*

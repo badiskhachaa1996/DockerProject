@@ -51,7 +51,7 @@ export class NotesComponent implements OnInit {
   examens: Examen[] = [];
   dropdownExamen: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
 
-  dropdownClasse: any[] = [{ libelle: 'Toutes les classes', value: null }];
+  dropdownClasse: any[] = [{ libelle: 'Toutes les groupes', value: null }];
   filterCampus: any[] = [
     { label: "Tous les campus", value: null }
   ]

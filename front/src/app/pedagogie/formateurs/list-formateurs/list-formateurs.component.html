@@ -6,7 +6,12 @@
 			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;"
 				(click)="showFormUpdateFormateur = false;" aria-hidden="true">
 			</i>
-			<h4 style="text-align: center;">Modifier un formateur </h4>
+			<h3 *ngIf="idFormateurToUpdate && userList[idFormateurToUpdate] && userList[idFormateurToUpdate].firstname"
+				class="text-center" style="font-weight: bold;">Modification de
+				: {{
+				userList[idFormateurToUpdate].firstname }} {{
+				userList[idFormateurToUpdate].lastname | uppercase }}
+			</h3>
 			<p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
 					style="color: red;"> * </span> sont obligatoires</p>
 
@@ -168,13 +173,13 @@
 					</p-tabView>
 				</div>
 
-				<div class="field col-12 md:col-6"
+				<div class="field col-12 md:col-4"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
-					<input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
+					<input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
 						formControlName="taux_h" />
 				</div>
-				<div class="field col-12 md:col-6"
+				<div class="field col-12 md:col-4"
 					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
 					<label For="cout_journalier">Coût journalier<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
@@ -323,8 +328,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;">
-							{{userList[formateur._id].lastname | titlecase}}
-							{{userList[formateur._id].firstname | titlecase | uppercase}}
+							{{userList[formateur._id].lastname | uppercase}}
+							{{userList[formateur._id].firstname | titlecase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 

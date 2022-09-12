@@ -4,7 +4,7 @@ export class Formateur {
         public _id?: string,
         public user_id?: string,
         public type_contrat?: string,
-        public taux_h?: number,
+        public taux_h?: string,
         public taux_j?: number,
         public prestataire_id?: string,
         public volume_h?: any,
