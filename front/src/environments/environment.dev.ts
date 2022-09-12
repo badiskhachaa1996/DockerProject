@@ -168,13 +168,12 @@ export const environment = {
   ],
 
   profil: [
-    {  value: 'Salarié', viewValue: 'Salarié' },
-    {  value: 'Apprenti', viewValue: 'Apprenti' },
-    { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi' },
-    {  value: 'Paticulier', viewValue: 'Paticulier' },
-    {  value: 'Autre', viewValue: 'Autre' },
-    {  value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
-    {  value: 'Contrat d\'apprentissage', viewValue: 'Contrat d\'apprentissage' },
+    { value: 'Salarié', viewValue: 'Salarié' },
+    { value: 'Apprenti', viewValue: 'Apprenti' },
+    { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi'},
+    { value: 'Paticulier', viewValue: 'Paticulier'},
+    { value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
+    { value: 'Autre', viewValue: 'Autre' },
   ],
 
   statut: [
