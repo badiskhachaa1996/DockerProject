@@ -98,6 +98,17 @@ app.get('/getAllByEntrepriseId/:entrepriseId', (req, res, next) => {
 
 });
 
+//Recuperation de tous les tuteur selon l'id d'une entreprise
+app.get('/getByEntrepriseId/:entrepriseId', (req, res, next) => {
+    Tuteur.findOne({ entreprise_id: req.params.entrepriseId }).populate('user_id')
+        .then((TuteurFromdb) => { res.status(200).send(TuteurFromdb) })
+        .catch(error => {
+            console.error(error)
+            res.status(400).send(error)
+        });
+
+});
+
 //Recuperation des données d'un tuteur
 app.get('/getById/:id', (req, res, next) => {
     Tuteur.findOne({ _id: req.params.id }).populate('user_id')

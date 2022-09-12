@@ -348,6 +348,20 @@ app.get("/getByDirecteurId/:id", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
 })
 
+//récupération d'un contrat d'alternance en fonction de l'id étudiant
+app.get("/getByEtudiantId/:id", (req, res, next) => {
+    CAlternance.findOne({ alternant_id: req.params.id })
+        .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
+})
+app.get("/getByEtudiantIdPopolate/:id", (req, res, next) => {
+    CAlternance.findOne({ alternant_id: req.params.id }).populate({ path: 'tuteur_id' })
+        .then((ContratDetails) => {
+            console.log(ContratDetails)
+            res.status(200).send(ContratDetails);
+        })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
+})
 
 //Modification d'une entreprise
 app.put("/update", (req, res, next) => {

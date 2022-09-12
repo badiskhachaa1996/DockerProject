@@ -366,13 +366,6 @@ export class AddEtudiantComponent implements OnInit {
     let filiere = this.formAddEtudiant.get("filiere")?.value;
 
 
-    this.entrepriseService.getById(entreprise_id).subscribe(
-      ((response) => {
-        this.entrepriseEtu = response
-
-    this.tuteurService.getById(id_tuteur).subscribe(
-      ((response) => {
-        this.tuteurEtu = response
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
@@ -436,7 +429,7 @@ export class AddEtudiantComponent implements OnInit {
       filiere,//filiere
       false);
 
-   
+    let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value.value;
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
@@ -449,58 +442,72 @@ export class AddEtudiantComponent implements OnInit {
   
         this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-
- 
-
-    let contratAlternance = new ContratAlternance(
-      debut_contrat,
-      fin_contrat,
-      horaire,
-      this.alternant_id,
-      intitule,
-      classification,
-      niv,
-      coeff_hier,
-      form,
-      id_tuteur,
-      code_commercial
-    );
-
-    console.log(contratAlternance)
-
-    let t1 = this.tuteurEtu;
-    let entreprise = this.entrepriseEtu;
-    let CEO = this.entrepriseEtu.Directeur_id;
     
+    if(isAlternant){
+      let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value.value;
+      let tuteurId = this.formAddEtudiant.get('id_tuteur')?.value.value;
 
-    let objectTosend = { contratAlternance, t1, entreprise }
-    
-    if(objectTosend){
-      this.entrepriseService.createContratAlternance(objectTosend).subscribe(
-        ((responseContrat) => {
-          this.messageService.add({ severity: 'success', summary: 'Contrat ajouté' });
+      this.entrepriseService.getById(entreprise_id).subscribe(
+        ((response) => {
+          this.entrepriseEtu = response
+  
+      this.tuteurService.getById(id_tuteur).subscribe(
+        ((response) => {
+          this.tuteurEtu = response
+   
+  
+      let contratAlternance = new ContratAlternance(
+        null,
+        debut_contrat,
+        fin_contrat,
+        horaire,
+        this.alternant_id,
+        intitule,
+        classification,
+        niv,
+        coeff_hier,
+        form,
+        id_tuteur,
+        code_commercial
+      );
+  
+      let t1 = this.tuteurEtu;
+      let entreprise = this.entrepriseEtu;
+      let CEO = this.entrepriseEtu.Directeur_id;
+      
+  
+      let objectTosend = { contratAlternance, t1, entreprise }
+      
+      if(objectTosend){
+        this.entrepriseService.createContratAlternance(objectTosend).subscribe(
+          ((responseContrat) => {
+            this.messageService.add({ severity: 'success', summary: 'Contrat ajouté' });
+          })
+        ),
+        ((error) => {
+          console.error(error)
+          this.messageService.add({ severity: 'error', summary: error.error });
         })
-      ),
-      ((error) => {
-        console.error(error)
-        this.messageService.add({ severity: 'error', summary: error.error });
-      })
+      }
+  
+    }),
+    ((error) => {
+      console.error(error)
+      this.messageService.add({ severity: 'error', summary: error.error });
+    })
+  );
+  
+  
+    })
+    )
     }
 
-  }),
-  ((error) => {
-    console.error(error)
-    this.messageService.add({ severity: 'error', summary: error.error });
-  })
-);
+    })
+    )
+  }
 
-
-  })
-  )
-  })
-  )
-
-}
+  
+    
 
   isMinorFC() {
     // console.log("IW AS HERE")
