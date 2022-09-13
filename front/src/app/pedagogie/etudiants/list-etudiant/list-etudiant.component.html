@@ -423,19 +423,21 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
+                        <th pSortableColumn="customid">ID <p-sortIcon field="customid"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nom_prenom"> Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="statut"> Statut Dossier<p-sortIcon field="statut"></p-sortIcon>
+                        <th pSortableColumn="statut">Statut Dossier<p-sortIcon field="statut"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="groupe"> Groupe <p-sortIcon field="groupe"></p-sortIcon>
+                        <th pSortableColumn="groupe">Groupe <p-sortIcon field="groupe"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="campus_id"> Campus <p-sortIcon field="campus_id"></p-sortIcon>
+                        <th pSortableColumn="campus_id">Campus <p-sortIcon field="campus_id"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="email"> Email <p-sortIcon field="email"></p-sortIcon>
+                        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
+                        <th pSortableColumn="email">Email perso<p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nationalite">Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
                         </th>
                         <th>Action </th>
                     </tr>
@@ -457,7 +459,11 @@
                             etudiant.date_dernier_modif_dossier | date : 'dd/MM hh:mm' }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.classe_id?.nom }}</td>
                         <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
-                        <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
+                        <td style="min-width: 10rem;">
+                            <span *ngIf="etudiant.user_id.email">{{ etudiant.user_id.email }}</span>
+                            <span *ngIf="!etudiant.user_id.email" style="color: red;">X</span>
+                        </td>
+                        <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
                         <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                         <td>
                             <i style="margin-left: 2%;" class="pi pi-pencil"
