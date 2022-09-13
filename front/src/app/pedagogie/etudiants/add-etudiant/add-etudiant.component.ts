@@ -453,7 +453,7 @@ export class AddEtudiantComponent implements OnInit {
  
 
     let contratAlternance = new ContratAlternance(
-      debut_contrat,
+      null,debut_contrat,
       fin_contrat,
       horaire,
       this.alternant_id,
@@ -463,7 +463,7 @@ export class AddEtudiantComponent implements OnInit {
       coeff_hier,
       form,
       id_tuteur,
-      code_commercial
+      code_commercial,'créé'
     );
 
     console.log(contratAlternance)

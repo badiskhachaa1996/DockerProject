@@ -381,8 +381,7 @@ Formation suivie :
                                 <label For="indicatif_whatsapp">indicatif <small>(WhatsApp)</small><span
                                         style="color: red;">*
                                     </span></label>
-                                <input pInputText id="indicatif_whatsapp" type="number"
-                                    placeholder="+01"
+                                <input pInputText id="indicatif_whatsapp" type="number" placeholder="+01"
                                     formControlName="indicatif_whatsapp" />
                                 <div
                                     *ngIf="indicatif_whatsapp.invalid && (indicatif_whatsapp.touched || indicatif_whatsapp.dirty)">
@@ -561,6 +560,14 @@ Formation suivie :
                 <p-fieldset legend="Informations sur le contrat" [style]="{'color': 'red', 'font-weight': 'bold'}">
                     <div style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-12">
+                                <label For="TypeCOntrat">Type de contrat<span style="color: red;">
+                                    </span></label>
+                                <p-selectButton optionValue="value" formControlName="professionnalisation"
+                                    (onChange)="afficherProsChamp()"
+                                    [options]="[{label:'Apprentissage',value:false},{label:'Professionnalisation',value:true}]">
+                                </p-selectButton>
+                            </div>
                             <div class="field col-12 md:col-6">
                                 <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                     </span></label>
@@ -619,7 +626,8 @@ Formation suivie :
                                         champs est obligatoire.</span>
                                 </div>
                             </div>
-                            <div class="field col-12 md:col-6">
+
+                            <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
                                 <label For="classification">Classification<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="classification" type="text" placeholder="Classe A"
@@ -632,7 +640,7 @@ Formation suivie :
                             </div>
 
 
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
                                 <label For="niv">Niveau de la formation<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="niv" type="text" placeholder="Bac+3" formControlName="niv" />
@@ -643,7 +651,7 @@ Formation suivie :
                                 </div>
                             </div>
 
-                            <div class="field col-12 md:col-6">
+                            <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
                                 <label For="coeff_hier">Coefficient hiérarchique<span style="color: red;"> *
                                     </span></label>
                                 <input pInputText id="coeff_hier" type="text" placeholder="5.2"
@@ -683,8 +691,8 @@ Formation suivie :
                         </div>
                         <div>
                             <button pButton type="button" label="Suivant" style="float: right;"
-                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||  classification.invalid || 
-                                alternantValidite ||  intitule.invalid || niv.invalid ||  coeff_hier.invalid  ||  form.invalid ||  code_commercial.invalid "
+                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||
+                                alternantValidite ||  intitule.invalid   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)"
                                 (click)="nextPage();"></button>
 
                         </div>
