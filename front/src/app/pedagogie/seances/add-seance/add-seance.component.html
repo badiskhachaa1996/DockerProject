@@ -47,7 +47,7 @@
                 <div class="field col-12 md:col-6" *ngIf="type!='classe'">
                     <label>Nom du groupe <span style="color: red;"> * </span></label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse" (onChange)="changeGroupe($event.value)"
-                        defaultLabel="Selection des classes" optionLabel="nom"></p-multiSelect>
+                        defaultLabel="Selection des groupes" optionLabel="nom"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
@@ -91,7 +91,7 @@
                         class="form-control col-8">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <small>(Obligatoire) <span style="color: red;"> * </span></small>
+                    <label>Type de séance <span style="color: red;"> * </span></label>
                     <p-selectButton
                         [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
                         formControlName="isPresentiel"></p-selectButton>
@@ -102,7 +102,6 @@
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 
                 </div>
-                {{isPresentiel.value | json}}
                 <div class="field col-12 md:col-12" *ngIf="isPresentiel.value!='Distanciel' && salleNames.length!=0">
                     <label>Salle Présentiel:</label><br>
                     <p-dropdown formControlName="salle_name" [options]="salleNames">

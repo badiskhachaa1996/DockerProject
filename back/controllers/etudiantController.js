@@ -56,6 +56,7 @@ app.post("/create", (req, res, next) => {
             indicatif: userData.indicatif,
             phone: userData.phone,
             email: userData.email,
+            email_perso: userData.email_perso,
             //password: bcrypt.hashSync(userData.password, 8),
             role: userData.role,
             service_id: userData.service_id,
@@ -71,7 +72,7 @@ app.post("/create", (req, res, next) => {
         });
 
     //Verification de l'existence de l'Utilisateur
-    User.findOne({ email: userData.email })
+    User.findOne({ email_perso: userData.email_perso })
         .then((userFromDb) => {
             if (userFromDb) {
                 Etudiant.findOne({ user_id: userFromDb._id })
