@@ -203,6 +203,7 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
+import { ListeComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-comptes/liste-comptes.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -391,7 +392,8 @@ import { CreateAccountComponent } from './support/create-account/create-account.
     ListEventsComponent,
     ListeContratsComponent,
     ArrToStrPipe,
-    CreateAccountComponent
+    CreateAccountComponent,
+    ListeComptesComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -164,6 +164,24 @@ export class AppMenuComponent implements OnInit {
             items: [
                 { label: 'Etudiants en attente de leur compte IMS', icon: 'pi pi-user-plus', routerLink: ['/assign-ims'] },
             ]
+             
+        },
+        {
+            label: 'Gestion bancaires',
+            items: [
+                {
+                    label: ' Gestion des comptes', icon: 'pi pi-wallet',
+                    items: [
+                        //{ label: 'Compte légal', icon: 'pi pi-check-circle', },
+                        //{ label: 'Bénéficiaire effectif ultime', icon: 'pi pi-users',  },
+                        { label: 'Liste des comptes', icon: ' pi pi-sort-alpha-down', routerLink: ['/liste-comptes-bancaires'] },
+                    ]
+                },
+                {
+                    label: 'Gestions des transaction', icon: 'pi pi-directions ',
+                },
+            ]
+            
         },
     ];
     model: any[];
