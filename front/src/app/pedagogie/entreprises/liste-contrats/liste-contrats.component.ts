@@ -59,8 +59,8 @@ export class ListeContratsComponent implements OnInit {
     return this.RegisterNewCA.get('entreprise_id').value;
   }
   get tuteur_id() { console.log("2"); return this.RegisterNewCA.get('tuteur_id').value; }
-  get debut_contrat() { console.log("3"); return this.RegisterNewCA.get('debut_contrat').value; }
-  get fin_contrat() { console.log("4"); return this.RegisterNewCA.get('fin_contrat').value; }
+  get debut_contrat() { console.log("3"); return this.RegisterNewCA.get('debut_contrat'); }
+  get fin_contrat() { console.log("4"); return this.RegisterNewCA.get('fin_contrat'); }
   get horaire() { console.log("5"); return this.RegisterNewCA.get('horaire').value; }
   get alternant() { console.log("6"); return this.RegisterNewCA.get('alternant').value; }
 
@@ -239,7 +239,7 @@ export class ListeContratsComponent implements OnInit {
   }
   createNewCA() {
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
     console.log(this.form)
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
       console.log(resData)
