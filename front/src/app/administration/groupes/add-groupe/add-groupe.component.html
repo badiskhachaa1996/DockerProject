@@ -41,7 +41,10 @@
                     <label For="libelle">Diplôme <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"></p-dropdown>
                 </div>
-                
+                <div class="field col-12 md:col-6">
+                    <label For="annee">Année <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
+                </div>
                 <div class="field col-12">
                     <label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
