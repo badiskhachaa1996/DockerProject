@@ -30,10 +30,16 @@
             </div>
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddClasse" (ngSubmit)="saveClasse()">
+                <div class="field col-12">
+                    <label for="campus">Campus</label>
+                    <p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
+                                emptyFilterMessage="Pas de campus trouvé"
+                                filterPlaceholder="Choissisez un campus" filter="true"></p-dropdown>
+                </div>
+
                 <div class="field col-12 md:col-6">
                     <label For="libelle">Diplôme <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"></p-dropdown>
-
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="annee">Année <span style="color: red;"> * </span></label>
