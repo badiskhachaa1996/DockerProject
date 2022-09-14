@@ -42,6 +42,15 @@ export class ListGroupeComponent implements OnInit {
     { libelle: 3 },
   ];
 
+  dropdownGroupe: any = [
+    { libelle: ' ' },
+    { libelle: 'A' },
+    { libelle: 'B' },
+    { libelle: 'C' },
+    { libelle: 'D' },
+    { libelle: 'E' },
+  ];
+
   dropdownCampus: any = [];
 
   campus: Campus[] = [];
@@ -125,17 +134,17 @@ export class ListGroupeComponent implements OnInit {
 
   onInitFormUpdateClasse() {
     this.formUpdateClasse = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      diplome_id: ['', Validators.required],
+      libelle: [''],
+      diplome_id: [''],
       // abbrv: ['', Validators.required],
-      campus_id: ['', Validators.required],
+      campus_id: [''],
       annee: [this.dropdownAnnee[0]]
     });
   }
 
   modifyClasse() {
     //Recuperation des données du formulaire
-    let libelle = this.formUpdateClasse.get('libelle')?.value;
+    let libelle = this.formUpdateClasse.get('libelle')?.value.libelle;
     let diplome_id = this.formUpdateClasse.get('diplome_id')?.value.value;
     let annee = this.formUpdateClasse.get('annee')?.value.libelle;
     let campus_id = this.formUpdateClasse.get('campus_id')?.value.value;
@@ -151,6 +160,13 @@ export class ListGroupeComponent implements OnInit {
             this.classes[i] = response
         })
 
+        this.classeService.getAllPopulate().subscribe(
+          ((response) => {
+            this.classes = response;
+          }),
+          ((error) => { console.error(error); })
+        );
+
         this.showFormUpdateClasse = false;
         this.formUpdateClasse.reset();
       }),
@@ -164,7 +180,7 @@ export class ListGroupeComponent implements OnInit {
     this.classeService.get(this.idClasseToUpdate).subscribe(
       ((response) => {
         this.classeToUpdate = response;
-        this.formUpdateClasse.patchValue({ libelle: this.classeToUpdate.nom, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
+        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: {libelle: this.classeToUpdate.nom}, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
       }),
       ((error) => { console.error(error); })
     );

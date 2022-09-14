@@ -14,7 +14,7 @@
                                 filterPlaceholder="Choissisez un campus" filter="true"></p-dropdown>
                 </div>
 
-				<div class="field col-12">
+				<div class="field col-12 md:col-6">
 					<label For="libelle">Diplôme</label>
 					<p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"
 						(onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
@@ -23,17 +23,10 @@
                     <label For="annee">Année <span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
                 </div>
-				<div class="field col-12 md:col-6">
-					<label For="nom_groupe">Nom du groupe</label>
-					<input pInputText id="nom_groupe" placeholder="Nom du groupe" type="text"
-						formControlName="libelle" />
-
-					<div *ngIf="libelle_m.invalid && (libelle_m.touched || libelle_m.dirty)">
-						<span *ngIf="libelle_m.errors?.pattern" style="color: red;">
-							Le nom du groupe n'est pas dans le bon format
-						</span>
-					</div>
-				</div>
+				<div class="field col-12">
+                    <label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
+                </div>
 				
 				
 				<div style="justify-content: right;">
@@ -101,7 +94,7 @@
 				<ng-template pTemplate="body" let-rowData>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{rowData.nom}}
+							<span *ngIf="rowData.nom == ' '" style="color: red;">Groupe unique</span><span *ngIf="rowData.nom != ''">{{rowData.nom}}</span>
 						</td>
 						<td style="min-width: 12rem;">
 							{{ rowData.diplome_id.titre }}

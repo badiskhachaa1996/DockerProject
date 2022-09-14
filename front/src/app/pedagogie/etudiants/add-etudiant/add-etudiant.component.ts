@@ -289,7 +289,7 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      '',
+      ' ',
       email,
       '',
       'user',
