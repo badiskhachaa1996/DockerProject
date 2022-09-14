@@ -56,7 +56,7 @@ export class ListeContratsComponent implements OnInit {
 
   get entreprise_id() {
     console.log("1");
-    return this.RegisterNewCA.get('entreprise_id').value;
+    return this.RegisterNewCA.get('entreprise_id');
   }
   get tuteur_id() { console.log("2"); return this.RegisterNewCA.get('tuteur_id').value; }
   get debut_contrat() { console.log("3"); return this.RegisterNewCA.get('debut_contrat'); }
@@ -224,7 +224,7 @@ export class ListeContratsComponent implements OnInit {
   loadTuteur() {
     this.dropdownTuteurList = []
 
-    this.tuteurService.getAllByEntrepriseId(this.entreprise_id._id).subscribe(listTuteur => {
+    this.tuteurService.getAllByEntrepriseId(this.entreprise_id.value._id).subscribe(listTuteur => {
       console.log("*************")
       console.log(listTuteur)
       console.log("*************")
