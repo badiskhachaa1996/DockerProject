@@ -25,8 +25,23 @@ export class AddGroupeComponent implements OnInit {
 
   diplomes: Diplome[] = [];
   dropdownDiplome: any[] = [{ libelle: "Touts les diplômes", value: null }];
-  token;
 
+  dropdownAnnee: any = [
+    { libelle: 1 },
+    { libelle: 2 },
+    { libelle: 3 },
+  ];
+
+  dropdownGroupe: any = [
+    { libelle: ' ' },
+    { libelle: 'A' },
+    { libelle: 'B' },
+    { libelle: 'C' },
+    { libelle: 'D' },
+    { libelle: 'E' },
+  ];
+
+  token;
 
   constructor(private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
     , private router: Router, private EtudiantService: EtudiantService) { }
@@ -76,19 +91,20 @@ export class AddGroupeComponent implements OnInit {
 
   onInitFormAddClasse() {
     this.formAddClasse = this.formBuilder.group({
-      libelle: ['', [Validators.required]],
+      libelle: [this.dropdownGroupe[1], [Validators.required]],
       diplome_id: ['', Validators.required],
-      abbrv: ['', Validators.required],
-      annee: ['']
+      //abbrv: ['', Validators.required],
+      annee: [this.dropdownAnnee[0]]
     });
   }
 
   saveClasse() {
     //Recuperation des données du formulaire
-    let libelle = this.formAddClasse.get('libelle')?.value;
+    let libelle = this.formAddClasse.get('libelle')?.value.libelle;
     let diplome_id = this.formAddClasse.get('diplome_id')?.value.value;
-    let abbrv = this.formAddClasse.get('abbrv')?.value;
-    let annee = this.formAddClasse.get('annee')?.value;
+    let annee = this.formAddClasse.get('annee')?.value.libelle;
+
+    let abbrv = `${this.formAddClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle}`;
 
     let classe = new Classe(null, diplome_id, libelle, true, abbrv, annee);
 
@@ -108,11 +124,5 @@ export class AddGroupeComponent implements OnInit {
 
   //Partie gestion des erreurs sur le formulaire 
   get libelle() { return this.formAddClasse.get('libelle'); }
-
-  chooseDiplome(event, type) {
-    if (type == "Add") {
-      this.formAddClasse.patchValue({ libelle: event.libelle })
-    }
-  }
 
 }
