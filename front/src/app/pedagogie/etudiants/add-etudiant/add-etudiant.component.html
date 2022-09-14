@@ -66,7 +66,7 @@
                 </div>
 
                 <div class="field col-4 md:col-2">
-                    <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                    <label For="indicatif">Indicatif </label>
                     <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
 
                     <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="field col-8 md:col-4">
-                    <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
+                    <label For="telephone">Numéro de téléphone </label>
                     <input pInputText id="telephone" type="text" placeholder="Entrez votre numéro de téléphone"
                         formControlName="phone" />
 
@@ -101,7 +101,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="nom_rue">Nom de la rue <span style="color: red;"> * </span></label>
+                    <label For="nom_rue">Nom de la rue </label>
                     <input pInputText id="nom_rue" type="text" placeholder="Nom de votre rue"
                         formControlName="rue_adresse" />
 
@@ -113,19 +113,19 @@
                 </div>
 
                 <div class="field col-6 md:col-3">
-                    <label For="numero_rue">Numéro de la rue <span style="color: red;"> * </span></label>
+                    <label For="numero_rue">Numéro de la rue </label>
                     <input pInputText id="numero_rue" type="text" placeholder="Numéro de votre rue"
                         formControlName="numero_adresse" />
                 </div>
 
                 <div class="field col-6 md:col-3">
-                    <label For="code_postale">Code postale<span style="color: red;"> * </span></label>
+                    <label For="code_postale">Code postale</label>
                     <input pInputText id="code_postale" type="text" placeholder="Code postale"
                         formControlName="postal_adresse" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="ville">Ville<span style="color: red;"> * </span></label>
+                    <label For="ville">Ville</label>
                     <input pInputText id="ville" type="text" placeholder="Ville" formControlName="ville_adresse" />
 
                     <!-- <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
@@ -136,14 +136,14 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="ville">Pays<span style="color: red;"> * </span></label>
+                    <label For="ville">Pays</label>
                     <p-dropdown [options]="paysList" optionLabel="value" optionDisabled="actif"
                         formControlName="pays_adresse"></p-dropdown>
-                    <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
+                    <!-- <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                         <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
                             Le nom du pays n'est pas dans le bon format
                         </span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="field col-12 md:col-6">
