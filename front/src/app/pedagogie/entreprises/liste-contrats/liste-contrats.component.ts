@@ -54,10 +54,13 @@ export class ListeContratsComponent implements OnInit {
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService, private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
 
-  get entreprise_id() { return this.RegisterNewCA.get('entreprise_id').value; }
+  get entreprise_id() {
+    console.log("1");
+    return this.RegisterNewCA.get('entreprise_id');
+  }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
-  get debut_contrat() { return this.RegisterNewCA.get('debut_contrat').value; }
-  get fin_contrat() { return this.RegisterNewCA.get('fin_contrat').value; }
+  get debut_contrat() { return this.RegisterNewCA.get('debut_contrat'); }
+  get fin_contrat() { return this.RegisterNewCA.get('fin_contrat'); }
   get horaire() { return this.RegisterNewCA.get('horaire').value; }
   get alternant() { return this.RegisterNewCA.get('alternant').value; }
 
@@ -68,6 +71,7 @@ export class ListeContratsComponent implements OnInit {
   get coeff_hier() { return this.RegisterNewCA.get('coeff_hier').value; }
   get code_commercial() { return this.RegisterNewCA.get('code_commercial').value; }
   get form() { return this.RegisterNewCA.get('form').value; }
+  get professionnalisation() { return this.RegisterNewCA.get('professionnalisation'); }
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -189,6 +193,7 @@ export class ListeContratsComponent implements OnInit {
     this.router.navigate(["details/" + alternant_id]);
   }
   ShowAddNewCA() {
+    this.onInitRegisterNewCA()
     this.formAddNewCA = true
   }
   afficherProsChamp() {
@@ -205,7 +210,7 @@ export class ListeContratsComponent implements OnInit {
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
       alternant: new FormControl('', Validators.required),
-      intitule: new FormControl('', Validators.required),
+      intitule: new FormControl(''),
       classification: new FormControl(''),
       niv: new FormControl(''),
       coeff_hier: new FormControl(''),
@@ -220,7 +225,7 @@ export class ListeContratsComponent implements OnInit {
   loadTuteur() {
     this.dropdownTuteurList = []
 
-    this.tuteurService.getAllByEntrepriseId(this.entreprise_id._id).subscribe(listTuteur => {
+    this.tuteurService.getAllByEntrepriseId(this.entreprise_id.value._id).subscribe(listTuteur => {
       console.log("*************")
       console.log(listTuteur)
       console.log("*************")
@@ -235,10 +240,14 @@ export class ListeContratsComponent implements OnInit {
   }
   createNewCA() {
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire, this.alternant._id, this.intitule, this.classification,this.niv , this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
     console.log(this.form)
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
       console.log(resData)
+
+
+      this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
+      this.formAddNewCA = false
 
     }, (error => { console.log(error) }))
   }
