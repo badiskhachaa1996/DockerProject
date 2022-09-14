@@ -68,6 +68,7 @@ export class ListeContratsComponent implements OnInit {
   get coeff_hier() { return this.RegisterNewCA.get('coeff_hier').value; }
   get code_commercial() { return this.RegisterNewCA.get('code_commercial').value; }
   get form() { return this.RegisterNewCA.get('form').value; }
+  get professionnalisation() { return this.RegisterNewCA.get('professionnalisation').value; }
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -205,7 +206,7 @@ export class ListeContratsComponent implements OnInit {
       fin_contrat: new FormControl('', Validators.required),
       horaire: new FormControl(''),
       alternant: new FormControl('', Validators.required),
-      intitule: new FormControl('', Validators.required),
+      intitule: new FormControl(''),
       classification: new FormControl(''),
       niv: new FormControl(''),
       coeff_hier: new FormControl(''),
@@ -235,10 +236,14 @@ export class ListeContratsComponent implements OnInit {
   }
   createNewCA() {
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire, this.alternant._id, this.intitule, this.classification,this.niv , this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
+    let CA_Object = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
     console.log(this.form)
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
       console.log(resData)
+
+      
+      this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
+  this.formAddNewCA=false
 
     }, (error => { console.log(error) }))
   }
