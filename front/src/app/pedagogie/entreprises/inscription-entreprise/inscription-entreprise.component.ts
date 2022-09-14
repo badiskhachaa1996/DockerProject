@@ -37,6 +37,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   ];
 
   MessageFormSubmit: boolean;
+  Professionnalisation: boolean;
   listAlternant = []
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
@@ -57,7 +58,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
   listAlternantDD: any = []
   formationList = []
 
-  products: any[];
+  
 
 
   constructor(private servService: ServService, private NotifService: NotificationService, private formationService: DiplomeService, private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private messageService: MessageService,
@@ -206,12 +207,12 @@ export class InscriptionEntrepriseComponent implements OnInit {
       alternant: new FormControl('', Validators.required),
       intitule: new FormControl('', Validators.required),
       classification: new FormControl(''),
-      niv: new FormControl('', Validators.required),
+      niv: new FormControl(''),
       coeff_hier: new FormControl(''),
       form: new FormControl('', Validators.required),
       code_commercial: new FormControl(this.Tok_code_commercial),
 
-
+      professionnalisation: new FormControl(''),
       // ****** Informations Données perso ******
       donneePerso: new FormControl(''),
 
@@ -260,6 +261,11 @@ export class InscriptionEntrepriseComponent implements OnInit {
       })
   }
 
+  afficherProsChamp() {
+
+    this.Professionnalisation = this.RegisterForm.value.professionnalisation
+    console.log(this.Professionnalisation)
+  }
   generatePassword() {
     return "mot dep asse"
   }
@@ -360,13 +366,13 @@ export class InscriptionEntrepriseComponent implements OnInit {
       null,
       false
     );
-    let TuteurObject = new Tuteur(null,null,this.fonction_t1.value,this.temps_fonction_t1.value,this.niv_formation_t1.value,this.date_naissance_t1,null)
+    let TuteurObject = new Tuteur(null, null, this.fonction_t1.value, this.temps_fonction_t1.value, this.niv_formation_t1.value, this.date_naissance_t1, null)
 
 
-    let contratAlternance = new ContratAlternance(null,this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant._id, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value)
-  console.log(contratAlternance)
+    let contratAlternance = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire.value, this.alternant._id, this.intitule.value, this.classification.value, this.niv.value, this.coeff_hier.value, this.form.value, null, this.code_commercial.value,'créé')
+    console.log(contratAlternance)
     //Creation de lobjet a envoyer dans le back 
-    let ObjetToSend = { CEO, entreprise, t1, contratAlternance,TuteurObject }
+    let ObjetToSend = { CEO, entreprise, t1, contratAlternance, TuteurObject }
     this.entrepriseService.createNewContrat(ObjetToSend).subscribe(
       ((response) => {
         if (response) {

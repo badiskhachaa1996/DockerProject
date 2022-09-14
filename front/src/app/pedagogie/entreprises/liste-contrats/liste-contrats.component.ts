@@ -9,6 +9,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DiplomeService } from 'src/app/services/diplome.service';
 
 
 @Component({
@@ -20,20 +22,59 @@ import { Tuteur } from 'src/app/models/Tuteur';
 export class ListeContratsComponent implements OnInit {
 
   token;
+  Professionnalisation: boolean;
   ListeContrats: ContratAlternance[] = []
   tuteurInfoPerso: any;
+  EntreprisesName: any[] = [];
+  maxYear = new Date().getFullYear() - 16
+  minYear = new Date().getFullYear() - 60
+  rangeYear = this.minYear + ":" + this.maxYear
+  minDateCalendar = new Date("01/01/" + this.minYear)
+  maxDateCalendar = new Date("01/01/" + this.maxYear)
+  maxYearC = new Date().getFullYear() + 4
+  minYearC = new Date().getFullYear() - 1
+  rangeYearC = this.minYear + ":" + this.maxYearC
+  minDateCalendarC = new Date("01/01/" + this.minYearC)
+  maxDateCalendarC = new Date("01/01/" + this.maxYearC)
+  listAlternantDD: any = []
+  formationList = []
+  RegisterNewCA: FormGroup;
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
   ParmTuteur = this.route.snapshot.paramMap.get('idTuteur');
+  formAddNewCA: boolean = false;
+  ConnectedEntreprise: any;
+  EntrepriseList = [];
+  TuteursList=[];
+
+
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router,
-    private authService: AuthService, private tuteurService: TuteurService) { }
+    private authService: AuthService, private tuteurService: TuteurService, private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
 
+  get entreprise_id() { return this.RegisterNewCA.get('entreprise_id').value; }
+  get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
+  get debut_contrat() { return this.RegisterNewCA.get('debut_contrat').value; }
+  get fin_contrat() { return this.RegisterNewCA.get('fin_contrat').value; }
+  get horaire() { return this.RegisterNewCA.get('horaire'); }
+  get alternant() { return this.RegisterNewCA.get('alternant').value; }
+
+  get alternantValidite() { return this.RegisterNewCA.get('alternant').invalid; }
+  get intitule() { return this.RegisterNewCA.get('intitule'); }
+  get classification() { return this.RegisterNewCA.get('classification'); }
+  get niv() { return this.RegisterNewCA.get('niv'); }
+  get coeff_hier() { return this.RegisterNewCA.get('coeff_hier'); }
+  get code_commercial() { return this.RegisterNewCA.get('code_commercial'); }
+  get form() { return this.RegisterNewCA.get('form').value; }
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
     console.log(this.token)
 
-
+    this.entrepriseService.getAll().subscribe(listEntre => {
+    this.EntrepriseList = listEntre;
+  
+    
+   
     //LISTE A AFFICHER POUR LADMIN
     if (this.token.role == "Admin") {
 
@@ -41,6 +82,14 @@ export class ListeContratsComponent implements OnInit {
         console.log(Allcontrats)
         this.ListeContrats = Allcontrats;
 
+        Allcontrats.forEach(cont => {
+          console.log(cont.tuteur_id.entreprise_id)
+          this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
+            console.log(entpName.r_sociale);
+            this.onInitRegisterNewCA();
+            this.EntreprisesName[entpName._id] = entpName
+          })
+        })
       })
 
     }
@@ -49,11 +98,22 @@ export class ListeContratsComponent implements OnInit {
 
       this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
         console.log(entrepriseData)
+
+        this.ConnectedEntreprise = entrepriseData;
+
+        this.tuteurService.getAllByEntrepriseId(this.ConnectedEntreprise._id).subscribe(listTuteur=>{
+        console.log("*************")
+        console.log(listTuteur)
+        console.log("*************")
+          this.TuteursList.push(listTuteur);
+          this.onInitRegisterNewCA();
+        }, (eror) => { console.log(eror) })
+       
         this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(listeData => {
 
           this.ListeContrats = listeData;
           console.log(listeData)
-        })
+        }, (eror) => { console.log(eror) })
       }, (eror) => { console.log(eror) })
 
     }
@@ -87,11 +147,39 @@ export class ListeContratsComponent implements OnInit {
       })
     }
 
-
+  })
   }
   showPresence(alternant_id) {
     console.log(alternant_id)
     this.router.navigate(["details/" + alternant_id]);
+  }
+  ShowAddNewCA() {
+    this.formAddNewCA = true
+  }
+  afficherProsChamp() {
+
+    this.Professionnalisation = this.RegisterNewCA.value.professionnalisation
+    console.log(this.Professionnalisation)
+  }
+  onInitRegisterNewCA() {
+    console.log(this.ConnectedEntreprise)
+    this.RegisterNewCA = this.formBuilder.group({
+      entreprise_id: new FormControl(this.ConnectedEntreprise ? this.ConnectedEntreprise:'', Validators.required),
+      tuteur_id: new FormControl('', Validators.required),
+      debut_contrat: new FormControl('', Validators.required),
+      fin_contrat: new FormControl('', Validators.required),
+      horaire: new FormControl(''),
+      alternant: new FormControl('', Validators.required),
+      intitule: new FormControl('', Validators.required),
+      classification: new FormControl(''),
+      niv: new FormControl(''),
+      coeff_hier: new FormControl(''),
+      form: new FormControl('', Validators.required),
+      code_commercial: new FormControl('', Validators.required),
+
+      professionnalisation: new FormControl(''),
+
+    })
   }
 
 

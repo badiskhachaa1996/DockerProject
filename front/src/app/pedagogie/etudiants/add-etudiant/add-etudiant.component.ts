@@ -160,7 +160,8 @@ export class AddEtudiantComponent implements OnInit {
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
-      email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
+      email: ['', Validators.email],
+      // email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
       pays_adresse: [this.paysList[0], [Validators.required]],
       ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       rue_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
@@ -288,8 +289,8 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      email,
       null,
+      email,
       '',
       'user',
       null,
@@ -352,6 +353,28 @@ export class AddEtudiantComponent implements OnInit {
   
         this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
+
+ 
+
+    let contratAlternance = new ContratAlternance(
+      null,debut_contrat,
+      fin_contrat,
+      horaire,
+      this.alternant_id,
+      intitule,
+      classification,
+      niv,
+      coeff_hier,
+      form,
+      id_tuteur,
+      code_commercial,'créé'
+    );
+
+    console.log(contratAlternance)
+
+    let t1 = this.tuteurEtu;
+    let entreprise = this.entrepriseEtu;
+    let CEO = this.entrepriseEtu.Directeur_id;
     
    
       })

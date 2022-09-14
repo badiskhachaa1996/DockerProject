@@ -120,6 +120,7 @@ export class ListSeancesComponent implements OnInit {
         camp.forEach(ca => {
           this.dicDiplome[ca._id] = ca
         })
+        console.log(this.dicDiplome,this.dicClasse)
         data.forEach(d => {
           if (this.dicDiplome[this.dicClasse[d.classe_id[0]]?.diplome_id] && this.dicClasse[d.classe_id[0]]) {
             d.diplome_titre = this.dicDiplome[this.dicClasse[d.classe_id[0]].diplome_id].titre
