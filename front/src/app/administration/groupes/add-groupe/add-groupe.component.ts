@@ -8,6 +8,8 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
+import { CampusService } from 'src/app/services/campus.service';
+import { Campus } from 'src/app/models/Campus';
 
 
 @Component({
@@ -41,10 +43,20 @@ export class AddGroupeComponent implements OnInit {
     { libelle: 'E' },
   ];
 
+  dropdownCampus: any = [];
+
+  campus: Campus[];
+  
+
   token;
 
-  constructor(private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
-    , private router: Router, private EtudiantService: EtudiantService) { }
+  constructor(private campusService: CampusService, 
+              private diplomeService: DiplomeService, 
+              private formBuilder: FormBuilder, 
+              private classeService: ClasseService, 
+              private messageService: MessageService, 
+              private router: Router, 
+              private EtudiantService: EtudiantService) { }
 
   ngOnInit(): void {
     try {
@@ -62,6 +74,16 @@ export class AddGroupeComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => { this.classes = response; }),
       ((error) => { console.error(error); })
+    );
+
+    this.campusService.getAll().subscribe(
+      ((response) => {
+        response.forEach((c) => {
+          this.dropdownCampus.push({ libelle: c.libelle, value: c._id });
+          //this.campus[c._id] = c;
+        });
+      }),
+      ((error) => { console.error(error);})
     );
 
     this.EtudiantService.getAll().subscribe(
@@ -91,6 +113,7 @@ export class AddGroupeComponent implements OnInit {
 
   onInitFormAddClasse() {
     this.formAddClasse = this.formBuilder.group({
+      campus_id: ['', Validators.required],
       libelle: [this.dropdownGroupe[1], [Validators.required]],
       diplome_id: ['', Validators.required],
       //abbrv: ['', Validators.required],
@@ -103,10 +126,10 @@ export class AddGroupeComponent implements OnInit {
     let libelle = this.formAddClasse.get('libelle')?.value.libelle;
     let diplome_id = this.formAddClasse.get('diplome_id')?.value.value;
     let annee = this.formAddClasse.get('annee')?.value.libelle;
+    let campus_id = this.formAddClasse.get('campus_id')?.value.value;
+    let abbrv = `${this.formAddClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle} - ${this.formAddClasse.get('campus_id')?.value.libelle}`;
 
-    let abbrv = `${this.formAddClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle}`;
-
-    let classe = new Classe(null, diplome_id, libelle, true, abbrv, annee);
+    let classe = new Classe(null, diplome_id, campus_id, libelle, true, abbrv, annee);
 
     this.classeService.create(classe).subscribe(
       ((response) => {
