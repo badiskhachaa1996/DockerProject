@@ -353,28 +353,6 @@ export class AddEtudiantComponent implements OnInit {
   
         this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-
- 
-
-    let contratAlternance = new ContratAlternance(
-      null,debut_contrat,
-      fin_contrat,
-      horaire,
-      this.alternant_id,
-      intitule,
-      classification,
-      niv,
-      coeff_hier,
-      form,
-      id_tuteur,
-      code_commercial,'créé'
-    );
-
-    console.log(contratAlternance)
-
-    let t1 = this.tuteurEtu;
-    let entreprise = this.entrepriseEtu;
-    let CEO = this.entrepriseEtu.Directeur_id;
     
    
       })
