@@ -58,20 +58,20 @@ export class ListeContratsComponent implements OnInit {
     console.log("1");
     return this.RegisterNewCA.get('entreprise_id');
   }
-  get tuteur_id() { console.log("2"); return this.RegisterNewCA.get('tuteur_id').value; }
-  get debut_contrat() { console.log("3"); return this.RegisterNewCA.get('debut_contrat'); }
-  get fin_contrat() { console.log("4"); return this.RegisterNewCA.get('fin_contrat'); }
-  get horaire() { console.log("5"); return this.RegisterNewCA.get('horaire').value; }
-  get alternant() { console.log("6"); return this.RegisterNewCA.get('alternant').value; }
+  get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
+  get debut_contrat() { return this.RegisterNewCA.get('debut_contrat'); }
+  get fin_contrat() { return this.RegisterNewCA.get('fin_contrat'); }
+  get horaire() { return this.RegisterNewCA.get('horaire').value; }
+  get alternant() { return this.RegisterNewCA.get('alternant').value; }
 
-  get alternantValidite() { console.log("7"); return this.RegisterNewCA.get('alternant').invalid; }
-  get intitule() { console.log("8"); return this.RegisterNewCA.get('intitule').value; }
-  get classification() { console.log("9"); return this.RegisterNewCA.get('classification').value; }
-  get niv() { console.log("10"); return this.RegisterNewCA.get('niv').value; }
-  get coeff_hier() { console.log("11"); return this.RegisterNewCA.get('coeff_hier').value; }
-  get code_commercial() { console.log("12"); return this.RegisterNewCA.get('code_commercial').value; }
-  get form() { console.log("13"); return this.RegisterNewCA.get('form').value; }
-  get professionnalisation() { console.log("14"); return this.RegisterNewCA.get('professionnalisation'); }
+  get alternantValidite() { return this.RegisterNewCA.get('alternant').invalid; }
+  get intitule() { return this.RegisterNewCA.get('intitule').value; }
+  get classification() { return this.RegisterNewCA.get('classification').value; }
+  get niv() { return this.RegisterNewCA.get('niv').value; }
+  get coeff_hier() { return this.RegisterNewCA.get('coeff_hier').value; }
+  get code_commercial() { return this.RegisterNewCA.get('code_commercial').value; }
+  get form() { return this.RegisterNewCA.get('form').value; }
+  get professionnalisation() { return this.RegisterNewCA.get('professionnalisation'); }
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -193,6 +193,7 @@ export class ListeContratsComponent implements OnInit {
     this.router.navigate(["details/" + alternant_id]);
   }
   ShowAddNewCA() {
+    this.onInitRegisterNewCA()
     this.formAddNewCA = true
   }
   afficherProsChamp() {
