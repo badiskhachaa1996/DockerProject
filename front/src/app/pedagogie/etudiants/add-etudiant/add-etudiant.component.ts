@@ -158,15 +158,15 @@ export class AddEtudiantComponent implements OnInit {
       civilite: [this.civiliteList[0], Validators.required],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
-      indicatif: [''],
-      phone: [''],
+      indicatif: ['', [Validators.required]],
+      phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
       email: ['', Validators.email],
       // email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
-      pays_adresse: [this.paysList[0]],
-      ville_adresse: [''],
-      rue_adresse: [''],
-      numero_adresse: [''],
-      postal_adresse: [''],
+      pays_adresse: [this.paysList[0], [Validators.required]],
+      ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      rue_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      numero_adresse: ['', [Validators.required, Validators.pattern('[0-9]+')]],
+      postal_adresse: ['', [Validators.required, Validators.pattern('[0-9]+')]],
       classe_id: ['', Validators.required],
       statut: [this.statutList[0], Validators.required],
       nationalite: [this.nationList[0].value, Validators.required],
@@ -193,8 +193,9 @@ export class AddEtudiantComponent implements OnInit {
       campus_id: [' '],
       filiere: ['', Validators.required],
       statut_dossier: [this.statutDossier[0].value]
+
+
     });
-    
   }
 
   resetAddEtudiant() {
@@ -279,6 +280,8 @@ export class AddEtudiantComponent implements OnInit {
     let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
     let filiere = this.formAddEtudiant.get("filiere")?.value;
 
+
+
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
       null,
@@ -341,8 +344,6 @@ export class AddEtudiantComponent implements OnInit {
       filiere,//filiere
       false);
 
-
-
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         console.log(response.data)
@@ -399,8 +400,7 @@ export class AddEtudiantComponent implements OnInit {
     this.AuthService.getProfilePicture(rowData.user_id).subscribe((data) => {
       if (data.error) {
         this.imageToShow = "../assets/images/avatar.PNG"
-      }
-      else {
+      } else {
         const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
         let blob: Blob = new Blob([byteArray], { type: data.documentType })
         let reader: FileReader = new FileReader();
@@ -484,4 +484,3 @@ export class AddEtudiantComponent implements OnInit {
   }
 
 }
-

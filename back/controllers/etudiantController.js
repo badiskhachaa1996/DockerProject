@@ -245,7 +245,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
                         res.send(err)
                     } else {
 
-                        res.send(etudiantFromDb)
+                        res.send(etudiant)
                     }
                 })
         })
