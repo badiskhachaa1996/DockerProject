@@ -407,7 +407,7 @@
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
                 [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
-                [pageLinks]="5" [paginator]="false" rowExpandMode="single" [totalRecords]="etudiants.length"
+                [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left mb-2 mr-2">
