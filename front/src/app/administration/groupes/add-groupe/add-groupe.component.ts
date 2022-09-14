@@ -114,7 +114,7 @@ export class AddGroupeComponent implements OnInit {
   onInitFormAddClasse() {
     this.formAddClasse = this.formBuilder.group({
       campus_id: ['', Validators.required],
-      libelle: [this.dropdownGroupe[1], [Validators.required]],
+      libelle: [this.dropdownGroupe[1]],
       diplome_id: ['', Validators.required],
       //abbrv: ['', Validators.required],
       annee: [this.dropdownAnnee[0]]
