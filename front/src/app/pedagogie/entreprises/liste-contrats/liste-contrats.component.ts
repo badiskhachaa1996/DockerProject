@@ -194,7 +194,8 @@ export class ListeContratsComponent implements OnInit {
   }
   ShowAddNewCA() {
     this.onInitRegisterNewCA()
-    this.formAddNewCA = true
+    this.formAddNewCA = true;
+    
   }
   afficherProsChamp() {
 
@@ -248,6 +249,7 @@ export class ListeContratsComponent implements OnInit {
 
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
       this.formAddNewCA = false
+      this.ngOnInit()
 
     }, (error => { console.log(error) }))
   }
