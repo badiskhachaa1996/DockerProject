@@ -44,26 +44,29 @@ export class ListeContratsComponent implements OnInit {
   formAddNewCA: boolean = false;
   ConnectedEntreprise: any;
   EntrepriseList = [];
-  TuteursList=[];
+  TuteursList = [];
+  dropdownTuteurList = []
+  ListCommercial = [];
+  dropDownCommecialList = [];
 
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
-    private messageService: MessageService, private router: Router,
+    private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService, private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id').value; }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
   get debut_contrat() { return this.RegisterNewCA.get('debut_contrat').value; }
   get fin_contrat() { return this.RegisterNewCA.get('fin_contrat').value; }
-  get horaire() { return this.RegisterNewCA.get('horaire'); }
+  get horaire() { return this.RegisterNewCA.get('horaire').value; }
   get alternant() { return this.RegisterNewCA.get('alternant').value; }
 
   get alternantValidite() { return this.RegisterNewCA.get('alternant').invalid; }
-  get intitule() { return this.RegisterNewCA.get('intitule'); }
-  get classification() { return this.RegisterNewCA.get('classification'); }
-  get niv() { return this.RegisterNewCA.get('niv'); }
-  get coeff_hier() { return this.RegisterNewCA.get('coeff_hier'); }
-  get code_commercial() { return this.RegisterNewCA.get('code_commercial'); }
+  get intitule() { return this.RegisterNewCA.get('intitule').value; }
+  get classification() { return this.RegisterNewCA.get('classification').value; }
+  get niv() { return this.RegisterNewCA.get('niv').value; }
+  get coeff_hier() { return this.RegisterNewCA.get('coeff_hier').value; }
+  get code_commercial() { return this.RegisterNewCA.get('code_commercial').value; }
   get form() { return this.RegisterNewCA.get('form').value; }
   ngOnInit(): void {
 
@@ -71,83 +74,115 @@ export class ListeContratsComponent implements OnInit {
     console.log(this.token)
 
     this.entrepriseService.getAll().subscribe(listEntre => {
-    this.EntrepriseList = listEntre;
-  
-    
-   
-    //LISTE A AFFICHER POUR LADMIN
-    if (this.token.role == "Admin") {
+      this.EntrepriseList = listEntre;
+      this.etudiantService.getAllAlternants().subscribe(alternantsData => {
 
-      this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
-        console.log(Allcontrats)
-        this.ListeContrats = Allcontrats;
+        this.listAlternantDD = alternantsData;
+        this.listAlternantDD.forEach(altdata => {
+          altdata.nomcomplet = altdata.user_id.firstname + ' ' + altdata.user_id.lastname
 
-        Allcontrats.forEach(cont => {
-          console.log(cont.tuteur_id.entreprise_id)
-          this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
-            console.log(entpName.r_sociale);
-            this.onInitRegisterNewCA();
-            this.EntreprisesName[entpName._id] = entpName
-          })
+        })
+        this.formationService.getAll().subscribe(data => {
+
+          data.forEach(element => {
+            this.formationList.push({ label: element.titre, value: element._id });
+          });
+
+        })
+      })
+      this.authService.getAllCommercial().subscribe(CommercialData => {
+        console.log(CommercialData)
+        this.ListCommercial = CommercialData
+        this.ListCommercial.forEach(comData => {
+          comData.nomComplet = comData.firstname + " " + comData.lastname;
+          this.dropDownCommecialList.push(comData)
         })
       })
 
-    }
-    //LISTE A AFFICHER POUR LES CEO ENTREPRISE 
-    else if (!this.idTuteur && this.token.type == "CEO Entreprise") {
+      //LISTE A AFFICHER POUR LADMIN
+      if (this.token.role == "Admin") {
 
-      this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
-        console.log(entrepriseData)
+        this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
+          console.log(Allcontrats)
+          this.ListeContrats = Allcontrats;
 
-        this.ConnectedEntreprise = entrepriseData;
 
-        this.tuteurService.getAllByEntrepriseId(this.ConnectedEntreprise._id).subscribe(listTuteur=>{
-        console.log("*************")
-        console.log(listTuteur)
-        console.log("*************")
-          this.TuteursList.push(listTuteur);
-          this.onInitRegisterNewCA();
+          Allcontrats.forEach(cont => {
+            console.log(cont.tuteur_id.entreprise_id)
+            this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
+              console.log(entpName.r_sociale);
+              this.onInitRegisterNewCA();
+
+              this.EntreprisesName[entpName._id] = entpName
+            })
+          })
+        })
+
+      }
+      //LISTE A AFFICHER POUR LES CEO ENTREPRISE 
+      else if (!this.idTuteur && this.token.type == "CEO Entreprise") {
+
+        this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
+          console.log(entrepriseData)
+
+          this.ConnectedEntreprise = entrepriseData;
+
+          this.tuteurService.getAllByEntrepriseId(this.ConnectedEntreprise._id).subscribe(listTuteur => {
+            console.log("*************")
+            console.log(listTuteur)
+            console.log("*************")
+
+            this.TuteursList = listTuteur;
+
+            this.TuteursList.forEach(tut => {
+              tut.nomCOmplet = tut.user_id.firstname + " " + tut.user_id.lastname
+
+              this.dropdownTuteurList.push(tut)
+            })
+
+            this.onInitRegisterNewCA();
+
+          }, (eror) => { console.log(eror) })
+
+          this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(listeData => {
+
+            this.ListeContrats = listeData;
+            console.log(listeData)
+          }, (eror) => { console.log(eror) })
         }, (eror) => { console.log(eror) })
-       
-        this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(listeData => {
 
-          this.ListeContrats = listeData;
-          console.log(listeData)
-        }, (eror) => { console.log(eror) })
-      }, (eror) => { console.log(eror) })
-
-    }
-    // LISTE A AFFICHER POUR LES TUTEURS
-    else if (this.token.type == "Tuteur") {
-      this.tuteurService.getByUserId(this.token.id).subscribe(TutData => {
-        this.idTuteur = TutData._id
+      }
+      // LISTE A AFFICHER POUR LES TUTEURS
+      else if (this.token.type == "Tuteur") {
+        this.tuteurService.getByUserId(this.token.id).subscribe(TutData => {
+          this.idTuteur = TutData._id
 
 
-        console.log(this.idTuteur)
+          console.log(this.idTuteur)
+          this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
+
+            this.ListeContrats = listeData;
+            console.log(listeData)
+          })
+        })
+      }
+      else {
         this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
 
           this.ListeContrats = listeData;
           console.log(listeData)
-        })
-      })
-    }
-    else {
-      this.entrepriseService.getAllContratsbyTuteur(this.idTuteur).subscribe(listeData => {
+          this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
+            this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
+              console.log(TuteurInfoPerso)
+              this.tuteurInfoPerso = TuteurInfoPerso
+            })
 
-        this.ListeContrats = listeData;
-        console.log(listeData)
-        this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
-          this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
-            console.log(TuteurInfoPerso)
-            this.tuteurInfoPerso = TuteurInfoPerso
+
           })
-
-
         })
-      })
-    }
+      }
 
-  })
+    })
   }
   showPresence(alternant_id) {
     console.log(alternant_id)
@@ -164,7 +199,7 @@ export class ListeContratsComponent implements OnInit {
   onInitRegisterNewCA() {
     console.log(this.ConnectedEntreprise)
     this.RegisterNewCA = this.formBuilder.group({
-      entreprise_id: new FormControl(this.ConnectedEntreprise ? this.ConnectedEntreprise:'', Validators.required),
+      entreprise_id: new FormControl(this.ConnectedEntreprise ? this.ConnectedEntreprise : '', Validators.required),
       tuteur_id: new FormControl('', Validators.required),
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
@@ -182,7 +217,31 @@ export class ListeContratsComponent implements OnInit {
     })
   }
 
+  loadTuteur() {
+    this.dropdownTuteurList = []
 
+    this.tuteurService.getAllByEntrepriseId(this.entreprise_id._id).subscribe(listTuteur => {
+      console.log("*************")
+      console.log(listTuteur)
+      console.log("*************")
+      this.TuteursList = listTuteur;
+      this.TuteursList.forEach(tut => {
+        tut.nomCOmplet = tut.user_id.firstname + " " + tut.user_id.lastname
+        this.dropdownTuteurList.push(tut)
+      })
+
+    }, (eror) => { console.log(eror) })
+
+  }
+  createNewCA() {
+
+    let CA_Object = new ContratAlternance(null, this.debut_contrat, this.fin_contrat, this.horaire, this.alternant._id, this.intitule, this.classification,this.niv , this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
+    console.log(this.form)
+    this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
+      console.log(resData)
+
+    }, (error => { console.log(error) }))
+  }
   // showPresence(alternant_id) {
   //   console.log(alternant_id)
   //   this.router.navigate(["details/" + alternant_id]);

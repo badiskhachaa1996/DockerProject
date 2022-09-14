@@ -17,7 +17,7 @@ export class ContratAlternance {
         public formation?: Diplome,
         public tuteur_id?: Tuteur,
         public code_commercial?: string,
-        public statut?:string,
+        public statut?: string,
     ) { }
 
 }

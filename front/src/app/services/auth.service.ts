@@ -103,6 +103,10 @@ export class AuthService {
     let loginUrl = this.apiUrl + "getAllAgent/";
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
+  getAllCommercial() {
+    let loginUrl = this.apiUrl + "getAllCommercial/";
+    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
 
   uploadimageprofile(data: FormData) {
     let url = this.apiUrl + "file";

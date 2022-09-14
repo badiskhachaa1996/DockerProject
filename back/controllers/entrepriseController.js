@@ -258,19 +258,17 @@ app.post("/createNewContrat", (req, res, next) => {
 });
 
 app.post("/createContratAlternance", (req, res, next) => {
-    let ContratData = req.body.contratAlternance;
+    let ContratData = req.body;
     delete ContratData._id;
-
+    console.log(ContratData)
     let NewContrat = new CAlternance({
         ...ContratData
     })
 
-    ///manque vérification de l'existence du contrat dans la base
-
     //création du contrat
     NewContrat.save()
         .then((NewContData) => {
-            console.log(NewContData);
+            console.log("créé");
             res.status(200).send(NewContData);
         })
         .catch((error) => {
@@ -278,7 +276,7 @@ app.post("/createContratAlternance", (req, res, next) => {
             res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
         })
 
-})
+});
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
@@ -320,7 +318,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 
 app.get("/getAllContrats/", (req, res, next) => {
     console.log("getAllContrats")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path:"user_id" } }).populate({ path: 'formation' })
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
         .then((CAFromDb) => {
             res.status(200).send(CAFromDb);
         })

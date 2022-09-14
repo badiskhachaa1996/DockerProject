@@ -361,6 +361,16 @@ app.get("/getAllbyService/:id", (req, res) => {
             console.error(err);
         })
 });
+app.get("/getAllCommercial/", (req, res) => {
+    User.find({ type: "Commercial" })
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            res.status(404).send(error);
+            console.error(err);
+        })
+});
 
 app.get("/getAllbyEmailPerso/:id", (req, res) => {
 
