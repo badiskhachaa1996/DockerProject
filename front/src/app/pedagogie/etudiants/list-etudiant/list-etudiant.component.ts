@@ -375,20 +375,6 @@ export class ListEtudiantComponent implements OnInit {
       nationalite: ['', Validators.required],
       date_naissance: ['', Validators.required],
       isAlternant: [false],
-      entreprise_id: [],
-      id_tuteur: [],
-      //contrat alternance
-      debut_contrat: [''],
-      fin_contrat: [''],
-      horaire: [''],
-      // alternant: [''],// remplissage auto
-      intitule: [''],
-      classification: [''],
-      niv: [''],
-      coeff_hier: [''],
-      form: [''],
-      code_commercial: [''],
-      donneePerso: [''],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -452,8 +438,8 @@ export class ListEtudiantComponent implements OnInit {
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
-    let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
+
+    let remarque = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
@@ -529,35 +515,12 @@ export class ListEtudiantComponent implements OnInit {
     let date = new Date(response.date_naissance)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
-    let alternantId = response._id
-    let contratAlternance
-    console.log(alternantId)
-    //récupération de l'entreprise et du contrat grace alternantId
-    this.entrepriseService.getByEtudiantIdPopolate(alternantId).subscribe(data => {
-      contratAlternance = data
-      // console.log(contratAlternance.tuteur_id.firstname, contratAlternance.tuteur_id.lastname)
-
-      this.entrepriseService.getById(contratAlternance.tuteur_id.entreprise).subscribe(dataEntreprise => {
-        this.entrepriseEtu = dataEntreprise
-
-        this.tuteurService.getByEntrepriseId(contratAlternance.tuteur_id.entreprise).subscribe(dataTuteur => {
+  
           this.formUpdateEtudiant.patchValue({
             statut: { value: response.statut, viewValue: response.statut },
             classe_id: { libelle: bypass.nom, value: bypass._id },
             nationalite: { value: response.nationalite, viewValue: response.nationalite },
             isAlternant: this.etudiantToUpdate.isAlternant,
-            entreprise_id: { value: contratAlternance.tuteur_id.entreprise, libelle: this.entrepriseEtu.r_sociale },
-            id_tuteur:{ libelle: dataTuteur.user_id.lastname + " " + dataTuteur.user_id.firstname, value: dataTuteur._id },
-            debut_contrat: new Date(contratAlternance.debut_contrat),
-            fin_contrat: new Date(contratAlternance.fin_contrat),
-            horaire: contratAlternance.horaire,
-            intitule: contratAlternance.intitule,
-            classification: contratAlternance.classification,
-            niv: contratAlternance.niveau_formation,
-            coeff_hier: contratAlternance.coeff_hierachique,
-            form: { label: contratAlternance.form },
-            code_commercial: contratAlternance.code_commercial,
-            donnePerso: contratAlternance.donnePerso,
             dernier_diplome: this.etudiantToUpdate.dernier_diplome,
             sos_email: this.etudiantToUpdate.sos_email,
             sos_phone: this.etudiantToUpdate.sos_phone,
@@ -583,9 +546,6 @@ export class ListEtudiantComponent implements OnInit {
           })
           this.showFormUpdateEtudiant = true;
           this.showFormExportEtudiant = false;
-        })
-      })
-    })
   }
 
   private formatDate(date) {
