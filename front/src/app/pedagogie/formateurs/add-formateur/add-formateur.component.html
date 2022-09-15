@@ -317,7 +317,7 @@
                     <div class="field col-12 md:col-4"
                         *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
-                        <input pInputText id="cout_horaire" type="number" placeholder="Coût/horaire"
+                        <input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
                             formControlName="taux_h" />
                     </div>
                     <div class="field col-12 md:col-4"
@@ -325,13 +325,6 @@
                         <label For="cout_journalier">Coût journalier</label>
                         <input pInputText id="cout_journalier" type="number" placeholder="Coût/jour"
                             formControlName="taux_j" />
-                    </div>
-
-                    <div class="field col-12 md:col-4"
-                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
-                        <label For="devise">Devise</label>
-                        <input pInputText id="devise" type="number" placeholder="Euro Français"
-                            formControlName="devise" />
                     </div>
 
                     <div class="field col-12 md:col-12">

@@ -2,7 +2,13 @@
 
     <div class="col-12">
         <div class="card">
-            <h5>Liste des Contrats</h5>
+            <h5>Liste des contrats <span *ngIf="ParmTuteur">du tuteur : {{ ListeContrats[0]?.tuteur_id.user_id.firstname
+                    | titlecase
+                    }} {{
+                    ListeContrats[0]?.tuteur_id.user_id.lastname |
+                    uppercase }} </span>
+            </h5>
+
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats" [globalFilterFields]="['']" [pageLinks]="5" [paginator]="true"
                 rowExpandMode="single" dataKey="_id" responsiveLayout="scroll" [rows]="10"
@@ -19,8 +25,15 @@
 
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width: 3rem;"></th>
+                        <th style="width: 8rem;"></th>
                         <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="fin_contrat"> Entreprise <p-sortIcon field="entreprise_id">
+                            </p-sortIcon>
+                        </th>
+                        <th *ngIf="token.role=='Admin'" pSortableColumn="tuteur_id.user_id.firstname">Tuteur de stage
+                            <p-sortIcon field="tuteur_id">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="intitule"> Intitulé du poste <p-sortIcon field="intitule">
@@ -28,12 +41,11 @@
                         </th>
                         <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="début_contrat"> Date début contrat <p-sortIcon field="début_contrat">
-                            </p-sortIcon>
+                        <th pSortableColumn="début_contrat" style="min-width: 15rem;text-align: center; ">Date début et
+                            fin du contrat
+
                         </th>
-                        <th pSortableColumn="fin_contrat"> Date fin contrat <p-sortIcon field="fin_contrat">
-                            </p-sortIcon>
-                        </th>
+
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -44,16 +56,21 @@
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
-                        <td style="min-width: 8rem;">
+                        <td style="min-width: 11rem;">
                             {{ contrat.alternant_id.user_id.firstname }}
                             {{ contrat.alternant_id.user_id.lastname }}</td>
-                        <td style="min-width: 8rem;">{{ contrat.intitule }}</td>
-                        <td style="min-width: 8rem;">{{ contrat.formation.titre_long }}</td>
-                        <td style="min-width: 8rem;">{{ contrat.debut_contrat }}</td>
-                        <td style="min-width: 8rem;">{{ contrat.fin_contrat }}</td>
+                        <td style="min-width: 5rem;">{{ contrat.tuteur_id.entreprise_id.r_sociale }}</td>
+
+                        <td *ngIf="token.role=='Admin'"> {{ contrat.tuteur_id.user_id?.firstname | titlecase }} {{
+                            contrat.tuteur_id.user_id?.lastname | uppercase }} </td>
+                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.intitule }}</td>
+                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.formation.titre_long }}</td>
+                        <td style="min-width: 15rem;text-align: center; ">{{contrat.debut_contrat | date:
+                            'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}</td>
+
                         <td>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
-                                (click)="showPresence(contrat.alternant_id._id)"></i>
+                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; "></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -91,7 +108,7 @@
         </td>
         </tr>
         </ng-template>
-    </p-table>
+        </p-table>
     </div>
 </div>
 </div>

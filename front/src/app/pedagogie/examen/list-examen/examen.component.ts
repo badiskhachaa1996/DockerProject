@@ -36,7 +36,7 @@ export class ExamenComponent implements OnInit {
   nomMatiereToUpdate: String;
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: "Toutes les classes", value: null }];
+  dropdownClasse: any[] = [{ libelle: "Toutes les groupes", value: null }];
   idClasseToUpdate: String;
   nomClasseToUpdate: String;
 

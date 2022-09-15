@@ -21,7 +21,9 @@ export class ListeContratsComponent implements OnInit {
 
   token;
   ListeContrats: ContratAlternance[] = []
+  tuteurInfoPerso: any;
   idTuteur = this.route.snapshot.paramMap.get('idTuteur');
+  ParmTuteur = this.route.snapshot.paramMap.get('idTuteur');
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router,
     private authService: AuthService, private tuteurService: TuteurService) { }
@@ -36,6 +38,7 @@ export class ListeContratsComponent implements OnInit {
     if (this.token.role == "Admin") {
 
       this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
+        console.log(Allcontrats)
         this.ListeContrats = Allcontrats;
 
       })
@@ -73,6 +76,14 @@ export class ListeContratsComponent implements OnInit {
 
         this.ListeContrats = listeData;
         console.log(listeData)
+        this.tuteurService.getById(this.idTuteur).subscribe(TutData => {
+          this.authService.getInfoById(TutData._id).subscribe(TuteurInfoPerso => {
+            console.log(TuteurInfoPerso)
+            this.tuteurInfoPerso = TuteurInfoPerso
+          })
+
+
+        })
       })
     }
 

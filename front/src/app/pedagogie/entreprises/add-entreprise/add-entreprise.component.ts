@@ -21,10 +21,12 @@ export class AddEntrepriseComponent implements OnInit {
     { label: 'Non', value: false },
   ];
 
+
+
   categorieList = [
     'Sous-traitant',
     "Alternant",
-    "Autre" 
+    "Autre"
   ]
 
   constructor(private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
@@ -71,7 +73,19 @@ export class AddEntrepriseComponent implements OnInit {
       indicatif_1er: [''],
       indicatif_2nd: [''],
       indicatif_ent: [''],
-      categorie: [[]]
+      categorie: [[]],
+      activite: [''],
+      adresse_ec: [''],
+      postal_ec: [''],
+      ville_ec: [''],
+      crc: [''],   //
+      convention: [''],//
+      idcc: ['', [Validators.pattern('[0-9]+')]], //1486
+      nb_salarie: ['', [Validators.pattern('[0-9]+')]],
+      telecopie: [''],
+      OPCO: [''],
+      organisme_prevoyance: ['']
+
     })
   }
 
@@ -109,7 +123,21 @@ export class AddEntrepriseComponent implements OnInit {
     let categorie = this.formAddEntreprise.get('categorie')?.value;
     let type_soc = this.formAddEntreprise.get('type_soc')?.value;
 
-    let entreprise = new Entreprise(null, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd, fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website, financeur, nda, type_soc, categorie);
+    let entreprise = new Entreprise(null, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd, fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website, financeur, nda, type_soc, categorie,
+      null,//Directeur_id TODO
+      this.formAddEntreprise.get('activite').value,
+      this.formAddEntreprise.get('adresse_ec').value,
+      this.formAddEntreprise.get('postal_ec').value,
+      this.formAddEntreprise.get('ville_ec').value,
+      this.formAddEntreprise.get('crc').value,
+      this.formAddEntreprise.get('convention').value,
+      this.formAddEntreprise.get('telecopie').value,
+      this.formAddEntreprise.get('nb_salarie').value,
+      this.formAddEntreprise.get('idcc').value,
+      this.formAddEntreprise.get('OPCO').value,
+      this.formAddEntreprise.get('organisme_prevoyance').value,
+
+    );
     this.entrepriseService.create(entreprise).subscribe(
       ((response) => {
 

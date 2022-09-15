@@ -52,10 +52,10 @@ export class AddGroupeComponent implements OnInit {
     this.EtudiantService.getAll().subscribe(
       ((etudiants) => {
         etudiants.forEach(data => {
-          if(this.numberClasse[data.classe_id]){
-            this.numberClasse[data.classe_id]+=1
-          }else{
-            this.numberClasse[data.classe_id]=1
+          if (this.numberClasse[data.classe_id]) {
+            this.numberClasse[data.classe_id] += 1
+          } else {
+            this.numberClasse[data.classe_id] = 1
           }
         })
       })
@@ -79,6 +79,7 @@ export class AddGroupeComponent implements OnInit {
       libelle: ['', [Validators.required]],
       diplome_id: ['', Validators.required],
       abbrv: ['', Validators.required],
+      annee: ['']
     });
   }
 
@@ -87,8 +88,9 @@ export class AddGroupeComponent implements OnInit {
     let libelle = this.formAddClasse.get('libelle')?.value;
     let diplome_id = this.formAddClasse.get('diplome_id')?.value.value;
     let abbrv = this.formAddClasse.get('abbrv')?.value;
+    let annee = this.formAddClasse.get('annee')?.value;
 
-    let classe = new Classe(null, diplome_id, libelle, true,abbrv);
+    let classe = new Classe(null, diplome_id, libelle, true, abbrv, annee);
 
     this.classeService.create(classe).subscribe(
       ((response) => {

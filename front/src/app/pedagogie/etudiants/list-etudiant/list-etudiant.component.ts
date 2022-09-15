@@ -17,6 +17,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
+import { ContratAlternance } from 'src/app/models/ContratAlternance';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
@@ -61,6 +62,7 @@ export class ListEtudiantComponent implements OnInit {
   searchClass: any[] = [];
   dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   tuteur: Tuteur[] = []
+  entrepriseID: Tuteur[] = [];
 
   civiliteList = environment.civilite;
   statutList = environment.profil;
@@ -89,6 +91,7 @@ export class ListEtudiantComponent implements OnInit {
   entreprises: Entreprise[] = [];
   dropdownEntreprise: any[] = [{ libelle: 'Choisissez une entreprise', value: '' }];
 
+
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   dropdownRole: any[] = [
@@ -105,11 +108,13 @@ export class ListEtudiantComponent implements OnInit {
   isCommercial: boolean = false;
   isAdministration: boolean = false;
 
+
   prospects = {}
 
   absences: Presence[] = []
 
   showPayement: Prospect
+  contrats: ContratAlternance[] = [];
 
   payementList = []
   onAddPayement() {
@@ -172,7 +177,6 @@ export class ListEtudiantComponent implements OnInit {
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
-    console.log("J'arrive à ListEtudiant")
     try {
       this.token = jwt_decode(localStorage.getItem("token"))
     } catch (e) {
@@ -221,12 +225,18 @@ export class ListEtudiantComponent implements OnInit {
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormUpdateEtudiant();
 
+    this.tuteurService.getAll().subscribe(data => {
+      data.forEach(tuteur => {
+        this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
+      })
+    })
+
   }
 
 
-  TuteurListLoad(entreprise_id) {
+  entrepriseIDLoad(entreprise_id) {
     //Liste des tuteurs par entreprise_id
-    let entrepriseId = this.formUpdateEtudiant.get('entreprise_id')?.value;
+    let entrepriseId = entreprise_id
     console.log(entrepriseId.value)
     this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
       (response) => {
@@ -345,7 +355,6 @@ export class ListEtudiantComponent implements OnInit {
 
   }
 
-
   isMinorFC() {
     var today = new Date();
     var birthDate = new Date(this.formUpdateEtudiant.value.date_naissance);
@@ -357,11 +366,6 @@ export class ListEtudiantComponent implements OnInit {
     this.isMinor = !(age < 18);
   }
 
-
-
-
-
-
   //Methode d'initialisation du formulaire de modification d'un étudiant
   onInitFormUpdateEtudiant() {
     this.formUpdateEtudiant = this.formBuilder.group({
@@ -371,16 +375,20 @@ export class ListEtudiantComponent implements OnInit {
       date_naissance: ['', Validators.required],
       isAlternant: [false],
       entreprise_id: [],
-      id_tuteur: [""],
-      debut_contrat: [""],
-      fin_contrat: [""],
-      horaire: [""],
-      intitule: [""],
-      classification: [""],
-      niv: [""],
-      coeff_hier: [""],
-      form: [""],
+      id_tuteur: [],
+      //contrat alternance
+      debut_contrat: [''],
+      fin_contrat: [''],
+      horaire: [''],
+      // alternant: [''],// remplissage auto
+      intitule: [''],
+      classification: [''],
+      niv: [''],
+      coeff_hier: [''],
+      form: [''],
       code_commercial: [''],
+      donneePerso: [''],
+      // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
@@ -439,11 +447,12 @@ export class ListEtudiantComponent implements OnInit {
     let numero_NIR = this.formUpdateEtudiant.get('numero_NIR')?.value;
     let nom_rl = this.formUpdateEtudiant.get('nom_rl')?.value;
     let prenom_rl = this.formUpdateEtudiant.get('prenom_rl')?.value;
+    let indicatif_rl = this.formUpdateEtudiant.get('indicatif_rl')?.value;
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value;
-    let remarque = this.formUpdateEtudiant.get('remarque')?.value;
+    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
+    let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
@@ -453,6 +462,11 @@ export class ListEtudiantComponent implements OnInit {
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
 
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
+
+    let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
+    let isMinor = this.formUpdateEtudiant.get("isMinor")?.value;
+
+
     let etudiant = new Etudiant(
       this.etudiantToUpdate._id,
       this.etudiantToUpdate.user_id,
@@ -504,42 +518,73 @@ export class ListEtudiantComponent implements OnInit {
     );
   }
 
+  entrepriseEtu: any = { libelle: '', value: '' };
+  // tuteurEtudiant: any = { libelle: '', value: '' };
+
   showFUpdate(response: Etudiant) {
     //Campus et Filiere, statut a vérifier
     this.etudiantToUpdate = response;
+    console.log(response)
     let date = new Date(response.date_naissance)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
-    this.formUpdateEtudiant.patchValue({
-      statut: { value: response.statut, viewValue: response.statut },
-      classe_id: { libelle: bypass.nom, value: bypass._id },
-      nationalite: { value: response.nationalite, viewValue: response.nationalite },
-      isAlternant: this.etudiantToUpdate.isAlternant,
-      dernier_diplome: this.etudiantToUpdate.dernier_diplome,
-      sos_email: this.etudiantToUpdate.sos_email,
-      sos_phone: this.etudiantToUpdate.sos_phone,
-      numero_INE: this.etudiantToUpdate.numero_INE,
-      numero_NIR: this.etudiantToUpdate.numero_NIR,
-      nom_rl: this.etudiantToUpdate.nom_rl,
-      prenom_rl: this.etudiantToUpdate.prenom_rl,
-      phone_rl: this.etudiantToUpdate.phone_rl,
-      email_rl: this.etudiantToUpdate.email_rl,
-      adresse_rl: this.etudiantToUpdate.adresse_rl,
-      isHandicaped: this.etudiantToUpdate.isHandicaped,
-      suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-      remarque: this.etudiantToUpdate.remarque,
-      isOnStage: this.etudiantToUpdate.isOnStage,
-      enic_naric: this.etudiantToUpdate.enic_naric
-    });
-    bypass = response.campus
-    let bypassv2: any = response.filiere
-    this.formUpdateEtudiant.patchValue({
-      campus_id: bypass?._id,
-      filiere: bypassv2?._id,
-      date_naissance: this.formatDate(date)
+    let alternantId = response._id
+    let contratAlternance
+    console.log(alternantId)
+    //récupération de l'entreprise et du contrat grace alternantId
+    this.entrepriseService.getByEtudiantIdPopolate(alternantId).subscribe(data => {
+      contratAlternance = data
+      // console.log(contratAlternance.tuteur_id.firstname, contratAlternance.tuteur_id.lastname)
+
+      this.entrepriseService.getById(contratAlternance.tuteur_id.entreprise).subscribe(dataEntreprise => {
+        this.entrepriseEtu = dataEntreprise
+
+        this.tuteurService.getByEntrepriseId(contratAlternance.tuteur_id.entreprise).subscribe(dataTuteur => {
+          this.formUpdateEtudiant.patchValue({
+            statut: { value: response.statut, viewValue: response.statut },
+            classe_id: { libelle: bypass.nom, value: bypass._id },
+            nationalite: { value: response.nationalite, viewValue: response.nationalite },
+            isAlternant: this.etudiantToUpdate.isAlternant,
+            entreprise_id: { value: contratAlternance.tuteur_id.entreprise, libelle: this.entrepriseEtu.r_sociale },
+            id_tuteur:{ libelle: dataTuteur.user_id.lastname + " " + dataTuteur.user_id.firstname, value: dataTuteur._id },
+            debut_contrat: new Date(contratAlternance.debut_contrat),
+            fin_contrat: new Date(contratAlternance.fin_contrat),
+            horaire: contratAlternance.horaire,
+            intitule: contratAlternance.intitule,
+            classification: contratAlternance.classification,
+            niv: contratAlternance.niveau_formation,
+            coeff_hier: contratAlternance.coeff_hierachique,
+            form: { label: contratAlternance.form },
+            code_commercial: contratAlternance.code_commercial,
+            donnePerso: contratAlternance.donnePerso,
+            dernier_diplome: this.etudiantToUpdate.dernier_diplome,
+            sos_email: this.etudiantToUpdate.sos_email,
+            sos_phone: this.etudiantToUpdate.sos_phone,
+            numero_INE: this.etudiantToUpdate.numero_INE,
+            numero_NIR: this.etudiantToUpdate.numero_NIR,
+            nom_rl: this.etudiantToUpdate.nom_rl,
+            prenom_rl: this.etudiantToUpdate.prenom_rl,
+            phone_rl: this.etudiantToUpdate.phone_rl,
+            email_rl: this.etudiantToUpdate.email_rl,
+            adresse_rl: this.etudiantToUpdate.adresse_rl,
+            isHandicaped: this.etudiantToUpdate.isHandicaped,
+            suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+            remarque: this.etudiantToUpdate.remarque,
+            isOnStage: this.etudiantToUpdate.isOnStage,
+            enic_naric: this.etudiantToUpdate.enic_naric,
+          });
+          bypass = response.campus
+          let bypassv2: any = response.filiere
+          this.formUpdateEtudiant.patchValue({
+            campus_id: bypass?._id,
+            filiere: bypassv2?._id,
+            date_naissance: this.formatDate(date)
+          })
+          this.showFormUpdateEtudiant = true;
+          this.showFormExportEtudiant = false;
+        })
+      })
     })
-    this.showFormUpdateEtudiant = true;
-    this.showFormExportEtudiant = false;
   }
 
   private formatDate(date) {

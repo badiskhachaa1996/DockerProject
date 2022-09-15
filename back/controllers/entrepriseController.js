@@ -282,7 +282,7 @@ app.post("/createContratAlternance", (req, res, next) => {
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
         .then((CAFromDb) => {
             console.log(CAFromDb);
             res.status(200).send(CAFromDb);
@@ -320,8 +320,9 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 
 app.get("/getAllContrats/", (req, res, next) => {
     console.log("getAllContrats")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id' }).populate({ path: 'formation' })
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path:"user_id" } }).populate({ path: 'formation' })
         .then((CAFromDb) => {
+
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
@@ -347,6 +348,20 @@ app.get("/getByDirecteurId/:id", (req, res, next) => {
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
 })
 
+//récupération d'un contrat d'alternance en fonction de l'id étudiant
+app.get("/getByEtudiantId/:id", (req, res, next) => {
+    CAlternance.findOne({ alternant_id: req.params.id })
+        .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
+})
+app.get("/getByEtudiantIdPopolate/:id", (req, res, next) => {
+    CAlternance.findOne({ alternant_id: req.params.id }).populate({ path: 'tuteur_id' })
+        .then((ContratDetails) => {
+            console.log(ContratDetails)
+            res.status(200).send(ContratDetails);
+        })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
+})
 
 //Modification d'une entreprise
 app.put("/update", (req, res, next) => {

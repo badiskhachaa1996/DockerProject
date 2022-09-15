@@ -34,6 +34,13 @@ export class TuteurService {
     let registreUrl = this.apiUrl + "getAllByEntrepriseId/" + entrepriseId;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+   //recupération d'un tuteur par Id Entreprise
+   getByEntrepriseId(entrepriseId: string) {
+    console.log('service' + entrepriseId)
+    let registreUrl = this.apiUrl + "getByEntrepriseId/" + entrepriseId;
+    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
   //récupération d'un tuteur
   getById(id: string) {
     let registreUrl = this.apiUrl + "getById/" + id;

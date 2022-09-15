@@ -120,6 +120,7 @@ export class ListSeancesComponent implements OnInit {
         camp.forEach(ca => {
           this.dicDiplome[ca._id] = ca
         })
+        console.log(this.dicDiplome,this.dicClasse)
         data.forEach(d => {
           if (this.dicDiplome[this.dicClasse[d.classe_id[0]]?.diplome_id] && this.dicClasse[d.classe_id[0]]) {
             d.diplome_titre = this.dicDiplome[this.dicClasse[d.classe_id[0]].diplome_id].titre
@@ -190,13 +191,16 @@ export class ListSeancesComponent implements OnInit {
       libelle: new FormControl(rowData.libelle),
       date_debut: new FormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
       date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
-      formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
+      formateur: new FormControl("", Validators.required),
       isPresentiel: new FormControl(rowData.isPresentiel),
       salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
       campus_id: new FormControl(c),
       isPlanified: new FormControl(rowData.isPlanified),
       nbseance: new FormControl(rowData.nbseance)
     });
+    //{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }
+    if (rowData.formateur_id && this.formateurs[rowData.formateur_id] && this.formateurs[rowData.formateur_id].firstname)
+      this.seanceFormUpdate.patchValue({formateur:{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }})
   }
 
   get isPresentielUpdated() { return this.seanceFormUpdate.get('isPresentiel'); }
