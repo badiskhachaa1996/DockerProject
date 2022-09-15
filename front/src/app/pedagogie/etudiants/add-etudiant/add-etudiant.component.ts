@@ -155,7 +155,7 @@ export class AddEtudiantComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout d'un étudiant
   onInitFormAddEtudiant() {
     this.formAddEtudiant = this.formBuilder.group({
-      civilite: [this.civiliteList[0], Validators.required],
+      civilite: [this.civiliteList[0]],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: [''],

@@ -35,7 +35,7 @@
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddEtudiant" (ngSubmit)="onAddEtudiant()">
                 <div class="field col-5 md:col-4">
-                    <label For="civilite">Civilité<span style="color: red;"> * </span></label>
+                    <label For="civilite">Civilité</label>
                     <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
                         formControlName="civilite"></p-dropdown>
                 </div>
@@ -183,7 +183,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
+                    <label For="nationalite">Nationalité</label>
                     <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
