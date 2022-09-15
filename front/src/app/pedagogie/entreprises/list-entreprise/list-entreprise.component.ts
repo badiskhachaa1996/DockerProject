@@ -158,16 +158,33 @@ export class ListEntrepriseComponent implements OnInit {
   /** Parti traitement pour la mise à jour des données */
   get r_sociale_m() { return this.formUpdateEntreprise.get('r_sociale'); };
   get fm_juridique_m() { return this.formUpdateEntreprise.get('fm_juridique'); };
-  get type_ent_m() { return this.formUpdateEntreprise.get('type_ent'); };
+  get activite_m() { return this.formUpdateEntreprise.get('activite'); };
+  get isInterne_m() { return this.formUpdateEntreprise.get('isInterne'); };
+  get crc_m() { return this.formUpdateEntreprise.get('crc'); };
+  get nb_salarie_m() { return this.formUpdateEntreprise.get('nb_salarie'); };
+  get convention_m() { return this.formUpdateEntreprise.get('convention'); };
+  get idcc_m() { return this.formUpdateEntreprise.get('idcc'); };
+  get indicatif_ent_m() { return this.formUpdateEntreprise.get('indicatif_ent'); };
+  get phone_ent_m() { return this.formUpdateEntreprise.get('phone_ent'); };
+  get adresse_ent_m() { return this.formUpdateEntreprise.get('adresse_ent'); };
+  get code_postale_ent_m() { return this.formUpdateEntreprise.get('code_postale_ent'); };
+  get ville_ent_m() { return this.formUpdateEntreprise.get('ville_ent'); };
+  get adresse_ec_m() { return this.formUpdateEntreprise.get('adresse_ec'); };
+  get postal_ec_m() { return this.formUpdateEntreprise.get('postal_ec'); };
+  get ville_ec_m() { return this.formUpdateEntreprise.get('ville_ec'); };
   get siret_m() { return this.formUpdateEntreprise.get('siret'); };
-  get nom_contact_m() { return this.formUpdateEntreprise.get('nom_contact'); };
-  get prenom_contact_m() { return this.formUpdateEntreprise.get('prenom_contact'); };
-  get nom_contact_2nd_m() { return this.formUpdateEntreprise.get('nom_contact_2nd'); };
-  get prenom_contact_2nd_m() { return this.formUpdateEntreprise.get('prenom_contact_2nd'); };
-  get pays_adresse_m() { return this.formUpdateEntreprise.get('pays_adresse'); };
-  get ville_adresse_m() { return this.formUpdateEntreprise.get('ville_adresse'); };
-  get rue_adresse_m() { return this.formUpdateEntreprise.get('rue_adresse'); };
-  get financeur_m() { return this.formUpdateEntreprise.get('financeur'); };
+  get code_ape_naf_m() { return this.formUpdateEntreprise.get('code_ape_naf'); };
+  get num_tva_m() { return this.formUpdateEntreprise.get('num_tva'); };
+  get telecopie_m() { return this.formUpdateEntreprise.get('telecopie'); };
+  get OPCO_m() { return this.formUpdateEntreprise.get('OPCO'); };
+  get organisme_prevoyance_m() { return this.formUpdateEntreprise.get('organisme_prevoyance'); };
+  get nom_rep_m() { return this.formUpdateEntreprise.get('nom_rep'); };
+  get prenom_rep_m() { return this.formUpdateEntreprise.get('prenom_rep'); };
+  get email_rep_m() { return this.formUpdateEntreprise.get('email_rep'); };
+  get indicatif_rep_m () { return this.formUpdateEntreprise.get('indicatif_rep'); };
+  get phone_rep_m() { return this.formUpdateEntreprise.get('phone_rep'); };
+  get indicatif_rep_wt_m() { return this.formUpdateEntreprise.get('indicatif_rep_wt'); };
+
 
   //Methode de modification d'une entreprise
   onUpdateEntreprise() {
