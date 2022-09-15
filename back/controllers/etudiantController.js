@@ -150,6 +150,7 @@ app.get("/getAllAlternants", (req, res, next) => {
     Etudiant.find({ isAlternant: true }).populate('user_id')
         .then((alternantsFromDb) => {
 
+            
             res.status(200).send(alternantsFromDb);
         })
         .catch((error) => {
@@ -245,7 +246,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
                         res.send(err)
                     } else {
 
-                        res.send(etudiantFromDb)
+                        res.send(etudiant)
                     }
                 })
         })

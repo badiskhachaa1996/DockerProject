@@ -9,6 +9,7 @@ app.post("/create", (req, res) => {
     let classe = new Classe(
         {
             diplome_id: req.body.diplome_id,
+            campus_id: req.body.campus_id,
             nom: req.body.nom,
             active: req.body.active,
             abbrv: req.body.abbrv
@@ -25,6 +26,7 @@ app.post("/updateById", (req, res) => {
     Classe.findOneAndUpdate({ _id: req.body._id },
         {
             diplome_id: req.body.diplome_id,
+            campus_id: req.body.campus_id,
             nom: req.body.nom,
             active: req.body.active,
             abbrv: req.body.abbrv
