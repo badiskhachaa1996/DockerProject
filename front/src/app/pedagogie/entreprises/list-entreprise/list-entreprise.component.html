@@ -277,7 +277,7 @@
             </div>
             <h5>Liste des entreprise</h5>
             <p-toast></p-toast>
-            <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret', 'isInterne', 'website', 'vip']"
+            <p-table #dt1 [globalFilterFields]="['r_sociale', 'fm_juridique', 'siret',]"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" [value]="entreprises" dataKey="_id"
                 responsiveLayout="scroll" [rows]="10" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -299,11 +299,13 @@
                         <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="siret"> Siret <p-sortIcon field="siret"></p-sortIcon>
+                        <th pSortableColumn="activite"> Activité <p-sortIcon field="activite"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="telephone"> Téléphone <p-sortIcon field="telephone"></p-sortIcon>
+                        <th pSortableColumn="type_ent"> Type d'entreprise <p-sortIcon field="type_ent"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="vip"> VIP <p-sortIcon field="vip"></p-sortIcon>
+                        <th pSortableColumn="categorie"> Catégorie <p-sortIcon field="categorie"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="isInterne"> Interne/Externe <p-sortIcon field="isInterne"></p-sortIcon>
                         </th>
                         <th>Action</th>
                     </tr>
@@ -317,9 +319,11 @@
                         </td>
                         <td style="min-width: 8rem;">{{ entreprise.r_sociale }}</td>
                         <td style="min-width: 8rem;">{{ entreprise.fm_juridique }}</td>
-                        <td style="min-width: 8rem;">{{ entreprise.siret }}</td>
-                        <td style="min-width: 8rem;">{{ entreprise.phone }}</td>
-                        <td style="min-width: 8rem;">{{ entreprise.vip }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.activite }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.type_ent }}</td>
+                        <td style="min-width: 8rem;">{{ entreprise.categorie }}</td>
+                        <td *ngIf="entreprise.isInterne">Interne</td>
+                        <td *ngIf="!entreprise.isInterne">Externe</td>
                         <td>
                             <i style="margin-left: 2%;" class="pi pi-pencil"
                                 (click)="initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
@@ -328,59 +332,116 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-entreprise>
                     <tr>
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
-                        <th>Type Entreprise</th>
-                        <th>Code APE</th>
-                        <th>Numéro TVA</th>
-                        <th>Interne/Externe</th>
-                        <th>Financeur</th>
-                        <th>Email</th>
-                        <th>Website</th>
+                        <th>Caisse de retraite complémentaire</th>
+                        <th>Nombre de salarié</th>
+                        <th>Convention collective</th>
+                        <th>Code IDCC</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{entreprise.type_ent}}</td>
-                        <td>{{entreprise.code_ape_naf}}</td>
-                        <td>{{entreprise.num_tva}}</td>
-                        <td *ngIf="entreprise.isInterne">Interne</td>
-                        <td *ngIf="!entreprise.isInterne">Externe</td>
-                        <td>{{entreprise.financeur}}</td>
-                        <td>{{entreprise.email}}</td>
-                        <td>{{entreprise.website}}</td>
+                        <td>{{entreprise.crc}}</td>
+                        <td>{{entreprise.nb_salarie}}</td>
+                        <td>{{entreprise.convention}}</td>
+                        <td>{{entreprise.idcc}}</td>
                     </tr>
                 </ng-template>
             </p-table>
-            <h5 *ngIf="entreprise.ville_adresse" style="text-align:center;">Adresse de l'entreprise</h5>
-            <p-table responsiveLayout="scroll" *ngIf="entreprise.ville_adresse" styleClass="p-datatable-gridlines">
+            <h5 *ngIf="entreprise" style="text-align:center;">Information de l'entreprise</h5>
+            <p-table responsiveLayout="scroll" *ngIf="entreprise" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Pays</th>
-                        <th>Ville</th>
-                        <th>Rue</th>
-                        <th>Numéro de Rue</th>
-                        <th>Code Postal</th>
+                        <th>Indicatif entreprise</th>
+                        <th>Téléphone entreprise</th>
+                        <th>Adresse entreprise</th>
+                        <th>SIRET</th>
+                        <th>Code APE NAF</th>
+                        <th>Numéro TVA</th>
+                        <th>Télécopie</th>
+                        <th>OPCO</th>
+                        <th>Organisme de prévoyance</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-order>
+                <ng-template pTemplate="body" let-entreprise>
 
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{entreprise.pays_adresse}}</td>
-                        <td>{{entreprise.ville_adresse}}</td>
-                        <td>{{entreprise.rue_adresse}}</td>
-                        <td>{{entreprise.numero_adresse}}</td>
-                        <td>{{entreprise.postal_adresse}}</td>
+                        <td>{{entreprise.indicatif_ent}}</td>
+                        <td>{{entreprise.phone_ent}}</td>
+                        <td>{{entreprise.adresse_ent}} {{entreprise.code_postale_ent}} {{entreprise.ville_ent}}</td>
+                        <td>{{entreprise.siret}}</td>
+                        <td>{{entreprise.code_ape_naf}}</td>
+                        <td>{{entreprise.num_tva}}</td>
+                        <td>{{entreprise.telecopie}}</td>
+                        <td>{{entreprise.OPCO}}</td>
+                        <td>{{entreprise.organisme_prevoyance}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <h5  style="text-align:center;">Information du représentant</h5>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Civilité du représentant</th>
+                        <th>Nom et prénom du représentant</th>
+                        <th>Email du représentant</th>
+                        <th>Téléphone du représentant</th>
+                        <th>Téléphone WhatsApp du représentant</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-entreprise>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.civilite_rep}}</td>
+                        <td>{{entreprise.nom_rep}} {{entreprise.prenom_rep}}</td>
+                        <td>{{entreprise.email_rep}}</td>
+                        <td>{{entreprise.indicatif_rep}} {{entreprise.phone_rep}}</td>
+                        <td>{{entreprise.indicatif_rep_wt}} {{entreprise.phone_rep_wt}} </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <h5  style="text-align:center;">Information du tuteur</h5>
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Civilité du tuteur</th>
+                        <th>Nom et prénom du tuteur</th>
+                        <th>Email du tuteur</th>
+                        <th>Téléphone du représentant</th>
+                        <th>Téléphone WhatsApp du représentant</th>
+                        <th>Date de naissance du tuteur</th>
+                        <th>Fonction du tuteur</th>
+                        <th>Ancienneté du tuteur</th>
+                        <th>Niveau d'étude du tuteur</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-entreprise>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{entreprise.civilite_tuteur}}</td>
+                        <td>{{entreprise.nom_tuteur}} {{entreprise.prenom_tuteur}}</td>
+                        <td>{{entreprise.email_tuteur}}</td>
+                        <td>{{entreprise.indicatif_tuteur}} {{entreprise.phone_tuteur}} </td>
+                        <td>{{entreprise.indicatif_tuteur_wt}} {{entreprise.phone_tuteur_wt}}</td>
+                        <td>{{entreprise.date_naissance_tuteur}}</td>
+                        <td>{{entreprise.fonction_tuteur}}</td>
+                        <td>{{entreprise.anciennete_tuteur}}</td>
+                        <td>{{entreprise.niveau_etude_tuteur}}</td>
                     </tr>
                 </ng-template>
             </p-table>
 
-            <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du
+            <!-- <h5 *ngIf="entreprise.nom_contact || entreprise.prenom_contact" style="text-align:center;">Informations du
                 1er contact</h5>
             <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact || entreprise.prenom_contact"
                 styleClass="p-datatable-gridlines">
@@ -402,8 +463,8 @@
                         <td>{{entreprise.phone_contact}}</td>
                     </tr>
                 </ng-template>
-            </p-table>
-            <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">
+            </p-table> -->
+            <!-- <h5 *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd" style="text-align:center;">
                 Informations du 2ème contact</h5>
             <p-table responsiveLayout="scroll" *ngIf="entreprise.nom_contact_2nd || entreprise.prenom_contact_2nd"
                 styleClass="p-datatable-gridlines">
@@ -416,7 +477,7 @@
                         <th>Téléphone</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-order>
+                <ng-template pTemplate="body" let-entreprise>
 
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -428,7 +489,7 @@
                         <td>{{entreprise.phone_contact_2nd}}</td>
                     </tr>
                 </ng-template>
-            </p-table>
+            </p-table> -->
 
             <h5 *ngIf="entreprise.categorie.includes('Alternant')" style="text-align:center;">
                 Informations Alternance</h5>

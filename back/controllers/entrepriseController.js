@@ -41,6 +41,7 @@ app.get("/getAll", (req, res, next) => {
 //creation d'une nouvelle entreprise
 app.post("/create", (req, res, next) => {
     delete req.body._id;
+    console.log(req.body)
     let entreprise = new Entreprise(
         {
             ...req.body

@@ -1,0 +1,35 @@
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+            <button pButton label="Ajouter" icon="pi pi-plus" style="float: right;"></button>
+            <h5>Gestion des logements</h5>
+            <p-table dataKey="name" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="location">Location</th>
+						<th>Image</th>
+						<th pSortableColumn="surface">Surface </th>
+						<th pSortableColumn="pieces">Nombre de pièces </th>
+						<th pSortableColumn="description">Description </th>
+                        <th pSortableColumn="prix">Loyer mensuel </th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-product let-expanded="expanded">
+					<tr>
+						<td style="min-width: 12rem;">Paris 15</td>
+						<td><img [src]="assets/images/profile.jpg" [alt]="LOGEMENT" width="100" class="shadow-4" /></td>
+						<td style="min-width: 8rem;">35 m<sup>2</sup></td>
+						<td style="min-width: 10rem;">2 pièces</td>
+						<td style="min-width: 10rem;">
+                            A 2 pas du RER et des commerces. Place du marché. Dans copropriété ancienne. 
+                            Appartement 2 P. de 29 m2 hab. situé au 2ème étage comprenant : Entrée, séjour avec ktichnette, une chambre, salle d'eau avec wc. . 
+                            Conditions revenus exigés : En CDI 2.000 EUR (constitution dossier + rédaction de bail : 290 EUR / Etat des lieux : 87 EUR)
+                        </td>
+						<td>640€</td>
+                        <td>voir <i class="pi pi-pencil"></i></td>
+					</tr>
+				</ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
