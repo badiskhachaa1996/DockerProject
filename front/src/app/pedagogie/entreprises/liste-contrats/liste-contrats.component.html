@@ -3,11 +3,9 @@
 
     <div class="col-12">
         <div class="card">
-            <h5>Liste des contrats <span *ngIf="ParmTuteur">du tuteur : {{ ListeContrats[0]?.tuteur_id.user_id.firstname
-                    | titlecase
-                    }} {{
-                    ListeContrats[0]?.tuteur_id.user_id.lastname |
-                    uppercase }} </span>
+            <h5>Liste des contrats <span *ngIf="ParmTuteur">du tuteur :
+                    {{ ListeContrats[0]?.tuteur_id.user_id.firstname | titlecase }} {{
+                    ListeContrats[0]?.tuteur_id.user_id.lastname | uppercase }} </span>
             </h5>
 
             <div *ngIf="formAddNewCA" class="card grid">
@@ -47,7 +45,7 @@
                                 </div>
                                 <div class="field col-12 md:col-6">
                                     <label For="alternant">Alternant<span style="color: red;"> *
-                                        </span></label>
+                                        </span> </label>
                                     <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
                                         [options]="listAlternantDD" dataKey="_id" filter="true"
                                         filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
@@ -191,7 +189,7 @@
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [globalFilterFields]="['code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -242,8 +240,7 @@
                     <tr>
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="contrat"
-                                class="p-button-text p-button-rounded p-button-plain"
-                                (click)="loadcomName(contrat.code_commercial)"
+                                class="p-button-text p-button-rounded p-button-plain" (click)="loadcomName(contrat)"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 11rem;">
