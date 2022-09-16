@@ -50,13 +50,8 @@ export class AddEtudiantComponent implements OnInit {
 
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
-  dropdownTuteur: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
   dropdownFiliere: any[] = [];
   dropdownCampus: any[] = [];
-  dropdownTuteurByEntreprise: any[] = [{ libelle: 'Choisissez un tuteur', value: null }];
-  tuteurs: Tuteur[] = []
-
-  tuteurEtu: Tuteur;
 
   searchClass: any[] = [{ libelle: 'Toutes les groupes', value: null }];
 
@@ -70,9 +65,6 @@ export class AddEtudiantComponent implements OnInit {
     { value: "Abandon", label: "Abandon" }
   ]
 
-  entreprises: Entreprise[] = [];
-  entrepriseEtu: Entreprise;
-  dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: '' }];
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
@@ -88,7 +80,7 @@ export class AddEtudiantComponent implements OnInit {
   parcoursList = []
   isMinor = false;
   formationList = []
-  alternant_id;
+
 
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
@@ -108,27 +100,6 @@ export class AddEtudiantComponent implements OnInit {
     }
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
-
-    //Recuperation de la liste des entreprises
-    this.entrepriseService.getAll().subscribe(
-      ((response) => {
-        response.forEach(entreprise => {
-          this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
-          this.entreprises[entreprise._id] = entreprise;
-        })
-      }),
-      ((error) => { console.error(error); })
-    );
-
-    //Liste des tuteurs
-    this.tuteurService.getAll().subscribe(
-      (response) => {
-        response.forEach((tuteur) => {
-          this.dropdownTuteur.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
-          this.tuteurs = tuteur
-        })
-      })
-
 
       this.diplomeService.getAll().subscribe(data => {
 
@@ -160,20 +131,6 @@ export class AddEtudiantComponent implements OnInit {
 
   }
 
-  TuteurListLoad(entreprise_id) {
-    //Liste des tuteurs par entreprise_id
-    let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value;
-    this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
-      (response) => {
-        response.forEach((tuteur) => {
-          this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
-          console.log(this.dropdownTuteurByEntreprise)
-        })
-      }); this.dropdownTuteurByEntreprise = [];
-  }
-
-
-
   //Methode de recuperation des differentes classes
   onGetAllClasses() {
 
@@ -185,7 +142,7 @@ export class AddEtudiantComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
+          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
           this.classes[classe._id] = classe;
           this.searchClass.push({ libelle: classe.nom, value: classe._id });
         })
@@ -198,7 +155,7 @@ export class AddEtudiantComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout d'un étudiant
   onInitFormAddEtudiant() {
     this.formAddEtudiant = this.formBuilder.group({
-      civilite: [this.civiliteList[0], Validators.required],
+      civilite: [this.civiliteList[0]],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: ['', [Validators.required]],
@@ -216,20 +173,6 @@ export class AddEtudiantComponent implements OnInit {
       date_naissance: [null, Validators.required],
       isAlternant: [false],
       isOnStage: [false],
-      ///partie si alternant
-      entreprise_id: [''],
-      id_tuteur: [''],
-      debut_contrat: [''],
-      fin_contrat: [''],
-      horaire: [''],
-      // alternant: [''],// remplissage auto
-      intitule: [''],
-      classification: [''],
-      niv: [''],
-      coeff_hier: [''],
-      form: [''],
-      code_commercial: [''],
-      donneePerso: [''],
       ///Form ETUDIANT
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -267,18 +210,6 @@ export class AddEtudiantComponent implements OnInit {
   get email() { return this.formAddEtudiant.get('email'); };
   get pays_adresse() { return this.formAddEtudiant.get('pays_adresse'); };
   get ville_adresse() { return this.formAddEtudiant.get('ville_adresse'); };
-
-  get debut_contrat() { return this.formAddEtudiant.get('debut_contrat'); };
-  get fin_contrat() { return this.formAddEtudiant.get('fin_contrat').value; };
-  get horaire() { return this.formAddEtudiant.get('horaire'); };
-  get alternant() { return this.formAddEtudiant.get('alternant'); };
-  get intitule() { return this.formAddEtudiant.get('intitule').value; };
-  get classification() { return this.formAddEtudiant.get('classification'); };
-  get coeff_hie() { return this.formAddEtudiant.get('coeff_hie'); };
-  get form() { return this.formAddEtudiant.get('form').value; };
-  get code_commercial() { return this.formAddEtudiant.get('code_commercial'); };
- 
-
   get rue_adresse() { return this.formAddEtudiant.get('rue_adresse'); };
   get nationalite() { return this.formAddEtudiant.get('nationalite').value; };
   get date_naissance() { return this.formAddEtudiant.get('date_naissance'); };
@@ -330,23 +261,6 @@ export class AddEtudiantComponent implements OnInit {
     let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
     let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
 
-    //// Partie contrat d'apprentissage
-    let entreprise_id = this.formAddEtudiant.get('entreprise_id')?.value.value;
-    let id_tuteur = this.formAddEtudiant.get('id_tuteur')?.value.value;
-    let debut_contrat = this.formAddEtudiant.get('debut_contrat')?.value;
-    let fin_contrat = this.formAddEtudiant.get('fin_contrat')?.value;
-    let horaire = this.formAddEtudiant.get('horaire')?.value;
-    // let alternant= this.formAddEtudiant.get('alternant')?.value;// remplissage auto
-    let intitule = this.formAddEtudiant.get('intitule')?.value;
-    let classification = this.formAddEtudiant.get('classification')?.value;
-    let niv = this.formAddEtudiant.get('niv')?.value;
-    let coeff_hier = this.formAddEtudiant.get('coeff_hier')?.value;
-    let form = this.formAddEtudiant.get('form')?.value.value;
-    let code_commercial = this.formAddEtudiant.get('code_commercial')?.value;
-
-    //Données Perso
-    let donneePerso = this.formAddEtudiant.get('donneePerso')?.value;
-
     let dernier_diplome = this.formAddEtudiant.get('dernier_diplome')?.value;
     let sos_email = this.formAddEtudiant.get('sos_email')?.value;
     let sos_phone = this.formAddEtudiant.get('sos_phone')?.value;
@@ -375,7 +289,7 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      null,
+      ' ',
       email,
       '',
       'user',
@@ -430,107 +344,21 @@ export class AddEtudiantComponent implements OnInit {
       filiere,//filiere
       false);
 
-    let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value.value;
-
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
         console.log(response.data)
-        this.alternant_id = response.data._id
-        console.log(this.alternant_id)
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
   
         this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-
- 
-
-    let contratAlternance = new ContratAlternance(
-      null,debut_contrat,
-      fin_contrat,
-      horaire,
-      this.alternant_id,
-      intitule,
-      classification,
-      niv,
-      coeff_hier,
-      form,
-      id_tuteur,
-      code_commercial,'créé'
-    );
-
-    console.log(contratAlternance)
-
-    let t1 = this.tuteurEtu;
-    let entreprise = this.entrepriseEtu;
-    let CEO = this.entrepriseEtu.Directeur_id;
     
-    if(isAlternant){
-      let entrepriseId = this.formAddEtudiant.get('entreprise_id')?.value.value;
-      let tuteurId = this.formAddEtudiant.get('id_tuteur')?.value.value;
-
-      this.entrepriseService.getById(entreprise_id).subscribe(
-        ((response) => {
-          this.entrepriseEtu = response
-  
-      this.tuteurService.getById(id_tuteur).subscribe(
-        ((response) => {
-          this.tuteurEtu = response
    
-  
-      let contratAlternance = new ContratAlternance(
-        null,
-        debut_contrat,
-        fin_contrat,
-        horaire,
-        this.alternant_id,
-        intitule,
-        classification,
-        niv,
-        coeff_hier,
-        form,
-        id_tuteur,
-        code_commercial
-      );
-  
-      let t1 = this.tuteurEtu;
-      let entreprise = this.entrepriseEtu;
-      let CEO = this.entrepriseEtu.Directeur_id;
-      
-  
-      let objectTosend = { contratAlternance, t1, entreprise }
-      
-      if(objectTosend){
-        this.entrepriseService.createContratAlternance(objectTosend).subscribe(
-          ((responseContrat) => {
-            this.messageService.add({ severity: 'success', summary: 'Contrat ajouté' });
-          })
-        ),
-        ((error) => {
-          console.error(error)
-          this.messageService.add({ severity: 'error', summary: error.error });
-        })
-      }
-  
-    }),
-    ((error) => {
-      console.error(error)
-      this.messageService.add({ severity: 'error', summary: error.error });
-    })
-  );
-  
-  
-    })
+      })
     )
-    }
-
-    })
-    )
+     
   }
-
-  
-    
 
   isMinorFC() {
     // console.log("IW AS HERE")
@@ -656,4 +484,3 @@ export class AddEtudiantComponent implements OnInit {
   }
 
 }
-

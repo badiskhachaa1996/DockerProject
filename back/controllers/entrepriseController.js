@@ -259,19 +259,17 @@ app.post("/createNewContrat", (req, res, next) => {
 });
 
 app.post("/createContratAlternance", (req, res, next) => {
-    let ContratData = req.body.contratAlternance;
+    let ContratData = req.body;
     delete ContratData._id;
-
+    console.log(ContratData)
     let NewContrat = new CAlternance({
         ...ContratData
     })
 
-    ///manque vérification de l'existence du contrat dans la base
-
     //création du contrat
     NewContrat.save()
         .then((NewContData) => {
-            console.log(NewContData);
+            console.log("créé");
             res.status(200).send(NewContData);
         })
         .catch((error) => {
@@ -279,13 +277,13 @@ app.post("/createContratAlternance", (req, res, next) => {
             res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
         })
 
-})
+});
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
     CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
         .then((CAFromDb) => {
-            console.log(CAFromDb);
+
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
@@ -302,7 +300,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
             let CAbyEntreprise = [];
 
             CAFromDb.forEach(async Contrat => {
-                console.log(Contrat)
+
                 if (Contrat.tuteur_id?.entreprise_id == req.params.entreprise_id) {
                     CAbyEntreprise.push(Contrat)
                 }

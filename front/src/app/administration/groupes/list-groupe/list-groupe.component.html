@@ -8,26 +8,27 @@
 			<h4 style="text-align: center;">Modifier un groupe</h4>
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateClasse" (ngSubmit)="modifyClasse()">
 				<div class="field col-12">
+                    <label for="campus">Campus</label>
+                    <p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
+                                emptyFilterMessage="Pas de campus trouvé"
+                                filterPlaceholder="Choissisez un campus" filter="true"></p-dropdown>
+                </div>
+
+				<div class="field col-12 md:col-6">
 					<label For="libelle">Diplôme</label>
 					<p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"
 						(onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
-
 				</div>
 				<div class="field col-12 md:col-6">
-					<label For="nom_groupe">Nom du groupe</label>
-					<input pInputText id="nom_groupe" placeholder="Nom du groupe" type="text"
-						formControlName="libelle" />
-
-					<div *ngIf="libelle_m.invalid && (libelle_m.touched || libelle_m.dirty)">
-						<span *ngIf="libelle_m.errors?.pattern" style="color: red;">
-							Le nom du groupe n'est pas dans le bon format
-						</span>
-					</div>
-				</div>
-				<div class="field col-12 md:col-6">
-					<label For="abreviation">Abréviation</label>
-					<input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="MCI A" />
-				</div>
+                    <label For="annee">Année <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
+                </div>
+				<div class="field col-12">
+                    <label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
+                </div>
+				
+				
 				<div style="justify-content: right;">
 					<button pButton label="Modifier" type="submit" [disabled]="formUpdateClasse.invalid"></button>
 				</div>
@@ -74,8 +75,8 @@
 						<th pSortableColumn="diplome" style="text-align: center;"> Diplôme <p-sortIcon field="diplome">
 							</p-sortIcon>
 						</th>
-						<th pSortableColumn="abreviation" style="text-align: center;"> Abréviation <p-sortIcon
-								field="diplome"></p-sortIcon>
+						<th pSortableColumn="campus" style="text-align: center;"> Campus <p-sortIcon field="campus">
+							</p-sortIcon>
 						</th>
 						<th pSortableColumn="nb_etudiant"> Nombres d'étudiants <p-sortIcon field="nb_etudiant">
 							</p-sortIcon>
@@ -90,13 +91,13 @@
 				<ng-template pTemplate="body" let-rowData>
 					<tr>
 						<td style="min-width: 12rem;">
-							{{rowData.nom}}
+							{{ rowData.abbrv }}
 						</td>
 						<td style="min-width: 12rem;">
 							{{ rowData.diplome_id.titre }}
 						</td>
-						<td style="min-width: 14rem;">
-							{{ rowData.abbrv }}
+						<td style="min-width: 12rem;">
+							{{ campus[rowData.campus_id]?.libelle }}
 						</td>
 						<td *ngIf='numberClasse[rowData._id]'>
 							{{ numberClasse[rowData._id] }}

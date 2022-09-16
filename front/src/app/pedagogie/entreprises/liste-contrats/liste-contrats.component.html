@@ -30,7 +30,8 @@
                                     <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
                                         [options]="EntrepriseList" dataKey="_id" filter="true"
                                         filterBy="r_sociale,email" optionLabel="r_sociale" id="entreprise_id"
-                                        formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'">
+                                        formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'"
+                                        (onChange)="loadTuteur()">
                                     </p-dropdown>
 
                                 </div>
@@ -38,10 +39,9 @@
                                     <label For="tuteur_id">Tuteur <span style="color: red;"> *
                                         </span></label>
                                     <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                        [options]="TuteursList" dataKey="_id" filter="true"
+                                        [options]="dropdownTuteurList" dataKey="_id" filter="true"
                                         filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                        optionLabel="fonction" id="alternant"
-                                        formControlName="tuteur_id">
+                                        optionLabel="nomCOmplet" id="alternant" formControlName="tuteur_id">
                                     </p-dropdown>
 
                                 </div>
@@ -56,17 +56,7 @@
 
                                 </div>
 
-                                <div class="field col-12 md:col-6">
-                                    <label For="intitule">Intitulé<span style="color: red;"> *
-                                        </span></label>
-                                    <input pInputText id="intitule" type="text" placeholder="Intitulé du poste"
-                                        formControlName="intitule" />
-                                    <div *ngIf="intitule.invalid && (intitule.touched || intitule.dirty)">
-                                        <span style="color: red;" class="error" *ngIf="intitule.errors?.required">*
-                                            Le
-                                            champs est obligatoire.</span>
-                                    </div>
-                                </div>
+
 
                                 <div class="field col-12 md:col-6">
                                     <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
@@ -120,6 +110,17 @@
                                             champs est obligatoire.</span>
                                     </div>
                                 </div>
+                                <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
+                                    <label For="intitule">Intitulé<span style="color: red;">
+                                        </span></label>
+                                    <input pInputText id="intitule" type="text" placeholder="Intitulé du poste"
+                                        formControlName="intitule" />
+                                    <div *ngIf="intitule.invalid && (intitule.touched || intitule.dirty)">
+                                        <span style="color: red;" class="error" *ngIf="intitule.errors?.required">*
+                                            Le
+                                            champs est obligatoire.</span>
+                                    </div>
+                                </div>
 
 
                                 <div class="field col-12 md:col-6" *ngIf="Professionnalisation">
@@ -158,10 +159,13 @@
                                     </div>
                                 </div>
                                 <div class="field col-12 md:col-6">
-                                    <label For="code_commercial">Code commercial<span style="color: red;"> *
+                                    <label For="code_commercial">Commercial référent<span style="color: red;"> *
                                         </span></label>
-                                    <input pInputText id="code_commercial" type="text" disabled=true
-                                        placeholder="Code commercial" formControlName="code_commercial" />
+                                    <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
+                                        [options]="dropDownCommecialList" dataKey="_id" filter="true"
+                                        filterBy="firstname,lastname,email,email_perso" optionLabel="nomComplet"
+                                        id="code_commercial" formControlName="code_commercial">
+                                    </p-dropdown>
                                     <div
                                         *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
                                         <span style="color: red;" class="error">*
@@ -169,13 +173,13 @@
                                             champs est obligatoire.</span>
                                     </div>
                                 </div>
-                                {{ debut_contrat.invalid }}
+
                             </div>
                             <div>
                                 <button pButton type="button" label="Suivant" style="float: right;"
                                     [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||
-                                    alternantValidite ||  intitule.invalid   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)">
-
+                                    alternantValidite   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)"
+                                    (click)="createNewCA()">
                                 </button>
                             </div>
                         </div>
@@ -186,9 +190,10 @@
             </div>
 
             <p-toast></p-toast>
-            <p-table #dt1 [value]="ListeContrats" [globalFilterFields]="['']" [pageLinks]="5" [paginator]="true"
-                rowExpandMode="single" dataKey="_id" responsiveLayout="scroll" [rows]="10"
-                styleClass="p-datatable-gridlines">
+            <p-table #dt1 [value]="ListeContrats"
+                [globalFilterFields]="['classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
+                [rows]="10" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <span class="p-input-icon-left mb-2">
@@ -199,7 +204,7 @@
                         </span>
                         <span class="p-input-icon-left mb-2">
 
-                            <button pButton type="button" label="Ajouter un Alternant" (click)="ShowAddNewCA()"
+                            <button pButton type="button" label="Ajouter un contrat Alternance" (click)="ShowAddNewCA()"
                                 class="p-button-rounded p-button-plain"></button>
                         </span>
                     </div>
@@ -212,18 +217,15 @@
                         <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
                             </p-sortIcon>
                         </th>
-                        <th *ngIf="token.role=='Admin'" pSortableColumn="fin_contrat"> Entreprise <p-sortIcon
+                        <!-- <th *ngIf="token.role=='Admin'" pSortableColumn="fin_contrat"> Entreprise <p-sortIcon
                                 field="entreprise_id">
                             </p-sortIcon>
-                        </th>
-                        <th *ngIf="token.role=='Admin'" pSortableColumn="tuteur_id.user_id.firstname">Tuteur de stage
-                            <p-sortIcon field="tuteur_id">
+                        </th> -->
+
+                        <th pSortableColumn=" intitule"> intitule du poste <p-sortIcon field="intitule">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn=" intitule">  intitule du poste <p-sortIcon field="intitule">
-                        </p-sortIcon>
-                    </th>
-                        <th pSortableColumn=" statut">  statut du contrat <p-sortIcon field=" statut">
+                        <th pSortableColumn=" statut"> statut du contrat <p-sortIcon field=" statut">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon>
@@ -241,19 +243,26 @@
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="contrat"
                                 class="p-button-text p-button-rounded p-button-plain"
+                                (click)="loadcomName(contrat.code_commercial)"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 11rem;">
                             {{ contrat.alternant_id.user_id.firstname }}
                             {{ contrat.alternant_id.user_id.lastname }}</td>
-                        <td *ngIf="token.role=='Admin'" style="min-width: 5rem;">{{
-                            EntreprisesName[contrat.tuteur_id.entreprise_id]?.r_sociale }}
+
+
+                        <!-- <td *ngIf="token.role=='Admin'"> {{ contrat.tuteur_id.user_id?.firstname | titlecase }} {{
+                            contrat.tuteur_id.user_id?.lastname | uppercase }} </td> -->
+                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.intitule }}</td>
+                        <td style="min-width: 8rem;text-align: center; ">
+                            <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
+                                [value]="contrat.statut">
+                            </p-tag>
+                            <p-tag *ngIf="contrat.statut =='signé'" icon="pi pi-chevron-right" severity="success"
+                                [value]="contrat.statut">
+                            </p-tag>
                         </td>
 
-                        <td *ngIf="token.role=='Admin'"> {{ contrat.tuteur_id.user_id?.firstname | titlecase }} {{
-                            contrat.tuteur_id.user_id?.lastname | uppercase }} </td>
-                            <td style="min-width: 8rem;text-align: center; ">{{ contrat.intitule }}</td>
-                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.statut }}</td>
                         <td style="min-width: 8rem;text-align: center; ">{{ contrat.formation.titre_long }}</td>
                         <td style="min-width: 15rem;text-align: center; ">{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}</td>
@@ -275,6 +284,7 @@
                         <th>Horaire</th>
                         <th>Classification</th>
                         <th>Niveau de la formation</th>
+                        <th>Entreprise</th>
                         <th>Coeff hierachique</th>
                         <th>code_commercial</th>
 
@@ -285,11 +295,14 @@
                         <td>{{contrat.horaire}}</td>
                         <td>{{contrat.classification}}</td>
                         <td>{{contrat.niveau_formation}}</td>
-
+                        <td style="min-width: 5rem;">{{
+                            EntreprisesName[contrat.tuteur_id.entreprise_id]?.r_sociale }}
+                        </td>
                         <td>{{contrat.coeff_hierachique}}</td>
-                        <td>{{contrat.code_commercial}}</td>
+                        <td>{{ nomCompletComm }}</td>
 
                     </tr>
+
                 </ng-template>
 
 

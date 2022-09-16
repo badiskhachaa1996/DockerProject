@@ -30,32 +30,24 @@
             </div>
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddClasse" (ngSubmit)="saveClasse()">
+                <div class="field col-12">
+                    <label for="campus">Campus</label>
+                    <p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
+                                emptyFilterMessage="Pas de campus trouvé"
+                                filterPlaceholder="Choissisez un campus" filter="true"></p-dropdown>
+                </div>
+
                 <div class="field col-12 md:col-6">
                     <label For="libelle">Diplôme <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"
-                        (onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
-
+                    <p-dropdown [options]="dropdownDiplome" optionLabel="libelle" formControlName="diplome_id"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="annee">Année <span style="color: red;"> * </span></label>
-                    <input pInputText id="annee" placeholder="1er Année" type="text"
-                        formControlName="annee" />
+                    <p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label For="nom_groupe">Nom du groupe <span style="color: red;"> * </span></label>
-                    <input pInputText id="nom_groupe" placeholder="MCO 1A" type="text"
-                        formControlName="libelle" />
-
-                    <div *ngIf="libelle.invalid && (libelle.touched || libelle.dirty)">
-                        <span style="color: red;" class="error" *ngIf="libelle.errors?.required" style="color: red;">*
-                            Le nom du groupe est obligatoire </span>
-                        <span style="color: red;" class="error" *ngIf="libelle.errors?.pattern" style="color: red;">* Le
-                            nom du groupe n'est pas dans le bon format </span>
-                    </div>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="abreviation">Abréviation <span style="color: red;"> * </span></label>
-                    <input pInputText id="abreviation" type="text" formControlName="abbrv" placeholder="MCO1A" />
+                <div class="field col-12">
+                    <label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
                 </div>
                 <div style="justify-content: right;">
                     <button pButton label="Ajouter" type="submit" [disabled]="formAddClasse.invalid"></button>

@@ -119,7 +119,7 @@ export class AddSeanceComponent implements OnInit {
               campusDic[campus._id] = campus
             })
             for (let classeID in response) {
-              let label = response[classeID].nom + " - " + campusDic[diplomeDic[response[classeID]?.diplome_id]?.campus_id]?.libelle
+              let label = response[classeID].abbrv;
               this.dropdownClasse.push({ nom: label, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
               this.dropdownClasse[response[classeID]._id] = response[classeID];
             }
