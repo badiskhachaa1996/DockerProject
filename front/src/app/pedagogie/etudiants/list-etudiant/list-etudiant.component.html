@@ -276,13 +276,14 @@
                 [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
-                    <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-                        (onChange)="dt1.filter($event.value, 'filiere','in');test($event.value)">
-                    </p-multiSelect>
+
+                    <input pInputText type="text" #filter
+							(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full" />
                     
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)">
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)" [style]="{'margin':'5px'}">
                     </p-multiSelect>
+                    
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
