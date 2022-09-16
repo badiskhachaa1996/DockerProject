@@ -410,12 +410,6 @@
                 [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
-                    <span class="p-input-icon-left mb-2 mr-2">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" #filter
-                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                            class="w-full" />
-                    </span>
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
                         (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)">
                     </p-multiSelect>
@@ -492,7 +486,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-etudiant>
                     <tr>
-                        <td colspan="8">
+                        <td colspan="10">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
@@ -517,9 +511,6 @@
                     <tr>
                         <td>
                             <img alt="userPicture" [src]="imageToShow" style="max-width: 140px; max-height: 140px;">
-                        </td>
-                        <td *ngIf="etudiant.user_id.email_perso">
-                            {{ etudiant.user_id.email_perso }}
                         </td>
                         <td *ngIf="etudiant.user_id">
                             {{ etudiant.user_id.numero_adresse }} {{etudiant.user_id.rue_adresse }} {{
