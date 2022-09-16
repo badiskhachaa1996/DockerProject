@@ -78,9 +78,6 @@
 						<th pSortableColumn="campus" style="text-align: center;"> Campus <p-sortIcon field="campus">
 							</p-sortIcon>
 						</th>
-						<th pSortableColumn="abreviation" style="text-align: center;"> Abréviation <p-sortIcon
-								field="diplome"></p-sortIcon>
-						</th>
 						<th pSortableColumn="nb_etudiant"> Nombres d'étudiants <p-sortIcon field="nb_etudiant">
 							</p-sortIcon>
 						</th>
@@ -94,16 +91,13 @@
 				<ng-template pTemplate="body" let-rowData>
 					<tr>
 						<td style="min-width: 12rem;">
-							<span *ngIf="rowData.nom == ' '" style="color: red;">Groupe unique</span><span *ngIf="rowData.nom != ''">{{rowData.nom}}</span>
+							{{ rowData.abbrv }}
 						</td>
 						<td style="min-width: 12rem;">
 							{{ rowData.diplome_id.titre }}
 						</td>
 						<td style="min-width: 12rem;">
 							{{ campus[rowData.campus_id]?.libelle }}
-						</td>
-						<td style="min-width: 14rem;">
-							{{ rowData.abbrv }}
 						</td>
 						<td *ngIf='numberClasse[rowData._id]'>
 							{{ numberClasse[rowData._id] }}

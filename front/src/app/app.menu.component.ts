@@ -172,6 +172,13 @@ export class AppMenuComponent implements OnInit {
                 { label: 'Etudiants en attente de leur compte IMS', icon: 'pi pi-user-plus', routerLink: ['/assign-ims'] },
             ]
         },
+        {
+            label: 'IMS +',
+            items: [
+                { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                { label: 'Gestion des logements', icon: 'pi pi-bookmark', routerLink: ['/gestion-logements'] },
+            ]
+        },
     ];
     model: any[];
     token: any;

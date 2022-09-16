@@ -41,6 +41,7 @@ app.get("/getAll", (req, res, next) => {
 //creation d'une nouvelle entreprise
 app.post("/create", (req, res, next) => {
     delete req.body._id;
+    console.log(req.body)
     let entreprise = new Entreprise(
         {
             ...req.body
@@ -282,7 +283,7 @@ app.post("/createContratAlternance", (req, res, next) => {
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
     CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
         .then((CAFromDb) => {
-            console.log(CAFromDb);
+
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
@@ -299,7 +300,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
             let CAbyEntreprise = [];
 
             CAFromDb.forEach(async Contrat => {
-                console.log(Contrat)
+
                 if (Contrat.tuteur_id?.entreprise_id == req.params.entreprise_id) {
                     CAbyEntreprise.push(Contrat)
                 }

@@ -101,6 +101,9 @@ import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { DetailLogementComponent } from './ims+/detail-logement/detail-logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 
 
 @NgModule({
@@ -189,7 +192,11 @@ import { CreateAccountComponent } from './support/create-account/create-account.
 
                     { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
-                    { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent }
+                    { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
+
+                    { path: 'logements', component: LogementComponent },
+                    { path: 'details-logement/:id', component: DetailLogementComponent },
+                    { path: 'gestion-logements', component: GestionLogementComponent },
 
                 ],
             },
