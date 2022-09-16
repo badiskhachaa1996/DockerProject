@@ -28,6 +28,11 @@ export class EntrepriseService {
     return this.httpClient.post<Entreprise>(registreUrl, entreprise, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  // Création d'une entreprise et d'un représentant 
+  createEntrepriseRepresentant(tbObj: any) {
+    let registreUrl = this.apiUrl + "createEntrepriseRepresentant";
+    return this.httpClient.post<any>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   //Recuperation d'une entreprise via un id
   getById(id: string) {

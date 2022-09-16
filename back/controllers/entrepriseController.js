@@ -7,6 +7,8 @@ const { Tuteur } = require('./../models/Tuteur');
 const { CAlternance } = require('./../models/contrat_alternance');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
+const { application } = require('express');
+const e = require('express');
 
 let origin = ["http://localhost:4200"]
 if (process.argv[2]) {
@@ -55,6 +57,51 @@ app.post("/create", (req, res, next) => {
         .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter une nouvelle entreprise " + error.message }); })
 
 });
+
+//Création d'une nouvelle entreprise avec un représentant 
+app.post("/createEntrepriseRepresentant", (req, res, next) => {
+
+    let entrepriseData = req.body.newEntreprise;
+    let representantData = req.body.newRepresentant;
+
+    delete entrepriseData._id;
+    delete representantData._id;
+
+    let entreprise = new Entreprise(
+        {
+            ...entrepriseData
+        });
+    
+    let representant = new User(
+        {
+            ...representantData
+        });
+
+        
+    User.findOne({ email_perso: representantData.email_perso})
+        .then((userFromDb) => {
+            if(userFromDb)
+            {
+                entreprise.directeur_id = userFromDb._id;
+                entreprise.save()
+                        .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved);})
+                        .catch((error) => {res.status(400).send('Impossible de créer la nouvelle entreprise')})
+            }
+            else
+            {
+                representant.save()
+                    .then((userCreated) => {
+                        entreprise.directeur_id = userCreated._id;
+                        entreprise.save()
+                                .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
+                                .catch((error) => { res.status(400).send('Impossible de créer une nouvelle entreprise')});
+                    })
+                    .catch((error) => {res.status(400).send('Impossible de créer un nouvel utilisateur')});
+            }
+        })
+        .catch((error) => {res.status(500).send("Impossible de vérifier l'existence de l'utilisateur")});    
+
+}); 
 app.post("/createNewContrat", (req, res, next) => {
 
     let CeoData = req.body.CEO
@@ -366,33 +413,7 @@ app.put("/update", (req, res, next) => {
 
     Entreprise.findOneAndUpdate({ _id: req.body._id },
         {
-            r_sociale: req.body.r_sociale,
-            fm_juridique: req.body.fm_juridique,
-            vip: req.body.vip,
-            type_ent: req.body.type_ent,
-            isInterne: req.body.isInterne,
-            siret: req.body.siret,
-            code_ape_naf: req.body.code_ape_naf,
-            num_tva: req.body.num_tva,
-            nom_contact: req.body.nom_contact,
-            prenom_contact: req.body.prenom_contact,
-            fc_contact: req.body.fc_contact,
-            email_contact: req.body.email_contact,
-            phone_contact: req.body.phone_contact,
-            nom_contact_2nd: req.body.nom_contact_2nd,
-            prenom_contact_2nd: req.body.prenom_contact_2nd,
-            fc_contact_2nd: req.body.fc_contact_2nd,
-            email_contact_2nd: req.body.email_contact_2nd,
-            phone_contact_2nd: req.body.phone_contact_2nd,
-            pays_adresse: req.body.pays_adresse,
-            ville_adresse: req.body.ville_adresse,
-            rue_adresse: req.body.rue_adresse,
-            numero_adresse: req.body.numero_adresse,
-            postal_adresse: req.body.postal_adresse,
-            email: req.body.email,
-            phone: req.body.phone,
-            website: req.body.website,
-            financeur: req.body.financeur
+            ...req.body
         })
         .then((entrepriseUpdated) => { res.status(201).send(entrepriseUpdated); })
         .catch((error) => { res.status(400).send("Impossible de modifier cette entreprise"); });

@@ -323,25 +323,7 @@ export class InscriptionEntrepriseComponent implements OnInit {
       null,
       null,
       this.email.value,
-      this.phone_ent.value,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      this.activite.value,
-      this.adresse_ec.value,
-      this.postal_ec.value,
-      this.ville_ec.value,
-      this.crc.value,
-      this.convention.value,
-      this.telecopie.value,
-      this.nb_salarie.value,
-      this.idcc.value,
-      this.indicatif_ent.value,
-      this.OPCO.value,
-      this.organisme_prevoyance.value)
+      this.phone_ent.value,)
 
     //Création du nouvel user
 

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Entreprise } from 'src/app/models/Entreprise';
+import { User } from 'src/app/models/User';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { environment } from 'src/environments/environment';
 
@@ -27,7 +28,6 @@ export class AddEntrepriseComponent implements OnInit {
   formSteps: any[] = [
     { label: "Entreprise", icon: "pi pi-sitemap", i: 0 },
     { label: "Representant", icon: "pi pi-user", i: 1 },
-    { label: "Tuteurs", icon: "pi pi-id-card", i: 2 },
   ];
 
   ActiveIndex = 0;
@@ -85,21 +85,6 @@ export class AddEntrepriseComponent implements OnInit {
       indicatif_rep_wt: [''],
       phone_rep_wt: [''],
       isTuteur: [false],
-
-      civilite_tuteur: [this.civiliteList[0]],
-      nom_tuteur: [''],
-      prenom_tuteur: [''],
-      email_tuteur: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      indicatif_tuteur: [''],
-      phone_tuteur: [''],
-      indicatif_tuteur_wt: [''],
-      phone_tuteur_wt: [''],
-      date_naissance_tuteur: [''],
-      fonction_tuteur: [''],
-      anciennete_tuteur: [''],
-      niveau_etude_tuteur: [''],
-
-
     })
   }
 
@@ -146,29 +131,68 @@ export class AddEntrepriseComponent implements OnInit {
     let email_rep = this.formAddEntreprise.get('email_rep')?.value;
     let indicatif_rep = this.formAddEntreprise.get('indicatif_rep').value;
     let phone_rep = this.formAddEntreprise.get('phone_rep').value;
-    let indicatif_rep_wt = this.formAddEntreprise.get('indicatif_rep_wt').value;
-    let phone_rep_wt = this.formAddEntreprise.get('phone_rep_wt').value;
-    let isTuteur = this.formAddEntreprise.get('isTuteur').value;
 
-    let civilite_tuteur = this.formAddEntreprise.get('civilite_tuteur')?.value;
-    let nom_tuteur = this.formAddEntreprise.get('nom_tuteur')?.value;
-    let prenom_tuteur = this.formAddEntreprise.get('prenom_tuteur')?.value;
-    let email_tuteur = this.formAddEntreprise.get('email_tuteur')?.value;
-    let indicatif_tuteur = this.formAddEntreprise.get('indicatif_tuteur_wt')?.value;
-    let phone_tuteur = this.formAddEntreprise.get('phone_tuteur')?.value;
-    let indicatif_tuteur_wt = this.formAddEntreprise.get('indicatif_tuteur_wt')?.value;
-    let phone_tuteur_wt = this.formAddEntreprise.get('phone_tuteur_wt')?.value;
-    let date_naissance_tuteur = this.formAddEntreprise.get('date_naissance_tuteur')?.value
-    let fonction_tuteur = this.formAddEntreprise.get('fonction_tuteur')?.value;
-    let anciennete_tuteur = this.formAddEntreprise.get('anciennete_tuteur')?.value;
-    let niveau_etude_tuteur = this.formAddEntreprise.get('niveau_etude_tuteur')?.value;
+    let entreprise = new Entreprise(
+      null, 
+      r_sociale, 
+      fm_juridique, 
+      activite, 
+      type_ent, 
+      categorie, 
+      isInterne, 
+      crc, 
+      nb_salarie, 
+      convention, 
+      idcc, 
+      indicatif_ent, 
+      phone_ent, 
+      adresse_ent, 
+      code_postale_ent, 
+      ville_ent, 
+      adresse_ec, 
+      postal_ec, 
+      ville_ec, 
+      siret, 
+      code_ape_naf, 
+      num_tva, 
+      telecopie, 
+      OPCO, 
+      organisme_prevoyance, 
+      null,
+    );
 
-    let entreprise = new Entreprise(null, r_sociale, fm_juridique, activite, type_ent, categorie, isInterne, crc, nb_salarie, convention, idcc, indicatif_ent, phone_ent, adresse_ent, code_postale_ent, ville_ent, adresse_ec, postal_ec, ville_ec, siret, code_ape_naf, num_tva, telecopie, OPCO, organisme_prevoyance, civilite_rep.value, nom_rep, prenom_rep, email_rep, indicatif_rep, phone_rep, indicatif_rep, phone_rep_wt, isTuteur, civilite_tuteur.value, nom_tuteur, prenom_tuteur, email_tuteur, indicatif_tuteur, phone_tuteur, indicatif_tuteur_wt, phone_tuteur_wt, date_naissance_tuteur, fonction_tuteur, anciennete_tuteur, niveau_etude_tuteur, null);
+    let representant = new User(
+      null,
+      prenom_rep,
+      nom_rep, 
+      indicatif_rep,
+      phone_rep,
+      null,
+      email_rep, 
+      null,
+      'User',
+      false,
+      null,
+      civilite_rep.value,
+      null,
+      null,
+      'Représentant',
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
     
-    this.entrepriseService.create(entreprise).subscribe(
+    this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
       ((response) => {
 
-        this.messageService.add({ severity: 'success', summary: 'Ajout de l\entreprise' });
+        this.messageService.add({ severity: 'success', summary: "Ajout de l'entreprise" });
         this.formAddEntreprise.reset();
       }),
       ((error) => { console.error(error); })

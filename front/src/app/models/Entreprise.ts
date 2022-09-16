@@ -28,28 +28,8 @@ export class Entreprise {
         public telecopie?: string,
         public OPCO?: string,
         public organisme_prevoyance?: string,
-        public civilite_rep?: string,
-        public nom_rep?: string,
-        public prenom_rep?: string,
-        public email_rep?: string,
-        public indicatif_rep?: Number,
-        public phone_rep?: Number,
-        public indicatif_rep_wt?: Number,
-        public phone_rep_wt?: Number,
-        public isTuteur?: Boolean,
-        public civilite_tuteur?: string,
-        public nom_tuteur?: string,
-        public prenom_tuteur?: string,
-        public email_tuteur?: string,
-        public indicatif_tuteur?: Number,
-        public phone_tuteur?: Number,
-        public indicatif_tuteur_wt?: Number,
-        public phone_tuteur_wt?: Number,
-        public date_naissance_tuteur?: Date,
-        public fonction_tuteur?: string,
-        public anciennete_tuteur?: Number,
-        public niveau_etude_tuteur?: Number,
-        public Directeur_id?: User,
+        public directeur_id?: string,
+        
     ) { }
 
-}
+} 

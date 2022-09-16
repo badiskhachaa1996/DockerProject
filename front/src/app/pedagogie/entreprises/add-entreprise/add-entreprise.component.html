@@ -84,11 +84,11 @@
                                         <label For="idcc">Code IDCC: <span style="color: red;"> * </span></label>
                                         <input pInputText type="number" formControlName="idcc" placeholder="0000" />
                                     </div>
-                                    <div class="field col-4 md:col-2">
+                                    <div class="field col-4 md:col-4">
                                         <label For="indicatif_ent">Indicatif<span style="color: red;"> * </span></label>
                                         <input pInputText type="number" formControlName="indicatif_ent" placeholder="+33" />
                                     </div>
-                                    <div class="field col-8 md:col-6">
+                                    <div class="field col-8 md:col-8">
                                         <label For="phone_ent">Téléphone <small>(entreprise)</small><span style="color: red;">* </span></label>
                                         <input pInputText type="tel" formControlName="phone_ent" placeholder="0188008800"/>
                                     </div>
@@ -145,7 +145,7 @@
                                         <label For="OPCO">OPCO <span style="color: red;"> * </span></label>
                                         <input pInputText id="OPCO" type="text" formControlName="OPCO" placeholder="OPCO" />
                                     </div>
-                                    <div class="field col-12 md:col-6">
+                                    <div class="field col-12 ">
                                         <label For="organisme_prevoyance">Organisme de prevoyance</label>
                                         <input pInputText id="organisme_prevoyance" type="text" formControlName="organisme_prevoyance" placeholder="Organisme de prevoyance"/>
                                     </div>
@@ -154,8 +154,8 @@
                                     
                                     </div>
             
-                                    <div>
-                                        <button pButton type="button" label="Suivant" style="float: right;"
+                                    <div class="field col-6">
+                                        <button pButton type="button" label="Suivant"
                                             (click)="nextPage();"></button>
                                     </div>
                                 </div>
@@ -189,24 +189,8 @@
                                         <label For="phone">Téléphone <small>(dirigeant)</small> <span style="color: red;"> * </span></label>
                                         <input pInputText id="phone" type="tel" formControlName="phone_rep" placeholder="0188880050" />
                                     </div>
-                                    <div class="field col-3 md:col-4">
-                                        <label For="indicatif_whatsapp">Indicatif <small>(WhatsApp)</small><span style="color: red;"> * </span></label>
-                                        <input pInputText id="indicatif_whatsapp" type="number" formControlName="indicatif_rep_wt" placeholder="+01" />
-                                    </div>
-                                    <div class="field col-9 md:col-8">
-                                        <label For="numero_whatsapp">Numéro<small>(WhatsApp)</small><span style="color: red;"> * </span></label>
-                                        <input pInputText id="numero_whatsapp" type="tel" formControlName="phone_rep_wt" placeholder="0770101090 "/>
-                                    </div>
-                                    <div class="field col-12">
-                                        <label For="tuteur"> Voulez-vous ajouter un tuteur ?</label>
-                                        <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]" 
-                                        formControlName="isTuteur"></p-selectButton>
-                                    </div>
                                     <div class="field col-6">
                                         <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()"></button>
-                                    </div>
-                                    <div class="field col-6" *ngIf="formAddEntreprise.value.isTuteur">
-                                        <button pButton type="button" label="Suivant" style="float: right;" (click)="nextPage()"></button>
                                     </div>
                                     <div class="field col-6" *ngIf="!formAddEntreprise.value.isTuteur">
                                         <button pButton type="submit" label="Terminer" style="float: right;"></button>
@@ -214,70 +198,6 @@
                                 </div>
                             </div>
                         </div>   
-                        
-                        <div *ngIf="ActiveIndex==2">
-                            <div  style="color: black;font-weight:normal">
-                                <div class="p-fluid p-formgrid grid">
-                                    <div class="field col-12 md:col-4">
-                                        <label For="civilite">Civilité<span style="color: red;"> * </span></label>
-                                        <p-dropdown [options]="civiliteList" optionLabel="value" formControlName="civilite_tuteur" optionDisabled="actif"></p-dropdown>
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="lastname">Nom<span style="color: red;"> * </span></label>
-                                        <input pInputText id="lastname" type="text" formControlName="nom_tuteur" placeholder="Nom du dirigeant" />
-                                    </div>
-                                    <div class="field col-12 md:col-4">
-                                        <label For="firstname">Prénom<span style="color: red;"> * </span></label>
-                                        <input pInputText id="firstname" type="text" formControlName="prenom_tuteur" placeholder="Prenom du dirigeant" />
-                                    </div>
-                                    <div class="field col-12 md:col-12">
-                                        <label For="email_t1">Email du tuteur<span style="color: red;"> * </span></label>
-                                        <input pInputText id="email_t1" type="email" formControlName="email_tuteur" placeholder="Email du tuteur" />
-                                    </div>
-                                    <div class="field col-3 md:col-4">
-                                        <label For="indicatif">Indicatif<span style="color: red;"> * </span></label>
-                                        <input pInputText id="indicatif" type="number" formControlName="indicatif_tuteur" placeholder="+01"/>
-                                    </div>
-                                    <div class="field col-9 md:col-8">
-                                        <label For="phone">Téléphone <small>(tuteur)</small> <span style="color: red;"> * </span></label>
-                                        <input pInputText id="phone" type="tel" formControlName="phone_tuteur" placeholder="0188880050" />
-                                    </div>
-                                    <div class="field col-3 md:col-4">
-                                        <label For="indicatif_whatsapp">Indicatif <small>(WhatsApp)</small><span style="color: red;"> * </span></label>
-                                        <input pInputText id="indicatif_whatsapp" type="number" formControlName="indicatif_tuteur_wt" placeholder="+01" />
-                                    </div>
-                                    <div class="field col-9 md:col-8">
-                                        <label For="numero_whatsapp">Numéro<small>(WhatsApp)</small><span style="color: red;"> * </span></label>
-                                        <input pInputText id="numero_whatsapp" type="tel" formControlName="phone_tuteur_wt" placeholder="0770101090 "/>
-                                    </div>
-                                    
-                                    <div class="field col-12 md:col-6">
-                                        <label For="date_naissance_t1">Date de naissance du tuteur<span style="color: red;"> * </span></label>
-                                        <p-calendar  dateFormat="dd/mm/yy"[minDate]="minDateCalendar" [maxDate]="maxDateCalendar" [locale]="fr"
-                                                    [monthNavigator]="true" yearNavigator="true" [yearRange]="rangeYear" formControlName="date_naissance_tuteur">
-                                        </p-calendar>
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="fonction_t1">Fonction du tuteur<span style="color: red;"> * </span></label>
-                                        <input pInputText id="fonction_t1" type="text" formControlName="fonction_tuteur" placeholder="Fonction du tuteur" />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="temps_fonction_t1">Ancienneté dans la fonction en années<span style="color: red;"> * </span></label>
-                                        <input pInputText id="temps_fonction_t1" type="number" formControlName="anciennete_tuteur" placeholder="0" />
-                                    </div>
-                                    <div class="field col-12 md:col-6">
-                                        <label For="niv_formation_t1">Niveau d'études du tuteur <span style="color: red;"> * </span></label>
-                                        <input pInputText id="niv_formation_t1" type="text" formControlName="niveau_etude_tuteur" placeholder="Bac+3" />
-                                    </div>
-                                    <div class="field col-6">
-                                        <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()"></button>
-                                    </div>
-                                    <div class="field col-6">
-                                        <button pButton type="submit" label="Terminer" style="float: left;"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </form>    
             <!--<form class="p-fluid p-formgrid grid" [formGroup]="formAddEntreprise" (ngSubmit)="onAddEntreprise()">
                 <div class="field col-12 md:col-6">
