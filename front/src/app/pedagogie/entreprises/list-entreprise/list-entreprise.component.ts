@@ -98,6 +98,7 @@ export class ListEntrepriseComponent implements OnInit {
       phone_tuteur_wt: [''],
       date_naissance_tuteur: [''],
       fonction_tuteur: [''],
+      anciennete_tuteur: [''],
       niveau_etude_tuteur: [''],
 
 
@@ -150,6 +151,7 @@ export class ListEntrepriseComponent implements OnInit {
       phone_tuteur_wt: entreprise.phone_tuteur_wt,
       date_naissance_tuteur: entreprise.date_naissance_tuteur,
       fonction_tuteur: entreprise.fonction_tuteur,
+      anciennete_tuteur: entreprise.anciennete_tuteur,
       niveau_etude_tuteur: entreprise.niveau_etude_tuteur,
 
     })
@@ -159,7 +161,7 @@ export class ListEntrepriseComponent implements OnInit {
   get r_sociale_m() { return this.formUpdateEntreprise.get('r_sociale'); };
   get fm_juridique_m() { return this.formUpdateEntreprise.get('fm_juridique'); };
   get activite_m() { return this.formUpdateEntreprise.get('activite'); };
-  get isInterne_m() { return this.formUpdateEntreprise.get('isInterne'); };
+  get type_ent_m() { return this.formUpdateEntreprise.get('type_ent'); };
   get crc_m() { return this.formUpdateEntreprise.get('crc'); };
   get nb_salarie_m() { return this.formUpdateEntreprise.get('nb_salarie'); };
   get convention_m() { return this.formUpdateEntreprise.get('convention'); };
@@ -184,45 +186,72 @@ export class ListEntrepriseComponent implements OnInit {
   get indicatif_rep_m () { return this.formUpdateEntreprise.get('indicatif_rep'); };
   get phone_rep_m() { return this.formUpdateEntreprise.get('phone_rep'); };
   get indicatif_rep_wt_m() { return this.formUpdateEntreprise.get('indicatif_rep_wt'); };
+  get phone_rep_wt_m() { return this.formUpdateEntreprise.get('phone_rep_wt'); };
+  get nom_tuteur_m() { return this.formUpdateEntreprise.get('nom_tuteur'); };
+  get prenom_tuteur_m() { return this.formUpdateEntreprise.get('prenom_tuteur'); };
+  get emaim_tuteur_m() { return this.formUpdateEntreprise.get('email_tuteur'); };
+  get indicatif_tuteur_m() { return this.formUpdateEntreprise.get('indicatif_tuteur'); }
+  get phone_tuteur_m() { return this.formUpdateEntreprise.get('phone_tuteur'); };
+  get indicatif_tuteur_wt_m() { return this.formUpdateEntreprise.get('indicatif_tuteur_wt'); }
+  get phone_tuteur_wt_m() { return this.formUpdateEntreprise.get('phone_tuteur_wt'); };
+  get fonction_tuteur_m() { return this.formUpdateEntreprise.get('fonction_tuteur'); };
+  get anciennete_tuteur_m() { return this.formUpdateEntreprise.get('anciennete_tuteur');}
+  get niveau_etude_tuteur_m() { return this.formUpdateEntreprise.get('niveau_etude_tuteur'); };
+
 
 
   //Methode de modification d'une entreprise
   onUpdateEntreprise() {
     //recuperation des données du formulaire
-    let r_sociale = this.formUpdateEntreprise.get('r_sociale')?.value;
-    let fm_juridique = this.formUpdateEntreprise.get('fm_juridique')?.value;
-    let vip = this.formUpdateEntreprise.get('vip')?.value;
-    let type_ent = this.formUpdateEntreprise.get('type_ent')?.value;
-    let isInterne = this.formUpdateEntreprise.get('isInterne')?.value;
-    let siret = this.formUpdateEntreprise.get('siret')?.value;
-    let code_ape_naf = this.formUpdateEntreprise.get('code_ape_naf')?.value;
-    let num_tva = this.formUpdateEntreprise.get('num_tva')?.value;
-    let nom_contact = this.formUpdateEntreprise.get('nom_contact')?.value;
-    let prenom_contact = this.formUpdateEntreprise.get('prenom_contact')?.value;
-    let fc_contact = this.formUpdateEntreprise.get('fc_contact')?.value;
-    let email_contact = this.formUpdateEntreprise.get('email_contact')?.value;
-    let phone_contact = this.formUpdateEntreprise.get('phone_contact')?.value;
-    let nom_contact_2nd = this.formUpdateEntreprise.get('nom_contact_2nd')?.value;
-    let prenom_contact_2nd = this.formUpdateEntreprise.get('prenom_contact_2nd')?.value;
-    let fc_contact_2nd = this.formUpdateEntreprise.get('fc_contact_2nd')?.value;
-    let email_contact_2nd = this.formUpdateEntreprise.get('email_contact_2nd')?.value;
-    let phone_contact_2nd = this.formUpdateEntreprise.get('phone_contact_2nd')?.value;
-    let pays_adresse = this.formUpdateEntreprise.get('pays_adresse')?.value;
-    let ville_adresse = this.formUpdateEntreprise.get('ville_adresse')?.value;
-    let rue_adresse = this.formUpdateEntreprise.get('rue_adresse')?.value;
-    let numero_adresse = this.formUpdateEntreprise.get('numero_adresse')?.value;
-    let postal_adresse = this.formUpdateEntreprise.get('postal_adresse')?.value;
-    let email = this.formUpdateEntreprise.get('email')?.value;
-    let phone = this.formUpdateEntreprise.get('phone')?.value;
-    let website = this.formUpdateEntreprise.get('website')?.value;
-    let financeur = this.formUpdateEntreprise.get('financeur')?.value;
-    let nda = this.formUpdateEntreprise.get('nda')?.value;
-    let type_soc = this.formUpdateEntreprise.get('type_soc')?.value;
-    let categorie = this.formUpdateEntreprise.get('categorie')?.value
+    let r_sociale_m = this.formUpdateEntreprise.get('r_sociale')?.value;
+    let fm_juridique_m = this.formUpdateEntreprise.get('fm_juridique')?.value;
+    let activite_m = this.formUpdateEntreprise.get('activite')?.value;
+    let type_ent_m = this.formUpdateEntreprise.get('type_ent')?.value;
+    let categorie_m = this.formUpdateEntreprise.get('categorie')?.value;
+    let isInterne_m = this.formUpdateEntreprise.get('isInterne')?.value;
+    let crc_m = this.formUpdateEntreprise.get('crc')?.value.value;
+    let nb_salarie_m = this.formUpdateEntreprise.get('nb_salarie')?.value;
+    let convention_m = this.formUpdateEntreprise.get('convention')?.value;
+    let idcc_m = this.formUpdateEntreprise.get('idcc')?.value;
+    let indicatif_ent_m = this.formUpdateEntreprise.get('indicatif_ent')?.value;
+    let phone_ent_m = this.formUpdateEntreprise.get('phone_ent')?.value;
+    let adresse_ent_m = this.formUpdateEntreprise.get('adresse_ent')?.value;
+    let code_postale_ent_m = this.formUpdateEntreprise.get('code_postale_ent')?.value
+    let ville_ent_m = this.formUpdateEntreprise.get('ville_ent')?.value;
+    let adresse_ec_m = this.formUpdateEntreprise.get('adresse_ec')?.value;
+    let postal_ec_m = this.formUpdateEntreprise.get('postal_ec')?.value;
+    let ville_ec_m = this.formUpdateEntreprise.get('ville_ec')?.value;
+    let siret_m = this.formUpdateEntreprise.get('siret')?.value; 
+    let code_ape_naf_m = this.formUpdateEntreprise.get('code_ape_naf')?.value;
+    let num_tva_m = this.formUpdateEntreprise.get('num_tva')?.value;
+    let telecopie_m = this.formUpdateEntreprise.get('telecopie')?.value;
+    let OPCO_m = this.formUpdateEntreprise.get('OPCO')?.value;
+    let organisme_prevoyance_m = this.formUpdateEntreprise.get('organisme_prevoyance')?.value;
 
-    let entreprise = new Entreprise(this.showFormUpdateEntreprise._id, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd,
-      fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website,
-      financeur, nda, type_soc, categorie);
+    let civilite_rep_m = this.formUpdateEntreprise.get('civilite_rep')?.value;
+    let nom_rep_m = this.formUpdateEntreprise.get('nom_rep')?.value;
+    let prenom_rep_m = this.formUpdateEntreprise.get('prenom_rep')?.value;
+    let email_rep_m = this.formUpdateEntreprise.get('email_rep')?.value;
+    let indicatif_rep_m = this.formUpdateEntreprise.get('indicatif_rep').value;
+    let phone_rep_m = this.formUpdateEntreprise.get('phone_rep').value;
+    let indicatif_rep_wt_m = this.formUpdateEntreprise.get('indicatif_rep_wt').value;
+    let phone_rep_wt_m = this.formUpdateEntreprise.get('phone_rep_wt').value;
+    let isTuteur_m = this.formUpdateEntreprise.get('isTuteur').value;
+
+    let civilite_tuteur_m = this.formUpdateEntreprise.get('civilite_tuteur')?.value;
+    let nom_tuteur_m = this.formUpdateEntreprise.get('nom_tuteur')?.value;
+    let prenom_tuteur_m = this.formUpdateEntreprise.get('prenom_tuteur')?.value;
+    let email_tuteur_m = this.formUpdateEntreprise.get('email_tuteur')?.value;
+    let indicatif_tuteur_m = this.formUpdateEntreprise.get('indicatif_tuteur_wt')?.value;
+    let phone_tuteur_m = this.formUpdateEntreprise.get('phone_tuteur')?.value;
+    let indicatif_tuteur_wt_m = this.formUpdateEntreprise.get('indicatif_tuteur_wt')?.value;
+    let phone_tuteur_wt_m = this.formUpdateEntreprise.get('phone_tuteur_wt')?.value;
+    let date_naissance_tuteur_m = this.formUpdateEntreprise.get('date_naissance_tuteur')?.value
+    let fonction_tuteur_m = this.formUpdateEntreprise.get('fonction_tuteur')?.value;
+    let anciennete_tuteur_m = this.formUpdateEntreprise.get('anciennete_tuteur')?.value;
+    let niveau_etude_tuteur_m = this.formUpdateEntreprise.get('niveau_etude_tuteur')?.value;
+
+    let entreprise = new Entreprise(this.showFormUpdateEntreprise._id,);     // TODO
 
     this.entrepriseService.update(entreprise).subscribe(
       ((response) => {

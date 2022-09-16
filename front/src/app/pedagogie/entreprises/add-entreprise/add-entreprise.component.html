@@ -116,7 +116,7 @@
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label For="postal_ec">Code postal<span style="color: red;"> * </span></label>
-                                        <input pInputText id="postal_ec" type="text" formControlName="postale_ec" placeholder="75001" />    
+                                        <input pInputText id="postal_ec" type="text" formControlName="postal_ec" placeholder="75001" />    
                                     </div>
                                     <div class="field col-12 md:col-3">
                                         <label For="ville_ec">Ville de l’exécution du contrat<span style="color: red;"> * </span></label>
@@ -156,7 +156,7 @@
             
                                     <div>
                                         <button pButton type="button" label="Suivant" style="float: right;"
-                                            (click)="nextPage();verifEmailInBD()"></button>
+                                            (click)="nextPage();"></button>
                                     </div>
                                 </div>
                             </div>
@@ -209,7 +209,7 @@
                                         <button pButton type="button" label="Suivant" style="float: right;" (click)="nextPage()"></button>
                                     </div>
                                     <div class="field col-6" *ngIf="!formAddEntreprise.value.isTuteur">
-                                        <button pButton type="button" label="Terminer" style="float: right;"></button>
+                                        <button pButton type="submit" label="Terminer" style="float: right;"></button>
                                     </div>
                                 </div>
                             </div>
@@ -259,18 +259,21 @@
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label For="fonction_t1">Fonction du tuteur<span style="color: red;"> * </span></label>
-                                        <input pInputText id="fonction_t1" type="text" formControlName="indicatif_tuteur" placeholder="fonction_tuteur" />
+                                        <input pInputText id="fonction_t1" type="text" formControlName="fonction_tuteur" placeholder="Fonction du tuteur" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label For="temps_fonction_t1">Ancienneté dans la fonction en années<span style="color: red;"> * </span></label>
-                                        <input pInputText id="temps_fonction_t1" type="number" formControlName="indicatif_tuteur" placeholder="0" />
+                                        <input pInputText id="temps_fonction_t1" type="number" formControlName="anciennete_tuteur" placeholder="0" />
                                     </div>
                                     <div class="field col-12 md:col-6">
                                         <label For="niv_formation_t1">Niveau d'études du tuteur <span style="color: red;"> * </span></label>
                                         <input pInputText id="niv_formation_t1" type="text" formControlName="niveau_etude_tuteur" placeholder="Bac+3" />
                                     </div>
-                                    <div>
+                                    <div class="field col-6">
                                         <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()"></button>
+                                    </div>
+                                    <div class="field col-6">
+                                        <button pButton type="submit" label="Terminer" style="float: left;"></button>
                                     </div>
                                 </div>
                             </div>

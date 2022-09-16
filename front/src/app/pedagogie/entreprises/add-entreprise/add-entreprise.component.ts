@@ -96,6 +96,7 @@ export class AddEntrepriseComponent implements OnInit {
       phone_tuteur_wt: [''],
       date_naissance_tuteur: [''],
       fonction_tuteur: [''],
+      anciennete_tuteur: [''],
       niveau_etude_tuteur: [''],
 
 
@@ -119,8 +120,9 @@ export class AddEntrepriseComponent implements OnInit {
     let type_ent = this.formAddEntreprise.get('type_ent')?.value;
     let categorie = this.formAddEntreprise.get('categorie')?.value;
     let isInterne = this.formAddEntreprise.get('isInterne')?.value;
-    let crc = this.formAddEntreprise.get('crc')?.value.value;
+    let crc = this.formAddEntreprise.get('crc')?.value;
     let nb_salarie = this.formAddEntreprise.get('nb_salarie')?.value;
+    
     let convention = this.formAddEntreprise.get('convention')?.value;
     let idcc = this.formAddEntreprise.get('idcc')?.value;
     let indicatif_ent = this.formAddEntreprise.get('indicatif_ent')?.value;
@@ -158,9 +160,10 @@ export class AddEntrepriseComponent implements OnInit {
     let phone_tuteur_wt = this.formAddEntreprise.get('phone_tuteur_wt')?.value;
     let date_naissance_tuteur = this.formAddEntreprise.get('date_naissance_tuteur')?.value
     let fonction_tuteur = this.formAddEntreprise.get('fonction_tuteur')?.value;
+    let anciennete_tuteur = this.formAddEntreprise.get('anciennete_tuteur')?.value;
     let niveau_etude_tuteur = this.formAddEntreprise.get('niveau_etude_tuteur')?.value;
 
-    let entreprise = new Entreprise(null, r_sociale, fm_juridique, activite, type_ent, categorie, isInterne, crc, nb_salarie, convention, idcc, indicatif_ent, adresse_ent, code_postale_ent, ville_ent, adresse_ec, postal_ec, ville_ec, siret, code_ape_naf, num_tva, telecopie, OPCO, organisme_prevoyance, civilite_rep, nom_rep, prenom_rep, email_rep, indicatif_rep, phone_rep, indicatif_rep, phone_rep_wt, isTuteur, civilite_tuteur, nom_tuteur, prenom_tuteur, email_tuteur, indicatif_tuteur, phone_tuteur, indicatif_tuteur_wt, phone_tuteur_wt, date_naissance_tuteur, fonction_tuteur, niveau_etude_tuteur, null);
+    let entreprise = new Entreprise(null, r_sociale, fm_juridique, activite, type_ent, categorie, isInterne, crc, nb_salarie, convention, idcc, indicatif_ent, phone_ent, adresse_ent, code_postale_ent, ville_ent, adresse_ec, postal_ec, ville_ec, siret, code_ape_naf, num_tva, telecopie, OPCO, organisme_prevoyance, civilite_rep.value, nom_rep, prenom_rep, email_rep, indicatif_rep, phone_rep, indicatif_rep, phone_rep_wt, isTuteur, civilite_tuteur.value, nom_tuteur, prenom_tuteur, email_tuteur, indicatif_tuteur, phone_tuteur, indicatif_tuteur_wt, phone_tuteur_wt, date_naissance_tuteur, fonction_tuteur, anciennete_tuteur, niveau_etude_tuteur, null);
     
     this.entrepriseService.create(entreprise).subscribe(
       ((response) => {
