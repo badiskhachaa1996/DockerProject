@@ -272,13 +272,18 @@
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
-                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id']" [rows]="10"
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','gituser_id.firstname','custom_id']" [rows]="10"
                 [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
+
+                    <input pInputText type="text" #filter
+							(input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full" />
+                    
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)">
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');test($event.value)" [style]="{'margin':'5px'}">
                     </p-multiSelect>
+                    
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>

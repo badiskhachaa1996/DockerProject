@@ -6,6 +6,7 @@ const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
+const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
 app.disable("x-powered-by");
 
@@ -81,7 +82,9 @@ app.post("/create", (req, res, next) => {
                             res.status(400).json({ error: 'Cet étudiant existe déja' });
                         } else {
                             etudiant.user_id = userFromDb._id;
+                            console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
+
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
 
@@ -93,6 +96,7 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         etudiant.user_id = userCreated._id;
+                        console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated }) })
                             .catch((error) => {
@@ -143,12 +147,33 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 });
 
 app.get("/getAllAlternants", (req, res, next) => {
-
+    AlternantTosign = []
     Etudiant.find({ isAlternant: true }).populate('user_id')
-        .then((alternantsFromDb) => {
+        .then(alternantsFromDb => {
 
+            let i = alternantsFromDb.length
+            alternantsFromDb.forEach(alternatInscrit => {
             
-            res.status(200).send(alternantsFromDb);
+                CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
+               
+                    if (contratdata.length !== 0) {
+                      
+                    }
+                    else {
+
+                        AlternantTosign.push(alternatInscrit)
+
+                    }
+
+                    i--;
+                    if (i < 1) {
+
+                     
+                        res.status(200).send(AlternantTosign);
+
+                    }
+                })
+            });
         })
         .catch((error) => {
             console.log(error);
