@@ -6,6 +6,7 @@ const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
+const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
 app.disable("x-powered-by");
 
@@ -146,12 +147,37 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 });
 
 app.get("/getAllAlternants", (req, res, next) => {
-
+    AlternantTosign = []
     Etudiant.find({ isAlternant: true }).populate('user_id')
-        .then((alternantsFromDb) => {
+        .then(alternantsFromDb => {
 
-            
-            res.status(200).send(alternantsFromDb);
+            let i = alternantsFromDb.length
+            alternantsFromDb.forEach(alternatInscrit => {
+                console.log("idalternant: " + alternatInscrit.user_id._id)
+                CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
+                    console.log("etudiant=****");
+                    console.log(contratdata);
+                    if (contratdata.length !== 0) {
+                        console.log("contrat trouvée ** ne pas envoyé")
+                    }
+                    else {
+
+                        console.log("etudiant add to sign")
+                        AlternantTosign.push(alternatInscrit)
+
+                    }
+
+                    i--;
+                    if (i < 1) {
+
+                        console.log("to send : " + AlternantTosign.length)
+
+                        console.log('execution here')
+                        res.status(200).send(AlternantTosign);
+                       
+                    }
+                })
+            });
         })
         .catch((error) => {
             console.log(error);
