@@ -82,7 +82,9 @@ app.post("/create", (req, res, next) => {
                             res.status(400).json({ error: 'Cet étudiant existe déja' });
                         } else {
                             etudiant.user_id = userFromDb._id;
+                            console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
+
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
 
@@ -94,6 +96,7 @@ app.post("/create", (req, res, next) => {
                 user.save()
                     .then((userCreated) => {
                         etudiant.user_id = userCreated._id;
+                        console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save()
                             .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated }) })
                             .catch((error) => {
@@ -150,16 +153,14 @@ app.get("/getAllAlternants", (req, res, next) => {
 
             let i = alternantsFromDb.length
             alternantsFromDb.forEach(alternatInscrit => {
-                console.log("idalternant: " + alternatInscrit.user_id._id)
+            
                 CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
-                    console.log("etudiant=****");
-                    console.log(contratdata);
+               
                     if (contratdata.length !== 0) {
-                        console.log("contrat trouvée ** ne pas envoyé")
+                      
                     }
                     else {
 
-                        console.log("etudiant add to sign")
                         AlternantTosign.push(alternatInscrit)
 
                     }
@@ -167,11 +168,9 @@ app.get("/getAllAlternants", (req, res, next) => {
                     i--;
                     if (i < 1) {
 
-                        console.log("to send : " + AlternantTosign.length)
-
-                        console.log('execution here')
+                     
                         res.status(200).send(AlternantTosign);
-                       
+
                     }
                 })
             });

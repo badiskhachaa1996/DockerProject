@@ -319,8 +319,9 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 
 app.get("/getAllContrats/", (req, res, next) => {
     console.log("getAllContrats")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' })
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'code_commercial' })
         .then((CAFromDb) => {
+            console.log(CAFromDb)
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {

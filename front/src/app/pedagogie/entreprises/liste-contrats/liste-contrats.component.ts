@@ -82,7 +82,7 @@ export class ListeContratsComponent implements OnInit {
       this.EntrepriseList = listEntre;
       // Lister tous les étudiants alternants
       this.etudiantService.getAllAlternants().subscribe(alternantsData => {
- 
+
         alternantsData.forEach(altdata => {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
           altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
@@ -225,10 +225,10 @@ export class ListeContratsComponent implements OnInit {
 
     })
   }
-  loadcomName(idComm) {
+  loadcomName(contrat) {
 
 
-    this.authService.getInfoById(idComm).subscribe(dataCom => {
+    this.authService.getInfoById(contrat.code_commercial._id).subscribe(dataCom => {
       if (dataCom) {
 
         this.nomCompletComm = dataCom.firstname + " " + dataCom?.lastname;
