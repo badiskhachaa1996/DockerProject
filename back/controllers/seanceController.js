@@ -59,18 +59,18 @@ app.post('/create', (req, res, next) => {
                     let ce = new Date(req.body.date_fin).getTime() //date to check = req.body.date_fin
 
                     //Si une séance existante se trouve pendant la séance
-                    if (cs <= s && e <= cs) {
+                    if (cs == s && e == cs) {
                         error = true
                         res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier les deux dates", temp })
                         return false
-                    } else if (cs >= s && cs <= e) {
+                    } else if (cs >= s && cs < e) {
                         //Si la date de debut de la nouvelle séance est entre une existante
                         error = true
                         res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de début", temp })
                         return false
                     }
                     //Si la date de fin de la nouvelle séance est entre une existante
-                    else if (ce >= s && ce <= e) {
+                    else if (ce > s && ce <= e) {
                         error = true
                         res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de fin", temp })
                         return false

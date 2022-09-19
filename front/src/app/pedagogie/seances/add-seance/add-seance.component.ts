@@ -14,7 +14,6 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
-import { of } from 'rxjs';
 
 
 @Component({
