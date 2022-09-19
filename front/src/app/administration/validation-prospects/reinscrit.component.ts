@@ -79,7 +79,7 @@ export class ReinscritComponent implements OnInit {
     // indicatif_tuteur: [''],
     remarque: [''],
     campus_id: [' '],
-    statut_dossier: [this.statutDossier[0].value],
+    statut_dossier: [''],
     //email_ims: ['', Validators.required]
 
   })
@@ -327,7 +327,7 @@ export class ReinscritComponent implements OnInit {
 
   showPayement: Prospect;
   formUpdateDossier: FormGroup = this.formBuilder.group({
-    statut_dossier: [this.statutDossier[0].value]
+    statut_dossier: ['']
   });
 
   showPayementFC(etu: Prospect) {

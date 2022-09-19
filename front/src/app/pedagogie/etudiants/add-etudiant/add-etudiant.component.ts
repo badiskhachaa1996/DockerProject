@@ -192,7 +192,7 @@ export class AddEtudiantComponent implements OnInit {
       remarque: [''],
       campus_id: [' '],
       filiere: ['', Validators.required],
-      statut_dossier: [this.statutDossier[0].value]
+      statut_dossier: ['']
 
 
     });

@@ -395,10 +395,10 @@ export class ListEtudiantComponent implements OnInit {
       enic_naric: [false],
       campus_id: [' '],
       filiere: ['', Validators.required],
-      statut_dossier: [this.statutDossier[0].value]
+      statut_dossier: ['']
     });
     this.formUpdateDossier = this.formBuilder.group({
-      statut_dossier: [this.statutDossier[0].value]
+      statut_dossier: ['']
     });
   }
 
@@ -447,7 +447,7 @@ export class ListEtudiantComponent implements OnInit {
     let campus = this.formUpdateEtudiant.get("campus_id")?.value;
 
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
-
+    console.log(statut_dossier)
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
 
     let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
@@ -493,7 +493,7 @@ export class ListEtudiantComponent implements OnInit {
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
-
+        console.log(responde.statut_dossier)
         this.messageService.add({ severity: 'success', summary: 'Etudiant modifié' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
@@ -515,37 +515,37 @@ export class ListEtudiantComponent implements OnInit {
     let date = new Date(response.date_naissance)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
-  
-          this.formUpdateEtudiant.patchValue({
-            statut: { value: response.statut, viewValue: response.statut },
-            classe_id: { libelle: bypass.nom, value: bypass._id },
-            nationalite: { value: response.nationalite, viewValue: response.nationalite },
-            isAlternant: this.etudiantToUpdate.isAlternant,
-            dernier_diplome: this.etudiantToUpdate.dernier_diplome,
-            sos_email: this.etudiantToUpdate.sos_email,
-            sos_phone: this.etudiantToUpdate.sos_phone,
-            numero_INE: this.etudiantToUpdate.numero_INE,
-            numero_NIR: this.etudiantToUpdate.numero_NIR,
-            nom_rl: this.etudiantToUpdate.nom_rl,
-            prenom_rl: this.etudiantToUpdate.prenom_rl,
-            phone_rl: this.etudiantToUpdate.phone_rl,
-            email_rl: this.etudiantToUpdate.email_rl,
-            adresse_rl: this.etudiantToUpdate.adresse_rl,
-            isHandicaped: this.etudiantToUpdate.isHandicaped,
-            suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-            remarque: this.etudiantToUpdate.remarque,
-            isOnStage: this.etudiantToUpdate.isOnStage,
-            enic_naric: this.etudiantToUpdate.enic_naric,
-          });
-          bypass = response.campus
-          let bypassv2: any = response.filiere
-          this.formUpdateEtudiant.patchValue({
-            campus_id: bypass?._id,
-            filiere: bypassv2?._id,
-            date_naissance: this.formatDate(date)
-          })
-          this.showFormUpdateEtudiant = true;
-          this.showFormExportEtudiant = false;
+
+    this.formUpdateEtudiant.patchValue({
+      statut: { value: response.statut, viewValue: response.statut },
+      classe_id: { libelle: bypass.nom, value: bypass._id },
+      nationalite: { value: response.nationalite, viewValue: response.nationalite },
+      isAlternant: this.etudiantToUpdate.isAlternant,
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome,
+      sos_email: this.etudiantToUpdate.sos_email,
+      sos_phone: this.etudiantToUpdate.sos_phone,
+      numero_INE: this.etudiantToUpdate.numero_INE,
+      numero_NIR: this.etudiantToUpdate.numero_NIR,
+      nom_rl: this.etudiantToUpdate.nom_rl,
+      prenom_rl: this.etudiantToUpdate.prenom_rl,
+      phone_rl: this.etudiantToUpdate.phone_rl,
+      email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl,
+      isHandicaped: this.etudiantToUpdate.isHandicaped,
+      suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque,
+      isOnStage: this.etudiantToUpdate.isOnStage,
+      enic_naric: this.etudiantToUpdate.enic_naric,
+    });
+    bypass = response.campus
+    let bypassv2: any = response.filiere
+    this.formUpdateEtudiant.patchValue({
+      campus_id: bypass?._id,
+      filiere: bypassv2?._id,
+      date_naissance: this.formatDate(date)
+    })
+    this.showFormUpdateEtudiant = true;
+    this.showFormExportEtudiant = false;
   }
 
   private formatDate(date) {

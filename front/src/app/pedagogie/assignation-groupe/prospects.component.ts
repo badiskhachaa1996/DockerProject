@@ -71,7 +71,7 @@ export class ProspectsComponent implements OnInit {
 
   AssignForm: FormGroup = this.formBuilder.group({
     groupe: ["", Validators.required],
-    statut_dossier: [[this.statutDossier[0].value], Validators.required],
+    statut_dossier: [[''], Validators.required],
   })
 
   ngOnInit(): void {
