@@ -76,7 +76,6 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
         {
             ...representantData
         });
-
         
     User.findOne({ email_perso: representantData.email_perso})
         .then((userFromDb) => {
@@ -102,6 +101,30 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
         .catch((error) => {res.status(500).send("Impossible de vérifier l'existence de l'utilisateur")});    
 
 }); 
+
+
+//Modification d'une entreprise et de son representant
+app.put("/updateEntrepriseRepresentant", (req, res) => {
+
+    let entrepriseData = req.body.entrepriseToUpdate;
+    let representantData = req.body.representantToUpdate;
+
+    User.findOneAndUpdate({ _id: representantData._id }, 
+        { 
+            ...representantData
+        })
+        .then((userSaved) => {
+            Entreprise.findOneAndUpdate({ _id: entrepriseData._id }, 
+                {
+                    ...entrepriseData
+                })
+                .then((entrepriseFromDb) => res.status(201).send(entrepriseFromDb))
+                .catch((error) => { res.status(500).send("Impossible de mettre à jour l'entreprise")}
+        )
+        .catch((error) => { res.status(500).send('Impossible de mettre à jour le representant')})        
+    });
+});
+
 app.post("/createNewContrat", (req, res, next) => {
 
     let CeoData = req.body.CEO
