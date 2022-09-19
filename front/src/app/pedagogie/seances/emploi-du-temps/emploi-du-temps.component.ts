@@ -78,11 +78,6 @@ export class EmploiDuTempsComponent implements OnInit {
         rowData.classe_id.forEach(classeID => {
           classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
         });
-        let c = []
-        rowData.campus_id.forEach(cid => {
-          c.push({ libelle: this.dicCampus[cid]?.nom, value: this.dicCampus[cid]?._id })
-        })
-        this.seanceFormUpdate.patchValue({ campus_id: c })
         this.seanceFormUpdate = new FormGroup({
           classe: new FormControl(classeList),
           matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
@@ -92,7 +87,7 @@ export class EmploiDuTempsComponent implements OnInit {
           formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
           isPresentiel: new FormControl(rowData.isPresentiel),
           salle_name: new FormControl({ value: rowData.salle_name }),
-          campus_id: new FormControl(c),
+          campus_id: new FormControl({ libelle: this.dicCampus[ rowData.campus_id]?.nom, value: this.dicCampus[ rowData.campus_id]?._id }),
           isPlanified: new FormControl(rowData.isPlanified),
           nbseance: new FormControl(rowData.nbseance)
         });

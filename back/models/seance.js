@@ -12,7 +12,7 @@ const seanceSchema = mongoose.Schema({
     isPresentiel: { type: String, default: false },
     salle_name: { type: String },
     isPlanified: { type: Boolean, default: false },
-    campus_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'campus', required: false },
+    campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'campus', required: false },
     nbseance: { type: Number, required: false },
     fileRight: { type: [mongoose.Schema.Types.Mixed], default: [] },//{name:"",right:false,upload_by:mongoose.Schema.Types.ObjectId}
     remarque: { type: String }

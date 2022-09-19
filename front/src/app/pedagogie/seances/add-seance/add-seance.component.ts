@@ -14,6 +14,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
+import { Campus } from 'src/app/models/Campus';
+import { Diplome } from 'src/app/models/Diplome';
 
 
 @Component({
@@ -130,17 +132,16 @@ export class AddSeanceComponent implements OnInit {
     );
   }
 
-  showSalles(value) {
+  showSalles(value,def=false) {
     this.salleNames = []
-    value.forEach(cid => {
-      this.campus[cid].salles.forEach(s => {
-        console.log(s)
-        this.salleNames.push({ value: s, label: s })
-      })
+    console.log(value)
+    this.campus[value].salles.forEach(s => {
+      console.log(s)
+      this.salleNames.push({ value: s, label: s })
     })
     if (this.salleNames.length != 0)
       this.seanceForm.patchValue({ salle_name: this.salleNames[0].value })
-    else if (this.isPresentiel.value != "Distanciel")
+    else if (this.isPresentiel.value != "Distanciel" && !def)
       this.messageService.add({ severity: "error", summary: "Choix des salles", detail: "Ces campus ne contiennent aucune salle." })
 
   }
@@ -433,18 +434,36 @@ export class AddSeanceComponent implements OnInit {
   }
 
   changeGroupe(event) {
-    console.log(event)
     let listIDs = []
+    this.dropdownCampus = []
     event.forEach(d => {
       listIDs.push(d.diplome_id)
+      let groupe: Classe = this.dicClasse[d.value]
+      let diplome: Diplome = this.diplomeDic[groupe.diplome_id]
+      if (groupe) {
+        diplome.campus_id.forEach(cid => {
+          let campus: Campus = this.campus[cid]
+          let r = false
+          let l = { label: campus.libelle, value: campus._id }
+          this.dropdownCampus.forEach(e => {
+            if (e.value == l.value) {
+              r = true
+            }
+          })
+          if (!r)
+            this.dropdownCampus.push(l)
+        })
+      }
+
     })
-    console.log(listIDs)
     this.dropdownMatiere = []
     this.listMatiere.forEach(m => {
       if (this.customIncludes(m.formation_id, listIDs) == true)
         this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[m.formation_id].titre, value: m._id });
     })
-    console.log(this.dropdownMatiere)
+
+    this.seanceForm.patchValue({ campus_id: this.dropdownCampus[0].value })
+    this.showSalles(this.dropdownCampus[0].value,true)
   }
 
   customIncludes(l: any, d: any[]) {
