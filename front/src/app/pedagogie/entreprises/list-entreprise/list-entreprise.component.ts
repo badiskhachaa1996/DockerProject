@@ -22,12 +22,26 @@ export class ListEntrepriseComponent implements OnInit {
   categorieList = [
     'Sous-traitant',
     "Alternant",
-    "Autre" 
+    "Prestataire",
+    "Autre"
   ]
   civiliteList = environment.civilite;
 
+  choiceList = [
+    { label: 'Oui', value: true },
+    { label: 'Non', value: false },
+  ];
+
+  formSteps: any[] = [
+    { label: "Entreprise", icon: "pi pi-sitemap", i: 0 },
+    { label: "Representant", icon: "pi pi-user", i: 1 },
+  ];
+
+  ActiveIndex = 0;
+
   formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
+  representantToUpdate: User;
   IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }]
   constructor(private userService: AuthService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
@@ -77,9 +91,9 @@ export class ListEntrepriseComponent implements OnInit {
       categorie: [[]],
       isInterne: [false],
       crc: [''], 
-      nb_salarie: ['', [Validators.pattern('[0-9]+')]],
+      nb_salarie: ['', Validators.pattern('[0-9]+')],
       convention: [''],
-      idcc: ['', [Validators.pattern('[0-9]+')]], 
+      idcc: ['', Validators.pattern('[0-9]+')], 
       indicatif_ent: [''],
       phone_ent: [''],
       adresse_ent: [''],
@@ -94,10 +108,18 @@ export class ListEntrepriseComponent implements OnInit {
       telecopie: [''],
       OPCO: [''],
       organisme_prevoyance: [''],
+
+      civilite_rep: [this.civiliteList[0]],
+      nom_rep: ['', Validators.required],
+      prenom_rep: ['', Validators.required],
+      email_rep: ['', [Validators.required, Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      indicatif_rep: ['', Validators.required],
+      phone_rep: ['', Validators.required],
     })
   }
 
-  initFormUpdateEntreprise(entreprise: Entreprise) {
+  initFormUpdateEntreprise(entreprise: Entreprise, representant: User) {
+    this.representantToUpdate = representant;
     this.showFormUpdateEntreprise = entreprise
     this.formUpdateEntreprise.patchValue({
       r_sociale: entreprise.r_sociale,
@@ -124,6 +146,13 @@ export class ListEntrepriseComponent implements OnInit {
       telecopie: entreprise.telecopie,
       OPCO: entreprise.OPCO,
       organisme_prevoyance: entreprise.organisme_prevoyance,
+
+      civilite_rep: representant.civilite,
+      nom_rep: representant.lastname,
+      prenom_rep: representant.firstname,
+      email_rep: representant.email_perso,
+      indicatif_rep: representant.indicatif,
+      phone_rep: representant.phone,
 
     })
   }
@@ -183,6 +212,14 @@ export class ListEntrepriseComponent implements OnInit {
     let OPCO = this.formUpdateEntreprise.get('OPCO')?.value;
     let organisme_prevoyance = this.formUpdateEntreprise.get('organisme_prevoyance')?.value;
 
+    let civilite_rep = this.formUpdateEntreprise.get('civilite_rep')?.value;
+    let nom_rep = this.formUpdateEntreprise.get('nom_rep')?.value;
+    let prenom_rep = this.formUpdateEntreprise.get('prenom_rep')?.value;
+    let email_rep = this.formUpdateEntreprise.get('email_rep')?.value;
+    let indicatif_rep = this.formUpdateEntreprise.get('indicatif_rep').value;
+    let phone_rep = this.formUpdateEntreprise.get('phone_rep').value;
+
+
     let entreprise = new Entreprise(
       this.showFormUpdateEntreprise._id, 
       r_sociale, 
@@ -212,7 +249,35 @@ export class ListEntrepriseComponent implements OnInit {
       null,
       ); 
 
-    this.entrepriseService.update(entreprise).subscribe(
+      let representant = new User(
+        this.representantToUpdate._id,
+        prenom_rep,
+        nom_rep, 
+        indicatif_rep,
+        phone_rep,
+        email_rep,
+        email_rep, 
+        null,
+        'User',
+        false,
+        null,
+        civilite_rep.value,
+        null,
+        null,
+        'Représentant',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
+
+    this.entrepriseService.updateEntrepriseRepresentant({'entrepriseToUpdate': entreprise, 'representantToUpdate': representant}).subscribe(
       ((response) => {
 
         this.messageService.add({ severity: 'success', summary: 'Entreprise modifiée' });
@@ -228,6 +293,14 @@ export class ListEntrepriseComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
+  }
+
+  nextPage() {
+    this.ActiveIndex++
+  }
+
+  previousPage() {
+    this.ActiveIndex--
   }
 
   onRedirect()
