@@ -84,8 +84,9 @@ export class ListSeancesComponent implements OnInit {
 
     this.classeService.getAll().subscribe(
       ((response) => {
+        console.log(response)
         for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].nom, value: response[classeID]._id });
+          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id });
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }

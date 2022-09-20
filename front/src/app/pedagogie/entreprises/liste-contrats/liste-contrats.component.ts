@@ -288,7 +288,7 @@ export class ListeContratsComponent implements OnInit {
   createNewCA() {
 
     let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
-
+    console.log(CA_Object)
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
       this.formAddNewCA = false

@@ -155,9 +155,8 @@
                             </div>
                         </div>
                         <div classe="field">
-                            <button pButton type="button" label="Ajouter" style="float: right;"
-                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||
-                                alternantValidite   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)">
+                            <button pButton type="submit" label="Ajouter" style="float: right;"
+                                [disabled]="RegisterNewCA.invalid|| (Professionnalisation.value == true && classification.invalid)">
                             </button>
                         </div>
                     </div>
@@ -359,10 +358,10 @@
                         <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn=" intitule"> intitulé du poste <p-sortIcon field="intitule">
+                        <th pSortableColumn=" intitule">Intitulé du poste <p-sortIcon field="intitule">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn=" statut"> statut du contrat <p-sortIcon field=" statut">
+                        <th pSortableColumn=" statut">Statut du contrat <p-sortIcon field=" statut">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon>
