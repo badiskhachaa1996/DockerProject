@@ -114,7 +114,7 @@ export class AddGroupeComponent implements OnInit {
   onInitFormAddClasse() {
     this.formAddClasse = this.formBuilder.group({
       campus_id: ['', Validators.required],
-      libelle: [this.dropdownGroupe[1]],
+      libelle: [this.dropdownGroupe[1], Validators.required],
       diplome_id: ['', Validators.required],
       //abbrv: ['', Validators.required],
       annee: [this.dropdownAnnee[0]]
@@ -129,7 +129,7 @@ export class AddGroupeComponent implements OnInit {
     let campus_id = this.formAddClasse.get('campus_id')?.value.value;
     let abbrv = `${this.formAddClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle} - ${this.formAddClasse.get('campus_id')?.value.libelle}`;
 
-    let classe = new Classe(null, diplome_id, campus_id, libelle, true, abbrv, annee);
+    let classe = new Classe(null, diplome_id, campus_id, true, abbrv, annee);
 
     this.classeService.create(classe).subscribe(
       ((response) => {

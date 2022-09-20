@@ -273,7 +273,7 @@ export class NotesComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
+          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
           this.classes[classe._id] = classe;
         })
 

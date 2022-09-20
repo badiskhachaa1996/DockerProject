@@ -6,13 +6,10 @@ const { Diplome } = require("./../models/diplome");
 //Création d'une nouveau classe 
 app.post("/create", (req, res) => {
     //Sauvegarde d'une classe
+    delete req.body._id
     let classe = new Classe(
         {
-            diplome_id: req.body.diplome_id,
-            campus_id: req.body.campus_id,
-            nom: req.body.nom,
-            active: req.body.active,
-            abbrv: req.body.abbrv
+            ...req.body
         });
 
     classe.save()
@@ -25,11 +22,7 @@ app.post("/create", (req, res) => {
 app.post("/updateById", (req, res) => {
     Classe.findOneAndUpdate({ _id: req.body._id },
         {
-            diplome_id: req.body.diplome_id,
-            campus_id: req.body.campus_id,
-            nom: req.body.nom,
-            active: req.body.active,
-            abbrv: req.body.abbrv
+            ...req.body
         })
         .then((classeUpdated) => { res.status(201).send(classeUpdated); })
         .catch((error) => { res.status(400).send('Modification impossible' + error) });

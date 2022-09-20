@@ -150,7 +150,7 @@ export class ListGroupeComponent implements OnInit {
     let campus_id = this.formUpdateClasse.get('campus_id')?.value.value;
     let abbrv = `${this.formUpdateClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle} - ${this.formUpdateClasse.get('campus_id')?.value.libelle}`;
 
-    let classe = new Classe(this.idClasseToUpdate, diplome_id, campus_id, libelle, true, abbrv, annee);
+    let classe = new Classe(this.idClasseToUpdate, diplome_id, campus_id, true, abbrv, annee);
 
     this.classeService.update(classe).subscribe(
       ((response) => {
@@ -180,7 +180,7 @@ export class ListGroupeComponent implements OnInit {
     this.classeService.get(this.idClasseToUpdate).subscribe(
       ((response) => {
         this.classeToUpdate = response;
-        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: {libelle: this.classeToUpdate.nom}, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
+        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: {libelle: this.classeToUpdate.abbrv}, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
       }),
       ((error) => { console.error(error); })
     );

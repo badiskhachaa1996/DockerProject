@@ -83,7 +83,7 @@ export class ProspectsComponent implements OnInit {
     })
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
-        this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
+        this.groupeList.push({ label: g.abbrv, value: g._id })
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value

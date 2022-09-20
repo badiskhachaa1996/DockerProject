@@ -153,7 +153,7 @@ export class ReinscritComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
-        this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
+        this.groupeList.push({ label: g.abbrv, value: g._id })
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value
