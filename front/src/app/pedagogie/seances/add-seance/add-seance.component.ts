@@ -132,7 +132,7 @@ export class AddSeanceComponent implements OnInit {
     );
   }
 
-  showSalles(value,def=false) {
+  showSalles(value, def = false) {
     this.salleNames = []
     console.log(value)
     this.campus[value].salles.forEach(s => {
@@ -239,6 +239,7 @@ export class AddSeanceComponent implements OnInit {
       }, (error) => {
         console.error(error)
         let serror: Seance = error.error.seance
+        console.error(error.error.temp, seance)
         this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
         let classeStr = ""
         serror.classe_id.forEach(c => {
@@ -463,7 +464,7 @@ export class AddSeanceComponent implements OnInit {
     })
 
     this.seanceForm.patchValue({ campus_id: this.dropdownCampus[0].value })
-    this.showSalles(this.dropdownCampus[0].value,true)
+    this.showSalles(this.dropdownCampus[0].value, true)
   }
 
   customIncludes(l: any, d: any[]) {
