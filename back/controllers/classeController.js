@@ -2,7 +2,7 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 const { Classe } = require("./../models/classe");
-
+const { Diplome } = require("./../models/diplome");
 //Création d'une nouveau classe 
 app.post("/create", (req, res) => {
     //Sauvegarde d'une classe
@@ -120,4 +120,16 @@ app.get("/getAllByEcoleID/:id", (req, res) => {
     })
 });
 
+//Récupérer getAll by diplome
+app.get('/getALLByDiplomeABBRV/:abbrv', (req, res) => {
+    Diplome.findOne({ titre: req.params.abbrv }).then(diplome => {
+        console.log(diplome)
+        Classe.find({ diplome_id: diplome._id }).then(classes => {
+            console.log(classes)
+            res.status(200).send(classes)
+        })
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+})
 module.exports = app;
