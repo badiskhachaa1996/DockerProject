@@ -52,9 +52,16 @@ export class ListeContratsComponent implements OnInit {
   dropDownCommecialList = [];
   nomCompletComm = "";
 
+  //partie dedié à la mise à jour 
+  showFormUpdateCa: boolean = false;
+  formUpdateCa: FormGroup;
+  contratToUpdate: ContratAlternance;
+
+
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
-    private authService: AuthService, private tuteurService: TuteurService, private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
+    private authService: AuthService, private tuteurService: TuteurService, 
+    private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
@@ -76,6 +83,8 @@ export class ListeContratsComponent implements OnInit {
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem("token"))
+
+    this.onInitFormUpdateCa();
 
     //Lister toutes les entreprises 
     this.entrepriseService.getAll().subscribe(listEntre => {
@@ -225,6 +234,29 @@ export class ListeContratsComponent implements OnInit {
 
     })
   }
+
+
+  onInitFormUpdateCa() {
+    this.formUpdateCa = this.formBuilder.group({
+      entreprise_id: new FormControl(this.ConnectedEntreprise ? this.ConnectedEntreprise : '', Validators.required),
+      tuteur_id: new FormControl('', Validators.required),
+      debut_contrat: new FormControl('', Validators.required),
+      fin_contrat: new FormControl('', Validators.required),
+      horaire: new FormControl(''),
+      alternant: new FormControl('', Validators.required),
+      intitule: new FormControl(''),
+      classification: new FormControl(''),
+      niv: new FormControl(''),
+      coeff_hier: new FormControl(''),
+      form: new FormControl('', Validators.required),
+      code_commercial: new FormControl('', Validators.required),
+
+      professionnalisation: new FormControl(''),
+
+    })
+  }
+
+
   loadcomName(contrat) {
 
 
@@ -258,9 +290,6 @@ export class ListeContratsComponent implements OnInit {
     let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
-
-
-
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
       this.formAddNewCA = false
       this.ngOnInit()
@@ -268,6 +297,43 @@ export class ListeContratsComponent implements OnInit {
     }, (error => { console.log(error) }))
   }
 
+  //Mise à jour
+  onUpdateCa()
+  {
+    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant._id, this.intitule, this.classification, this.niv, this.coeff_hier, this.form.value, this.tuteur_id._id, this.code_commercial._id, 'créé')
+
+    this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
+      this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
+      this.formAddNewCA = false
+      this.ngOnInit()
+
+    }, (error => { console.log(error) }))
+  }
+  
+
+
+  //Methode pour preparer le formulaire de modification d'un contrat
+  onFillFormUpdate(contrat: ContratAlternance)
+  {
+    this.contratToUpdate = contrat;
+
+    this.formUpdateCa.patchValue({
+      entreprise_id: this.EntrepriseList[contrat.tuteur_id.entreprise_id],
+      tuteur_id: contrat.tuteur_id,
+      debut_contrat: contrat.debut_contrat,
+      fin_contrat: contrat.fin_contrat,
+      horaire: contrat.horaire,
+      alternant: contrat.alternant_id,
+      intitule: contrat.intitule,
+      classification: contrat.classification,
+      niv: contrat.niveau_formation,
+      coeff_hier: contrat.coeff_hierachique,
+      form: contrat.formation,
+      code_commercial: contrat.code_commercial,
+
+      professionnalisation: contrat.statut,
+    });
+  }
 
 
 }
