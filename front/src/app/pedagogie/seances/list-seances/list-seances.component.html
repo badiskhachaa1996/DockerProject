@@ -8,8 +8,9 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="seanceFormUpdate" (ngSubmit)="modifySeance()">
                 <div class="field col-12 md:col-6">
                     <label>Nom du groupe</label><br>
-                    <p-multiSelect formControlName="classe" [options]="dropdownClasse" (onChange)="showCampus($event.value)"
-                        defaultLabel="Selection des groupes" optionLabel="nom" filter="true"></p-multiSelect>
+                    <p-multiSelect formControlName="classe" [options]="dropdownClasse"
+                        (onChange)="showCampus($event.value)" defaultLabel="Selection des groupes" optionLabel="nom"
+                        filter="true"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
@@ -127,8 +128,7 @@
                         <th pSortableColumn="matiere" scope="col" style="text-align:center">
                             Module <p-sortIcon field="matiere"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="formateur_id" scope="col"
-                            style="text-align:center">
+                        <th pSortableColumn="formateur_id" scope="col" style="text-align:center">
                             Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="libelle" scope="col" style="text-align:center">
@@ -180,6 +180,8 @@
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData);" aria-hidden="true"></i>
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="delete(rowData);" aria-hidden="true"></i>
                             <i pTooltip="Voir la feuille d'émargement" tooltipPosition="bottom" class="pi pi-list"
                                 (click)="toSign(rowData)" aria-hidden="true" style="margin-left: 5%;"></i>
                         </td>

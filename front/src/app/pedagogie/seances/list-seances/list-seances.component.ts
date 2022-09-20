@@ -99,7 +99,7 @@ export class ListSeancesComponent implements OnInit {
         for (let formateurId in response) {
           this.dropdownFormateur.push({ nom: response[formateurId].firstname + ' ' + response[formateurId].lastname, value: response[formateurId]._id });
           this.formateurs[formateurId] = response[formateurId]
-          this.formateurs[response[formateurId]._id]=response[formateurId]
+          this.formateurs[response[formateurId]._id] = response[formateurId]
 
         }
       }),
@@ -307,6 +307,20 @@ export class ListSeancesComponent implements OnInit {
         this.loadEvents(datas)
       },
     );
+  }
+
+  delete(rowData: Seance) {
+    if (confirm("Voulez vous supprimez la séance " + rowData.libelle + " ?"))
+      this.seanceService.delete(rowData._id).subscribe(data => {
+        this.messageService.add({ severity: "success", summary: "Suppression avec succès" })
+        this.seances.forEach((val, index) => {
+          if (val._id == rowData._id) {
+            this.seances.splice(index, 1)
+          }
+        })
+      }, error => {
+        console.error(error)
+      })
   }
 
 }

@@ -21,6 +21,12 @@ export class SeanceService {
     return this.httpClient.post<Seance>(registreUrl, seance, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Creation d'une nouvelle séance
+  delete(id) {
+    let registreUrl = this.apiUrl + "delete/"+id;
+    return this.httpClient.delete<Seance>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   getById(id: String) {
     let registreUrl = this.apiUrl + "getById/" + id;
     return this.httpClient.get<Seance>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
