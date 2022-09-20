@@ -47,7 +47,7 @@
 				[globalFilterFields]="['nom']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 			<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-				(onChange)="dt1.filter($event.value, 'filiere','in');test($event.value)">
+				(onChange)="dt1.filter($event.value, 'filiere','in');">
 			</p-multiSelect>
 
 				<ng-template pTemplate="caption">

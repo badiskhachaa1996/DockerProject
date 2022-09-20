@@ -277,7 +277,7 @@
 
 
 <div *ngIf="isEtudiant">
-    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
+    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant.custom_id}}</h1>
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">

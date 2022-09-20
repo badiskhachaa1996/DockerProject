@@ -15,6 +15,7 @@ import { MatiereService } from 'src/app/services/matiere.service';
 import { SeanceService } from 'src/app/services/seance.service';
 import { environment } from 'src/environments/environment';
 import { User } from 'src/app/models/User';
+import { Campus } from 'src/app/models/Campus';
 
 @Component({
   selector: 'app-list-seances',
@@ -98,6 +99,7 @@ export class ListSeancesComponent implements OnInit {
         for (let formateurId in response) {
           this.dropdownFormateur.push({ nom: response[formateurId].firstname + ' ' + response[formateurId].lastname, value: response[formateurId]._id });
           this.formateurs[formateurId] = response[formateurId]
+          this.formateurs[response[formateurId]._id] = response[formateurId]
 
         }
       }),
@@ -120,7 +122,7 @@ export class ListSeancesComponent implements OnInit {
         camp.forEach(ca => {
           this.dicDiplome[ca._id] = ca
         })
-        console.log(this.dicDiplome,this.dicClasse)
+        console.log(this.dicDiplome, this.dicClasse)
         data.forEach(d => {
           if (this.dicDiplome[this.dicClasse[d.classe_id[0]]?.diplome_id] && this.dicClasse[d.classe_id[0]]) {
             d.diplome_titre = this.dicDiplome[this.dicClasse[d.classe_id[0]].diplome_id].titre
@@ -175,15 +177,9 @@ export class ListSeancesComponent implements OnInit {
     rowData.classe_id.forEach(classeID => {
       classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
     });
-    let c = []
-    rowData.campus_id.forEach(cid => {
-      c.push({ libelle: this.dicCampus[cid]?.libelle, value: this.dicCampus[cid]?._id })
-    })
     this.salleNames = []
-    rowData.campus_id.forEach(cid => {
-      this.dicCampus[cid].salles.forEach(s => {
-        this.salleNames.push({ value: s, label: s })
-      })
+    this.dicCampus[rowData.campus_id].salles.forEach(s => {
+      this.salleNames.push({ value: s, label: s })
     })
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
@@ -194,13 +190,13 @@ export class ListSeancesComponent implements OnInit {
       formateur: new FormControl("", Validators.required),
       isPresentiel: new FormControl(rowData.isPresentiel),
       salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
-      campus_id: new FormControl(c),
+      campus_id: new FormControl({ libelle: this.dicCampus[rowData.campus_id]?.libelle, value: this.dicCampus[rowData.campus_id]?._id }),
       isPlanified: new FormControl(rowData.isPlanified),
       nbseance: new FormControl(rowData.nbseance)
     });
     //{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }
     if (rowData.formateur_id && this.formateurs[rowData.formateur_id] && this.formateurs[rowData.formateur_id].firstname)
-      this.seanceFormUpdate.patchValue({formateur:{ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }})
+      this.seanceFormUpdate.patchValue({ formateur: { nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id } })
   }
 
   get isPresentielUpdated() { return this.seanceFormUpdate.get('isPresentiel'); }
@@ -212,22 +208,43 @@ export class ListSeancesComponent implements OnInit {
         this.salleNames.push({ value: s, label: s })
       })
     })
-    this.seanceFormUpdate.patchValue({ salle_name: this.salleNames[0].value })
+    if (this.salleNames.length < 1)
+      this.messageService.add({ severity: "error", summary: "Problème de chargement des salles", detail: "Le campus que vous avez selectionné n'a pas de salle parametré, ce qui empeche le choix d'une salle si la séance est Présentiel." })
+    else
+      this.seanceFormUpdate.patchValue({ salle_name: this.salleNames[0].value })
+  }
+
+  showCampus(value) {
+    this.dropdownCampus = []
+    console.log(value)
+    value.forEach(cid => {
+      let groupe: Classe = this.classes[cid.value]
+      let diplome = this.dicDiplome[groupe.diplome_id]
+      if (groupe) {
+        diplome.campus_id.forEach(cid => {
+          let campus: Campus = this.dicCampus[cid]
+          let r = false
+          let l = { libelle: campus.libelle, value: campus._id }
+          this.dropdownCampus.forEach(e => {
+            if (e.value == l.value) {
+              r = true
+            }
+          })
+          if (!r)
+            this.dropdownCampus.push(l)
+        })
+      }
+    })
+    this.seanceFormUpdate.patchValue({ campus_id: this.dropdownCampus[0].value })
   }
 
   modifySeance() {
-    let seance: Seance
-
     let classeList = []
-    let campusList = []
     this.seanceFormUpdate.value.classe.forEach(c => {
       classeList.push(c.value)
     })
-    this.seanceFormUpdate.value.campus_id.forEach(c => {
-      campusList.push(c.value)
-    })
-    seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
-      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, campusList);
+    let seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
+      this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
       this.seanceFormUpdate.value.classe.forEach(c => {
@@ -290,6 +307,20 @@ export class ListSeancesComponent implements OnInit {
         this.loadEvents(datas)
       },
     );
+  }
+
+  delete(rowData: Seance) {
+    if (confirm("Voulez vous supprimez la séance " + rowData.libelle + " ?"))
+      this.seanceService.delete(rowData._id).subscribe(data => {
+        this.messageService.add({ severity: "success", summary: "Suppression avec succès" })
+        this.seances.forEach((val, index) => {
+          if (val._id == rowData._id) {
+            this.seances.splice(index, 1)
+          }
+        })
+      }, error => {
+        console.error(error)
+      })
   }
 
 }

@@ -9,7 +9,7 @@ const path = require('path');
 var mime = require('mime-types')
 const fs = require("fs")
 
-function customIncludes(listSeance, listGiven){
+function customIncludes(listSeance, listGiven) {
     let r = false
     listSeance.forEach(s => {
         listGiven.forEach(g => {
@@ -47,7 +47,7 @@ app.post('/create', (req, res, next) => {
             data.forEach(temp => {
                 if (temp.formateur_id == req.body.formateur_id) {
                     text = "Le formateur est déjà assigné à une séance :\n"
-                } else if (customIncludes(temp.classe_id,req.body.classe_id)) {
+                } else if (customIncludes(temp.classe_id, req.body.classe_id)) {
                     text = "La classe est déjà assigné à une séance :\n"
                 } else {
                     text = null
@@ -406,4 +406,12 @@ app.get('/getFormateurFromClasseID/:classe_id/:semestre', (req, res, next) => {
     })
 }, (error) => { res.status(500).send(error); })
 
+app.delete("/delete/:id", (req, res) => {
+    Seance.deleteOne({_id:req.params.id}).then(s => {
+        res.status(200).send(s)
+    }, error => {
+        console.error(error)
+        res.status(500).send(error)
+    })
+})
 module.exports = app;
