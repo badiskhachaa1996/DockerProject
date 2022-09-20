@@ -241,9 +241,9 @@ app.post("/update", (req, res, next) => {
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
-                res.send(err)
+                res.status(500).send(err)
             } else {
-                res.send(user)
+                res.status(201).send(user)
             }
         })
 });

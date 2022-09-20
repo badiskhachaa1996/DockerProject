@@ -46,7 +46,8 @@ const etudiantSchema = mongoose.Schema({
     absencesModules: { type: mongoose.Schema.Types.Mixed, default: {} },
     date_dernier_modif_dossier: { type: Date, default: null },
     valided_by_admin: { type: Boolean, default: false },
-    valided_by_support: { type: Boolean, default: false}
+    valided_by_support: { type: Boolean, default: false },
+    annee_scolaire: { type: [String], default: ["2021"] }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

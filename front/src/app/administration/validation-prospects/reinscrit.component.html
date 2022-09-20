@@ -57,15 +57,23 @@
                 <label>Payement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
+            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
+                <label>&nbsp;</label>
+                <p>&nbsp;</p>
+            </div>
 
             <!--<div class="field col-12">
                 <label for="ine">Email IMS<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>-->
-            <div class="field col-12 md:col-12">
+            <div class="field col-12 md:col-6">
                 <label>Statut Professionel</label>
                 <p-selectButton [options]="[ {value:'Initial',label:'Initial'},{value:'Alternant',label:'Alternant'}]"
                     formControlName="statut"></p-selectButton>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Année scolaire</label>
+                <p-multiSelect [options]="anneeScolaireReinscrit" formControlName="annee_scolaire"></p-multiSelect>
             </div>
             <!-- Si c'est un alternant -->
             <div class="field col-6" *ngIf="AssignForm.value.statut == 'Alternant'">
@@ -202,15 +210,23 @@
                 <label>Payement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
+            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
+                <label>&nbsp;</label>
+                <p>&nbsp;</p>
+            </div>
 
             <!--<div class="field col-12">
                 <label for="ine">Email IMS<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>-->
-            <div class="field col-12 md:col-12">
+            <div class="field col-12 md:col-6">
                 <label>Statut Professionel</label>
                 <p-selectButton [options]="[ {value:'Initial',label:'Initial'},{value:'Alternant',label:'Alternant'}]"
                     formControlName="statut"></p-selectButton>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Année scolaire</label>
+                <p-multiSelect [options]="anneeScolaireReinscrit" formControlName="annee_scolaire"></p-multiSelect>
             </div>
             <!-- Si c'est un alternant -->
             <div class="field col-6" *ngIf="AssignForm.value.statut == 'Alternant'">

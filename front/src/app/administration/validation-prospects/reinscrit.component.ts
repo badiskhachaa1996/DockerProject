@@ -43,6 +43,16 @@ export class ReinscritComponent implements OnInit {
     { value: "Abandon", label: "Abandon" }
   ]
 
+  anneeScolaireReinscrit = [
+    { label: "2019", value: "2019" },
+    { label: "2020", value: "2020" },
+    { label: "2021", value: "2021" },
+    { label: "2022", value: "2022" },
+    { label: "2023", value: "2023" },
+    { label: "2024", value: "2024" },
+    { label: "2025", value: "2025" }
+  ]
+
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   statutList = [
@@ -65,7 +75,7 @@ export class ReinscritComponent implements OnInit {
 
   AssignForm: FormGroup = this.formBuilder.group({
     filiere: ["", Validators.required],
-    statut: [this.statutList[0], Validators.required],
+    statut: ["", Validators.required],
     numero_ine: [''],
     numero_nir: [''],
     sos_email: [''],
@@ -80,6 +90,7 @@ export class ReinscritComponent implements OnInit {
     remarque: [''],
     campus_id: [' '],
     statut_dossier: [''],
+    annee_scolaire: ['', Validators.required]
     //email_ims: ['', Validators.required]
 
   })
@@ -111,7 +122,7 @@ export class ReinscritComponent implements OnInit {
     this.payementList = etudiant.payment_reinscrit
     this.AssignForm.patchValue({
       customid: etudiant?.custom_id,
-      statut: { value: s },
+      statut: s,
       statut_dossier: etudiant.statut_dossier
     })
   }
@@ -125,7 +136,7 @@ export class ReinscritComponent implements OnInit {
     this.payementList = etudiant.payement
     this.AssignForm.patchValue({
       customid: etudiant?.customid,
-      statut: { value: s },
+      statut: s,
       statut_dossier: etudiant.statut_dossier
     })
   }
@@ -217,11 +228,12 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
-      true
+      true,false,
+      this.AssignForm.value.annee_scolaire
     )
-    if (!this.showAssignFormEtu.custom_id)
+    if (!etd.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
+    if (etd.statut_dossier.includes('Paiement non finalisé')) {
       if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?")) {
         this.etudiantService.update(etd).subscribe(data => {
           this.etudiants.forEach((val, index) => {
@@ -289,10 +301,10 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.filiere,
       true
     )
-    if (!this.showAssignForm.customid)
+    if (!etd.custom_id)
       etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
+    if (etd.statut_dossier.includes('Paiement non finalisé')) {
       if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
         this.etudiantService.validateProspect(etd, bypass._id).subscribe(data => {
           this.prospects.forEach((val, index) => {
