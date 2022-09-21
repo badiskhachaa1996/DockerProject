@@ -101,4 +101,9 @@ export class EntrepriseService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
   }
 
+  updateContratAlternance(data:ContratAlternance) {
+    let url = this.apiUrl + "updateContratAlternance"
+    return this.httpClient.post<ContratAlternance>(url,data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });;
+  }
+
 }
