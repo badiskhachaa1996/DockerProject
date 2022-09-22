@@ -206,13 +206,13 @@ export class GestionLogementComponent implements OnInit {
         let pFFR: User = this.users[reservation.pFFR];
 
         let t = {}
-        t['NOM'] = pWR.lastname.toUpperCase;
+        t['NOM'] = pWR.lastname;
         t['Prenom'] = pWR.firstname;
         t['Email perso'] = pWR.email_perso;
         t['Email IntedGroup'] = pWR.email
         t['Téléphone'] = pWR.phone;
 
-        t['NOM Colocataire'] = pFFR.lastname.toUpperCase;
+        t['NOM Colocataire'] = pFFR.lastname;
         t['Prenom Colocataire'] = pFFR.firstname;
         t['Email perso Colocataire'] = pFFR.email_perso;
         t['Email IntedGroup Colocataire'] = pFFR.email
