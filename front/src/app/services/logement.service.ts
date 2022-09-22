@@ -48,4 +48,5 @@ export class LogementService {
     let url = this.apiUrl + 'deleteReservation/' + id;
     return this.httpClient.delete<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
 }
