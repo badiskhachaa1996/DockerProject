@@ -334,8 +334,11 @@ export class SuiviTicketsComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
       this.updateList()
       this.Socket.AddNewTicket(this.TicketForm.value.sujet.service_id)
-      this.TicketForm.reset()
-      this.TicketForm.setValue({ description: null, sujet: '', service: '' });
+      this.TicketForm = new FormGroup({
+        description: new FormControl('', Validators.required),
+        sujet: new FormControl('', Validators.required),
+        service: new FormControl('', Validators.required),
+      })
       this.showFormAdd = false;
 
     }, (error) => {
