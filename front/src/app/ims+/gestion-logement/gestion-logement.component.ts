@@ -44,7 +44,7 @@ export class GestionLogementComponent implements OnInit {
     //Recuperation de la liste des réservation validée
     this.logementService.getAllReservationsValidated().subscribe(
       ((response) => {
-        this.reservations = response;
+        this.reservationsValidated = response;
       }),
       ((error) => { console.log(error) })
     );
@@ -70,6 +70,15 @@ export class GestionLogementComponent implements OnInit {
           }),
           ((error) => { console.log(error) })
         );
+
+        //Recuperation de la liste des réservation validée
+        this.logementService.getAllReservationsValidated().subscribe(
+          ((response) => {
+            this.reservationsValidated = response;
+          }),
+          ((error) => { console.log(error) })
+        );
+        
       }),
       ((error) => { console.log(error)})
     );
@@ -92,6 +101,15 @@ export class GestionLogementComponent implements OnInit {
           }),
           ((error) => { console.log(error) })
         );
+
+        //Recuperation de la liste des réservation validée
+        this.logementService.getAllReservationsValidated().subscribe(
+          ((response) => {
+            this.reservationsValidated = response;
+          }),
+          ((error) => { console.log(error) })
+        );
+
       }),
       ((error) => { console.log(error)})
     );
