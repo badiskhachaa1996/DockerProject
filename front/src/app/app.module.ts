@@ -204,7 +204,6 @@ import { ListEventsComponent } from './demande-events/list-events/list-events.co
 import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { LogementComponent } from './ims+/logement/logement.component';
-import { DetailLogementComponent } from './ims+/detail-logement/detail-logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 @NgModule({
   imports: [
@@ -396,7 +395,6 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
     ArrToStrPipe,
     CreateAccountComponent,
     LogementComponent,
-    DetailLogementComponent,
     GestionLogementComponent
   ],
   providers: [MessageService, ConfirmationService,

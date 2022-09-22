@@ -1,35 +1,166 @@
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
 	<div class="col-12">
 		<div class="card">
-            <button pButton label="Ajouter" icon="pi pi-plus" style="float: right;"></button>
-            <h5>Gestion des logements</h5>
-            <p-table dataKey="name" responsiveLayout="scroll">
+			<h3>Gestion des réservations</h3>
+			<p-toast></p-toast>
+			<p-table #dt1 [value]="reservations" dataKey="_id" responsiveLayout="scroll"
+					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
+					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
+				
+				<ng-template pTemplate="caption">
+					<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+				</ng-template>
+
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="location">Location</th>
-						<th>Image</th>
-						<th pSortableColumn="surface">Surface </th>
-						<th pSortableColumn="pieces">Nombre de pièces </th>
-						<th pSortableColumn="description">Description </th>
-                        <th pSortableColumn="prix">Loyer mensuel </th>
+						<th style="width: 3rem"></th>
+						<th pSortableColumn="nom_prenom">Nom et Prénom <p-sortIcon field="nom"></p-sortIcon></th>
+						<th pSortableColumn="email">Email Perso<p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="email">Email IntedGroup<p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="tel">Téléphone <p-sortIcon field="tel"></p-sortIcon></th>
+						<th></th>
 					</tr>
 				</ng-template>
-				<ng-template pTemplate="body" let-product let-expanded="expanded">
+				<ng-template pTemplate="body" let-reservation let-expanded="expanded">
 					<tr>
-						<td style="min-width: 12rem;">Paris 15</td>
-						<td><img [src]="assets/images/profile.jpg" [alt]="LOGEMENT" width="100" class="shadow-4" /></td>
-						<td style="min-width: 8rem;">35 m<sup>2</sup></td>
-						<td style="min-width: 10rem;">2 pièces</td>
-						<td style="min-width: 10rem;">
-                            A 2 pas du RER et des commerces. Place du marché. Dans copropriété ancienne. 
-                            Appartement 2 P. de 29 m2 hab. situé au 2ème étage comprenant : Entrée, séjour avec ktichnette, une chambre, salle d'eau avec wc. . 
-                            Conditions revenus exigés : En CDI 2.000 EUR (constitution dossier + rédaction de bail : 290 EUR / Etat des lieux : 87 EUR)
-                        </td>
-						<td>640€</td>
-                        <td>voir <i class="pi pi-pencil"></i></td>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="reservation" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+						</td>
+						<td style="min-width: 12rem;">
+							{{ users[reservation.pWR]?.civilite }}
+							{{ users[reservation.pWR]?.firstname }}
+                            {{ users[reservation.pWR]?.lastname }}
+						</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.email_perso }}</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.email }}</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.phone }}</td>
+						<td *ngIf="!reservation.isValidate" style="min-width: 8rem;">
+							<button pButton type="button" (click)="onValidate(reservation)" label="Valider" icon="pi pi-check" class="p-button-success mr-2 mb-2"></button>
+							<button pButton type="button" (click)="onDelete(reservation._id)" label="Réfuser" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
+						</td>
+						<td *ngIf="reservation.isValidate" style="min-width: 8rem;">
+							<button pButton type="button" (click)="onDelete(reservation._id)" label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
+						</td>
 					</tr>
 				</ng-template>
-            </p-table>
-        </div>
+				<ng-template pTemplate="rowexpansion" let-reservation>
+					<tr>
+						<td colspan="6">
+							<div class="p-3">
+								<h4 style="text-align: center; color: red;">Info collocataire</h4>
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+										<tr>
+											<th pSortableColumn="nom">Nom et Prénom <p-sortIcon field="nom"></p-sortIcon></th>
+											<th pSortableColumn="email">Email Perso<p-sortIcon field="email"></p-sortIcon></th>
+											<th pSortableColumn="email">Email IntedGroup<p-sortIcon field="email"></p-sortIcon></th>
+											<th pSortableColumn="tel">Téléphone <p-sortIcon field="tel"></p-sortIcon></th>
+										</tr>
+									</ng-template>
+									<ng-template pTemplate="body" let-reservation>
+										
+									</ng-template>
+									<ng-template pTemplate="emptymessage">
+										<tr>
+											<td style="min-width: 12rem;">
+												{{ users[reservation.pFFR]?.civilite }}
+												{{ users[reservation.pFFR]?.firstname }}
+												{{ users[reservation.pFFR]?.lastname }}
+											</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.email_perso }}</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.email }}</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.phone }}</td>
+										</tr>
+									</ng-template>
+								</p-table>
+							</div>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+
+		<div class="card">
+			<h3>Réservations validées</h3>
+			<p-toast></p-toast>
+			<p-table #dt1 [value]="reservationsValidated" dataKey="_id" responsiveLayout="scroll"
+					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
+					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
+				
+				<ng-template pTemplate="caption">
+					<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+				</ng-template>
+
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem"></th>
+						<th pSortableColumn="nom_prenom">Nom et Prénom <p-sortIcon field="nom"></p-sortIcon></th>
+						<th pSortableColumn="email">Email Perso<p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="email">Email IntedGroup<p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="tel">Téléphone <p-sortIcon field="tel"></p-sortIcon></th>
+						<th></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-reservation let-expanded="expanded">
+					<tr>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="reservation" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+						</td>
+						<td style="min-width: 12rem;">
+							{{ users[reservation.pWR]?.civilite }}
+							{{ users[reservation.pWR]?.firstname }}
+                            {{ users[reservation.pWR]?.lastname }}
+						</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.email_perso }}</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.email }}</td>
+						<td style="min-width: 8rem;">{{ users[reservation.pWR]?.phone }}</td>
+						<td *ngIf="!reservation.isValidate" style="min-width: 8rem;">
+							<button pButton type="button" (click)="onValidate(reservation)" label="Valider" icon="pi pi-check" class="p-button-success mr-2 mb-2"></button>
+							<button pButton type="button" (click)="onDelete(reservation._id)" label="Réfuser" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
+						</td>
+						<td *ngIf="reservation.isValidate" style="min-width: 8rem;">
+							<button pButton type="button" (click)="onDelete(reservation._id)" label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="rowexpansion" let-reservation>
+					<tr>
+						<td colspan="6">
+							<div class="p-3">
+								<h4 style="text-align: center; color: red;">Info collocataire</h4>
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+										<tr>
+											<th pSortableColumn="nom">Nom et Prénom <p-sortIcon field="nom"></p-sortIcon></th>
+											<th pSortableColumn="email">Email Perso<p-sortIcon field="email"></p-sortIcon></th>
+											<th pSortableColumn="email">Email IntedGroup<p-sortIcon field="email"></p-sortIcon></th>
+											<th pSortableColumn="tel">Téléphone <p-sortIcon field="tel"></p-sortIcon></th>
+										</tr>
+									</ng-template>
+									<ng-template pTemplate="body" let-reservation>
+										
+									</ng-template>
+									<ng-template pTemplate="emptymessage">
+										<tr>
+											<td style="min-width: 12rem;">
+												{{ users[reservation.pFFR]?.civilite }}
+												{{ users[reservation.pFFR]?.firstname }}
+												{{ users[reservation.pFFR]?.lastname }}
+											</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.email_perso }}</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.email }}</td>
+											<td style="min-width: 8rem;">{{ users[reservation.pFFR]?.phone }}</td>
+										</tr>
+									</ng-template>
+								</p-table>
+							</div>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
     </div>
 </div>

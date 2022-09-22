@@ -102,7 +102,6 @@ import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { LogementComponent } from './ims+/logement/logement.component';
-import { DetailLogementComponent } from './ims+/detail-logement/detail-logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 
 
@@ -195,8 +194,7 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
                     { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
                     { path: 'logements', component: LogementComponent },
-                    { path: 'details-logement/:id', component: DetailLogementComponent },
-                    { path: 'gestion-logements', component: GestionLogementComponent },
+                    { path: 'gestion-reservations', component: GestionLogementComponent },
 
                 ],
             },
