@@ -118,6 +118,9 @@
 		</div>
 
 		<div class="card">
+			<div style="float: right;">
+				<button pButton icon="pi pi-file" label="Exporter la liste" (click)="exportExcel()"></button>
+			</div>
 			<h3>Réservations validées</h3>
 			<small style="color: red; font-weight: bold;">{{ reservationsValidated.length }} Réservatios validées</small>
 			<p-toast></p-toast>
