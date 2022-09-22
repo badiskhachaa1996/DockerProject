@@ -176,7 +176,7 @@ export class AppMenuComponent implements OnInit {
             label: 'IMS +',
             items: [
                 { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
-                { label: 'Gestion des logements', icon: 'pi pi-bookmark', routerLink: ['/gestion-logements'] },
+                { label: 'Gestion des reservations', icon: 'pi pi-bookmark', routerLink: ['/gestion-reservations'] },
             ]
         },
     ];
@@ -265,7 +265,13 @@ export class AppMenuComponent implements OnInit {
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                     ]
-                                }
+                                },
+                                {
+                                    label: 'IMS +',
+                                    items: [
+                                        { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                    ]
+                                },
                             ];
                         } else {
                             this.model = [
