@@ -101,7 +101,7 @@ export class AuthService {
 
   getAllAgent() {
     let loginUrl = this.apiUrl + "getAllAgent/";
-    return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+    return this.http.get<User[]>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
   getAllCommercial() {
     let loginUrl = this.apiUrl + "getAllCommercial/";

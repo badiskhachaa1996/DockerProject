@@ -89,7 +89,96 @@ app.post("/create", (req, res) => {
             })
         })
     })
+});
 
+//Création d'un nouveau ticket par un Admin
+app.post("/createAdmin", (req, res) => {
+    Ticket.find({ agent_id: req.body.agent_id }).then(tkt => {
+        var lengTicket = tkt.length + 1
+        Sujet.findOne({ service_id: req.body.service_id }).populate('service_id').then(sujet => {
+            if (sujet)
+                User.findById(req.body.id).then(u => {
+                    //Generation Custom ID
+                    let id = ""
+                    let d = new Date()
+                    let month = (d.getUTCMonth() + 1).toString()
+                    if (d.getUTCMonth() + 1 < 10)
+                        month = "0" + month
+                    let day = (d.getUTCDate()).toString()
+                    if (d.getUTCDate() < 10)
+                        day = "0" + day
+                    let year = d.getUTCFullYear().toString().slice(-2);
+                    while (lengTicket > 1000)
+                        lengTicket - 1000
+                    let nb = (lengTicket).toString()
+                    if (lengTicket < 10)
+                        nb = "00" + nb
+                    if (lengTicket < 100)
+                        nb = "0" + nb
+
+
+                    id = id + u.lastname.slice(0, 1) + u.firstname.slice(0, 1) + sujet.service_id.label.slice(0, 1) + sujet.label.slice(0, 1)
+                    id = id + day + month + year + nb
+                    id = id.toUpperCase()
+
+                    const ticket = new Ticket({
+                        createur_id: req.body.id,
+                        sujet_id: sujet._id,
+                        description: req.body.description,
+                        date_ajout: d,
+                        customid: id,
+                        agent_id: req.body.agent_id,
+                        isAffected: true,
+                        date_affec_accep: d,
+                        statut: "En cours de traitement"
+                    });
+
+                    ticket.save((err, doc) => {
+                        if(err){
+                            console.error(err);
+                            res.status(404).send("Erreur avec la création d'un ticket")
+                        }
+                        else{
+                            res.send({ message: "Votre ticket a été crée!", doc });
+                            User.findById(req.body.agent_id).then(responsable => {
+                                let gender = (responsable.civilite == 'Monsieur') ? 'M. ' : 'Mme ';
+                                let htmlemail = '<p style="color:black"> Bonjour  ' + gender + responsable.lastname + ',</p> </br> <p style="color:black"> Le ticket qui a pour numéro : <b> ' + doc.customid + ' </strong> est arrivé dans la fil d\'attente de votre service <b>' + doc.description + ' </strong></p></br><p style="color:black">Cordialement,</p> <img  src="red"/> '
+                                let mailOptions = {
+                                    from: 'estya-ticketing@estya.com',
+                                    to: responsable.email,
+                                    subject: '[ESTYA Ticketing] - Notification ',
+                                    html: htmlemail,
+                                    priority: 'high',
+                                    attachments: [{
+                                        filename: 'signature.png',
+                                        path: 'assets/signature.png',
+                                        cid: 'red' //same cid value as in the html img src
+                                    }]
+                                };
+    
+    
+                                transporter.sendMail(mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.error(error);
+                                    }
+                                });
+                            })
+                        }
+                    });
+                }).catch(err => {
+                    console.error(err);
+                    res.status(404).send("Erreur avec votre ID, essayer de vous reconnectez")
+                })
+            else
+                res.status(404).send("Aucun sujet n'existe pour ce service")
+        }).catch(err => {
+            console.error(err);
+            res.status(404).send("Aucun sujet n'existe pour ce service")
+        })
+    }).catch(err => {
+            console.error(err);
+            res.status(404).send("Problème de trouver le nombre de tickets de cette agent")
+        })
 });
 
 

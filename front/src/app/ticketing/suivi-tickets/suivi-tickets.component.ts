@@ -65,6 +65,7 @@ export class SuiviTicketsComponent implements OnInit {
   listSujets1: any = [];
 
   showCard: Boolean = true;
+  agentList = []
 
 
   ticketUserInWaiting: Ticket[] = [];
@@ -157,6 +158,13 @@ export class SuiviTicketsComponent implements OnInit {
         }
       })
 
+      this.AuthService.getAllAgent().subscribe(data => {
+        data.forEach(a => {
+          this.agentList.push({ label: a.firstname + " " + a.lastname, value: a._id })
+        })
+        this.TicketFormAssign.patchValue({ agent: this.agentList[0].value })
+      })
+
       this.SujetService.getAll().subscribe((data) => {
         if (!data.message) {
           this.filterSujet = data;
@@ -237,6 +245,58 @@ export class SuiviTicketsComponent implements OnInit {
       ((response) => { this.ticketUserInQueue = response; }),
       ((error) => { console.error(error) })
     );
+  }
+  showAssignForm = false
+  TicketFormAssign = new FormGroup({
+    description: new FormControl('', Validators.required),
+    agent: new FormControl('', Validators.required),
+    file: new FormControl(''),
+    value: new FormControl(null, Validators.maxLength(20000000))
+  })
+
+  createAdminTicket() {
+    this.AuthService.getInfoById(this.TicketFormAssign.value.agent).subscribe(u => {
+      let ticket = {
+        id: this.token.id,
+        service_id: u.service_id,
+        agent_id: this.TicketFormAssign.value.agent,
+        description: this.TicketFormAssign.value.description,
+      }
+      this.TicketService.createAdmin(ticket).subscribe(t => {
+        this.messageService.add({ severity: 'success', summary: "Création du ticket avec succès", detail: "L'agent a reçu un mail de cette demande" })
+        this.updateList()
+        let comment = {
+          description: this.TicketFormAssign.value.description,
+          id: this.token.id,
+          ticket_id: t.doc._id,
+          file: this.TicketFormAssign.value.file,
+          isRep: false
+    
+        }
+    
+        this.MsgServ.create(comment).subscribe((data) => {
+          this.comments.push(data.doc);
+          this.messageService.add({ severity: 'success', summary: 'Gestion de message', detail: 'Le fichier a bien été envoyé' });
+          let agenttoNotif = t.doc.agent_id;
+          this.selectedTicket = null;
+          this.commentForm.reset();
+          this.Socket.NewMessageByUser(agenttoNotif)
+          this.NotifService.create(new Notification(null, t.doc._id, false, "Nouveau Message", null, agenttoNotif)).subscribe((notif) => {
+            this.NotifService.newNotif(notif)
+          }, (error) => {
+            console.error(error)
+          });
+        }, (error) => {
+          console.error(error)
+        });
+        this.Socket.AddNewTicket(u.service_id)
+        this.showAssignForm = false
+        this.TicketFormAssign.setValue({ description: "", agent: this.agentList[0].value, file: "", value: null })
+      }, error => {
+        console.error(error)
+        this.messageService.add({ severity: 'error', summary: "Un problème est survenu", detail: error.error })
+      })
+    })
 
   }
 
@@ -244,6 +304,7 @@ export class SuiviTicketsComponent implements OnInit {
     description: new FormControl('', Validators.required),
     sujet: new FormControl('', Validators.required),
     service: new FormControl('', Validators.required),
+    agent: new FormControl('')
   })
 
   TicketForm1: FormGroup = new FormGroup({
@@ -327,8 +388,7 @@ export class SuiviTicketsComponent implements OnInit {
     let req = {
       id: jwt_decode(localStorage.getItem("token"))["id"],
       sujet_id: this.TicketForm.value.sujet._id,
-      description: this.TicketForm.value.description,
-      customid: this.generateCustomID(this.userconnected.firstname, this.userconnected.lastname, "Paris", this.userconnected.type)
+      description: this.TicketForm.value.description
     }
     this.TicketService.create(req).subscribe((data) => {
       this.messageService.add({ severity: 'success', summary: 'Création du ticket', detail: 'Votre ticket a bien été crée' });
@@ -442,7 +502,27 @@ export class SuiviTicketsComponent implements OnInit {
     this.fileInput.clear();
   }
 
+  onUploadFile(event) {
+    let reader = new FileReader();
+    if (event.files && event.files.length > 0) {
+      this.loading = true
+      let file = event.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.TicketFormAssign.get('file').setValue({
+          filename: file.name,
+          filetype: file.type,
+          value: reader.result.toString().split(',')[1]
+        })
+        this.TicketFormAssign.get('value').setValue(reader.result.toString().split(',')[1])
+        this.loading = false;
+      };
+    }
+    this.fileInput.clear();
+  }
+
   get value() { return this.commentForm.get('value'); }
+  get value_admin() { return this.TicketFormAssign.get('value'); }
 
   customSort(event: SortEvent) {
     event.data.sort((data1, data2) => {
@@ -483,32 +563,6 @@ export class SuiviTicketsComponent implements OnInit {
         }
       return (event.order * result);
     });
-  }
-
-  generateCustomID(firstname, lastname, campus: string, statut: string) {
-    let reeldate = new Date();
-
-    let date = (reeldate.getDate()).toString() + (reeldate.getMonth() + 1).toString() + (reeldate.getFullYear()).toString();
-
-    let random = Math.random().toString(36).substring(8).toUpperCase();
-
-    let nom = lastname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
-
-    let prenom = firstname.replace(/[^a-z0-9]/gi, '').substr(0, 2).toUpperCase();
-
-    let campusCustom
-
-    if (campus == null || campus == undefined || !campus) {
-      campusCustom = "X"
-    } else if (campus == "Montréal") {
-      campusCustom = "C"
-    } else if (campus == "En Ligne(365)") {
-      campusCustom = "O"
-    } else {
-      campusCustom = campus[0].toUpperCase()
-    }
-
-    return 'ESTYA' + prenom + nom + '' + campusCustom + statut[0].toUpperCase() + '' + date + '' + random;
   }
 
   scrollToTop() {
