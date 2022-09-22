@@ -22,7 +22,7 @@ export class LogementComponent implements OnInit {
   showFormReservation2: boolean = false;
   formReservation2: FormGroup;
 
-  dropdownEtudiant = [{ name: ' ', _id: null }];
+  dropdownEtudiant = [];
 
   token: any;
 
@@ -67,14 +67,14 @@ export class LogementComponent implements OnInit {
   onInitFormReservation1()
   {
     this.formReservation1 = this.formBuilder.group({
-      choice: [this.dropdownEtudiant[0]],
+      choice: [''],
     });
   }
 
   onInitFormReservation2()
   {
     this.formReservation2 = this.formBuilder.group({
-      choice: [this.dropdownEtudiant[0]],
+      choice: [''],
     });
   }
 

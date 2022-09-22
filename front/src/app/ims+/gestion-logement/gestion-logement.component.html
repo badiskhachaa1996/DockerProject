@@ -40,9 +40,6 @@
 							<button pButton type="button" (click)="onValidate(reservation)" label="Valider" icon="pi pi-check" class="p-button-success mr-2 mb-2"></button>
 							<button pButton type="button" (click)="onDelete(reservation._id)" label="Réfuser" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
 						</td>
-						<td *ngIf="reservation.isValidate" style="min-width: 8rem;">
-							<button pButton type="button" (click)="onDelete(reservation._id)" label="Supprimer" icon="pi pi-trash" class="p-button-danger mr-2 mb-2"></button>
-						</td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="rowexpansion" let-reservation>
@@ -84,6 +81,7 @@
 
 		<div class="card">
 			<h3>Réservations validées</h3>
+			<small style="color: red; font-weight: bold;"> Réservatios validées</small>
 			<p-toast></p-toast>
 			<p-table #dt1 [value]="reservationsValidated" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
