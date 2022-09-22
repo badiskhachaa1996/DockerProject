@@ -71,36 +71,34 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
         {
             ...entrepriseData
         });
-    
+
     let representant = new User(
         {
             ...representantData
         });
-        
-    User.findOne({ email_perso: representantData.email_perso})
+
+    User.findOne({ email_perso: representantData.email_perso })
         .then((userFromDb) => {
-            if(userFromDb)
-            {
+            if (userFromDb) {
                 entreprise.directeur_id = userFromDb._id;
                 entreprise.save()
-                        .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved);})
-                        .catch((error) => {res.status(400).send('Impossible de créer la nouvelle entreprise')})
+                    .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
+                    .catch((error) => { res.status(400).send('Impossible de créer la nouvelle entreprise') })
             }
-            else
-            {
+            else {
                 representant.save()
                     .then((userCreated) => {
                         entreprise.directeur_id = userCreated._id;
                         entreprise.save()
-                                .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
-                                .catch((error) => { res.status(400).send('Impossible de créer une nouvelle entreprise')});
+                            .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
+                            .catch((error) => { res.status(400).send('Impossible de créer une nouvelle entreprise') });
                     })
-                    .catch((error) => {res.status(400).send('Impossible de créer un nouvel utilisateur')});
+                    .catch((error) => { res.status(400).send('Impossible de créer un nouvel utilisateur') });
             }
         })
-        .catch((error) => {res.status(500).send("Impossible de vérifier l'existence de l'utilisateur")});    
+        .catch((error) => { res.status(500).send("Impossible de vérifier l'existence de l'utilisateur") });
 
-}); 
+});
 
 
 //Modification d'une entreprise et de son representant
@@ -109,20 +107,20 @@ app.put("/updateEntrepriseRepresentant", (req, res) => {
     let entrepriseData = req.body.entrepriseToUpdate;
     let representantData = req.body.representantToUpdate;
 
-    User.findOneAndUpdate({ _id: representantData._id }, 
-        { 
+    User.findOneAndUpdate({ _id: representantData._id },
+        {
             ...representantData
         })
         .then((userSaved) => {
-            Entreprise.findOneAndUpdate({ _id: entrepriseData._id }, 
+            Entreprise.findOneAndUpdate({ _id: entrepriseData._id },
                 {
                     ...entrepriseData
                 })
                 .then((entrepriseFromDb) => res.status(201).send(entrepriseFromDb))
-                .catch((error) => { res.status(500).send("Impossible de mettre à jour l'entreprise")}
-        )
-        .catch((error) => { res.status(500).send('Impossible de mettre à jour le representant')})        
-    });
+                .catch((error) => { res.status(500).send("Impossible de mettre à jour l'entreprise") }
+                )
+                .catch((error) => { res.status(500).send('Impossible de mettre à jour le representant') })
+        });
 });
 
 app.post("/createNewContrat", (req, res, next) => {
@@ -331,7 +329,6 @@ app.post("/createNewContrat", (req, res, next) => {
 app.post("/createContratAlternance", (req, res, next) => {
     let ContratData = req.body;
     delete ContratData._id;
-    console.log(ContratData)
     let NewContrat = new CAlternance({
         ...ContratData
     })
@@ -346,6 +343,19 @@ app.post("/createContratAlternance", (req, res, next) => {
             console.log(error)
             res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
         })
+
+});
+
+app.post("/updateContratAlternance", (req, res, next) => {
+    let ContratData = req.body;
+    CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true },(err,value)=>{
+        if(err){
+            console.error(err)
+            res.status(500).send(err)
+        }else{
+            res.status(201).send(value)
+        }
+    })
 
 });
 

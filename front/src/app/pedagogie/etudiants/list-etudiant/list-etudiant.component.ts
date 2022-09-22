@@ -85,6 +85,7 @@ export class ListEtudiantComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
@@ -295,8 +296,8 @@ export class ListEtudiantComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
-          this.searchClass.push({ label: classe.nom, value: classe._id });
+          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
+          this.searchClass.push({ label: classe.abbrv, value: classe._id });
         })
       }),
       ((error) => { console.error(error); })

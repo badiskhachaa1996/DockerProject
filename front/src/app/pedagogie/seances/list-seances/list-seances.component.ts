@@ -84,8 +84,9 @@ export class ListSeancesComponent implements OnInit {
 
     this.classeService.getAll().subscribe(
       ((response) => {
+        console.log(response)
         for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].nom, value: response[classeID]._id });
+          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id });
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }
@@ -108,9 +109,6 @@ export class ListSeancesComponent implements OnInit {
   }
 
   loadEvents(data) {
-    this.seances = []
-    this.diplomeFilter = [{ label: "Toutes les filières", value: null }]
-    this.groupeFilter = [{ label: "Tout les groupes", value: null }]
     let diplomeList = {}
     this.classeService.getAll().subscribe(datac => {
       //TODO Filter all the classe and not the first one
@@ -119,10 +117,12 @@ export class ListSeancesComponent implements OnInit {
         this.dicClasse[classe._id] = classe
       })
       this.DiplomeService.getAll().subscribe(camp => {
+        this.seances = []
+        this.diplomeFilter = [{ label: "Toutes les filières", value: null }]
+        this.groupeFilter = [{ label: "Tout les groupes", value: null }]
         camp.forEach(ca => {
           this.dicDiplome[ca._id] = ca
         })
-        console.log(this.dicDiplome, this.dicClasse)
         data.forEach(d => {
           if (this.dicDiplome[this.dicClasse[d.classe_id[0]]?.diplome_id] && this.dicClasse[d.classe_id[0]]) {
             d.diplome_titre = this.dicDiplome[this.dicClasse[d.classe_id[0]].diplome_id].titre
@@ -321,6 +321,25 @@ export class ListSeancesComponent implements OnInit {
       }, error => {
         console.error(error)
       })
+  }
+
+  updateGroupeFilter(value) {
+    if (value)
+      this.classeService.getAllByDiplomeABBRV(value).subscribe(classes => {
+        this.groupeFilter = [{ label: "Tout les groupes", value: null }]
+        classes.forEach(c => {
+          let v2 = { label: c.abbrv, value: c.abbrv }
+          if (this.customIncludes(this.groupeFilter, v2) == false) {
+            this.groupeFilter.push(v2)
+          }
+        })
+      })
+    else
+      this.seanceService.getAll().subscribe(
+        (datas) => {
+          this.loadEvents(datas)
+        },
+      );
   }
 
 }

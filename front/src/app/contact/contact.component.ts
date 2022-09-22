@@ -43,9 +43,6 @@ export class ContactComponent implements OnInit {
   get description() { return this.contactform.get('description').value; };
 
   register() {
-
-    console.log(this.nom)
-
     let messageObject = {
       civilite : this.civilite,
       lastname: this.nom,

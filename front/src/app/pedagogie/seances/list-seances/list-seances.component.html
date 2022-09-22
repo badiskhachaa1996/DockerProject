@@ -100,7 +100,8 @@
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown *ngIf="diplomeFilter!=null && diplomeFilter.length!=1" [options]="diplomeFilter"
-                            class="mb-2" (onChange)="dt1.filter($event.value, 'diplome_titre', 'equals')">
+                            class="mb-2"
+                            (onChange)="dt1.filter($event.value, 'diplome_titre', 'equals');updateGroupeFilter($event.value)">
                         </p-dropdown>
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">

@@ -39,6 +39,7 @@ export class ReinscritComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
@@ -153,7 +154,7 @@ export class ReinscritComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
-        this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
+        this.groupeList.push({ label: g.abbrv, value: g._id })
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value

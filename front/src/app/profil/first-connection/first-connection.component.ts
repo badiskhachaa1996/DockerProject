@@ -125,7 +125,7 @@ export class FirstConnectionComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(item => {
-          this.dropdownClasse.push({ nom: item.nom, value: item._id });
+          this.dropdownClasse.push({ nom: item.abbrv, value: item._id });
           this.classes[item._id] = item;
         });
 

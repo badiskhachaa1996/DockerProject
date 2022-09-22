@@ -23,27 +23,22 @@
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
                                 [options]="EntrepriseList" dataKey="_id" filter="true"
-                                filterBy="r_sociale,email" optionLabel="r_sociale" id="entreprise_id"
                                 formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'"
-                                (onChange)="loadTuteur()">
+                                (onChange)="loadTuteur(entreprise_id.value)">
                             </p-dropdown>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="tuteur_id">Tuteur <span style="color: red;"> *
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="dropdownTuteurList" dataKey="_id" filter="true"
-                                filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                optionLabel="nomCOmplet" id="alternant" formControlName="tuteur_id">
+                                [options]="dropdownTuteurList" dataKey="_id" filter="true" id="alternant" formControlName="tuteur_id">
                             </p-dropdown>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="alternant">Alternant<span style="color: red;"> *
                                 </span> </label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="listAlternantDD" dataKey="_id" filter="true"
-                                filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                optionLabel="nomcomplet" id="alternant" formControlName="alternant">
+                                [options]="listAlternantDD" dataKey="_id" filter="true" id="alternant" formControlName="alternant">
                             </p-dropdown>
                         </div>
                         <div class="field col-12 md:col-6">
@@ -130,8 +125,8 @@
                         <div class="field col-12 md:col-6">
                             <label For="form">Formation<span style="color: red;"> *
                                 </span></label>
-                            <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
-                                id="form" formControlName="form">
+                                
+                            <p-dropdown [options]="formationList" id="form" formControlName="form">
                             </p-dropdown>
                             <div *ngIf="form.invalid && (form.touched || form.dirty)">
                                 <span style="color: red;" class="error" *ngIf="form.errors?.required">*
@@ -143,9 +138,7 @@
                             <label For="code_commercial">Commercial référent<span style="color: red;"> *
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="dropDownCommecialList" dataKey="_id" filter="true"
-                                filterBy="firstname,lastname,email,email_perso" optionLabel="nomComplet"
-                                id="code_commercial" formControlName="code_commercial">
+                                [options]="dropDownCommecialList" dataKey="_id" filter="true" formControlName="code_commercial">
                             </p-dropdown>
                             <div
                                 *ngIf="code_commercial.invalid && (code_commercial.touched || code_commercial.dirty)">
@@ -155,9 +148,8 @@
                             </div>
                         </div>
                         <div classe="field">
-                            <button pButton type="button" label="Ajouter" style="float: right;"
-                                [disabled]=" debut_contrat.invalid ||  fin_contrat.invalid ||
-                                alternantValidite   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)">
+                            <button pButton type="submit" label="Ajouter" style="float: right;"
+                                [disabled]="RegisterNewCA.invalid|| (Professionnalisation.value == true && classification.invalid)">
                             </button>
                         </div>
                     </div>
@@ -187,29 +179,24 @@
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
                                 [options]="EntrepriseList" dataKey="_id" filter="true"
-                                filterBy="r_sociale,email" optionLabel="r_sociale" id="entreprise_id"
                                 formControlName="entreprise_id" [disabled]="token.type == 'CEO Entreprise'"
-                                (onChange)="loadTuteur()">
+                                (onChange)="loadTuteur(entreprise_id_m.value)">
                             </p-dropdown>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="tuteur_id">Tuteur <span style="color: red;"> *
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="dropdownTuteurList" dataKey="_id" filter="true"
-                                filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                optionLabel="nomCOmplet" id="alternant" formControlName="tuteur_id">
+                                [options]="dropdownTuteurList" dataKey="_id" filter="true" id="alternant" formControlName="tuteur_id">
                             </p-dropdown>
                         </div>
-                        <div class="field col-12 md:col-6">
+                        <!--<div class="field col-12 md:col-6">
                             <label For="alternant">Alternant<span style="color: red;"> *
                                 </span> </label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="listAlternantDD" dataKey="_id" filter="true"
-                                filterBy="user_id.firstname,user_id.lastname,user_id.email,user_id.email_perso"
-                                optionLabel="nomcomplet" id="alternant" formControlName="alternant">
+                                [options]="listAlternantDD" dataKey="_id" filter="true" id="alternant" formControlName="alternant">
                             </p-dropdown>
-                        </div>
+                        </div>-->
                         <div class="field col-12 md:col-6">
                             <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                 </span></label>
@@ -294,8 +281,7 @@
                         <div class="field col-12 md:col-6">
                             <label For="form">Formation<span style="color: red;"> *
                                 </span></label>
-                            <p-dropdown [options]="formationList" optionLabel="label" optionDisabled="actif"
-                                id="form" formControlName="form">
+                            <p-dropdown [options]="formationList" id="form" formControlName="form">
                             </p-dropdown>
                             <div *ngIf="form_m.invalid && (form_m.touched || form_m.dirty)">
                                 <span style="color: red;" class="error" *ngIf="form_m.errors?.required">*
@@ -303,13 +289,11 @@
                                     champs est obligatoire.</span>
                             </div>
                         </div>
-                        <div class="field col-12 md:col-6">
+                        <div class="field col-12 md:col-12">
                             <label For="code_commercial">Commercial référent<span style="color: red;"> *
                                 </span></label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
-                                [options]="dropDownCommecialList" dataKey="_id" filter="true"
-                                filterBy="firstname,lastname,email,email_perso" optionLabel="nomComplet"
-                                id="code_commercial" formControlName="code_commercial">
+                                [options]="dropDownCommecialList" dataKey="_id" filter="true" formControlName="code_commercial">
                             </p-dropdown>
                             <div
                                 *ngIf="code_commercial_m.invalid && (code_commercial_m.touched || code_commercial_m.dirty)">
@@ -319,9 +303,8 @@
                             </div>
                         </div>
                         <div classe="field">
-                            <button pButton type="button" label="Modifier" style="float: right;"
-                                [disabled]="debut_contrat.invalid ||  fin_contrat.invalid ||
-                                alternantValidite   ||  form.invalid ||  code_commercial.invalid || Professionnalisation == undefined || (Professionnalisation.value == true && classification.invalid)">
+                            <button pButton type="submit" label="Modifier" style="float: right;"
+                                [disabled]="formUpdateCa.invalid|| (professionnalisation_m.value == true && classification_m.invalid)">
                             </button>
                         </div>
                     </div>
@@ -359,10 +342,10 @@
                         <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn=" intitule"> intitulé du poste <p-sortIcon field="intitule">
+                        <th pSortableColumn=" intitule">Intitulé du poste <p-sortIcon field="intitule">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn=" statut"> statut du contrat <p-sortIcon field=" statut">
+                        <th pSortableColumn=" statut">Statut du contrat <p-sortIcon field=" statut">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="formation"> Formation <p-sortIcon field="formation"></p-sortIcon>
@@ -419,7 +402,7 @@
                                             <th>Niveau de la formation</th>
                                             <th>Entreprise</th>
                                             <th>Coeff hierachique</th>
-                                            <th>code_commercial</th>
+                                            <th>Commercial</th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
