@@ -1,7 +1,45 @@
 <p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
 	<div class="col-12">
+
+		<!-- Formulaire de reservations -->
+        <div class="card" *ngIf="showFormAddReservation">
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showFormAddReservation = false;"> </i>
+
+            <h4 style="text-align: center;">Formulaire de soumission d'une réservation</h4>
+            <form [formGroup]="formReservation" (ngSubmit)="onReserve()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="name">Pour qui ?</label>
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                                    id="name" formControlName="choice"
+                                    emptyFilterMessage="Pas d'étudiant trouvé"
+                                    filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
+                    </div>
+
+					<div class="field col-12">
+                        <label htmlFor="name2">Choix du colocataire</label>
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                                    id="name2" formControlName="choice2"
+                                    emptyFilterMessage="Pas d'étudiant trouvé"
+                                    filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
+                    </div>
+                    
+                    <div class="field col-3">
+                        <button pButton type="submit" label="Réserver"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end form -->
+
 		<div class="card">
+			<div style="float: right;">
+				<button pButton icon="pi pi-plus" label="Ajouter" (click)="showFormAddReservation = true;"></button>
+			</div>
+
 			<h3>Gestion des réservations</h3>
 			<p-toast></p-toast>
 			<p-table #dt1 [value]="reservations" dataKey="_id" responsiveLayout="scroll"
