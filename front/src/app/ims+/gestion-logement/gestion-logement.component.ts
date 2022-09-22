@@ -7,6 +7,10 @@ import { LogementService } from 'src/app/services/logement.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 
+import * as XLSX from 'xlsx'; 
+import * as FileSaver from 'file-saver';
+
+
 @Component({
   selector: 'app-gestion-logement',
   templateUrl: './gestion-logement.component.html',
@@ -190,5 +194,42 @@ export class GestionLogementComponent implements OnInit {
       ((error) => { console.log(error) })
     );
   }
+
+
+  //Methode d'export en excel
+  exportExcel(): void 
+    {
+      let dataExcel = [];
+      
+      this.reservations.forEach((reservation) => {
+        let pWR: User = this.users[reservation.pWR];
+        let pFFR: User = this.users[reservation.pFFR];
+
+        let t = {}
+        t['NOM'] = pWR.lastname.toUpperCase;
+        t['Prenom'] = pWR.firstname;
+        t['Email perso'] = pWR.email_perso;
+        t['Email IntedGroup'] = pWR.email
+        t['Téléphone'] = pWR.phone;
+
+        t['NOM Colocataire'] = pFFR.lastname.toUpperCase;
+        t['Prenom Colocataire'] = pFFR.firstname;
+        t['Email perso Colocataire'] = pFFR.email_perso;
+        t['Email IntedGroup Colocataire'] = pFFR.email
+        t['Téléphone Colocataire'] = pFFR.phone;
+
+        dataExcel.push(t);
+      });
+
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+      const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+      const data: Blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+      });
+      FileSaver.saveAs(data, `reservation_validee_${new Date().toLocaleDateString("fr-FR")}.xlsx`);
+
+			
+    }
 
 }
