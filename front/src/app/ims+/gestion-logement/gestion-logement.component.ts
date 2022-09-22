@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Reservation } from 'src/app/models/Reservation';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { LogementService } from 'src/app/services/logement.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
   selector: 'app-gestion-logement',
@@ -17,9 +18,14 @@ export class GestionLogementComponent implements OnInit {
   reservations: Reservation[] = [];
   users: User[] = [];
 
+  dropdownEtudiant = [{ name: '', _id: null }];
+
+  showFormAddReservation: boolean = false;
+  formReservation: FormGroup;
+
   reservationsValidated: Reservation[] = [];
 
-  constructor(private messageService: MessageService, private userService: AuthService, private logementService: LogementService) { }
+  constructor(private etudiantService: EtudiantService, private formBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService, private logementService: LogementService) { }
 
   ngOnInit(): void {
 
@@ -31,6 +37,28 @@ export class GestionLogementComponent implements OnInit {
         });
       }),
       ((error) => { console.log(error) })
+    );
+
+    //Récupération de la liste des étudiants
+    this.userService.getAll().subscribe(
+      ((response) => {
+        
+        this.etudiantService.getAll().subscribe(
+          ((response2) => {
+            response.forEach(u => {
+              response2.forEach(e => {
+                if(e.user_id == u._id) 
+                {
+                  this.dropdownEtudiant.push({ name: `${u.firstname} ${u.lastname}`, _id: u._id })
+                }
+              });
+            });
+          }),
+          ((error) => { console.error(error); })
+        );
+
+      }),
+      ((error) => { console.error(error); })
     );
 
     //Recuperation de la liste des réservation
@@ -48,6 +76,8 @@ export class GestionLogementComponent implements OnInit {
       }),
       ((error) => { console.log(error) })
     );
+
+    this.onInitFormReservation();
 
   }
 
@@ -112,6 +142,52 @@ export class GestionLogementComponent implements OnInit {
 
       }),
       ((error) => { console.log(error)})
+    );
+  }
+
+  //Methode d'initialisation des formulaires
+  onInitFormReservation()
+  {
+    this.formReservation = this.formBuilder.group({
+      choice: [''],
+      choice2: [''],
+    });
+  }
+
+  onReserve()
+  {
+    //Récuperation des données du formulaire
+    const formValue = this.formReservation.value;
+    //Création d'une nouvelle réservation
+    const reservation = new Reservation(
+      null,
+      formValue['choice'],
+      formValue['choice2'],
+      false,
+    );
+
+    this.logementService.createReservation(reservation).subscribe(
+      ((response) => {
+        if(response.success)
+        {
+          this.messageService.add({ key: 'tst', severity: 'success', summary: 'Nouvelle réservation', detail: response.success });
+          
+          //Recuperation de la liste des réservation
+          this.logementService.getAllReservation().subscribe(
+            ((response) => {
+              this.reservations = response;
+            }),
+            ((error) => { console.log(error) })
+          );
+
+          this.formReservation.reset();
+        }
+        else 
+        {
+          this.messageService.add({ key: 'tst', severity: 'error', summary: 'Nouvelle réservation', detail: response.error });
+        }
+      }),
+      ((error) => { console.log(error) })
     );
   }
 
