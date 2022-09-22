@@ -127,7 +127,8 @@ export class GestionServicesComponent implements OnInit {
     
   }
 
-  onRowSelect($event) {
+  onRowSelect(event) {
+    console.log(event)
     this.loadServiceSujet()
     this.sujetShow = []
     this.sujetList.forEach(sujet => {
@@ -137,7 +138,7 @@ export class GestionServicesComponent implements OnInit {
     });
   }
 
-  onRowUnselect($event) {
+  onRowUnselect(event) {
     this.currentService = null
   }
 
