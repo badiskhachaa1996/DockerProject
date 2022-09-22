@@ -22,7 +22,7 @@ export class LogementComponent implements OnInit {
   showFormReservation2: boolean = false;
   formReservation2: FormGroup;
 
-  dropdownEtudiant = [];
+  dropdownEtudiant = [{ name: '', _id: null }];
 
   token: any;
 

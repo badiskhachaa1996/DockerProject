@@ -81,7 +81,7 @@
 
 		<div class="card">
 			<h3>Réservations validées</h3>
-			<small style="color: red; font-weight: bold;"> Réservatios validées</small>
+			<small style="color: red; font-weight: bold;">{{ reservationsValidated.length }} Réservatios validées</small>
 			<p-toast></p-toast>
 			<p-table #dt1 [value]="reservationsValidated" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"

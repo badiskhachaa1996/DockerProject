@@ -57,12 +57,13 @@ app.put("/validateReservation/:id", (req, res) => {
                .catch((error) => { res.status(500).json({error: 'Impossible de valider cette reservation'}) })
 });
 
-
 //methode de suppression d'une reservation
 app.delete("/deleteReservation/:id", (req, res) => {
     Reservation.deleteOne({ _id: req.params.id})
                .then(() => { res.status(200).json({success: 'Réservation refusé'}) })
                .catch((error) => { res.status(400).send('Impossible de supprimer cette réservation') })
 });
+
+
 
 module.exports = app;
