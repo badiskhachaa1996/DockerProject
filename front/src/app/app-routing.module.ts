@@ -193,8 +193,8 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
-                    { path: 'logements', component: LogementComponent },
-                    { path: 'gestion-reservations', component: GestionLogementComponent },
+                    { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
+                    { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
                 ],
             },

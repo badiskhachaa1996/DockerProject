@@ -13,7 +13,7 @@ app.post("/newReservation", (req, res, next) => {
     const reservation = new Reservation({ ...req.body });
 
     //Verification si la reservation n'existe pas au nom du même utilisateur
-    Reservation.findOne({ pwR: reservation.pwR })
+    Reservation.findOne({ pWR: reservation.pWR })
                .then((reservationFromDb) => {
                     if(reservationFromDb)
                     {
