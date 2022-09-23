@@ -45,7 +45,7 @@ export class AddEtudiantComponent implements OnInit {
   minYear = new Date().getFullYear() - 80;
   rangeYear = this.minYear + ":" + this.maxYear;
 
-  users: User[] = [];
+  users: Etudiant[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
   classes: Classe[] = [];
@@ -81,6 +81,7 @@ export class AddEtudiantComponent implements OnInit {
   parcoursList = []
   isMinor = false;
   formationList = []
+  defaultClasse: Classe;
 
 
 
@@ -102,13 +103,13 @@ export class AddEtudiantComponent implements OnInit {
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
 
-      this.diplomeService.getAll().subscribe(data => {
+    this.diplomeService.getAll().subscribe(data => {
 
-        data.forEach(element => {
-          this.formationList.push({ label: element.titre, value: element._id });
-        });
-  
-      })
+      data.forEach(element => {
+        this.formationList.push({ label: element.titre, value: element._id });
+      });
+
+    })
 
 
     this.campusService.getAllPopulate().subscribe(data => {
@@ -125,6 +126,10 @@ export class AddEtudiantComponent implements OnInit {
         this.dropdownFiliere.push({ value: d._id, label: d.titre })
       })
       this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
+
+    this.etudiantService.getAll().subscribe(u => {
+      this.users = u
     })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
@@ -147,7 +152,8 @@ export class AddEtudiantComponent implements OnInit {
           this.classes[classe._id] = classe;
           this.searchClass.push({ libelle: classe.abbrv, value: classe._id });
         })
-        this.formAddEtudiant.patchValue({ classe_id: response[0] })
+        this.defaultClasse = response[0]
+        this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
       }),
       ((error) => { console.error(error); })
     );
@@ -189,9 +195,9 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      
+
       remarque: [''],
-      campus_id: [' '],
+      campus_id: [''],
       filiere: ['', Validators.required],
       statut_dossier: ['']
 
@@ -201,6 +207,9 @@ export class AddEtudiantComponent implements OnInit {
 
   resetAddEtudiant() {
     this.onInitFormAddEtudiant()
+    this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
+    this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
+    this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
@@ -233,9 +242,15 @@ export class AddEtudiantComponent implements OnInit {
     let dn = new Date(date_naissance)
     let jour = dn.getDate()
     let mois = dn.getMonth() + 1
-    let year = dn.getFullYear().toString().substring(2)
-    let nb = this.users.length.toString()
-    nb = nb.substring(nb.length - 3)
+    let year = dn.getUTCFullYear().toString().slice(-2)
+    let lengUser = this.users.length
+    while (lengUser > 1000)
+      lengUser - 1000
+    let nb = (lengUser).toString()
+    if (lengUser < 10)
+      nb = "00" + nb
+    if (9 < lengUser && lengUser < 100)
+      nb = "0" + nb
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
   }
@@ -290,9 +305,9 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      ' ',
       email,
-      '',
+      email,
+      null,
       'user',
       null,
       null,
@@ -351,14 +366,14 @@ export class AddEtudiantComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
-  
-        this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-    
-   
-      })
+
+
+      }), error => {
+        this.messageService.add({ severity: 'error', summary: 'Etudiant n\'a pas été ajouté', detail: error.error.error });
+      }
     )
-     
+
   }
 
   isMinorFC() {

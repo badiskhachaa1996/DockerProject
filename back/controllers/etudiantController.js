@@ -93,18 +93,23 @@ app.post("/create", (req, res, next) => {
                     .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence de l'étudiant" }) });
             }
             else {
-                user.save()
-                    .then((userCreated) => {
+                user.save((error2,userCreated)=>{
+                    if(error2){
+                        console.error(error2);
+                        res.status(400).send({ error: 'Impossible de créer un nouvel user ' + error2.message })
+                    }else{
                         etudiant.user_id = userCreated._id;
                         console.log("Le user n'existe pas - enregistrement en cours")
-                        etudiant.save()
-                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated }) })
-                            .catch((error) => {
+                        etudiant.save((error, etudiantCreated) => {
+                            if (error) {
                                 console.error(error);
                                 res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
-                            });
-                    })
-                    .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
+                            } else {
+                                res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated })
+                            }
+                        })
+                    }
+                })
             }
         })
         .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });
@@ -153,11 +158,11 @@ app.get("/getAllAlternants", (req, res, next) => {
 
             let i = alternantsFromDb.length
             alternantsFromDb.forEach(alternatInscrit => {
-            
+
                 CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
-               
+
                     if (contratdata.length !== 0) {
-                      
+
                     }
                     else {
 
@@ -168,7 +173,7 @@ app.get("/getAllAlternants", (req, res, next) => {
                     i--;
                     if (i < 1) {
 
-                     
+
                         res.status(200).send(AlternantTosign);
 
                     }
