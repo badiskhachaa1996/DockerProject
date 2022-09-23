@@ -86,8 +86,10 @@ export class ExterneComponent implements OnInit {
   toLoginMiscroft() {
 
     if (this.msalGuardConfig.authRequest) {
+      console.log(this.msalGuardConfig.authRequest)
       this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
         .subscribe((response: AuthenticationResult) => {
+          console.log(response)
           this.msalService.instance.setActiveAccount(response.account);
           if (response.account) {
             this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {

@@ -138,7 +138,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="ville">Pays</label>
                     <p-dropdown [options]="paysList" optionLabel="value" optionDisabled="actif"
-                        formControlName="pays_adresse"></p-dropdown>
+                        formControlName="pays_adresse" filter="true"></p-dropdown>
                     <!-- <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                         <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
                             Le nom du pays n'est pas dans le bon format

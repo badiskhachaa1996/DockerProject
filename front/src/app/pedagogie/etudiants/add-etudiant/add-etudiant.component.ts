@@ -81,6 +81,7 @@ export class AddEtudiantComponent implements OnInit {
   parcoursList = []
   isMinor = false;
   formationList = []
+  defaultClasse: Classe;
 
 
 
@@ -102,13 +103,13 @@ export class AddEtudiantComponent implements OnInit {
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
 
-      this.diplomeService.getAll().subscribe(data => {
+    this.diplomeService.getAll().subscribe(data => {
 
-        data.forEach(element => {
-          this.formationList.push({ label: element.titre, value: element._id });
-        });
-  
-      })
+      data.forEach(element => {
+        this.formationList.push({ label: element.titre, value: element._id });
+      });
+
+    })
 
 
     this.campusService.getAllPopulate().subscribe(data => {
@@ -147,7 +148,8 @@ export class AddEtudiantComponent implements OnInit {
           this.classes[classe._id] = classe;
           this.searchClass.push({ libelle: classe.abbrv, value: classe._id });
         })
-        this.formAddEtudiant.patchValue({ classe_id: response[0] })
+        this.defaultClasse = response[0]
+        this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse  })
       }),
       ((error) => { console.error(error); })
     );
@@ -189,9 +191,9 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       isHandicaped: [false],
       suivi_handicaped: [''],
-      
+
       remarque: [''],
-      campus_id: [' '],
+      campus_id: [''],
       filiere: ['', Validators.required],
       statut_dossier: ['']
 
@@ -201,6 +203,9 @@ export class AddEtudiantComponent implements OnInit {
 
   resetAddEtudiant() {
     this.onInitFormAddEtudiant()
+    this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
+    this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse  })
+    this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
@@ -290,9 +295,9 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      ' ',
       email,
-      '',
+      email,
+      null,
       'user',
       null,
       null,
@@ -351,14 +356,14 @@ export class AddEtudiantComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
-  
-        this.showFormAddEtudiant = false;
         this.resetAddEtudiant();
-    
-   
-      })
+
+
+      }), error => {
+        this.messageService.add({ severity: 'error', summary: 'Etudiant n\'a pas été ajouté', detail: error.error.error });
+      }
     )
-     
+
   }
 
   isMinorFC() {
