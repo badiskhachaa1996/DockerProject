@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Reservation } from 'src/app/models/Reservation';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
@@ -153,7 +153,7 @@ export class GestionLogementComponent implements OnInit {
   onInitFormReservation()
   {
     this.formReservation = this.formBuilder.group({
-      choice: [''],
+      choice: ['', Validators.required],
       choice2: [''],
     });
   }
@@ -161,12 +161,15 @@ export class GestionLogementComponent implements OnInit {
   onReserve()
   {
     //Récuperation des données du formulaire
-    const formValue = this.formReservation.value;
+    let choice1 = this.formReservation.get('choice')?.value._id; 
+    let choice2 = this.formReservation.get('choice2')?.value._id; 
+
+    console.log(choice1)
     //Création d'une nouvelle réservation
     const reservation = new Reservation(
       null,
-      formValue['choice'],
-      formValue['choice2'],
+      choice1,
+      choice2,
       false,
     );
 
