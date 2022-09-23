@@ -44,6 +44,16 @@ export class ReinscritComponent implements OnInit {
     { value: "Abandon", label: "Abandon" }
   ]
 
+  typePaiement = [
+    {value:"Espèces",label:"Espèces"},
+    {value:"Virement",label:"Virement"},
+    {value:"Chèque de caution",label:"Chèque de caution"},
+    {value:"Chèque en échange d'espèces",label:"Chèque en échange d'espèces"},
+    {value:"Chèque de Garantie",label:"Chèque de Garantie"},
+    {value:"Chèque",label:"Chèque"},
+    {value:"Autre",label:"Autre"},
+  ]
+
   anneeScolaireReinscrit = [
     { label: "2019", value: "2019" },
     { label: "2020", value: "2020" },
@@ -368,11 +378,14 @@ export class ReinscritComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: this.typePaiement[0].value, montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
-    if (type == "montant") {
+    if(type=="type"){
+      this.payementList[i][type] = event.value;
+    }
+    else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
     } else {
       this.payementList[i][type] = event.target.value;
@@ -622,4 +635,43 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+    this.etudiantService.getFiles(rowData?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+      },
+      (error) => { console.error(error) }
+    );
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
 }
