@@ -161,6 +161,7 @@ export class AddFormateurComponent implements OnInit {
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
       email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@estya+\\.com$")]],
+      email_perso:['',Validators.email],
       pays_adresse: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
       ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       rue_adresse: ['', Validators.required],
@@ -206,6 +207,7 @@ export class AddFormateurComponent implements OnInit {
   get indicatif() { return this.formAddFormateur.get('indicatif'); };
   get phone() { return this.formAddFormateur.get('phone'); };
   get email() { return this.formAddFormateur.get('email'); };
+  get email_perso() { return this.formAddFormateur.get('email_perso'); };
   get pays_adresse() { return this.formAddFormateur.get('pays_adresse'); };
   get ville_adresse() { return this.formAddFormateur.get('ville_adresse'); };
   get rue_adresse() { return this.formAddFormateur.get('rue_adresse'); };
@@ -227,6 +229,7 @@ export class AddFormateurComponent implements OnInit {
     let indicatif = this.formAddFormateur.get('indicatif')?.value;
     let phone = this.formAddFormateur.get('phone')?.value;
     let email = this.formAddFormateur.get('email')?.value;
+    let email_perso = this.formAddFormateur.get('email_perso')?.value;
     let pays_adresse = this.formAddFormateur.get('pays_adresse')?.value;
     let ville_adresse = this.formAddFormateur.get('ville_adresse')?.value;
     let rue_adresse = this.formAddFormateur.get('rue_adresse')?.value;
@@ -285,7 +288,7 @@ export class AddFormateurComponent implements OnInit {
     let absences = this.formAddFormateur.get('absences').value
 
     //Pour la creation du nouveau formateur, on crée en même temps un user et un formateur
-    let newUser = new User(null, firstname, lastname, indicatif, phone, email, null, null, 'user', null, null, civilite, null, null, 'Formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
+    let newUser = new User(null, firstname, lastname, indicatif, phone, email, email_perso, null, 'user', null, null, civilite, null, null, 'Formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, null, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
       jury, absences);
