@@ -45,7 +45,7 @@ export class AddEtudiantComponent implements OnInit {
   minYear = new Date().getFullYear() - 80;
   rangeYear = this.minYear + ":" + this.maxYear;
 
-  users: User[] = [];
+  users: Etudiant[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
   classes: Classe[] = [];
@@ -128,6 +128,10 @@ export class AddEtudiantComponent implements OnInit {
       this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
     })
 
+    this.etudiantService.getAll().subscribe(u => {
+      this.users = u
+    })
+
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
     this.onInitFormAddEtudiant();
 
@@ -149,7 +153,7 @@ export class AddEtudiantComponent implements OnInit {
           this.searchClass.push({ libelle: classe.abbrv, value: classe._id });
         })
         this.defaultClasse = response[0]
-        this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse  })
+        this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
       }),
       ((error) => { console.error(error); })
     );
@@ -204,7 +208,7 @@ export class AddEtudiantComponent implements OnInit {
   resetAddEtudiant() {
     this.onInitFormAddEtudiant()
     this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
-    this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse  })
+    this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
     this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
   }
 
@@ -238,9 +242,15 @@ export class AddEtudiantComponent implements OnInit {
     let dn = new Date(date_naissance)
     let jour = dn.getDate()
     let mois = dn.getMonth() + 1
-    let year = dn.getFullYear().toString().substring(2)
-    let nb = this.users.length.toString()
-    nb = nb.substring(nb.length - 3)
+    let year = dn.getUTCFullYear().toString().slice(-2)
+    let lengUser = this.users.length
+    while (lengUser > 1000)
+      lengUser - 1000
+    let nb = (lengUser).toString()
+    if (lengUser < 10)
+      nb = "00" + nb
+    if (9 < lengUser && lengUser < 100)
+      nb = "0" + nb
     let r = (code_pays + prenom + nom + jour + mois + year + nb).toUpperCase()
     return r
   }
