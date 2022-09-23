@@ -82,12 +82,12 @@ export class LogementComponent implements OnInit {
   onReserve1()
   {
     //Récuperation des données du formulaire
-    const formValue = this.formReservation1.value;
+    let choice = this.formReservation1.get('choice')?.value._id; 
     //Création d'une nouvelle réservation
     const reservation = new Reservation(
       null,
       this.token.id,
-      formValue['choice'],
+      choice,
       false,
     );
 
@@ -109,12 +109,12 @@ export class LogementComponent implements OnInit {
   onReserve2()
   {
     //Récuperation des données du formulaire
-    const formValue = this.formReservation2.value;
+    let choice = this.formReservation2.get('choice')?.value._id; 
     //Création d'une nouvelle réservation
     const reservation = new Reservation(
       null,
       this.token.id,
-      formValue['choice'],
+      choice,
       false,
     );
 

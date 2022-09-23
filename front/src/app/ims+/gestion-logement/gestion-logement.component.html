@@ -13,7 +13,7 @@
                 <div class="p-fluid p-formgrid grid">
                     <div class="field col-12">
                         <label htmlFor="name">Pour qui ?</label>
-                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" 
                                     id="name" formControlName="choice"
                                     emptyFilterMessage="Pas d'étudiant trouvé"
                                     filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
@@ -21,14 +21,14 @@
 
 					<div class="field col-12">
                         <label htmlFor="name2">Choix du colocataire</label>
-                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" 
                                     id="name2" formControlName="choice2"
                                     emptyFilterMessage="Pas d'étudiant trouvé"
                                     filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
                     </div>
                     
                     <div class="field col-3">
-                        <button pButton type="submit" label="Réserver"></button>
+                        <button pButton type="submit" [disabled]="formReservation.invalid" label="Réserver"></button>
                     </div>
                 </div>
             </form>
