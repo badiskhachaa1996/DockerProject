@@ -101,7 +101,8 @@ import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
-import { ListeComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-comptes/liste-comptes.component';
+import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
+import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
 
 
 @NgModule({
@@ -194,7 +195,8 @@ import { ListeComptesComponent } from './gestion-bancaire/gestion-des-comptes/li
 
                     /** Path Lemon Way */
 
-                    { path: 'liste-comptes-bancaires', component: ListeComptesComponent },
+                    { path: 'mon-comptes-bancaires', component: MyAccountComponent },
+                    { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
 
                     /** end */
 

@@ -203,7 +203,8 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
-import { ListeComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-comptes/liste-comptes.component';
+import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
+import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -393,7 +394,8 @@ import { ListeComptesComponent } from './gestion-bancaire/gestion-des-comptes/li
     ListeContratsComponent,
     ArrToStrPipe,
     CreateAccountComponent,
-    ListeComptesComponent,
+    MyAccountComponent,
+    AddNewIndividualAccountComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
