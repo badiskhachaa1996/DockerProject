@@ -276,8 +276,9 @@
 
 
 
-<div *ngIf="isEtudiant">
-    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant.custom_id}}</h1>
+<div *ngIf="isEtudiant && dataEtudiant">
+    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant.custom_id}}
+    </h1>
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
@@ -329,7 +330,8 @@
                 </div>
 
                 <div class="col-12" *ngIf="type==null">
-                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsforma"></p-fullCalendar>
+                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsforma">
+                    </p-fullCalendar>
                 </div>
             </div>
         </div>
@@ -434,7 +436,41 @@
             scolaire par la pédagogie.</h3>
     </div>
 </div>
-
+<div *ngIf="dashboard">
+    <div class="card" *ngIf="showForm">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showForm=false;addLinkForm.reset()"  aria-hidden="true"> </i>
+        <h4 style="text-align: center;">Ajouter un lien</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+        <form class="p-fluid p-formgrid grid" [formGroup]="addLinkForm" (ngSubmit)="saveLink()">
+            <div class="field col-12 md:col-6">
+                <label for="libelle">Libellé <span style="color: red;"> * </span></label>
+                <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Google" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="link">Lien <span style="color: red;"> * </span></label>
+                <input pInputText id="link" type="text" formControlName="link" placeholder="google.fr" />
+            </div>
+            <div style="justify-content: right;">
+                <button pButton label="Ajouter" type="submit" [disabled]="addLinkForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card">
+        <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus" label="Ajouter un nouveau lien"
+            style="width:auto;float:right"></button>
+        <h2>Tableau de bord personnel</h2>
+        <div class="grid">
+            <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
+                <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
+                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;" (click)="deleteLink(i)"  aria-hidden="true"> </i>
+            </div>
+        </div>
+    </div>
+</div>
 <!--<div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>

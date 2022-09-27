@@ -88,7 +88,7 @@ const contactController = require('./controllers/contactController');
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
-
+const dashboardController = require('./controllers/dashboardController')
 const partenaireController = require('./controllers/partenaireController');
 const commercialPartenaireController = require('./controllers/commercialPartenaireController');
 const appreciationController = require('./controllers/appreciationController');
@@ -215,6 +215,8 @@ app.use('/soc/contact', contactController)
 app.use("/soc/tuteur", tuteurController);
 
 app.use("/soc/logement", logementController);
+
+app.use('/soc/dashboard', dashboardController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

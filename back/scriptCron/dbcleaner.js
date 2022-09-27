@@ -6,6 +6,10 @@ const { Prospect } = require('../models/prospect')
 const { Formateur } = require('../models/formateur')
 const { Tuteur } = require('../models/Tuteur')
 const mongoose = require("mongoose");
+var readlineSync = require('readline-sync');
+var willBeDeleted = []
+var emailUpdated = []
+var emailIMSUpdated = []
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -53,71 +57,68 @@ mongoose
             })
             console.log('Tuteur nettoyé')
         })
-        let emailList = []
-        let emailDoublon = []
+        var emailList = []
         //Vérification des doublons
         User.find().then(users => {
             users.forEach(u => {
-                if (customIncludes(emailList, u.email_perso, u.email)) {
+                if (customIncludes(u.email_perso, u.email)) {
                     deleteUser(u)
                 }
-                if (u.email_perso == u.email) {
+                /*if (u.email_perso == u.email) {
                     whichSave(u)
-                }
+                }*/
             })
+            User.updateMany({ _id: emailIMSUpdated }, { email: null })
+            User.updateMany({ _id: emailUpdated }, { email_perso: null })
+            User.deleteMany({ _id: willBeDeleted })
         })
 
-        function customIncludes(emailList, email_perso, email_ims) {
+        function customIncludes(email_perso, email_ims) {
             let r = false
             emailList.forEach(email => {
                 if (email == email_perso || email == email_ims) {
                     r = true
-                    emailDoublon.push(email)
                 }
             })
+            if (email_perso != null && emailList.includes(email_perso) == false)
+                emailList.push(email_perso)
+            if (email_ims != null && emailList.includes(email_ims) == false)
+                emailList.push(email_ims)
             return r
         }
 
         function deleteUser(u) {
-            const readline = require('readline').createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
-            readline.question(u.email + " " + u.email_perso + " est un doublon.\nVoulez-vous le supprimer ? (y\\n)", r => {
-                if (r == 'y') {
-                    User.find({ $or: [{ email: u.email, email_perso: u.email_perso }] }).then(users => {
-                        let dic = {}
-                        let i = 1
-                        users.forEach(us => {
-                            dic[i] = us._id
-                            console.log(i.toString() + " :" + us.toString())
-                            i++
-                        })
-                        readline.close();
-                        readline.question("Lequel voulez-vous supprimer ?", r2 => {
-                            console.log(dic[r2.toString()])
-                            //TODO
-                        });
+            if (readlineSync.keyInYN(u.email + " " + u.email_perso + " est un doublon.\nVoulez-vous le supprimer ?")) {
+                if (u.email == null)
+                    u.email = u.email_perso
+                if (u.email_perso == null)
+                    u.email_perso = u.email
+                User.find({ $or: [{ email: u.email }, { email_perso: u.email_perso }, { email: u.email_perso }, { email_perso: u.email }] }).then(users => {
+                    let dic = {}
+                    let i = 1
+                    users.forEach(us => {
+                        dic[i] = us._id
+                        console.log(i.toString() + " :" + us.toString())
+                        i++
                     })
-                }else{
-                    readline.close();
-                }
-            });
-        }
+                    console.log(users.length)
+                    var r2 = readlineSync.question("Lequel voulez-vous garder ?")
+                    console.log(dic[r2.toString()])
+                    for (let index = 0; index < i; index++) {
+                        if (index.toString() != r2)
+                            willBeDeleted.push(dic[index])
+                    }
+                })
+            }
+        };
 
         function whichSave(u) {
-            const readline = require('readline').createInterface({
-                input: process.stdin,
-                output: process.stdout
-            });
             console.log(u.toString())
-            readline.question("1: " + u.email + " 2: " + u.email_perso + " est un doublon.\nLequel voulez-vous supprimer ? (1\\2)", r => {
-                if (r == '1') {
-                    User.findByIdAndUpdate(u._id, { email: null })
-                } else {
-                    User.findByIdAndUpdate(u._id, { email_perso: null })
-                }
-                readline.close()
-            });
+            let r = readlineSync.question(u.email + " est un doublon 1: IMS 2: Perso.\nLequel voulez-vous supprimer ? (1\\2)")
+            if (r == '1') {
+                emailIMSUpdated.push(u._id)
+            } else {
+                emailUpdated.push(u._id) // email_perso: null
+            }
         }
     })

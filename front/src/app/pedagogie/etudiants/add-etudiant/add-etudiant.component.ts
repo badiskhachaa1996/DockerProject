@@ -370,6 +370,7 @@ export class AddEtudiantComponent implements OnInit {
 
 
       }), error => {
+        console.error(error)
         this.messageService.add({ severity: 'error', summary: 'Etudiant n\'a pas été ajouté', detail: error.error.error });
       }
     )

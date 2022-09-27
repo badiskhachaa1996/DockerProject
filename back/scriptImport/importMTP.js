@@ -297,8 +297,6 @@ function generateCode(user, dn) {
     } catch (error) {
         console.error(error, user)
     }
-
-
 }
 
 

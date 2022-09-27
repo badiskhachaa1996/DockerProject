@@ -84,10 +84,8 @@ app.post("/create", (req, res, next) => {
                             etudiant.user_id = userFromDb._id;
                             console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
-
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
-
                         }
                     })
                     .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence de l'étudiant" }) });

@@ -28,6 +28,9 @@ import { Note } from 'src/app/models/Note';
 import { NoteService } from 'src/app/services/note.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { Formateur } from 'src/app/models/Formateur';
+import { Dashboard } from 'src/app/models/Dashboard';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -57,6 +60,7 @@ export class DashboardComponent implements OnInit {
   isReinscrit = false
   isUnknow = false
 
+  dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
@@ -118,6 +122,10 @@ export class DashboardComponent implements OnInit {
 
   events: any[];
 
+  addLinkForm: FormGroup = new FormGroup({
+    libelle: new FormControl('', [Validators.required]),
+    link: new FormControl('', Validators.required),
+  });
 
   eventClickFC(col) {
     this.router.navigate(['/emergement/' + col.event.id])
@@ -130,12 +138,17 @@ export class DashboardComponent implements OnInit {
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService
-    ) { }
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService,
+    private dashboardService: DashboardService
+  ) { }
 
 
   ngOnInit() {
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
+      this.dashboard = dataDashboard
+      console.log(dataDashboard)
+    })
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
         this.user = dataUser;
@@ -151,7 +164,6 @@ export class DashboardComponent implements OnInit {
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         if (this.isEtudiant) {
-          console.log(dataUser)
           this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
             this.dataEtudiant = dataEtu
             if (dataEtu) {
@@ -271,6 +283,29 @@ export class DashboardComponent implements OnInit {
         this.events = seancesCal;
       })
     })
+
+  }
+  showForm = false
+  saveLink() {
+    let label = this.addLinkForm.value.libelle
+    let link = this.addLinkForm.value.link
+    if (link.includes("http") == false)
+      link = "https://" + link
+    this.dashboard.links.push({ label, link })
+    this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard => {
+      this.dashboard = newDashboard
+      this.showForm = false
+    }, err => {
+      console.error(err)
+    })
+  }
+  deleteLink(i) {
+    if (confirm("Est ce que vous êtes sûr de vouloir supprimer le lien " + this.dashboard.links[i].label + " ?")) {
+      this.dashboard.links.splice(i, 1)
+      this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard=>{
+        this.dashboard = newDashboard
+      })
+    }
 
   }
 }
