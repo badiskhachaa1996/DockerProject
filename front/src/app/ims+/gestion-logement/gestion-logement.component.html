@@ -1,5 +1,36 @@
 <p-toast key="tst" [baseZIndex]="99999"></p-toast>
 <div class="grid">
+	
+	<div class="col-6">
+		<div class="card mb-0">
+			<div class="flex justify-content-between mb-3">
+				<div>
+					<span class="block text-500 font-medium mb-3">Réservations en attentes </span>
+					<div class="text-900 font-medium text-xl">{{ reservationWaiting.length }}</div>
+				</div>
+				<div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+					[ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+					<i class="pi pi-refresh text-blue-500 text-xl"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-6">
+		<div class="card mb-0">
+			<div class="flex justify-content-between mb-3">
+				<div>
+					<span class="block text-500 font-medium mb-3">Réservations validées</span>
+					<div class="text-900 font-medium text-xl">{{ reservationsValidated.length }}</div>
+				</div>
+				<div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+					[ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+					<i class="pi pi-check text-blue-500 text-xl"></i>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="col-12">
 
 		<!-- Formulaire de reservations -->
@@ -37,12 +68,11 @@
 
 		<div class="card">
 			<div style="float: right;">
-				<button pButton icon="pi pi-plus" label="Ajouter" (click)="showFormAddReservation = true;"></button>
+				<button pButton icon="pi pi-plus" label="Ajouter une nouvelle réservation" (click)="showFormAddReservation = true;"></button>
 			</div>
 
-			<h3>Gestion des réservations</h3>
-			<p-toast></p-toast>
-			<p-table #dt1 [value]="reservations" dataKey="_id" responsiveLayout="scroll"
+			<h3>Gestion des Réservations en attentes</h3>
+			<p-table #dt1 [value]="reservationWaiting" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
 					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
 				
@@ -122,8 +152,6 @@
 				<button pButton icon="pi pi-file" label="Exporter la liste" (click)="exportExcel()"></button>
 			</div>
 			<h3>Réservations validées</h3>
-			<small style="color: red; font-weight: bold;">{{ reservationsValidated.length }} Réservatios validées</small>
-			<p-toast></p-toast>
 			<p-table #dt1 [value]="reservationsValidated" dataKey="_id" responsiveLayout="scroll"
 					[globalFilterFields]="['user_id', 'classe_id','user_id.lastname','user_id.firstname']"
 					[rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="reservations.length">
