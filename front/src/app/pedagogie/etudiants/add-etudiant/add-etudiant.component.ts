@@ -168,6 +168,7 @@ export class AddEtudiantComponent implements OnInit {
       indicatif: [''],
       phone: [''],
       email: ['', Validators.email],
+      email_ims: ['', Validators.email],
       // email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
       pays_adresse: [this.paysList[0]],
       ville_adresse: [''],
@@ -263,6 +264,7 @@ export class AddEtudiantComponent implements OnInit {
     let indicatif = this.formAddEtudiant.get('indicatif')?.value;
     let phone = this.formAddEtudiant.get('phone')?.value;
     let email = this.formAddEtudiant.get('email')?.value;
+    let email_ims = this.formAddEtudiant.get('email_ims')?.value;
     let pays_adresse = this.formAddEtudiant.get('pays_adresse')?.value;
     let ville_adresse = this.formAddEtudiant.get('ville_adresse')?.value;
     let rue_adresse = this.formAddEtudiant.get('rue_adresse')?.value;
@@ -305,7 +307,7 @@ export class AddEtudiantComponent implements OnInit {
       lastname,
       indicatif,
       phone,
-      email,
+      email_ims,
       email,
       null,
       'user',
@@ -364,9 +366,7 @@ export class AddEtudiantComponent implements OnInit {
       ((response) => {
         console.log(response.data)
         this.messageService.add({ severity: 'success', summary: 'Etudiant ajouté' });
-        //Recuperation de la liste des differentes informations
-        this.onGetAllClasses();
-        this.resetAddEtudiant();
+        this.router.navigate(['etudiants']);
 
 
       }), error => {

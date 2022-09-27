@@ -89,8 +89,8 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="mail">Adresse email <span style="color: red;"> * </span></label>
-                    <input pInputText id="mail" type="email" placeholder="Entrez l'adresse email perso de l'étudiant"
+                    <label For="mail">Adresse email perso<span style="color: red;"> * </span></label>
+                    <input pInputText id="mail" type="email" placeholder="j.smith@gmail.com"
                         formControlName="email" />
 
                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
@@ -98,6 +98,12 @@
                             L'email est obligatoire </span>
                         <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon format</span>
                     </div>
+                </div>
+
+                <div class="field col-12 md:col-12">
+                    <label For="mail">Adresse email IMS</label>
+                    <input pInputText id="mail" type="email" placeholder="j.smith@estya.com"
+                        formControlName="email_ims" />
                 </div>
 
                 <div class="field col-12 md:col-6">

@@ -754,7 +754,7 @@
         <h5>Liste des réinscriptions en attente de validation</h5>
         <p-toast></p-toast>
         <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id']"
+            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','user_id.email','custom_id']"
             [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
