@@ -205,6 +205,7 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
+import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -396,6 +397,7 @@ import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des
     CreateAccountComponent,
     MyAccountComponent,
     AddNewIndividualAccountComponent,
+    ListeDesComptesComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
