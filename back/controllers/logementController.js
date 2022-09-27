@@ -39,6 +39,13 @@ app.get("/getAllReservation", (req, res) => {
            .catch((error) => { res.status(500).send('Impossible de recuperer les réservations')})
 });
 
+//Recuperation de toute les réservations en attentes
+app.get("/getAllReservationWaiting", (req, res) => {
+    Reservation.find({ isValidate: false })
+           .then((reservationsFromDb) => { res.status(200).send(reservationsFromDb)})
+           .catch((error) => { res.status(500).send('Impossible de recuperer les réservations')})
+});
+
 //Recuperation de toute les réservations existantes et validées
 app.get("/getAllReservationsValidated", (req, res) => {
     Reservation.find({ isValidate: true })
@@ -62,6 +69,14 @@ app.delete("/deleteReservation/:id", (req, res) => {
     Reservation.deleteOne({ _id: req.params.id})
                .then(() => { res.status(200).json({success: 'Réservation refusé'}) })
                .catch((error) => { res.status(400).send('Impossible de supprimer cette réservation') })
+});
+
+
+//Verifier l'existence d'une réservation
+app.get("/verifyReservation/:user_id", (req, res) => {
+    Reservation.findOne({ pWR: req.params.user_id})
+               .then((reservationsFromDb) => { res.status(200).send(reservationsFromDb); })
+               .catch((error) => { res.status(400).send("Impossible de verifeir l'existence de cette réservation"); })
 });
 
 

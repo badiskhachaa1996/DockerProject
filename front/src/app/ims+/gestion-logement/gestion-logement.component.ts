@@ -20,14 +20,15 @@ import * as FileSaver from 'file-saver';
 export class GestionLogementComponent implements OnInit {
 
   reservations: Reservation[] = [];
+  reservationWaiting: Reservation[] = [];
+  reservationsValidated: Reservation[] = [];
+
   users: User[] = [];
 
   dropdownEtudiant = [{ name: '', _id: null }];
 
   showFormAddReservation: boolean = false;
   formReservation: FormGroup;
-
-  reservationsValidated: Reservation[] = [];
 
   constructor(private etudiantService: EtudiantService, private formBuilder: FormBuilder, private messageService: MessageService, private userService: AuthService, private logementService: LogementService) { }
 
@@ -65,10 +66,29 @@ export class GestionLogementComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
-    //Recuperation de la liste des réservation
+    //Récupération des listes
+    this.getReservations();
+
+    this.onInitFormReservation();
+
+  }
+
+
+  //Recupération de tous les types de réservation
+  getReservations(): void
+  {
+    //Recuperation de la liste des réservations
     this.logementService.getAllReservation().subscribe(
       ((response) => {
         this.reservations = response;
+      }),
+      ((error) => { console.log(error) })
+    );
+
+    //Recuperation de la liste des réservations en attentes
+    this.logementService.getAllReservationWaiting().subscribe(
+      ((response) => {
+        this.reservationWaiting = response;
       }),
       ((error) => { console.log(error) })
     );
@@ -80,9 +100,6 @@ export class GestionLogementComponent implements OnInit {
       }),
       ((error) => { console.log(error) })
     );
-
-    this.onInitFormReservation();
-
   }
 
 
@@ -98,20 +115,7 @@ export class GestionLogementComponent implements OnInit {
         }
 
         //Recuperation de la liste des réservation
-        this.logementService.getAllReservation().subscribe(
-          ((response) => {
-            this.reservations = response;
-          }),
-          ((error) => { console.log(error) })
-        );
-
-        //Recuperation de la liste des réservation validée
-        this.logementService.getAllReservationsValidated().subscribe(
-          ((response) => {
-            this.reservationsValidated = response;
-          }),
-          ((error) => { console.log(error) })
-        );
+        this.getReservations();
 
       }),
       ((error) => { console.log(error)})
@@ -129,20 +133,7 @@ export class GestionLogementComponent implements OnInit {
         }
 
         //Recuperation de la liste des réservation
-        this.logementService.getAllReservation().subscribe(
-          ((response) => {
-            this.reservations = response;
-          }),
-          ((error) => { console.log(error) })
-        );
-
-        //Recuperation de la liste des réservation validée
-        this.logementService.getAllReservationsValidated().subscribe(
-          ((response) => {
-            this.reservationsValidated = response;
-          }),
-          ((error) => { console.log(error) })
-        );
+        this.getReservations();
 
       }),
       ((error) => { console.log(error)})
@@ -180,12 +171,7 @@ export class GestionLogementComponent implements OnInit {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Nouvelle réservation', detail: response.success });
           
           //Recuperation de la liste des réservation
-          this.logementService.getAllReservation().subscribe(
-            ((response) => {
-              this.reservations = response;
-            }),
-            ((error) => { console.log(error) })
-          );
+          this.getReservations();
 
           this.formReservation.reset();
         }
@@ -204,22 +190,22 @@ export class GestionLogementComponent implements OnInit {
     {
       let dataExcel = [];
       
-      this.reservations.forEach((reservation) => {
+      this.reservationsValidated.forEach((reservation) => {
         let pWR: User = this.users[reservation.pWR];
         let pFFR: User = this.users[reservation.pFFR];
 
         let t = {}
-        t['NOM'] = pWR.lastname;
-        t['Prenom'] = pWR.firstname;
-        t['Email perso'] = pWR.email_perso;
-        t['Email IntedGroup'] = pWR.email
-        t['Téléphone'] = pWR.phone;
+        t['NOM'] = pWR?.lastname;
+        t['Prenom'] = pWR?.firstname;
+        t['Email perso'] = pWR?.email_perso;
+        t['Email IntedGroup'] = pWR?.email
+        t['Téléphone'] = pWR?.phone;
 
-        t['NOM Colocataire'] = pFFR.lastname;
-        t['Prenom Colocataire'] = pFFR.firstname;
-        t['Email perso Colocataire'] = pFFR.email_perso;
-        t['Email IntedGroup Colocataire'] = pFFR.email
-        t['Téléphone Colocataire'] = pFFR.phone;
+        t['NOM Colocataire'] = pFFR?.lastname;
+        t['Prenom Colocataire'] = pFFR?.firstname;
+        t['Email perso Colocataire'] = pFFR?.email_perso;
+        t['Email IntedGroup Colocataire'] = pFFR?.email
+        t['Téléphone Colocataire'] = pFFR?.phone;
 
         dataExcel.push(t);
       });
