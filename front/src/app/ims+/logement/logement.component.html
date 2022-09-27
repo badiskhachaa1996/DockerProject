@@ -96,7 +96,8 @@
                 <li>Document d'identité à jour</li>
             </ul>
 
-            <button pButton label="Faire une réservation" (click)="showFormReservation1 = true"></button>
+            <h3 *ngIf="hasReservation" style="color: green; text-align: center;">Votre demande de logement est en cours de traitement</h3>
+            <button pButton *ngIf="!hasReservation" label="Faire une réservation" (click)="showFormReservation1 = true"></button>
         </div>
 
         <!-- Formulaire de reservations -->
@@ -160,7 +161,8 @@
                 la résidence est sous vidéo-surveillance 24h/7.
             </p>
 
-            <button pButton label="Faire une réservation" (click)="showFormReservation2 = true"></button>
+            <h3 *ngIf="hasReservation" style="color: green; text-align: center;">Votre demande de logement est en cours de traitement</h3>
+            <button pButton *ngIf="!hasReservation" label="Faire une réservation" (click)="showFormReservation2 = true"></button>
         </div>
 
         <!-- Formulaire de reservations -->

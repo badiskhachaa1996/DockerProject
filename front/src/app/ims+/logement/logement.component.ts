@@ -17,6 +17,8 @@ import { LogementService } from 'src/app/services/logement.service';
 })
 export class LogementComponent implements OnInit {
 
+  hasReservation: boolean = false;
+
   showFormReservation1: boolean = false;
   formReservation1: FormGroup;
   showFormReservation2: boolean = false;
@@ -60,6 +62,19 @@ export class LogementComponent implements OnInit {
     this.onInitFormReservation1();
     this.onInitFormReservation2();
 
+    //Verification de la réservation
+    this.onVerifyReservation();
+
+  }
+
+  //Methode de verification pour savoir si une réservation existe pour ce utilisateur ou non
+  onVerifyReservation() 
+  {
+    this.logementService.verifyReservation(this.token.id)
+                        .then((response) => {
+                          response ? this.hasReservation = true : this.hasReservation = false;
+                        })
+                        .catch((error) => { console.error(error); }); 
   }
 
 
@@ -96,6 +111,8 @@ export class LogementComponent implements OnInit {
         if(response.success)
         {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Nouvelle réservation', detail: response.success });
+          this.onVerifyReservation();
+          this.showFormReservation1 = this.showFormReservation2 = false;  
         }
         else 
         {
@@ -123,6 +140,8 @@ export class LogementComponent implements OnInit {
         if(response.success)
         {
           this.messageService.add({ key: 'tst', severity: 'success', summary: 'Nouvelle réservation', detail: response.success });
+          this.onVerifyReservation();
+          this.showFormReservation1 = this.showFormReservation2 = false;        
         }
         else 
         {
