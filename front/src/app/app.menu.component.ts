@@ -174,8 +174,9 @@ export class AppMenuComponent implements OnInit {
                     items: [
                         //{ label: 'Compte légal', icon: 'pi pi-check-circle', },
                         //{ label: 'Bénéficiaire effectif ultime', icon: 'pi pi-users',  },
-                        { label: 'Mon compte', icon: ' pi pi-sort-alpha-down', routerLink: ['/mon-comptes-bancaires'] },
-                        { label: 'Ajouter un nouveau compte individuel', icon: ' pi pi-sort-alpha-down', routerLink: ['/new-individual-account'] },
+                        { label: 'Mon compte', icon: ' pi pi-user', routerLink: ['/mon-compte-bancaire'] },
+                        { label: 'Ajouter un nouveau compte individuel', icon: ' pi pi-plus', routerLink: ['/new-individual-account'] },
+                        { label: 'Liste des comptes', icon: ' pi pi-wallet', routerLink: ['/list-accounts'] },
                     ]
                 },
                 {

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { IndividualAccount } from 'src/app/models/lemonway/IndividualAccount';
+import { PaymentService } from 'src/app/services/payment.service';
 
 @Component({
   selector: 'app-liste-des-comptes',
@@ -7,9 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListeDesComptesComponent implements OnInit {
 
-  constructor() { }
+  loading: boolean = false;
+  accounts: IndividualAccount[] = [];
+
+  constructor(private paymentService: PaymentService) { }
 
   ngOnInit(): void {
+  }
+
+  //Recupération de la liste des comptes
+  onGetAllAccounts(): void 
+  {
+    this.paymentService.getAllAccounts()
+                       .then((response: any) => { 
+                          response.forEach((account) => {
+                            this.accounts.push(account);
+                        });
+                      })
+                       .catch((error) => { console.log(error); })
   }
 
 }

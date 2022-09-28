@@ -5,17 +5,8 @@ export class IndividualAccount{
         public title?:                          string,
         public firstName?:                      string,
         public lastName?:                       string,
-        public adresse?: {
-                           street?:             string,
-                           postCode?:           string,
-                           city:                string,
-                           country:             string
-                        },  
-        public birth?:   {
-                            date:               string,
-                            city? :             string,
-                            country?:           string
-                        },
+        public adresse?:                        any,
+        public birth?:                          any,
         public nationality?:                    string,
         public phoneNumber?:                    string,
         public mobileNumber?:                   string,
@@ -23,6 +14,7 @@ export class IndividualAccount{
         public payerOrBeneficiary?:             number,
         public isOneTimeCustomerAccount?:       boolean,
         public isTechnicalAccount?:             boolean,
-        public isUltimateBeneficialOwner?:      boolean
+        public isUltimateBeneficialOwner?:      boolean,
+        public user_id?:                        string,
     ){}; 
 }

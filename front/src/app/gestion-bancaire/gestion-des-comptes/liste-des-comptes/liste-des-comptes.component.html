@@ -1,1 +1,113 @@
-<p>liste-des-comptes works!</p>
+<div class="grid">
+	<div class="col-12">
+		<div class="card">
+			<h5>Liste des comptes bancaires</h5>
+			<p-table #dt1 value="accounts" datakey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Filtrer les comptes" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+                                ID du compte
+                            </div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Catégorie
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Prénom
+							</div>
+						</th>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Nom
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Email
+							</div>
+						</th>
+                        <th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Date de création
+							</div>
+						</th>
+                        <th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Solde
+							</div>
+						</th>
+                        <th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Statut
+							</div>
+						</th>
+                        <th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Type
+							</div>
+						</th>
+						<th>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-account>
+					<tr>
+						<td style="min-width: 12rem;">
+							test
+						</td>
+						<td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+                        <td style="min-width: 12rem;">
+							test
+						</td>
+						<td style="min-width: 12rem;">
+							<i class="pi pi-plus"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="9">Aucun compte trouvé.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="9">Chargement des données ...</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+
+	</div>
+</div>

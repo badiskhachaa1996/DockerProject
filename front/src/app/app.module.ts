@@ -206,6 +206,8 @@ import { CreateAccountComponent } from './support/create-account/create-account.
 import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
 import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
+import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
+import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transactions/new-card-payment/new-card-payment.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -398,6 +400,8 @@ import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes
     MyAccountComponent,
     AddNewIndividualAccountComponent,
     ListeDesComptesComponent,
+    AccountDetailsComponent,
+    NewCardPaymentComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

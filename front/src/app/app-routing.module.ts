@@ -103,6 +103,9 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
+import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
+import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
+import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transactions/new-card-payment/new-card-payment.component';
 
 
 @NgModule({
@@ -195,8 +198,11 @@ import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des
 
                     /** Path Lemon Way */
 
-                    { path: 'mon-comptes-bancaires', component: MyAccountComponent },
+                    { path: 'mon-compte-bancaire', component: MyAccountComponent },
                     { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
+                    { path: 'list-accounts', component: ListeDesComptesComponent },
+                    { path: 'account-details/:id', component: AccountDetailsComponent },
+                    { path: 'transaction-cb', component: NewCardPaymentComponent }
 
                     /** end */
 
