@@ -91,7 +91,7 @@ mongoose
                                                         if (err) {
                                                             console.error(err)
                                                         } else {
-                                                            console.log(newE.custom_id, " mis à jour x2")
+                                                            console.log(newE.custom_id, " mis à jour x2 94")
                                                         }
                                                     })
                                                 } else {
@@ -112,7 +112,7 @@ mongoose
                                                         if (errEtu)
                                                             console.error(errEtu)
                                                         else
-                                                            console.log(newEtu.email, " mis à jour")
+                                                            console.log(newEtu.custom_id, " mis à jour 115")
                                                     })
                                                 }
                                             })
@@ -199,7 +199,7 @@ mongoose
                                                                 if (err) {
                                                                     console.error(err)
                                                                 } else {
-                                                                    console.log(newE.custom_id, " mis à jour x2")
+                                                                    console.log(newE.custom_id, " mis à jour x2 202")
                                                                 }
                                                             })
                                                         } else {
@@ -220,7 +220,7 @@ mongoose
                                                                 if (errEtu)
                                                                     console.error(errEtu)
                                                                 else
-                                                                    console.log(newEtu.email, " mis à jour")
+                                                                    console.log(newEtu.custom_id, " mis à jour 223")
                                                             })
                                                         }
                                                     })

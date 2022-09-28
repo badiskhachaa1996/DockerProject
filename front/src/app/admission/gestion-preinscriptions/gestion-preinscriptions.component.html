@@ -386,6 +386,9 @@
                             <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
+                            <i *ngIf="token && token.role!='user' && token.role!='Agent'"
+                                pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="deleteProspect(prospect)" aria-hidden="true"></i>
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
@@ -395,7 +398,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-prospect>
                     <tr>
-                        <td colspan="14">
+                        <td colspan="17">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
