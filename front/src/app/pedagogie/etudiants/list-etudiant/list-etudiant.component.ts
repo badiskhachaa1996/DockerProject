@@ -576,7 +576,7 @@ export class ListEtudiantComponent implements OnInit {
   onUpdateUser() {
     let bypass: any = this.etudiantToUpdate.user_id
     bypass.firstname = this.formUpdateUser.value.firstname
-    bypass.lastname = this.formUpdateUser.value.lastname
+    bypass.lastname = this.formUpdateUser.value.lastname.toUpperCase()
     bypass.email = this.formUpdateUser.value.email_ims
     bypass.email_perso = this.formUpdateUser.value.email_perso
     this.AuthService.updateByIdForPrivate(bypass).subscribe(v => {
