@@ -1,4 +1,3 @@
-//Nettoyer les Objets du type Etudiant ou Formateur qui n'ont plus l'objet user
 
 const { User } = require("../models/user");
 const { Etudiant } = require('../models/etudiant')
@@ -10,6 +9,8 @@ var readlineSync = require('readline-sync');
 var willBeDeleted = []
 var emailUpdated = []
 var emailIMSUpdated = []
+let dicUser = {}
+console.log(mongoose.version)
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
@@ -18,59 +19,49 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
-        //Etudiant
-        Etudiant.find().populate('user_id').then(etudiants => {
-            etudiants.forEach(etu => {
-                if (etu.user_id == null) {
-                    Etudiant.findByIdAndRemove(etu._id)
-                }
-            })
-            console.log('Etudiant nettoyé')
-        })
-
-        //Formateur
-        Formateur.find().populate('user_id').then(formateurs => {
-            formateurs.forEach(f => {
-                if (f.user_id == null) {
-                    Formateur.findByIdAndRemove(f._id)
-                }
-            })
-            console.log('Formateur nettoyé')
-        })
-
-        //Prospect
-        Prospect.find().populate('user_id').then(prospects => {
-            prospects.forEach(p => {
-                if (p.user_id == null) {
-                    Prospect.findByIdAndRemove(p._id)
-                }
-            })
-            console.log('Prospect nettoyé')
-        })
-
-        //Tuteur
-        Tuteur.find().populate('user_id').then(tuteurs => {
-            tuteurs.forEach(t => {
-                if (t.user_id == null) {
-                    Tuteur.findByIdAndRemove(t._id)
-                }
-            })
-            console.log('Tuteur nettoyé')
-        })
         var emailList = []
-        //Vérification des doublons
         User.find().then(users => {
-            users.forEach(u => {
-                if (customIncludes(u.email_perso, u.email)) {
-                    deleteUser(u)
-                }
-                /*if (u.email_perso == u.email) {
-                    whichSave(u)
-                }*/
+            Etudiant.find().then(etudiants => {
+                etudiants.forEach(etu => {
+                    dicUser[etu.user_id] = etu
+                })
+                users.forEach(u => {
+                    if (customIncludes(u.email_perso, u.email)) {
+                        deleteUser(u)
+                    }
+                    /*if (u.email_perso == u.email) {
+                        whichSave(u)
+                    }*/
+                })
+                console.log("Update en cours")
+                User.find({ _id: { $in: emailIMSUpdated } }).then(u => {
+                    console.log("Executez la commande suvante dans mongodb:\ndb.users.update({_id:{ $in: " + emailIMSUpdated + " }},{$set:{email: null}})")
+                    /*User.updateMany({ _id: { $in: emailIMSUpdated } }, { email: null }, { new: true }, (err, u) => {
+                        if (err) {
+                            console.error(err)
+                        } else {
+                            console.log("Email IMS des Users mis à jour avec succès")
+                        }
+                    })*/
+                    console.log("Executez la commande suvante dans mongodb:\ndb.users.update({_id:{ $in: " + emailUpdated + " }},{$set:{email_perso: null}})")
+                    /*User.updateMany({ _id: { $in: emailUpdated } }, { email_perso: null }, { new: true }, (err, u) => {
+                        if (err) {
+                            console.error(err)
+                        } else {
+                            console.log("Email perso des Users mis à jour avec succès")
+                        }
+                    })*/
+                    console.log("Executez la commande suvante dans mongodb:\ndb.users.remove({_id:{ $in: " + willBeDeleted + " }})")
+                    /*User.deleteMany({ _id: { $in: willBeDeleted } }, {}, (err, u) => {
+                        if (err) {
+                            console.error(err)
+                        } else {
+                            console.log("User supprimé avec succès", willBeDeleted, u)
+                        }
+                    })*/
+                })
+
             })
-            User.updateMany({ _id: emailIMSUpdated }, { email: null })
-            User.updateMany({ _id: emailUpdated }, { email_perso: null })
-            User.deleteMany({ _id: willBeDeleted })
         })
 
         function customIncludes(email_perso, email_ims) {
@@ -88,17 +79,23 @@ mongoose
         }
 
         function deleteUser(u) {
+            if (u.email == null)
+                u.email = u.email_perso
+            if (u.email_perso == null)
+                u.email_perso = u.email
             if (readlineSync.keyInYN(u.email + " " + u.email_perso + " est un doublon.\nVoulez-vous le supprimer ?")) {
-                if (u.email == null)
-                    u.email = u.email_perso
-                if (u.email_perso == null)
-                    u.email_perso = u.email
                 User.find({ $or: [{ email: u.email }, { email_perso: u.email_perso }, { email: u.email_perso }, { email_perso: u.email }] }).then(users => {
                     let dic = {}
                     let i = 1
                     users.forEach(us => {
                         dic[i] = us._id
                         console.log(i.toString() + " :" + us.toString())
+                        if(dicUser[us._id]){
+                            let etu = dicUser[us._id]
+                            console.log(etu.classe_id,etu.date_naissance,etu.custom_id,etu._id,etu.code_partenaire,etu.filiere,etu.campus)
+                        }else{
+                            console.log("Pas Etudiant")
+                        }
                         i++
                     })
                     console.log(users.length)

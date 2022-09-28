@@ -21,8 +21,8 @@ const user_schema = new mongoose.Schema({
     email: {
         type: String,
         required: false,
-        sparse:true,
-        unique:true
+        sparse: true,
+        unique: true
     },
     email_perso: {
         type: String,
