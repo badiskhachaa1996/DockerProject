@@ -102,12 +102,13 @@ mongoose
                         i++
                     })
                     console.log(users.length)
-                    var r2 = readlineSync.question("Lequel voulez-vous garder ?")
+                    var r2 = readlineSync.question("Lequel voulez-vous garder ? (-1 pour annuler)")
                     console.log(dic[r2.toString()])
-                    for (let index = 0; index < i; index++) {
-                        if (index.toString() != r2)
-                            willBeDeleted.push(dic[index])
-                    }
+                    if (r2.toString() != "-1")
+                        for (let index = 0; index < i; index++) {
+                            if (index.toString() != r2)
+                                willBeDeleted.push(dic[index])
+                        }
                 })
             }
         };
