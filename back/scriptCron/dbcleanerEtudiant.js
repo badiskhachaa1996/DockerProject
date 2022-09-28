@@ -19,7 +19,8 @@ mongoose
         useFindAndModify: false
     })
     .then(() => {
-        var emailList = []
+        var emailPersoList = []
+        var emailIMSList = []
         User.find().then(users => {
             Etudiant.find().then(etudiants => {
                 etudiants.forEach(etu => {
@@ -66,15 +67,20 @@ mongoose
 
         function customIncludes(email_perso, email_ims) {
             let r = false
-            emailList.forEach(email => {
-                if (email == email_perso || email == email_ims) {
+            emailPersoList.forEach(email => {
+                if (email == email_perso) {
                     r = true
                 }
             })
-            if (email_perso != null && emailList.includes(email_perso) == false)
-                emailList.push(email_perso)
-            if (email_ims != null && emailList.includes(email_ims) == false)
-                emailList.push(email_ims)
+            emailIMSList.forEach(email => {
+                if (email == email_ims) {
+                    r = true
+                }
+            })
+            if (email_perso != null && emailPersoList.includes(email_perso) == false)
+                emailPersoList.push(email_perso)
+            if (email_ims != null && emailIMSList.includes(email_ims) == false)
+                emailIMSList.push(email_ims)
             return r
         }
 
@@ -84,16 +90,16 @@ mongoose
             if (u.email_perso == null)
                 u.email_perso = u.email
             if (readlineSync.keyInYN(u.email + " " + u.email_perso + " est un doublon.\nVoulez-vous le supprimer ?")) {
-                User.find({ $or: [{ email: u.email }, { email_perso: u.email_perso }, { email: u.email_perso }, { email_perso: u.email }] }).then(users => {
+                User.find({ $or: [{ email: u.email }, { email_perso: u.email_perso }] }).then(users => {
                     let dic = {}
                     let i = 1
                     users.forEach(us => {
                         dic[i] = us._id
                         console.log(i.toString() + " :" + us.toString())
-                        if(dicUser[us._id]){
+                        if (dicUser[us._id]) {
                             let etu = dicUser[us._id]
-                            console.log(etu.classe_id,etu.date_naissance,etu.custom_id,etu._id,etu.code_partenaire,etu.filiere,etu.campus)
-                        }else{
+                            console.log(etu.classe_id, etu.date_naissance, etu.custom_id, etu._id, etu.code_partenaire, etu.filiere, etu.campus)
+                        } else {
                             console.log("Pas Etudiant")
                         }
                         i++
