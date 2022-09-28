@@ -126,7 +126,12 @@ app.use('/', function (req, res, next) {
                             res.status(401).send(errToken)
                         }
                     } else {
-                        next()
+                        User.findByIdAndUpdate(user._id, { last_connection: new Date() },{},(err,user)=>{
+                            if(err){
+                                console.error(err)
+                            }
+                            next()
+                        })
                     }
                 });
             } else {

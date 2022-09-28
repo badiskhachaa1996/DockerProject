@@ -401,6 +401,13 @@ export class ListEtudiantComponent implements OnInit {
     this.formUpdateDossier = this.formBuilder.group({
       statut_dossier: ['']
     });
+
+    this.formUpdateUser = this.formBuilder.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email_ims: ['', [Validators.required, Validators.email]],
+      email_perso: ['', [Validators.required, Validators.email]]
+    });
   }
 
   onDossierUpdate() {
@@ -547,6 +554,38 @@ export class ListEtudiantComponent implements OnInit {
     })
     this.showFormUpdateEtudiant = true;
     this.showFormExportEtudiant = false;
+    this.showFormUpdateUser = false;
+  }
+  showFormUpdateUser = false
+  formUpdateUser: FormGroup
+
+  showFPersonalUpdate(response: User, etudiant: Etudiant) {
+    this.etudiantToUpdate = etudiant
+    console.log(etudiant)
+    this.formUpdateUser.patchValue({
+      firstname: response.firstname,
+      lastname: response.lastname,
+      email_ims: response.email,
+      email_perso: response.email_perso
+    })
+    this.showFormUpdateUser = true;
+    this.showFormUpdateEtudiant = false;
+    this.showFormExportEtudiant = false;
+  }
+
+  onUpdateUser() {
+    let bypass: any = this.etudiantToUpdate.user_id
+    bypass.firstname = this.formUpdateUser.value.firstname
+    bypass.lastname = this.formUpdateUser.value.lastname
+    bypass.email = this.formUpdateUser.value.email_ims
+    bypass.email_perso = this.formUpdateUser.value.email_perso
+    this.AuthService.updateByIdForPrivate(bypass).subscribe(v => {
+      this.showFormUpdateUser = false
+      this.messageService.add({ severity: 'success', summary: 'Modification d\'un étudiant', detail: 'Mise à jour de l\'étudiant avec succès' });
+      let bp: any = this.etudiantToUpdate
+      bp.user_id = v
+      this.etudiants[this.etudiants.indexOf(this.etudiantToUpdate)] = bp
+    })
   }
 
   private formatDate(date) {

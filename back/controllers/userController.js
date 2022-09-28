@@ -230,6 +230,26 @@ app.post("/updateById/:id", (req, res) => {
 })
 
 
+//Mise à jour d'un user
+app.post("/updateByIdForPrivate/:id", (req, res) => {
+    User.findOneAndUpdate({ _id: req.params.id },
+        {
+            firstname: req.body.user.firstname,
+            lastname: req.body.user.lastname,
+            email: req.body.user.email,
+            email_perso: req.body.user.email_perso,
+
+        }, { new: true }, (err, user) => {
+        if (err) {
+            console.error(err);
+            res.send(err)
+        } else {
+            res.send(user)
+        }
+    })
+})
+
+
 app.post("/ValidateEmail/:email", (req, res) => {
 
     User.findOneAndUpdate({ email: req.params.email },

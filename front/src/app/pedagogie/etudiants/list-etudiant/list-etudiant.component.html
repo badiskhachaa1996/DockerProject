@@ -82,6 +82,48 @@
 
         </div>
     </div>
+    <!-- Formulaire de modification d'un étudiant -->
+    <div class="col-12" *ngIf="showFormUpdateUser">
+        <div class="card">
+
+            <h4 *ngIf="etudiantToUpdate.user_id" style="text-align: center;">Modification de {{etudiantToUpdate.user_id.firstname}}
+                {{etudiantToUpdate.user_id.lastname}} </h4>
+            <div style="text-align: center;">
+                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
+                        style="color: red;"> * </span> sont obligatoires</small>
+            </div>
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormUpdateUser = false; formUpdateUser.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateUser" (ngSubmit)="onUpdateUser()">
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Nom de famille <span style="color: red;"> * </span></label>
+                    <input formControlName="lastname" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="firstname">Prénom <span style="color: red;"> * </span></label>
+                    <input formControlName="firstname" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="email_ims">Email IMS <span style="color: red;"> * </span></label>
+                    <input formControlName="email_ims" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="email_perso">Email Personnel <span style="color: red;"> * </span></label>
+                    <input formControlName="email_perso" pInputText type="text" />
+                </div>
+
+                <div>
+                    <button pButton label="Valider" type="submit" [disabled]="formUpdateUser.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
 
     <!-- Formulaire de modification d'un étudiant -->
     <div class="col-12" *ngIf="showFormUpdateEtudiant">
@@ -282,8 +324,7 @@
                         placeholder="Recherche" />
 
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');"
-                        [style]="{'margin':'5px'}">
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','in');" [style]="{'margin':'5px'}">
                     </p-multiSelect>
 
                 </ng-template>
@@ -292,7 +333,8 @@
                         <th style="width: 3rem"></th>
                         <th pSortableColumn="custom_id">ID <p-sortIcon field="custom_id"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname"></p-sortIcon>
+                        <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname">
+                            </p-sortIcon>
                         </th>
                         <th pSortableColumn="statut">Statut Dossier<p-sortIcon field="statut"></p-sortIcon>
                         </th>
@@ -337,6 +379,11 @@
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
+                            <i style="margin-left: 2%;" class="pi pi-user-edit"
+                                *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
+                                    showFPersonalUpdate(etudiant.user_id,etudiant)"
+                                pTooltip="Modifier les informations personnelles" aria-hidden="true"
+                                tooltipPosition="bottom"></i>
                             <!--
                                                                     idEtudiantToUpdate = etudiant._id; 
                                     idUserOfEtudiantToUpdate = etudiant.user_id._id;
@@ -344,14 +391,14 @@
                                     classeToUpdate = etudiant.classe_id?.nom;
                                     nationaliteToUpdate = etudiant.nationalite;
                             -->
-                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf" style="margin-left: 2%;"
                                 (click)="showUploadFile=etudiant" aria-hidden="true"></i>
-                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
+                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card" style="margin-left: 2%;"
                                 (click)="clickFile(etudiant)" aria-hidden="true" *ngIf="!this.isCommercial"></i>
-                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
+                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité" style="margin-left: 2%;"
                                 tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
                             </i>
-                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom" style="margin-left: 2%;"
                                 class="pi pi-money-bill" (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant"
                                 aria-hidden="true"></i>
                         </td>
