@@ -91,11 +91,11 @@ app.post("/create", (req, res, next) => {
                     .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence de l'étudiant" }) });
             }
             else {
-                user.save((error2,userCreated)=>{
-                    if(error2){
+                user.save((error2, userCreated) => {
+                    if (error2) {
                         console.error(error2);
                         res.status(400).send({ error: 'Impossible de créer un nouvel user ' + error2.message })
-                    }else{
+                    } else {
                         etudiant.user_id = userCreated._id;
                         console.log("Le user n'existe pas - enregistrement en cours")
                         etudiant.save((error, etudiantCreated) => {
@@ -142,7 +142,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAllEtudiantPopulate", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere')
+    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate("user_id").populate('campus').populate('filiere')
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })

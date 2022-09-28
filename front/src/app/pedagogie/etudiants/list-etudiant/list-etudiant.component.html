@@ -273,7 +273,7 @@
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
-                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','gituser_id.firstname','custom_id']"
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user.email_perso']"
                 [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -290,19 +290,19 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
-                        <th pSortableColumn="customid">ID <p-sortIcon field="customid"></p-sortIcon>
+                        <th pSortableColumn="custom_id">ID <p-sortIcon field="custom_id"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname"></p-sortIcon>
                         </th>
                         <th pSortableColumn="statut">Statut Dossier<p-sortIcon field="statut"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="groupe">Groupe <p-sortIcon field="groupe"></p-sortIcon>
+                        <th pSortableColumn="classe_id.abbrv">Groupe <p-sortIcon field="classe_id.abbrv"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="campus_id">Campus <p-sortIcon field="campus_id"></p-sortIcon>
+                        <th pSortableColumn="campus.libelle">Campus <p-sortIcon field="campus.libelle"></p-sortIcon>
                         </th>
                         <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="email">Email perso<p-sortIcon field="email"></p-sortIcon>
+                        <th pSortableColumn="email_perso">Email perso<p-sortIcon field="email_perso"></p-sortIcon>
                         </th>
                         <th pSortableColumn="nationalite">Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
                         </th>
