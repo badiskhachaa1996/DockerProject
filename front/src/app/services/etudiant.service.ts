@@ -159,4 +159,10 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "assignEmail/" + etudiant_id + "/" + email_ims;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  downloadBulletin(etudiant_id) {
+    let registreUrl = this.apiUrl + "downloadBulletin/" + etudiant_id;
+    return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 }

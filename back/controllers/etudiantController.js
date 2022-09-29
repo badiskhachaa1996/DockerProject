@@ -716,4 +716,16 @@ app.get('/assignEmail/:etudiant_id/:email_ims', (req, res) => {
     })
 
 })
+
+app.get('/downloadBulletin/:id', (req, res) => {
+    Etudiant.findByIdAndUpdate(req.params.id, { date_telechargement_bulletin: new Date() }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc)
+        } else {
+            console.error(err)
+            res.status(500).send(err)
+        }
+
+    })
+})
 module.exports = app;

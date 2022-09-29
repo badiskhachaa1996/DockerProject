@@ -266,7 +266,7 @@
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Le tableau de bord des Admins est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
@@ -277,8 +277,9 @@
 
 
 <div *ngIf="isEtudiant && dataEtudiant">
-    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant.custom_id}}
+    <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant?.custom_id}}
     </h1>
+    <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing</p>
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
@@ -395,7 +396,7 @@
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Le tableau de bord de la pédagogie est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
@@ -412,7 +413,7 @@
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Le tableau de bord des commerciaux est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
