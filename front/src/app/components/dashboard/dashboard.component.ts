@@ -28,6 +28,7 @@ import { Note } from 'src/app/models/Note';
 import { NoteService } from 'src/app/services/note.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { Formateur } from 'src/app/models/Formateur';
+import { PaymentService } from 'src/app/services/payment.service';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -130,8 +131,8 @@ export class DashboardComponent implements OnInit {
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService
-    ) { }
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService, private paySer: PaymentService
+  ) { }
 
 
   ngOnInit() {
@@ -272,5 +273,24 @@ export class DashboardComponent implements OnInit {
       })
     })
 
+  }
+
+  test() {
+    this.paySer.getAllAccountsv2().subscribe(a => {
+      console.log(a)
+    }, err => {
+      console.error(err)
+    })
+    const xhr = new XMLHttpRequest();
+    const url = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';
+   
+
+    xhr.open('GET', url,true);
+    xhr.setRequestHeader('Authorization', 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66');
+    xhr.onload = () => {
+      console.log(xhr.responseURL); // http://example.com/test
+      console.error(xhr.response)
+    };
+    xhr.send();
   }
 }
