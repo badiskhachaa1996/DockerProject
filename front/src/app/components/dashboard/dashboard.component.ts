@@ -308,4 +308,18 @@ export class DashboardComponent implements OnInit {
     }
 
   }
+
+  test(){
+    const xhr = new XMLHttpRequest();
+    const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';
+   
+
+    xhr.open('GET', url,true);
+    xhr.setRequestHeader('Authorization', 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66');
+    xhr.onload = () => {
+      console.log(xhr.responseURL); // http://example.com/test
+      console.error(xhr.response)
+    };
+    xhr.send();
+  }
 }

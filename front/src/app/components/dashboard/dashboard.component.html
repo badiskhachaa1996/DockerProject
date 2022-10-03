@@ -262,24 +262,17 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
-    <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\construction.jpg" style="width: 40%;">
-        </div>
-        <p>Le tableau de bord des Admins est actuellement en construction pour votre statut!</p>
-        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
-        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
-                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
-        <p>Merci de votre patience!</p>
-    </div>
+    <button pButton label="Test" (click)="test()"></button>
 </div>
 
 
 
 <div *ngIf="isEtudiant && dataEtudiant">
-    <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}} N°{{dataEtudiant?.custom_id}}
+    <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+        N°{{dataEtudiant?.custom_id}}
     </h1>
-    <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing</p>
+    <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre
+        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing</p>
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
@@ -439,7 +432,8 @@
 </div>
 <div *ngIf="dashboard">
     <div class="card" *ngIf="showForm">
-        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;" (click)="showForm=false;addLinkForm.reset()"  aria-hidden="true"> </i>
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+            (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
         <h4 style="text-align: center;">Ajouter un lien</h4>
         <div style="text-align: center;">
             <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
@@ -467,7 +461,8 @@
         <div class="grid">
             <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
                 <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
-                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;" (click)="deleteLink(i)"  aria-hidden="true"> </i>
+                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;"
+                    (click)="deleteLink(i)" aria-hidden="true"> </i>
             </div>
         </div>
     </div>
