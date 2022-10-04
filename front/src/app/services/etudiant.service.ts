@@ -166,8 +166,8 @@ export class EtudiantService {
 
   }
 
-  disable(etudiant_id){
-    let registreUrl = this.apiUrl + "disable/" + etudiant_id;
+  disable(etudiant:Etudiant){
+    let registreUrl = this.apiUrl + "disable/" + etudiant._id;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }

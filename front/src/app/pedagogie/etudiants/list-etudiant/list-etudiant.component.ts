@@ -743,7 +743,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   disable(etudiant: Etudiant) {
-    this.etudiantService.disable(etudiant.user_id).subscribe((data) => {
+    this.etudiantService.disable(etudiant).subscribe((data) => {
       this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
       this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
     }, (error) => {
