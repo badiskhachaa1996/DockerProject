@@ -182,7 +182,8 @@
                     </th>
                     <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="statut_dossier"> Statut du dossier <p-sortIcon field="statut_dossier"></p-sortIcon>
+                    <th pSortableColumn="statut_dossier"> Statut du dossier <p-sortIcon field="statut_dossier">
+                        </p-sortIcon>
                     </th>
                     <th>Action </th>
                 </tr>
@@ -212,6 +213,9 @@
                             (click)="showUploadFile=etudiant" aria-hidden="true"></i>
                         <i pTooltip="Assigner à un groupe" tooltipPosition="bottom" class="pi pi-check"
                             (click)="showAssignForm=etudiant;showUploadFile=null;" aria-hidden="true"></i>
+                        <i *ngIf="this.isAdministration" (click)="disable(etudiant)" pTooltip="Désactiver l'étudiant"
+                            style="margin-left: 2%;" tooltipPosition="bottom" class="pi pi-trash"
+                            aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
