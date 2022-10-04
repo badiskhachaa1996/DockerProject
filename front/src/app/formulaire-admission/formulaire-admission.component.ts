@@ -272,6 +272,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       servicesEh_3: new FormControl(false, [Validators.required]),
       servicesEh_4: new FormControl(false, [Validators.required]),
       servicesEh_5: new FormControl(false, [Validators.required]),
+      servicesEh_6: new FormControl(false, [Validators.required]),
       isGarant: new FormControl(false, [Validators.required]),
       nomGarant: new FormControl('', [Validators.pattern('[^0-9]+')]),
       prenomGarant: new FormControl('', [Validators.pattern('[^0-9]+')]),
@@ -427,7 +428,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       formation = null
     }
     //****** Notre partenaire d'accompagnement EduHorizons *******
-    let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value];
+    let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value,this.RegisterForm.get('servicesEh_6').value];
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;
     let prenomGarant = this.RegisterForm.get('prenomGarant').value;

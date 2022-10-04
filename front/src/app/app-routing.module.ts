@@ -199,7 +199,7 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
                 ],
             },
             { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
-            { path: 'demande-events', component: DemandeEventsComponent },
+            { path: 'formulaire', component: DemandeEventsComponent },
             { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
             { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
             { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },

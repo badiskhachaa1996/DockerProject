@@ -6,23 +6,13 @@ const app = express();
 app.disable("x-powered-by");
 const jwt = require("jsonwebtoken");
 const multer = require('multer');
-
-let origin = ["http://localhost:4200"]
-
-if (process.argv[2]) {
-    let argProd = process.argv[2]
-    if (argProd.includes('dev')) {
-        origin = ["https://t.dev.estya.com"]
-    } else (
-        origin = ["https://ticket.estya.com", "https://estya.com", "https://adgeducations.com"]
-    )
-}
+const { sourceForm } = require("../models/sourceForm");
 
 app.post("/create", (req, res, next) => {
 
     //création d'un nvx event
-    let data = req.body.newEvent;
-    let NewEvent = new Demande_events(
+    let data = req.body;
+    let NewEvent = new sourceForm(
         {
             ...data
         });
@@ -37,7 +27,7 @@ app.post("/create", (req, res, next) => {
 })
 
 app.get("/getAll", (req, res, next) => {
-    Demande_events.find()
+    sourceForm.find()
         .then((result) => { res.status(200).send(result); })
         .catch((error) => { req.status(500).json({ error: "Probleme porte ouverte " + error.message }); });
 })

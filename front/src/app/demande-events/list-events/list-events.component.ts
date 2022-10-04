@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DemandeEventsService } from '../../services/demande-events.service';
+import { sourceForm } from 'src/app/models/sourceForm';
 
 @Component({
   selector: 'app-list-events',
@@ -13,7 +14,7 @@ import { DemandeEventsService } from '../../services/demande-events.service';
 })
 export class ListEventsComponent implements OnInit {
 
-  events : Demande_events[] = [];
+  events : sourceForm[] = [];
 
   constructor(private formBuilder: FormBuilder, private dEventService:DemandeEventsService,
     private messageService:MessageService) { }
@@ -22,7 +23,6 @@ export class ListEventsComponent implements OnInit {
     this.dEventService.getAll().subscribe(
       (response) => {
         this.events = response;
-        console.log(this.events);
       }
     )
   }

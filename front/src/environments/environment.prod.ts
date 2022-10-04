@@ -674,7 +674,7 @@ export const environment = {
 
 
   nationalites: [
-    { value: "", viewValue: "Choissisez une nationalité" },
+    //{ value: "", viewValue: "Choissisez une nationalité" },
     { value: "Afghane", viewValue: 'Afghane' },
     { value: "Albanaise", viewValue: 'Albanaise' },
     { value: "Algerienne", viewValue: 'Algerienne' },
