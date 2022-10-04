@@ -742,5 +742,13 @@ export class ListEtudiantComponent implements OnInit {
     this.router.navigate(['ajout-etudiant']);
   }
 
-
+  disable(etudiant: Etudiant) {
+    this.etudiantService.disable(etudiant.user_id).subscribe((data) => {
+      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+      console.error(error)
+    })
+  }
 }

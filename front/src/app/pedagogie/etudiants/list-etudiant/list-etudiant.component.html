@@ -86,7 +86,8 @@
     <div class="col-12" *ngIf="showFormUpdateUser">
         <div class="card">
 
-            <h4 *ngIf="etudiantToUpdate.user_id" style="text-align: center;">Modification de {{etudiantToUpdate.user_id.firstname}}
+            <h4 *ngIf="etudiantToUpdate.user_id" style="text-align: center;">Modification de
+                {{etudiantToUpdate.user_id.firstname}}
                 {{etudiantToUpdate.user_id.lastname}} </h4>
             <div style="text-align: center;">
                 <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
@@ -391,16 +392,21 @@
                                     classeToUpdate = etudiant.classe_id?.nom;
                                     nationaliteToUpdate = etudiant.nationalite;
                             -->
-                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf" style="margin-left: 2%;"
-                                (click)="showUploadFile=etudiant" aria-hidden="true"></i>
-                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card" style="margin-left: 2%;"
-                                (click)="clickFile(etudiant)" aria-hidden="true" *ngIf="!this.isCommercial"></i>
-                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité" style="margin-left: 2%;"
-                                tooltipPosition="bottom" class="pi pi-chart-bar" aria-hidden="true">
+                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                                style="margin-left: 2%;" (click)="showUploadFile=etudiant" aria-hidden="true"></i>
+                            <i pTooltip="Ajouter une photo de profil" tooltipPosition="bottom" class="pi pi-id-card"
+                                style="margin-left: 2%;" (click)="clickFile(etudiant)" aria-hidden="true"
+                                *ngIf="!this.isCommercial"></i>
+                            <i (click)="router.navigate(['/details/'+etudiant._id])" pTooltip="Suivie assiduité"
+                                style="margin-left: 2%;" tooltipPosition="bottom" class="pi pi-chart-bar"
+                                aria-hidden="true">
                             </i>
-                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom" style="margin-left: 2%;"
-                                class="pi pi-money-bill" (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant"
-                                aria-hidden="true"></i>
+                            <i *ngIf="isAdministration" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                                style="margin-left: 2%;" class="pi pi-money-bill"
+                                (click)="showPayementFC(etudiant);etudiantToUpdate=etudiant" aria-hidden="true"></i>
+                            <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
+                                pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
+                                class="pi pi-trash" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
