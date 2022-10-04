@@ -8,6 +8,9 @@ const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
 const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
+const { Presence } = require('./../models/presence')
+const { Appreciation } = require("./../models/appreciation")
+const { Dashboard } = require("./../models/dashboard")
 app.disable("x-powered-by");
 
 const path = require('path');
@@ -132,7 +135,7 @@ app.post("/assignToGroupe", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAll", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null } })
+    Etudiant.find({ classe_id: { $ne: null }, isActive: true })
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })
@@ -142,7 +145,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAllEtudiantPopulate", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate("user_id").populate('campus').populate('filiere')
+    Etudiant.find({ classe_id: { $ne: null }, isActive: true }).populate('classe_id').populate("user_id").populate('campus').populate('filiere')
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })
@@ -151,7 +154,7 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 
 app.get("/getAllAlternants", (req, res, next) => {
     AlternantTosign = []
-    Etudiant.find({ isAlternant: true }).populate('user_id')
+    Etudiant.find({ isAlternant: true, isActive: true }).populate('user_id')
         .then(alternantsFromDb => {
 
             let i = alternantsFromDb.length
@@ -187,28 +190,28 @@ app.get("/getAllAlternants", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants via un Id de classe
 app.get("/getAllByClasseId/:id", (req, res, next) => {
-    Etudiant.find({ classe_id: req.params.id })
+    Etudiant.find({ classe_id: req.params.id, isActive: true })
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en attente d'assignation de groupe
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null, valided_by_admin: true }).populate('filiere').populate('user_id')
+    Etudiant.find({ classe_id: null, valided_by_admin: true, isActive: true }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en de validation par l'administration
 app.get("/getAllWaitForVerif", (req, res, next) => {
-    Etudiant.find({ valided_by_admin: { $ne: true } }).populate('filiere').populate('user_id')
+    Etudiant.find({ valided_by_admin: { $ne: true }, isActive: true }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en de validation par l'administration
 app.get("/getAllWaitForCreateAccount", (req, res, next) => {
-    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true } }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
+    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true }, isActive: true }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -504,7 +507,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
+    Etudiant.find({ classe_id: { $ne: null }, isActive: true }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
@@ -547,6 +550,7 @@ function max(myArray) {
 
 const multer = require('multer');
 const { Prospect } = require("../models/prospect");
+const { Message } = require("../models/message");
 
 
 app.get("/getFiles/:id", (req, res) => {
@@ -638,7 +642,7 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.post('/getAllByMultipleClasseID', (req, res) => {
-    Etudiant.find({ classe_id: { $in: req.body.classe_id } }).populate("user_id").populate("classe_id").then(result => {
+    Etudiant.find({ classe_id: { $in: req.body.classe_id }, isActive: true }).populate("user_id").populate("classe_id").then(result => {
         res.send(result)
     })
 });
@@ -726,6 +730,32 @@ app.get('/downloadBulletin/:id', (req, res) => {
             res.status(500).send(err)
         }
 
+    })
+})
+
+app.get('/disable/:user_id', (req, res) => {
+    /*Etudiant.findByIdAndRemove(req.params.id, { new: true }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc)
+        } else {
+            console.error(err)
+            res.status(500).send(err)
+        }
+
+    })
+    User.findByIdAndRemove(req.params.user_id)
+    Presence.remove({ user_id: req.params.user_id })
+    Appreciation.remove({ etudiant_id: req.params.id })
+    CAlternance.remove({ alternant_id: req.params.id })
+    Dashboard.remove({ user_id: req.params.user_id })
+    Message.remove({ user_id: req.params.user_id })
+    RachatBulletin.remove({ user_id: req.params.user_id })
+    Ticket.remove({ createur_id: req.params.user_id })*/
+    Etudiant.findByIdAndUpdate(req.params.id, { isActive: false }).then(etudiant => {
+        res.send(etudiant)
+    }, err => {
+        console.err(err)
+        res.send(err)
     })
 })
 module.exports = app;

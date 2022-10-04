@@ -39,6 +39,7 @@ const etudiantSchema = mongoose.Schema({
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
+    isActive: { type: Boolean, default: true },
     enic_naric: { type: Boolean, default: false },
     campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
     statut_dossier: { type: [String], default: [] },
