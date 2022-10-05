@@ -27,29 +27,56 @@
                 </ng-template>
             <ng-template pTemplate="header">
                 <tr>
-                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Prénom & Nom <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Pays <p-sortIcon></p-sortIcon></th>
-                    <th style="text-align:center"> Domaine </th>              
+                    <th pSortableColumn="nom" style="text-align:center"> Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                    <th pSortableColumn="prenom" style="text-align:center"> Prénom<p-sortIcon field="prenom"></p-sortIcon></th>
+                    <th pSortableColumn="date_naissance" style="text-align:center"> Date de naissance <p-sortIcon field="date_naissance"></p-sortIcon></th>
+                    <th pSortableColumn="pays_naissance" style="text-align:center"> Pays de naissance<p-sortIcon field="pays_naissance"></p-sortIcon></th>
+                    <th pSortableColumn="nationalite" style="text-align:center"> Nationalité<p-sortIcon field="nationalite"></p-sortIcon></th>   
+                    <th pSortableColumn="email" style="text-align:center"> Email<p-sortIcon field="email"></p-sortIcon></th>
+                    <th pSortableColumn="phone" style="text-align:center"> Téléphone<p-sortIcon field="phone"></p-sortIcon></th>
+                    <th pSortableColumn="domaine" style="text-align:center"> Domaine desiré<p-sortIcon field="domaine"></p-sortIcon></th>
+                    <th pSortableColumn="source" style="text-align:center"> Source<p-sortIcon field="source"></p-sortIcon></th>
+                    <th pSortableColumn="inscrit_etablissement" style="text-align:center"> Est inscrit à un établissement <p-sortIcon field="inscrit_etablissement"></p-sortIcon></th>  
+                    <th pSortableColumn="etablissement" style="text-align:center"> Etablissement inscrit <p-sortIcon field="etablissement"></p-sortIcon></th>  
             </ng-template>
             <ng-template pTemplate="body" let-event>
                 <tr>
                     <td style="min-width: 12rem;">
-                        {{ event.email }}
+                        {{ event.nom }}
                         
                     </td>
                     <td style="min-width: 12rem;">
-                       {{ event.nom }}
+                       {{ event.prenom }}
                     </td>
                     <td >
-                        {{ event.indicatif }} {{ event.phone }}
+                        {{ event.date_naissance | date:'dd/MM/YYYY' }}
                     </td>
                     <td>
-                        {{ event.pays }}
+                        {{ event.pays_naissance }}
+                    </td>
+                    <td>
+                        {{ event.nationalite}}
+                    </td>
+                    <td>
+                        {{ event.email}}
+                    </td>
+                    <td>
+                        {{ event.phone}}
                     </td>
                     <td>
                         {{ event.domaine}}
+                    </td>
+                    <td>
+                        {{ event.source}}
+                    </td>
+                    <td *ngIf="event.inscrit_etablissement">
+                        Oui
+                    </td>
+                    <td *ngIf="!event.inscrit_etablissement">
+                        Non
+                    </td>
+                    <td>
+                        {{ event.etablissement}}
                     </td>
                     <!-- <td> -->
                         <!-- <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"

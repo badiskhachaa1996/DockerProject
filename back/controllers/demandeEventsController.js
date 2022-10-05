@@ -4,8 +4,6 @@ const Sujet = mongoose.model('sujet')
 const { Demande_events } = require("./../models/demande_event");
 const app = express();
 app.disable("x-powered-by");
-const jwt = require("jsonwebtoken");
-const multer = require('multer');
 const { sourceForm } = require("../models/sourceForm");
 
 app.post("/create", (req, res, next) => {
