@@ -44,7 +44,7 @@
 			<h5>Liste des groupes</h5>
 			<p-table #dt1 *ngIf="classes" [value]="classes" rowExpandMode="single" dataKey="_id" [rows]="10"
 				[rowHover]="true" [totalRecords]="classes.length" [paginator]="true" [pageLinks]="5"
-				[globalFilterFields]="['nom']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+				[globalFilterFields]="['abbrv']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 			<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
 				(onChange)="dt1.filter($event.value, 'filiere','in');">
