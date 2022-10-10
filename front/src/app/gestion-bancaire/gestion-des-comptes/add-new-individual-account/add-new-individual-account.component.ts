@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IndividualAccount } from 'src/app/models/lemonway/IndividualAccount';
+import { PaymentService } from 'src/app/services/payment.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,22 +11,25 @@ import { environment } from 'src/environments/environment';
 })
 export class AddNewIndividualAccountComponent implements OnInit {
 
-  civiliteList = environment.civilite;
+  civiliteList: any = [{ viewValue: 'Monsieur', value: 'M' },
+                       { viewValue: 'Madame', value: 'F' },
+                       { viewValue: 'Autre', value: 'J' }
+                      ];
   paysList = environment.pays;
   paysIsoCodes = environment.isoCodes;
   nationaliteList = environment.nationalites;
   payerOrBeneficiaryList: any = [
                                   {
                                     label: 'Inconnu', 
-                                    value: null,
-                                  },
-                                  {
-                                    label: 'Payeur', 
                                     value: 1,
                                   },
                                   {
-                                    label: 'Bénéficiare', 
+                                    label: 'Payeur', 
                                     value: 2,
+                                  },
+                                  {
+                                    label: 'Bénéficiare', 
+                                    value: 3,
                                   }
                                 ];
 
@@ -33,10 +37,10 @@ export class AddNewIndividualAccountComponent implements OnInit {
   form: FormGroup;
   checked: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private paymentService: PaymentService) { }
 
   ngOnInit(): void {
-
+    
     //Initialisation du formulaire
     this.onInitForm();
   }
@@ -76,9 +80,8 @@ export class AddNewIndividualAccountComponent implements OnInit {
   {
     const account = new IndividualAccount();
     
-
     account.email                         = this.form.get('email')?.value;
-    account.title                         = this.form.get('title')?.value;
+    account.title                         = this.form.get('title')?.value.value;
     account.firstName                     = this.form.get('firstName')?.value;
     account.lastName                      = this.form.get('lastName')?.value;
     account.adresse                       = {
@@ -87,7 +90,7 @@ export class AddNewIndividualAccountComponent implements OnInit {
                                               'city': this.form.get('city')?.value,
                                               'country': this.form.get('country')?.value.value,
                                             };
-  account.birth                           = {
+    account.birth                         = {
                                             'date': this.form.get('dateN')?.value,
                                             'city': this.form.get('cityN')?.value,
                                             'country': this.form.get('countryN')?.value.value,
@@ -100,6 +103,20 @@ export class AddNewIndividualAccountComponent implements OnInit {
     account.isOneTimeCustomerAccount      = this.form.get('isOneTimeCustomerAccount')?.value;
     account.isTechnicalAccount            = this.form.get('isTechnicalAccount')?.value;
     account.isUltimateBeneficialOwner     = this.form.get('isUltimateBeneficialOwner')?.value;
+
+    //Envoi dans la base de données
+    this.paymentService.postIndividualAccount(account)
+                       .then((accountFromDb: IndividualAccount) => {
+                          account.accountId = accountFromDb.accountId;
+
+                          //Envoi du compte à LemonWay
+                          this.paymentService.postIndividualAccountLemon(account)
+                                             .then((response) => { console.log(response) })
+                                             .catch((error) => { console.log(error); })
+
+                       })
+                       .catch((error) => { console.log(error); })
+
 
   }
 }

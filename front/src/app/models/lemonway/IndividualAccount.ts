@@ -1,5 +1,6 @@
 export class IndividualAccount{
     public constructor(
+        public _id?:                            string,
         public accountId?:                      string,
         public email?:                          string,
         public title?:                          string,
@@ -16,5 +17,5 @@ export class IndividualAccount{
         public isTechnicalAccount?:             boolean,
         public isUltimateBeneficialOwner?:      boolean,
         public user_id?:                        string,
-    ){}; 
+    ){};
 }

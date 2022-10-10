@@ -207,7 +207,9 @@ import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-ac
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
 import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
 import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
-import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transactions/new-card-payment/new-card-payment.component';
+import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
+import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
+import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -401,7 +403,9 @@ import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transact
     AddNewIndividualAccountComponent,
     ListeDesComptesComponent,
     AccountDetailsComponent,
-    NewCardPaymentComponent,
+    ReturnUrlComponent,
+    CancelUrlComponent,
+    ErrorUrlComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

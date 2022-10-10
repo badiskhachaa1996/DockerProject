@@ -105,7 +105,10 @@ import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-ac
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
 import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
 import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
-import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transactions/new-card-payment/new-card-payment.component';
+import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
+import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
+import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
+import { PaymentComponent } from './gestion-bancaire/gestion-des-transactions/payment/payment.component';
 
 
 @NgModule({
@@ -202,7 +205,10 @@ import { NewCardPaymentComponent } from './gestion-bancaire/gestion-des-transact
                     { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
                     { path: 'list-accounts', component: ListeDesComptesComponent },
                     { path: 'account-details/:id', component: AccountDetailsComponent },
-                    { path: 'transaction-cb', component: NewCardPaymentComponent }
+                    { path: 'payment', component: PaymentComponent },
+                    { path: 'success', component: ReturnUrlComponent },
+                    { path: 'error', component: ErrorUrlComponent },
+                    { path: 'cancel', component: CancelUrlComponent },
 
                     /** end */
 

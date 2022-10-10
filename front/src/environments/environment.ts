@@ -286,7 +286,7 @@ export const environment = {
     { value: "FK", label: "Îles Malouines"},
     { value: "FM", label: "États Fédérés De Micronésie"},
     { value: "FO", label: "Îles Féroé"},
-    { value: "FR", label: "France"},
+    { value: "FRA", label: "France"},
     { value: "GA", label: "Gabon"},
     { value: "GB", label: "Royaume-Uni"},
     { value: "GD", label: "Grenade"},

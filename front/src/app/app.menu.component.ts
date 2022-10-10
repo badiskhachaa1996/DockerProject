@@ -181,6 +181,9 @@ export class AppMenuComponent implements OnInit {
                 },
                 {
                     label: 'Gestions des transaction', icon: 'pi pi-directions ',
+                    items:[ 
+                        { label: 'Paiement', icon: ' pi pi-credit-card', routerLink: ['/payment'] },
+                    ]
                 },
             ]
             
