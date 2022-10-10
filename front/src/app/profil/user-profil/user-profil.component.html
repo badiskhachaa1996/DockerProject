@@ -9,11 +9,11 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right; padding-top: 3%;">
-                <i pTooltip="Modifier vos informations" class="pi pi-cog" (click)="ToggleUpdate()"
+                <i pTooltip="Modifier vos informations"  tooltipPosition="bottom" class="pi pi-cog" (click)="ToggleUpdate()"
                     style="font-size: 15px;" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre photo de profil" class="pi pi-fw pi-image" (click)="clickFile()"
+                <i pTooltip="Modifier votre photo de profil"  tooltipPosition="bottom" class="pi pi-fw pi-image" (click)="clickFile()"
                     style="font-size: 15px;" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre mot de passe" class="pi pi-lock" (click)="ToggleUpdatepwd()"
+                <i pTooltip="Modifier votre mot de passe"  tooltipPosition="bottom" class="pi pi-lock" (click)="ToggleUpdatepwd()"
                     *ngIf="userco.password != undefined" style="font-size: 15px;" aria-hidden="true"></i>
             </div>
             <h2>Profil</h2>
