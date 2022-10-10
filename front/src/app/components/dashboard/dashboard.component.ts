@@ -8,6 +8,7 @@ import { AppConfig } from '../../api/appconfig';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
 
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -139,7 +140,7 @@ export class DashboardComponent implements OnInit {
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
     private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,private http: HttpClient
   ) { }
 
 
@@ -308,6 +309,7 @@ export class DashboardComponent implements OnInit {
     }
 
   }
+  
 
   test(){
     const xhr = new XMLHttpRequest();
@@ -316,10 +318,27 @@ export class DashboardComponent implements OnInit {
 
     xhr.open('GET', url,true);
     xhr.setRequestHeader('Authorization', 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66');
+    xhr.setRequestHeader('Access-Control-Allow-Origin','*')
+    xhr.setRequestHeader('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE, OPTIONS')
+    xhr.setRequestHeader('Access-Control-Allow-Headers','Origin, Content-Type, X-Auth-Token')
     xhr.onload = () => {
       console.log(xhr.responseURL); // http://example.com/test
       console.error(xhr.response)
     };
     xhr.send();
+    const optionRequete = {
+      headers: new HttpHeaders({ 
+        'Access-Control-Allow-Origin':'*',
+        'Authorization':'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66',
+        'Access-Control-Allow-Methods' :'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers' :'Origin, Content-Type, X-Auth-Token'
+      })
+    };
+
+    this.http.get(url, optionRequete).subscribe(r=>{
+      console.log(r)
+    },err=>{
+      console.error(err)
+    })
   }
 }

@@ -31,7 +31,7 @@
         </div>
     </form>
 </div>
-<div class="card" *ngIf="presence && seance " [ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}">
+<div class="card" *ngIf="presence && seance "><!--[ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}"-->
     <div class="grid">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <h5 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM/yyyy"}}</h5>
