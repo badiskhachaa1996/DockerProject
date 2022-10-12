@@ -282,7 +282,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 });
 
 app.get('/sendEDT/:id/:update', (req, res, next) => {
-    let msg = "Votre emploi du temps est disponible sur la nouvelle plateforme de l'école IMS,\nMerci de vous y connecter pour remplir vos informations manquantes,\nceci vous permettra de visionner votre emploi du temps et d'obtenir d'autre fonctionnalités"
+    let msg = "Vous trouverez dans le lien ci-dessous votre emploi du temps"
     if (req.params.update == "YES") {
         msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
     }
@@ -295,7 +295,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
             })
         })
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement,</p><footer> <img  src="red"/></footer>';
         let mailOptions = {
             from: 'ims@estya.com',
             to: mailList,
