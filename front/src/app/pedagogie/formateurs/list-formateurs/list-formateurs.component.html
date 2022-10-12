@@ -286,7 +286,7 @@
 			</div>
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
-			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda']" [totalRecords]="formateurs.length"
+			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda','userList[formateur._id].lastname','userList[formateur._id].firstname']" [totalRecords]="formateurs.length"
 				[pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10" styleClass="p-datatable-gridlines"
 				[value]="formateurs" dataKey="_id" responsiveLayout="scroll">
 

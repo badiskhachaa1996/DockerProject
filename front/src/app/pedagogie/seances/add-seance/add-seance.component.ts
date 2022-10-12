@@ -215,9 +215,12 @@ export class AddSeanceComponent implements OnInit {
         }
         if (available) {
           let dd = new Date(this.seanceForm.value.date_debut)
-          data.absences.forEach(d => {
-            available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
-          })
+          console.log(data.absences)
+          if (data.absences && data.absences.length > 0)
+            data.absences.forEach(d => {
+              if (d)
+                available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
+            })
         }
         if (!available) {
           let txt = ""
