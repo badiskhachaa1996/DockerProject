@@ -34,7 +34,7 @@ if (process.argv[2]) {
     if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
-        origin = ["https://ticket.estya.com"]
+        origin = ["https://ims.estya.com"]
     )
 }
 
@@ -282,7 +282,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 });
 
 app.get('/sendEDT/:id/:update', (req, res, next) => {
-    let msg = "Votre emploi du temps est disponible"
+    let msg = "Votre emploi du temps est disponible sur la nouvelle plateforme de l'école IMS,\nMerci de vous y connecter pour remplir vos informations manquantes,\nceci vous permettra de visionner votre emploi du temps et d'obtenir d'autre fonctionnalités"
     if (req.params.update == "YES") {
         msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
     }
@@ -299,7 +299,7 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
         let mailOptions = {
             from: 'ims@estya.com',
             to: mailList,
-            subject: 'Estya-Ticketing',
+            subject: 'Emploi du temps',
             html: htmlmail,
             attachments: [{
                 filename: 'signature.png',

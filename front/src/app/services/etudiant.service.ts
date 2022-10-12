@@ -86,7 +86,7 @@ export class EtudiantService {
   }
 
   sendEDT(id, update = "/nope") {
-    let registreUrl = this.apiUrl + "sendEDT/" + id + "/" + update;
+    let registreUrl = this.apiUrl + "sendEDT/" + id + update;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
