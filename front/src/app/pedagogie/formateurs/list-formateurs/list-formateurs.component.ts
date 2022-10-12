@@ -194,14 +194,15 @@ export class ListFormateursComponent implements OnInit {
         this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
         let arr = []
-        if(this.formateurToUpdate.absences )
+        if (this.formateurToUpdate.absences)
           this.formateurToUpdate.absences.forEach(date => {
             arr.push(new Date(date))
           })
         let c = []
-        response.campus_id.forEach(cid => {
-          c.push(this.campusList[cid]?._id)
-        })
+        if (response.campus_id)
+          response.campus_id.forEach(cid => {
+            c.push(this.campusList[cid]?._id)
+          })
         this.formUpdateFormateur.patchValue({
           type_contrat: { label: this.formateurToUpdate.type_contrat, value: this.formateurToUpdate.type_contrat }, taux_h: this.formateurToUpdate.taux_h,
           taux_j: this.formateurToUpdate.taux_j,
