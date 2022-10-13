@@ -1,4 +1,14 @@
 <p-toast></p-toast>
+<p-dialog header="Envoie de mail de l'emploi du temps" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '90vw',height:'90vw'}"
+	[draggable]="false" [resizable]="false">
+	<textarea pInputTextarea [(ngModel)]="mailtype" [style]="{width: '85vw',height:'35vw'}" [placeholder]=placeholderType></textarea>
+	<ng-template pTemplate="footer">
+		<p-button (click)="displayResponsive=false;sendCalendar(null)" label="Envoyer le mail par défaut"
+			styleClass="p-button-text"></p-button>
+		<p-button (click)="displayResponsive=false;sendCalendar(mailtype)" label="Envoyer ce mail" styleClass="p-button-text">
+		</p-button>
+	</ng-template>
+</p-dialog>
 <div class="grid">
 	<!-- Formulaire de modification du groupe -->
 	<div class="col-12" *ngIf="showFormUpdateClasse">
@@ -8,11 +18,11 @@
 			<h4 style="text-align: center;">Modifier un groupe</h4>
 			<form class="p-fluid p-formgrid grid" [formGroup]="formUpdateClasse" (ngSubmit)="modifyClasse()">
 				<div class="field col-12">
-                    <label for="campus">Campus</label>
-                    <p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
-                                emptyFilterMessage="Pas de campus trouvé"
-                                filterPlaceholder="Choissisez un campus" filter="true"></p-dropdown>
-                </div>
+					<label for="campus">Campus</label>
+					<p-dropdown [options]="dropdownCampus" optionLabel="libelle" formControlName="campus_id"
+						emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Choissisez un campus"
+						filter="true"></p-dropdown>
+				</div>
 
 				<div class="field col-12 md:col-6">
 					<label For="libelle">Diplôme</label>
@@ -20,15 +30,15 @@
 						(onChange)="chooseDiplome($event.value,'Add')"></p-dropdown>
 				</div>
 				<div class="field col-12 md:col-6">
-                    <label For="annee">Année <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
-                </div>
+					<label For="annee">Année <span style="color: red;"> * </span></label>
+					<p-dropdown [options]="dropdownAnnee" optionLabel="libelle" formControlName="annee"></p-dropdown>
+				</div>
 				<div class="field col-12">
-                    <label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
-                </div>
-				
-				
+					<label For="nom_groupe">Groupe <span style="color: red;"> * </span></label>
+					<p-dropdown [options]="dropdownGroupe" optionLabel="libelle" formControlName="libelle"></p-dropdown>
+				</div>
+
+
 				<div style="justify-content: right;">
 					<button pButton label="Modifier" type="submit" [disabled]="formUpdateClasse.invalid"></button>
 				</div>
@@ -46,9 +56,9 @@
 				[rowHover]="true" [totalRecords]="classes.length" [paginator]="true" [pageLinks]="5"
 				[globalFilterFields]="['abbrv']" responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
-			<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
-				(onChange)="dt1.filter($event.value, 'filiere','in');">
-			</p-multiSelect>
+				<p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
+					(onChange)="dt1.filter($event.value, 'filiere','in');">
+				</p-multiSelect>
 
 				<ng-template pTemplate="caption">
 					<span class="p-input-icon-left mb-2">
@@ -115,7 +125,7 @@
 								(click)="idClasseToUpdate = rowData._id; onGetById(); showFormUpdateClasse = true; showFormAddClasse = false; diplomeToUpdate = rowData.diplome_id.titre;"></i>
 							<i class="pi pi-calendar" aria-hidden="true" (click)="showCalendar(rowData)"
 								pTooltip="Voir le calendrier du groupe"></i>
-							<i class="pi pi-calendar" aria-hidden="true" (click)="sendCalendar(rowData)"
+							<i class="pi pi-calendar" aria-hidden="true" (click)="displayResponsive=true;mailtype='';groupeEdt=rowData"
 								pTooltip="Envoyer le calendrier au groupe"></i>
 							<i class="pi pi-file" pTooltip="Lister les notes de la classe" (click)="sendNotes(rowData)"
 								aria-hidden="true"></i>

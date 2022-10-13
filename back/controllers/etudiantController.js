@@ -23,8 +23,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'ims@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -281,8 +281,8 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 
 });
 
-app.get('/sendEDT/:id/:update', (req, res, next) => {
-    let msg = "Vous trouverez dans le lien ci-dessous votre emploi du temps"
+app.post('/sendEDT/:id/:update', (req, res, next) => {
+    let msg = "Vous trouverez dans le lien ci-dessous votre emploi du temps."
     if (req.params.update == "YES") {
         msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
     }
@@ -294,10 +294,14 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
                 mailList.push(user.email)
             })
         })
-        let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement,</p><footer> <img  src="red"/></footer>';
+        let url = '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a>'
+        let htmlmail = '<p style="color:black;w">Bonjour,\n' + msg + "</p>"
+            + url + '</p><p style="color:black">Cordialement,</p><footer> <img src="red"/></footer>';
+        if (req.body.mailcustom)
+            htmlmail = "<div style='white-space: pre-wrap;'>" + req.body.mailcustom.replace('<lien>', url) + "</div><footer> <img src='red'/></footer>"
+        htmlmail = htmlmail.replaceAll('\n', '<br>')
         let mailOptions = {
-            from: 'ims@estya.com',
+            from: 'ims@intedgroup.com',
             to: mailList,
             subject: 'Emploi du temps',
             html: htmlmail,
@@ -307,6 +311,29 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
                 cid: 'red' //same cid value as in the html img src
             }]
         };
+        if (htmlmail.indexOf('<signature espic>') != -1) {
+            mailOptions.attachments = [{
+                filename: 'signatureEspic.png',
+                path: 'assets/signatureEspic.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature espic>', '')
+        } else if (htmlmail.indexOf('<signature adg>') != -1) {
+            mailOptions.attachments = [{
+                filename: 'signatureADG.png',
+                path: 'assets/signatureADG.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature adg>', '')
+        } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
+            mailOptions.attachments = [{
+                filename: 'signatureEH.png',
+                path: 'assets/signature.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature eduhorizons>', '')
+        }
+        mailOptions.html = htmlmail.replace('<signature estya>', '')
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error(error);
@@ -751,7 +778,7 @@ app.get('/disable/:id', (req, res) => {
     Message.remove({ user_id: req.params.user_id })
     RachatBulletin.remove({ user_id: req.params.user_id })
     Ticket.remove({ createur_id: req.params.user_id })*/
-    
+
     Etudiant.findByIdAndUpdate(req.params.id, { isActive: false }).then(etudiant => {
         res.send(etudiant)
     }, err => {

@@ -90,7 +90,7 @@ export class ListGroupeComponent implements OnInit {
           this.campus[c._id] = c;
         });
       }),
-      ((error) => { console.error(error);})
+      ((error) => { console.error(error); })
     );
 
     this.classeService.getAllPopulate().subscribe(
@@ -180,7 +180,7 @@ export class ListGroupeComponent implements OnInit {
     this.classeService.get(this.idClasseToUpdate).subscribe(
       ((response) => {
         this.classeToUpdate = response;
-        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: {libelle: this.classeToUpdate.abbrv}, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
+        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: { libelle: this.classeToUpdate.abbrv }, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
       }),
       ((error) => { console.error(error); })
     );
@@ -228,8 +228,8 @@ export class ListGroupeComponent implements OnInit {
     this.router.navigate(['/emploi-du-temps/classe/' + rowData._id])
   }
 
-  sendCalendar(rowData) {
-    this.EtudiantService.sendEDT(rowData._id).subscribe(data => {
+  sendCalendar(def: string) {
+    this.EtudiantService.sendEDT(this.groupeEdt._id, "/nope", def).subscribe(data => {
       this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé" })
     }, error => {
       console.error(error)
@@ -244,5 +244,12 @@ export class ListGroupeComponent implements OnInit {
   onRedirect() {
     this.router.navigate(['ajout-groupe']);
   }
+
+  displayResponsive = false
+  groupeEdt: Classe = null
+  mailtype = ""
+  placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" + 
+  "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n" 
+  + "Cordialement," + "\n" + "l'équipe IMS"
 
 }
