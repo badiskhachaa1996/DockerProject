@@ -306,29 +306,29 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
             subject: 'Emploi du temps',
             html: htmlmail,
             attachments: [{
-                filename: 'signature.png',
-                path: 'assets/signature.png',
+                filename: 'signature_peda_estya.png',
+                path: 'assets/signature_peda_estya.png',
                 cid: 'red' //same cid value as in the html img src
             }]
         };
-        if (htmlmail.indexOf('<signature espic>') != -1) {
+        if (htmlmail.indexOf('<signature espic>')!=-1) {
             mailOptions.attachments = [{
-                filename: 'signatureEspic.png',
-                path: 'assets/signatureEspic.png',
+                filename: 'siganture_espic.png',
+                path: 'assets/signature_espic.png',
                 cid: 'red' //same cid value as in the html img src
             }]
             mailOptions.html = htmlmail.replace('<signature espic>', '')
-        } else if (htmlmail.indexOf('<signature adg>') != -1) {
+        } else if (htmlmail.indexOf('<signature adg>')!=-1) {
             mailOptions.attachments = [{
-                filename: 'signatureADG.png',
-                path: 'assets/signatureADG.png',
+                filename: 'siganture_adg.png',
+                path: 'assets/siganture_adg.png',
                 cid: 'red' //same cid value as in the html img src
             }]
             mailOptions.html = htmlmail.replace('<signature adg>', '')
-        } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
+        } else if (htmlmail.indexOf('<signature eduhorizons>')!=-1) {
             mailOptions.attachments = [{
-                filename: 'signatureEH.png',
-                path: 'assets/signature.png',
+                filename: 'siganture_eh.png',
+                path: 'assets/siganture_eh.png',
                 cid: 'red' //same cid value as in the html img src
             }]
             mailOptions.html = htmlmail.replace('<signature eduhorizons>', '')
