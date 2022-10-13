@@ -46,8 +46,6 @@
             </div>
             <div *ngIf="presence.isPresent">
                 <small>Vous avez été noté présent lors de cette séance</small>
-                <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
-                    (click)="showUploadFile=true"></button>
             </div>
         </div>
         <div class="col-12">
@@ -57,7 +55,7 @@
                     <i *ngIf="token.role!='user' || formateurInfo" class="pi pi-times"
                         style="float:right; font-size: 20px;cursor:pointer" (click)="deleteFile(file)"
                         aria-hidden="true"> </i>
-                    <i *ngIf="token.role!='user' || file.right || formateurInfo" class="pi pi-file-pdf "
+                    <i *ngIf="token.role!='user' || file.right || formateurInfo" class="pi pi-download"
                         style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
                     <em *ngIf="token.role!='user' || file.right || formateurInfo" (click)="downloadFileCours(file)"
                         [id]="i" style="cursor: pointer;">
@@ -187,19 +185,19 @@
 </div>
 
 <div class="col-12" *ngIf="token.role!='user'  || formateurInfo">
-    <div class="col-12">
-        <small> <span style="font-weight: bold;"> Documents : </span></small><br>
-        <ul>
+    <div class="col-12 card">
+        <p style="font-weight: bold;"> Documents :</p>
+        <ul *ngIf="seance.fileRight!=null || seance.fileRight.length!=0">
             <li *ngFor="let file of seance.fileRight; index as i">
                 <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer" (click)="deleteFile(file)"
                     aria-hidden="true"> </i>
-                <i class="pi pi-file-pdf " style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
+                <i class="pi pi-download " style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
                 <em (click)="downloadFileCours(file)" [id]="i" style="cursor: pointer;">
                     {{ file.name }}
                 </em>
             </li>
         </ul>
-        <small *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</small>
+        <p *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</p>
         <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
             (click)="showUploadFile=true"></button>
     </div>
