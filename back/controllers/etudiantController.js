@@ -12,7 +12,97 @@ const { Presence } = require('./../models/presence')
 const { Appreciation } = require("./../models/appreciation")
 const { Dashboard } = require("./../models/dashboard")
 app.disable("x-powered-by");
+const sign_espic = `
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
 
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 0 15px;
+        word-break: normal;
+    }
+
+    .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 15px;
+        word-break: normal;
+    }
+
+    .tg .tg-129j {
+        color: #23234c;
+        font-size: x-large;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-uu30 {
+        font-size: medium;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-wp8o {
+        border-right: 1px #e0222e solid;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-o3cm {
+        color: #e0222e;
+        font-size: large;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-73oq {
+        text-align: left;
+        vertical-align: top
+    }
+</style>
+<table class="tg" style="table-layout: fixed; width: 560px">
+    <colgroup>
+        <col style="width: 240px">
+        <col style="width: 320px">
+    </colgroup>
+    <tbody>
+        <tr>
+            <td class="tg-wp8o" rowspan="6"><br><img
+                    src="https://www.espic.com/wp-content/uploads/2022/08/cropped-cropped-cropped-espic-logo.png"
+                    alt="Image" width="169" height="auto"></td>
+            <td class="tg-129j"><span style="text-transform: capitalize;">Service</span> <span
+                    style="text-transform: uppercase;">Pédagogique</span></td>
+        </tr>
+        <tr>
+            <td class="tg-o3cm"></td>
+        </tr>
+        <tr>
+            <td class="tg-uu30">+33 01 88 88 06 75</td>
+        </tr>
+        <tr>
+            <td class="tg-uu30"><a href="mailto:pedagogie@espic.com" target="_blank"
+                    rel="noopener noreferrer">pedagogie@espic.com</a></td>
+        </tr>
+        <tr>
+            <td class="tg-73oq">6 allée Hendrik Lorentz, 77420</td>
+            <td class="tg-uu30"><a href="https://www.espic.com/" target="_blank"
+                    rel="noopener noreferrer">www.espic.com/</a></td>
+        </tr>
+    </tbody>
+</table>
+`
 const path = require('path');
 var mime = require('mime-types')
 const fs = require("fs")
@@ -311,29 +401,36 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
                 cid: 'red' //same cid value as in the html img src
             }]
         };
-        if (htmlmail.indexOf('<signature espic>')!=-1) {
+        if (htmlmail.indexOf('<signature espic>') != -1) {
+            /*mailOptions.attachments = []
+           
+            //mailOptions.html = mailOptions.html.replace("<img src='red'/>",sign_espic)
+            try {
+                const data = fs.readFileSync('assets/signature_espic.html', 'utf8');
+                mailOptions.html = htmlmail.replace("<img src='red'/>", data)
+            } catch (err) {
+                console.error(err);
+            }
+            console.log(mailOptions.html)*/
             mailOptions.attachments = [{
-                filename: 'siganture_espic.png',
-                path: 'assets/signature_espic.png',
+                filename: 'signature_peda_espic.png',
+                path: 'assets/signature_peda_espic.png',
                 cid: 'red' //same cid value as in the html img src
             }]
-            mailOptions.html = htmlmail.replace('<signature espic>', '')
-        } else if (htmlmail.indexOf('<signature adg>')!=-1) {
+            htmlmail = htmlmail.replace('<signature espic><br>', '')
+
+        } else if (htmlmail.indexOf('<signature adg>') != -1) {
             mailOptions.attachments = [{
                 filename: 'siganture_adg.png',
                 path: 'assets/siganture_adg.png',
                 cid: 'red' //same cid value as in the html img src
             }]
-            mailOptions.html = htmlmail.replace('<signature adg>', '')
-        } else if (htmlmail.indexOf('<signature eduhorizons>')!=-1) {
-            mailOptions.attachments = [{
-                filename: 'siganture_eh.png',
-                path: 'assets/siganture_eh.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-            mailOptions.html = htmlmail.replace('<signature eduhorizons>', '')
+            mailOptions.html = htmlmail.replace('<signature adg><br>', '')
+        } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
+            mailOptions.attachments = []
+            mailOptions.html = htmlmail.replace('<signature eduhorizons><br>', '')
         }
-        mailOptions.html = htmlmail.replace('<signature estya>', '')
+        mailOptions.html = htmlmail.replace('<signature estya><br>', '')
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error(error);
