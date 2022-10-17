@@ -45,6 +45,12 @@ export class ListEtudiantComponent implements OnInit {
 
   formUpdateEtudiant: FormGroup;
 
+  typeEtudiant = [
+    { label: "Tout types d'étudiants", value: null },
+    { label: "Alternant", value: true },
+    { label: "Initial", value: false }
+  ]
+
   formUpdateDossier: FormGroup;
   showFormUpdateEtudiant: boolean = false;
 
@@ -603,6 +609,11 @@ export class ListEtudiantComponent implements OnInit {
     document.getElementById('selectedFile').click();
   }
 
+
+  clickFile2() {
+    document.getElementById('selectedFile2').click();
+  }
+
   FileUploadPC(event) {
     if (event && event.length > 0 && this.uploadUser != null) {
       const formData = new FormData();
@@ -693,8 +704,6 @@ export class ListEtudiantComponent implements OnInit {
         this.confirmRighFile(event.files[0], this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.loadPP(this.showUploadFile)
-
-
         event.target = null;
         this.showUploadFile = null;
 
@@ -743,14 +752,25 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   disable(etudiant: Etudiant) {
-    let bypass:any = etudiant.user_id
-    if(confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
-    this.etudiantService.disable(etudiant).subscribe((data) => {
-      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
-      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
-    }, (error) => {
-      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
-      console.error(error)
-    })
+    let bypass: any = etudiant.user_id
+    if (confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+      this.etudiantService.disable(etudiant).subscribe((data) => {
+        this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+        this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+      }, (error) => {
+        this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+        console.error(error)
+      })
+  }
+
+
+  showCV: Etudiant = null
+  showUpdateCV(etudiant) {
+    this.showCV = etudiant
+  }
+
+
+  onUploadPDF(event) {
+    console.log(event,event.files[0])
   }
 }

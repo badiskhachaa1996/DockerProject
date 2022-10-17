@@ -67,7 +67,7 @@ mongoose
                                         email: email_ims,
                                         email_perso: email_perso,
                                         civilite: null,
-                                        type: "Etudiant",
+                                        type: "Initial",
                                         nationnalite: natio,
                                         verifedEmail: true
                                     }, { new: true }, (err, newU) => {
@@ -130,7 +130,7 @@ mongoose
                                         email: email_ims,
                                         email_perso: email_perso,
                                         civilite: null,
-                                        type: "Etudiant",
+                                        type: "Initial",
                                         nationnalite: natio,
                                         verifedEmail: true
                                     })
@@ -175,7 +175,7 @@ mongoose
                                                 lastname: data['Nom'].toUpperCase(),
                                                 phone: data['Téléphone'],
                                                 civilite: null,
-                                                type: "Etudiant",
+                                                type: "Initial",
                                                 nationnalite: natio,
                                                 verifedEmail: true
                                             }, { new: true }, (err, newU) => {
@@ -238,7 +238,7 @@ mongoose
                                                 email: email_perso,
                                                 email_perso: email_perso,
                                                 civilite: null,
-                                                type: "Etudiant",
+                                                type: "Initial",
                                                 nationnalite: natio,
                                                 verifedEmail: true
                                             })
