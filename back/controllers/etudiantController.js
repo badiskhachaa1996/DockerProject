@@ -396,11 +396,13 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
             subject: 'Emploi du temps',
             html: htmlmail,
             attachments: [{
-                filename: 'signature_peda_estya.png',
-                path: 'assets/signature_peda_estya.png',
+                filename: 'signature_peda_espic.png',
+                path: 'assets/signature_peda_espic.png',
                 cid: 'red' //same cid value as in the html img src
             }]
         };
+        htmlmail = htmlmail.replace('<signature espic><br>', '')
+
         if (htmlmail.indexOf('<signature espic>') != -1) {
             /*mailOptions.attachments = []
            
@@ -429,8 +431,14 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
         } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
             mailOptions.attachments = []
             mailOptions.html = htmlmail.replace('<signature eduhorizons><br>', '')
+        } else if (htmlmail.indexOf('<signature estya>') != -1) {
+            mailOptions.attachments = [{
+                filename: 'signature_peda_estya.png',
+                path: 'assets/signature_peda_estya.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature estya><br>', '')
         }
-        mailOptions.html = htmlmail.replace('<signature estya><br>', '')
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error(error);
