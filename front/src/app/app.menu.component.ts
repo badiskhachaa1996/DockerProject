@@ -173,10 +173,16 @@ export class AppMenuComponent implements OnInit {
             ]
         },
         {
-            label: 'IMS +',
+            label: 'Booking',
             items: [
                 { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                 { label: 'Gestion des reservations', icon: 'pi pi-bookmark', routerLink: ['/gestion-reservations'] },
+            ]
+        },
+        {
+            label: 'SkillsNet',
+            items: [
+                { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
             ]
         },
     ];
@@ -267,7 +273,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: 'IMS +',
+                                    label: 'Booking',
                                     items: [
                                         { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                     ]

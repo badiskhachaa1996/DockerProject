@@ -103,6 +103,7 @@ import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { MissionComponent } from './skillsnet/mission/mission.component';
 
 
 @NgModule({
@@ -195,6 +196,8 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
 
                     { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
                     { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
+
+                    { path: 'missions', component: MissionComponent  },
 
                 ],
             },
