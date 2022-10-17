@@ -324,6 +324,8 @@
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
 
+                    <p-dropdown  [style]="{'margin':'5px'}" [options]="typeEtudiant" filter="true" (onChange)="dt1.filter($event.value, 'isAlternant', 'equals')" emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type"></p-dropdown>
+
                     <p-multiSelect [options]="searchClass" placeholder="Choissisez les groupes"
                         (onChange)="dt1.filter($event.value, 'classe_id._id','in');" [style]="{'margin':'5px'}">
                     </p-multiSelect>

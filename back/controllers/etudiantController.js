@@ -154,7 +154,7 @@ app.post("/create", (req, res, next) => {
             //password: bcrypt.hashSync(userData.password, 8),
             role: userData.role,
             service_id: userData.service_id,
-            type: "Etudiant",
+            type: "Initial",
 
             pays_adresse: userData.pays_adresse,
             ville_adresse: userData.ville_adresse,
@@ -792,7 +792,7 @@ app.post('/addNewPayment/:id', (req, res) => {
 
 app.post('/validateProspect/:user_id', (req, res) => {
     User.findByIdAndUpdate(req.params.user_id, {
-        type: "Etudiant"
+        type: "Initial"
     }, { new: true }, (err, updatedUser) => {
         if (err) {
             console.error(err)
