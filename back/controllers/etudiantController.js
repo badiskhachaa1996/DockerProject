@@ -389,7 +389,7 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
             + url + '</p><p style="color:black">Cordialement,</p><footer> <img src="red"/></footer>';
         if (req.body.mailcustom)
             htmlmail = "<div style='white-space: pre-wrap;'>" + req.body.mailcustom.replace('<lien>', url) + "</div><footer> <img src='red'/></footer>"
-        htmlmail = htmlmail.replaceAll('\n', '<br>')
+        htmlmail = htmlmail.replace(/\n/g, '<br>')
         let mailOptions = {
             from: 'ims@intedgroup.com',
             to: mailList,

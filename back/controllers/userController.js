@@ -232,7 +232,7 @@ app.post("/updateById/:id", (req, res) => {
 
 //Mise à jour d'un user
 app.post("/updateByIdForPrivate/:id", (req, res) => {
-    User.findOneAndUpdate({ _id: req.params.id },
+    User.findByIdAndUpdate(req.params.id,
         {
             firstname: req.body.user.firstname,
             lastname: req.body.user.lastname,
