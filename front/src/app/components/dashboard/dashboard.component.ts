@@ -161,7 +161,7 @@ export class DashboardComponent implements OnInit {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
         }
-        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant"
+        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant"
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         if (this.isEtudiant) {

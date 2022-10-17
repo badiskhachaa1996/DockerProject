@@ -203,7 +203,7 @@ export class UserProfilComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
-    if (this.userco.type == "Etudiant") {
+    if (this.userco.type == "Etudiant" || this.userco.type == "Initial") {
       let etu: Etudiant = this.InfoUser
       etu.nationalite = this.RegisterForm.value.nationalite.value
       etu.date_naissance = this.RegisterForm.value.date_naissance
