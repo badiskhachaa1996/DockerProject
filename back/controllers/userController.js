@@ -484,6 +484,7 @@ const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
 //Sauvegarde de la photo de profile
 app.post('/file', upload.single('file'), (req, res, next) => {
     const file = req.file;
+    console.log(file)
     if (!file) {
         const error = new Error('No File')
         error.httpStatusCode = 400

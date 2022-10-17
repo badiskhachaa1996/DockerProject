@@ -41,8 +41,8 @@
             <div class="col-12 grid">
                 <div class="field col-12">
                     <label>Importation via PDF</label>
-                    <p-fileUpload mode="basic" accept="application/pdf" maxFileSize="1000000" [customUpload]="true"
-                        (uploadHandler)="onUploadPDF($event)" [auto]="true" chooseLabel="Télécharger un CV">
+                    <p-fileUpload #fileUpload mode="basic" accept="application/pdf" maxFileSize="1000000" [customUpload]="true"
+                        (uploadHandler)="onUploadPDF($event,fileUpload)" [auto]="true" chooseLabel="Télécharger un CV">
                     </p-fileUpload>
                 </div>
             </div>

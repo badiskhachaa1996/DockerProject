@@ -97,6 +97,7 @@ const forfeitFormController = require('./controllers/forfeitFormController');
 const tuteurController = require('./controllers/tuteurController');
 const demandeEventsController = require('./controllers/demandeEventsController');
 const logementController = require('./controllers/logementController');
+const cvController = require('./controllers/cvController')
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 
@@ -198,6 +199,7 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
+app.use('/soc/cv',cvController)
 
 app.use('/soc/prestataire', prestataireController);
 

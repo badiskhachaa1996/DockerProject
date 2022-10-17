@@ -19,7 +19,7 @@ import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
-
+import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -181,7 +181,7 @@ export class ListEtudiantComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -770,7 +770,43 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  onUploadPDF(event) {
-    console.log(event,event.files[0])
+  onUploadPDF(event, himself) {
+    console.log(event, event.files[0])
+    if (event.files) {
+      const formData = new FormData();
+      let bypass: any = this.showCV.user_id
+      formData.append('user_id', bypass._id)
+      formData.append('file', event.files[0])
+      let avoidError: any = document.getElementById('selectedFile')
+      avoidError.value = ""
+      himself.clear()
+      this.CVService.uploadCV(formData, bypass._id).subscribe(r => {
+        console.log(r)
+      }, err => {
+        console.error(err)
+      })
+    }
+  }
+
+  langueFinder(pdf: string) {
+    let pdf_lower = pdf.toLowerCase()
+    let speakFrench = pdf_lower.indexOf('français') != -1 || pdf_lower.indexOf('francais') != -1 || pdf_lower.indexOf('french') != -1
+    let speakEnglish = pdf_lower.indexOf('english') != -1 || pdf_lower.indexOf('anglais') != -1
+    let speakArabe = pdf_lower.indexOf('arabe') != -1 || pdf_lower.indexOf('arabian') != -1
+    let speakEspagnol = pdf_lower.indexOf('espagnol') != -1 || pdf_lower.indexOf('spanish') != -1
+    let speakJaponais = pdf_lower.indexOf('japonais') != -1 || pdf_lower.indexOf('japanese') != -1
+    let speakMandarin = pdf_lower.indexOf('chinois') != -1 || pdf_lower.indexOf('mandarin') != -1 || pdf_lower.indexOf('chinese') != -1
+    let speakDeutsch = pdf_lower.indexOf('allemand') != -1 || pdf_lower.indexOf('german') != -1
+    return { speakFrench, speakEnglish, speakArabe, speakEspagnol, speakJaponais, speakMandarin, speakDeutsch }
+  }
+
+  skillFinder(pdf:string){
+    this.CVService.getAll().subscribe(cvs=>{//TODO
+      
+    })
+  }
+
+  experiencesFinder(pdf:string){
+
   }
 }
