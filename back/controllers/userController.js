@@ -240,13 +240,13 @@ app.post("/updateByIdForPrivate/:id", (req, res) => {
             email_perso: req.body.user.email_perso,
 
         }, { new: true }, (err, user) => {
-        if (err) {
-            console.error(err);
-            res.send(err)
-        } else {
-            res.send(user)
-        }
-    })
+            if (err) {
+                console.error(err);
+                res.send(err)
+            } else {
+                res.send(user)
+            }
+        })
 })
 
 
@@ -359,13 +359,26 @@ app.post("/updateEtudiant/:id", (req, res) => {
                 res.send(err)
             } else {
                 let etudiantData = req.body.newEtudiant;
-                let etudiant = new Etudiant(
-                    {
+                if (etudiantData._id) {
+                    Etudiant.findByIdAndUpdate(etudiantData._id, {
                         ...etudiantData
-                    });
-                etudiant.save()
-                    .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
-                    .catch((error) => { res.status(500).send(error) });
+                    }, { new: true }, (err, doc) => {
+                        if (!err && doc) {
+                            res.status(201).json(doc)
+                        }else{
+                            res.status(500).json(err)
+                        }
+                    })
+                } else {
+                    delete etudiantData._id
+                    let etudiant = new Etudiant(
+                        {
+                            ...etudiantData
+                        });
+                    etudiant.save()
+                        .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
+                        .catch((error) => { res.status(500).send(error) });
+                }
             }
         })
 })
