@@ -205,6 +205,7 @@ import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { MissionComponent } from './skillsnet/mission/mission.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -395,7 +396,8 @@ import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logeme
     ArrToStrPipe,
     CreateAccountComponent,
     LogementComponent,
-    GestionLogementComponent
+    GestionLogementComponent,
+    MissionComponent
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
