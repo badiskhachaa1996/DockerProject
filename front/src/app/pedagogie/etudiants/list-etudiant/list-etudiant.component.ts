@@ -772,6 +772,7 @@ export class ListEtudiantComponent implements OnInit {
       this.languesCV = cv.langues
       this.experiencesCV = cv.experiences
       this.skillsCV = cv.connaissances
+      this.messageService.add({ severity: "info", summary: "Importation d'un CV existant", detail: "Si vous importez un CV via PDF, celui-ci sera écraser." })
     }, err => {
       console.error(err)
     })
@@ -779,7 +780,6 @@ export class ListEtudiantComponent implements OnInit {
 
 
   onUploadPDF(event, himself) {
-    console.log(event, event.files[0])
     if (event.files) {
       const formData = new FormData();
       let bypass: any = this.showCV.user_id

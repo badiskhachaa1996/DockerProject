@@ -34,7 +34,7 @@
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showCV = null"
                 aria-hidden="true"> </i>
-            <h3 *ngIf="showCV.user_id" class="text-center" style="font-weight: bold;">Ajouter un cv de : {{
+            <h3 *ngIf="showCV.user_id" class="text-center" style="font-weight: bold;">Ajouter/Modifier un CV à : {{
                 showCV.user_id?.firstname }} {{
                 showCV.user_id?.lastname | uppercase }}
             </h3>
