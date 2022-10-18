@@ -5,13 +5,10 @@ const sch = mongoose.Schema({
     langues: { type: [String], default: [] },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     experiences: [
-        { skill: String },
-        { date_debut: Date },
-        { date_fin: Date }
+        { skill: String, date_debut: Date, date_fin: Date }
     ],
     connaissances: [
-        { skill: String },
-        { niveau: Number }
+        { skill: String, niveau: String }
     ]
 
 });
