@@ -206,6 +206,7 @@ import { CreateAccountComponent } from './support/create-account/create-account.
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
+import { DetailsMissionComponent } from './skillsnet/details-mission/details-mission.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -397,7 +398,8 @@ import { MissionComponent } from './skillsnet/mission/mission.component';
     CreateAccountComponent,
     LogementComponent,
     GestionLogementComponent,
-    MissionComponent
+    MissionComponent,
+    DetailsMissionComponent
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
