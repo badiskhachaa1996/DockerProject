@@ -38,13 +38,48 @@
                 showCV.user_id?.firstname }} {{
                 showCV.user_id?.lastname | uppercase }}
             </h3>
-            <div class="col-12 grid">
+            <div class="col-12 p-fluid p-formgrid grid">
                 <div class="field col-12">
-                    <label>Importation via PDF</label>
-                    <p-fileUpload #fileUpload mode="basic" accept="application/pdf" maxFileSize="1000000" [customUpload]="true"
-                        (uploadHandler)="onUploadPDF($event,fileUpload)" [auto]="true" chooseLabel="Télécharger un CV">
+                    <p-fileUpload #fileUpload mode="basic" accept="application/pdf" maxFileSize="1000000"
+                        [customUpload]="true" (uploadHandler)="onUploadPDF($event,fileUpload)" [auto]="true"
+                        chooseLabel="Importer un CV sous PDF">
                     </p-fileUpload>
                 </div>
+                <button type="button" class="mb-2" (click)="onAddSkill()" pButton label="Ajouter une compétences"></button>
+                <div class="field col-12 grid" *ngFor="let skill of skillsCV; let i = index">
+                    <div class="field col-5 grid">
+                        <label>Compétences N°{{i+1}}</label>
+                        <input pInputText [(ngModel)]="skillsCV[i].skill" />
+                    </div>
+                    <div class="field col-6 grid">
+                        <label>Niveau</label>
+                        <input pInputText placeholder [(ngModel)]="skillsCV[i].niveau" />
+                    </div>
+                    <div class="col-12 md:col-1">
+                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteSkill(i)"
+                            aria-hidden="true"></i>
+                    </div>
+                </div>
+                <button type="button" (click)="onAddExp()" class="mb-2" pButton label="Ajouter une expériences"></button>
+                <div class="field col-12 grid" *ngFor="let exp of experiencesCV; let i = index">
+                    <div class="field col-12 md:col-5 grid">
+                        <label>Expériences N°{{i+1}}</label>
+                        <input pInputText [(ngModel)]="experiencesCV[i].skill" />
+                    </div>
+                    <div class="field col-6 md:col-3 grid">
+                        <label>Date Debut</label>
+                        <input pInputText placeholder type="date" [(ngModel)]="experiencesCV[i].date_debut" />
+                    </div>
+                    <div class="field col-6 md:col-3 grid">
+                        <label>Date Fin</label>
+                        <input pInputText placeholder type="date" [(ngModel)]="experiencesCV[i].date_fin" />
+                    </div>
+                    <div class="col-12 md:col-1">
+                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteExp(i)"
+                            aria-hidden="true"></i>
+                    </div>
+                </div>
+                <button type="button" (click)="submitCV()" class="mb-2" pButton label="Enregister le CV"></button>
             </div>
         </div>
     </div>
