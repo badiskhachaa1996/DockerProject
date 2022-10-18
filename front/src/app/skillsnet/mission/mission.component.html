@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div class="grid">
 	<!-- Formulaire d'ajout d'une nouvelle mission -->
 	<div class="col-12" *ngIf="showForm">
@@ -7,11 +8,9 @@
                     style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
                     pTooltip="Fermer" (click)="showForm = false" aria-hidden="true"> </i>
 
-			<h5>Nouvelle mission</h5>
-
+			<h3>Nouvelle mission</h3>
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddMission()">
 				<div class="p-formgrid grid">
-
 					<div class="field col-12" *ngIf="token.role == 'Admin'">
 						<label htmlFor="entreprise">Entreprise</label>
 						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label" formControlName="entreprise_id"
@@ -19,17 +18,14 @@
 									filter="true">
 						</p-dropdown>
 					</div>
-
 					<div class="field col-12">
 						<label htmlFor="title">Titre de la mission</label>
 						<input pInputText id="title" type="text" formControlName="missionName"/>
 					</div>
-
 					<div class="field col-12 md:col-6">
 						<label htmlFor="profil">Profil</label>
-						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"></p-dropdown>
+						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil" (onChange)="chargeCompetence($event)"></p-dropdown>
 					</div>
-
 					<div class="field col-12 md:col-6">
 						<label htmlFor="competences">Compétences</label>
 						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
@@ -48,24 +44,21 @@
 							</ng-template>
 						</p-multiSelect>
 					</div>
-
 					<div class="field col-12">
 						<label htmlFor="title">Description</label>
 						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30" formControlName="missionDesc"></textarea>
 					</div>
-
 					<div class="field col-12 md:col-6">
 						<label htmlFor="type">Type de mission</label>
-						<p-dropdown id="type" [options]="missionTypes" optionLabel="label" formControlName="type"></p-dropdown>
+						<p-dropdown id="type" [options]="missionTypes" optionLabel="label" formControlName="missionType"></p-dropdown>
 					</div>
-
 					<div class="field col-12 md:col-6">
 						<label htmlFor="debut">Date de début</label>
 						<input pInputText id="debut" type="date" formControlName="debut"/>
 					</div>
 
 					<div>
-						<button pButton type="submit" label="Ajouter la mission" icon="pi pi-plus"></button>
+						<button pButton type="submit" label="Ajouter la mission" icon="pi pi-plus" [disabled]="form.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -79,15 +72,14 @@
             <button pButton pRipple label="Mes missions" icon="pi pi-briefcase" class="mr-2 mb-2" style="float: right"></button>
             <button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"></button>
 
-			<h5>Missions</h5>
+			<h3>Missions</h3>
 
-			<p-dataView #dv [value]="missions" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+			<p-dataView #dv [value]="missions" [paginator]="true" [rows]="9" filterBy="missionName" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
-						<p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
 						<span class="p-input-icon-left mb-2 md:mb-0">
                             <i class="pi pi-search"></i>
-                            <input type="search" pInputText placeholder="Recherche par entréprise" (input)="dv.filter($event.target.value)">
+                            <input type="search" pInputText placeholder="Filtrer par poste" (input)="dv.filter($event.target.value)">
                         </span>	
 						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
 					</div>
@@ -96,20 +88,24 @@
 				<ng-template let-mission pTemplate="listItem">
 					<div class="col-12">
 						<div class="flex flex-column md:flex-row align-items-center p-3 w-full">
-							<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/cdd.png" *ngIf="mission.missionType == 'CDD'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/cdi.png" *ngIf="mission.missionType == 'CDI'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/pro.png" *ngIf="mission.missionType == 'Professionnalisation'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/alternance.png" *ngIf="mission.missionType == 'Alternance'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+							<img style="border: none;" src="assets/skillsnet/stage.png" *ngIf="mission.missionType == 'Stage'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
 							<div class="flex-1 text-center md:text-left">
-								<div class="font-bold text-2xl">{{ mision.missionName }}</div>
-								<div class="mb-3">{{ mission.missionDesc | slice: 0:100 }}</div>
+								<div class="font-bold text-2xl">{{ mission.missionName }}</div>
+								<div class="mb-3">{{ mission.missionDesc | slice: 0:50 }}</div>
 								<div>{{ entreprises[entreprise_id]?.ville_ent }}</div>
 								<div class="flex align-items-center mt-2">
 									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">{{ mission.type }}</span>
+									<span class="font-semibold">{{ mission.missionType }}</span>
 								</div>
 							</div>
 							<div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
 								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{ entreprises[mission.entreprise_id]?.r_sociale }}</span>
-								<p-button icon="pi pi-play" label="Détails" class="mb-2"></p-button>
-								<span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">Début le {{ entreprise.debut | date: 'short' }}</span>
+								<p-button icon="pi pi-play" label="Voir la mission" [disabled]="mission.isClosed" class="mb-2"></p-button>
+								<span [class]="'product-badge'">Début le {{ mission.debut | date: 'dd/MM/YY' }}</span>
 							</div>
 						</div>
 					</div>
@@ -121,19 +117,23 @@
 							<div class="flex align-items-center justify-content-between">
 								<div class="flex align-items-center">
 									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">{{ mission.type }}</span>
+									<span class="font-semibold">{{ mission.missionType }}</span>
 								</div>
-								<span [class]="'sm:ml-2 product-badge status-' + product.inventoryStatus.toLowerCase()">Début le {{ entreprise.debut | date: 'short' }}</span>
+								<span [class]="'sm:ml-2 product-badge'">Début le {{ mission.debut | date: 'dd/MM/YY' }}</span>
 							</div>
 							<div class="text-center">
-								<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
-								<div class="text-2xl font-bold">{{ mision.missionName }}</div>
-								<div class="mb-3">{{ mission.missionDesc | slice: 0:100 }}</div>
+								<img src="assets/skillsnet/cdd.png" *ngIf="mission.missionType == 'CDD'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+								<img src="assets/skillsnet/cdi.png" *ngIf="mission.missionType == 'CDI'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+								<img src="assets/skillsnet/pro.png" *ngIf="mission.missionType == 'Professionnalisation'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+								<img src="assets/skillsnet/alternance.png" *ngIf="mission.missionType == 'Alternance'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+								<img src="assets/skillsnet/stage.png" *ngIf="mission.missionType == 'Stage'" alt="{{mission.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
+								<div class="text-2xl font-bold">{{ mission.missionName }}</div>
+								<div class="mb-3">{{ mission.missionDesc | slice: 0:50 }}</div>
 								<div>{{ entreprises[mission.entreprise_id]?.ville_ent }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
 								<span class="text-2xl font-semibold">{{ entreprises[mission.entreprise_id]?.r_sociale }}</span>
-								<p-button icon="pi pi-play"></p-button>
+								<p-button icon="pi pi-play" title="Plus de détails" [disabled]="mission.isClosed"></p-button>
 							</div>
 						</div>
 					</div>

@@ -8,7 +8,7 @@ import { Mission } from '../../models/Mission';
 })
 export class MissionService {
 
-  apiUrl = `${environment.origin}/mission/`;
+  apiUrl = `${environment.origin}mission/`;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -34,9 +34,22 @@ export class MissionService {
   getMissions()
   {
     const url = `${this.apiUrl}get-missions`;
-
+    
     return new Promise((resolve, reject) => {
       this.httpClient.get<Mission[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { console.log(error); reject(error); }
+      );
+    });
+  }
+
+  //Recuperation d'une mission via son identifiant
+  getMission(missionId: string)
+  {
+    const url = `${this.apiUrl}get-mission/${missionId}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<Mission>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => { resolve(response); },
         (error) => { reject(error); }
       );

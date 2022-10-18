@@ -97,6 +97,7 @@ const forfeitFormController = require('./controllers/forfeitFormController');
 const tuteurController = require('./controllers/tuteurController');
 const demandeEventsController = require('./controllers/demandeEventsController');
 const logementController = require('./controllers/logementController');
+const missionController = require('./controllers/missionController');
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 
@@ -221,7 +222,9 @@ app.use("/soc/tuteur", tuteurController);
 
 app.use("/soc/logement", logementController);
 
-app.use('/soc/dashboard', dashboardController)
+app.use('/soc/dashboard', dashboardController);
+
+app.use('/soc/mission', missionController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import jwt_decode from "jwt-decode";
 
-import { ProductService } from '../../service/productservice';
-import { SelectItem } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
@@ -18,17 +17,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class MissionComponent implements OnInit {
 
-  sortOptions: SelectItem[];
-  sortOrder: number;
-  sortField: string;
-
   missions: Mission[] = [];
   entreprises: Entreprise[] = [];
-  entreprisesList: any = [];
+  entreprisesList: any = [{ label: 'Veuillez choisir une entreprise', value: null }];
   form: FormGroup;
   showForm: boolean = false;
 
   profilsList: any = [
+    { label: '' },
     { label: 'Développeur' },
     { label: 'Réseaux' },
     { label: 'Commercial' },
@@ -51,14 +47,9 @@ export class MissionComponent implements OnInit {
 
   token: any;
 
-  constructor(private formBuilder: FormBuilder, private userService: AuthService, private productService: ProductService, private entrepriseService: EntrepriseService, private missionService: MissionService) { }
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private entrepriseService: EntrepriseService, private missionService: MissionService) { }
 
   ngOnInit(): void {
-    this.sortOptions = [
-      {label: 'Price High to Low', value: '!price'},
-      {label: 'Price Low to High', value: 'price'}
-    ];
-
     //Decodage du token
     this.token = jwt_decode(localStorage.getItem("token"));
 
@@ -76,40 +67,83 @@ export class MissionComponent implements OnInit {
     //Recuperation de la liste des missions
     this.missionService.getMissions()
     .then((response: Mission[]) => {
-      response.forEach((mission) => {
-        this.missions.push(mission);
-      })
+      this.missions = response;
     })
     .catch((error) => console.log(error));
 
     //Initialisation du formulaire d'ajout
     this.form = this.formBuilder.group({
-      entreprise_id: [''],
-      missionName: ['', Validators.required],
-      profil: [this.profilsList[0], Validators.required],
-      competences: ['', Validators.required],
-      missionDesc: ['', Validators.required],
-      type: [this.missionTypes[0], Validators.required],
-      debut: [''],
+      entreprise_id:    [''],
+      missionName:      ['', Validators.required],
+      profil:           [this.profilsList[0], Validators.required],
+      competences:      ['', Validators.required],
+      missionDesc:      ['', Validators.required],
+      missionType:      [this.missionTypes[0], Validators.required],
+      debut:            [''],
     });
 
   }
 
 
-  //Méthode d'ajout d'une mission
-  onAddMission(): void {}
+  //Methode qui servira à modifier le contenu de la liste de competences en fonction du profil
+  chargeCompetence(event)
+  {
+    const label = event.value.label;
 
-
-  onSortChange(event) {
-    const value = event.value;
-
-    if (value.indexOf('!') === 0) {
-        this.sortOrder = -1;
-        this.sortField = value.substring(1, value.length);
-    } else {
-        this.sortOrder = 1;
-        this.sortField = value;
+    if(label == "Développeur")
+    {
+      this.competencesList = [
+        { label: "PHP" },
+        { label: "HTML 5" },
+        { label: "CSS 3" },
+        { label: "Java" },
+      ];
+    } 
+    else if(label == "Réseaux")
+    {
+      this.competencesList = [
+        { label: "TCP IP" },
+        { label: "Ip config" },
+        { label: "DHCP" },
+        { label: "DNS" },
+      ];
     }
   }
+
+
+  //Méthode d'ajout d'une mission
+  onAddMission(): void 
+  {
+    const mission = new Mission();
+
+    mission.missionType   = this.form.get('missionType')?.value.label;
+    mission.debut         = this.form.get('debut')?.value;
+    mission.missionName   = this.form.get('missionName')?.value;
+    mission.missionDesc   = this.form.get('missionDesc')?.value;
+    mission.entreprise_id = this.form.get('entreprise_id')?.value.value;
+    mission.profil        = this.form.get('profil')?.value.label;
+    mission.competences   = [];
+    this.form.get('competences')?.value.forEach((competence) => {
+      mission.competences.push(competence.label);
+    });
+    mission.isClosed      = false;
+
+    //Envoi de la mission en BD
+    this.missionService.postMission(mission)
+    .then((response) => {
+      this.messageService.add({ severity: "success", summary: "La mission a été ajouté" })
+      this.form.reset();
+
+      //Recuperation de la liste des missions
+      this.missionService.getMissions()
+      .then((response: Mission[]) => {
+        this.missions = response;
+      })
+      .catch((error) => console.log(error));
+    })
+    .catch((error) => { console.log(error); });
+
+  }
+  
 
 }
