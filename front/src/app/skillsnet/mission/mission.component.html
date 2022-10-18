@@ -1,13 +1,87 @@
 <div class="grid">
+	<!-- Formulaire d'ajout d'une nouvelle mission -->
+	<div class="col-12" *ngIf="showForm">
+		<div class="card">
+			
+			<i class="pi pi-times-circle"
+                    style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+                    pTooltip="Fermer" (click)="showForm = false" aria-hidden="true"> </i>
+
+			<h5>Nouvelle mission</h5>
+
+			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddMission()">
+				<div class="p-formgrid grid">
+
+					<div class="field col-12" *ngIf="token.role == 'Admin'">
+						<label htmlFor="entreprise">Entreprise</label>
+						<p-dropdown id="entreprise" [options]="entreprisesList" optionLabel="label" formControlName="entreprise_id"
+									emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Recherche"
+									filter="true">
+						</p-dropdown>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="title">Titre de la mission</label>
+						<input pInputText id="title" type="text" formControlName="missionName"/>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label htmlFor="profil">Profil</label>
+						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil"></p-dropdown>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label htmlFor="competences">Compétences</label>
+						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
+									Selectionner une ou plusieurs compétences
+								</div>
+							</ng-template>
+							<ng-template let-competence pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{competence.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="title">Description</label>
+						<textarea pInputTextarea placeholder="Veuillez décrire la mission" autoResize rows="4" cols="30" formControlName="missionDesc"></textarea>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label htmlFor="type">Type de mission</label>
+						<p-dropdown id="type" [options]="missionTypes" optionLabel="label" formControlName="type"></p-dropdown>
+					</div>
+
+					<div class="field col-12 md:col-6">
+						<label htmlFor="debut">Date de début</label>
+						<input pInputText id="debut" type="date" formControlName="debut"/>
+					</div>
+
+					<div>
+						<button pButton type="submit" label="Ajouter la mission" icon="pi pi-plus"></button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+
 	<div class="col-12">
 		<div class="card">
-            <button pButton pRipple label="Ajouter une mission" icon="pi pi-plus" class="mr-2 mb-2" style="float: right"></button>
+            <button pButton pRipple label="Ajouter une mission" icon="pi pi-plus" class="mr-2 mb-2" (click)="showForm = true" style="float: right"></button>
             <button pButton pRipple label="Mes missions" icon="pi pi-briefcase" class="mr-2 mb-2" style="float: right"></button>
             <button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"></button>
 
 			<h5>Missions</h5>
 
-			<p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+			<p-dataView #dv [value]="missions" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
 				<ng-template pTemplate="header">
 					<div class="grid grid-nogutter flex-column md:flex-row justify-content-between">
 						<p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
@@ -19,46 +93,46 @@
 					</div>
 				</ng-template>
 
-				<ng-template let-product pTemplate="listItem">
+				<ng-template let-mission pTemplate="listItem">
 					<div class="col-12">
 						<div class="flex flex-column md:flex-row align-items-center p-3 w-full">
 							<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"/>
 							<div class="flex-1 text-center md:text-left">
-								<div class="font-bold text-2xl">Titre de la mission</div>
-								<div class="mb-3">{{ 'Une très long derscription de la mission' | slice: 0:100 }}</div>
-								<div>Paris/ France</div>
+								<div class="font-bold text-2xl">{{ mision.missionName }}</div>
+								<div class="mb-3">{{ mission.missionDesc | slice: 0:100 }}</div>
+								<div>{{ entreprises[entreprise_id]?.ville_ent }}</div>
 								<div class="flex align-items-center mt-2">
 									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">Type de mission</span>
+									<span class="font-semibold">{{ mission.type }}</span>
 								</div>
 							</div>
 							<div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">Nom de l'entreprise</span>
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{ entreprises[mission.entreprise_id]?.r_sociale }}</span>
 								<p-button icon="pi pi-play" label="Détails" class="mb-2"></p-button>
-								<span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">Début le 26/05/2022</span>
+								<span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">Début le {{ entreprise.debut | date: 'short' }}</span>
 							</div>
 						</div>
 					</div>
 				</ng-template>
 
-				<ng-template let-product pTemplate="gridItem">
+				<ng-template let-mission pTemplate="gridItem">
 					<div class="col-12 md:col-4">
 						<div class="card m-3 border-1 surface-border">
 							<div class="flex align-items-center justify-content-between">
 								<div class="flex align-items-center">
 									<i class="pi pi-tag mr-2"></i>
-									<span class="font-semibold">Type de mission</span>
+									<span class="font-semibold">{{ mission.type }}</span>
 								</div>
-								<span [class]="'sm:ml-2 product-badge status-' + product.inventoryStatus.toLowerCase()">Début le 26/05/2022</span>
+								<span [class]="'sm:ml-2 product-badge status-' + product.inventoryStatus.toLowerCase()">Début le {{ entreprise.debut | date: 'short' }}</span>
 							</div>
 							<div class="text-center">
 								<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
-								<div class="text-2xl font-bold">Titre de la mission</div>
-								<div class="mb-3">{{ 'Une très long derscription de la mission' | slice: 0:100 }}</div>
-								<div>Paris/ France</div>
+								<div class="text-2xl font-bold">{{ mision.missionName }}</div>
+								<div class="mb-3">{{ mission.missionDesc | slice: 0:100 }}</div>
+								<div>{{ entreprises[mission.entreprise_id]?.ville_ent }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold">Nom de l'entreprise</span>
+								<span class="text-2xl font-semibold">{{ entreprises[mission.entreprise_id]?.r_sociale }}</span>
 								<p-button icon="pi pi-play"></p-button>
 							</div>
 						</div>

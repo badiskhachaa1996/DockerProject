@@ -7,6 +7,8 @@ export class Mission {
         public missionDesc?:        string,
         public location?:           string,
         public entreprise_id?:      string,
+        public profil?:             string,
+        public competences?:        string[],
         public isClosed?:           boolean,
     ){}
 }
