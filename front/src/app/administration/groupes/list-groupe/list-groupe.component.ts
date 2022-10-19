@@ -228,8 +228,10 @@ export class ListGroupeComponent implements OnInit {
     this.router.navigate(['/emploi-du-temps/classe/' + rowData._id])
   }
 
-  sendCalendar(def: string) {
-    this.EtudiantService.sendEDT(this.groupeEdt._id, "/nope", def).subscribe(data => {
+  sendCalendar(def: string, objet: string) {
+    this.EtudiantService.sendEDT(this.groupeEdt._id, def, objet).subscribe(data => {
+      this.objetMail=""
+      this.mailtype=""
       this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé" })
     }, error => {
       console.error(error)
@@ -245,11 +247,17 @@ export class ListGroupeComponent implements OnInit {
     this.router.navigate(['ajout-groupe']);
   }
 
+  loadDefautEDT() {
+    this.mailtype = "Bonjour,\nVous trouverez dans le lien ci-dessous votre emploi du temps.\n<lien edt>\nCordialement,\n<signature espic>"
+    this.objetMail = "Emploi du temps"
+  }
+
   displayResponsive = false
   groupeEdt: Classe = null
   mailtype = ""
-  placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" + 
-  "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n" 
-  + "Cordialement," + "\n" + "l'équipe IMS"
+  objetMail = ""
+  placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien edt>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" +
+    "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n"
+    + "La signature par défaut sera celle d'espic\nCordialement,\nl'équipe IMS"
 
 }

@@ -346,19 +346,6 @@ export class AddFormateurComponent implements OnInit {
       console.error(error)
     })
   }
-
-  showCalendar(rowData) {
-    this.router.navigate(['/calendrier/formateur/' + rowData.user_id])
-  }
-
-  sendCalendar(rowData) {
-    this.formateurService.sendEDT(rowData._id).subscribe(data => {
-      this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "L'emploi du temps a bien été envoyé" })
-    }, error => {
-      console.error(error)
-      this.messageService.add({ severity: 'error', summary: 'Erreur avec les emplois du temps', detail: "Contacté un Admin" })
-    })
-  }
   resetAddFormateur() {
     this.formAddFormateur.reset()
     this.formAddFormateur.patchValue({

@@ -262,8 +262,12 @@ export class ListSeancesComponent implements OnInit {
       );
       this.showFormUpdateSeance = null;
       if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette modification ?")) {
-        this.formateurService.sendEDT(this.seanceFormUpdate.value.formateur.value, "/YES")
-        this.EtudiantService.sendEDT(this.seanceFormUpdate.value.classe.value, "/YES")
+        this.formateurService.sendEDT(this.seanceFormUpdate.value.formateur.value, "/YES").subscribe(data => {
+          this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès", detail: "Nous vous conseillons d'envoyer un mail au groupe via la liste des groupes pour les notifier du changement" })
+        }, err => {
+          console.error(err)
+          this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
+        })
       }
       this.seanceFormUpdate.reset();
     }, (error) => {

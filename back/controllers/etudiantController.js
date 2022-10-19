@@ -371,11 +371,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 
 });
 
-app.post('/sendEDT/:id/:update', (req, res, next) => {
-    let msg = "Vous trouverez dans le lien ci-dessous votre emploi du temps."
-    if (req.params.update == "YES") {
-        msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
-    }
+app.post('/sendEDT/:id', (req, res, next) => {
     let mailList = []
     Etudiant.find({ classe_id: req.params.id }).then(etudiantList => {
         etudiantList.forEach(etudiant => {
@@ -385,60 +381,33 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
             })
         })
         let url = '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a>'
-        let htmlmail = '<p style="color:black;w">Bonjour,\n' + msg + "</p>"
-            + url + '</p><p style="color:black">Cordialement,</p><footer> <img src="red"/></footer>';
-        if (req.body.mailcustom)
-            htmlmail = "<div style='white-space: pre-wrap;'>" + req.body.mailcustom.replace('<lien>', url) + "</div><footer> <img src='red'/></footer>"
-        htmlmail = htmlmail.replace(/\n/g, '<br>')
-        let mailOptions = {
-            from: 'ims@intedgroup.com',
-            to: mailList,
-            subject: 'Emploi du temps',
-            html: htmlmail,
-            attachments: [{
-                filename: 'signature_peda_espic.png',
-                path: 'assets/signature_peda_espic.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-        };
-        htmlmail = htmlmail.replace('<signature espic><br>', '')
-
-        if (htmlmail.indexOf('<signature espic>') != -1) {
-            /*mailOptions.attachments = []
-           
-            //mailOptions.html = mailOptions.html.replace("<img src='red'/>",sign_espic)
-            try {
-                const data = fs.readFileSync('assets/signature_espic.html', 'utf8');
-                mailOptions.html = htmlmail.replace("<img src='red'/>", data)
-            } catch (err) {
-                console.error(err);
-            }
-            console.log(mailOptions.html)*/
-            mailOptions.attachments = [{
-                filename: 'signature_peda_espic.png',
-                path: 'assets/signature_peda_espic.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-            htmlmail = htmlmail.replace('<signature espic><br>', '')
-
-        } else if (htmlmail.indexOf('<signature adg>') != -1) {
-            mailOptions.attachments = [{
-                filename: 'siganture_adg.png',
-                path: 'assets/siganture_adg.png',
-                cid: 'red' //same cid value as in the html img src
-            }]
-            mailOptions.html = htmlmail.replace('<signature adg><br>', '')
+        let htmlmail = ("<div style='white-space: pre-wrap;'>" + req.body.mailcustom.replace('<lien>', url).replace('<lien edt>', url) + "</div><footer> <img src='red'/></footer>").replace(/\n/g, '<br>').replace('<signature espic><br>', '')
+        let attachments = [{
+            filename: 'signature_peda_espic.png',
+            path: 'assets/signature_peda_espic.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+        if (htmlmail.indexOf('<signature adg>') != -1) {
+            attachments = []
+            htmlmail = htmlmail.replace('<signature adg><br>', '')
         } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
-            mailOptions.attachments = []
-            mailOptions.html = htmlmail.replace('<signature eduhorizons><br>', '')
+            attachments = []
+            htmlmail = htmlmail.replace('<signature eduhorizons><br>', '')
         } else if (htmlmail.indexOf('<signature estya>') != -1) {
-            mailOptions.attachments = [{
+            attachments = [{
                 filename: 'signature_peda_estya.png',
                 path: 'assets/signature_peda_estya.png',
                 cid: 'red' //same cid value as in the html img src
             }]
-            mailOptions.html = htmlmail.replace('<signature estya><br>', '')
+            htmlmail = htmlmail.replace('<signature estya><br>', '')
         }
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: mailList,
+            subject: req.body.objet,
+            html: htmlmail,
+            attachments
+        };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error(error);
