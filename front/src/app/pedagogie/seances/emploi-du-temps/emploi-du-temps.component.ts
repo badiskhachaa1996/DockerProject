@@ -87,7 +87,7 @@ export class EmploiDuTempsComponent implements OnInit {
           formateur: new FormControl({ nom: this.formateurs[rowData.formateur_id].firstname + " " + this.formateurs[rowData.formateur_id].lastname, value: rowData.formateur_id }, Validators.required),
           isPresentiel: new FormControl(rowData.isPresentiel),
           salle_name: new FormControl({ value: rowData.salle_name }),
-          campus_id: new FormControl({ libelle: this.dicCampus[ rowData.campus_id]?.nom, value: this.dicCampus[ rowData.campus_id]?._id }),
+          campus_id: new FormControl({ libelle: this.dicCampus[rowData.campus_id]?.nom, value: this.dicCampus[rowData.campus_id]?._id }),
           isPlanified: new FormControl(rowData.isPlanified),
           nbseance: new FormControl(rowData.nbseance)
         });
@@ -346,9 +346,15 @@ export class EmploiDuTempsComponent implements OnInit {
       this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'Votre séance a bien été modifié!' });
       this.refreshEvent()
       this.SeanceToUpdate = null;
-      if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette modification ?")) {
-        this.formateurService.sendEDT(this.seanceFormUpdate.value.formateur.value, "/YES")
-        this.EtudiantService.sendEDT(this.seanceFormUpdate.value.classe.value, "/YES")
+      if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur de cette modification ?")) {
+        this.formateurService.sendEDT(this.seanceFormUpdate.value.formateur.value, "/YES").subscribe(data => {
+          this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès", detail: "Nous vous conseillons d'envoyer un mail au groupe via la liste des groupes pour les notifier du changement" })
+        }, err => {
+          console.error(err)
+          this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
+        })
+        //this.EtudiantService.sendEDT(this.seanceFormUpdate.value.classe.value, "/YES")
+
       }
       this.seanceFormUpdate.reset();
     }, (error) => {

@@ -85,9 +85,9 @@ export class EtudiantService {
     return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  sendEDT(id, update = "/nope", mailcustom = "") {
-    let registreUrl = this.apiUrl + "sendEDT/" + id + update;
-    return this.httpClient.post<any>(registreUrl, { mailcustom }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  sendEDT(id, mailcustom = "", objet = "") {
+    let registreUrl = this.apiUrl + "sendEDT/" + id;
+    return this.httpClient.post<any>(registreUrl, { mailcustom, objet }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getBulletin(etudiant_id, semestre) {

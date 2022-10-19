@@ -45,6 +45,9 @@
                         chooseLabel="Importer un CV sous PDF">
                     </p-fileUpload>
                 </div>
+                <div class="col-12 field">
+                    <p-multiSelect [options]="languesList" placeholder="Choissisez la langue" [(ngModel)]="languesCV"></p-multiSelect>
+                </div>
                 <button type="button" class="mb-2" (click)="onAddSkill()" pButton label="Ajouter une compétences"></button>
                 <div class="field col-12 grid" *ngFor="let skill of skillsCV; let i = index">
                     <div class="field col-5 grid">

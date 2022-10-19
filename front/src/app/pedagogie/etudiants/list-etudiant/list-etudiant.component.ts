@@ -801,15 +801,32 @@ export class ListEtudiantComponent implements OnInit {
 
   langueFinder(pdf: string) {
     let pdf_lower = pdf.toLowerCase()
-    let speakFrench = pdf_lower.indexOf('français') != -1 || pdf_lower.indexOf('francais') != -1 || pdf_lower.indexOf('french') != -1
-    let speakEnglish = pdf_lower.indexOf('english') != -1 || pdf_lower.indexOf('anglais') != -1
-    let speakArabe = pdf_lower.indexOf('arabe') != -1 || pdf_lower.indexOf('arabian') != -1
-    let speakEspagnol = pdf_lower.indexOf('espagnol') != -1 || pdf_lower.indexOf('spanish') != -1
-    let speakJaponais = pdf_lower.indexOf('japonais') != -1 || pdf_lower.indexOf('japanese') != -1
-    let speakMandarin = pdf_lower.indexOf('chinois') != -1 || pdf_lower.indexOf('mandarin') != -1 || pdf_lower.indexOf('chinese') != -1
-    let speakDeutsch = pdf_lower.indexOf('allemand') != -1 || pdf_lower.indexOf('german') != -1
-    return { speakFrench, speakEnglish, speakArabe, speakEspagnol, speakJaponais, speakMandarin, speakDeutsch }
+    this.languesCV = []
+    if (pdf_lower.indexOf('français') != -1 || pdf_lower.indexOf('francais') != -1 || pdf_lower.indexOf('french') != -1)
+      this.languesCV.push('français')
+    if (pdf_lower.indexOf('arabe') != -1 || pdf_lower.indexOf('arabian') != -1)
+      this.languesCV.push('arabe')
+    if (pdf_lower.indexOf('espagnol') != -1 || pdf_lower.indexOf('spanish') != -1)
+      this.languesCV.push('espagnol')
+    if (pdf_lower.indexOf('japonais') != -1 || pdf_lower.indexOf('japanese') != -1)
+      this.languesCV.push('japonais')
+    if (pdf_lower.indexOf('english') != -1 || pdf_lower.indexOf('anglais') != -1)
+      this.languesCV.push('anglais')
+    if (pdf_lower.indexOf('chinois') != -1 || pdf_lower.indexOf('mandarin') != -1 || pdf_lower.indexOf('chinese') != -1)
+      this.languesCV.push('chinois')
+    if (pdf_lower.indexOf('allemand') != -1 || pdf_lower.indexOf('german') != -1)
+      this.languesCV.push('allemand')
   }
+
+  languesList = [
+    { label: "Français", value: "français" },
+    { label: "Anglais", value: "anglais" },
+    { label: "Arabe", value: "arabe" },
+    { label: "Espagnol", value: "espagnol" },
+    { label: "Japonais", value: "japonais" },
+    { label: "Chinos", value: "chinois" },
+    { label: "Allemand", value: "allemand" }
+  ]
 
   languesCV = []
   skillsCV: [
@@ -837,6 +854,7 @@ export class ListEtudiantComponent implements OnInit {
   experiencesFinder(pdf: string) {
     let pdf_lower = pdf.toLowerCase()
     this.CVService.getExperiences().subscribe(experiences => {
+      this.experiencesCV = null
       experiences.forEach(skill => {
         if (pdf_lower.indexOf(skill) != -1) {
           if (this.experiencesCV != null)
