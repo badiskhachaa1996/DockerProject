@@ -1,28 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import jwt_decode from "jwt-decode";
-
-import { MessageService } from 'primeng/api';
-import { EntrepriseService } from 'src/app/services/entreprise.service';
-import { User } from 'src/app/models/User';
-import { AuthService } from 'src/app/services/auth.service';
-import { MissionService } from 'src/app/services/skillsnet/mission.service';
-import { Mission } from 'src/app/models/Mission';
-import { Entreprise } from 'src/app/models/Entreprise';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Entreprise } from 'src/app/models/Entreprise';
+import { Mission } from 'src/app/models/Mission';
+import { User } from 'src/app/models/User';
+import jwt_decode from "jwt-decode";
 import { TuteurService } from 'src/app/services/tuteur.service';
-import { Tuteur } from 'src/app/models/Tuteur';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { AuthService } from 'src/app/services/auth.service';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { MissionService } from 'src/app/services/skillsnet/mission.service';
+import { log } from 'console';
+
 
 @Component({
-  selector: 'app-mission',
-  templateUrl: './mission.component.html',
-  styleUrls: ['./mission.component.scss']
+  selector: 'app-mes-missions',
+  templateUrl: './mes-missions.component.html',
+  styleUrls: ['./mes-missions.component.scss']
 })
-export class MissionComponent implements OnInit {
+export class MesMissionsComponent implements OnInit {
 
   missions: Mission[] = [];
   entreprises: Entreprise[] = [];
-  entreprisesWithCEO: Entreprise[] = [];
   entreprisesList: any = [{ label: 'Veuillez choisir une entreprise', value: null }];
   form: FormGroup;
   showForm: boolean = false;
@@ -58,7 +57,6 @@ export class MissionComponent implements OnInit {
     { label: 'CDI' }
   ];
 
-  tuteurs: Tuteur[] = [];
   token: any;
 
   constructor(private tuteurService: TuteurService, private router: Router, private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private entrepriseService: EntrepriseService, private missionService: MissionService) { }
@@ -79,29 +77,21 @@ export class MissionComponent implements OnInit {
         response.forEach((entreprise) => {
           this.entreprisesList.push({ label: entreprise.r_sociale, value: entreprise._id });
           this.entreprises[entreprise._id] = entreprise;
-          this.entreprisesWithCEO[entreprise.directeur_id] = entreprise;
         });
       }),
       ((error) => console.log(error))
     );
 
-    //Recuperation de la liste des missions
-    this.missionService.getMissions()
+    //Recuperation de la liste des missions de ce utilisateur
+    this.missionService.getMissionsByUserId(this.token.id)
     .then((response: Mission[]) => {
       this.missions = response;
+      
     })
     .catch((error) => console.log(error));
 
-    //Récupération de la liste des tuteurs
-    this.tuteurService.getAll().subscribe(
-      ((response) => { 
-        response.forEach((tuteur) => {
-          this.tuteurs[tuteur.user_id] = tuteur;
-        });
-      }),
-    )
 
-    //Initialisation du formulaire d'ajout
+    //Initialisation du formulaire d'ajout d'une mission
     this.form = this.formBuilder.group({
       entreprise_id:    [''],
       missionName:      ['', Validators.required],
@@ -145,59 +135,53 @@ export class MissionComponent implements OnInit {
   //Méthode d'ajout d'une mission
   onAddMission(): void 
   {
-    const mission = new Mission();
+    // const mission = new Mission();
 
-    mission.user_id         = this.token.id;
-    mission.missionType     = this.form.get('missionType')?.value.label;
-    mission.debut           = this.form.get('debut')?.value;
-    mission.missionName     = this.form.get('missionName')?.value;
-    mission.missionDesc     = this.form.get('missionDesc')?.value;
+    // mission.user_id         = this.token.id;
+    // mission.missionType     = this.form.get('missionType')?.value.label;
+    // mission.debut           = this.form.get('debut')?.value;
+    // mission.missionName     = this.form.get('missionName')?.value;
+    // mission.missionDesc     = this.form.get('missionDesc')?.value;
 
-    //Si l'utilisateur est rattaché à une entreprise: tuteur ou representant, l'entreprise id de la mission sera l'entreprise id de l'utilisateur
-    if(this.userConnected.type == 'CEO Entreprise')
-    {
-      mission.entreprise_id = this.entreprisesWithCEO[this.userConnected._id]._id;
-    } 
-    else if (this.userConnected.type == 'Tuteur')
-    {
-      mission.entreprise_id = this.tuteurs[this.userConnected._id].entreprise_id;
-    }
-    else 
-    {
-      mission.entreprise_id   = this.form.get('entreprise_id')?.value.value;
-    }
+    // //Si l'utilisateur est rattaché à une entreprise: tuteur ou representant, l'entreprise id de la mission sera l'entreprise id de l'utilisateur
+    // if(this.userConnected.type == 'CEO Entreprise')
+    // {
+    //   mission.entreprise_id = this.entreprisesWithCEO[this.userConnected._id]._id;
+    // } 
+    // else if (this.userConnected.type == 'Tuteur')
+    // {
+    //   mission.entreprise_id = this.tuteurs[this.userConnected._id].entreprise_id;
+    // }
+    // else 
+    // {
+    //   mission.entreprise_id   = this.form.get('entreprise_id')?.value.value;
+    // }
     
 
-    mission.profil          = this.form.get('profil')?.value.label;
-    mission.competences     = [];
-    mission.workplaceType   = this.form.get('workplaceType')?.value.label;
-    mission.publicationDate = new Date();
-    this.form.get('competences')?.value.forEach((competence) => {
-      mission.competences.push(competence.label);
-    });
-    mission.isClosed      = false;
+    // mission.profil          = this.form.get('profil')?.value.label;
+    // mission.competences     = [];
+    // mission.workplaceType   = this.form.get('workplaceType')?.value.label;
+    // mission.publicationDate = new Date();
+    // this.form.get('competences')?.value.forEach((competence) => {
+    //   mission.competences.push(competence.label);
+    // });
+    // mission.isClosed      = false;
 
-    //Envoi de la mission en BD
-    this.missionService.postMission(mission)
-    .then((response) => {
-      this.messageService.add({ severity: "success", summary: "La mission a été ajouté" })
-      this.form.reset();
+    // //Envoi de la mission en BD
+    // this.missionService.postMission(mission)
+    // .then((response) => {
+    //   this.messageService.add({ severity: "success", summary: "La mission a été ajouté" })
+    //   this.form.reset();
 
-      //Recuperation de la liste des missions
-      this.missionService.getMissions()
-      .then((response: Mission[]) => {
-        this.missions = response;
-      })
-      .catch((error) => console.log(error));
-    })
-    .catch((error) => { console.log(error); });
+    //   //Recuperation de la liste des missions
+    //   this.missionService.getMissions()
+    //   .then((response: Mission[]) => {
+    //     this.missions = response;
+    //   })
+    //   .catch((error) => console.log(error));
+    // })
+    // .catch((error) => { console.log(error); });
 
-  }
-  
-  //Methode de redirection vers la page des details
-  onGoToMesMissions(id: string) 
-  {
-    this.router.navigate(['/mes-missions']);
   }
 
 }

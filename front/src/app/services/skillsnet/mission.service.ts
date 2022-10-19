@@ -56,4 +56,30 @@ export class MissionService {
     });
   }
 
+  //Recuperation d'une mission via l'identifiant d'un utilisateur
+  getMissionsByUserId(user_id: string)
+  {
+    const url = `${this.apiUrl}get-missions-by-user-id/${user_id}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<Mission[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
+  //Recuperation d'une mission via l'identifiant d'un utilisateur
+  getMissionsByEntrepriseId(entreprise_id: string)
+  {
+    const url = `${this.apiUrl}get-missions-by-entreprise-id/${entreprise_id}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<Mission[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
 }

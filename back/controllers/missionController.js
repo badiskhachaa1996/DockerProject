@@ -28,4 +28,20 @@ app.get("/get-mission", (req, res) => {
            .catch((error) => { res.status(500).send(error.message); });
 });
 
+
+//Recuperation de la liste des mission d'un utilisateur
+app.get("/get-missions-by-user-id/:user_id", (req, res) => {
+    Mission.find({ user_id: req.params.user_id })
+           .then((missions) => { res.status(200).send(missions); })
+           .catch((error) => { res.status(500).send(error.message); });
+});
+
+
+//Recuperation de la liste des mission d'une entreprise
+app.get("/get-missions-by-entreprise-id/:entreprise_id", (req, res) => {
+    Mission.find({ entreprise_id: req.params.entreprise_id })
+           .then((missions) => { res.status(200).send(missions); })
+           .catch((error) => { res.status(500).send(error.message); });
+});
+
 module.exports = app;
