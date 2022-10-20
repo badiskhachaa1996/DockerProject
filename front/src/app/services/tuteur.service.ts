@@ -54,7 +54,6 @@ export class TuteurService {
   }
 
   getByUserId(id:string){
-    console.log("service getByUserId ", id)
     let registreUrl = this.apiUrl + "getByUserId/" + id;
     return this.httpClient.get<Tuteur>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

@@ -44,6 +44,16 @@ app.get("/get-missions-by-entreprise-id/:entreprise_id", (req, res) => {
         .catch((error) => { res.status(500).send(error.message); });
 });
 
+
+//Modification d'une mission
+app.put("/put-mission", (req, res) => {
+
+    Mission.updateOne({ _id: req.body._id }, { ...req.body } )
+           .then((mission) => { res.status(200).send(mission) })
+           .catch((error) => { res.status(500).send(error.message) })
+});
+
+
 //Recupération d'une liste de mission qui corresponds à un CV
 app.get('/getMissionFromCV/:cv_id', (req, res) => {
     CV.findById(req.params.cv_id).then(cv => {
