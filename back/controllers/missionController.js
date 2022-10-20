@@ -44,4 +44,13 @@ app.get("/get-missions-by-entreprise-id/:entreprise_id", (req, res) => {
            .catch((error) => { res.status(500).send(error.message); });
 });
 
+
+//Modification d'une mission
+app.put("/put-mission", (req, res) => {
+
+    Mission.updateOne({ _id: req.body._id }, { ...req.body } )
+           .then((mission) => { res.status(200).send(mission) })
+           .catch((error) => { res.status(500).send(error.message) })
+});
+
 module.exports = app;

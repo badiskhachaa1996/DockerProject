@@ -205,7 +205,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'SkillsNet',
                 items: [
                     { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
-                    { label: 'Mes missions', icon: 'pi pi-briefcase', routerLink: ['/mes-missions'] },
+                    { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
                 ]
             },
         ];
@@ -314,7 +314,14 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Gestions des prospects', icon: 'pi pi-users', routerLink: ['gestion-preinscriptions', cData.code_commercial_partenaire] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
-                                }
+                                },
+                                {
+                                    label: 'SkillsNet',
+                                    items: [
+                                        { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
+                                        { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                                    ]
+                                },
                             ];
                         }
 
@@ -335,7 +342,14 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Gestion des collaborateurs', icon: 'pi pi-users', routerLink: ['collaborateur', cData.partenaire_id] },
                                         //{ label: 'Gestion des échanges', icon: 'pi pi-comment' },
                                     ]
-                                }
+                                },
+                                {
+                                    label: 'SkillsNet',
+                                    items: [
+                                        { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
+                                        { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                                    ]
+                                },
                             ];
                         }
                     })
@@ -417,6 +431,14 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Listes des alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
                             ]
                         },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
+                                { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                                { label: 'Les missions de mon entreprise', icon: 'pi pi-building', routerLink: ['/entreprise-missions'] },
+                            ]
+                        },
                     ]
 
 
@@ -445,6 +467,14 @@ export class AppMenuComponent implements OnInit {
                                 { label: 'Liste de tous les alternants ', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
                                 { label: 'Liste des tuteurs', icon: 'pi pi-list', routerLink: ['/tuteur'] },
                                 { label: 'Mes alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
+                            ]
+                        },
+                        {
+                            label: 'SkillsNet',
+                            items: [
+                                { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
+                                { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                                { label: 'Les missions de mon entreprise', icon: 'pi pi-building', routerLink: ['/entreprise-missions'] },
                             ]
                         },
                     ]

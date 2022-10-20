@@ -207,6 +207,7 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
+import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -400,6 +401,7 @@ import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.comp
     GestionLogementComponent,
     MissionComponent,
     MesMissionsComponent,
+    EntreprisesMissionsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

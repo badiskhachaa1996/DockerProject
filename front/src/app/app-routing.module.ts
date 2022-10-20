@@ -105,6 +105,7 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
+import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 
 
 @NgModule({
@@ -200,6 +201,7 @@ import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.comp
 
                     { path: 'missions', component: MissionComponent  },
                     { path: 'mes-missions', component: MesMissionsComponent  },
+                    { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
 
                 ],
             },
