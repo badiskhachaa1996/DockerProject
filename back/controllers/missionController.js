@@ -45,18 +45,39 @@ app.get("/get-missions-by-entreprise-id/:entreprise_id", (req, res) => {
 });
 
 //Recupération d'une liste de mission qui corresponds à un CV
-app.get('/getMissionFromCV/:cv_id', (req, res) => {
-    CV.findById(req.params.cv_id).then(cv => {
-        let langues = cv.langues
-        let skills = []
+app.get('/getMissionFromCV/:user_id', (req, res) => {
+    CV.findOne({ user_id: req.params.user_id }).then(cv => {
+        var skills = []
+        var r = []
         cv.connaissances.forEach(element => {
             skills.push(element.skill)
         });
         cv.experiences.forEach(element => {
             skills.push(element.skill)
         });
-        
+        Mission.find({ competences: { $in: skills } }).then(missions => {
+            missions.forEach(m => {
+                let score_max = m.competences.length
+                let score = 0
+                let competences = stringArrayToLower(m.competences)
+                skills.forEach(s => {
+                    if (competences.includes(s.toLowerCase()))
+                        score++;
+                })
+                r.push({ mission: m, score: (score * 100) / score_max })
+            })
+            res.status(201).send(r)
+        })
+
     })
 })
+
+function stringArrayToLower(arr){
+    let r = []
+    arr.forEach(ele => {
+        r.push(ele.toLowerCase())
+    })
+    return r
+}
 
 module.exports = app;

@@ -105,6 +105,7 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
+import { MatchingComponent } from './skillsnet/matching/matching.component';
 
 
 @NgModule({
@@ -198,8 +199,9 @@ import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.comp
                     { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
                     { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
-                    { path: 'missions', component: MissionComponent  },
-                    { path: 'mes-missions', component: MesMissionsComponent  },
+                    { path: 'missions', component: MissionComponent, canActivate: [AuthGuardService] },
+                    { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
+                    { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] }
 
                 ],
             },
