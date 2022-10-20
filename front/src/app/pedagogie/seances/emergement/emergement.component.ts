@@ -45,7 +45,7 @@ export class EmergementComponent implements OnInit {
   showJustif;
   loadingFile = false;
   uploadFile = false;
-  presences;
+  presences: Presence[];
   userList = [];
   allowJustificatif = false
   classeList = [{}];
@@ -56,6 +56,7 @@ export class EmergementComponent implements OnInit {
   dicEtudiant = {}
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
+  showFiles: [{ name: string, right: string, upload_by: string }];
   date = new Date().getTime()
   date_debut; date_fin;
   formateurInfo: Formateur = null;
@@ -66,6 +67,7 @@ export class EmergementComponent implements OnInit {
   @ViewChild('justificatif') fileInput: FileUpload;
   loading: boolean = false;
   affichageDiplome = ""
+  affichageGroupe = ""
 
   formAddEtudiant = this.formBuilder.group({
     etudiant_id: [null]
@@ -227,6 +229,14 @@ export class EmergementComponent implements OnInit {
     })
     this.SeanceService.getById(this.ID).subscribe(dataS => {
       this.seance = dataS
+      this.showFiles = null
+      this.seance.fileRight.forEach(f => {
+        if (f.right != 'false')
+          if (this.showFiles != null)
+            this.showFiles.push(f)
+          else
+            this.showFiles = [f]
+      })
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = this.date_debut + (15 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
@@ -246,25 +256,32 @@ export class EmergementComponent implements OnInit {
         })
         this.formAddEtudiant.patchValue({ etudiant_id: this.dropdownEtudiant[0] })
       })
-    })
-    this.DiplomeService.getAll().subscribe(diplomes => {
-      diplomes.forEach(diplome => {
-        this.diplomeList[diplome._id] = diplome
-      })
-
-      if (this.seance) {
-
-        this.seance.classe_id.forEach((cid, index) => {
-          if (this.classeList[cid] && this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
-            if (index == 0) {
-              this.affichageDiplome = this.diplomeList[this.classeList[cid].diplome_id].titre
-            } else if (this.affichageDiplome.includes(this.diplomeList[this.classeList[cid].diplome_id].titre) == false) {
-              this.affichageDiplome = this.affichageDiplome + ", " + this.diplomeList[this.classeList[cid].diplome_id].titre
-            }
-          }
+      this.DiplomeService.getAll().subscribe(diplomes => {
+        diplomes.forEach(diplome => {
+          this.diplomeList[diplome._id] = diplome
         })
-      }
+        if (this.seance) {
+          console.log(this.seance.classe_id, this.diplomeList)
+          this.seance.classe_id.forEach((cid, index) => {
+            if (this.classeList[cid] && this.diplomeList[this.classeList[cid].diplome_id] && this.diplomeList[this.classeList[cid].diplome_id].titre) {
+              if (index == 0) {
+                this.affichageDiplome = this.diplomeList[this.classeList[cid].diplome_id].titre
+              } else if (this.affichageDiplome.includes(this.diplomeList[this.classeList[cid].diplome_id].titre) == false) {
+                this.affichageDiplome = this.affichageDiplome + ", " + this.diplomeList[this.classeList[cid].diplome_id].titre
+              }
+            }
+            if (this.classeList[cid] && this.classeList[cid].abbrv) {
+              if (index == 0) {
+                this.affichageGroupe = this.classeList[cid].abbrv
+              } else if (this.affichageGroupe.includes(this.classeList[cid].abbrv) == false) {
+                this.affichageGroupe = this.affichageGroupe + ", " + this.classeList[cid].abbrv
+              }
+            }
+          })
+        }
+      })
     })
+
     this.socket.on("refreshPresences", () => {
       this.reloadPresence();
     })
@@ -282,9 +299,9 @@ export class EmergementComponent implements OnInit {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.FormateurService.getByUserId(this.token.id).subscribe(data => {
           if (data) {
-            this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
+            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
               this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })
+            })*/
           }
         })
         this.SocketService.addPresence();
@@ -299,9 +316,9 @@ export class EmergementComponent implements OnInit {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
         this.FormateurService.getByUserId(this.token.id).subscribe(data => {
           if (data) {
-            this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
+            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
               this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })
+            })*/
           }
         })
         this.SocketService.addPresence();
@@ -399,9 +416,16 @@ export class EmergementComponent implements OnInit {
       this.SeanceService.uploadFile(formData, this.ID).subscribe(res => {
         this.MessageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         event.target = null;
-        console.log(res)
         if (res.data) {
           this.seance = res.data
+          this.showFiles = null
+          this.seance.fileRight.forEach(f => {
+            if (f.right != 'false')
+              if (this.showFiles != null)
+                this.showFiles.push(f)
+              else
+                this.showFiles = [f]
+          })
         }
         this.showUploadFile = false;
       }, error => {
@@ -423,6 +447,14 @@ export class EmergementComponent implements OnInit {
     this.SeanceService.deleteFile(file.name, this.ID).subscribe(data => {
       if (data.data) {
         this.seance = data.data
+        this.showFiles = null
+        this.seance.fileRight.forEach(f => {
+          if (f.right != 'false')
+            if (this.showFiles != null)
+              this.showFiles.push(f)
+            else
+              this.showFiles = [f]
+        })
       }
     }, (error) => {
       this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
@@ -448,6 +480,8 @@ export class EmergementComponent implements OnInit {
     }).subscribe(data => {
       this.showAddEtudiant = false
       console.log(data)
+      //TODO
+      this.presences.push(data)
       this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
     }, error => {
       console.error(error)

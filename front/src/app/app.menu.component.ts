@@ -244,7 +244,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + dataF._id },
+                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
                                     ]
                                 },
                                 {
