@@ -26,6 +26,8 @@ export class MissionComponent implements OnInit {
   entreprisesList: any = [{ label: 'Veuillez choisir une entreprise', value: null }];
   form: FormGroup;
   showForm: boolean = false;
+  formUpdate: FormGroup;
+  showFormUpdate: boolean = false;
 
   userConnected: User;
   missionSelected: Mission;
@@ -58,6 +60,8 @@ export class MissionComponent implements OnInit {
     { label: 'CDI' }
   ];
 
+  isCanModify: boolean = false;
+
   tuteurs: Tuteur[] = [];
   token: any;
 
@@ -69,7 +73,13 @@ export class MissionComponent implements OnInit {
 
     //Recuperation de l'utilisateur connecté
     this.userService.getInfoById(this.token.id).subscribe(
-      ((response) => { this.userConnected = response; }),
+      ((response) => { 
+        this.userConnected = response; 
+        if(this.userConnected.role == 'Admin' || this.userConnected.role == 'Commercial')
+        {
+          this.isCanModify = true;
+        }
+      }),
       ((error) => { console.log(error); })
     );
 
@@ -103,6 +113,19 @@ export class MissionComponent implements OnInit {
 
     //Initialisation du formulaire d'ajout
     this.form = this.formBuilder.group({
+      entreprise_id:    [''],
+      missionName:      ['', Validators.required],
+      profil:           [this.profilsList[0], Validators.required],
+      competences:      ['', Validators.required],
+      workplaceType:    [this.locationOptions[1], Validators.required],
+      missionDesc:      ['', Validators.required],
+      missionType:      [this.missionTypes[0], Validators.required],
+      debut:            [''],
+    });
+
+
+    //Initialisation du formulaire de modification d'une mission
+    this.formUpdate = this.formBuilder.group({
       entreprise_id:    [''],
       missionName:      ['', Validators.required],
       profil:           [this.profilsList[0], Validators.required],
@@ -193,11 +216,82 @@ export class MissionComponent implements OnInit {
     .catch((error) => { console.log(error); });
 
   }
+
+
+  //Méthode de modification d'une mission
+  onUpdateMission(): void 
+  {
+    const mission = new Mission();
+
+    mission._id             = this.missionSelected._id;
+    mission.user_id         = this.missionSelected.user_id;
+    mission.missionType     = this.formUpdate.get('missionType')?.value.label;
+    mission.debut           = this.formUpdate.get('debut')?.value;
+    mission.missionName     = this.formUpdate.get('missionName')?.value;
+    mission.missionDesc     = this.formUpdate.get('missionDesc')?.value;
+
+    //Si l'utilisateur est rattaché à une entreprise: tuteur ou representant, l'entreprise id de la mission sera l'entreprise id de l'utilisateur
+    if(this.userConnected.type == 'CEO Entreprise' || this.userConnected.type == 'Tuteur')
+    {
+      mission.entreprise_id = this.missionSelected.entreprise_id;
+    } 
+    else 
+    {
+      mission.entreprise_id   = this.formUpdate.get('entreprise_id')?.value.value;
+    }
+    
+
+    mission.profil          = this.formUpdate.get('profil')?.value.label;
+    mission.competences     = [];
+    mission.workplaceType   = this.formUpdate.get('workplaceType')?.value.label;
+    mission.publicationDate = new Date();
+    this.formUpdate.get('competences')?.value.forEach((competence) => {
+      mission.competences.push(competence.label);
+    });
+    mission.isClosed      = this.missionSelected.isClosed;
+
+    //Envoi de la mission en BD
+    this.missionService.putMission(mission)
+    .then((response) => {
+      this.messageService.add({ severity: "success", summary: "La mission a été modifier" })
+      this.formUpdate.reset();
+
+      //Recuperation de la liste des missions
+      this.missionService.getMissions()
+      .then((response: Mission[]) => {
+        this.missions = response;
+      })
+      .catch((error) => console.log(error));
+    })
+    .catch((error) => { console.log(error); });
+
+  }
+
   
-  //Methode de redirection vers la page des details
-  onGoToMesMissions(id: string) 
+  //Methode de redirection vers la page mes missions
+  onGoToMesMissions() 
   {
     this.router.navigate(['/mes-missions']);
+  }
+
+  //Methode de redirection vers la page des missions de mon entreprise
+  onGoToEntrepriseMissions() 
+  {
+    this.router.navigate(['/entreprise-missions']);
+  }
+
+  onFillForm()
+  {
+    this.formUpdate.patchValue({
+      entreprise_id:    { label: this.entreprises[this.missionSelected.entreprise_id].r_sociale, value: this.missionSelected.entreprise_id },
+      missionName:      this.missionSelected.missionName,
+      // profil:           { label: this.missionSelected.profil },
+      // competences:      this.missionSelected.competences,
+      workplaceType:    { label: this.missionSelected.workplaceType },
+      missionDesc:      this.missionSelected.missionDesc,
+      missionType:      { label: this.missionSelected.missionType },
+      debut:            this.missionSelected.debut,
+    });
   }
 
 }

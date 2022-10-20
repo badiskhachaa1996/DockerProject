@@ -86,4 +86,17 @@ export class MissionService {
     });
   }
 
+  //Methode de modification d'une mission
+  putMission(mission: Mission)
+  {
+    const url = `${this.apiUrl}put-mission`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.put<Mission>(url, mission, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
 }
