@@ -520,7 +520,7 @@
                         {{prospect.date_creation | date :'dd/MM/yyyy' }}
                     </td>
                     <td>
-                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                             (click)="showUploadFile=prospect;scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayement=prospect;showPayementFC(prospect);scrollToTop()"
@@ -811,7 +811,7 @@
                     <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.statut_dossier }}</td>
                     <td>
-                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+                        <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                             (click)="showUploadFile=etudiant;scrollToTop()" aria-hidden="true"></i>
                         <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayementEtu=etudiant;showPayementEtuFC(etudiant);scrollToTop()"

@@ -39,8 +39,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class DashboardComponent implements OnInit {
 
   user: User;
-  etudiant: Etudiant;
-  formateur: Formateur;
   classe: Classe[] = [];
 
   seances: Seance[] = [];
@@ -66,7 +64,6 @@ export class DashboardComponent implements OnInit {
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
-  seance = []
 
   date: Date = new Date();
 
@@ -140,7 +137,7 @@ export class DashboardComponent implements OnInit {
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
     private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService,
-    private dashboardService: DashboardService,private http: HttpClient
+    private dashboardService: DashboardService, private http: HttpClient
   ) { }
 
 
@@ -172,11 +169,29 @@ export class DashboardComponent implements OnInit {
               if (dataEtu.classe_id)
                 this.refreshEvent(dataEtu)
               this.isEtudiant = !this.isReinscrit;
+              this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
+                ((responseNote) => {
+                  this.notes = responseNote;
+                  this.dernotes = this.notes.slice(1, 6)
+                }));
             } else {
               this.isEtudiant = false
             }
             console.log(dataEtu)
           })
+          // recuperation de la liste des notes par étudiant
+          this.EtuService.getByUser_id(this.token.id).subscribe(
+            (responseEtu) => {
+              if (responseEtu) {
+
+              }
+            });
+        }
+        if (this.isFormateur) {
+          this.seanceService.getAllbyFormateur(this.token.id).subscribe(
+            ((resSea) => {
+              this.showEvents(resSea)
+            }));
         }
         this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)
       }
@@ -190,35 +205,6 @@ export class DashboardComponent implements OnInit {
         })
       }
     );
-
-    // recuperation de la liste des notes par étudiant
-    this.EtuService.getByUser_id(this.token.id).subscribe(
-      (responseEtu) => {
-        if (responseEtu) {
-          this.etudiant = responseEtu;
-          this.noteService.getAllByEtudiantId(this.etudiant._id).subscribe(
-            ((responseNote) => {
-              this.notes = responseNote;
-              this.dernotes = this.notes.slice(1, 6)
-            }));
-        }
-      });
-
-    //Récupération des séances par formateur 
-    //On récupére d'abord le formarteur via son id
-    this.formateurService.getByUserId(this.token.id).subscribe(
-      (resFor) => {
-        if (resFor) {
-          this.formateur = resFor;
-          //On récupére ensuite les séances du formateur via l'id de la séance
-          this.seanceService.getAllbyFormateurToday(this.formateur._id).subscribe(
-            ((resSea) => {
-              console.log(resSea);
-              this.seance = resSea;
-            }));
-        }
-      });
-
   }
 
   SCIENCE() {
@@ -303,41 +289,41 @@ export class DashboardComponent implements OnInit {
   deleteLink(i) {
     if (confirm("Est ce que vous êtes sûr de vouloir supprimer le lien " + this.dashboard.links[i].label + " ?")) {
       this.dashboard.links.splice(i, 1)
-      this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard=>{
+      this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard => {
         this.dashboard = newDashboard
       })
     }
 
   }
-  
 
-  test(){
+
+  test() {
     const xhr = new XMLHttpRequest();
     const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';
-   
 
-    xhr.open('GET', url,true);
+
+    xhr.open('GET', url, true);
     xhr.setRequestHeader('Authorization', 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66');
-    xhr.setRequestHeader('Access-Control-Allow-Origin','*')
-    xhr.setRequestHeader('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE, OPTIONS')
-    xhr.setRequestHeader('Access-Control-Allow-Headers','Origin, Content-Type, X-Auth-Token')
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+    xhr.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
     xhr.onload = () => {
       console.log(xhr.responseURL); // http://example.com/test
       console.error(xhr.response)
     };
     xhr.send();
     const optionRequete = {
-      headers: new HttpHeaders({ 
-        'Access-Control-Allow-Origin':'*',
-        'Authorization':'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66',
-        'Access-Control-Allow-Methods' :'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers' :'Origin, Content-Type, X-Auth-Token'
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66',
+        'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
       })
     };
 
-    this.http.get(url, optionRequete).subscribe(r=>{
+    this.http.get(url, optionRequete).subscribe(r => {
       console.log(r)
-    },err=>{
+    }, err => {
       console.error(err)
     })
   }

@@ -4,8 +4,10 @@ const fs = require("fs")
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 const { Poppler } = require("node-poppler");
-const poppler = new Poppler();
-
+var poppler = new Poppler('./usr/bin');
+if (!process.argv[2]) {
+    poppler = new Poppler();
+}
 app.post("/create", (req, res) => {
     //Sauvegarde d'un cv
     delete req.body._id
