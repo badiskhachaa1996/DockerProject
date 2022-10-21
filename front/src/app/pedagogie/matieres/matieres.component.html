@@ -101,7 +101,7 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="niveau">Année <span style="color: red;"> * </span></label>
-                        <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
+                        <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="1er année" />
                     </div>
                     <div class="field col-12">
                         <label For="remarque">Remarque</label>
@@ -166,7 +166,7 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="niveau">Année <span style="color: red;"> * </span></label>
-                    <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
+                    <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="1er année" />
                 </div>
                 <div class="field col-12">
                     <label For="remarque">Remarque</label>
@@ -199,7 +199,7 @@
                         <div class="field">
                             <span style="margin-left: 2px;">
                                 <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
+                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'contains')"
                                     emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
                                 </p-dropdown>
                             </span>
