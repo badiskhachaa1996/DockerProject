@@ -468,15 +468,16 @@ export class AddSeanceComponent implements OnInit {
           let str = m.nom + " - "
           m.formation_id.forEach((formation, index) => {
             if (index != 0)
-              str = str + ", "+ this.diplomeDic[formation].titre
+              str = str + ", " + this.diplomeDic[formation].titre
             else
               str = str + this.diplomeDic[formation].titre
           })
+          str = str + " - " + m.niveau
           this.dropdownMatiere.push({ nom: str, value: m._id });
         }
         else {
           let str: any = m.formation_id
-          this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[str].titre, value: m._id });
+          this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[str].titre + " - " + m.niveau, value: m._id });
         }
 
       }
