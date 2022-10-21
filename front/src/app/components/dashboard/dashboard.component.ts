@@ -9,6 +9,7 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import {GalleriaModule} from 'primeng/galleria';
 
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -131,6 +132,78 @@ export class DashboardComponent implements OnInit {
 
   ID = this.route.snapshot.paramMap.get('id');
   type = this.route.snapshot.paramMap.get('type');
+
+
+  galleriaResponsiveOptions: any[] = [
+    {
+      breakpoint: '1024px',
+      numVisible: 5
+    },
+    {
+      breakpoint: '960px',
+      numVisible: 4
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1
+    }
+  ];
+
+  carousselImages: any = [
+    {
+      "previewImageSrc": "assets/logement/original/accueil4.jpg",
+      "thumbnailImageSrc": "assets/logement/original/accueil4.jpg",
+      "alt": "Restaurant",
+      "title": "Accueil 1"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/accueil2.jpg",
+      "thumbnailImageSrc": "assets/logement/original/accueil2.jpg",
+      "alt": "Description for Image 2",
+      "title": "Accueil 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-1.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-1.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 1"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/gym4.jpg",
+      "thumbnailImageSrc": "assets/logement/original/gym4.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-2.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-2.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/cinebox.jpg",
+      "thumbnailImageSrc": "assets/logement/original/cinebox.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-3.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-3.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 3"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/chillroom2.jpg",
+      "thumbnailImageSrc": "assets/logement/original/chillroom2.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+  ];
+
 
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
@@ -297,6 +370,7 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  //Methode de test pour LW
   test() {
     const xhr = new XMLHttpRequest();
     const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';

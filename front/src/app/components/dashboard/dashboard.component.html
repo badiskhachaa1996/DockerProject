@@ -244,6 +244,7 @@
         </div>
 
     </div> -->
+
 <div *ngIf="isUnknow">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -262,8 +263,8 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
-    <button pButton label="Test" (click)="test()"></button>
 </div>
+
 
 
 
@@ -272,7 +273,29 @@
         N°{{dataEtudiant?.custom_id}}
     </h1>
     <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre
-        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing</p>
+        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
+    </p>
+
+    <div class="col-12">
+        <div class="card">
+            <h5>
+                Besoin d'un logement ?
+                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des logements tout neufs et pas chèr.
+            </h5>
+
+            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.previewImageSrc" style="width: 100%;" />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="grid grid-nogutter justify-content-center">
+                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px"/>
+                    </div>
+                </ng-template>
+            </p-galleria>
+        </div>
+    </div>
+
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
