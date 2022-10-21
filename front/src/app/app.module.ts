@@ -207,6 +207,7 @@ import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
+import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 @NgModule({
   imports: [
@@ -401,6 +402,7 @@ import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/e
     GestionLogementComponent,
     MissionComponent,
     MesMissionsComponent,
+    MatchingComponent,
     EntreprisesMissionsComponent,
   ],
   providers: [MessageService, ConfirmationService,

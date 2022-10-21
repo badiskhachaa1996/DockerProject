@@ -13,10 +13,9 @@ export class MissionService {
   constructor(private httpClient: HttpClient) { }
 
   //Methode d'ajout d'une mission
-  postMission(mission: Mission)
-  {
+  postMission(mission: Mission) {
     const url = `${this.apiUrl}post-mission`;
-    
+
     return new Promise((resolve, reject) => {
       this.httpClient.post<Mission>(url, mission, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => {
@@ -31,10 +30,9 @@ export class MissionService {
 
 
   //Methode de recuperation de la liste des missions
-  getMissions()
-  {
+  getMissions() {
     const url = `${this.apiUrl}get-missions`;
-    
+
     return new Promise((resolve, reject) => {
       this.httpClient.get<Mission[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => { resolve(response); },
@@ -44,8 +42,7 @@ export class MissionService {
   }
 
   //Recuperation d'une mission via son identifiant
-  getMission(missionId: string)
-  {
+  getMission(missionId: string) {
     const url = `${this.apiUrl}get-mission/${missionId}`;
 
     return new Promise((resolve, reject) => {
@@ -57,8 +54,7 @@ export class MissionService {
   }
 
   //Recuperation d'une mission via l'identifiant d'un utilisateur
-  getMissionsByUserId(user_id: string)
-  {
+  getMissionsByUserId(user_id: string) {
     const url = `${this.apiUrl}get-missions-by-user-id/${user_id}`;
 
     return new Promise((resolve, reject) => {
@@ -70,12 +66,20 @@ export class MissionService {
   }
 
   //Recuperation d'une mission via l'identifiant d'un utilisateur
-  getMissionsByEntrepriseId(entreprise_id: string)
-  {
+  getMissionsByEntrepriseId(entreprise_id: string) {
     const url = `${this.apiUrl}get-missions-by-entreprise-id/${entreprise_id}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<Mission[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+  getMissionFromCV(user_id: string) {
+    const url = `${this.apiUrl}getMissionFromCV/${user_id}`;
+    return new Promise<[{ mission: Mission, score: Number }]>((resolve, reject) => {
+      this.httpClient.get<[{ mission: Mission, score: Number }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
         (response) => { resolve(response); },
         (error) => { reject(error); }
       );

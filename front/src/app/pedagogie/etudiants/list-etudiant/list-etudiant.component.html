@@ -46,9 +46,11 @@
                     </p-fileUpload>
                 </div>
                 <div class="col-12 field">
-                    <p-multiSelect [options]="languesList" placeholder="Choissisez la langue" [(ngModel)]="languesCV"></p-multiSelect>
+                    <p-multiSelect [options]="languesList" placeholder="Choissisez la langue" [(ngModel)]="languesCV">
+                    </p-multiSelect>
                 </div>
-                <button type="button" class="mb-2" (click)="onAddSkill()" pButton label="Ajouter une compétences"></button>
+                <button type="button" class="mb-2" (click)="onAddSkill()" pButton
+                    label="Ajouter une compétences"></button>
                 <div class="field col-12 grid" *ngFor="let skill of skillsCV; let i = index">
                     <div class="field col-5 grid">
                         <label>Compétences N°{{i+1}}</label>
@@ -59,11 +61,11 @@
                         <input pInputText placeholder [(ngModel)]="skillsCV[i].niveau" />
                     </div>
                     <div class="col-12 md:col-1">
-                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteSkill(i)"
-                            aria-hidden="true"></i>
+                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteSkill(i)" aria-hidden="true"></i>
                     </div>
                 </div>
-                <button type="button" (click)="onAddExp()" class="mb-2" pButton label="Ajouter une expériences"></button>
+                <button type="button" (click)="onAddExp()" class="mb-2" pButton
+                    label="Ajouter une expériences"></button>
                 <div class="field col-12 grid" *ngFor="let exp of experiencesCV; let i = index">
                     <div class="field col-12 md:col-5 grid">
                         <label>Expériences N°{{i+1}}</label>
@@ -78,8 +80,7 @@
                         <input pInputText placeholder type="date" [(ngModel)]="experiencesCV[i].date_fin" />
                     </div>
                     <div class="col-12 md:col-1">
-                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteExp(i)"
-                            aria-hidden="true"></i>
+                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteExp(i)" aria-hidden="true"></i>
                     </div>
                 </div>
                 <button type="button" (click)="submitCV()" class="mb-2" pButton label="Enregister le CV"></button>
@@ -444,6 +445,9 @@
                             <i style="margin-left: 2%;" class="pi pi-file-pdf" (click)="
                                     showUpdateCV(etudiant)" pTooltip="Modifier le CV" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
+                            <i style="margin-left: 2%;" *ngIf="this.isCommercial || token.role=='Admin'" class="pi pi-search"
+                                (click)="findMission(etudiant.user_id._id)" pTooltip="Trouver une mission"
+                                aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="margin-left: 2%;" class="pi pi-user-edit"
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFPersonalUpdate(etudiant.user_id,etudiant)"

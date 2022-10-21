@@ -29,6 +29,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
 import { CV } from 'src/app/models/CV';
+import { MissionService } from 'src/app/services/skillsnet/mission.service';
 
 
 
@@ -182,7 +183,7 @@ export class ListEtudiantComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService:MissionService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -899,6 +900,12 @@ export class ListEtudiantComponent implements OnInit {
     }, err => {
       console.error(err)
       this.messageService.add({ severity: 'error', summary: "Une erreur est survenu", detail: err.error })
+    })
+  }
+
+  findMission(user_id){
+    this.missionService.getMissionFromCV(user_id).then(d=>{
+      console.log(d)
     })
   }
 }
