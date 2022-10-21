@@ -174,12 +174,13 @@ export class ListSeancesComponent implements OnInit {
 
     let classeList = [];
     rowData.classe_id.forEach(classeID => {
-      classeList.push({ nom: this.classes[classeID]?.nom, value: this.classes[classeID]?._id });
+      classeList.push({ nom: this.classes[classeID]?.abbrv, value: this.classes[classeID]?._id });
     });
     this.salleNames = []
     this.dicCampus[rowData.campus_id].salles.forEach(s => {
       this.salleNames.push({ value: s, label: s })
     })
+    console.log(rowData.date_debut,new Date(rowData.date_debut),new Date(rowData.date_debut).toISOString(),new Date(rowData.date_debut).toISOString().slice(0, 16))
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
       matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),

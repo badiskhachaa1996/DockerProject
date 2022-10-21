@@ -905,7 +905,9 @@ export class ListEtudiantComponent implements OnInit {
 
   findMission(user_id){
     this.missionService.getMissionFromCV(user_id).then(d=>{
-      console.log(d)
+      if(d){
+        this.router.navigate(['matching',user_id])
+      }
     })
   }
 }
