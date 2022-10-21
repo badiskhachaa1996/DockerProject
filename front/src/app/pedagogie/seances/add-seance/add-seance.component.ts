@@ -218,8 +218,10 @@ export class AddSeanceComponent implements OnInit {
           console.log(data.absences)
           if (data.absences && data.absences.length > 0)
             data.absences.forEach(d => {
-              if (d)
+              if (d) {
+                d = new Date(d)
                 available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
+              }
             })
         }
         if (!available) {
