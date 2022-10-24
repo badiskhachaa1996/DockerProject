@@ -234,7 +234,7 @@ export class AppMenuComponent implements OnInit {
                     if(dataUser.email == 'test.admin@estya.com' || dataUser.email == 'i.sall@estya.com')
                     {
                         this.model.push({
-                            label: 'Gestion bancaires',
+                            label: 'Gestion service bancaire',
                             items: [
                                 {
                                     label: ' Gestion des comptes', icon: 'pi pi-wallet',
