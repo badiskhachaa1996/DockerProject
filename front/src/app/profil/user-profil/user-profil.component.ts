@@ -203,7 +203,7 @@ export class UserProfilComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
-    if (this.userco.type == "Etudiant") {
+    if (this.userco.type == "Etudiant" || this.userco.type == "Initial") {
       let etu: Etudiant = this.InfoUser
       etu.nationalite = this.RegisterForm.value.nationalite.value
       etu.date_naissance = this.RegisterForm.value.date_naissance
@@ -378,6 +378,19 @@ export class UserProfilComponent implements OnInit {
     } else {
       return "Mes informations"
     }
+  }
+
+  scrollToBot() {
+    var scrollDuration = 250;
+    var scrollStep = window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY < 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
   }
 
 }

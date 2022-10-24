@@ -91,8 +91,8 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="coeff">Filière <span style="color: red;"> * </span></label>
-                        <p-dropdown [options]="formationList" optionLabel="titre" formControlName="formation_id"
-                            optionValue="_id"></p-dropdown>
+                        <p-multiSelect [options]="formationList" optionLabel="titre" formControlName="formation_id"
+                            optionValue="_id"></p-multiSelect>
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="semestre">Semestre <span style="color: red;"> * </span></label>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="field col-12 md:col-4">
                         <label For="niveau">Année <span style="color: red;"> * </span></label>
-                        <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
+                        <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="1er année" />
                     </div>
                     <div class="field col-12">
                         <label For="remarque">Remarque</label>
@@ -157,8 +157,8 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="coeff">Filière <span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="formationList" optionLabel="titre" formControlName="formation_id"
-                        optionValue="_id"></p-dropdown>
+                    <p-multiSelect [options]="formationList" optionLabel="titre" formControlName="formation_id"
+                        optionValue="_id"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="semestre">Semestre <span style="color: red;"> * </span></label>
@@ -166,7 +166,7 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="niveau">Année <span style="color: red;"> * </span></label>
-                    <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="BTS" />
+                    <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="1er année" />
                 </div>
                 <div class="field col-12">
                     <label For="remarque">Remarque</label>
@@ -199,7 +199,7 @@
                         <div class="field">
                             <span style="margin-left: 2px;">
                                 <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
+                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'contains')"
                                     emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
                                 </p-dropdown>
                             </span>
@@ -255,8 +255,16 @@
                         <td style="min-width: 12rem;">
                             {{ matiere.abbrv }}
                         </td>
-                        <td *ngIf="formationDic[matiere.formation_id]!=undefined" style="min-width: 12rem;">
+                        <td *ngIf="formationDic[matiere.formation_id]!=undefined && !isArray(matiere.formation_id)" style="min-width: 12rem;">
                             {{ formationDic[matiere.formation_id].titre }}
+                        </td>
+                        <td *ngIf="matiere.formation_id!=undefined && isArray(matiere.formation_id)" style="min-width: 12rem;">
+                            <span *ngFor="let cid of matiere.formation_id; let index = index">
+                                <span
+                                    *ngIf="formationDic[cid] && formationDic[cid].titre && index==0">{{formationDic[cid].titre}}</span>
+                                <span
+                                    *ngIf="formationDic[cid] && formationDic[cid].titre && index!=0">,<br>{{formationDic[cid].titre}}</span>
+                            </span>
                         </td>
                         <td style="min-width: 12rem;">
                             {{matiere.semestre}}

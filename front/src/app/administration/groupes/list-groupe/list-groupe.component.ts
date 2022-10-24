@@ -10,6 +10,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import jwt_decode from "jwt-decode";
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
+import { CampusService } from 'src/app/services/campus.service';
+import { Campus } from 'src/app/models/Campus';
 
 @Component({
   selector: 'app-list-groupe',
@@ -34,7 +36,26 @@ export class ListGroupeComponent implements OnInit {
   token;
   user: User;
 
-  constructor(private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
+  dropdownAnnee: any = [
+    { libelle: 1 },
+    { libelle: 2 },
+    { libelle: 3 },
+  ];
+
+  dropdownGroupe: any = [
+    { libelle: ' ' },
+    { libelle: 'A' },
+    { libelle: 'B' },
+    { libelle: 'C' },
+    { libelle: 'D' },
+    { libelle: 'E' },
+  ];
+
+  dropdownCampus: any = [];
+
+  campus: Campus[] = [];
+
+  constructor(private campusService: CampusService, private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
     , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService) { }
 
   customIncludes(l: any, d: { label: string, value: string }) {
@@ -61,6 +82,16 @@ export class ListGroupeComponent implements OnInit {
     this.authService.getPopulate(this.token.id).subscribe(u => {
       this.user = u
     })
+
+    this.campusService.getAll().subscribe(
+      ((response) => {
+        response.forEach((c) => {
+          this.dropdownCampus.push({ libelle: c.libelle, value: c._id });
+          this.campus[c._id] = c;
+        });
+      }),
+      ((error) => { console.error(error); })
+    );
 
     this.classeService.getAllPopulate().subscribe(
       ((response) => {
@@ -103,19 +134,23 @@ export class ListGroupeComponent implements OnInit {
 
   onInitFormUpdateClasse() {
     this.formUpdateClasse = this.formBuilder.group({
-      libelle: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      diplome_id: ['', Validators.required],
-      abbrv: ['', Validators.required],
+      libelle: [''],
+      diplome_id: [''],
+      // abbrv: ['', Validators.required],
+      campus_id: [''],
+      annee: [this.dropdownAnnee[0]]
     });
   }
 
   modifyClasse() {
     //Recuperation des données du formulaire
-    let libelle = this.formUpdateClasse.get('libelle')?.value;
+    let libelle = this.formUpdateClasse.get('libelle')?.value.libelle;
     let diplome_id = this.formUpdateClasse.get('diplome_id')?.value.value;
-    let abbrv = this.formUpdateClasse.get('abbrv')?.value;
+    let annee = this.formUpdateClasse.get('annee')?.value.libelle;
+    let campus_id = this.formUpdateClasse.get('campus_id')?.value.value;
+    let abbrv = `${this.formUpdateClasse.get('diplome_id')?.value.libelle} ${annee} ${libelle} - ${this.formUpdateClasse.get('campus_id')?.value.libelle}`;
 
-    let classe = new Classe(this.idClasseToUpdate, diplome_id, libelle, true, abbrv);
+    let classe = new Classe(this.idClasseToUpdate, diplome_id, campus_id, true, abbrv, annee);
 
     this.classeService.update(classe).subscribe(
       ((response) => {
@@ -124,6 +159,13 @@ export class ListGroupeComponent implements OnInit {
           if (classe._id == response._id)
             this.classes[i] = response
         })
+
+        this.classeService.getAllPopulate().subscribe(
+          ((response) => {
+            this.classes = response;
+          }),
+          ((error) => { console.error(error); })
+        );
 
         this.showFormUpdateClasse = false;
         this.formUpdateClasse.reset();
@@ -138,7 +180,7 @@ export class ListGroupeComponent implements OnInit {
     this.classeService.get(this.idClasseToUpdate).subscribe(
       ((response) => {
         this.classeToUpdate = response;
-        this.formUpdateClasse.patchValue({ libelle: this.classeToUpdate.nom, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
+        this.formUpdateClasse.patchValue({ campus_id: { libelle: this.campus[this.classeToUpdate.campus_id].libelle, value: this.classeToUpdate.campus_id }, libelle: { libelle: this.classeToUpdate.abbrv }, diplome_id: { libelle: this.diplomeToUpdate, value: this.classeToUpdate.diplome_id }, abbrv: this.classeToUpdate.abbrv });
       }),
       ((error) => { console.error(error); })
     );
@@ -186,8 +228,10 @@ export class ListGroupeComponent implements OnInit {
     this.router.navigate(['/emploi-du-temps/classe/' + rowData._id])
   }
 
-  sendCalendar(rowData) {
-    this.EtudiantService.sendEDT(rowData._id).subscribe(data => {
+  sendCalendar(def: string, objet: string) {
+    this.EtudiantService.sendEDT(this.groupeEdt._id, def, objet).subscribe(data => {
+      this.objetMail=""
+      this.mailtype=""
       this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé" })
     }, error => {
       console.error(error)
@@ -202,5 +246,18 @@ export class ListGroupeComponent implements OnInit {
   onRedirect() {
     this.router.navigate(['ajout-groupe']);
   }
+
+  loadDefautEDT() {
+    this.mailtype = "Bonjour,\nVous trouverez dans le lien ci-dessous votre emploi du temps.\n<lien edt>\nCordialement,\n<signature espic>"
+    this.objetMail = "Emploi du temps"
+  }
+
+  displayResponsive = false
+  groupeEdt: Classe = null
+  mailtype = ""
+  objetMail = ""
+  placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien edt>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" +
+    "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n"
+    + "La signature par défaut sera celle d'espic\nCordialement,\nl'équipe IMS"
 
 }

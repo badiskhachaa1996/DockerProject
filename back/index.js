@@ -88,7 +88,7 @@ const contactController = require('./controllers/contactController');
 const prestataireController = require('./controllers/prestataireController');
 const historiqueController = require('./controllers/historiqueController');
 const prospectController = require('./controllers/prospectController');
-
+const dashboardController = require('./controllers/dashboardController')
 const partenaireController = require('./controllers/partenaireController');
 const commercialPartenaireController = require('./controllers/commercialPartenaireController');
 const appreciationController = require('./controllers/appreciationController');
@@ -98,6 +98,9 @@ const tuteurController = require('./controllers/tuteurController');
 const demandeEventsController = require('./controllers/demandeEventsController');
 const paymentController = require('./controllers/paymentController');
 
+const logementController = require('./controllers/logementController');
+const missionController = require('./controllers/missionController');
+const cvController = require('./controllers/cvController')
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 const { use } = require("./controllers/userController");
@@ -128,7 +131,12 @@ app.use('/', function (req, res, next) {
                             res.status(401).send(errToken)
                         }
                     } else {
-                        next()
+                        User.findByIdAndUpdate(user._id, { last_connection: new Date() },{},(err,user)=>{
+                            if(err){
+                                console.error(err)
+                            }
+                            next()
+                        })
                     }
                 });
             } else {
@@ -137,7 +145,7 @@ app.use('/', function (req, res, next) {
             }
         })
     } else {
-        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel')
+        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel')|| req.originalUrl == "/soc/demande-events/create"
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" ||
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise') || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
@@ -195,6 +203,7 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
+app.use('/soc/cv',cvController)
 
 app.use('/soc/prestataire', prestataireController);
 
@@ -217,6 +226,11 @@ app.use('/soc/contact', contactController)
 app.use("/soc/tuteur", tuteurController);
 
 app.use("/soc/lemon", paymentController);
+app.use("/soc/logement", logementController);
+
+app.use('/soc/dashboard', dashboardController);
+
+app.use('/soc/mission', missionController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

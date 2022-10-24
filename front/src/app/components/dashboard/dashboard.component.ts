@@ -8,6 +8,8 @@ import { AppConfig } from '../../api/appconfig';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
+import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
+import {GalleriaModule} from 'primeng/galleria';
 
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -29,6 +31,9 @@ import { NoteService } from 'src/app/services/note.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { Formateur } from 'src/app/models/Formateur';
 import { PaymentService } from 'src/app/services/payment.service';
+import { Dashboard } from 'src/app/models/Dashboard';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -36,8 +41,6 @@ import { PaymentService } from 'src/app/services/payment.service';
 export class DashboardComponent implements OnInit {
 
   user: User;
-  etudiant: Etudiant;
-  formateur: Formateur;
   classe: Classe[] = [];
 
   seances: Seance[] = [];
@@ -58,11 +61,11 @@ export class DashboardComponent implements OnInit {
   isReinscrit = false
   isUnknow = false
 
+  dashboard: Dashboard = null
   dataEtudiant: Etudiant = null
 
   dropdownNote: any[] = [{ libelle: '', value: '' }];
   notes = []
-  seance = []
 
   date: Date = new Date();
 
@@ -119,6 +122,10 @@ export class DashboardComponent implements OnInit {
 
   events: any[];
 
+  addLinkForm: FormGroup = new FormGroup({
+    libelle: new FormControl('', [Validators.required]),
+    link: new FormControl('', Validators.required),
+  });
 
   eventClickFC(col) {
     this.router.navigate(['/emergement/' + col.event.id])
@@ -127,16 +134,94 @@ export class DashboardComponent implements OnInit {
   ID = this.route.snapshot.paramMap.get('id');
   type = this.route.snapshot.paramMap.get('type');
 
+
+  galleriaResponsiveOptions: any[] = [
+    {
+      breakpoint: '1024px',
+      numVisible: 5
+    },
+    {
+      breakpoint: '960px',
+      numVisible: 4
+    },
+    {
+      breakpoint: '768px',
+      numVisible: 3
+    },
+    {
+      breakpoint: '560px',
+      numVisible: 1
+    }
+  ];
+
+  carousselImages: any = [
+    {
+      "previewImageSrc": "assets/logement/original/accueil4.jpg",
+      "thumbnailImageSrc": "assets/logement/original/accueil4.jpg",
+      "alt": "Restaurant",
+      "title": "Accueil 1"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/accueil2.jpg",
+      "thumbnailImageSrc": "assets/logement/original/accueil2.jpg",
+      "alt": "Description for Image 2",
+      "title": "Accueil 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-1.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-1.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 1"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/gym4.jpg",
+      "thumbnailImageSrc": "assets/logement/original/gym4.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-2.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-2.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/cinebox.jpg",
+      "thumbnailImageSrc": "assets/logement/original/cinebox.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/ch-3.png",
+      "thumbnailImageSrc": "assets/logement/original/ch-3.png",
+      "alt": "Description for Image 2",
+      "title": "Chambre 3"
+    },
+    {
+      "previewImageSrc": "assets/logement/original/chillroom2.jpg",
+      "thumbnailImageSrc": "assets/logement/original/chillroom2.jpg",
+      "alt": "Description for Image 2",
+      "title": "Chillroom 2"
+    },
+  ];
+
+
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService, private paySer: PaymentService
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService, 
+    private formateurService: FormateurService, private paySer: PaymentService,    
+    private dashboardService: DashboardService, private http: HttpClient
   ) { }
 
 
   ngOnInit() {
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
+      this.dashboard = dataDashboard
+      console.log(dataDashboard)
+    })
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
         this.user = dataUser;
@@ -148,11 +233,10 @@ export class DashboardComponent implements OnInit {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
         }
-        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Alternant"
+        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant"
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
         if (this.isEtudiant) {
-          console.log(dataUser)
           this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
             this.dataEtudiant = dataEtu
             if (dataEtu) {
@@ -160,11 +244,29 @@ export class DashboardComponent implements OnInit {
               if (dataEtu.classe_id)
                 this.refreshEvent(dataEtu)
               this.isEtudiant = !this.isReinscrit;
+              this.noteService.getAllByEtudiantId(dataEtu._id).subscribe(
+                ((responseNote) => {
+                  this.notes = responseNote;
+                  this.dernotes = this.notes.slice(1, 6)
+                }));
             } else {
               this.isEtudiant = false
             }
             console.log(dataEtu)
           })
+          // recuperation de la liste des notes par étudiant
+          this.EtuService.getByUser_id(this.token.id).subscribe(
+            (responseEtu) => {
+              if (responseEtu) {
+
+              }
+            });
+        }
+        if (this.isFormateur) {
+          this.seanceService.getAllbyFormateur(this.token.id).subscribe(
+            ((resSea) => {
+              this.showEvents(resSea)
+            }));
         }
         this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)
       }
@@ -178,35 +280,6 @@ export class DashboardComponent implements OnInit {
         })
       }
     );
-
-    // recuperation de la liste des notes par étudiant
-    this.EtuService.getByUser_id(this.token.id).subscribe(
-      (responseEtu) => {
-        if (responseEtu) {
-          this.etudiant = responseEtu;
-          this.noteService.getAllByEtudiantId(this.etudiant._id).subscribe(
-            ((responseNote) => {
-              this.notes = responseNote;
-              this.dernotes = this.notes.slice(1, 6)
-            }));
-        }
-      });
-
-    //Récupération des séances par formateur 
-    //On récupére d'abord le formarteur via son id
-    this.formateurService.getByUserId(this.token.id).subscribe(
-      (resFor) => {
-        if (resFor) {
-          this.formateur = resFor;
-          //On récupére ensuite les séances du formateur via l'id de la séance
-          this.seanceService.getAllbyFormateurToday(this.formateur._id).subscribe(
-            ((resSea) => {
-              console.log(resSea);
-              this.seance = resSea;
-            }));
-        }
-      });
-
   }
 
   SCIENCE() {
@@ -274,23 +347,60 @@ export class DashboardComponent implements OnInit {
     })
 
   }
-
-  test() {
-    this.paySer.getAllAccountsv2().subscribe(a => {
-      console.log(a)
+  showForm = false
+  saveLink() {
+    let label = this.addLinkForm.value.libelle
+    let link = this.addLinkForm.value.link
+    if (link.includes("http") == false)
+      link = "https://" + link
+    this.dashboard.links.push({ label, link })
+    this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard => {
+      this.dashboard = newDashboard
+      this.showForm = false
     }, err => {
       console.error(err)
     })
-    const xhr = new XMLHttpRequest();
-    const url = 'https://cors-anywhere.herokuapp.com/https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';
-   
+  }
+  deleteLink(i) {
+    if (confirm("Est ce que vous êtes sûr de vouloir supprimer le lien " + this.dashboard.links[i].label + " ?")) {
+      this.dashboard.links.splice(i, 1)
+      this.dashboardService.addLinks(this.dashboard._id, this.dashboard.links).subscribe(newDashboard => {
+        this.dashboard = newDashboard
+      })
+    }
 
-    xhr.open('GET', url,true);
+  }
+
+
+  //Methode de test pour LW
+  test() {
+    const xhr = new XMLHttpRequest();
+    const url = 'https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345';
+
+
+    xhr.open('GET', url, true);
     xhr.setRequestHeader('Authorization', 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66');
+    xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+    xhr.setRequestHeader('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token')
     xhr.onload = () => {
       console.log(xhr.responseURL); // http://example.com/test
       console.error(xhr.response)
     };
     xhr.send();
+    const optionRequete = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66',
+        'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+      })
+    };
+
+    this.http.get(url, optionRequete).subscribe(r => {
+      console.log(r)
+    }, err => {
+      console.error(err)
+    })
   }
 }

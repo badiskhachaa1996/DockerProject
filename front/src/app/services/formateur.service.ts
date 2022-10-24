@@ -59,9 +59,9 @@ export class FormateurService {
     return this.httpClient.post(this.apiUrl + "updateVolume/" + formateur._id, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
-  sendEDT(id, update = "/nope") {
+  sendEDT(id, update = "/nope", mailcustom = "") {
     let registreUrl = this.apiUrl + "sendEDT/" + id + update;
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<any>(registreUrl, { mailcustom }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getFiles(id: any) {

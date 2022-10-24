@@ -5,6 +5,9 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import jwt_decode from "jwt-decode";
 import { Entreprise } from 'src/app/models/Entreprise';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { environment } from 'src/environments/environment';
+import { User } from 'src/app/models/User';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-list-entreprise',
@@ -15,16 +18,32 @@ import { EntrepriseService } from 'src/app/services/entreprise.service';
 export class ListEntrepriseComponent implements OnInit {
   token;
   entreprises: Entreprise[] = [];
+  users: User[] = [];
   categorieList = [
     'Sous-traitant',
     "Alternant",
-    "Autre" 
+    "Prestataire",
+    "Autre"
   ]
+  civiliteList = environment.civilite;
+
+  choiceList = [
+    { label: 'Oui', value: true },
+    { label: 'Non', value: false },
+  ];
+
+  formSteps: any[] = [
+    { label: "Entreprise", icon: "pi pi-sitemap", i: 0 },
+    { label: "Representant", icon: "pi pi-user", i: 1 },
+  ];
+
+  ActiveIndex = 0;
 
   formUpdateEntreprise: FormGroup;
   showFormUpdateEntreprise: Entreprise;
+  representantToUpdate: User;
   IntExtChoice = [{ label: "Interne", value: true }, { label: "Externe", value: false }]
-  constructor(private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
+  constructor(private userService: AuthService, private entrepriseService: EntrepriseService, private formBuilder: FormBuilder, private messageService: MessageService, private router: Router) { }
 
   ngOnInit(): void {
     try {
@@ -37,9 +56,23 @@ export class ListEntrepriseComponent implements OnInit {
     } else if (this.token["role"].includes("user")) {
       this.router.navigate(["/ticket/suivi"])
     }
+
+    //Recuperation de la liste des users
+    this.userService.getAll().subscribe(
+      ((response) => {
+        response.forEach((user) => {
+          this.users[user._id] = user;
+        })
+      }),
+      ((error) => { console.error(error); })
+    );
+    
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
-      ((response) => { this.entreprises = response; }),
+      ((response) => { 
+        this.entreprises = response; 
+        console.log(response);
+      }),
       ((error) => { console.error(error); })
     );
 
@@ -53,126 +86,198 @@ export class ListEntrepriseComponent implements OnInit {
     this.formUpdateEntreprise = this.formBuilder.group({
       r_sociale: ['', Validators.required],
       fm_juridique: [''],
-      vip: [''],
+      activite: [''],
       type_ent: [''],
+      categorie: [[]],
       isInterne: [false],
+      crc: [''], 
+      nb_salarie: ['', Validators.pattern('[0-9]+')],
+      convention: [''],
+      idcc: ['', Validators.pattern('[0-9]+')], 
+      indicatif_ent: [''],
+      phone_ent: [''],
+      adresse_ent: [''],
+      code_postale_ent: [''],
+      ville_ent: [''],
+      adresse_ec: [''],
+      postal_ec: [''],
+      ville_ec: [''],  
       siret: [''],
       code_ape_naf: [''],
       num_tva: [''],
-      nom_contact: [''],
-      prenom_contact: [''],
-      fc_contact: [''],
-      email_contact: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      phone_contact: [''],
-      nom_contact_2nd: [''],
-      prenom_contact_2nd: [''],
-      fc_contact_2nd: [''],
-      email_contact_2nd: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      phone_contact_2nd: [''],
-      pays_adresse: [''],
-      ville_adresse: [''],
-      rue_adresse: [''],
-      numero_adresse: [''],
-      postal_adresse: [''],
-      email: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      phone: [''],
-      website: [''],
-      financeur: [''],
-      nda: [''],
-      type_soc: [''],
-      categorie: [[]]
+      telecopie: [''],
+      OPCO: [''],
+      organisme_prevoyance: [''],
+
+      civilite_rep: [this.civiliteList[0]],
+      nom_rep: ['', Validators.required],
+      prenom_rep: ['', Validators.required],
+      email_rep: ['', [Validators.required, Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+      indicatif_rep: ['', Validators.required],
+      phone_rep: ['', Validators.required],
     })
   }
 
-  initFormUpdateEntreprise(entreprise: Entreprise) {
+  initFormUpdateEntreprise(entreprise: Entreprise, representant: User) {
+    this.representantToUpdate = representant;
     this.showFormUpdateEntreprise = entreprise
     this.formUpdateEntreprise.patchValue({
       r_sociale: entreprise.r_sociale,
       fm_juridique: entreprise.fm_juridique,
-      vip: entreprise.vip,
+      activite: entreprise.activite,
       type_ent: entreprise.type_ent,
-      siret: entreprise.siret,
+      categorie: entreprise.categorie,
       isInterne: entreprise.isInterne,
+      crc: entreprise.crc,
+      nb_salarie: entreprise.nb_salarie,
+      convention: entreprise.convention,
+      idcc: entreprise.idcc,
+      indicatif_ent: entreprise.indicatif_ent,
+      phone_ent: entreprise.phone_ent,
+      adresse_ent: entreprise.adresse_ent,
+      code_postale_ent: entreprise.code_postale_ent,
+      ville_ent: entreprise.ville_ent,
+      adresse_ec: entreprise.adresse_ec,
+      postal_ec: entreprise.postal_ec,
+      ville_ec: entreprise.ville_ec,
+      siret: entreprise.siret,
       code_ape_naf: entreprise.code_ape_naf,
       num_tva: entreprise.num_tva,
-      nom_contact: entreprise.nom_contact,
-      prenom_contact: entreprise.prenom_contact,
-      fc_contact: entreprise.fc_contact,
-      email_contact: entreprise.email_contact,
-      phone_contact: entreprise.phone_contact,
-      nom_contact_2nd: entreprise.nom_contact_2nd,
-      prenom_contact_2nd: entreprise.prenom_contact_2nd,
-      fc_contact_2nd: entreprise.fc_contact_2nd,
-      email_contact_2nd: entreprise.email_contact_2nd,
-      phone_contact_2nd: entreprise.phone_contact_2nd,
-      pays_adresse: entreprise.pays_adresse,
-      ville_adresse: entreprise.ville_adresse,
-      rue_adresse: entreprise.rue_adresse,
-      numero_adresse: entreprise.numero_adresse,
-      postal_adresse: entreprise.postal_adresse,
-      email: entreprise.email,
-      phone: entreprise.phone,
-      website: entreprise.website,
-      financeur: entreprise.financeur,
-      nda: entreprise.nda,
-      type_soc: entreprise.type_soc,
-      categorie: entreprise.categorie
+      telecopie: entreprise.telecopie,
+      OPCO: entreprise.OPCO,
+      organisme_prevoyance: entreprise.organisme_prevoyance,
+
+      civilite_rep: representant.civilite,
+      nom_rep: representant.lastname,
+      prenom_rep: representant.firstname,
+      email_rep: representant.email_perso,
+      indicatif_rep: representant.indicatif,
+      phone_rep: representant.phone,
+
     })
   }
 
   /** Parti traitement pour la mise à jour des données */
-  get r_sociale_m() { return this.formUpdateEntreprise.get('r_sociale'); };
-  get fm_juridique_m() { return this.formUpdateEntreprise.get('fm_juridique'); };
-  get type_ent_m() { return this.formUpdateEntreprise.get('type_ent'); };
-  get siret_m() { return this.formUpdateEntreprise.get('siret'); };
-  get nom_contact_m() { return this.formUpdateEntreprise.get('nom_contact'); };
-  get prenom_contact_m() { return this.formUpdateEntreprise.get('prenom_contact'); };
-  get nom_contact_2nd_m() { return this.formUpdateEntreprise.get('nom_contact_2nd'); };
-  get prenom_contact_2nd_m() { return this.formUpdateEntreprise.get('prenom_contact_2nd'); };
-  get pays_adresse_m() { return this.formUpdateEntreprise.get('pays_adresse'); };
-  get ville_adresse_m() { return this.formUpdateEntreprise.get('ville_adresse'); };
-  get rue_adresse_m() { return this.formUpdateEntreprise.get('rue_adresse'); };
-  get financeur_m() { return this.formUpdateEntreprise.get('financeur'); };
+  get r_sociale() { return this.formUpdateEntreprise.get('r_sociale'); };
+  get fm_juridique() { return this.formUpdateEntreprise.get('fm_juridique'); };
+  get activite() { return this.formUpdateEntreprise.get('activite'); };
+  get type_ent() { return this.formUpdateEntreprise.get('type_ent'); };
+  get crc() { return this.formUpdateEntreprise.get('crc'); };
+  get nb_salarie() { return this.formUpdateEntreprise.get('nb_salarie'); };
+  get convention() { return this.formUpdateEntreprise.get('convention'); };
+  get idcc() { return this.formUpdateEntreprise.get('idcc'); };
+  get indicatif_ent() { return this.formUpdateEntreprise.get('indicatif_ent'); };
+  get phone_ent() { return this.formUpdateEntreprise.get('phone_ent'); };
+  get adresse_ent() { return this.formUpdateEntreprise.get('adresse_ent'); };
+  get code_postale_ent() { return this.formUpdateEntreprise.get('code_postale_ent'); };
+  get ville_ent() { return this.formUpdateEntreprise.get('ville_ent'); };
+  get adresse_ec() { return this.formUpdateEntreprise.get('adresse_ec'); };
+  get postal_ec() { return this.formUpdateEntreprise.get('postal_ec'); };
+  get ville_ec() { return this.formUpdateEntreprise.get('ville_ec'); };
+  get siret() { return this.formUpdateEntreprise.get('siret'); };
+  get code_ape_naf() { return this.formUpdateEntreprise.get('code_ape_naf'); };
+  get num_tva() { return this.formUpdateEntreprise.get('num_tva'); };
+  get telecopie() { return this.formUpdateEntreprise.get('telecopie'); };
+  get OPCO() { return this.formUpdateEntreprise.get('OPCO'); };
+  get organisme_prevoyance() { return this.formUpdateEntreprise.get('organisme_prevoyance'); };
+
+
 
   //Methode de modification d'une entreprise
   onUpdateEntreprise() {
     //recuperation des données du formulaire
     let r_sociale = this.formUpdateEntreprise.get('r_sociale')?.value;
     let fm_juridique = this.formUpdateEntreprise.get('fm_juridique')?.value;
-    let vip = this.formUpdateEntreprise.get('vip')?.value;
+    let activite = this.formUpdateEntreprise.get('activite')?.value;
     let type_ent = this.formUpdateEntreprise.get('type_ent')?.value;
+    let categorie = this.formUpdateEntreprise.get('categorie')?.value;
     let isInterne = this.formUpdateEntreprise.get('isInterne')?.value;
-    let siret = this.formUpdateEntreprise.get('siret')?.value;
+    let crc = this.formUpdateEntreprise.get('crc')?.value;
+    let nb_salarie = this.formUpdateEntreprise.get('nb_salarie')?.value;
+
+    let convention = this.formUpdateEntreprise.get('convention')?.value;
+    let idcc = this.formUpdateEntreprise.get('idcc')?.value;
+    let indicatif_ent = this.formUpdateEntreprise.get('indicatif_ent')?.value;
+    let phone_ent = this.formUpdateEntreprise.get('phone_ent')?.value;
+    let adresse_ent = this.formUpdateEntreprise.get('adresse_ent')?.value;
+    let code_postale_ent = this.formUpdateEntreprise.get('code_postale_ent')?.value
+    let ville_ent = this.formUpdateEntreprise.get('ville_ent')?.value;
+    let adresse_ec = this.formUpdateEntreprise.get('adresse_ec')?.value;
+    let postal_ec = this.formUpdateEntreprise.get('postal_ec')?.value;
+    let ville_ec = this.formUpdateEntreprise.get('ville_ec')?.value;
+    let siret = this.formUpdateEntreprise.get('siret')?.value; 
     let code_ape_naf = this.formUpdateEntreprise.get('code_ape_naf')?.value;
     let num_tva = this.formUpdateEntreprise.get('num_tva')?.value;
-    let nom_contact = this.formUpdateEntreprise.get('nom_contact')?.value;
-    let prenom_contact = this.formUpdateEntreprise.get('prenom_contact')?.value;
-    let fc_contact = this.formUpdateEntreprise.get('fc_contact')?.value;
-    let email_contact = this.formUpdateEntreprise.get('email_contact')?.value;
-    let phone_contact = this.formUpdateEntreprise.get('phone_contact')?.value;
-    let nom_contact_2nd = this.formUpdateEntreprise.get('nom_contact_2nd')?.value;
-    let prenom_contact_2nd = this.formUpdateEntreprise.get('prenom_contact_2nd')?.value;
-    let fc_contact_2nd = this.formUpdateEntreprise.get('fc_contact_2nd')?.value;
-    let email_contact_2nd = this.formUpdateEntreprise.get('email_contact_2nd')?.value;
-    let phone_contact_2nd = this.formUpdateEntreprise.get('phone_contact_2nd')?.value;
-    let pays_adresse = this.formUpdateEntreprise.get('pays_adresse')?.value;
-    let ville_adresse = this.formUpdateEntreprise.get('ville_adresse')?.value;
-    let rue_adresse = this.formUpdateEntreprise.get('rue_adresse')?.value;
-    let numero_adresse = this.formUpdateEntreprise.get('numero_adresse')?.value;
-    let postal_adresse = this.formUpdateEntreprise.get('postal_adresse')?.value;
-    let email = this.formUpdateEntreprise.get('email')?.value;
-    let phone = this.formUpdateEntreprise.get('phone')?.value;
-    let website = this.formUpdateEntreprise.get('website')?.value;
-    let financeur = this.formUpdateEntreprise.get('financeur')?.value;
-    let nda = this.formUpdateEntreprise.get('nda')?.value;
-    let type_soc = this.formUpdateEntreprise.get('type_soc')?.value;
-    let categorie = this.formUpdateEntreprise.get('categorie')?.value
+    let telecopie = this.formUpdateEntreprise.get('telecopie')?.value;
+    let OPCO = this.formUpdateEntreprise.get('OPCO')?.value;
+    let organisme_prevoyance = this.formUpdateEntreprise.get('organisme_prevoyance')?.value;
 
-    let entreprise = new Entreprise(this.showFormUpdateEntreprise._id, r_sociale, fm_juridique, vip, type_ent, isInterne, siret, code_ape_naf, num_tva, nom_contact, prenom_contact, fc_contact, email_contact, phone_contact, nom_contact_2nd, prenom_contact_2nd,
-      fc_contact_2nd, email_contact_2nd, phone_contact_2nd, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse, email, phone, website,
-      financeur, nda, type_soc, categorie);
+    let civilite_rep = this.formUpdateEntreprise.get('civilite_rep')?.value;
+    let nom_rep = this.formUpdateEntreprise.get('nom_rep')?.value;
+    let prenom_rep = this.formUpdateEntreprise.get('prenom_rep')?.value;
+    let email_rep = this.formUpdateEntreprise.get('email_rep')?.value;
+    let indicatif_rep = this.formUpdateEntreprise.get('indicatif_rep').value;
+    let phone_rep = this.formUpdateEntreprise.get('phone_rep').value;
 
-    this.entrepriseService.update(entreprise).subscribe(
+
+    let entreprise = new Entreprise(
+      this.showFormUpdateEntreprise._id, 
+      r_sociale, 
+      fm_juridique, 
+      activite, 
+      type_ent, 
+      categorie, 
+      isInterne, 
+      crc, 
+      nb_salarie, 
+      convention, 
+      idcc, 
+      indicatif_ent, 
+      phone_ent, 
+      adresse_ent, 
+      code_postale_ent, 
+      ville_ent, 
+      adresse_ec, 
+      postal_ec, 
+      ville_ec, 
+      siret, 
+      code_ape_naf, 
+      num_tva, 
+      telecopie, 
+      OPCO, 
+      organisme_prevoyance, 
+      null,
+      ); 
+
+      let representant = new User(
+        this.representantToUpdate._id,
+        prenom_rep,
+        nom_rep, 
+        indicatif_rep,
+        phone_rep,
+        email_rep,
+        email_rep, 
+        null,
+        'User',
+        false,
+        null,
+        civilite_rep.value,
+        null,
+        null,
+        'Représentant',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
+
+    this.entrepriseService.updateEntrepriseRepresentant({'entrepriseToUpdate': entreprise, 'representantToUpdate': representant}).subscribe(
       ((response) => {
 
         this.messageService.add({ severity: 'success', summary: 'Entreprise modifiée' });
@@ -188,6 +293,14 @@ export class ListEntrepriseComponent implements OnInit {
       ((error) => { console.error(error); })
     );
 
+  }
+
+  nextPage() {
+    this.ActiveIndex++
+  }
+
+  previousPage() {
+    this.ActiveIndex--
   }
 
   onRedirect()

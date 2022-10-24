@@ -80,7 +80,7 @@ export class MatieresComponent implements OnInit {
       nom: ['', [Validators.required]],
       volume: ['', [Validators.required]],
       abbrv: ['', Validators.required],
-      formation_id: [this.formationList[0], Validators.required],
+      formation_id: [[], Validators.required],
       seance_max: ['', Validators.required],
       coeff: ['', [Validators.required]],
       credit_ects: ['', Validators.required],
@@ -223,5 +223,7 @@ export class MatieresComponent implements OnInit {
     this.formModifMatiere.reset();
     this.showFormModifMatiere = false;
   }
-
+  isArray(r){
+    return Array.isArray(r)
+  }
 }

@@ -13,8 +13,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'estya-ticketing@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 let origin = ["http://localhost:4200"]
@@ -139,9 +139,10 @@ app.post("/create", (req, res, next) => {
                         formateur.user_id = userCreated._id;
                         formateur.save()
                             .then((formateurCreated) => { res.status(201).json({ success: 'Formateur crée', data: formateurCreated, dataUser: userCreated }) })
-                            .catch((error) => { 
+                            .catch((error) => {
                                 console.error(error)
-                                res.status(400).json({ msg: 'Impossible de crée ce formateur', error }) });
+                                res.status(400).json({ msg: 'Impossible de crée ce formateur', error })
+                            });
                     })
                     .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
             }
@@ -190,25 +191,52 @@ app.post('/updateVolume/:id', (req, res, next) => {
     })
 });
 
-app.get('/sendEDT/:id/:update', (req, res, next) => {
+app.post('/sendEDT/:id/:update', (req, res, next) => {
     let msg = "Votre emploi du temps est disponible"
     if (req.params.update == "YES") {
         msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
     }
     Formateur.findById(req.params.id).then(formateur => {
+        let url = '<a href="' + origin[0] + '/calendrier/formateur/' + req.params.id + '">Voir mon emploi du temps</a>'
         let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="' + origin[0] + '/calendrier/formateur/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
+            + url + '</p><p style="color:black">Cordialement,</p><footer> <img src="red"/></footer>';
+        if (req.body.mailcustom)
+            htmlmail = req.body.mailcustom.replace('<lien>', url) + "<footer> <img src='red'/></footer>"
+        htmlmail = htmlmail.replaceAll('\n', '<br>')
         let mailOptions = {
-            from: 'estya-ticketing@estya.com',
-            to: formateur.email,
-            subject: 'Estya-Ticketing',
+            from: 'ims@intedgroup.com',
+            to: mailList,
+            subject: 'Emploi du temps',
             html: htmlmail,
             attachments: [{
-                filename: 'signature.png',
-                path: 'assets/signature.png',
+                filename: 'signature_peda_estya.png',
+                path: 'assets/signature_peda_estya.png',
                 cid: 'red' //same cid value as in the html img src
             }]
         };
+        if (htmlmail.indexOf('<signature espic>')!=-1) {
+            mailOptions.attachments = [{
+                filename: 'siganture_espic.png',
+                path: 'assets/signature_espic.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature espic>', '')
+        } else if (htmlmail.indexOf('<signature adg>')!=-1) {
+            mailOptions.attachments = [{
+                filename: 'siganture_adg.png',
+                path: 'assets/siganture_adg.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature adg>', '')
+        } else if (htmlmail.indexOf('<signature eduhorizons>')!=-1) {
+            mailOptions.attachments = [{
+                filename: 'siganture_eh.png',
+                path: 'assets/siganture_eh.png',
+                cid: 'red' //same cid value as in the html img src
+            }]
+            mailOptions.html = htmlmail.replace('<signature eduhorizons>', '')
+        }
+        mailOptions.html = htmlmail.replace('<signature estya>', '')
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error(error);

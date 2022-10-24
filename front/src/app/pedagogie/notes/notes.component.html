@@ -366,8 +366,8 @@
                     *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
                 </button>
 
-                <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin();hideBtn = true"
-                    type="button" style="float:right;" label="Exporter en pdf">
+                <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin()" type="button"
+                    style="float:right;" label="Exporter en pdf">
                 </button>
             </div>
 
@@ -691,16 +691,21 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
-                    <tr>
+                    <tr class="grid">
                         <th>
-                            <div class="flex justify-content-between align-items-center" pSortableColumn="user_id">
+                            <div class="flex justify-content-between align-items-center">
                                 Nom
                             </div>
                         </th>
                         <th>
-                            <div pSortableColumn="note_val" class="flex justify-content-between align-items-center"
-                                pSortableColumn="user_id">
+                            <div pSortableColumn="note_val" class="flex justify-content-between align-items-center">
                                 Prénom
+                            </div>
+                        </th>
+                        <th>
+                            <div pSortableColumn="date_telechargement_bulletin"
+                                class="flex justify-content-between align-items-center">
+                                Date du dernier téléchargement
                             </div>
                         </th>
                         <th style="width: 8rem">
@@ -714,6 +719,9 @@
                     <tr>
                         <td>{{ users[etudiant.user_id]?.firstname }}</td>
                         <td>{{ users[etudiant.user_id]?.lastname }}</td>
+                        <td *ngIf="etudiant.user_id.date_telechargement_bulletin">{{
+                            etudiant.user_id.date_telechargement_bulletin | date:'dd/MM/yyyy' }}</td>
+                        <td *ngIf="!etudiant.user_id.date_telechargement_bulletin">Jamais</td>
                         <td>
                             <!--<i style="margin-left: 2%;" class="pi pi-file-excel" title="Générer le bulletin"
                                 aria-hidden="true" (click)="moyEtudiant = null;
@@ -854,17 +862,21 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="nom_prenom">Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
+                        <th pSortableColumn="etudiant_id.user_id.firstname">Prénom & Nom<p-sortIcon
+                                field="etudiant_id.user_id.firstname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="classe"> Groupe <p-sortIcon field="classe"></p-sortIcon>
+                        <th pSortableColumn="examen_id.matiere_id.abbrv"> Module <p-sortIcon
+                                field="examen_id.matiere_id.abbrv"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="matiere"> Module <p-sortIcon field="matiere"></p-sortIcon>
+                        <th pSortableColumn="formateur_id"> Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="evaluation"> Evaluation <p-sortIcon field="evaluation"></p-sortIcon>
+                        <th pSortableColumn="examen_id.libelle"> Evaluation <p-sortIcon field="examen_id.libelle">
+                            </p-sortIcon>
                         </th>
-                        <th pSortableColumn="note"> Note <p-sortIcon field="note"></p-sortIcon>
+                        <th pSortableColumn="examen_id.type"> Type d'evaluation <p-sortIcon field="examen_id.type">
+                            </p-sortIcon>
                         </th>
-                        <th pSortableColumn="semestre"> Semestre <p-sortIcon field="semestre"></p-sortIcon>
+                        <th pSortableColumn="note_val"> Note <p-sortIcon field="note_val"></p-sortIcon>
                         </th>
                         <th>
                             <div class="flex justify-content-between align-items-center">
@@ -881,23 +893,23 @@
                 <ng-template pTemplate="body" let-note>
                     <tr>
                         <td style="min-width: 12rem;">
-                            {{ users[etudiants[note.etudiant_id]?.user_id]?.firstname }}
-                            {{ users[etudiants[note.etudiant_id]?.user_id]?.lastname }}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{ classes[examens[note.examen_id]?.classe_id]?.nom }}
+                            {{ note.etudiant_id?.user_id?.firstname }}
+                            {{ note.etudiant_id?.user_id?.lastname }}
                         </td>
                         <td style="min-width: 14rem;">
-                            {{ matieres[examens[note.examen_id]?.matiere_id]?.nom }}
+                            {{ note.examen_id?.matiere_id?.abbrv }}
+                        </td>
+                        <td>
+                            WIP
                         </td>
                         <td style="min-width: 10rem;">
-                            {{ examens[note.examen_id]?.libelle }}
+                            {{ note.examen_id?.libelle }}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{ note.examen_id?.type }}
                         </td>
                         <td style="min-width: 10rem;">
                             {{ note.note_val | number : '0.2-9' }}
-                        </td>
-                        <td style="min-width: 12rem;">
-                            {{ note.semestre }}
                         </td>
                         <td style="min-width: 12rem; ">
                             {{ note.appreciation }}

@@ -14,7 +14,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { Classe } from 'src/app/models/Classe';
 import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
-import { of } from 'rxjs';
+import { Campus } from 'src/app/models/Campus';
+import { Diplome } from 'src/app/models/Diplome';
 
 
 @Component({
@@ -119,7 +120,7 @@ export class AddSeanceComponent implements OnInit {
               campusDic[campus._id] = campus
             })
             for (let classeID in response) {
-              let label = response[classeID].nom + " - " + campusDic[diplomeDic[response[classeID]?.diplome_id]?.campus_id]?.libelle
+              let label = response[classeID].abbrv;
               this.dropdownClasse.push({ nom: label, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
               this.dropdownClasse[response[classeID]._id] = response[classeID];
             }
@@ -131,17 +132,16 @@ export class AddSeanceComponent implements OnInit {
     );
   }
 
-  showSalles(value) {
+  showSalles(value, def = false) {
     this.salleNames = []
-    value.forEach(cid => {
-      this.campus[cid].salles.forEach(s => {
-        console.log(s)
-        this.salleNames.push({ value: s, label: s })
-      })
+    console.log(value)
+    this.campus[value].salles.forEach(s => {
+      console.log(s)
+      this.salleNames.push({ value: s, label: s })
     })
     if (this.salleNames.length != 0)
       this.seanceForm.patchValue({ salle_name: this.salleNames[0].value })
-    else if (this.isPresentiel.value != "Distanciel")
+    else if (this.isPresentiel.value != "Distanciel" && !def)
       this.messageService.add({ severity: "error", summary: "Choix des salles", detail: "Ces campus ne contiennent aucune salle." })
 
   }
@@ -166,13 +166,13 @@ export class AddSeanceComponent implements OnInit {
     let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
     this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
-      if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
+      /*if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
         choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
       } else {
         if (data.hasOwnProperty("volume_h_consomme") && data.volume_h_consomme[this.seanceForm.value.matiere.value] == Number && data.volume_h_consomme[this.seanceForm.value.matiere.value] + calc > data.volume_h[this.seanceForm.value.matiere.value]) {
           choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
         }
-      }
+      }*/
       if (choice && data.type_contrat == "Prestation et Vacation") {
         let date_debut = this.getScoreDate(new Date(this.seanceForm.value.date_debut))
         let date_fin = this.getScoreDate(new Date(this.seanceForm.value.date_fin))
@@ -215,9 +215,14 @@ export class AddSeanceComponent implements OnInit {
         }
         if (available) {
           let dd = new Date(this.seanceForm.value.date_debut)
-          data.absences.forEach(d => {
-            available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
-          })
+          console.log(data.absences)
+          if (data.absences && data.absences.length > 0)
+            data.absences.forEach(d => {
+              if (d) {
+                d = new Date(d)
+                available = !(d.getDate() == dd.getDate() && d.getMonth() == dd.getMonth() && d.getFullYear() == dd.getFullYear())
+              }
+            })
         }
         if (!available) {
           let txt = ""
@@ -231,29 +236,31 @@ export class AddSeanceComponent implements OnInit {
           choice = confirm("Le nombre de séance prévu pour ce module va être depassé\nVoulez-vous quand même créer cette séance ?")
         }
       }
-      if (choice)
+      if (choice) {
         console.log(seance)
-      this.seanceService.create(seance).subscribe((data) => {
-        console.log(data)
-        this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
-      }, (error) => {
-        console.error(error)
-        let serror: Seance = error.error.seance
-        this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
-        let classeStr = ""
-        serror.classe_id.forEach(c => {
-          classeStr = classeStr + this.classes[c].abbrv + ","
-        })
-        this.messageService.add({
-          severity: 'error', summary: "Informations de :" + error.seance, detail:
-            "Debut: " + this.convertDate(new Date(serror.date_debut)) +
-            "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
-            "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
-            "\nModule: " + this.matieres[serror.matiere_id].nom +
-            "\nClasse: " + classeStr
-        })
+        this.seanceService.create(seance).subscribe((data) => {
+          console.log(data)
+          this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
+        }, (error) => {
+          console.error(error)
+          let serror: Seance = error.error.seance
+          console.error(error.error.temp, seance)
+          this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
+          let classeStr = ""
+          serror.classe_id.forEach(c => {
+            classeStr = classeStr + this.classes[c].abbrv + ","
+          })
+          this.messageService.add({
+            severity: 'error', summary: "Informations de :" + error.seance, detail:
+              "Debut: " + this.convertDate(new Date(serror.date_debut)) +
+              "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
+              "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
+              "\nModule: " + this.matieres[serror.matiere_id].nom +
+              "\nClasse: " + classeStr
+          })
 
-      });
+        });
+      }
     })
 
 
@@ -309,13 +316,13 @@ export class AddSeanceComponent implements OnInit {
         let calc = newDateFin.getHours() - newDateDebut.getHours()
         let choice = true
         this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
-          if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
+          /*if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
             choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
           } else {
             if (data.hasOwnProperty("volume_h_consomme") && data.volume_h_consomme[this.seanceForm.value.matiere.value] == Number && data.volume_h_consomme[this.seanceForm.value.matiere.value] + calc > data.volume_h[this.seanceForm.value.matiere.value]) {
               choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
             }
-          }
+          }*/
           if (choice && data.type_contrat == "Prestation et Vacation") {
             let date_debut = this.getScoreDate(newDateDebut)
             let date_fin = this.getScoreDate(newDateFin)
@@ -434,28 +441,73 @@ export class AddSeanceComponent implements OnInit {
   }
 
   changeGroupe(event) {
-    console.log(event)
     let listIDs = []
+    this.dropdownCampus = []
     event.forEach(d => {
       listIDs.push(d.diplome_id)
+      let groupe: Classe = this.dicClasse[d.value]
+      let diplome: Diplome = this.diplomeDic[groupe.diplome_id]
+      if (groupe) {
+        diplome.campus_id.forEach(cid => {
+          let campus: Campus = this.campus[cid]
+          let r = false
+          let l = { label: campus.libelle, value: campus._id }
+          this.dropdownCampus.forEach(e => {
+            if (e.value == l.value) {
+              r = true
+            }
+          })
+          if (!r)
+            this.dropdownCampus.push(l)
+        })
+      }
+
     })
-    console.log(listIDs)
     this.dropdownMatiere = []
     this.listMatiere.forEach(m => {
-      if (this.customIncludes(m.formation_id, listIDs) == true)
-        this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[m.formation_id].titre, value: m._id });
+      if (this.customIncludes(m.formation_id, listIDs) == true) {
+        if (Array.isArray(m.formation_id)) {
+          let str = m.nom + " - "
+          m.formation_id.forEach((formation, index) => {
+            if (index != 0)
+              str = str + ", " + this.diplomeDic[formation].titre
+            else
+              str = str + this.diplomeDic[formation].titre
+          })
+          str = str + " - " + m.niveau
+          this.dropdownMatiere.push({ nom: str, value: m._id });
+        }
+        else {
+          let str: any = m.formation_id
+          this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[str].titre + " - " + m.niveau, value: m._id });
+        }
+
+      }
+
     })
-    console.log(this.dropdownMatiere)
+
+    this.seanceForm.patchValue({ campus_id: this.dropdownCampus[0].value })
+    this.showSalles(this.dropdownCampus[0].value, true)
   }
 
   customIncludes(l: any, d: any[]) {
     let r = false
-    d.forEach(e => {
-      if (e == l) {
-        r = true
-      }
-    })
+    if (Array.isArray(l)) {
+      d.forEach(e => {
+        if (this.customIncludes(e, l) == true) {
+          r = true
+        }
+      })
+    } else {
+      d.forEach(e => {
+        if (e == l) {
+          r = true
+        }
+      })
+    }
     return r
+
   }
+
 
 }

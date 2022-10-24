@@ -635,10 +635,10 @@
 							<td>
 								<span class="ui-g-6 ui-md-6">
 									<div class="ui-g-12 ui-md-12">
-										<button style="cursor: pointer;" *ngIf="message.document"
+										<i style="cursor: pointer;" *ngIf="message.document"
 											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
-												*ngIf="loadingMessage==message._id" aria-hidden="true"></i></button>
+											(click)="downloadFile(message)"></i><i class="fa fa-spinner fa-spin fa-fw"
+											*ngIf="loadingMessage==message._id" aria-hidden="true"></i>
 										<span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
 									</div>
 									<span id="soustitre" class="ui-g-11 ui-md-11">
@@ -653,13 +653,13 @@
 							<td>
 								<span class="ui-g-6 ui-md-6" style="float: right;">
 									<div class="ui-g-12 ui-md-12">
-										<button style="cursor: pointer;" *ngIf="message.document"
+										<i style="cursor: pointer;" *ngIf="message.document"
 											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
 											(click)="downloadFile(message)">
-											<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-												aria-hidden="true">
-											</i>
-										</button>
+										</i>
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
+											aria-hidden="true">
+										</i>
 										<span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}
 										</span>
 									</div>
@@ -971,10 +971,11 @@
 							<td>
 								<span class="ui-g-6 ui-md-6">
 									<div class="ui-g-12 ui-md-12">
-										<button style="cursor: pointer;" *ngIf="message.document"
+										<i style="cursor: pointer;" *ngIf="message.document"
 											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
-											(click)="downloadFile(message)"><i class="fa fa-spinner fa-spin fa-fw"
-												*ngIf="loadingMessage==message._id" aria-hidden="true"></i></button>
+											(click)="downloadFile(message)"></i>
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
+											aria-hidden="true"></i>
 										<span class="ui-g-11 ui-md-11" id="messageUser"> {{message.description}} </span>
 									</div>
 									<span id="soustitre" class="ui-g-11 ui-md-11">
@@ -989,13 +990,13 @@
 							<td>
 								<span class="ui-g-6 ui-md-6" style="float: right;">
 									<div class="ui-g-12 ui-md-12">
-										<button style="cursor: pointer;" *ngIf="message.document"
+										<i style="cursor: pointer;" *ngIf="message.document"
 											class="pi pi-paperclip ui-g-1 ui-md-1" id="charger2"
 											(click)="downloadFile(message)">
-											<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
-												aria-hidden="true">
-											</i>
-										</button>
+										</i>
+										<i class="fa fa-spinner fa-spin fa-fw" *ngIf="loadingMessage==message._id"
+										aria-hidden="true">
+									</i>
 										<span class="ui-g-12 ui-md-11" id="messageAgent"> {{message.description}}
 										</span>
 									</div>

@@ -4,7 +4,7 @@
 		<div class="card">
 			<h5>Liste des agents</h5>
 			<p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="tabUser" styleClass="" [paginator]="true"
-				[pageLinks]="5" [globalFilterFields]="['nom_prenom','service','role','email']"
+				[pageLinks]="5" [globalFilterFields]="['firstname','serviceDic[rowData.service_id]?.label','role','email','lastname']"
 				responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
@@ -19,8 +19,8 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="nom_prenom" style="text-align: center;">Prénom & Nom <p-sortIcon field="nom_prenom"></p-sortIcon></th>
-						<th pSortableColumn="service" style="text-align: center;"> Services <p-sortIcon field="service"></p-sortIcon></th>
+						<th pSortableColumn="firstname" style="text-align: center;">Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon></th>
+						<th pSortableColumn="service_id" style="text-align: center;"> Services <p-sortIcon field="service_id"></p-sortIcon></th>
 						<th pSortableColumn="role" style="text-align: center;"> Rôle <p-sortIcon field="role"></p-sortIcon></th>
 						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
 						<th style="text-align: center;">Action</th>

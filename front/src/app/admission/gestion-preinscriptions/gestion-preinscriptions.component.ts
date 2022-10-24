@@ -51,7 +51,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: 'releve_notes', label: 'Relevé de notes' },
     { value: 'TCF', label: "TCF" }
   ];
-// L1 L2 L3 M1 M2 BAC Lycée
+  // L1 L2 L3 M1 M2 BAC Lycée
   DocPresent = [
     { label: "Relevé de note de semestre L1" },
     { label: "Relevé de note de semestre L2" },
@@ -544,6 +544,17 @@ export class GestionPreinscriptionsComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Envoi de Fichier', detail: 'Une erreur est arrivé' });
       });
     }
+  }
+
+  deleteProspect(p: Prospect) {
+    let bypass: any = p.user_id
+    if (confirm("Est ce que vous êtes sûr de vouloir supprimer " + bypass.firstname + " " + bypass.lastname + " ?"))
+      this.admissionService.delete(p._id, bypass._id).subscribe(d => {
+        this.messageService.add({ severity: 'success', summary: 'Suppression de ' + bypass.firstname + " " + bypass.lastname, detail: 'Le prospect a bien été supprimé' });
+        this.prospects.splice(this.prospects.indexOf(p),1)
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Suppression de ' + bypass.firstname + " " + bypass.lastname, detail: 'Une erreur est arrivé\n' + error.error });
+      });
   }
 
   exportExcel() {

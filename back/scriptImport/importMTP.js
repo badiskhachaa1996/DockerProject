@@ -67,7 +67,7 @@ mongoose
                                         email: data['Compte ESTYA'],
                                         email_perso: data['Mail personnel'],
                                         civilite: null,
-                                        type: "Etudiant",
+                                        type: "Initial",
                                         pays_adresse: "France",
                                         ville_adresse: adresse['Ville'],
                                         rue_adresse: adresse['Rue'],
@@ -142,7 +142,7 @@ mongoose
                                         email: data['Compte ESTYA'],
                                         email_perso: data['Mail personnel'],
                                         civilite: null,
-                                        type: "Etudiant",
+                                        type: "Initial",
                                         pays_adresse: "France",
                                         ville_adresse: adresse['Ville'],
                                         rue_adresse: adresse['Rue'],
@@ -297,8 +297,6 @@ function generateCode(user, dn) {
     } catch (error) {
         console.error(error, user)
     }
-
-
 }
 
 

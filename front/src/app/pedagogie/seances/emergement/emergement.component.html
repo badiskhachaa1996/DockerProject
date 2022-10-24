@@ -31,10 +31,12 @@
         </div>
     </form>
 </div>
-<div class="card" *ngIf="presence && seance " [ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}">
+<div class="card" *ngIf="presence && seance ">
+    <!--[ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}"-->
     <div class="grid">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <h5 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM/yyyy"}}</h5>
+            <h5 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM/yyyy"}}
+            </h5>
         </div>
         <div class="col-12">
             <small><span style="font-weight: bold;"> Etat :</span></small><br><br>
@@ -44,26 +46,21 @@
             </div>
             <div *ngIf="presence.isPresent">
                 <small>Vous avez été noté présent lors de cette séance</small>
-                <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
-                    (click)="showUploadFile=true"></button>
             </div>
-        </div>    
-        <div class="col-12">
-            <small> <span style="font-weight: bold;"> Documents : </span></small><br>
+        </div>
+        <div class="col-12" *ngIf="seance">
+            <small> <span style="font-weight: bold;"> Support de cours : </span></small><br>
             <ul>
-                <li *ngFor="let file of seance.fileRight; index as i">
-                    <i *ngIf="token.role!='user' || formateurInfo" class="pi pi-times"
-                        style="float:right; font-size: 20px;cursor:pointer" (click)="deleteFile(file)"
-                        aria-hidden="true"> </i>
-                    <i *ngIf="token.role!='user' || file.right || formateurInfo" class="pi pi-file-pdf "
+                <li *ngFor="let file of showFiles; index as i">
+                    <i *ngIf="file.right && file.right!='false'" class="pi pi-download"
                         style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
-                    <em *ngIf="token.role!='user' || file.right || formateurInfo" (click)="downloadFileCours(file)"
+                    <em *ngIf="file.right && file.right!='false'" (click)="downloadFileCours(file)"
                         [id]="i" style="cursor: pointer;">
                         {{ file.name }}
                     </em>
                 </li>
             </ul>
-            <small *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</small>
+            <small *ngIf="showFiles==null">Aucun document n'a été chargé !</small>
         </div>
     </div>
 </div>
@@ -78,14 +75,12 @@
                 </p-fileUpload>
             </div>
             <i *ngIf="uploadFile" class="pi pi-spin pi-spinner col-2" style="font-size: 2rem"
-            aria-hidden="true"></i><br>
-        <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
-        <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
-             label="Envoyer le justificatif"
-            (click)="sendJustif();"></button>
-        <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
-             label="Télécharger votre justificatif"
-            (click)="downloadFile(presence);"></button>
+                aria-hidden="true"></i><br>
+            <i *ngIf="loadingFile" class="pi pi-spin pi-spinner" style="font-size: 2rem" aria-hidden="true"></i>
+            <button [disabled]="justif_file_value==null || justif_file_value>20000000 || uploadFile" pButton
+                label="Envoyer le justificatif" (click)="sendJustif();"></button>
+            <button *ngIf="presence && presence.justificatif" [disabled]="loadingFile" pButton
+                label="Télécharger votre justificatif" (click)="downloadFile(presence);"></button>
         </div>
     </div>
 </div>
@@ -108,60 +103,36 @@
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="seance.classe_id && diplomeList">
                 <div class="col-6 md:col-6">
-                    <strong style="text-align:left !important;">Diplome :</strong>
-                </div>
-                <div class="col-6 md:col-6" style="text-align:left !important;">
-                    {{affichageDiplome}}
+                    <strong style="text-align:left !important;">Filière(s) :</strong>{{affichageDiplome}}
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="classeList && seance.classe_id">
                 <div class="col-6 md:col-6">
-                    <strong style="text-align:left !important;">Groupe :</strong>
-                </div>
-                <div class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;" *ngFor="let cid of seance.classe_id; let index = index">
-                        <span *ngIf="classeList[cid] && classeList[cid].nom && index==0">{{classeList[cid].nom}}</span>
-                        <span
-                            *ngIf="classeList[cid] && classeList[cid].nom && index!=0">,<br>{{classeList[cid].nom}}</span>
-                    </span>
+                    <strong style="text-align:left !important;">Groupe :</strong>{{affichageGroupe}}
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="matiereList && matiereList[seance.matiere_id]">
                 <div class="col-6 md:col-6">
-                    <strong style="text-align:left !important;">Module :</strong>
-                </div>
-                <div class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;">
-                        {{matiereList[seance.matiere_id].nom}}
-                    </span>
+                    <strong style="text-align:left !important;">Module :</strong>{{matiereList[seance.matiere_id].nom}}
                 </div>
             </div>
             <div class="col-12 md:col-6 grid">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Numéro de Salle :</strong>
-                </div>
-                <div *ngIf="seance.isPresentiel" class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;">
+                    <span *ngIf="seance.isPresentiel && seance.salle_name" style="color: black;">
                         {{seance.salle_name}}
                     </span>
-                </div>
-                <div *ngIf="!seance.isPresentiel" class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;">
+                    <span *ngIf="seance.isPresentiel && !seance.salle_name" style="color: black;">
+                        Non Specifié
+                    </span>
+                    <span style="color: black;" *ngIf="!seance.isPresentiel"> 
                         Distanciel
                     </span>
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="seance.date_debut && seance.date_fin">
                 <div class="col-6 md:col-6">
-                    <strong style="text-align:left !important;">Date :</strong>
-                </div>
-                <div class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;">
-                        {{seance.date_debut | date:'dd/MM HH:mm'}} - {{seance.date_fin | date:'dd/MM HH:mm'}}
-                    </span>
-                    <span style="color: black;">
-                        {{seance.date_debut | date:'dd/MM HH:mm':'+2'}} - {{seance.date_fin | date:'dd/MM HH:mm':'+2'}}
-                    </span>
+                    <strong style="text-align:left !important;">Date :</strong> {{seance.date_debut | date:'dd/MM HH:mm'}} - {{seance.date_fin | date:'dd/MM HH:mm'}}
                 </div>
             </div>
         </div>
@@ -187,6 +158,22 @@
 </div>
 
 <div class="col-12" *ngIf="token.role!='user'  || formateurInfo">
+    <div class="col-12 card" *ngIf="seance">
+        <p style="font-weight: bold;"> Support de cours & Documents :</p>
+        <ul *ngIf="seance.fileRight!=null || seance.fileRight.length!=0">
+            <li *ngFor="let file of seance.fileRight; index as i">
+                <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer" (click)="deleteFile(file)"
+                    aria-hidden="true"> </i>
+                <i class="pi pi-download " style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
+                <em (click)="downloadFileCours(file)" [id]="i" style="cursor: pointer;">
+                    {{ file.name }}
+                </em>
+            </li>
+        </ul>
+        <p *ngIf="seance.fileRight==null || seance.fileRight.length==0">Aucun document n'a été chargé !</p>
+        <button pButton class="ui-button-raised ui-button-success" label="Envoyer un document"
+            (click)="showUploadFile=true"></button>
+    </div>
     <div class="grid col-12 card" *ngIf="showPdf">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPdf = false"
             aria-hidden="true"> </i>
@@ -205,16 +192,17 @@
         </h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" rowExpandMode="single" [rows]="10"
-                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length" [globalFilterFields]="">              
-                 <ng-template pTemplate="caption">
+                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length"
+                [globalFilterFields]="">
+                <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_id', 'contains')">
                         </p-dropdown>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                                placeholder="Recherche" />
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
                         </span>
                     </div>
                 </ng-template>
@@ -248,8 +236,12 @@
                         <td *ngIf="userList[rowData.user_id]">
                             {{userList[rowData.user_id].firstname}}
                         </td>
+                        <td
+                            *ngIf="rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type=='Formateur'">
+                            Formateur
+                        </td>
                         <td *ngIf="rowData.user_id && dicEtudiant[rowData.user_id]">
-                            {{dicEtudiant[rowData.user_id].classe_id.nom}}                      
+                            {{dicEtudiant[rowData.user_id].classe_id.nom}}
                         </td>
                         <td>
                             {{(rowData.isPresent)?"Oui":"Non"}}
@@ -261,10 +253,12 @@
                             <i *ngIf="rowData.justificatif" pTooltip="Télécharger la justification"
                                 tooltipPosition="bottom" class="pi pi-download" (click)="downloadFile(rowData)"
                                 aria-hidden="true"></i>
-                            <i *ngIf="!rowData.isPresent" pTooltip="Marquer comme présent" tooltipPosition="bottom"
-                                class="pi pi-check" (click)="acceptJustif(rowData,true)" aria-hidden="true"></i>
-                            <i *ngIf="rowData.isPresent" pTooltip="Marquer comme absent" tooltipPosition="bottom"
-                                class="pi pi-times" (click)="acceptJustif(rowData,false)" aria-hidden="true"></i>
+                            <i *ngIf="!rowData.isPresent && rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type!='Formateur'"
+                                pTooltip="Marquer comme présent" tooltipPosition="bottom" class="pi pi-check"
+                                (click)="acceptJustif(rowData,true)" aria-hidden="true"></i>
+                            <i *ngIf="rowData.isPresent && rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type!='Formateur'"
+                                pTooltip="Marquer comme absent" tooltipPosition="bottom" class="pi pi-times"
+                                (click)="acceptJustif(rowData,false)" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>

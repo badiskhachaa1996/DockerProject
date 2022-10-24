@@ -9,7 +9,8 @@
                 <div class="field col-12 md:col-6">
                     <label>Nom du groupe</label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse"
-                        defaultLabel="Selection des groupes" optionLabel="nom" filter="true"></p-multiSelect>
+                        (onChange)="showCampus($event.value)" defaultLabel="Selection des groupes" optionLabel="nom"
+                        filter="true"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
@@ -35,10 +36,10 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus</label><br>
-                    <p-multiSelect formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
+                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" optionLabel="libelle"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
-                    </p-multiSelect>
+                    </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Nom du formateur</label><br>
@@ -99,7 +100,8 @@
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown *ngIf="diplomeFilter!=null && diplomeFilter.length!=1" [options]="diplomeFilter"
-                            class="mb-2" (onChange)="dt1.filter($event.value, 'diplome_titre', 'equals')">
+                            class="mb-2"
+                            (onChange)="dt1.filter($event.value, 'diplome_titre', 'equals');updateGroupeFilter($event.value)">
                         </p-dropdown>
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
                             class="mb-2" (onChange)="dt1.filter($event.value, 'classe_abbrv', 'equals')">
@@ -127,8 +129,7 @@
                         <th pSortableColumn="matiere" scope="col" style="text-align:center">
                             Module <p-sortIcon field="matiere"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="formateur_id" scope="col"
-                            style="text-align:center">
+                        <th pSortableColumn="formateur_id" scope="col" style="text-align:center">
                             Formateur <p-sortIcon field="formateur_id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="libelle" scope="col" style="text-align:center">
@@ -180,7 +181,9 @@
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData);" aria-hidden="true"></i>
-                            <i pTooltip="Voir la feuille d'émergement" tooltipPosition="bottom" class="pi pi-list"
+                            <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="delete(rowData);" aria-hidden="true"></i>
+                            <i pTooltip="Informations de la séance" tooltipPosition="bottom" class="pi pi-list"
                                 (click)="toSign(rowData)" aria-hidden="true" style="margin-left: 5%;"></i>
                         </td>
                     </tr>

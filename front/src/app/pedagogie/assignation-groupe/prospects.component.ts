@@ -56,6 +56,7 @@ export class ProspectsComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
@@ -71,7 +72,7 @@ export class ProspectsComponent implements OnInit {
 
   AssignForm: FormGroup = this.formBuilder.group({
     groupe: ["", Validators.required],
-    statut_dossier: [[this.statutDossier[0].value], Validators.required],
+    statut_dossier: [[''], Validators.required],
   })
 
   ngOnInit(): void {
@@ -83,7 +84,7 @@ export class ProspectsComponent implements OnInit {
     })
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
-        this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
+        this.groupeList.push({ label: g.abbrv, value: g._id })
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value
@@ -243,6 +244,18 @@ export class ProspectsComponent implements OnInit {
     }
 
     return result;
+  }
+
+  disable(etudiant: Etudiant) {
+    let bypass:any = etudiant.user_id
+    if(confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+    this.etudiantService.disable(etudiant).subscribe((data) => {
+      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+      console.error(error)
+    })
   }
 
 }

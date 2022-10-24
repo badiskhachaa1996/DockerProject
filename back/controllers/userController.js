@@ -230,6 +230,26 @@ app.post("/updateById/:id", (req, res) => {
 })
 
 
+//Mise à jour d'un user
+app.post("/updateByIdForPrivate/:id", (req, res) => {
+    User.findByIdAndUpdate(req.params.id,
+        {
+            firstname: req.body.user.firstname,
+            lastname: req.body.user.lastname,
+            email: req.body.user.email,
+            email_perso: req.body.user.email_perso,
+
+        }, { new: true }, (err, user) => {
+            if (err) {
+                console.error(err);
+                res.send(err)
+            } else {
+                res.send(user)
+            }
+        })
+})
+
+
 app.post("/ValidateEmail/:email", (req, res) => {
 
     User.findOneAndUpdate({ email: req.params.email },
@@ -339,13 +359,26 @@ app.post("/updateEtudiant/:id", (req, res) => {
                 res.send(err)
             } else {
                 let etudiantData = req.body.newEtudiant;
-                let etudiant = new Etudiant(
-                    {
+                if (etudiantData._id) {
+                    Etudiant.findByIdAndUpdate(etudiantData._id, {
                         ...etudiantData
-                    });
-                etudiant.save()
-                    .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
-                    .catch((error) => { res.status(500).send(error) });
+                    }, { new: true }, (err, doc) => {
+                        if (!err && doc) {
+                            res.status(201).json(doc)
+                        }else{
+                            res.status(500).json(err)
+                        }
+                    })
+                } else {
+                    delete etudiantData._id
+                    let etudiant = new Etudiant(
+                        {
+                            ...etudiantData
+                        });
+                    etudiant.save()
+                        .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée' }) })
+                        .catch((error) => { res.status(500).send(error) });
+                }
             }
         })
 })
@@ -353,6 +386,16 @@ app.post("/updateEtudiant/:id", (req, res) => {
 //Récupérer tous les users via Service ID
 app.get("/getAllbyService/:id", (req, res) => {
     User.find({ service: req.params.id })
+        .then(result => {
+            res.send(result.length > 0 ? result : []);
+        })
+        .catch(err => {
+            res.status(404).send(error);
+            console.error(err);
+        })
+});
+app.get("/getAllCommercial/", (req, res) => {
+    User.find({ type: "Commercial" })
         .then(result => {
             res.send(result.length > 0 ? result : []);
         })
@@ -441,6 +484,7 @@ const upload = multer({ storage: storage, limits: { fileSize: 20000000 } })
 //Sauvegarde de la photo de profile
 app.post('/file', upload.single('file'), (req, res, next) => {
     const file = req.file;
+    console.log(file)
     if (!file) {
         const error = new Error('No File')
         error.httpStatusCode = 400

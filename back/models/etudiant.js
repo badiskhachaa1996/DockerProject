@@ -1,3 +1,4 @@
+
 //déclaration de la bibliothèque mongoose
 const mongoose = require("mongoose");
 // création du schéma de la table etudiant 
@@ -38,6 +39,7 @@ const etudiantSchema = mongoose.Schema({
         type: [mongoose.Schema.Types.Mixed],
         default: []
     },
+    isActive: { type: Boolean, default: true },
     enic_naric: { type: Boolean, default: false },
     campus: { type: mongoose.Schema.Types.ObjectId, ref: "campus" },
     statut_dossier: { type: [String], default: [] },
@@ -45,7 +47,9 @@ const etudiantSchema = mongoose.Schema({
     absencesModules: { type: mongoose.Schema.Types.Mixed, default: {} },
     date_dernier_modif_dossier: { type: Date, default: null },
     valided_by_admin: { type: Boolean, default: false },
-    valided_by_support: { type: Boolean, default: false}
+    valided_by_support: { type: Boolean, default: false },
+    annee_scolaire: { type: [String], default: ["2021"] },
+    date_telechargement_bulletin: { type: Date }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

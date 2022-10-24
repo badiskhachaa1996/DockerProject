@@ -286,7 +286,7 @@
 			</div>
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
-			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda']" [totalRecords]="formateurs.length"
+			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda','userList[formateur._id].lastname','userList[formateur._id].firstname']" [totalRecords]="formateurs.length"
 				[pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10" styleClass="p-datatable-gridlines"
 				[value]="formateurs" dataKey="_id" responsiveLayout="scroll">
 
@@ -351,7 +351,7 @@
 							<!--<i style="margin-left: 2%;" (click)="resetHeure()" class="fas fa-undo"></i>-->
 							<i class="pi pi-calendar" aria-hidden="true" (click)="sendCalendar(rowData)"
 								pTooltip="Envoyer le calendrier au groupe"></i>
-							<i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-file-pdf"
+							<i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
 								(click)="showUploadFile=formateur" aria-hidden="true"></i>
 						</td>
 					</tr>

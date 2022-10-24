@@ -85,9 +85,9 @@ export class EtudiantService {
     return this.httpClient.post<any>(registreUrl, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  sendEDT(id, update = "/nope") {
-    let registreUrl = this.apiUrl + "sendEDT/" + id + "/" + update;
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  sendEDT(id, mailcustom = "", objet = "") {
+    let registreUrl = this.apiUrl + "sendEDT/" + id;
+    return this.httpClient.post<any>(registreUrl, { mailcustom, objet }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   getBulletin(etudiant_id, semestre) {
@@ -159,4 +159,16 @@ export class EtudiantService {
     let registreUrl = this.apiUrl + "assignEmail/" + etudiant_id + "/" + email_ims;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
+
+  downloadBulletin(etudiant_id) {
+    let registreUrl = this.apiUrl + "downloadBulletin/" + etudiant_id;
+    return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  disable(etudiant: Etudiant) {
+    let registreUrl = this.apiUrl + "disable/" + etudiant._id;
+    return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

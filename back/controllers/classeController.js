@@ -2,16 +2,14 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 const { Classe } = require("./../models/classe");
-
+const { Diplome } = require("./../models/diplome");
 //Création d'une nouveau classe 
 app.post("/create", (req, res) => {
     //Sauvegarde d'une classe
+    delete req.body._id
     let classe = new Classe(
         {
-            diplome_id: req.body.diplome_id,
-            nom: req.body.nom,
-            active: req.body.active,
-            abbrv: req.body.abbrv
+            ...req.body
         });
 
     classe.save()
@@ -24,10 +22,7 @@ app.post("/create", (req, res) => {
 app.post("/updateById", (req, res) => {
     Classe.findOneAndUpdate({ _id: req.body._id },
         {
-            diplome_id: req.body.diplome_id,
-            nom: req.body.nom,
-            active: req.body.active,
-            abbrv: req.body.abbrv
+            ...req.body
         })
         .then((classeUpdated) => { res.status(201).send(classeUpdated); })
         .catch((error) => { res.status(400).send('Modification impossible' + error) });
@@ -118,4 +113,16 @@ app.get("/getAllByEcoleID/:id", (req, res) => {
     })
 });
 
+//Récupérer getAll by diplome
+app.get('/getALLByDiplomeABBRV/:abbrv', (req, res) => {
+    Diplome.findOne({ titre: req.params.abbrv }).then(diplome => {
+        console.log(diplome)
+        Classe.find({ diplome_id: diplome._id }).then(classes => {
+            console.log(classes)
+            res.status(200).send(classes)
+        })
+    }).catch((error) => {
+        res.status(404).send("erreur :" + error);
+    })
+})
 module.exports = app;

@@ -39,8 +39,29 @@ export class ReinscritComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
+  ]
+
+  typePaiement = [
+    {value:"Espèces",label:"Espèces"},
+    {value:"Virement",label:"Virement"},
+    {value:"Chèque de caution",label:"Chèque de caution"},
+    {value:"Chèque en échange d'espèces",label:"Chèque en échange d'espèces"},
+    {value:"Chèque de Garantie",label:"Chèque de Garantie"},
+    {value:"Chèque",label:"Chèque"},
+    {value:"Autre",label:"Autre"},
+  ]
+
+  anneeScolaireReinscrit = [
+    { label: "2019", value: "2019" },
+    { label: "2020", value: "2020" },
+    { label: "2021", value: "2021" },
+    { label: "2022", value: "2022" },
+    { label: "2023", value: "2023" },
+    { label: "2024", value: "2024" },
+    { label: "2025", value: "2025" }
   ]
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
@@ -65,7 +86,7 @@ export class ReinscritComponent implements OnInit {
 
   AssignForm: FormGroup = this.formBuilder.group({
     filiere: ["", Validators.required],
-    statut: [this.statutList[0], Validators.required],
+    statut: ["", Validators.required],
     numero_ine: [''],
     numero_nir: [''],
     sos_email: [''],
@@ -79,7 +100,8 @@ export class ReinscritComponent implements OnInit {
     // indicatif_tuteur: [''],
     remarque: [''],
     campus_id: [' '],
-    statut_dossier: [this.statutDossier[0].value],
+    statut_dossier: [''],
+    annee_scolaire: ['', Validators.required]
     //email_ims: ['', Validators.required]
 
   })
@@ -111,7 +133,7 @@ export class ReinscritComponent implements OnInit {
     this.payementList = etudiant.payment_reinscrit
     this.AssignForm.patchValue({
       customid: etudiant?.custom_id,
-      statut: { value: s },
+      statut: s,
       statut_dossier: etudiant.statut_dossier
     })
   }
@@ -125,7 +147,7 @@ export class ReinscritComponent implements OnInit {
     this.payementList = etudiant.payement
     this.AssignForm.patchValue({
       customid: etudiant?.customid,
-      statut: { value: s },
+      statut: s,
       statut_dossier: etudiant.statut_dossier
     })
   }
@@ -142,7 +164,7 @@ export class ReinscritComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem("token"))
     this.classeService.getAll().subscribe(groupes => {
       groupes.forEach(g => {
-        this.groupeList.push({ label: g.abbrv, value: g._id, nom: g.nom })
+        this.groupeList.push({ label: g.abbrv, value: g._id })
       })
       this.AssignForm.patchValue({
         groupe: this.groupeList[0].value
@@ -217,11 +239,12 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
-      true
+      true,false,
+      this.AssignForm.value.annee_scolaire
     )
-    if (!this.showAssignFormEtu.custom_id)
+    if (!etd.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
+    if (etd.statut_dossier.includes('Paiement non finalisé')) {
       if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?")) {
         this.etudiantService.update(etd).subscribe(data => {
           this.etudiants.forEach((val, index) => {
@@ -289,10 +312,10 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.filiere,
       true
     )
-    if (!this.showAssignForm.customid)
+    if (!etd.custom_id)
       etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims
-    if (this.showAssignForm.statut_dossier.includes('Paiement non finalisé')) {
+    if (etd.statut_dossier.includes('Paiement non finalisé')) {
       if (confirm("Cette étudiant a été signalé avec un paiement non finalisé,\nÊtes vous sur de vouloir l'assigner à la pédagogie ?"))
         this.etudiantService.validateProspect(etd, bypass._id).subscribe(data => {
           this.prospects.forEach((val, index) => {
@@ -327,7 +350,7 @@ export class ReinscritComponent implements OnInit {
 
   showPayement: Prospect;
   formUpdateDossier: FormGroup = this.formBuilder.group({
-    statut_dossier: [this.statutDossier[0].value]
+    statut_dossier: ['']
   });
 
   showPayementFC(etu: Prospect) {
@@ -355,11 +378,14 @@ export class ReinscritComponent implements OnInit {
     if (this.payementList == null) {
       this.payementList = []
     }
-    this.payementList.push({ type: "", montant: 0, date: "" })
+    this.payementList.push({ type: this.typePaiement[0].value, montant: 0, date: "" })
   }
 
   changeMontant(i, event, type) {
-    if (type == "montant") {
+    if(type=="type"){
+      this.payementList[i][type] = event.value;
+    }
+    else if (type == "montant") {
       this.payementList[i][type] = parseInt(event.target.value);
     } else {
       this.payementList[i][type] = event.target.value;
@@ -609,4 +635,55 @@ export class ReinscritComponent implements OnInit {
     })
   }
 
+  loadPP(rowData) {
+    this.imageToShow = "../assets/images/avatar.PNG"
+    this.userService.getProfilePicture(rowData.user_id).subscribe((data) => {
+      if (data.error) {
+        this.imageToShow = "../assets/images/avatar.PNG"
+      } else {
+        const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([byteArray], { type: data.documentType })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.imageToShow = reader.result;
+        }, false);
+        if (blob) {
+          this.imageToShow = "../assets/images/avatar.PNG"
+          reader.readAsDataURL(blob);
+        }
+      }
+
+    })
+    this.etudiantService.getFiles(rowData?._id).subscribe(
+      (data) => {
+        this.ListDocuments = data
+      },
+      (error) => { console.error(error) }
+    );
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  disable(etudiant: Etudiant) {
+    let bypass:any = etudiant.user_id
+    if(confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+    this.etudiantService.disable(etudiant).subscribe((data) => {
+      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+      console.error(error)
+    })
+  }
 }

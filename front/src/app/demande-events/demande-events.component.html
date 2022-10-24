@@ -1,7 +1,7 @@
 <!-- AJOUT DUNE DEMANDE DINSCRIPTION AUX JOURNEES PORTE OUVERTES - ROLE USER -->
 <div class="col-12 flex align-items-center justify-content-center">
     <div class="card col-12 md:col-8">
-        <!-- <i class="pi pi-times-circle" style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer" aria-hidden="true"> </i> -->
+        <!--
         <h4 style="text-align: center;">Venez à une de nos portes ouvertes </h4>
         <p style="text-align: center; font-size: 16px;">Inscrivez vous à la journée portes ouvertes qui se déroulera à
             notre campus de Montpellier le 31 Août 2022</p>
@@ -12,23 +12,22 @@
             <img src="\assets\images\portesouvertes.png" alt="Portes ouvertes" style="width: 100%;">
         </div>
         <br>
-        <br>
+        <br>-->
         <form class="p-fluid p-formgrid grid" [formGroup]="addeventForm" (ngSubmit)="onAddEvent()">
-            <div class="field col-12">
-                <label For="email">Email <span style="color: red;"> * </span></label>
-                <input pInputText id="email" type="text" placeholder="Entrez votre adresse email"
-                    formControlName="email" />
-                <div *ngIf="email.invalid && (email.touched || email.dirty)">
-                    <span style="color: red;" class="error" *ngIf="email.errors?.required">* L'email est
+
+            <div class="field col-12 md:col-6">
+                <label For="prenom">Prénom<span style="color: red;"> * </span></label>
+                <input pInputText id="prenom" type="text" placeholder="John" formControlName="prenom" />
+                <div *ngIf="prenom.invalid && (prenom.touched || prenom.dirty)">
+                    <span style="color: red;" class="error" *ngIf="prenom.errors?.required">* Le prénom est
                         obligatoire</span>
-                    <span style="color: red;" class="error" *ngIf="email.errors?.pattern">* Seul les lettres sont
+                    <span style="color: red;" class="error" *ngIf="prenom.errors?.pattern">* Seul les lettres sont
                         acceptés</span>
                 </div>
             </div>
-
             <div class="field col-12 md:col-6">
-                <label For="nom">Prénom & Nom <span style="color: red;"> * </span></label>
-                <input pInputText id="nom" type="text" placeholder="John Smith" formControlName="nom" />
+                <label For="nom">Nom<span style="color: red;"> * </span></label>
+                <input pInputText id="nom" type="text" placeholder="Smith" formControlName="nom" />
                 <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
                     <span style="color: red;" class="error" *ngIf="nom.errors?.required">* Le nom est obligatoire</span>
                     <span style="color: red;" class="error" *ngIf="nom.errors?.pattern">* Seul les lettres sont
@@ -36,8 +35,41 @@
                 </div>
             </div>
             <div class="field col-12 md:col-6">
+                <label For="date_naissance">Date de naissance <span style="color: red;"> *
+                    </span></label>
+                <input type="date" formControlName="date_naissance" pInputText />
+                <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
+                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.required">* La
+                        date de naissance est obligatoire.</span>
+                    <span style="color: red;" class="error" *ngIf="date_naissance.errors?.pattern">* Le
+                        format ne correspond pas à une date dd/MM/YYYY.</span>
+                </div>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="Pays">Pays de naissance<span style="color: red;"> * </span></label>
+                <p-dropdown formControlName="pays_naissance" [options]="paysList" optionLabel="viewValue"
+                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label For="nationalite">Nationalité <span style="color: red;"> * </span></label>
+                <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                    emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité"
+                    filter="true"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Adresse mail :<span style="color:red"> *</span></label>
+                <input type="email" formControlName="email" placeholder="Email" pInputText>
+                <div *ngIf="email.invalid && (email.touched || email.dirty)">
+                    <span style="color: red;" class="error" *ngIf="email.errors?.required"
+                        style="color: red;">* L'email est obligatoire </span>
+                    <span style="color: red;" class="error" *ngIf="email.errors?.email"
+                        style="color: red;">* L'email n'est pas dans le bon format </span>
+                </div>
+            </div>
+            <div class="field col-12 md:col-12">
                 <label For="Téléphone">Téléphone <span style="color: red;"> * </span></label><br>
-                <ngx-intl-tel-input class="pInputText"  [preferredCountries]="preferredCountries"
+                <ngx-intl-tel-input class="pInputText" [preferredCountries]="preferredCountries"
                     [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
                     [searchCountryField]="[
                   SearchCountryField.Iso2,
@@ -47,21 +79,36 @@
                     formControlName="phone"> </ngx-intl-tel-input>
 
             </div>
-
-
             <div class="field col-12 md:col-6">
-                <label For="Pays">Pays<span style="color: red;"> * </span></label>
-                <p-dropdown formControlName="pays_adresse" [options]="paysList" optionLabel="viewValue"
-                    emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" filter="true">
-                </p-dropdown>
+                <label>Quel est votre niveau de formation ?<span style="color:red"> *</span></label>
+                <input type="text" formControlName="lvl_formation" placeholder="1er année" pInputText>
+                <div *ngIf="lvl_formation.invalid && (lvl_formation.touched || lvl_formation.dirty)">
+                    <span style="color: red;" class="error" *ngIf="lvl_formation.errors?.required"
+                        style="color: red;">* L'email est obligatoire </span>
+                    <span style="color: red;" class="error" *ngIf="lvl_formation.errors?.pattern"
+                        style="color: red;">* L'email n'est pas dans le bon format </span>
+                </div>
             </div>
-
             <div class="field col-12 md:col-6">
-                <label>Domaine <span style="color: red;"> * </span></label><br>
-                <p-multiSelect formControlName="domaine" [options]="domaineList" defaultLabel="Selection des domaines"
-                    optionLabel="value"></p-multiSelect>
+                <label>Quel domaine vous intéresse le plus ?<span style="color:red"> *</span></label>
+                <p-dropdown formControlName="domaine" [options]="domaineListe"
+                    emptyFilterMessage="Pas de domaine trouvé" filterPlaceholder="Informatique"
+                    filter="true"></p-dropdown>
             </div>
-
+            <div class="field col-12 md:col-6">
+                <label>Comment avez-vous connu l’école ?<span style="color:red"> *</span></label>
+                <p-dropdown formControlName="source" [options]="sourceListe"
+                    emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Internet"
+                    filter="true"></p-dropdown>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label>Êtes-vous inscrit dans un établissement d'Enseignement Supérieur ?<span style="color:red"> *</span></label>
+                <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]" formControlName="inscrit_etablissement"></p-selectButton>
+            </div>
+            <div class="field col-12" *ngIf="inscrit_etablissement.value">
+                <label>Quel établissement ?</label>
+                <input type="text" formControlName="etablissement" pInputText>
+            </div>
             <div class="col-4">
                 <button pButton label="Envoyer" type="submit" [disabled]="addeventForm.invalid"></button>
                 <!-- ajouter click -->

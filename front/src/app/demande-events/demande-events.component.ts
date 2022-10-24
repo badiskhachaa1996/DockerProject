@@ -5,6 +5,7 @@ import { SearchCountryField, CountryISO, PhoneNumberFormat } from 'ngx-intl-tel-
 import { environment } from 'src/environments/environment';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DemandeEventsService } from '../services/demande-events.service';
+import { sourceForm } from '../models/sourceForm';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { DemandeEventsService } from '../services/demande-events.service';
 export class DemandeEventsComponent implements OnInit {
   //Déclarations
   addeventForm: FormGroup;
+  nationList = environment.nationalites;
   paysList = environment.pays;
   separateDialCode = false;
   SearchCountryField = SearchCountryField;
@@ -26,68 +28,83 @@ export class DemandeEventsComponent implements OnInit {
     private messageService: MessageService) { }
 
   ngOnInit(): void {
-    
+
     this.onInitAddEventForm()
   }
 
+  sourceListe = [
+    { label: "Réseaux sociaux", value: "Réseaux sociaux" },
+    { label: "Affichage extérieur", value: "Affichage extérieur" },
+    { label: "Par le bias d'un proche", value: "Par le bias d'un proche" },
+    { label: "Autre", value: "Autre" }
+  ]
 
-
-  domaineList = [
-    { value: "Marketing" },
-    { value: "Commerce" },
-    { value: "Comptabilité" },
-    { value: "Droit" },
-    { value: "Construction" },
+  domaineListe = [
+    { label: "Commerce", value: "Commerce" },
+    { label: "Informatique", value: "Informatique" },
+    { label: "Ressources Humaines", value: "Ressources Humaines" },
+    { label: "Comptabilité", value: "Comptabilité" },
+    { label: "BIM", value: "BIM" },
   ]
 
   //initialisation du formulaire
   onInitAddEventForm() {
     this.addeventForm = this.formBuilder.group({
-      email: ['', [Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
+
       nom: ['', [Validators.required, Validators.pattern("^[a-zA-Zéèàêô -]+$")]],
+      prenom: ['', [Validators.required, Validators.pattern("^[a-zA-Zéèàêô -]+$")]],
+      date_naissance: new FormControl('', [Validators.required]),
+      pays_naissance: [this.paysList[0], Validators.required],
+      domaine:new FormControl(this.domaineListe[0].value,Validators.required),
+      nationalite: new FormControl(this.nationList[0], [Validators.required]),
+      email: ['', [Validators.email]],
       phone: [undefined, [Validators.required]],
-      pays_adresse: [this.paysList[0], Validators.required],
-      domaine: ['', Validators.required],
+      lvl_formation: ['', Validators.required],
+      source: [this.sourceListe[0].value, Validators.required],
+      inscrit_etablissement: [false, Validators.required],
+      etablissement: ['']
 
     })
   }
 
-  get email() { return this.addeventForm.get('email'); };
+
   get nom() { return this.addeventForm.get('nom'); };
+  get prenom() { return this.addeventForm.get('prenom'); };
+  get date_naissance() { return this.addeventForm.get('date_naissance'); };
+  get pays_naissance() { return this.addeventForm.get('pays_naissance').value; };
+  get domaine() { return this.addeventForm.get('domaine'); };
+  get nationalite() { return this.addeventForm.get('nationalite'); };
+  get email() { return this.addeventForm.get('email'); };
   get phone() { return this.addeventForm.get('phone'); };
-  get pays_adresse() { return this.addeventForm.get('pays_adresse').value; };
-  get domaine() { return this.addeventForm.get('domaine').value; };
+  get lvl_formation() { return this.addeventForm.get('lvl_formation'); };
+  get source() { return this.addeventForm.get('source'); };
+  get inscrit_etablissement() { return this.addeventForm.get('inscrit_etablissement'); };
 
 
   ///méthode d'ajout de l'event
   onAddEvent() {
-
-    let domaineSelect = [];
-    this.addeventForm.value.domaine.forEach((e) => {
-      domaineSelect.push(e.value)
-    });
-    console.log(domaineSelect)
-
-    let email = this.addeventForm.get('email')?.value;
-    let nom = this.addeventForm.get('nom')?.value;
-    let phone = this.addeventForm.get('phone')?.value;
-    let pays_adresse = this.addeventForm.get('pays_adresse')?.value.value;
-
-    let newEvent = new Demande_events(
-      email,
-      nom,
-      phone.internationalNumber,
-      pays_adresse,
-      domaineSelect
+    let source = new sourceForm(
+      null,
+      this.addeventForm.value.prenom,
+      this.addeventForm.value.nom,
+      this.addeventForm.value.date_naissance, //Object Date
+      this.addeventForm.value.pays_naissance.value, //liste
+      this.addeventForm.value.nationalite.value, //liste
+      this.addeventForm.value.email,
+      this.addeventForm.value.phone.internationalNumber,//phoneObject
+      this.addeventForm.value.domaine,//liste
+      this.addeventForm.value.source,//liste
+      this.addeventForm.value.etablissement,
+      this.addeventForm.value.inscrit_etablissement//boolean
     )
 
-    this.dEventService.create({ 'newEvent': newEvent }).subscribe(
+    this.dEventService.create(source).subscribe(
       ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Inscription ajoutée' });
+        this.messageService.add({ severity: 'success', summary: 'Merci de votre participation' });
       }),
       ((error) => {
         console.error(error)
-        this.messageService.add({ severity: 'error', summary: error.error });
+        this.messageService.add({ severity: 'error',summary:"Une erreur est arrivé\nMerci de contacter un Admin", detail: error.error });
       })
     )
   }

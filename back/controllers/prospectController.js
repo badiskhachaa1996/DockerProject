@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 app.disabled("x-powered-by");
 const { Prospect } = require('../models/prospect');
-const { CommercialPartenaire } = require('../models/CommercialPartenaire');
 const { User } = require('./../models/user');
 const { Partenaire } = require("../models/partenaire")
 const fs = require("fs");
@@ -652,13 +651,40 @@ app.get('/createProspectWhileEtudiant/:user_id', (req, res) => {
 
 app.get('/updateDossier/:id/:statut_dossier', (req, res) => {
     Prospect.findByIdAndUpdate(req.params.id, { statut_dossier: req.params.statut_dossier }, { new: true }, function (err, data) {
-        if(err){
+        if (err) {
             console.error(err)
             res.status(400).send(err)
-        }else{
+        } else {
             res.status(201).send(data)
         }
     })
+})
+
+app.get('/delete/:p_id/:user_id', (req, res) => {
+    Prospect.findByIdAndRemove(req.params.p_id, {}, function (err, data2) {
+        if (err) {
+            console.error(err)
+            res.status(400).send(err)
+        } else {
+            //Supprimer ces fichiers
+            let pathFile = "storage/prospect/" + req.params.p_id
+            try {
+                fs.rmSync(pathFile, { recursive: true });
+            } catch (err) {
+                console.error(err)
+            }
+            User.findByIdAndRemove(req.params.user_id, {}, function (err, data) {
+                if (err) {
+                    console.error(err)
+                    res.status(400).send(err)
+                } else {
+                    res.status(201).send({ user: data, prospect: data2 })
+                }
+            })
+        }
+    })
+
+
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

@@ -72,7 +72,7 @@ export class TuteurComponent implements OnInit {
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent"
         this.isCEO = dataUser.type == "CEO Entreprise"
-      } 
+      }
       if (this.isCEO) {
 
         // récupération de l'entreprise du user
@@ -95,33 +95,36 @@ export class TuteurComponent implements OnInit {
           }))
       }
       else if (!this.isCEO) {
-        //recupération des entreprises
-        console.log(this.entreprises)
+
         //récupération des tuteur
         this.tuteurService.getAll().subscribe(
           (dataTuteur) => {
-            dataTuteur.forEach(tuteur => {
-              this.tuteurs.push(tuteur);
-            })
-          }
-        );
-        console.log(this.tuteurs)
+            // dataTuteur.forEach(tuteur => {
+            //   this.tuteurs.push(tuteur);
+            // })
+            this.tuteurs = dataTuteur;
+            console.log(this.tuteurs)
 
-        //récupération des user
-        this.UserService.getAll().subscribe(
-          (dataUser) => {
-            dataUser.forEach(user => {
-              this.users.push(user);
-            })
+
+            //récupération des user
+            this.UserService.getAll().subscribe(
+              (dataUser) => {
+                dataUser.forEach(user => {
+                  this.users.push(user);
+                })
+              }
+            );
+            //Liste des entreprises
+            this.entrepriseService.getAll().subscribe(
+              (data) => {
+                data.forEach(entreprise => {
+                  this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
+                })
+              })
+
           }
         );
-        //Liste des entreprises
-        this.entrepriseService.getAll().subscribe(
-          (data) => {
-            data.forEach(entreprise => {
-              this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
-            })
-          })
+
       }
     })
 

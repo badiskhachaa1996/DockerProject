@@ -1,0 +1,194 @@
+<!-- <div class="grid">
+    <div class="col-12">
+        <h1 style="text-align: center;">Vous avez besoin d'un logement ?</h1>
+    </div>
+
+    
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Paris 19
+                    </span>
+                    <hr>
+                    <img src="../../../assets/images/profile.jpg" alt="LOGEMENT" width="100%" height="70%">
+                    <hr>
+                    <div class="text-900 font-medium text-xl">2 chambres salon</div>
+                    <button (click)="onGetDetails('25352')" pButton pRipple label="voir" type="button" icon="pi pi-plus" style="float: right;" class="p-button-rounded mr-2 mb-2"></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Bondy
+                    </span>
+                    <hr>
+                    <img src="../../../assets/images/profile.jpg" alt="LOGEMENT" width="100%" height="70%">
+                    <hr>
+                    <div class="text-900 font-medium text-xl">2 chambres salon</div>
+                    <button (click)="onGetDetails('25352')" pButton pRipple label="voir" type="button" icon="pi pi-plus" style="float: right;" class="p-button-rounded mr-2 mb-2"></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Noisy le sec
+                    </span>
+                    <hr>
+                    <img src="../../../assets/images/profile.jpg" alt="LOGEMENT" width="100%" height="70%">
+                    <hr>
+                    <div class="text-900 font-medium text-xl">2 chambres salon</div>
+                    <button (click)="onGetDetails('25352')" pButton label="voir" pRipple type="button" icon="pi pi-plus" style="float: right;" class="p-button-rounded mr-2 mb-2"></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Ivry sur seine
+                    </span>
+                    <hr>
+                    <img src="../../../assets/images/profile.jpg" alt="LOGEMENT" width="100%" height="70%">
+                    <hr>
+                    <div class="text-900 font-medium text-xl">2 chambres salon</div>
+                    <button (click)="onGetDetails('25352')" pButton pRipple label="voir" type="button" icon="pi pi-plus" style="float: right;" class="p-button-rounded mr-2 mb-2"></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+        
+</div> -->
+
+<p-toast key="tst" [baseZIndex]="99999"></p-toast>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h1>Bienvenue chez vous : réservez votre logement pour la rentrée</h1>
+            <p>
+                <span style="color: red;">OFFRE EXCEPTIONNELLE</span> dans la superbe nouvelle résidence de NOISY qui offre un espace unique 
+                en France pour les étudiants de toute nationalité! Nous vous proposons des appartements avec 
+                une chambre qui sera partagée par deux personnes uniquement avec un lit individuel pour chacun, 
+                salle de bains, espace cuisine et séjour <span style="color: red">à partager uniquement par deux personnes</span>.
+            </p>
+
+            <div>
+                <img src="assets/logement/ch-1.png" alt="Résidence ECLAT" class="col-12 md:col-4" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+                <img src="assets/logement/ch-2.png" alt="Résidence ECLAT" class="col-12 md:col-4" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+                <img src="assets/logement/ch-3.png" alt="Résidence ECLAT" class="col-12 md:col-4" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+            </div>
+
+            <h1>Conditions</h1>
+            <ul>
+                <li>325€/mois par personne toutes charges comprises pour un <span style="color: red; font-weight: bold;">studio dit M de 22-24 mètres carrés</span></li>
+                <li>1 mois de loyer en Dépôt de garantie</li>
+                <li>Document d'identité à jour</li>
+            </ul>
+
+            <h3 *ngIf="hasReservation" style="color: green; text-align: center;">Votre demande de logement est en cours de traitement</h3>
+            <button pButton *ngIf="!hasReservation" label="Faire une réservation" (click)="showFormReservation1 = true"></button>
+        </div>
+
+        <!-- Formulaire de reservations -->
+        <div class="card" *ngIf="showFormReservation1">
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showFormReservation1 = false;"> </i>
+
+            <h4 style="text-align: center;">Formulaire de soumission d'une réservation</h4>
+            <form [formGroup]="formReservation1" (ngSubmit)="onReserve1()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="name">Nom et prénom</label>
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                                    id="name" formControlName="choice"
+                                    emptyFilterMessage="Pas d'étudiant trouvé"
+                                    filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
+                        <small style="color: red;">Si vous souhaitez être en colocation avec une personne particulière vous pouvez la selectionner</small>
+                    </div>
+                    
+                    <div class="field col-3">
+                        <button pButton type="submit" label="Réserver"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end form -->
+
+        <div class="card">
+            <h1>Espaces communs de la résidence</h1>
+            La résidence vous met à disposition plusieurs espaces communs dont:
+            <ul>
+                <li>Un espaces Co-working: Grands espaces pour tous les locataires</li>
+                <li>Salle de sport : Immense salle avec de nombreux appareils : Fitness, muscu, cardio, pilates, ring de boxe etc...</li>
+                <li>Restauration : grandes cuisines communautaires</li>
+                <li>Salle de cinéma</li>
+                <li>Salle de réunion</li>
+                <li>Atelier des métamorphoses</li>
+                <li>Laverie</li>
+                <li>36 salles avec thématiques : Danse, Yoga, Relaxation, Cuisine etc… : Accessible à tous les locataires</li>
+                <li>Un immense Atrium au milieu de la résidence </li>
+            </ul> 
+
+            <div>
+                <img src="assets/logement/gym.jpg" alt="Résidence ECLAT" class="col-12 md:col-6" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+                <img src="assets/logement/patio.jpg" alt="Résidence ECLAT" class="col-12 md:col-6" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+
+                <img src="assets/logement/resto.jpg" alt="Résidence ECLAT" class="col-12" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+
+                <img src="assets/logement/library.jpg" alt="Résidence ECLAT" class="col-12 md:col-6" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+                <img src="assets/logement/lounge.jpg" alt="Résidence ECLAT" class="col-12 md:col-6" width="100%" height="100%" style="border-radius: 30px; box-shadow: 5px 5px 5px black">
+            </div>
+        </div>
+
+        <div class="card">
+            <h1>Information supplémentaire</h1>
+
+            <p>
+                La résidence se trouve à Noisy-le-Grand, elle a ouverte ses porte le <span style="color: red; font-weight: bold">22 Août 2022</span>.
+                L'accès à la résidence se fait via un <span style="color: red; font-weight: bold">Badge</span>, 
+                la résidence est sous vidéo-surveillance 24h/7.
+            </p>
+
+            <h3 *ngIf="hasReservation" style="color: green; text-align: center;">Votre demande de logement est en cours de traitement</h3>
+            <button pButton *ngIf="!hasReservation" label="Faire une réservation" (click)="showFormReservation2 = true"></button>
+        </div>
+
+        <!-- Formulaire de reservations -->
+        <div class="card" *ngIf="showFormReservation2">
+
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showFormReservation2 = false;"> </i>
+
+            <h4 style="text-align: center;">Formulaire de soumission d'une réservation</h4>
+            <form [formGroup]="formReservation2" (ngSubmit)="onReserve2()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="name2">Nom et prénom</label>
+                        <p-dropdown [options]="dropdownEtudiant" optionLabel="name" optionValue="_id" 
+                                    id="name2" formControlName="choice"
+                                    emptyFilterMessage="Pas d'étudiant trouvé"
+                                    filterPlaceholder="Choissisez un colocataire" filter="true"></p-dropdown>
+                        <small style="color: red;">Si vous souhaitez être en colocation avec une personne particulière vous pouvez la selectionner</small>
+                    </div>
+                    
+                    <div class="field col-3">
+                        <button pButton type="submit" label="Réserver"></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- end form -->
+    </div>
+</div>

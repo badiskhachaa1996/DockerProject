@@ -13,15 +13,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Recuperation de la liste des notes
 app.get("/getAllPopulate", (req, res, next) => {
-    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } })
-        .then((notesFromDb) => { res.status(200).send(notesFromDb); })
-        .catch((error) => { res.status(500).send(error.message); });
-});
-
-
-//Recuperation de la liste des notes
-app.get("/getAllPopulate", (req, res, next) => {
-    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } })
+    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}})
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });

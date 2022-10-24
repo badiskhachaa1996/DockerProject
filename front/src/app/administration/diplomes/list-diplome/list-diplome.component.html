@@ -191,6 +191,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem"></th>
+                        <th>Titre RNCP</th>
                         <th pSortableColumn="niveau" style="text-align: center;">Niveau <p-sortIcon field="niveau">
                             </p-sortIcon>
                         </th>
@@ -213,6 +214,7 @@
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
+                        <td>{{diplome.titre}}</td>
                         <td style="min-width: 12rem;">{{ diplome.niveau }}</td>
                         <td style="min-width: 8rem;">{{ diplome.titre_long }}</td>
                         <td style="min-width: 8rem;">{{ diplome.domaine }}</td>
@@ -235,7 +237,6 @@
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
-                        <th>Titre RNCP</th>
                         <th>Code Diplome</th>
                         <th>Début</th>
                         <th>Fin</th>
@@ -246,7 +247,6 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{diplome.titre}}</td>
                         <td>{{diplome.code_diplome}}</td>
                         <td>{{diplome.date_debut | date:'dd/MM/yyyy'}}</td>
                         <td>{{diplome.date_fin | date :'dd/MM/yyyy'}}</td>

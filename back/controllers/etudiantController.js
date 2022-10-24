@@ -6,9 +6,103 @@ const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
+const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
+const { Presence } = require('./../models/presence')
+const { Appreciation } = require("./../models/appreciation")
+const { Dashboard } = require("./../models/dashboard")
 app.disable("x-powered-by");
+const sign_espic = `
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
 
+    .tg td {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 0 15px;
+        word-break: normal;
+    }
+
+    .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 15px;
+        word-break: normal;
+    }
+
+    .tg .tg-129j {
+        color: #23234c;
+        font-size: x-large;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-uu30 {
+        font-size: medium;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-wp8o {
+        border-right: 1px #e0222e solid;
+        text-align: center;
+        vertical-align: top
+    }
+
+    .tg .tg-o3cm {
+        color: #e0222e;
+        font-size: large;
+        font-weight: bold;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-73oq {
+        text-align: left;
+        vertical-align: top
+    }
+</style>
+<table class="tg" style="table-layout: fixed; width: 560px">
+    <colgroup>
+        <col style="width: 240px">
+        <col style="width: 320px">
+    </colgroup>
+    <tbody>
+        <tr>
+            <td class="tg-wp8o" rowspan="6"><br><img
+                    src="https://www.espic.com/wp-content/uploads/2022/08/cropped-cropped-cropped-espic-logo.png"
+                    alt="Image" width="169" height="auto"></td>
+            <td class="tg-129j"><span style="text-transform: capitalize;">Service</span> <span
+                    style="text-transform: uppercase;">Pédagogique</span></td>
+        </tr>
+        <tr>
+            <td class="tg-o3cm"></td>
+        </tr>
+        <tr>
+            <td class="tg-uu30">+33 01 88 88 06 75</td>
+        </tr>
+        <tr>
+            <td class="tg-uu30"><a href="mailto:pedagogie@espic.com" target="_blank"
+                    rel="noopener noreferrer">pedagogie@espic.com</a></td>
+        </tr>
+        <tr>
+            <td class="tg-73oq">6 allée Hendrik Lorentz, 77420</td>
+            <td class="tg-uu30"><a href="https://www.espic.com/" target="_blank"
+                    rel="noopener noreferrer">www.espic.com/</a></td>
+        </tr>
+    </tbody>
+</table>
+`
 const path = require('path');
 var mime = require('mime-types')
 const fs = require("fs")
@@ -19,8 +113,8 @@ let transporter = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'ims@estya.com',
-        pass: 'ESTYA@@2021',
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
     },
 });
 
@@ -30,7 +124,7 @@ if (process.argv[2]) {
     if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
-        origin = ["https://ticket.estya.com"]
+        origin = ["https://ims.estya.com"]
     )
 }
 
@@ -60,7 +154,7 @@ app.post("/create", (req, res, next) => {
             //password: bcrypt.hashSync(userData.password, 8),
             role: userData.role,
             service_id: userData.service_id,
-            type: "Etudiant",
+            type: "Initial",
 
             pays_adresse: userData.pays_adresse,
             ville_adresse: userData.ville_adresse,
@@ -83,27 +177,30 @@ app.post("/create", (req, res, next) => {
                             etudiant.user_id = userFromDb._id;
                             console.log("L'étudiant n'existe pas - enregistrement en cours")
                             etudiant.save()
-
                                 .then((etudiantSaved) => { res.status(201).json({ success: "Etudiant ajouté dans la BD!", data: etudiantSaved }) })
                                 .catch((error) => { res.status(400).json({ error: "Impossible d'ajouter cet étudiant " + error.message }) });
-
                         }
                     })
                     .catch((error) => { res.status(400).json({ error: "Impossible de verifier l'existence de l'étudiant" }) });
             }
             else {
-                user.save()
-                    .then((userCreated) => {
+                user.save((error2, userCreated) => {
+                    if (error2) {
+                        console.error(error2);
+                        res.status(400).send({ error: 'Impossible de créer un nouvel user ' + error2.message })
+                    } else {
                         etudiant.user_id = userCreated._id;
                         console.log("Le user n'existe pas - enregistrement en cours")
-                        etudiant.save()
-                            .then((etudiantCreated) => { res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated }) })
-                            .catch((error) => {
+                        etudiant.save((error, etudiantCreated) => {
+                            if (error) {
                                 console.error(error);
                                 res.status(400).send({ error: 'Impossible de créer un nouvel etudiant ' + error.message })
-                            });
-                    })
-                    .catch((error) => { res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message }) });
+                            } else {
+                                res.status(201).json({ success: 'Etudiant crée', data: etudiantCreated })
+                            }
+                        })
+                    }
+                })
             }
         })
         .catch((error) => { res.status(500).json({ error: 'Impossible de verifier l\'existence de l\'utilisateur ' }) });
@@ -128,7 +225,7 @@ app.post("/assignToGroupe", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAll", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null } })
+    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } })
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })
@@ -138,7 +235,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAllEtudiantPopulate", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere')
+    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate("user_id").populate('campus').populate('filiere')
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })
@@ -146,11 +243,33 @@ app.get("/getAllEtudiantPopulate", (req, res, next) => {
 });
 
 app.get("/getAllAlternants", (req, res, next) => {
+    AlternantTosign = []
+    Etudiant.find({ isAlternant: true, isActive: { $ne: false } }).populate('user_id')
+        .then(alternantsFromDb => {
 
-    Etudiant.find({ isAlternant: true }).populate('user_id')
-        .then((alternantsFromDb) => {
+            let i = alternantsFromDb.length
+            alternantsFromDb.forEach(alternatInscrit => {
 
-            res.status(200).send(alternantsFromDb);
+                CAlternance.find({ alternant_id: alternatInscrit._id }).then(contratdata => {
+
+                    if (contratdata.length !== 0) {
+
+                    }
+                    else {
+
+                        AlternantTosign.push(alternatInscrit)
+
+                    }
+
+                    i--;
+                    if (i < 1) {
+
+
+                        res.status(200).send(AlternantTosign);
+
+                    }
+                })
+            });
         })
         .catch((error) => {
             console.log(error);
@@ -161,28 +280,28 @@ app.get("/getAllAlternants", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants via un Id de classe
 app.get("/getAllByClasseId/:id", (req, res, next) => {
-    Etudiant.find({ classe_id: req.params.id })
+    Etudiant.find({ classe_id: req.params.id, isActive: { $ne: false } })
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en attente d'assignation de groupe
 app.get("/getAllWait", (req, res, next) => {
-    Etudiant.find({ classe_id: null, valided_by_admin: true }).populate('filiere').populate('user_id')
+    Etudiant.find({ classe_id: null, valided_by_admin: true, isActive: { $ne: false } }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en de validation par l'administration
 app.get("/getAllWaitForVerif", (req, res, next) => {
-    Etudiant.find({ valided_by_admin: { $ne: true } }).populate('filiere').populate('user_id')
+    Etudiant.find({ valided_by_admin: { $ne: true }, isActive: { $ne: false } }).populate('filiere').populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
 
 //Récupérer la liste de tous les étudiants en de validation par l'administration
 app.get("/getAllWaitForCreateAccount", (req, res, next) => {
-    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true } }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
+    Etudiant.find({ valided_by_admin: true, valided_by_support: { $ne: true }, isActive: { $ne: false } }).populate('filiere').populate('user_id').populate('classe_id').populate('campus')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });
@@ -218,9 +337,9 @@ app.post("/update", (req, res, next) => {
         }, { new: true }, (err, user) => {
             if (err) {
                 console.error(err);
-                res.send(err)
+                res.status(500).send(err)
             } else {
-                res.send(user)
+                res.status(201).send(user)
             }
         })
 });
@@ -252,11 +371,7 @@ app.post("/setFileRight/:idetudiant", (req, res, next) => {
 
 });
 
-app.get('/sendEDT/:id/:update', (req, res, next) => {
-    let msg = "Votre emploi du temps est disponible"
-    if (req.params.update == "YES") {
-        msg = "Votre emploi du temps a été modifier\nVeuillez verifier les changements\nDésolé de la gêne occasionnée"
-    }
+app.post('/sendEDT/:id', (req, res, next) => {
     let mailList = []
     Etudiant.find({ classe_id: req.params.id }).then(etudiantList => {
         etudiantList.forEach(etudiant => {
@@ -265,18 +380,33 @@ app.get('/sendEDT/:id/:update', (req, res, next) => {
                 mailList.push(user.email)
             })
         })
-        let htmlmail = '<p style="color:black">Bonjour,\n' + msg + "</p>"
-            + '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a></p><p style="color:black">Cordialement.</p><footer> <img  src="red"/></footer>';
-        let mailOptions = {
-            from: 'ims@estya.com',
-            to: mailList,
-            subject: 'Estya-Ticketing',
-            html: htmlmail,
-            attachments: [{
-                filename: 'signature.png',
-                path: 'assets/signature.png',
+        let url = '<a href="' + origin[0] + '/calendrier/classe/' + req.params.id + '">Voir mon emploi du temps</a>'
+        let htmlmail = ("<div style='white-space: pre-wrap;'>" + req.body.mailcustom.replace('<lien>', url).replace('<lien edt>', url) + "</div><footer> <img src='red'/></footer>").replace(/\n/g, '<br>').replace('<signature espic><br>', '')
+        let attachments = [{
+            filename: 'signature_peda_espic.png',
+            path: 'assets/signature_peda_espic.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+        if (htmlmail.indexOf('<signature adg>') != -1) {
+            attachments = []
+            htmlmail = htmlmail.replace('<signature adg><br>', '')
+        } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
+            attachments = []
+            htmlmail = htmlmail.replace('<signature eduhorizons><br>', '')
+        } else if (htmlmail.indexOf('<signature estya>') != -1) {
+            attachments = [{
+                filename: 'signature_peda_estya.png',
+                path: 'assets/signature_peda_estya.png',
                 cid: 'red' //same cid value as in the html img src
             }]
+            htmlmail = htmlmail.replace('<signature estya><br>', '')
+        }
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: mailList,
+            subject: req.body.objet,
+            html: htmlmail,
+            attachments
         };
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
@@ -478,7 +608,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
+    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
@@ -521,6 +651,7 @@ function max(myArray) {
 
 const multer = require('multer');
 const { Prospect } = require("../models/prospect");
+const { Message } = require("../models/message");
 
 
 app.get("/getFiles/:id", (req, res) => {
@@ -612,7 +743,7 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.post('/getAllByMultipleClasseID', (req, res) => {
-    Etudiant.find({ classe_id: { $in: req.body.classe_id } }).populate("user_id").populate("classe_id").then(result => {
+    Etudiant.find({ classe_id: { $in: req.body.classe_id }, isActive: { $ne: false } }).populate("user_id").populate("classe_id").then(result => {
         res.send(result)
     })
 });
@@ -630,7 +761,7 @@ app.post('/addNewPayment/:id', (req, res) => {
 
 app.post('/validateProspect/:user_id', (req, res) => {
     User.findByIdAndUpdate(req.params.user_id, {
-        type: "Etudiant"
+        type: "Initial"
     }, { new: true }, (err, updatedUser) => {
         if (err) {
             console.error(err)
@@ -689,5 +820,44 @@ app.get('/assignEmail/:etudiant_id/:email_ims', (req, res) => {
             res.status(500).send(dataU)
     })
 
+})
+
+app.get('/downloadBulletin/:id', (req, res) => {
+    Etudiant.findByIdAndUpdate(req.params.id, { date_telechargement_bulletin: new Date() }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc)
+        } else {
+            console.error(err)
+            res.status(500).send(err)
+        }
+
+    })
+})
+
+app.get('/disable/:id', (req, res) => {
+    /*Etudiant.findByIdAndRemove(req.params.id, { new: true }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc)
+        } else {
+            console.error(err)
+            res.status(500).send(err)
+        }
+
+    })
+    User.findByIdAndRemove(req.params.user_id)
+    Presence.remove({ user_id: req.params.user_id })
+    Appreciation.remove({ etudiant_id: req.params.id })
+    CAlternance.remove({ alternant_id: req.params.id })
+    Dashboard.remove({ user_id: req.params.user_id })
+    Message.remove({ user_id: req.params.user_id })
+    RachatBulletin.remove({ user_id: req.params.user_id })
+    Ticket.remove({ createur_id: req.params.user_id })*/
+
+    Etudiant.findByIdAndUpdate(req.params.id, { isActive: false }).then(etudiant => {
+        res.send(etudiant)
+    }, err => {
+        console.err(err)
+        res.send(err)
+    })
 })
 module.exports = app;

@@ -210,6 +210,12 @@ import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/
 import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
 import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
 import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
+import { LogementComponent } from './ims+/logement/logement.component';
+import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
+import { MissionComponent } from './skillsnet/mission/mission.component';
+import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
+import { MatchingComponent } from './skillsnet/matching/matching.component';
+import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -406,6 +412,12 @@ import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/r
     ReturnUrlComponent,
     CancelUrlComponent,
     ErrorUrlComponent,
+    LogementComponent,
+    GestionLogementComponent,
+    MissionComponent,
+    MesMissionsComponent,
+    MatchingComponent,
+    EntreprisesMissionsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

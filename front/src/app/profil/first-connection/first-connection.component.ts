@@ -67,13 +67,13 @@ export class FirstConnectionComponent implements OnInit {
       numero_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       postal_adresse: new FormControl("", [Validators.required, Validators.pattern('[0-9]+')]),
       //classe_id: new FormControl(this.dropdownClasse[0]),
-      nationalite: new FormControl(this.nationList[0],Validators.required),
+      nationalite: new FormControl(this.nationList[0], Validators.required),
       date_naissance: new FormControl("", Validators.required),
       entreprise: new FormControl(""),
       diplome: new FormControl(this.programReinscrit[0]),
     });
   }
-
+  dataEtudiant: Etudiant
   ngOnInit(): void {
     this.onGetAllClasses();
     this.onInitRegisterForm();
@@ -82,6 +82,7 @@ export class FirstConnectionComponent implements OnInit {
     this.etuService.getPopulateByUserid(token['id']).subscribe((data) => {
       if (data) {
         this.userConnected = data.user_id
+        this.dataEtudiant = data
         this.RegisterForm.patchValue({
           lastname: this.userConnected.lastname,
           firstname: this.userConnected.firstname,
@@ -125,7 +126,7 @@ export class FirstConnectionComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(item => {
-          this.dropdownClasse.push({ nom: item.nom, value: item._id });
+          this.dropdownClasse.push({ nom: item.abbrv, value: item._id });
           this.classes[item._id] = item;
         });
 
@@ -237,34 +238,43 @@ export class FirstConnectionComponent implements OnInit {
 
       let calc = -(date.getUTCFullYear() - new Date().getUTCFullYear())
       if (15 < calc && calc < 61) {
+        if (this.dataEtudiant) {
+          this.dataEtudiant.statut = "Etudiant"
+          this.dataEtudiant.nationalite = this.RegisterForm.value.nationalite.value
+          this.dataEtudiant.date_naissance = this.RegisterForm.value.date_naissance
+          if (this.dataEtudiant.custom_id == null)
+            this.dataEtudiant.custom_id = this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance)
 
-        let etudiant = new Etudiant(
-          null,
-          this.userConnected._id,
-          null,
-          "Etudiant", //statut
-          this.RegisterForm.value.nationalite.value,
-          this.RegisterForm.value.date_naissance,
-          null,
-          null,
-          null,
-          null,
-          this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          this.RegisterForm.value.type.value !== "Initial",
-          null,null,
-          this.RegisterForm.value.diplome.value
-        )
-        this.AuthService.updateEtudiant(user, etudiant).subscribe((data: any) => {
+          this.dataEtudiant.isAlternant = this.RegisterForm.value.type.value !== "Initial"
+        } else {
+          this.dataEtudiant = new Etudiant(
+            null,
+            this.userConnected._id,
+            null,
+            "Etudiant", //statut
+            this.RegisterForm.value.nationalite.value,
+            this.RegisterForm.value.date_naissance,
+            null,
+            null,
+            null,
+            null,
+            this.generateCode(this.RegisterForm.value.nationalite.value, this.RegisterForm.value.firstname, this.RegisterForm.value.lastname, this.RegisterForm.value.date_naissance),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            this.RegisterForm.value.type.value !== "Initial",
+            null, null,
+            this.RegisterForm.value.diplome.value,
+          )
+        }
+        this.AuthService.updateEtudiant(user, this.dataEtudiant).subscribe((data: any) => {
           localStorage.removeItem('modify')
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {

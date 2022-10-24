@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
@@ -18,7 +19,7 @@ import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
-
+import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -27,6 +28,8 @@ import { Diplome } from 'src/app/models/Diplome';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
+import { CV } from 'src/app/models/CV';
+import { MissionService } from 'src/app/services/skillsnet/mission.service';
 
 
 
@@ -43,6 +46,12 @@ export class ListEtudiantComponent implements OnInit {
   etudiants: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
+
+  typeEtudiant = [
+    { label: "Tout types d'étudiants", value: null },
+    { label: "Alternant", value: true },
+    { label: "Initial", value: false }
+  ]
 
   formUpdateDossier: FormGroup;
   showFormUpdateEtudiant: boolean = false;
@@ -84,6 +93,7 @@ export class ListEtudiantComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
@@ -173,7 +183,7 @@ export class ListEtudiantComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService:MissionService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -294,8 +304,8 @@ export class ListEtudiantComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
-          this.searchClass.push({ label: classe.nom, value: classe._id });
+          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
+          this.searchClass.push({ label: classe.abbrv, value: classe._id });
         })
       }),
       ((error) => { console.error(error); })
@@ -374,20 +384,6 @@ export class ListEtudiantComponent implements OnInit {
       nationalite: ['', Validators.required],
       date_naissance: ['', Validators.required],
       isAlternant: [false],
-      entreprise_id: [],
-      id_tuteur: [],
-      //contrat alternance
-      debut_contrat: [''],
-      fin_contrat: [''],
-      horaire: [''],
-      // alternant: [''],// remplissage auto
-      intitule: [''],
-      classification: [''],
-      niv: [''],
-      coeff_hier: [''],
-      form: [''],
-      code_commercial: [''],
-      donneePerso: [''],
       // indicatif_tuteur: ["", Validators.pattern('[- +()0-9]+')],
       dernier_diplome: [''],
       sos_email: ['', Validators.email],
@@ -408,10 +404,17 @@ export class ListEtudiantComponent implements OnInit {
       enic_naric: [false],
       campus_id: [' '],
       filiere: ['', Validators.required],
-      statut_dossier: [this.statutDossier[0].value]
+      statut_dossier: ['']
     });
     this.formUpdateDossier = this.formBuilder.group({
-      statut_dossier: [this.statutDossier[0].value]
+      statut_dossier: ['']
+    });
+
+    this.formUpdateUser = this.formBuilder.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email_ims: ['', [Validators.required, Validators.email]],
+      email_perso: ['', [Validators.required, Validators.email]]
     });
   }
 
@@ -451,8 +454,8 @@ export class ListEtudiantComponent implements OnInit {
     let phone_rl = this.formUpdateEtudiant.get('phone_rl')?.value;
     let email_rl = this.formUpdateEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formUpdateEtudiant.get('adresse_rl')?.value;
-    let entreprise_id = this.formUpdateEtudiant.get('entreprise_id')?.value.value;
-    let remarque = entreprise_id = this.formUpdateEtudiant.get('remarque')?.value;
+
+    let remarque = this.formUpdateEtudiant.get('remarque')?.value;
     let isHandicaped = this.formUpdateEtudiant.get("isHandicaped")?.value;
     let suivi_handicaped = this.formUpdateEtudiant.get("suivi_handicaped")?.value;
     let enic_naric = this.formUpdateEtudiant.get("enic_naric")?.value
@@ -460,7 +463,7 @@ export class ListEtudiantComponent implements OnInit {
     let campus = this.formUpdateEtudiant.get("campus_id")?.value;
 
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
-
+    console.log(statut_dossier)
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
 
     let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
@@ -506,7 +509,7 @@ export class ListEtudiantComponent implements OnInit {
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
-
+        console.log(responde.statut_dossier)
         this.messageService.add({ severity: 'success', summary: 'Etudiant modifié' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
@@ -528,62 +531,68 @@ export class ListEtudiantComponent implements OnInit {
     let date = new Date(response.date_naissance)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
-    let alternantId = response._id
-    let contratAlternance
-    console.log(alternantId)
-    //récupération de l'entreprise et du contrat grace alternantId
-    this.entrepriseService.getByEtudiantIdPopolate(alternantId).subscribe(data => {
-      contratAlternance = data
-      // console.log(contratAlternance.tuteur_id.firstname, contratAlternance.tuteur_id.lastname)
 
-      this.entrepriseService.getById(contratAlternance.tuteur_id.entreprise).subscribe(dataEntreprise => {
-        this.entrepriseEtu = dataEntreprise
+    this.formUpdateEtudiant.patchValue({
+      statut: { value: response.statut, viewValue: response.statut },
+      classe_id: { libelle: bypass.nom, value: bypass._id },
+      nationalite: { value: response.nationalite, viewValue: response.nationalite },
+      isAlternant: this.etudiantToUpdate.isAlternant,
+      dernier_diplome: this.etudiantToUpdate.dernier_diplome,
+      sos_email: this.etudiantToUpdate.sos_email,
+      sos_phone: this.etudiantToUpdate.sos_phone,
+      numero_INE: this.etudiantToUpdate.numero_INE,
+      numero_NIR: this.etudiantToUpdate.numero_NIR,
+      nom_rl: this.etudiantToUpdate.nom_rl,
+      prenom_rl: this.etudiantToUpdate.prenom_rl,
+      phone_rl: this.etudiantToUpdate.phone_rl,
+      email_rl: this.etudiantToUpdate.email_rl,
+      adresse_rl: this.etudiantToUpdate.adresse_rl,
+      isHandicaped: this.etudiantToUpdate.isHandicaped,
+      suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
+      remarque: this.etudiantToUpdate.remarque,
+      isOnStage: this.etudiantToUpdate.isOnStage,
+      enic_naric: this.etudiantToUpdate.enic_naric,
+    });
+    bypass = response.campus
+    let bypassv2: any = response.filiere
+    this.formUpdateEtudiant.patchValue({
+      campus_id: bypass?._id,
+      filiere: bypassv2?._id,
+      date_naissance: this.formatDate(date)
+    })
+    this.showFormUpdateEtudiant = true;
+    this.showFormExportEtudiant = false;
+    this.showFormUpdateUser = false;
+  }
+  showFormUpdateUser = false
+  formUpdateUser: FormGroup
 
-        this.tuteurService.getByEntrepriseId(contratAlternance.tuteur_id.entreprise).subscribe(dataTuteur => {
-          this.formUpdateEtudiant.patchValue({
-            statut: { value: response.statut, viewValue: response.statut },
-            classe_id: { libelle: bypass.nom, value: bypass._id },
-            nationalite: { value: response.nationalite, viewValue: response.nationalite },
-            isAlternant: this.etudiantToUpdate.isAlternant,
-            entreprise_id: { value: contratAlternance.tuteur_id.entreprise, libelle: this.entrepriseEtu.r_sociale },
-            id_tuteur:{ libelle: dataTuteur.user_id.lastname + " " + dataTuteur.user_id.firstname, value: dataTuteur._id },
-            debut_contrat: new Date(contratAlternance.debut_contrat),
-            fin_contrat: new Date(contratAlternance.fin_contrat),
-            horaire: contratAlternance.horaire,
-            intitule: contratAlternance.intitule,
-            classification: contratAlternance.classification,
-            niv: contratAlternance.niveau_formation,
-            coeff_hier: contratAlternance.coeff_hierachique,
-            form: { label: contratAlternance.form },
-            code_commercial: contratAlternance.code_commercial,
-            donnePerso: contratAlternance.donnePerso,
-            dernier_diplome: this.etudiantToUpdate.dernier_diplome,
-            sos_email: this.etudiantToUpdate.sos_email,
-            sos_phone: this.etudiantToUpdate.sos_phone,
-            numero_INE: this.etudiantToUpdate.numero_INE,
-            numero_NIR: this.etudiantToUpdate.numero_NIR,
-            nom_rl: this.etudiantToUpdate.nom_rl,
-            prenom_rl: this.etudiantToUpdate.prenom_rl,
-            phone_rl: this.etudiantToUpdate.phone_rl,
-            email_rl: this.etudiantToUpdate.email_rl,
-            adresse_rl: this.etudiantToUpdate.adresse_rl,
-            isHandicaped: this.etudiantToUpdate.isHandicaped,
-            suivi_handicaped: this.etudiantToUpdate.suivi_handicaped,
-            remarque: this.etudiantToUpdate.remarque,
-            isOnStage: this.etudiantToUpdate.isOnStage,
-            enic_naric: this.etudiantToUpdate.enic_naric,
-          });
-          bypass = response.campus
-          let bypassv2: any = response.filiere
-          this.formUpdateEtudiant.patchValue({
-            campus_id: bypass?._id,
-            filiere: bypassv2?._id,
-            date_naissance: this.formatDate(date)
-          })
-          this.showFormUpdateEtudiant = true;
-          this.showFormExportEtudiant = false;
-        })
-      })
+  showFPersonalUpdate(response: User, etudiant: Etudiant) {
+    this.etudiantToUpdate = etudiant
+    console.log(etudiant)
+    this.formUpdateUser.patchValue({
+      firstname: response.firstname,
+      lastname: response.lastname,
+      email_ims: response.email,
+      email_perso: response.email_perso
+    })
+    this.showFormUpdateUser = true;
+    this.showFormUpdateEtudiant = false;
+    this.showFormExportEtudiant = false;
+  }
+
+  onUpdateUser() {
+    let bypass: any = this.etudiantToUpdate.user_id
+    bypass.firstname = this.formUpdateUser.value.firstname
+    bypass.lastname = this.formUpdateUser.value.lastname.toUpperCase()
+    bypass.email = this.formUpdateUser.value.email_ims
+    bypass.email_perso = this.formUpdateUser.value.email_perso
+    this.AuthService.updateByIdForPrivate(bypass).subscribe(v => {
+      this.showFormUpdateUser = false
+      this.messageService.add({ severity: 'success', summary: 'Modification d\'un étudiant', detail: 'Mise à jour de l\'étudiant avec succès' });
+      let bp: any = this.etudiantToUpdate
+      bp.user_id = v
+      this.etudiants[this.etudiants.indexOf(this.etudiantToUpdate)] = bp
     })
   }
 
@@ -600,6 +609,11 @@ export class ListEtudiantComponent implements OnInit {
   clickFile(rowData) {
     this.uploadUser = rowData
     document.getElementById('selectedFile').click();
+  }
+
+
+  clickFile2() {
+    document.getElementById('selectedFile2').click();
   }
 
   FileUploadPC(event) {
@@ -692,8 +706,6 @@ export class ListEtudiantComponent implements OnInit {
         this.confirmRighFile(event.files[0], this.showUploadFile)
         this.messageService.add({ severity: 'success', summary: 'Envoi de Fichier', detail: 'Le fichier a bien été envoyé' });
         this.loadPP(this.showUploadFile)
-
-
         event.target = null;
         this.showUploadFile = null;
 
@@ -741,5 +753,161 @@ export class ListEtudiantComponent implements OnInit {
     this.router.navigate(['ajout-etudiant']);
   }
 
+  disable(etudiant: Etudiant) {
+    let bypass: any = etudiant.user_id
+    if (confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+      this.etudiantService.disable(etudiant).subscribe((data) => {
+        this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+        this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+      }, (error) => {
+        this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+        console.error(error)
+      })
+  }
 
+
+  showCV: Etudiant = null
+  showUpdateCV(etudiant) {
+    this.showCV = etudiant
+    this.CVService.getByUserID(etudiant.user_id._id).subscribe(cv => {
+      this.languesCV = cv.langues
+      this.experiencesCV = cv.experiences
+      this.skillsCV = cv.connaissances
+      this.messageService.add({ severity: "info", summary: "Importation d'un CV existant", detail: "Si vous importez un CV via PDF, celui-ci sera écraser." })
+    }, err => {
+      console.error(err)
+    })
+  }
+
+
+  onUploadPDF(event, himself) {
+    if (event.files) {
+      const formData = new FormData();
+      let bypass: any = this.showCV.user_id
+      formData.append('user_id', bypass._id)
+      formData.append('file', event.files[0])
+      let avoidError: any = document.getElementById('selectedFile')
+      avoidError.value = ""
+      himself.clear()
+      this.CVService.uploadCV(formData, bypass._id).subscribe(r => {
+        console.log(r.txt)
+        this.langueFinder(r.txt)
+        this.skillFinder(r.txt)
+        this.experiencesFinder(r.txt)
+      }, err => {
+        console.error(err)
+      })
+    }
+  }
+
+  langueFinder(pdf: string) {
+    let pdf_lower = pdf.toLowerCase()
+    this.languesCV = []
+    if (pdf_lower.indexOf('français') != -1 || pdf_lower.indexOf('francais') != -1 || pdf_lower.indexOf('french') != -1)
+      this.languesCV.push('français')
+    if (pdf_lower.indexOf('arabe') != -1 || pdf_lower.indexOf('arabian') != -1)
+      this.languesCV.push('arabe')
+    if (pdf_lower.indexOf('espagnol') != -1 || pdf_lower.indexOf('spanish') != -1)
+      this.languesCV.push('espagnol')
+    if (pdf_lower.indexOf('japonais') != -1 || pdf_lower.indexOf('japanese') != -1)
+      this.languesCV.push('japonais')
+    if (pdf_lower.indexOf('english') != -1 || pdf_lower.indexOf('anglais') != -1)
+      this.languesCV.push('anglais')
+    if (pdf_lower.indexOf('chinois') != -1 || pdf_lower.indexOf('mandarin') != -1 || pdf_lower.indexOf('chinese') != -1)
+      this.languesCV.push('chinois')
+    if (pdf_lower.indexOf('allemand') != -1 || pdf_lower.indexOf('german') != -1)
+      this.languesCV.push('allemand')
+  }
+
+  languesList = [
+    { label: "Français", value: "français" },
+    { label: "Anglais", value: "anglais" },
+    { label: "Arabe", value: "arabe" },
+    { label: "Espagnol", value: "espagnol" },
+    { label: "Japonais", value: "japonais" },
+    { label: "Chinos", value: "chinois" },
+    { label: "Allemand", value: "allemand" }
+  ]
+
+  languesCV = []
+  skillsCV: [
+    { skill: String, niveau: String }
+  ]
+  experiencesCV: [
+    { skill: String, date_debut: Date, date_fin: Date }
+  ]
+
+  skillFinder(pdf: string) {
+    let pdf_lower = pdf.toLowerCase()
+    this.CVService.getSkills().subscribe(skills => {
+      this.skillsCV = null
+      skills.forEach(skill => {
+        if (pdf_lower.indexOf(skill) != -1) {
+          if (this.skillsCV != null)
+            this.skillsCV.push({ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() })
+          else
+            this.skillsCV = [{ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() }]
+        }
+      })
+    })
+  }
+
+  experiencesFinder(pdf: string) {
+    let pdf_lower = pdf.toLowerCase()
+    this.CVService.getExperiences().subscribe(experiences => {
+      this.experiencesCV = null
+      experiences.forEach(skill => {
+        if (pdf_lower.indexOf(skill) != -1) {
+          if (this.experiencesCV != null)
+            this.experiencesCV.push({ skill, date_debut: null, date_fin: null })
+          else
+            this.experiencesCV = [{ skill, date_debut: null, date_fin: null }]
+        }
+      })
+    })
+  }
+  ImagineYaPasDeCountEnJS(string, substring) {
+    //return (string.match("/" + substring + "/g") || []).length;
+    return string.split(substring).length - 1;
+  }
+
+  onAddSkill() {
+    this.skillsCV.push({ skill: "", niveau: "" })
+  }
+
+  onAddExp() {
+    this.experiencesCV.push({ skill: "", date_debut: null, date_fin: null })
+  }
+
+  deleteSkill(i) {
+    this.skillsCV.splice(i, 1)
+  }
+  deleteExp(i) {
+    this.experiencesCV.splice(i, 1)
+  }
+
+  submitCV() {
+    let bypass: any = this.showCV.user_id
+    let cv: CV = new CV(null,
+      bypass._id,
+      this.languesCV,
+      this.experiencesCV,
+      this.skillsCV
+    )
+    this.CVService.create(cv).subscribe(data => {
+      this.showCV = null
+      this.messageService.add(data.message)
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: 'error', summary: "Une erreur est survenu", detail: err.error })
+    })
+  }
+
+  findMission(user_id){
+    this.missionService.getMissionFromCV(user_id).then(d=>{
+      if(d){
+        this.router.navigate(['matching',user_id])
+      }
+    })
+  }
 }

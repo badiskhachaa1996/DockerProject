@@ -244,6 +244,7 @@
         </div>
 
     </div> -->
+
 <div *ngIf="isUnknow">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
@@ -262,6 +263,7 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
+<<<<<<< HEAD
     <div class="card">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
@@ -273,12 +275,41 @@
         <p>Merci de votre patience!</p>
     </div>
     <button pButton label="Test" (click)="test()"></button>
+=======
+>>>>>>> bbd6d477ffaadee668543c6e187604449656d9f5
 </div>
 
 
 
-<div *ngIf="isEtudiant">
-    <h1 *ngIf="user">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}</h1>
+
+<div *ngIf="isEtudiant && dataEtudiant">
+    <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
+        N°{{dataEtudiant?.custom_id}}
+    </h1>
+    <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre
+        dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
+    </p>
+
+    <div class="col-12">
+        <div class="card">
+            <h5>
+                Besoin d'un logement ?
+                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des logements tout neufs et pas cher.
+            </h5>
+
+            <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
+                <ng-template pTemplate="item" let-item>
+                    <img [src]="item.previewImageSrc" style="width: 100%;" />
+                </ng-template>
+                <ng-template pTemplate="thumbnail" let-item>
+                    <div class="grid grid-nogutter justify-content-center">
+                        <img [src]="item.thumbnailImageSrc" style="width:100px; height:100px"/>
+                    </div>
+                </ng-template>
+            </p-galleria>
+        </div>
+    </div>
+
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
@@ -330,7 +361,8 @@
                 </div>
 
                 <div class="col-12" *ngIf="type==null">
-                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsforma"></p-fullCalendar>
+                    <p-fullCalendar #calendar [events]="events" class="col-12 md:col-8" [options]="optionsforma">
+                    </p-fullCalendar>
                 </div>
             </div>
         </div>
@@ -394,7 +426,7 @@
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Le tableau de bord de la pédagogie est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
@@ -411,7 +443,7 @@
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
             <img src="assets\images\construction.jpg" style="width: 40%;">
         </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
+        <p>Le tableau de bord des commerciaux est actuellement en construction pour votre statut!</p>
         <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
         <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
                 style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
@@ -435,7 +467,43 @@
             scolaire par la pédagogie.</h3>
     </div>
 </div>
-
+<div *ngIf="dashboard">
+    <div class="card" *ngIf="showForm">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+            (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
+        <h4 style="text-align: center;">Ajouter un lien</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+        <form class="p-fluid p-formgrid grid" [formGroup]="addLinkForm" (ngSubmit)="saveLink()">
+            <div class="field col-12 md:col-6">
+                <label for="libelle">Libellé <span style="color: red;"> * </span></label>
+                <input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Google" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="link">Lien <span style="color: red;"> * </span></label>
+                <input pInputText id="link" type="text" formControlName="link" placeholder="google.fr" />
+            </div>
+            <div style="justify-content: right;">
+                <button pButton label="Ajouter" type="submit" [disabled]="addLinkForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+    <div class="card">
+        <button (click)="showForm=true;addLinkForm.reset()" pButton icon="pi pi-plus" label="Ajouter un nouveau lien"
+            style="width:auto;float:right"></button>
+        <h2>Tableau de bord personnel</h2>
+        <div class="grid">
+            <div class="field col-12 md:col-3 grid" *ngFor="let link of dashboard.links; let i = index">
+                <a class="col-11" href="{{link.link}}" target="_blank">{{link.label}}</a>
+                <i class="col-1 pi pi-times-circle" style="font-size: 20px; color: red; cursor: pointer;"
+                    (click)="deleteLink(i)" aria-hidden="true"> </i>
+            </div>
+        </div>
+    </div>
+</div>
 <!--<div *ngIf="isAdmin">
     <h2>Outil pour les devs</h2>
     <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>

@@ -273,7 +273,7 @@ export class NotesComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.nom, value: classe._id });
+          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
           this.classes[classe._id] = classe;
         })
 
@@ -285,6 +285,7 @@ export class NotesComponent implements OnInit {
     this.noteService.getAllPopulate().subscribe(
       ((response) => {
         this.notes = response;
+        console.log(response)
       }),
       ((error) => { console.error(error); })
     );
@@ -1000,18 +1001,24 @@ export class NotesComponent implements OnInit {
 
   //Methode de generation du bulletin de note
   onGenerateBulletin(id = 'content') {
-    console.log(id)
-    var element = document.getElementById(id);
-    var opt = {
-      margin: 0,
-      filename: 'bulletin.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-    this.hideBtn = false
+    if (this.etudiantToGenerateBulletin.statut_dossier.includes('Dossier complet') || confirm("Le dossier n'est pas complet\nVoulez-vous quand même générer le bulletin de note ?")) {
+      this.hideBtn = true
+      var element = document.getElementById(id);
+      var opt = {
+        margin: 0,
+        filename: 'bulletin.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+      this.hideBtn = false
+      this.etudiantService.downloadBulletin(this.etudiantToGenerateBulletin._id).subscribe(doc => {
 
+      },err=>{
+        console.error(err)
+      })
+    }
   }
 
   getBulletin(rowData: Note) {
