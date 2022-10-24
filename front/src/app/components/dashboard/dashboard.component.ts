@@ -30,6 +30,7 @@ import { Note } from 'src/app/models/Note';
 import { NoteService } from 'src/app/services/note.service';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { Formateur } from 'src/app/models/Formateur';
+import { PaymentService } from 'src/app/services/payment.service';
 import { Dashboard } from 'src/app/models/Dashboard';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -209,7 +210,8 @@ export class DashboardComponent implements OnInit {
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService, private formateurService: FormateurService,
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService, 
+    private formateurService: FormateurService, private paySer: PaymentService,    
     private dashboardService: DashboardService, private http: HttpClient
   ) { }
 

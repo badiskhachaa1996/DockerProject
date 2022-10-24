@@ -96,11 +96,14 @@ const historiqueEchangeController = require('./controllers/historiqueEchangeCont
 const forfeitFormController = require('./controllers/forfeitFormController');
 const tuteurController = require('./controllers/tuteurController');
 const demandeEventsController = require('./controllers/demandeEventsController');
+const paymentController = require('./controllers/paymentController');
+
 const logementController = require('./controllers/logementController');
 const missionController = require('./controllers/missionController');
 const cvController = require('./controllers/cvController')
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
+const { use } = require("./controllers/userController");
 
 
 app.use('/', function (req, res, next) {
@@ -222,6 +225,7 @@ app.use('/soc/contact', contactController)
 
 app.use("/soc/tuteur", tuteurController);
 
+app.use("/soc/lemon", paymentController);
 app.use("/soc/logement", logementController);
 
 app.use('/soc/dashboard', dashboardController);
