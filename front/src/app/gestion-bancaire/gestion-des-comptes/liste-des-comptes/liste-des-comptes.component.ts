@@ -15,18 +15,19 @@ export class ListeDesComptesComponent implements OnInit {
   constructor(private paymentService: PaymentService) { }
 
   ngOnInit(): void {
+    this.onGetAllAccounts();
   }
 
   //Recupération de la liste des comptes
   onGetAllAccounts(): void 
   {
-    this.paymentService.getAllAccounts()
-                       .then((response: any) => { 
-                          response.forEach((account) => {
-                            this.accounts.push(account);
-                        });
-                      })
-                       .catch((error) => { console.log(error); })
+    this.paymentService.getAllAccountsv2()
+                       .subscribe(
+                        ((response: any) => { 
+                          console.log('ok')
+                      }),
+                      ((error) => { console.log(error.message); }))
+                       
   }
 
 }
