@@ -13,11 +13,9 @@ export class PaymentService {
 
   lemonHeaders = {
     headers: new HttpHeaders({ 
-                'PSU-IP-Address': '130.180.213.198',
+                'psu-ip-address': '130.180.213.198',
                 'Authorization': 'Bearer f3b0723d-9739-467b-8cb5-5c8855fc1e66',
-                'Accept': '*/*',
-                'Access-Control-Allow-Origin': '*', 
-                'Referer': 'sandbox-api.lemonway.fr'              
+                'Accept': '*/*',        
               })
             }
 
@@ -37,7 +35,7 @@ export class PaymentService {
 
   getAllAccountsv2() {
     const url = "https://sandbox-api.lemonway.fr/mb/eduhorizons/dev/directkitrest/v2/accounts/123456789212345";
-    return this.httpClient.get<any>(url, this.lemonHeaders);
+    return this.httpClient.get(url, this.lemonHeaders);
   }
 
 
