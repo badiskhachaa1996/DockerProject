@@ -107,6 +107,8 @@ import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
+import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
+import { ResponsableCommercialGuard } from './guards/responsable-commercial.guard';
 
 
 @NgModule({
@@ -204,6 +206,7 @@ import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/e
                     { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
                     { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
                     { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
+                    { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] }
 
                 ],
             },

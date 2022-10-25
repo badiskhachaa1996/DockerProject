@@ -49,7 +49,8 @@ const etudiantSchema = mongoose.Schema({
     valided_by_admin: { type: Boolean, default: false },
     valided_by_support: { type: Boolean, default: false },
     annee_scolaire: { type: [String], default: ["2021"] },
-    date_telechargement_bulletin: { type: Date }
+    date_telechargement_bulletin: { type: Date },
+    conseiller: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

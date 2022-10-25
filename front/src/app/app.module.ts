@@ -209,6 +209,7 @@ import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
+import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -404,6 +405,7 @@ import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/e
     MesMissionsComponent,
     MatchingComponent,
     EntreprisesMissionsComponent,
+    GestionEquipeComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
