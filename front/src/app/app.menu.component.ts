@@ -23,6 +23,7 @@ import { CommercialPartenaireService } from './services/commercial-partenaire.se
     `
 })
 export class AppMenuComponent implements OnInit {
+    
     modelAdmin: any = [];
     model: any[];
     token: any;
@@ -230,6 +231,31 @@ export class AppMenuComponent implements OnInit {
                 this.isCommercial = dataUser.type == "Commercial"
                 if (this.isAdmin) {
                     this.model = this.modelAdmin
+                    if(dataUser.email == 'test.admin@estya.com' || dataUser.email == 'i.sall@estya.com')
+                    {
+                        this.model.push({
+                            label: 'Gestion service bancaire',
+                            items: [
+                                {
+                                    label: ' Gestion des comptes', icon: 'pi pi-wallet',
+                                    items: [
+                                        //{ label: 'Compte légal', icon: 'pi pi-check-circle', },
+                                        //{ label: 'Bénéficiaire effectif ultime', icon: 'pi pi-users',  },
+                                        { label: 'Mon compte', icon: ' pi pi-user', routerLink: ['/mon-compte-bancaire'] },
+                                        { label: 'Ajouter un nouveau compte individuel', icon: ' pi pi-plus', routerLink: ['/new-individual-account'] },
+                                        { label: 'Liste des comptes', icon: ' pi pi-wallet', routerLink: ['/list-accounts'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des transaction', icon: 'pi pi-directions ',
+                                    items:[ 
+                                        { label: 'Paiement', icon: ' pi pi-credit-card', routerLink: ['/payment'] },
+                                    ]
+                                },
+                            ]
+                            
+                        });
+                    }
                 } else if (this.isFormateur) {
                     //Formateur
                     this.FService.getByUserId(this.token.id).subscribe(dataF => {

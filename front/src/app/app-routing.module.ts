@@ -101,6 +101,14 @@ import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
 import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
 import { CompletionProfilGuard } from './guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
+import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
+import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
+import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
+import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
+import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
+import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
+import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
+import { PaymentComponent } from './gestion-bancaire/gestion-des-transactions/payment/payment.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
@@ -199,6 +207,18 @@ import { ResponsableCommercialGuard } from './guards/responsable-commercial.guar
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
+                    /** Path Lemon Way */
+
+                    { path: 'mon-compte-bancaire', component: MyAccountComponent },
+                    { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
+                    { path: 'list-accounts', component: ListeDesComptesComponent },
+                    { path: 'account-details/:id', component: AccountDetailsComponent },
+                    { path: 'payment', component: PaymentComponent },
+                    { path: 'success', component: ReturnUrlComponent },
+                    { path: 'error', component: ErrorUrlComponent },
+                    { path: 'cancel', component: CancelUrlComponent },
+
+                    /** end */
                     { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
                     { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
