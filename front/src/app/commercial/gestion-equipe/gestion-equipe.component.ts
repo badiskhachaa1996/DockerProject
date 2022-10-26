@@ -3,6 +3,7 @@ import { User } from 'src/app/models/User';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TeamCommercialService } from 'src/app/services/team-commercial.service';
 
 @Component({
   selector: 'app-gestion-equipe',
@@ -22,13 +23,16 @@ export class GestionEquipeComponent implements OnInit {
     team_id: ['', [Validators.required]]
   })
 
-  constructor(private formBuilder: FormBuilder, private UserService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private UserService: AuthService, private TeamCommercialService: TeamCommercialService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
     /*this.team.getAllCommercialFromTeam(this.token.id).subscribe(d => {
       this.commercials = d
     })*/
+    this.TeamCommercialService.getMyTeam().subscribe(tc => {
+      this.commercials = tc.team_id
+    })
     this.UserService.getAllCommercialV2().subscribe(u => {
       u.forEach(user => {
         if (user.role == "Responsable")

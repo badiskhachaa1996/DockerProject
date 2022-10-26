@@ -465,7 +465,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
-    interactionType: InteractionType.Redirect,
+    interactionType: InteractionType.Popup,
     authRequest: {
       scopes: ['user.read']
     }
