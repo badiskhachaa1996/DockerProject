@@ -100,7 +100,7 @@ export class UserProfilComponent implements OnInit {
           numero_adresse: this.userco.numero_adresse,
           postal_adresse: this.userco.postal_adresse,
           nationalite: { value: this.InfoUser.nationalite, viewValue: this.InfoUser.nationalite },
-          date_naissance: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getUTCFullYear()
+          date_naissance: date
         })
       }
     })

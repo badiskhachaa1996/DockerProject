@@ -126,7 +126,11 @@
                     <label For="firstname">Prénom</label>
                     <input pInputText id="firstname" formControlName="firstname" type="text" />
                 </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-3">
+                    <label For="code_postal">Numéro de la rue</label>
+                    <input pInputText id="code_postal" type="number" formControlName="numero_adresse" />
+                </div>
+                <div class="field col-12 md:col-9">
                     <label For="rue">Nom de la rue</label>
                     <input pInputText id="rue" type="text" formControlName="rue_adresse" />
                 </div>
@@ -134,11 +138,11 @@
                     <label For="code_postal">Code postal</label>
                     <input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
                 </div>
-                <div class="field col-6 md:col-3">
+                <div class="field col-6 md:col-6">
                     <label For="ville">Ville</label>
                     <input pInputText id="ville" type="text" formControlName="ville_adresse" />
                 </div>
-                <div class="field col-6 md:col-12">
+                <div class="field col-6 md:col-3">
                     <label For="pays">Pays</label>
                     <input pInputText id="pays" type="text" formControlName="pays_adresse" />
                 </div>
@@ -150,18 +154,20 @@
                     <label For="tel">Téléphone</label>
                     <input pInputText id="tel" type="text" formControlName="phone" />
                 </div>
-                <div class="field col-8 md:col-12">
+                <div class="field col-8 md:col-12" *ngIf="infoUser">
                     <label For="nationnalite">Nationnalité</label>
                     <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-12">
+                <div class="field col-12 md:col-12" *ngIf="infoUser">
                     <label For="date">Date de naissance</label>
-                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
+                    <!--<p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear">
-                    </p-calendar>
+                    </p-calendar>-->
+                    <input type="date" formControlName="date_naissance" class="form-control col-12"
+                    placeholder="21/12/2012" pInputText>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="IsAdmin">
                     <label For="role">Rôle</label>
