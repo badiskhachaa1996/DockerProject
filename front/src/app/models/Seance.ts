@@ -15,7 +15,8 @@ export class Seance {
         public campus_id?: string,
         public nbseance?: number,
         public fileRight?: any[],
-        public remarque?: string
+        public remarque?: string,
+        public seance_type?: string
     ) { }
 }
 

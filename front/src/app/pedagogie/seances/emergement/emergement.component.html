@@ -52,10 +52,10 @@
             <small> <span style="font-weight: bold;"> Support de cours : </span></small><br>
             <ul>
                 <li *ngFor="let file of showFiles; index as i">
-                    <i *ngIf="file.right && file.right!='false'" class="pi pi-download"
-                        style="font-size: 2rem" (click)="downloadFileCours(file)"></i>
-                    <em *ngIf="file.right && file.right!='false'" (click)="downloadFileCours(file)"
-                        [id]="i" style="cursor: pointer;">
+                    <i *ngIf="file.right && file.right!='false'" class="pi pi-download" style="font-size: 2rem"
+                        (click)="downloadFileCours(file)"></i>
+                    <em *ngIf="file.right && file.right!='false'" (click)="downloadFileCours(file)" [id]="i"
+                        style="cursor: pointer;">
                         {{ file.name }}
                     </em>
                 </li>
@@ -92,13 +92,9 @@
                 *ngIf="userList && userList[seance.formateur_id] && userList[seance.formateur_id].type!='Formateur'">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Formateur :</strong>
-                </div>
-                <div class="col-6 md:col-6" style="text-align:left !important;">
-                    <span style="color: black;">
-                        {{userList[seance.formateur_id].lastname | uppercase}}
-                        {{userList[seance.formateur_id].firstname
-                        | titlecase}}
-                    </span>
+                    {{userList[seance.formateur_id].lastname | uppercase}}
+                    {{userList[seance.formateur_id].firstname
+                    | titlecase}}
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="seance.classe_id && diplomeList">
@@ -125,14 +121,15 @@
                     <span *ngIf="seance.isPresentiel && !seance.salle_name" style="color: black;">
                         Non Specifié
                     </span>
-                    <span style="color: black;" *ngIf="!seance.isPresentiel"> 
+                    <span style="color: black;" *ngIf="!seance.isPresentiel">
                         Distanciel
                     </span>
                 </div>
             </div>
             <div class="col-12 md:col-6 grid" *ngIf="seance.date_debut && seance.date_fin">
                 <div class="col-6 md:col-6">
-                    <strong style="text-align:left !important;">Date :</strong> {{seance.date_debut | date:'dd/MM HH:mm'}} - {{seance.date_fin | date:'dd/MM HH:mm'}}
+                    <strong style="text-align:left !important;">Date :</strong> {{seance.date_debut | date:'dd/MM
+                    HH:mm'}} - {{seance.date_fin | date:'dd/MM HH:mm'}}
                 </div>
             </div>
         </div>
@@ -147,7 +144,7 @@
     <form class="col-12" [formGroup]="formAddEtudiant">
         <div class="grid">
             <div class="col-12">
-                <p-dropdown [options]="dropdownEtudiant" formControlName="etudiant_id"></p-dropdown>
+                <p-dropdown [filter]="true" [options]="dropdownEtudiant" formControlName="etudiant_id"></p-dropdown>
             </div>
             <div class="col-12">
                 <button pButton class="ui-button-raised ui-button-success" label="Autorisez cette étudiant"
@@ -241,7 +238,7 @@
                             Formateur
                         </td>
                         <td *ngIf="rowData.user_id && dicEtudiant[rowData.user_id]">
-                            {{dicEtudiant[rowData.user_id].classe_id.nom}}
+                            {{dicEtudiant[rowData.user_id].classe_id.abbrv}}
                         </td>
                         <td>
                             {{(rowData.isPresent)?"Oui":"Non"}}

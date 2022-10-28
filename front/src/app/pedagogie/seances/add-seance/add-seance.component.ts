@@ -32,6 +32,10 @@ export class AddSeanceComponent implements OnInit {
 
   salleNames = [
   ]
+  dropdownSeanceType: any[] = [
+    { label: "Séance", value: "Séance" },
+    { label: "Séance sans Formateur", value: "Séance sans Formateur" }
+  ]
   dropdownFormateur: any[] = [];
   dropdownMatiere: any[] = [];
   dropdownCampus: any[] = []
@@ -51,6 +55,7 @@ export class AddSeanceComponent implements OnInit {
     nbseance: new FormControl(""),
     isUnique: new FormControl(true, Validators.required),
     date_fin_plannification: new FormControl(''),
+    seance_type: new FormControl('Séance')
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
@@ -160,12 +165,19 @@ export class AddSeanceComponent implements OnInit {
     this.seanceForm.value.classe.forEach(c => {
       classeList.push(c.value)
     })
-    let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom,
-      this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle);
-    seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+    let formateur = null
+    let libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - En Autonomie (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+    let info = 'Classe: ' + this.seanceForm.value.classe[0].value + " Cours en Autonomie"
+    if (this.seanceForm.value.seance_type != 'Séance sans Formateur') {
+      formateur = this.seanceForm.value.formateur.value
+      info = 'Classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom
+      libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+    }
+    let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, formateur, info,
+      this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type);
     let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
-    this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
+    this.formateurService.getByUserId(formateur).subscribe(data => {
       /*if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
         choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
       } else {
@@ -173,7 +185,7 @@ export class AddSeanceComponent implements OnInit {
           choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
         }
       }*/
-      if (choice && data.type_contrat == "Prestation et Vacation") {
+      if (choice && data && data.type_contrat == "Prestation et Vacation") {
         let date_debut = this.getScoreDate(new Date(this.seanceForm.value.date_debut))
         let date_fin = this.getScoreDate(new Date(this.seanceForm.value.date_fin))
         let score_debut = 0
@@ -244,7 +256,7 @@ export class AddSeanceComponent implements OnInit {
         }, (error) => {
           console.error(error)
           let serror: Seance = error.error.seance
-          console.error(error.error.temp, seance)
+          console.error(error, seance)
           this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
           let classeStr = ""
           serror.classe_id.forEach(c => {
@@ -309,13 +321,19 @@ export class AddSeanceComponent implements OnInit {
         this.seanceForm.value.classe.forEach(c => {
           classeList.push(c.value)
         })
-        let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, newDateDebut, newDateFin, this.seanceForm.value.formateur.value, 'classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom,
-          this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle);
+        let formateur = null
+        let info = 'Classe: ' + this.seanceForm.value.classe[0].value + " Cours en Autonomie"
+        if (this.seanceForm.value.seance_type != 'Séance sans Formateur') {
+          formateur = this.seanceForm.value.formateur.value
+          info = 'Classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom
+        }
+        let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, newDateDebut, newDateFin, formateur, info,
+          this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type);
         console.log(seance)
         seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + newNumeroSeance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
         let calc = newDateFin.getHours() - newDateDebut.getHours()
         let choice = true
-        this.formateurService.getByUserId(this.seanceForm.value.formateur.value).subscribe(data => {
+        this.formateurService.getByUserId(formateur).subscribe(data => {
           /*if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
             choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
           } else {
@@ -323,7 +341,7 @@ export class AddSeanceComponent implements OnInit {
               choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
             }
           }*/
-          if (choice && data.type_contrat == "Prestation et Vacation") {
+          if (choice && data && data.type_contrat == "Prestation et Vacation") {
             let date_debut = this.getScoreDate(newDateDebut)
             let date_fin = this.getScoreDate(newDateFin)
             let score_debut = 0
@@ -507,6 +525,16 @@ export class AddSeanceComponent implements OnInit {
     }
     return r
 
+  }
+
+  changeType(value) {
+    if (value == "Séance sans Formateur") {
+      this.seanceForm.controls.formateur.setValidators([])
+      this.seanceForm.patchValue({ formateur: { value: null, nom: "En Autonomie" } })
+    } else {
+      this.seanceForm.controls.formateur.setValidators([Validators.required])
+      this.seanceForm.patchValue({ formateur: '' })
+    }
   }
 
 

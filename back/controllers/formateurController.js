@@ -50,9 +50,13 @@ app.get("/getById/:id", (req, res, next) => {
 
 //Recupère un formateur via un userId
 app.get("/getByUserId/:id", (req, res, next) => {
-    Formateur.findOne({ user_id: req.params.id })
-        .then((formateurFromDb) => { res.status(200).send(formateurFromDb) })
-        .catch((error) => { res.status(400).json({ error: "Impossible de recuperer cet formateur via son userId " + error.message }) });
+    if (req.params.id != "null")
+        Formateur.findOne({ user_id: req.params.id })
+            .then((formateurFromDb) => { res.status(200).send(formateurFromDb) })
+            .catch((error) => { res.status(400).json({ error: "Impossible de recuperer cet formateur via son userId " + error.message }) });
+    else{
+        res.status(200).send(null)
+    }
 })
 
 //Récupère le dictionaire id:formateur
@@ -214,21 +218,21 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
                 cid: 'red' //same cid value as in the html img src
             }]
         };
-        if (htmlmail.indexOf('<signature espic>')!=-1) {
+        if (htmlmail.indexOf('<signature espic>') != -1) {
             mailOptions.attachments = [{
                 filename: 'siganture_espic.png',
                 path: 'assets/signature_espic.png',
                 cid: 'red' //same cid value as in the html img src
             }]
             mailOptions.html = htmlmail.replace('<signature espic>', '')
-        } else if (htmlmail.indexOf('<signature adg>')!=-1) {
+        } else if (htmlmail.indexOf('<signature adg>') != -1) {
             mailOptions.attachments = [{
                 filename: 'siganture_adg.png',
                 path: 'assets/siganture_adg.png',
                 cid: 'red' //same cid value as in the html img src
             }]
             mailOptions.html = htmlmail.replace('<signature adg>', '')
-        } else if (htmlmail.indexOf('<signature eduhorizons>')!=-1) {
+        } else if (htmlmail.indexOf('<signature eduhorizons>') != -1) {
             mailOptions.attachments = [{
                 filename: 'siganture_eh.png',
                 path: 'assets/siganture_eh.png',

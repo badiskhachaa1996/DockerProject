@@ -65,7 +65,7 @@
                 <div class="field col-12">
                     <label>Montant Payé</label>
                     <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                        <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                        <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                         <div class="field col-12 md:col-3">
                             <label>Type de paiement:</label><br>
                             <input pInputText type="text" (change)="changeMontant(i,$event,'type')"

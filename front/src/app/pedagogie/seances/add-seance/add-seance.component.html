@@ -79,26 +79,26 @@
                         filterPlaceholder="Nom du campus" filter="true">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6" *ngIf="type!='formateur'">
+                <div class="field col-12 md:col-6" *ngIf="type!='formateur' && seanceForm.value.seance_type=='Séance'">
                     <label>Nom du formateur <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="formateur" [options]="dropdownFormateur" optionLabel="nom"
                         placeholder="Choissisez un formateur" emptyFilterMessage="Pas de formateur trouvé"
                         filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
+                <div [ngClass]="{'field col-12 md:col-6':(type!='formateur' && seanceForm.value.seance_type=='Séance'),'field col-12':!(type!='formateur' && seanceForm.value.seance_type=='Séance')}" class="field col-12 md:col-6">
                     <label>Numéro de séance</label><br>
                     <input pInputText type="number" formControlName="nbseance" placeholder="1"
-                        class="form-control col-8">
+                        class="form-control col-12">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Type de séance <span style="color: red;"> * </span></label>
+                    <label>Emplacement de la séance <span style="color: red;"> * </span></label>
                     <p-selectButton
                         [options]="[{label:'Présentiel',value:'Présentiel'},{label:'Distanciel',value:'Distanciel'},{label:'Hybride',value:'Hybride'}]"
                         formControlName="isPresentiel"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
-                    <br>
+                    <label>Type de planification <span style="color: red;"> * </span></label>
                     <p-selectButton [options]="[{name:'Planifiée',value:true},{name:'Validée',value:false}]"
                         formControlName="isPlanified" optionLabel="name" optionValue="value"></p-selectButton>
 
@@ -108,7 +108,14 @@
                     <p-dropdown formControlName="salle_name" [options]="salleNames">
                     </p-dropdown>
                 </div>
-                <div class="field col-12">
+                <div class="field col-12 md:col-6">
+                    <label>Type de séance <span style="color: red;"> * </span></label>
+                    <p-selectButton (onChange)="changeType($event.value)"
+                        [options]="dropdownSeanceType"
+                        formControlName="seance_type"></p-selectButton>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Multiplicité de la séance <span style="color: red;"> * </span></label>
                     <p-selectButton [options]="seanceOptions" optionLabel="name" optionValue="value"
                         formControlName="isUnique">
                     </p-selectButton>

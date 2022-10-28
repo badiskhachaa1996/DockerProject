@@ -54,7 +54,7 @@
             </div>
 
             <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
-                <label>Payement restant :</label>
+                <label>Paiement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
             <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
@@ -140,7 +140,7 @@
 
             <!-- Parcous Etudiant-->
             <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-4">
                     <label>Diplome du parcours:</label><br>
                     <input pInputText type="text" [(value)]="parcoursList[i]['diplome']" placeholder="BTS"
@@ -207,7 +207,7 @@
 
 
             <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
-                <label>Payement restant :</label>
+                <label>Paiement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
             <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
@@ -293,7 +293,7 @@
 
             <!-- Parcous Etudiant-->
             <div class="col-12 grid" *ngFor="let data of parcoursList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-4">
                     <label>Diplome du parcours:</label><br>
                     <input pInputText type="text" [(value)]="parcoursList[i]['diplome']" placeholder="BTS"
@@ -340,7 +340,7 @@
         </form>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-3">
                     <label>Type de payement:</label><br>
                     <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
@@ -390,7 +390,7 @@
         </form>
         <div class="p-fluid p-formgrid grid">
             <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
-                <!--<p style="font-style:italic">Payement n°{{i+1}}</p>-->
+                <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-3">
                     <label>Type de payement:</label><br>
                     <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
@@ -690,7 +690,7 @@
                     <th>Désignation du TCF</th>
                     <th>Agent</th>
                     <th>Phase complémentaire</th>
-                    <th>Statut Payement</th>
+                    <th>Statut Paiement</th>
                     <th>Attestation traité par</th>
                 </tr>
             </ng-template>

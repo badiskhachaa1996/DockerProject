@@ -232,7 +232,7 @@ app.use('/soc/dashboard', dashboardController);
 
 app.use('/soc/mission', missionController);
 
-app.use('/sov/teamCommercial',teamCommercialController)
+app.use('/soc/teamCommercial',teamCommercialController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

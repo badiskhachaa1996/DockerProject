@@ -22,61 +22,49 @@ function customIncludes(listSeance, listGiven) {
 
 //Creation d'une nouvelle 
 app.post('/create', (req, res, next) => {
-
-    let seanceData = req.body.newSeance;
     //Création d'une nouvelle 
     let seance = new Seance({
-        classe_id: req.body.classe_id,
-        matiere_id: req.body.matiere_id,
-        libelle: req.body.libelle,
-        date_debut: req.body.date_debut,
-        date_fin: req.body.date_fin,
-        formateur_id: req.body.formateur_id,
-        infos: req.body.infos,
-        isPresentiel: req.body.isPresentiel,
-        salle_name: req.body.salle_name,
-        isPlanified: req.body.isPlanified,
-        campus_id: req.body.campus_id,
-        nbseance: req.body.nbseance
+        ...req.body
     });
 
     Seance.find()
         .then(data => {
             let text = null
             let error = false
-            data.forEach(temp => {
-                if (temp.formateur_id == req.body.formateur_id) {
-                    text = "Le formateur est déjà assigné à une séance :\n"
-                } else if (customIncludes(temp.classe_id, req.body.classe_id)) {
-                    text = "La classe est déjà assigné à une séance :\n"
-                } else {
-                    text = null
-                }
-                if (text && !error) {
-                    let s = temp.date_debut.getTime() // debut = temp.date_debut
-                    let e = temp.date_fin.getTime() // fin = temp.date_fin
-                    let cs = new Date(req.body.date_debut).getTime() //date to check = req.body.date_debut
-                    let ce = new Date(req.body.date_fin).getTime() //date to check = req.body.date_fin
+            if (req.body.formateur_id)
+                data.forEach(temp => {
+                    if (temp.formateur_id == req.body.formateur_id) {
+                        text = "Le formateur est déjà assigné à une séance :\n"
+                    } else if (customIncludes(temp.classe_id, req.body.classe_id)) {
+                        text = "La classe est déjà assigné à une séance :\n"
+                    } else {
+                        text = null
+                    }
+                    if (text && !error) {
+                        let s = temp.date_debut.getTime() // debut = temp.date_debut
+                        let e = temp.date_fin.getTime() // fin = temp.date_fin
+                        let cs = new Date(req.body.date_debut).getTime() //date to check = req.body.date_debut
+                        let ce = new Date(req.body.date_fin).getTime() //date to check = req.body.date_fin
 
-                    //Si une séance existante se trouve pendant la séance
-                    if (cs == s && e == cs) {
-                        error = true
-                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier les deux dates", temp })
-                        return false
-                    } else if (cs >= s && cs < e) {
-                        //Si la date de debut de la nouvelle séance est entre une existante
-                        error = true
-                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de début", temp })
-                        return false
+                        //Si une séance existante se trouve pendant la séance
+                        if (cs == s && e == cs) {
+                            error = true
+                            res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier les deux dates", temp })
+                            return false
+                        } else if (cs >= s && cs < e) {
+                            //Si la date de debut de la nouvelle séance est entre une existante
+                            error = true
+                            res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de début", temp })
+                            return false
+                        }
+                        //Si la date de fin de la nouvelle séance est entre une existante
+                        else if (ce > s && ce <= e) {
+                            error = true
+                            res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de fin", temp })
+                            return false
+                        }
                     }
-                    //Si la date de fin de la nouvelle séance est entre une existante
-                    else if (ce > s && ce <= e) {
-                        error = true
-                        res.status(400).send({ text: text + "Cette séance s'interpose avec une autre séance\nVérifier la date de fin", temp })
-                        return false
-                    }
-                }
-            })
+                })
             if (new Date(req.body.date_debut).getTime() > new Date(req.body.fin).getTime() && !error) {
                 res.status(400).send("La date de début est supérieur à la date de fin")
             } else if (!error) {
@@ -407,7 +395,7 @@ app.get('/getFormateurFromClasseID/:classe_id/:semestre', (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.delete("/delete/:id", (req, res) => {
-    Seance.deleteOne({_id:req.params.id}).then(s => {
+    Seance.deleteOne({ _id: req.params.id }).then(s => {
         res.status(200).send(s)
     }, error => {
         console.error(error)

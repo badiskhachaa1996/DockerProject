@@ -104,6 +104,12 @@
                         <input pInputText id="niveau" type="text" formControlName="niveau" placeholder="1er année" />
                     </div>
                     <div class="field col-12">
+                        <label>Prise en compte pour le Bulletin: <span style="color: red;"> * </span></label>
+                        <p-selectButton (onChange)="changeMatiereSeanceAdd($event.value)"
+                            [options]="[{label:'Pris en compte dans le Bulletin',value:false},{label:'Hors Bulletin',value:true}]"
+                            formControlName="hors_bulletin"></p-selectButton>
+                    </div>
+                    <div class="field col-12">
                         <label For="remarque">Remarque</label>
                         <textarea id="remarque" pInputTextarea placeholder="Remarque" autoResize rows="3" cols="150"
                             formControlName="remarque"></textarea>
@@ -239,8 +245,11 @@
                         <th pSortableColumn="coeff" style="text-align:center">Coefficient <p-sortIcone field="coeff">
                             </p-sortIcone>
                         </th>
-                        <th pSortableColumn="credit_ects" style="text-align:center">Crédits ECTS <p-sortIcone
-                                field="credit_ects"></p-sortIcone>
+                        <th pSortableColumn="credit_ects" style="text-align:center">Crédits ECTS <p-sortIcon
+                                field="credit_ects"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="hors_bulletin" style="text-align:center"> Pris en compte dans le Bulletin
+                            <p-sortIcon field="hors_bulletin"></p-sortIcon>
                         </th>
                         <th pSortableColumn="remarque" style="text-align:center">Remarque <p-sortIcone field="remarque">
                             </p-sortIcone>
@@ -255,10 +264,12 @@
                         <td style="min-width: 12rem;">
                             {{ matiere.abbrv }}
                         </td>
-                        <td *ngIf="formationDic[matiere.formation_id]!=undefined && !isArray(matiere.formation_id)" style="min-width: 12rem;">
+                        <td *ngIf="formationDic[matiere.formation_id]!=undefined && !isArray(matiere.formation_id)"
+                            style="min-width: 12rem;">
                             {{ formationDic[matiere.formation_id].titre }}
                         </td>
-                        <td *ngIf="matiere.formation_id!=undefined && isArray(matiere.formation_id)" style="min-width: 12rem;">
+                        <td *ngIf="matiere.formation_id!=undefined && isArray(matiere.formation_id)"
+                            style="min-width: 12rem;">
                             <span *ngFor="let cid of matiere.formation_id; let index = index">
                                 <span
                                     *ngIf="formationDic[cid] && formationDic[cid].titre && index==0">{{formationDic[cid].titre}}</span>
@@ -297,9 +308,16 @@
                         <td style="min-width: 12rem;">
                             {{matiere.credit_ects}}
                         </td>
+                        <td style="min-width: 12rem;" *ngIf="matiere.hors_bulletin">
+                            <p-tag styleClass="mr-2" icon="pi pi-times" severity="danger" value="Hors Bulletin"></p-tag>
+                        </td>
+                        <td style="min-width: 12rem;" *ngIf="!matiere.hors_bulletin">
+                            <p-tag styleClass="mr-2" icon="pi pi-check" severity="success" value="Pris en compte"></p-tag>
+                        </td>
                         <td style="min-width: 12rem;">
                             {{matiere.remarque}}
                         </td>
+
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showFormModifMatiere = true; idMatiereToUpdate = matiere._id; onGetbyId(matiere); showFormAddMatiere = false;"

@@ -263,16 +263,6 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
-    <div class="card">
-        <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
-            <img src="assets\images\construction.jpg" style="width: 40%;">
-        </div>
-        <p>Le tableau de bord est actuellement en construction pour votre statut!</p>
-        <p>Pour naviguer sur l'application, merci d'utiliser le menu à gauche.</p>
-        <p>Si vous rencontrez le moindre problème, nous vous invitons à créer un ticket dans la partie <span
-                style="color: red; font-weight: bold;">"Ticketing"</span> dans le menu</p>
-        <p>Merci de votre patience!</p>
-    </div>
     <button pButton label="Test" (click)="test()"></button>
 </div>
 

@@ -187,7 +187,8 @@ export class AppMenuComponent implements OnInit {
             }, {
                 label: 'Commercial',
                 items: [
-                    { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
+                    { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                    { label: 'Gestion des Equipes de Conseillers', icon: 'pi pi-users', routerLink: ['/equipe-commercial'] },
                 ]
             }, {
                 label: 'Support',

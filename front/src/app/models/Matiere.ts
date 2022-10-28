@@ -15,6 +15,7 @@ export class Matiere {
         public remarque?: string,
         public semestre?: string,
         public niveau?: string,
+        public hors_bulletin?: boolean
     ) { };
 
 }

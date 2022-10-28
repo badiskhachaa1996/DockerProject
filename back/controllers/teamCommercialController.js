@@ -11,19 +11,24 @@ app.post("/create", (req, res, next) => {
     });
 
     tCommercial.save()
-        .then((tSaved) => { res.status(201).send(tSaved) })
+        .then((tSaved) => {
+            tSaved.populate('owner_id').populate('team_id').populate('createur_id')
+            console.log(tSaved)
+            res.status(201).send(tSaved)
+        })
         .catch((error) => { res.status(400).send(error) });
 
 });
 
 app.post('/updateTeam', (req, res) => {
-    TeamCommercial.findByIdAndUpdate(req.body._id, { team_id: req.body.team_id }, { new: true }, (err, doc) => {
-        if (err) {
-            console.error(err)
-            res.status(500).send(err)
-        } else
-            res.status(201).send(doc)
-    })
+    TeamCommercial.findByIdAndUpdate(req.body._id, { team_id: req.body.team_id }, { new: true }).populate('owner_id').populate('team_id').populate('createur_id')
+        .exec((err, doc) => {
+            if (err) {
+                console.error(err)
+                res.status(500).send(err)
+            } else
+                res.status(201).send(doc)
+        })
 })
 
 app.get("/getAll", (req, res, next) => {
@@ -35,10 +40,11 @@ app.get("/getAll", (req, res, next) => {
 app.get('/getMyTeam', (req, res) => {
     let token = jwt.decode(req.header("token"))
     TeamCommercial.findOne({ owner_id: token.id }).populate('owner_id').populate('team_id').populate('createur_id')
-    .then(team=>{res.status(200).send(team)})
-    .catch((error) => {
-        console.error(error)
-        res.status(500).send(error) })
+        .then(team => { res.status(200).send(team) })
+        .catch((error) => {
+            console.error(error)
+            res.status(500).send(error)
+        })
 })
 
 

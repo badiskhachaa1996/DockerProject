@@ -8,7 +8,7 @@ import { teamCommercial } from '../models/teamCommercial';
 })
 export class TeamCommercialService {
 
-  apiUrl = environment.origin + "ticket/"
+  apiUrl = environment.origin + "teamCommercial/"
 
   constructor(private http: HttpClient) { }
   create(team: teamCommercial) {

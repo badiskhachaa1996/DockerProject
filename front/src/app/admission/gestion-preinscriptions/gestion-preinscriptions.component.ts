@@ -591,7 +591,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
       t['Decision Admission'] = p.decision_admission
       t['Phase complémentaire'] = p.phase_complementaire
-      t['Statut Payement'] = p.statut_payement
+      t['Statut Paiement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
       t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
