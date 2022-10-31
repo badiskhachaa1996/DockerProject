@@ -181,7 +181,7 @@ const prospect_schema = new mongoose.Schema({
     },
     rentree_scolaire: {
         type: String,
-        default: "Principale"
+        default: "Septembre 2022"
     }
 });
 

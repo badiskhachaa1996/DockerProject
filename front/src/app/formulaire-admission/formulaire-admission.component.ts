@@ -58,9 +58,15 @@ export class FormulaireAdmissionComponent implements OnInit {
     "Fin",
   ];
 
+  rentreeList = [
+    { label: "Janvier 2023", value: "Janvier 2023" },
+    { label: "Septembre 2023", value: "Septembre 2023" }
+  ]
+
   academicList =
     [
       { label: 'Pré-bac', value: 'Pré-bac' },
+      { label: 'Bac +1', value: 'Bac +1' },
       { label: 'Bac +2', value: 'Bac +2' },
       { label: 'Bac +3', value: 'Bac +3' },
       { label: 'Bac +4', value: 'Bac +4' },
@@ -93,6 +99,20 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Programme Français" },
     ];
 
+  /*
+        { value: "1ere année BTS MCO - Management Commercial Operationnel " },
+    { value: "1ere année BTS NDRC - Négociation et Digitalisation de la Relation Client" },
+    { value: "1ere année BTS CI - Commerce International" },
+    { value: "Année 1 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
+    { value: "Année 2 TP NTC - Négociateur Technico-Commercial (Titre Professionnel)" },
+    { value: "Année 3 : Bachelor Chargé de gestion commerciale - Spécialité service commercial " },
+    { value: "Année 3 : Bachelor Chargé de Développement Marketing et Commercial" },
+    { value: "Mastère 1 : MDO : Manager des organisations" },
+    { value: "Mastère 1 : IA - Ingénieur d'Affaires" },
+    { value: "1ere année BTS SIO - Services Informatiques aux Organisations" },
+    { value: "Année 1 : TSSR   - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
+    { value: "Année 2 : TSSR  - Technicien Supérieur Systèmes et Réseaux (Titre professionnel)" },
+    */
   programeFrDropdown =
     [
       { value: "BTS MCO - Management Commercial Opérationnel" },
@@ -263,6 +283,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       campusChoix2: new FormControl(this.campusDropdown[1], [Validators.required]),
       campusChoix3: new FormControl(this.campusDropdown[2], [Validators.required]),
       formation: new FormControl(this.programeFrDropdown[0], [Validators.required]),
+      rentree_scolaire: new FormControl('', [Validators.required]),
       programme: new FormControl(this.programList[0], [Validators.required]),
       rythme_formation: new FormControl('', Validators.required),
 
@@ -416,6 +437,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     let campusChoix3 = this.RegisterForm.get('campusChoix3').value.value;
     let programme = this.RegisterForm.get('programme').value.value;
     let formation = this.RegisterForm.get('formation').value.value;
+    let rentree_scolaire = this.RegisterForm.value.rentree_scolaire
     let rythme_formation = this.RegisterForm.get('rythme_formation').value.value;
     // if (rythme_formation == "Alternance") {
     let nir = this.RegisterForm.get('nir').value;
@@ -428,7 +450,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       formation = null
     }
     //****** Notre partenaire d'accompagnement EduHorizons *******
-    let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value,this.RegisterForm.get('servicesEh_6').value];
+    let servicesEh = [this.RegisterForm.get('servicesEh_1').value, this.RegisterForm.get('servicesEh_2').value, this.RegisterForm.get('servicesEh_3').value, this.RegisterForm.get('servicesEh_4').value, this.RegisterForm.get('servicesEh_5').value, this.RegisterForm.get('servicesEh_6').value];
     let isGarant = this.RegisterForm.get('isGarant').value.value;
     let nomGarant = this.RegisterForm.get('nomGarant').value;
     let prenomGarant = this.RegisterForm.get('prenomGarant').value;
@@ -450,7 +472,7 @@ export class FormulaireAdmissionComponent implements OnInit {
 
     let prospect = new Prospect(null, null, date_naissance, numero_whatsapp, validated_academic_level, statut_actuel, other, languages, professional_experience, campusChoix1, campusChoix2, campusChoix3, programme, formation, rythme_formation, servicesEh, nomGarant, prenomGarant, nomAgence, donneePerso, Date(), this.form_origin, code_commercial,
       "En attente de traitement", null, "En cours de traitement", null, null, indicatif_whatsapp, null, null, null, null, null, null, null, null, false, null, nir, mobilite_reduite, sportif_hn,
-      hors_Admission, null, null, null, null, null, null, null, source,"Decalée");
+      hors_Admission, null, null, null, null, null, null, null, source, rentree_scolaire);
     this.admissionService.create({ 'newUser': user, 'newProspect': prospect }).subscribe(
       ((response) => {
         if (response.success) {

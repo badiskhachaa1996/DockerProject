@@ -87,8 +87,9 @@ export class UserProfilComponent implements OnInit {
     window.scrollTo(1000, 0)
     this.civiliteList.forEach((civ) => {
       if (civ.value == this.userco.civilite) {
-        let date = new Date(this.InfoUser.date_naissance)
-        this.RegisterForm.setValue({
+        if (this.InfoUser && this.InfoUser.date_naissance)
+          this.RegisterForm.setValue(new Date(this.InfoUser.date_naissance))
+        this.RegisterForm.patchValue({
           lastname: this.userco.lastname,
           firstname: this.userco.firstname,
           indicatif: this.userco?.indicatif,
@@ -99,8 +100,7 @@ export class UserProfilComponent implements OnInit {
           rue_adresse: this.userco.rue_adresse,
           numero_adresse: this.userco.numero_adresse,
           postal_adresse: this.userco.postal_adresse,
-          nationalite: { value: this.InfoUser.nationalite, viewValue: this.InfoUser.nationalite },
-          date_naissance: date
+          nationalite: { value: this.InfoUser.nationalite, viewValue: this.InfoUser.nationalite }
         })
       }
     })
@@ -203,8 +203,9 @@ export class UserProfilComponent implements OnInit {
     }, (error) => {
       console.error(error)
     });
-    if (this.userco.type == "Etudiant" || this.userco.type == "Initial") {
+    if (this.userco.type == "Etudiant" || this.userco.type == "Initial" || this.userco.type == "Alternant") {
       let etu: Etudiant = this.InfoUser
+      console.log(this.InfoUser)
       etu.nationalite = this.RegisterForm.value.nationalite.value
       etu.date_naissance = this.RegisterForm.value.date_naissance
       this.EtudiantService.update(etu).subscribe(newEtu => {
@@ -215,8 +216,6 @@ export class UserProfilComponent implements OnInit {
         console.error(err)
       })
     }
-
-    this.showFormModifInfo = false;
     this.showFormModifInfo = false;
   }
 
