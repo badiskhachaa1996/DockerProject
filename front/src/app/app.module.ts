@@ -218,6 +218,7 @@ import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
+import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -422,6 +423,7 @@ import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.
     EntreprisesMissionsComponent,
     GestionEquipeComponent,
     DetailEquipeComponent,
+    DemandeConseillerComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -1,0 +1,54 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des demandes pour des conseillers</h5>
+            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="demandes" styleClass="" [paginator]="true"
+                [pageLinks]="5" [globalFilterFields]="['by.lastname','by.firstname']" responsiveLayout="scroll"
+                styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="firstname" style="text-align: center;">Demandé par <p-sortIcon
+                                field="firstname">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="role" style="text-align: center;">Pour <p-sortIcon field="role">
+                            </p-sortIcon>
+                        </th>
+                        <th style="text-align: center;">Action</th>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{ rowData.student_id.firstname | titlecase }} {{ rowData.student_id.lastname | uppercase }}
+                        </td>
+                        <td *ngIf="rowData.conseiller_id">
+                            {{ rowData.conseiller_id.firstname | titlecase }} {{ rowData.conseiller_id.lastname | uppercase }}
+                        </td>
+                        <td *ngIf="!rowData.conseiller_id">
+                            Peut Importe
+                        </td>
+                        <td>
+                            <i pTooltip="Accepter la demande" tooltipPosition="bottom" class="pi pi-check" *ngIf="rowData.conseiller_id"
+                                (click)="accepted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i pTooltip="Affecter la demande" tooltipPosition="bottom" class="pi pi-user-plus"
+                                (click)="seeAffectation = rowData" aria-hidden="true" style="margin-left: 7px"></i>
+                            <i pTooltip="Refuser la demande" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="deleted(rowData)" aria-hidden="true" style="margin-left: 7px"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

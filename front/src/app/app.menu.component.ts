@@ -189,6 +189,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
                     { label: 'Gestion des Equipes de Conseillers', icon: 'pi pi-users', routerLink: ['/equipe-commercial'] },
+                    { label: 'Liste des demandes de conseillers', icon: 'pi pi-users', routerLink: ['/liste-demande-commercial'] },
                 ]
             }, {
                 label: 'Support',

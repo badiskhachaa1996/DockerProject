@@ -47,5 +47,22 @@ app.get('/getMyTeam', (req, res) => {
         })
 })
 
+app.get('/getAllCommercial', (req, res) => {
+    TeamCommercial.find().populate('team_id')
+        .then(team => { 
+            console.log(team)
+            let r = []
+            team.forEach(arr=>{
+                r=r.concat(arr.team_id)
+            })
+            console.log(r)
+            res.status(200).send(r)
+        })
+        .catch((error) => {
+            console.error(error)
+            res.status(500).send(error)
+        })
+})
+
 
 module.exports = app;

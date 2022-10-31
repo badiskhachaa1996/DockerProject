@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { teamCommercial } from '../models/teamCommercial';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +29,10 @@ export class TeamCommercialService {
   updateTeam(newTeam: teamCommercial) {
     let registreUrl = this.apiUrl + "updateTeam";
     return this.http.post<teamCommercial>(registreUrl, newTeam, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllCommercial() {
+    let registreUrl = this.apiUrl + "getAllCommercial";
+    return this.http.get<User[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }

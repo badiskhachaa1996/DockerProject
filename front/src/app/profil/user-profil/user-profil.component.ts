@@ -15,7 +15,9 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
-
+import { DemandeConseillerService } from 'src/app/services/commercial/demande-conseiller.service'
+import { DemandeConseiller } from 'src/app/models/DemandeConseiller';
+import { TeamCommercialService } from 'src/app/services/team-commercial.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -63,6 +65,9 @@ export class UserProfilComponent implements OnInit {
 
   pwdmsgerr: string = "";
   PreinscriptionData: any;
+  listConseiller: any[] = [{ label: "Peut m'importe", value: "Peut m'importe" }]
+
+  demandeConseiller: DemandeConseiller;
 
 
   changeStatut(event) {
@@ -129,6 +134,26 @@ export class UserProfilComponent implements OnInit {
     nationalite: new FormControl(null),
     date_naissance: new FormControl("21/12/2000"),
   })
+
+  demandeConseillerForm: FormGroup = new FormGroup({
+    conseiller_id: new FormControl('', Validators.required)
+  })
+
+  saveDemande() {
+    let dcs = {
+      student_id: this.decodeToken.id,
+      conseiller_id: this.demandeConseillerForm.value.conseiller_id
+    }
+    if (this.demandeConseillerForm.value.conseiller_id == "Peut m'importe")
+      dcs.conseiller_id = null
+    this.DemandeConseillerService.create(dcs).subscribe(dc => {
+      this.demandeConseiller = dc
+      this.messageService.add({ severity: 'success', summary: 'Demande de conseillé envoyé' })
+    }, err => {
+      console.error(err)
+      this.messageService.add({ severity: 'error', summary: 'Erreur lors de la demande de conseillé' })
+    })
+  }
 
   onInitPasswordForm() {
     this.passwordForm = this.formBuilder.group({
@@ -238,7 +263,8 @@ export class UserProfilComponent implements OnInit {
 
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
-    private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService) { }
+    private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
+    private TCService: TeamCommercialService) { }
 
   ngOnInit(): void {
 
@@ -334,7 +360,15 @@ export class UserProfilComponent implements OnInit {
 
     this.onInitPasswordForm();
 
+    this.DemandeConseillerService.findbyStudentID(decodeToken.id).subscribe(dc => {
+      this.demandeConseiller = dc
+    })
 
+    this.TCService.getAllCommercial().subscribe(u => {
+      u.forEach(user => {
+        this.listConseiller.push({ label: user.lastname + " " + user.firstname, value: user._id })
+      })
+    })
 
 
   }

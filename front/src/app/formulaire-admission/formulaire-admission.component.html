@@ -311,7 +311,7 @@
                         <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
                         </button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "
+                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>

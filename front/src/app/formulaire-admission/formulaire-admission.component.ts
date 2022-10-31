@@ -350,6 +350,7 @@ export class FormulaireAdmissionComponent implements OnInit {
   get validated_academic_level() { return this.RegisterForm.get('validated_academic_level'); }
   get statut_actuel() { return this.RegisterForm.get('statut_actuel').value; }
   get other() { return this.RegisterForm.get('other'); }
+  get rentree_scolaire() { return this.RegisterForm.get('rentree_scolaire'); }
   get languages() { return this.RegisterForm.get('languages'); }
   get is_professional_experience() { return this.RegisterForm.get('is_professional_experience'); }
   get professional_experience() { return this.RegisterForm.get('professional_experience'); }

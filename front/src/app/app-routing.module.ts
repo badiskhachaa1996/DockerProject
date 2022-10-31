@@ -118,6 +118,7 @@ import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/e
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { ResponsableCommercialGuard } from './guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
+import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 
 
 @NgModule({
@@ -228,7 +229,8 @@ import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.
                     { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
                     { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
                     { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
-                    { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] }
+                    { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
+                    { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
 
                 ],
             },
