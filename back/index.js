@@ -98,6 +98,7 @@ const tuteurController = require('./controllers/tuteurController');
 const demandeEventsController = require('./controllers/demandeEventsController');
 const logementController = require('./controllers/logementController');
 const missionController = require('./controllers/missionController');
+const inTimeController = require('./controllers/inTimeController');
 const cvController = require('./controllers/cvController')
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
@@ -227,6 +228,8 @@ app.use("/soc/logement", logementController);
 app.use('/soc/dashboard', dashboardController);
 
 app.use('/soc/mission', missionController);
+
+app.use('/soc/intime', inTimeController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
