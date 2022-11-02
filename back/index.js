@@ -100,6 +100,7 @@ const paymentController = require('./controllers/paymentController');
 const teamCommercialController = require('./controllers/teamCommercialController')
 const logementController = require('./controllers/logementController');
 const missionController = require('./controllers/missionController');
+const inTimeController = require('./controllers/inTimeController');
 const cvController = require('./controllers/cvController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
 const { User } = require("./models/user");
@@ -233,6 +234,7 @@ app.use('/soc/dashboard', dashboardController);
 
 app.use('/soc/mission', missionController);
 
+app.use('/soc/intime', inTimeController);
 app.use('/soc/teamCommercial', teamCommercialController)
 
 app.use('/soc/demandeConseiller', DemandeConseillerController)
