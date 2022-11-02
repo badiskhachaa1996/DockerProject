@@ -8,9 +8,7 @@ const { Note } = require("./../models/note");
 const { User } = require('./../models/user');
 const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
-const { Presence } = require('./../models/presence')
-const { Appreciation } = require("./../models/appreciation")
-const { Dashboard } = require("./../models/dashboard")
+const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const sign_espic = `
 <style type="text/css">
@@ -212,6 +210,21 @@ app.post("/create", (req, res, next) => {
 app.post("/assignToGroupe", (req, res, next) => {
     //creation du nouvel étudiant
     let etudiantData = req.body;
+
+    Etudiant.findById(req.body._id).then(et => {
+        let token = jwt.decode(req.header("token"))
+        let me = new MonitoringEtudiant(
+            {
+                agent_id: token.id,
+                etudiant_id: req.body._id,
+                date: new Date(),
+                etudiant_before: et,
+                etudiant_after: { ...req.body },
+                remarque: "Assigner à un groupe scolaire"
+            }
+        )
+        me.save()
+    })
     Etudiant.findByIdAndUpdate(req.body._id, { statut_dossier: etudiantData.statut_dossier, classe_id: etudiantData.groupe }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
@@ -331,6 +344,20 @@ app.get("/getPopulateByUserid/:user_id", (req, res, next) => {
 
 //Mettre à jour un étudiant via son identifiant
 app.post("/update", (req, res, next) => {
+    Etudiant.findById(req.body._id).then(et => {
+        let token = jwt.decode(req.header("token"))
+        let me = new MonitoringEtudiant(
+            {
+                agent_id: token.id,
+                etudiant_id: req.body._id,
+                date: new Date(),
+                etudiant_before: et,
+                etudiant_after: { ...req.body },
+                remarque: "Update"
+            }
+        )
+        me.save()
+    })
     Etudiant.findOneAndUpdate({ _id: req.body._id },
         {
             ...req.body
@@ -652,6 +679,7 @@ function max(myArray) {
 const multer = require('multer');
 const { Prospect } = require("../models/prospect");
 const { Message } = require("../models/message");
+const { MonitoringEtudiant } = require("../models/monitoring");
 
 
 app.get("/getFiles/:id", (req, res) => {
@@ -694,6 +722,21 @@ app.get("/deleteFile/:id/:filename", (req, res) => {
             let filearrayT = etudiantFromDb.fileRight;
 
             delete filearrayT[req.params.filename]
+
+            Etudiant.findById(req.params.id).then(et => {
+                let token = jwt.decode(req.header("token"))
+                let me = new MonitoringEtudiant(
+                    {
+                        agent_id: token.id,
+                        etudiant_id: req.params.id,
+                        date: new Date(),
+                        etudiant_before: et,
+                        etudiant_after: { ...req.body },
+                        remarque: "Suppresion de fichier"
+                    }
+                )
+                me.save()
+            })
 
             Etudiant.findOneAndUpdate({ _id: req.params.id },
                 {
@@ -749,6 +792,20 @@ app.post('/getAllByMultipleClasseID', (req, res) => {
 });
 
 app.post('/addNewPayment/:id', (req, res) => {
+    Etudiant.findById(req.params.id).then(et => {
+        let token = jwt.decode(req.header("token"))
+        let me = new MonitoringEtudiant(
+            {
+                agent_id: token.id,
+                etudiant_id: req.params.id,
+                date: new Date(),
+                etudiant_before: et,
+                etudiant_after: { ...req.body },
+                remarque: "Ajout Payement"
+            }
+        )
+        me.save()
+    })
     Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: req.body.payement }, function (err, data) {
         if (err) {
             console.error(err)
@@ -788,6 +845,20 @@ app.post('/validateProspect/:user_id', (req, res) => {
 })
 
 app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
+    Etudiant.findById(req.params.etudiant_id).then(et => {
+        let token = jwt.decode(req.header("token"))
+        let me = new MonitoringEtudiant(
+            {
+                agent_id: token.id,
+                etudiant_id: req.params.etudiant_id,
+                date: new Date(),
+                etudiant_before: et,
+                etudiant_after: { ...req.body },
+                remarque: "Update Dossier"
+            }
+        )
+        me.save()
+    })
     Etudiant.findByIdAndUpdate(req.params.etudiant_id, { statut_dossier: req.params.statut_dossier, date_dernier_modif_dossier: new Date() }, { new: true }, (err, doc) => {
         if (err) {
             console.error(err)
@@ -852,6 +923,21 @@ app.get('/disable/:id', (req, res) => {
     Message.remove({ user_id: req.params.user_id })
     RachatBulletin.remove({ user_id: req.params.user_id })
     Ticket.remove({ createur_id: req.params.user_id })*/
+
+    Etudiant.findById(req.params.etudiant_id).then(et => {
+        let token = jwt.decode(req.header("token"))
+        let me = new MonitoringEtudiant(
+            {
+                agent_id: token.id,
+                etudiant_id: req.params.etudiant_id,
+                date: new Date(),
+                etudiant_before: et,
+                etudiant_after: { ...req.body },
+                remarque: "Désactiver"
+            }
+        )
+        me.save()
+    })
 
     Etudiant.findByIdAndUpdate(req.params.id, { isActive: false }).then(etudiant => {
         res.send(etudiant)

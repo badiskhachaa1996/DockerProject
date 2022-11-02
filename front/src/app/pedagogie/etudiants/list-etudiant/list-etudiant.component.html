@@ -45,9 +45,14 @@
                         chooseLabel="Importer un CV sous PDF">
                     </p-fileUpload>
                 </div>
-                <div class="col-12 field">
+                <div class="col-12 md:col-6 field">
+                    <label>Langues:</label>
                     <p-multiSelect [options]="languesList" placeholder="Choissisez la langue" [(ngModel)]="languesCV">
                     </p-multiSelect>
+                </div>
+                <div class="col-12 md:col-6 field">
+                    <label>URL Vidéo:</label>
+                    <input pInputText placeholder="Exemple: Linkedin, google drive ou youtube" [(ngModel)]="urlVideo"/>
                 </div>
                 <button type="button" class="mb-2" (click)="onAddSkill()" pButton
                     label="Ajouter une compétences"></button>
@@ -391,8 +396,11 @@
                     </p-multiSelect>
 
                     <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
-                    (onChange)="dt1.filter($event.value, 'campus._id', 'equals')"
-                    emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type"></p-dropdown>
+                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals')"
+                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Campus"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterAnneeScolaire" filter="true"
+                        (onChange)="dt1.filter($event.value, 'annee_scolaire', 'contains')"
+                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Annee Scolaire"></p-dropdown>
 
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -449,9 +457,9 @@
                             <i style="margin-left: 2%;" class="pi pi-file-pdf" (click)="
                                     showUpdateCV(etudiant)" pTooltip="Modifier le CV" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
-                            <i style="margin-left: 2%;" *ngIf="this.isCommercial || token.role=='Admin'" class="pi pi-search"
-                                (click)="findMission(etudiant.user_id._id)" pTooltip="Trouver une mission"
-                                aria-hidden="true" tooltipPosition="bottom"></i>
+                            <i style="margin-left: 2%;" *ngIf="this.isCommercial || token.role=='Admin'"
+                                class="pi pi-search" (click)="findMission(etudiant.user_id._id)"
+                                pTooltip="Trouver une mission" aria-hidden="true" tooltipPosition="bottom"></i>
                             <i style="margin-left: 2%;" class="pi pi-user-edit"
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFPersonalUpdate(etudiant.user_id,etudiant)"
@@ -584,6 +592,7 @@
                         <th>Statut Professionel </th>
                         <th>Formation</th>
                         <th>Date d'ajout IMS</th>
+                        <th>Année Scolaire</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -601,6 +610,7 @@
                         <td>{{etudiant.statut}}</td>
                         <td>{{etudiant?.filiere?.titre}}</td>
                         <td>{{etudiant?.user_id?.date_creation| date:'dd/MM/yyyy'}}</td>
+                        <td>{{etudiant?.annee_scolaire}}</td>
                     </tr>
 
                 </ng-template>

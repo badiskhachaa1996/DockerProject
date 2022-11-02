@@ -210,14 +210,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
-    if (confirm("Voulez-vous supprimer le payement ?")) {
+    if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
     }
   }
 
   addNewPayment() {
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
-      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
       this.prospects.forEach((p, index) => {
         if (p._id == data._id)
           this.prospects[index].payement = data.payement
