@@ -203,12 +203,22 @@ import { DemandeEventsComponent } from './demande-events/demande-events.componen
 import { ListEventsComponent } from './demande-events/list-events/list-events.component';
 import { ArrToStrPipe } from './arr-to-str.pipe';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
+import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
+import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
+import { ListeDesComptesComponent } from './gestion-bancaire/gestion-des-comptes/liste-des-comptes/liste-des-comptes.component';
+import { AccountDetailsComponent } from './gestion-bancaire/gestion-des-comptes/account-details/account-details.component';
+import { ReturnUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/return-url/return-url.component';
+import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/cancel-url/cancel-url.component';
+import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
 import { MissionComponent } from './skillsnet/mission/mission.component';
 import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
+import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
+import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
+import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -398,12 +408,22 @@ import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/e
     ListeContratsComponent,
     ArrToStrPipe,
     CreateAccountComponent,
+    MyAccountComponent,
+    AddNewIndividualAccountComponent,
+    ListeDesComptesComponent,
+    AccountDetailsComponent,
+    ReturnUrlComponent,
+    CancelUrlComponent,
+    ErrorUrlComponent,
     LogementComponent,
     GestionLogementComponent,
     MissionComponent,
     MesMissionsComponent,
     MatchingComponent,
     EntreprisesMissionsComponent,
+    GestionEquipeComponent,
+    DetailEquipeComponent,
+    DemandeConseillerComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
@@ -449,7 +469,7 @@ export function MSALInstanceFactory(): IPublicClientApplication {
 }
 export function MSALGuardConfigFactory(): MsalGuardConfiguration {
   return {
-    interactionType: InteractionType.Redirect,
+    interactionType: InteractionType.Popup,
     authRequest: {
       scopes: ['user.read']
     }

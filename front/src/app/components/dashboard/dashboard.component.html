@@ -263,6 +263,7 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
+    <button pButton label="Test" (click)="test()"></button>
 </div>
 
 
@@ -280,7 +281,7 @@
         <div class="card">
             <h5>
                 Besoin d'un logement ?
-                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des logements tout neufs et pas chèr.
+                Rendez-vous sur <a routerLink="/logements">IMS Booking</a>. Nous vous mettons à disposition des logements tout neufs et pas cher.
             </h5>
 
             <p-galleria [(value)]="carousselImages" [responsiveOptions]="responsiveOptions" [containerStyle]="{'max-width': '800px', 'margin':'auto'}" [numVisible]="5">
@@ -459,7 +460,7 @@
             (click)="showForm=false;addLinkForm.reset()" aria-hidden="true"> </i>
         <h4 style="text-align: center;">Ajouter un lien</h4>
         <div style="text-align: center;">
-            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+            <small>Tous les champs marqués d'un asterique <span style="color: red;"> * </span> sont
                 obligatoires</small><br>
         </div>
         <br>

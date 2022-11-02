@@ -16,17 +16,7 @@ app.get("/getAll", (req, res, next) => {
 //creation d'une nouvelle matiere
 app.post("/create", (req, res, next) => {
     let matiere = new Matiere({
-        nom: req.body.nom,
-        formation_id: req.body.formation_id,
-        volume_init: req.body.volume_init,
-        abbrv: req.body.abbrv,
-        classe_id: req.body.classe_id,
-        seance_max: req.body.seance_max,
-        coeff: req.body.coeff,
-        credit_ects: req.body.credit_ects,
-        remarque: req.body.remarque,
-        semestre: req.body.semestre,
-        niveau: req.body.niveau
+        ...req.body
     });
 
     matiere.save()

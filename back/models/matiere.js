@@ -14,6 +14,7 @@ const matiereSchema = mongoose.Schema({
     coeff: { type: Number, default: 1 },
     credit_ects: { type: Number, default: 1 },
     remarque: { type: String },
+    hors_bulletin: { type: Boolean, default: false }
 });
 
 //creation de la table matiere

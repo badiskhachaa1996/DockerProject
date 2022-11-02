@@ -9,12 +9,13 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right; padding-top: 3%;">
-                <i pTooltip="Modifier vos informations"  tooltipPosition="bottom" class="pi pi-cog" (click)="ToggleUpdate()"
-                    style="font-size: 15px;" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre photo de profil"  tooltipPosition="bottom" class="pi pi-fw pi-image" (click)="clickFile()"
-                    style="font-size: 15px;" aria-hidden="true"></i>
-                <i pTooltip="Modifier votre mot de passe"  tooltipPosition="bottom" class="pi pi-lock" (click)="ToggleUpdatepwd()"
-                    *ngIf="userco.password != undefined" style="font-size: 15px;" aria-hidden="true"></i>
+                <i pTooltip="Modifier vos informations" tooltipPosition="bottom" class="pi pi-cog"
+                    (click)="ToggleUpdate()" style="font-size: 15px;" aria-hidden="true"></i>
+                <i pTooltip="Modifier votre photo de profil" tooltipPosition="bottom" class="pi pi-fw pi-image"
+                    (click)="clickFile()" style="font-size: 15px;" aria-hidden="true"></i>
+                <i pTooltip="Modifier votre mot de passe" tooltipPosition="bottom" class="pi pi-lock"
+                    (click)="ToggleUpdatepwd()" *ngIf="userco.password != undefined" style="font-size: 15px;"
+                    aria-hidden="true"></i>
             </div>
             <h2>Profil</h2>
             <div style="text-align: center;">
@@ -34,7 +35,7 @@
             <div class="card">
                 <div class="p-fluid p-formgrid grid">
                     <div class="col-12 md:col-6">
-                        <strong>Adresse email:</strong> {{userco.email}} 
+                        <strong>Adresse email:</strong> {{userco.email}}
                     </div>
 
                     <div class="col-12 md:col-6" *ngIf="userco.phone && userco.indicatif">
@@ -82,6 +83,14 @@
                     <div class="col-12 md:col-4" *ngIf="infoCommercial && infoCommercial.code_commercial_partenaire">
                         <strong>ID Commercial:</strong> {{infoCommercial.code_commercial_partenaire}}
                     </div>
+
+                    <div class="col-12" *ngIf="demandeConseiller && demandeConseiller.conseiller_id && demandeConseiller.activated">
+                        <strong>Conseiller:</strong> {{demandeConseiller.conseiller_id.firstname | titlecase }}
+                        {{demandeConseiller.conseiller_id.lastname | uppercase}}
+                    </div>
+                    <div class="col-12" *ngIf="demandeConseiller && !demandeConseiller.activated">
+                        <strong>Conseiller:</strong> Votre demande est en attente de validation
+                    </div>
                 </div>
                 <div class="p-fluid p-formgrid grid" *ngIf="PreinscriptionData && !InfoUser.classe_id">
                     <div class="col-12"></div>
@@ -105,6 +114,20 @@
                 </div>
 
             </div>
+
+            <div class="card" *ngIf="demandeConseiller==null">
+                <h3>Faire une demande de Conseiller</h3>
+                <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="saveDemande()">
+                    <div class="field col-12">
+                        <p-dropdown formControlName="conseiller_id" [options]="listConseiller" placeholder="Choisissez un conseiller">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-12">
+                        <button pButton pRipple label="Envoyer la demande de conseiller" class="mr-2 mb-2" [disabled]="demandeConseillerForm.invalid"
+                            type="submit"></button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -126,7 +149,11 @@
                     <label For="firstname">Prénom</label>
                     <input pInputText id="firstname" formControlName="firstname" type="text" />
                 </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-3">
+                    <label For="code_postal">Numéro de la rue</label>
+                    <input pInputText id="code_postal" type="number" formControlName="numero_adresse" />
+                </div>
+                <div class="field col-12 md:col-9">
                     <label For="rue">Nom de la rue</label>
                     <input pInputText id="rue" type="text" formControlName="rue_adresse" />
                 </div>
@@ -134,11 +161,11 @@
                     <label For="code_postal">Code postal</label>
                     <input pInputText id="code_postal" type="number" formControlName="postal_adresse" />
                 </div>
-                <div class="field col-6 md:col-3">
+                <div class="field col-6 md:col-6">
                     <label For="ville">Ville</label>
                     <input pInputText id="ville" type="text" formControlName="ville_adresse" />
                 </div>
-                <div class="field col-6 md:col-12">
+                <div class="field col-6 md:col-3">
                     <label For="pays">Pays</label>
                     <input pInputText id="pays" type="text" formControlName="pays_adresse" />
                 </div>
@@ -150,18 +177,20 @@
                     <label For="tel">Téléphone</label>
                     <input pInputText id="tel" type="text" formControlName="phone" />
                 </div>
-                <div class="field col-8 md:col-12">
+                <div class="field col-8 md:col-12" *ngIf="infoUser">
                     <label For="nationnalite">Nationnalité</label>
                     <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-12">
+                <div class="field col-12 md:col-12" *ngIf="infoUser">
                     <label For="date">Date de naissance</label>
-                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
+                    <!--<p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear">
-                    </p-calendar>
+                    </p-calendar>-->
+                    <input type="date" formControlName="date_naissance" class="form-control col-12"
+                        placeholder="21/12/2012" pInputText>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="IsAdmin">
                     <label For="role">Rôle</label>

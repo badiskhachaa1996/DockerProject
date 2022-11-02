@@ -15,7 +15,8 @@ const seanceSchema = mongoose.Schema({
     campus_id: { type: mongoose.Schema.Types.ObjectId, ref: 'campus', required: false },
     nbseance: { type: Number, required: false },
     fileRight: { type: [mongoose.Schema.Types.Mixed], default: [] },//{name:"",right:false,upload_by:mongoose.Schema.Types.ObjectId}
-    remarque: { type: String }
+    remarque: { type: String },
+    seance_type: { type: String, default: "Séance" }
 });
 
 //Creation de la table seance et export du model Seance

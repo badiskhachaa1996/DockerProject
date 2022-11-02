@@ -138,19 +138,18 @@ app.post("/create", (req, res, next) => {
                         prospect.save()
                             .then((prospectSaved) => {
                                 if (prospectSaved.type_form == "estya") {
-                                    let temp = fs.readFileSync('assets/Esty_Mailauth2.html', { encoding: "utf-8", flag: "r" })
+                                    let temp = fs.readFileSync('assets/EmailAdmissionEstyaPart2.html', { encoding: "utf-8", flag: "r" })
                                     temp = temp.replace('eMailduProSpect', userCreated.email_perso)
-
                                     temp = temp.replace('oRiGin', origin[0])
 
                                     temp = temp.replace("\"oRiGin/", '"' + origin[0] + "/")
 
-                                    let htmlmail = fs.readFileSync('assets/Estya_Mail authetifiacation.html', { encoding: "utf-8", flag: "r" }) + r + temp
+                                    let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
 
                                     let mailOptions = {
                                         from: "admission@estya.com",
                                         to: userCreated.email_perso,
-                                        subject: 'Confirmation de préinscription',
+                                        subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
                                         html: htmlmail,
                                         attachments: [{
                                             filename: 'Image1.png',

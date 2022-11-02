@@ -53,6 +53,10 @@ export class ListEtudiantComponent implements OnInit {
     { label: "Initial", value: false }
   ]
 
+  filterCampus = [
+    { label: 'Tous les campus', value: null }
+  ]
+
   formUpdateDossier: FormGroup;
   showFormUpdateEtudiant: boolean = false;
 
@@ -183,7 +187,7 @@ export class ListEtudiantComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService:MissionService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService: MissionService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -221,6 +225,7 @@ export class ListEtudiantComponent implements OnInit {
         let e: any = c.ecole_id
         let n = e.libelle + " - " + c.libelle
         this.dropdownCampus.push({ value: c._id, label: n })
+        this.filterCampus.push({ value: c._id, label: c.libelle })
       })
       this.formUpdateEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
     })
@@ -903,9 +908,11 @@ export class ListEtudiantComponent implements OnInit {
     })
   }
 
-  findMission(user_id){
-    this.missionService.getMissionFromCV(user_id).then(d=>{
-      console.log(d)
+  findMission(user_id) {
+    this.missionService.getMissionFromCV(user_id).then(d => {
+      if (d) {
+        this.router.navigate(['matching', user_id])
+      }
     })
   }
 }

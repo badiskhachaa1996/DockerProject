@@ -28,7 +28,7 @@
         <p-panel header="Instructions et Détails du Cursus demandé" [toggleable]="false" [collapsed]="false"
             [style]="{'margin-bottom':'20px'}">
 
-            <p-fieldset legend="Instructions" [style]="{'color':'#dc143c','font-weight': 'bold'}">
+            <!--<p-fieldset legend="Instructions" [style]="{'color':'#dc143c','font-weight': 'bold'}">
                 <div class="p-grid ui-fluid" style="color: black;font-weight:normal">
                     <div class="col-12 p-md-12 p-lg-12">
                         <p>
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                 </div>
-            </p-fieldset>
+            </p-fieldset>-->
             <br>
 
 
@@ -280,8 +280,7 @@
                         </div>
 
                         <div class="col-12 field">
-                            <p-fileUpload 
-                                (uploadHandler)="FileUpload($event,uploadFileForm.value.typeDoc)" mode="basic"
+                            <p-fileUpload (uploadHandler)="FileUpload($event,uploadFileForm.value.typeDoc)" mode="basic"
                                 chooseLabel="Ajouter un Document" customUpload="true" fileLimit="1"
                                 accept=".docx,.pdf,.doc,.jpg,.png,.jpeg" maxFileSize="10000000" [auto]="true"
                                 #fileInput>
@@ -289,11 +288,6 @@
                         </div>
 
                     </form>
-
-                    <div class="">
-                        <h3>Documents chargés : </h3>
-                    </div>
-
                 </p-fieldset>
 
             </p-fieldset>

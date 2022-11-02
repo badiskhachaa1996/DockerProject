@@ -42,7 +42,7 @@ export class AuthService {
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getNBUser(){
+  getNBUser() {
     let loginUrl = this.apiUrl + "getNBUser";
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
@@ -160,12 +160,21 @@ export class AuthService {
 
   pwdToken(email) {
     let url = this.apiUrl + "pwdToken/" + email;
-    return this.http.post<any>(url,  { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+    return this.http.post<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
   }
-  reinitPwd(pwdTokenID,pwd) {
-    let url = this.apiUrl + "reinitPwd/" +pwdTokenID;
-    return this.http.post<any>(url, {pwd},{ headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
-  }  
+  reinitPwd(pwdTokenID, pwd) {
+    let url = this.apiUrl + "reinitPwd/" + pwdTokenID;
+    return this.http.post<any>(url, { pwd }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }) })
+  }
+  getAllCommercialFromTeam(user_id) {
+    let url = this.apiUrl + "getAllCommercialFromTeam/" + user_id
+    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllCommercialV2(){
+    let url = this.apiUrl + "getAllCommercialV2"
+    return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
   /*TESTMAIL(){
     let url = this.apiUrl	+"TESTMAIL"

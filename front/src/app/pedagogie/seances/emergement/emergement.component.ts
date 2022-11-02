@@ -245,7 +245,7 @@ export class EmergementComponent implements OnInit {
         data.forEach(etu => {
           if (etu.user_id != null && etu.classe_id != null) {
             let temp = {
-              label: etu.user_id.lastname + " " + etu.user_id.firstname + " - " + etu.classe_id.nom,
+              label: etu.user_id.lastname + " " + etu.user_id.firstname + " - " + etu.classe_id.abbrv,
               value: etu.user_id._id
             }
             if (!this.customIncludes(this.dropdownEtudiant, temp)) {

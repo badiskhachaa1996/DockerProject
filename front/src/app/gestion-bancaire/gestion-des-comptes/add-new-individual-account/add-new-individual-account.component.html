@@ -1,0 +1,132 @@
+<div class="grid">
+    <div class="col-12">
+		<div class="card">
+			<h4>Nouveau compte individuel</h4>
+            <form [formGroup]="form" (ngSubmit)="onAddAccount()">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12">
+                        <label htmlFor="email">Email</label>
+                        <input pInputText id="email" type="email" formControlName="email"/>
+                    </div>
+                    <div class="field col-12 md:col-2">
+                        <label htmlFor="civilite">Civilité</label>
+                        <p-dropdown [options]="civiliteList" optionLabel="viewValue" formControlName="title"></p-dropdown>
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label htmlFor="firstName">Prénom</label>
+                        <input pInputText id="firstName" formControlName="firstName"/>
+                    </div>
+                    <div class="field col-12 md:col-5">
+                        <label htmlFor="lastName">Nom</label>
+                        <input pInputText id="lastName" type="text" formControlName="lastName"/>
+                    </div>
+                    <div class="field col-12 md:col-8">
+                        <label htmlFor="street">Rue</label>
+                        <input pInputText id="street" type="text" formControlName="street"/>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="postCode">Code postal</label>
+                        <input pInputText id="postCode" type="number" formControlName="postCode"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="city">Ville</label>
+                        <input pInputText id="city" type="text" formControlName="city"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="country">Pays</label>
+                        <p-dropdown id="country" [options]="paysIsoCodes" optionLabel="label" formControlName="country"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="dateN">Date de naissance</label>
+                        <input pInputText id="dateN" type="date" formControlName="dateN"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="cityN">Ville de naissance</label>
+                        <input pInputText id="cityN" type="text" formControlName="cityN"/>
+                    </div>
+
+                    <div class="field col-12 md:col-6">
+                        <label htmlFor="countryN">Pays de naissance</label>
+                        <p-dropdown id="countryN" [options]="paysIsoCodes" optionLabel="label" formControlName="countryN"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-12">
+                        <label htmlFor="nationality">Nationnalitée</label>
+                        <p-dropdown id="nationality" [options]="paysIsoCodes" optionLabel="label" formControlName="nationality"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="indicatifPhoneNumber">Indicatif</label>
+                        <input pInputText id="indicatifPhoneNumber" type="text" formControlName="indicatifPhoneNumber"/>
+                    </div>
+
+                    <div class="field col-12 md:col-8">
+                        <label htmlFor="phoneNumber">Téléphone</label>
+                        <input pInputText id="phoneNumber" type="text" formControlName="phoneNumber"/>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <label htmlFor="indicatifMobileNumber">Indicatif</label>
+                        <input pInputText id="indicatifMobileNumber" type="text" formControlName="indicatifMobileNumber"/>
+                    </div>
+
+                    <div class="field col-12 md:col-8">
+                        <label htmlFor="mobileNumber">Téléphone portable</label>
+                        <input pInputText id="mobileNumber" type="text" formControlName="mobileNumber"/>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <h5>Compte débiteur</h5>
+                        <p-inputSwitch id="isDebtor" formControlName="isDebtor"></p-inputSwitch>
+                    </div>
+
+                    <div class="field col-12 md:col-8">
+                        <label htmlFor="payerOrBeneficiary">Payeur ou Béneficiaire</label>
+                        <p-dropdown [options]="payerOrBeneficiaryList" optionLabel="label" formControlName="payerOrBeneficiary"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <h5>Compte de paiement unique</h5>
+                        <p-inputSwitch id="isOneTimeCustomerAccount" formControlName="isOneTimeCustomerAccount"></p-inputSwitch>
+                        <br/>
+                        <small style="color: red;">
+                            Indique si le compte de paiement est pour un client ponctuel.
+                            Si oui, le compte de paiement sera créé avec le statut 14, permettant un seul paiement.
+                            Le montant maximum sera défini avec Lemonway.
+                        </small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <h5>Compte technique</h5>
+                        <p-inputSwitch id="isTechnicalAccount" formControlName="isTechnicalAccount"></p-inputSwitch>
+                        <br/>
+                        <small style="color: red;">
+                            Cette option est disponible en fonction de votre contrat
+                            Vrai, dans le cas où cette option est activée dans votre contrat.
+                            Sinon, il sera considéré comme un portefeuille client.
+                        </small>
+                    </div>
+
+                    <div class="field col-12 md:col-4">
+                        <h5>Compte de bénéficiaire ultime</h5>
+                        <p-inputSwitch id="isUltimateBeneficialOwner" formControlName="isUltimateBeneficialOwner"></p-inputSwitch>
+                    </div>
+
+                    <div class="field-checkbox col-12">
+						<p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary" formControlName="valider"></p-checkbox>
+                        <label for="binary">Êtes-vous sur des informations: <span style="color: red">{{ checked ? 'Oui' : 'Non' }}</span></label>
+					</div>
+
+                    <div class="field col-4">
+                        <button pButton [disabled]="form.invalid || !form.get('valider').value" type="submit" label="Créer le compte"></button>
+                    </div>
+                </div>
+            </form>
+                
+		</div>
+	</div>
+</div>

@@ -80,7 +80,7 @@ mongoose
                                     decision_admission: data['Decision Admission'],
                                     phase_complementaire: data['Phase complémentaire'],
                                     customid: data['ID Etudiant'],
-                                    statut_payement: data["Statut Payement"],
+                                    statut_payement: data["Statut Paiement"],
                                     traited_by: data["Att Traité par"],
                                     date_traitement: dt,
                                     code_commercial: data['Code du commercial']

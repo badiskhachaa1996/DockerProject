@@ -13,6 +13,7 @@ const { Etudiant } = require("../models/etudiant")
 const { pwdToken } = require("../models/pwdToken")
 const { Partenaire } = require("../models/partenaire")
 const { Prospect } = require("../models/prospect")
+const { Service } = require('../models/service')
 const { CommercialPartenaire } = require("../models/CommercialPartenaire")
 
 
@@ -365,7 +366,7 @@ app.post("/updateEtudiant/:id", (req, res) => {
                     }, { new: true }, (err, doc) => {
                         if (!err && doc) {
                             res.status(201).json(doc)
-                        }else{
+                        } else {
                             res.status(500).json(err)
                         }
                     })
@@ -788,6 +789,25 @@ app.get("/HowIsIt/:id", (req, res) => {
             })
         }
     });
+});
+
+app.get('/getAllCommercialFromTeam/:id', (req, res) => {
+    Service.findOne({ label: /ommercial/i }).then(s => {
+        User.find({ role: "Agent", service_id: s._id }).then(u => {
+            res.status(201).send(u)
+        })
+    })
+})
+
+app.get("/getAllCommercialV2", (req, res) => {
+    Service.findOne({ label: /ommercial/i }).then(s => {
+        if (s)
+            User.find({ role: { $ne: 'user' }, service_id: s._id }).then(u => {
+                res.status(201).send(u)
+            })
+        else
+            res.status(500).send("Le service de commercial n'existe pas")
+    })
 });
 
 module.exports = app;

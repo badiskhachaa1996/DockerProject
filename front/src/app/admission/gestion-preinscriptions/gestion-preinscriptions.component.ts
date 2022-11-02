@@ -104,22 +104,27 @@ export class GestionPreinscriptionsComponent implements OnInit {
     { value: "Non concerné" }
   ]
   decisionList = [
-    { value: "Suspendu" },
-    { value: "Suspension - Test TCF" },
     { value: "Accepté" },
     { value: "Accepté sur réserve" },
+    { value: "Suspendu" },
+    { value: "Suspension - Test TCF" },
     { value: "Non Retenu" },
+    { value: "Refusé" },
+    { value: "En attente de traitement" },
     { value: "Payée" },
     { value: "A signé les documents" },
   ]
   dropdownDecision = [
     { value: null, label: "Toutes les décisions" },
-    { value: "Suspendu", label: "Suspendu" },
-    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Accepté", label: "Accepté" },
     { value: "Accepté sur réserve", label: "Accepté sur réserve" },
+    { value: "Suspendu", label: "Suspendu" },
+    { value: "Suspension - Test TCF", label: "Suspension - Test TCF" },
     { value: "Non Retenu", label: "Non Retenu" },
+    { value: "Refusé", label: "Refusé" },
+    { value: "En attente de traitement", label: "En attente de traitement" },
     { value: "Payée", label: "Payée" },
+    { value: "A signé les documents", label: "A signé les documents" },
   ]
 
   filterTraitement = [
@@ -132,13 +137,15 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   phaseComplementaire = [
     { value: "Aucune" },
-    { value: "Choix de formation" },
     { value: "Changement de campus" },
+    { value: "Orientation E2E par Eduhorizons" },
+    { value: "Choix de formation" },
     { value: "Document Manquant" },
     { value: "Ajouté sur la base ILTS" },
-    //{ value: "Sous Dossier" },
-    { value: "Orientation E2E par Eduhorizons" },
     { value: "En attente retour ILTS" },
+    { value: "Sous Dossier" },
+    { value: "En attente retour dep bim" },
+    { value: "En attente retour Peda" },
     //{ value: "Demande équivalence envoyée" },
   ]
 
@@ -551,7 +558,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
     if (confirm("Est ce que vous êtes sûr de vouloir supprimer " + bypass.firstname + " " + bypass.lastname + " ?"))
       this.admissionService.delete(p._id, bypass._id).subscribe(d => {
         this.messageService.add({ severity: 'success', summary: 'Suppression de ' + bypass.firstname + " " + bypass.lastname, detail: 'Le prospect a bien été supprimé' });
-        this.prospects.splice(this.prospects.indexOf(p),1)
+        this.prospects.splice(this.prospects.indexOf(p), 1)
       }, error => {
         this.messageService.add({ severity: 'error', summary: 'Suppression de ' + bypass.firstname + " " + bypass.lastname, detail: 'Une erreur est arrivé\n' + error.error });
       });
@@ -591,7 +598,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['A des documents'] = (p.haveDoc) ? "Oui" : "Non"
       t['Decision Admission'] = p.decision_admission
       t['Phase complémentaire'] = p.phase_complementaire
-      t['Statut Payement'] = p.statut_payement
+      t['Statut Paiement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
       t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"

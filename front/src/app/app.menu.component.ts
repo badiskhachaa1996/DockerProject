@@ -6,6 +6,8 @@ import { Service } from './models/Service';
 import { EtudiantService } from './services/etudiant.service';
 import { FormateurService } from './services/formateur.service';
 import { CommercialPartenaireService } from './services/commercial-partenaire.service';
+import { TeamCommercialService } from './services/team-commercial.service';
+import { teamCommercial } from './models/teamCommercial';
 
 @Component({
     selector: 'app-menu',
@@ -23,6 +25,7 @@ import { CommercialPartenaireService } from './services/commercial-partenaire.se
     `
 })
 export class AppMenuComponent implements OnInit {
+
     modelAdmin: any = [];
     model: any[];
     token: any;
@@ -38,8 +41,9 @@ export class AppMenuComponent implements OnInit {
     isCeoEntreprise: Boolean = false;
     isEvent = false
     isAdministration: Boolean = false;
+    isConseiller: teamCommercial = null
 
-    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService) { }
+    constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
     ngOnInit() {
         //Decodage du token
@@ -102,7 +106,7 @@ export class AppMenuComponent implements OnInit {
                     },
                     { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
                 ]
-    
+
             },
             {
                 label: 'Administration',
@@ -163,7 +167,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Alternance',
                 items: [
                     { label: 'Liste des contrats Alternance', icon: 'pi pi-list', routerLink: ['/liste-contrats'] },
-    
+
                 ],
             },
             {
@@ -186,7 +190,8 @@ export class AppMenuComponent implements OnInit {
             }, {
                 label: 'Commercial',
                 items: [
-                    { label: 'Gestion des tuteurs', icon: 'pi pi-user-plus', routerLink: ['/tuteur'] },
+                    { label: 'Gestion des tuteurs', icon: 'pi pi-user', routerLink: ['/tuteur'] },
+                    { label: 'Gestion des equipes de conseillers', icon: 'pi pi-users', routerLink: ['/equipe-commercial'] }
                 ]
             }, {
                 label: 'Support',
@@ -209,7 +214,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
         ];
-        
+
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {
             if (dataUser) {
                 this.isAdmin = dataUser.role == "Admin"
@@ -228,8 +233,38 @@ export class AppMenuComponent implements OnInit {
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
                 this.isCommercial = dataUser.type == "Commercial"
+                this.TCService.getMyTeam().subscribe(team => {
+                    if (team) {
+                        this.isConseiller = team
+                        this.isCommercial = false
+                    }
+                })
                 if (this.isAdmin) {
                     this.model = this.modelAdmin
+                    if (dataUser.email == 'test.admin@estya.com' || dataUser.email == 'i.sall@estya.com') {
+                        this.model.push({
+                            label: 'Gestion service bancaire',
+                            items: [
+                                {
+                                    label: ' Gestion des comptes', icon: 'pi pi-wallet',
+                                    items: [
+                                        //{ label: 'Compte légal', icon: 'pi pi-check-circle', },
+                                        //{ label: 'Bénéficiaire effectif ultime', icon: 'pi pi-users',  },
+                                        { label: 'Mon compte', icon: ' pi pi-user', routerLink: ['/mon-compte-bancaire'] },
+                                        { label: 'Ajouter un nouveau compte individuel', icon: ' pi pi-plus', routerLink: ['/new-individual-account'] },
+                                        { label: 'Liste des comptes', icon: ' pi pi-wallet', routerLink: ['/list-accounts'] },
+                                    ]
+                                },
+                                {
+                                    label: 'Gestions des transaction', icon: 'pi pi-directions ',
+                                    items: [
+                                        { label: 'Paiement', icon: ' pi pi-credit-card', routerLink: ['/payment'] },
+                                    ]
+                                },
+                            ]
+
+                        });
+                    }
                 } else if (this.isFormateur) {
                     //Formateur
                     this.FService.getByUserId(this.token.id).subscribe(dataF => {
@@ -321,7 +356,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
                                         { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
                                     ]
-                                },
+                                }
                             ];
                         }
 
@@ -353,6 +388,24 @@ export class AppMenuComponent implements OnInit {
                             ];
                         }
                     })
+                } else if (this.isConseiller) {
+                    this.model = [
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+                                { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                            ]
+                        },
+                        {
+                            label: 'Conseiller',
+                            items: [
+                                { label: "Liste des demandes", icon: 'pi pi-exclamation-triangle', routerLink: ['/liste-demande-commercial', this.isConseiller._id] },
+                                { label: "Liste des affectations", icon:'pi pi-users', routerLink: ['/detail-equipe-commercial', this.isConseiller._id]}
+
+                            ]
+                        }
+                    ];
                 } else if (this.isAdmission) {
                     if (this.isAgent) {
                         this.model = [

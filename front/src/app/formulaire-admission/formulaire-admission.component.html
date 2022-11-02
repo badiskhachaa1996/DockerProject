@@ -12,7 +12,7 @@
 
         <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
         <div style="text-align: center;">
-            <small>Tous les champs marqués d'un asterix <span style="color: red;"> * </span> sont
+            <small>Tous les champs marqués d'un asterique <span style="color: red;"> * </span> sont
                 obligatoires</small><br>
         </div>
         <br>
@@ -247,6 +247,12 @@
                                 <p-message severity="error"
                                     text="Vous ne pouvez pas choisir le même campus plusieurs fois"></p-message>
                             </div>
+                            <div class="field col-12 md:col-12">
+                                <label>Choix de la rentrée <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire" placeholder="Choissisez la rentrée scolaire">
+                                </p-dropdown>
+                                <span style="color: red;" class="error">Dans certains pays, la rentrée de janvier 2023 n'est pas disponible suite à la fermeture de campus France</span>
+                            </div>
 
                             <div class="field col-12 md:col-4">
                                 <label>Choix du programme <span style="color: red;"> * </span></label>
@@ -305,7 +311,7 @@
                         <button pButton type=" button" label="Précedent" style="float: left;" (click)="previousPage()">
                         </button>
                         <button pButton type="button" label="Suivant"
-                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid "
+                            [disabled]="VerifCampus() || programme.invalid || formation.invalid || rythme_formation.invalid || rentree_scolaire.invalid "
                             style="float: right;" (click)="nextPage()"></button>
                     </div>
                 </p-fieldset>
@@ -356,10 +362,9 @@
                                         irrévocable (AVI)</label>
                                 </div>
                                 <div>
-                                    <input type="checkbox" formControlName="servicesEh_6"
-                                        name="Trouver une alternance">
-                                    <label style="font-size: 14px;"
-                                        for="Trouver une alternance">Trouver une alternance</label>
+                                    <input type="checkbox" formControlName="servicesEh_6" name="Trouver une alternance">
+                                    <label style="font-size: 14px;" for="Trouver une alternance">Trouver une
+                                        alternance</label>
                                 </div>
                             </div>
                             <br>
@@ -437,7 +442,9 @@
                                     formControlName="code_commercial" />
                             </div>
                             <div class="ui-g-12 ui-md-12">
-                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales" target="_blank">mentions légales</a> et accepte que mes données soient utiliseés dans le cadre de mon accompagnement
+                                <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
+                                        target="_blank">mentions légales</a> et accepte que mes données soient utiliseés
+                                    dans le cadre de mon accompagnement
                                     et dans le traitement de ma demande ?</h6>
                                 <div>
                                     <p-radioButton value=true name="donneePerso" formControlName="donneePerso">

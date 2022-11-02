@@ -87,6 +87,7 @@ export class MatieresComponent implements OnInit {
       remarque: [''],
       semestre: ['', Validators.required],
       niveau: ['', Validators.required],
+      hors_bulletin: [false]
     })
   }
 
@@ -121,8 +122,8 @@ export class MatieresComponent implements OnInit {
       credit_ects,
       remarque,
       semestre,
-      niveau
-
+      niveau,
+      this.formAddMatiere.value.hors_bulletin
     );
     //Envoi vers la BD
     this.matiereService.create(matiere).subscribe(
@@ -163,7 +164,7 @@ export class MatieresComponent implements OnInit {
   onInitFormModifMatiere() {
     this.formModifMatiere = this.formBuilder.group({
       nom: ['', [Validators.required]],
-      volume: ['',Validators.required],
+      volume: ['', Validators.required],
       abbrv: ['', Validators.required],
       formation_id: [this.formationList[0], Validators.required],
       seance_max: ['', Validators.required],
@@ -223,7 +224,22 @@ export class MatieresComponent implements OnInit {
     this.formModifMatiere.reset();
     this.showFormModifMatiere = false;
   }
-  isArray(r){
+  isArray(r) {
     return Array.isArray(r)
+  }
+  showHorsBulletin = true
+  changeMatiereSeanceAdd(value) {
+    //WIP
+    if (value){
+      //hors bulletin
+      //this.formAddMatiere.controls.gngn.setValidators([])
+    }else{
+
+    }
+
+  }
+
+  test(event) {
+    console.log(event)
   }
 }

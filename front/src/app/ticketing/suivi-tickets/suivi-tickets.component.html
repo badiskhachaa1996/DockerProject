@@ -230,7 +230,7 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button pButton label="Affecter un ticket"
+                <button pButton label="Affecter un ticket" *ngIf="token.role=='Admin'"
                     (click)="showAssignForm=true; showCard = false;showFormAdd=false"
                     style="margin-left: 2px;"></button>
                 <button pButton label="Créer un ticket"

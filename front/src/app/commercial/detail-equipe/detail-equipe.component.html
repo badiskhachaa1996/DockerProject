@@ -1,0 +1,72 @@
+<p-toast></p-toast>
+<div *ngIf="seeAffectation!=null" class="col-12">
+    <div class="card">
+        <i class="pi pi-times-circle"
+            style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+            (click)="seeAffectation = null;" aria-hidden="true"> </i>
+        <h4 style="text-align: center;">Affecté un conseiller à {{ seeAffectation.student_id.firstname | titlecase }} {{ seeAffectation.student_id.lastname | uppercase }} </h4>
+        <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;">
+                * </span> sont obligatoires</p>
+
+        <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="affected()">
+            <div class="grid col-12">
+                <div class="field col-12">
+                    <label For="coeff">Commercials: <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="listConseiller" formControlName="conseiller_id" placeholder="Choisir le commercial"></p-dropdown>
+                </div>
+                <button pButton label="Enregistrez les modifications" type="submit"
+                    [disabled]="demandeConseillerForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Affecter un étudiant à un conseiller" (click)="showFormAddDemande = true;"></button>
+            </div>
+            <h5>Liste des affectation de l'équipe de {{ team.owner_id.firstname | titlecase }} {{ team.owner_id.lastname | uppercase }}</h5>
+            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="affectationList" styleClass="" [paginator]="true"
+                [pageLinks]="5" [globalFilterFields]="['student_id.lastname','student_id.firstname','conseiller_id.lastname','conseiller_id.firstname']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="student_id.firstname" style="text-align: center;">Etudiant <p-sortIcon field="student_id.firstname">
+                            </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="conseiller_id.firstname" style="text-align: center;">Conseiller <p-sortIcon field="conseiller_id.firstname">
+                            </p-sortIcon>
+                        </th>
+                        <th style="text-align: center;">Action</th>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData>
+                    <tr>
+                        <td>
+                            {{ rowData.student_id.firstname | titlecase }} {{ rowData.student_id.lastname | uppercase }}
+                        </td>
+                        <td>
+                            {{ rowData.conseiller_id.firstname | titlecase }} {{ rowData.conseiller_id.lastname | uppercase }}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier le conseiller" tooltipPosition="bottom"
+                                class="pi pi-pencil" (click)="seeAffectation = rowData" aria-hidden="true"
+                                style="margin-left: 7px"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
