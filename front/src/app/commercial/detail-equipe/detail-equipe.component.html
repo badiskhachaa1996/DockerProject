@@ -1,21 +1,21 @@
 <p-toast></p-toast>
-<div *ngIf="showFormUpdate!=null" class="col-12">
+<div *ngIf="seeAffectation!=null" class="col-12">
     <div class="card">
         <i class="pi pi-times-circle"
             style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
-            (click)="showFormUpdate = null;" aria-hidden="true"> </i>
-        <h4 style="text-align: center;">Modifier les élèves conseillés de {{ showFormUpdate.firstname | titlecase }} {{ showFormUpdate.lastname | uppercase }} </h4>
+            (click)="seeAffectation = null;" aria-hidden="true"> </i>
+        <h4 style="text-align: center;">Affecté un conseiller à {{ seeAffectation.student_id.firstname | titlecase }} {{ seeAffectation.student_id.lastname | uppercase }} </h4>
         <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;">
                 * </span> sont obligatoires</p>
 
-        <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateEquipe" (ngSubmit)="onUpdateTeam()">
+        <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="affected()">
             <div class="grid col-12">
                 <div class="field col-12">
-                    <label For="coeff">Commercials de l'équipe: <span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="commercialAvailable" formControlName="team_id"></p-multiSelect>
+                    <label For="coeff">Commercials: <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="listConseiller" formControlName="conseiller_id" placeholder="Choisir le commercial"></p-dropdown>
                 </div>
                 <button pButton label="Enregistrez les modifications" type="submit"
-                    [disabled]="formUpdateEquipe.invalid"></button>
+                    [disabled]="demandeConseillerForm.invalid"></button>
             </div>
         </form>
     </div>
@@ -24,11 +24,11 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button pButton label="Ajouter une équipe" (click)="showFormAddEquipe = true;"></button>
+                <button pButton label="Affecter un étudiant à un conseiller" (click)="showFormAddDemande = true;"></button>
             </div>
-            <h5>Liste des membres de l'équipe de {{ team.owner_id.firstname | titlecase }} {{ team.owner_id.lastname | uppercase }}</h5>
-            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="team.team_id" styleClass="" [paginator]="true"
-                [pageLinks]="5" [globalFilterFields]="['lastname','firstname']"
+            <h5>Liste des affectation de l'équipe de {{ team.owner_id.firstname | titlecase }} {{ team.owner_id.lastname | uppercase }}</h5>
+            <p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="affectationList" styleClass="" [paginator]="true"
+                [pageLinks]="5" [globalFilterFields]="['student_id.lastname','student_id.firstname','conseiller_id.lastname','conseiller_id.firstname']"
                 responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
@@ -43,10 +43,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th pSortableColumn="firstname" style="text-align: center;">Chef <p-sortIcon field="firstname">
+                        <th pSortableColumn="student_id.firstname" style="text-align: center;">Etudiant <p-sortIcon field="student_id.firstname">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="role" style="text-align: center;"> Membres <p-sortIcon field="role">
+                        <th pSortableColumn="conseiller_id.firstname" style="text-align: center;">Conseiller <p-sortIcon field="conseiller_id.firstname">
                             </p-sortIcon>
                         </th>
                         <th style="text-align: center;">Action</th>
@@ -54,30 +54,15 @@
                 <ng-template pTemplate="body" let-rowData>
                     <tr>
                         <td>
-                            {{ rowData.owner_id.firstname | titlecase }} {{ rowData.owner_id.lastname | uppercase }}
+                            {{ rowData.student_id.firstname | titlecase }} {{ rowData.student_id.lastname | uppercase }}
                         </td>
                         <td>
-                            <span *ngFor="let value of rowData.team_id;let isFirst = first">
-                                <span *ngIf="isFirst">
-                                    {{ value.firstname | titlecase }} {{ value.lastname | uppercase }}
-                                </span>
-                                <span *ngIf="!isFirst">
-                                    ,{{ value.firstname | titlecase }} {{ value.lastname | uppercase }}
-                                </span>
-
-                            </span>
-
+                            {{ rowData.conseiller_id.firstname | titlecase }} {{ rowData.conseiller_id.lastname | uppercase }}
                         </td>
                         <td>
-                            <i pTooltip="Voir la liste des étudiants conseillés" tooltipPosition="bottom"
-                                class="pi pi-user" (click)="seeConseilled(rowData)" aria-hidden="true"
+                            <i pTooltip="Modifier le conseiller" tooltipPosition="bottom"
+                                class="pi pi-pencil" (click)="seeAffectation = rowData" aria-hidden="true"
                                 style="margin-left: 7px"></i>
-                            <i pTooltip="Modifier l'équipe" tooltipPosition="bottom"
-                                class="pi pi-pencil" (click)="showUpdate(rowData)" aria-hidden="true"
-                                style="margin-left: 7px"></i>
-                            <!--<i pTooltip="Supprimer l'équipe" tooltipPosition="bottom"
-                                class="pi pi-trash" (click)="deleteTeam(rowData)" aria-hidden="true"
-                                style="margin-left: 7px"></i>-->
                         </td>
                     </tr>
                 </ng-template>

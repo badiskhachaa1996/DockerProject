@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TeamCommercialService } from 'src/app/services/team-commercial.service';
 import { teamCommercial } from 'src/app/models/teamCommercial';
 import { Message, MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestion-equipe',
@@ -29,7 +30,7 @@ export class GestionEquipeComponent implements OnInit {
     team_id: ['', [Validators.required]]
   })
 
-  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private UserService: AuthService, private TeamCommercialService: TeamCommercialService) { }
+  constructor(private router: Router, private messageService: MessageService, private formBuilder: FormBuilder, private UserService: AuthService, private TeamCommercialService: TeamCommercialService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem('token'));
@@ -101,6 +102,14 @@ export class GestionEquipeComponent implements OnInit {
     this.formUpdateEquipe.setValue({ team_id: listeID })
     this.showFormUpdate = rowData
     this.showFormAddEquipe = false
+  }
+
+  seeConseilled(rowData: teamCommercial) {
+    this.router.navigate(["/detail-equipe-commercial", rowData._id])
+  }
+
+  seeDemandes(rowData: teamCommercial) {
+    this.router.navigate(["/liste-demande-commercial", rowData._id])
   }
 
 

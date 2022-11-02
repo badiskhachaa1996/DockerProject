@@ -1,3 +1,24 @@
+<div *ngIf="seeAffectation!=null" class="col-12">
+    <div class="card">
+        <i class="pi pi-times-circle"
+            style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;" pTooltip="Fermer"
+            (click)="seeAffectation = null;" aria-hidden="true"> </i>
+        <h4 style="text-align: center;">Affecté un conseiller à {{ seeAffectation.student_id.firstname | titlecase }} {{ seeAffectation.student_id.lastname | uppercase }} </h4>
+        <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span style="color: red;">
+                * </span> sont obligatoires</p>
+
+        <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="affected()">
+            <div class="grid col-12">
+                <div class="field col-12">
+                    <label For="coeff">Commercials: <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="listConseiller" formControlName="conseiller_id" placeholder="Choisir le commercial"></p-dropdown>
+                </div>
+                <button pButton label="Enregistrez les modifications" type="submit"
+                    [disabled]="demandeConseillerForm.invalid"></button>
+            </div>
+        </form>
+    </div>
+</div>
 <div class="grid">
     <div class="col-12">
         <div class="card">

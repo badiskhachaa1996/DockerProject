@@ -132,8 +132,8 @@ app.use('/', function (req, res, next) {
                             res.status(401).send(errToken)
                         }
                     } else {
-                        User.findByIdAndUpdate(user._id, { last_connection: new Date() },{},(err,user)=>{
-                            if(err){
+                        User.findByIdAndUpdate(user._id, { last_connection: new Date() }, {}, (err, user) => {
+                            if (err) {
                                 console.error(err)
                             }
                             next()
@@ -146,7 +146,7 @@ app.use('/', function (req, res, next) {
             }
         })
     } else {
-        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel')|| req.originalUrl == "/soc/demande-events/create"
+        if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel') || req.originalUrl == "/soc/demande-events/create"
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" ||
             req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise') || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
@@ -204,7 +204,7 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
-app.use('/soc/cv',cvController)
+app.use('/soc/cv', cvController)
 
 app.use('/soc/prestataire', prestataireController);
 
@@ -233,9 +233,9 @@ app.use('/soc/dashboard', dashboardController);
 
 app.use('/soc/mission', missionController);
 
-app.use('/soc/teamCommercial',teamCommercialController)
+app.use('/soc/teamCommercial', teamCommercialController)
 
-app.use('/soc/demande_conseiller',DemandeConseillerController)
+app.use('/soc/demandeConseiller', DemandeConseillerController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

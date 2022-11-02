@@ -48,7 +48,7 @@ const etudiantSchema = mongoose.Schema({
     date_dernier_modif_dossier: { type: Date, default: null },
     valided_by_admin: { type: Boolean, default: false },
     valided_by_support: { type: Boolean, default: false },
-    annee_scolaire: { type: [String], default: ["2021"] },
+    annee_scolaire: { type: [String], default: ["2021-2022"] },
     date_telechargement_bulletin: { type: Date },
     conseiller: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
 });

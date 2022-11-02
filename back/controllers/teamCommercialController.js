@@ -39,7 +39,7 @@ app.get("/getAll", (req, res, next) => {
 
 app.get('/getMyTeam', (req, res) => {
     let token = jwt.decode(req.header("token"))
-    TeamCommercial.findOne({ owner_id: token.id }).populate('owner_id').populate('team_id').populate('createur_id')
+    TeamCommercial.findOne({ $or: [{ owner_id: token.id }, { team_id: { $in: [token.id] } }] }).populate('owner_id').populate('team_id').populate('createur_id')
         .then(team => { res.status(200).send(team) })
         .catch((error) => {
             console.error(error)
@@ -48,14 +48,38 @@ app.get('/getMyTeam', (req, res) => {
 })
 
 app.get('/getAllCommercial', (req, res) => {
-    TeamCommercial.find().populate('team_id')
-        .then(team => { 
-            console.log(team)
+    TeamCommercial.find().populate('team_id').populate('owner_id')
+        .then(team => {
             let r = []
-            team.forEach(arr=>{
-                r=r.concat(arr.team_id)
+            team.forEach(arr => {
+                r.push(arr.owner_id)
+                r = r.concat(arr.team_id)
             })
-            console.log(r)
+            res.status(200).send(r)
+        })
+        .catch((error) => {
+            console.error(error)
+            res.status(500).send(error)
+        })
+})
+
+app.get('/getByID/:team_id', (req, res) => {
+    TeamCommercial.findById(req.params.team_id).populate('team_id').populate('owner_id')
+        .then(team => {
+            res.status(200).send(team)
+        })
+        .catch((error) => {
+            console.error(error)
+            res.status(500).send(error)
+        })
+})
+
+app.get('/getAllCommercialByTeamID/:team_id', (req, res) => {
+    TeamCommercial.findById(req.params.team_id).populate('team_id').populate('owner_id')
+        .then(team => {
+            let r = []
+            r.push(team.owner_id)
+            r = r.concat(team.team_id)
             res.status(200).send(r)
         })
         .catch((error) => {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { DemandeConseiller } from 'src/app/models/DemandeConseiller';
 import { DemandeConseillerService } from 'src/app/services/commercial/demande-conseiller.service';
@@ -14,12 +15,18 @@ export class DemandeConseillerComponent implements OnInit {
   demandes: DemandeConseiller[] = []
   seeAffectation: DemandeConseiller = null
   listConseiller: any[] = []
-  constructor(public DCService: DemandeConseillerService, public messageService: MessageService, public TCService: TeamCommercialService) { }
+  constructor(public DCService: DemandeConseillerService, public messageService: MessageService, public TCService: TeamCommercialService, private activatedRoute: ActivatedRoute,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-    this.DCService.getAll().subscribe(dcs=>{
-      this.demandes=dcs
-    })
+    if (!this.activatedRoute.snapshot.params.equipe_id)
+      this.DCService.getAll().subscribe(dcs => {
+        this.demandes = dcs
+      })
+    else
+      this.DCService.getAllWaitingByTeamCommercialID(this.activatedRoute.snapshot.params.equipe_id).subscribe(dcs => {
+        this.demandes = dcs
+      })
     this.TCService.getAllCommercial().subscribe(u => {
       u.forEach(user => {
         this.listConseiller.push({ label: user.lastname + " " + user.firstname, value: user._id })
@@ -28,7 +35,8 @@ export class DemandeConseillerComponent implements OnInit {
   }
 
   accepted(rowData: DemandeConseiller) {
-    this.DCService.Update(rowData).subscribe(d => {
+    rowData.activated = true
+    this.DCService.update(rowData).subscribe(d => {
       this.demandes.splice(this.demandes.indexOf(rowData), 1)
       this.messageService.add({ severity: 'success', summary: 'Suppression avec succès' })
     }, err => {
@@ -41,18 +49,20 @@ export class DemandeConseillerComponent implements OnInit {
   })
 
   affected() {
-    this.DCService.Update({
+    let bypass: any = this.seeAffectation.student_id._id
+    this.DCService.update({
       _id: this.seeAffectation._id,
-      student_id: this.seeAffectation.student_id,
+      student_id: bypass,
       conseiller_id: this.demandeConseillerForm.value.conseiller_id,
       archived: false,
       activated: true
     }).subscribe(dc => {
-      this.demandes.splice(this.demandes.indexOf(this.seeAffectation), 1, dc)
-      this.messageService.add({ severity: 'success', summary: 'Demande de conseillé envoyé' })
+      this.demandes.splice(this.demandes.indexOf(this.seeAffectation), 1)
+      this.messageService.add({ severity: 'success', summary: 'L\'affectation a été realisé avec succès' })
+      this.seeAffectation = null
     }, err => {
       console.error(err)
-      this.messageService.add({ severity: 'error', summary: 'Erreur lors de la demande de conseillé' })
+      this.messageService.add({ severity: 'error', summary: 'Erreur lors de l\'affectation' })
     })
   }
 
