@@ -7,7 +7,8 @@ export class CV {
             { skill: String, date_debut: Date, date_fin: Date }
         ], public connaissances?: [
             { skill: String, niveau: String }
-        ]
+        ],
+        public video_lien?:string
     ) { }
 
 }

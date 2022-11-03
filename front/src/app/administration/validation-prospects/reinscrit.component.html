@@ -328,7 +328,7 @@
     <div class="card">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPayement = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+        <h3 *ngIf="showPayement.user_id" class="text-center" style="font-weight: bold;">Ajouter un paiement de : {{
             showPayement.user_id?.firstname }} {{
             showPayement.user_id?.lastname | uppercase }}
         </h3>
@@ -342,7 +342,7 @@
             <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                 <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-3">
-                    <label>Type de payement:</label><br>
+                    <label>Type de paiement:</label><br>
                     <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                         [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
                     <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
@@ -363,7 +363,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
             </div>
             <div class="col-6">
                 <button pButton label="Mettre à jour les payements" (click)="addNewPayment()"></button>
@@ -378,7 +378,7 @@
     <div class="card">
         <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showPayementEtu = null"
             aria-hidden="true"> </i>
-        <h3 *ngIf="showPayementEtu.user_id" class="text-center" style="font-weight: bold;">Ajouter un payement de : {{
+        <h3 *ngIf="showPayementEtu.user_id" class="text-center" style="font-weight: bold;">Ajouter un paiement de : {{
             showPayementEtu.user_id?.firstname }} {{
             showPayementEtu.user_id?.lastname | uppercase }}
         </h3>
@@ -392,7 +392,7 @@
             <div class="col-12 grid" *ngFor="let data of payementList; let i = index">
                 <!--<p style="font-style:italic">Paiement n°{{i+1}}</p>-->
                 <div class="field col-12 md:col-3">
-                    <label>Type de payement:</label><br>
+                    <label>Type de paiement:</label><br>
                     <!--<input pInputText type="text" (change)="changeMontant(i,$event,'type')"
                         [(value)]="payementList[i]['type']" placeholder="CB" class="form-control">-->
                     <p-dropdown [options]="typePaiement" [(ngModel)]="payementList[i]['type']"
@@ -413,7 +413,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un payement"></button>
+                <button type="button" (click)="onAddPayement()" pButton label="Ajouter un paiement"></button>
             </div>
             <div class="col-6">
                 <button pButton label="Mettre à jour les payements" (click)="addNewPaymentEtu()"></button>
@@ -522,7 +522,7 @@
                     <td>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                             (click)="showUploadFile=prospect;scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
+                        <i pTooltip="Mettre à jour le paiement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayement=prospect;showPayementFC(prospect);scrollToTop()"
                             aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
@@ -813,7 +813,7 @@
                     <td>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                             (click)="showUploadFile=etudiant;scrollToTop()" aria-hidden="true"></i>
-                        <i pTooltip="Mettre à jour le payement" tooltipPosition="bottom" class="pi pi-wallet"
+                        <i pTooltip="Mettre à jour le paiement" tooltipPosition="bottom" class="pi pi-wallet"
                             (click)="showPayementEtu=etudiant;showPayementEtuFC(etudiant);scrollToTop()"
                             aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->

@@ -9,7 +9,8 @@ const sch = mongoose.Schema({
     ],
     connaissances: [
         { skill: String, niveau: String }
-    ]
+    ],
+    video_lien: { type: String }
 
 });
 

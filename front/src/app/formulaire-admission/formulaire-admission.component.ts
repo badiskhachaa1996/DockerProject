@@ -85,7 +85,6 @@ export class FormulaireAdmissionComponent implements OnInit {
     [
       { value: "Paris - France" },
       { value: "Montpellier - France" },
-      { value: "Athène - Grèce" },
       { value: "Valence - Espagne" },
       { value: "Florence - Italie" },
       { value: "UAE - Dubai" },
@@ -188,8 +187,8 @@ export class FormulaireAdmissionComponent implements OnInit {
       ]
     } else if (this.form_origin == "estya") {
       this.campusDropdown = [
-        { value: "Paris - France" },
-        { value: "Montpellier - France" },
+        { value: "France - Paris" },
+        { value: "France - Montpellier" },
         { value: "Brazzaville - Congo" },
         { value: "Rabat - Maroc " },
         { value: "Malte" },
@@ -232,7 +231,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     } else if (this.form_origin == "espic") {
       this.campusDropdown = [
         { value: "France - Paris" },
-        { value: "Athène - Grèce" },
+        { value: "France - Montpellier" },
         { value: "En ligne" }
       ]
 

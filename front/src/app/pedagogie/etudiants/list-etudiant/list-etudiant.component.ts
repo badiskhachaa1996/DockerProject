@@ -101,6 +101,15 @@ export class ListEtudiantComponent implements OnInit {
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
+  
+  filterAnneeScolaire=[
+    { value: "2020-2021", label: "2020-2021" },
+    { value: "2021-2022", label: "2021-2022" },
+    { value: "2022-2023", label: "2022-2023" },
+    { value: "2023-2024", label: "2023-2024" },
+    { value: "2024-2025", label: "2024-2025" },
+
+  ]
 
   entreprises: Entreprise[] = [];
   dropdownEntreprise: any[] = [{ libelle: 'Choisissez une entreprise', value: '' }];
@@ -148,14 +157,14 @@ export class ListEtudiantComponent implements OnInit {
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
-    if (confirm("Voulez-vous supprimer le payement ?")) {
+    if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
     }
   }
 
   addNewPayment() {
     this.etudiantService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
-      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
       this.prospects[this.showPayement.user_id] = data
       this.showPayement = null
       this.payementList = null
@@ -835,6 +844,7 @@ export class ListEtudiantComponent implements OnInit {
   ]
 
   languesCV = []
+  urlVideo = ""
   skillsCV: [
     { skill: String, niveau: String }
   ]
@@ -897,7 +907,8 @@ export class ListEtudiantComponent implements OnInit {
       bypass._id,
       this.languesCV,
       this.experiencesCV,
-      this.skillsCV
+      this.skillsCV,
+      this.urlVideo
     )
     this.CVService.create(cv).subscribe(data => {
       this.showCV = null

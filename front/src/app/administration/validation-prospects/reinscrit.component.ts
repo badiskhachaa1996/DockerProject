@@ -394,14 +394,14 @@ export class ReinscritComponent implements OnInit {
 
   deletePayement(i) {
     //let temp = (this.payementList[i]) ? this.payementList[i] + " " : ""
-    if (confirm("Voulez-vous supprimer le payement ?")) {
+    if (confirm("Voulez-vous supprimer le paiement ?")) {
       this.payementList.splice(i, 1)
     }
   }
 
   addNewPayment() {
     this.admissionService.addNewPayment(this.showPayement._id, { payement: this.payementList }).subscribe(data => {
-      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.messageService.add({ severity: "success", summary: "Le paiement a été ajouter" })
       let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
       this.admissionService.updateDossier(this.showPayement._id, statut_dossier).subscribe(
         ((responde) => {
@@ -421,7 +421,7 @@ export class ReinscritComponent implements OnInit {
 
   addNewPaymentEtu() {
     this.etudiantService.addNewPayment(this.showPayementEtu._id, { payement: this.payementList }).subscribe(data => {
-      this.messageService.add({ severity: "success", summary: "Le payement a été ajouter" })
+      this.messageService.add({ severity: "success", summary: "Le paiement a été ajouté" })
       let statut_dossier = this.formUpdateDossier.get("statut_dossier")?.value;
       this.etudiantService.updateDossier(this.showPayementEtu._id, statut_dossier).subscribe(
         ((responde) => {

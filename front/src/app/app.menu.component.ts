@@ -236,7 +236,6 @@ export class AppMenuComponent implements OnInit {
                 this.TCService.getMyTeam().subscribe(team => {
                     if (team) {
                         this.isConseiller = team
-                        this.isCommercial = false
                     }
                 })
                 if (this.isAdmin) {
@@ -387,25 +386,18 @@ export class AppMenuComponent implements OnInit {
                                 },
                             ];
                         }
-                    })
-                } else if (this.isConseiller) {
-                    this.model = [
-                        {
-                            label: 'Ticketing', icon: 'pi pi-ticket',
-                            items: [
-                                { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
-                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
-                            ]
-                        },
-                        {
-                            label: 'Conseiller',
-                            items: [
-                                { label: "Liste des demandes", icon: 'pi pi-exclamation-triangle', routerLink: ['/liste-demande-commercial', this.isConseiller._id] },
-                                { label: "Liste des affectations", icon:'pi pi-users', routerLink: ['/detail-equipe-commercial', this.isConseiller._id]}
+                        if (this.isConseiller) {
+                            this.model.push(
+                                {
+                                    label: 'Conseiller',
+                                    items: [
+                                        { label: "Liste des demandes", icon: 'pi pi-exclamation-triangle', routerLink: ['/liste-demande-commercial', this.isConseiller._id] },
+                                        { label: "Liste des affectations", icon: 'pi pi-users', routerLink: ['/detail-equipe-commercial', this.isConseiller._id] }
 
-                            ]
+                                    ]
+                                })
                         }
-                    ];
+                    })
                 } else if (this.isAdmission) {
                     if (this.isAgent) {
                         this.model = [
