@@ -96,4 +96,32 @@ export class IntimeService {
     });
   }
 
+
+  //Recuperation de la presence d'un utilisateur via une date et un id
+  getByDateByUserId(userId: string, dateOfTheDay: string)
+  {
+    let url = `${this.apiUrl}get-by-date-by-user-id/${userId}/${dateOfTheDay}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<InTime>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => (resolve(response)),
+        (error) => (reject(error))
+      );
+    });
+  }
+
+
+  //Recuperer l'adresse IP de l'utilisateur
+  getIpAdress() 
+  {
+    const url = "https://api.ipify.org?format=json";
+    
+    return new Promise((resolve, reject) => {
+      this.httpClient.get(url).subscribe(
+        (response) => (resolve(response)),
+        (error) => (reject(error))
+      );
+    })
+  }
+
 }
