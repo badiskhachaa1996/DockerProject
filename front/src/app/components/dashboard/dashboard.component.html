@@ -263,7 +263,17 @@
 <div *ngIf="isAdmin">
     <h2 *ngIf="user" style="text-align: center;">Bienvenue {{user.lastname | uppercase}} {{user.firstname | titlecase}}
     </h2>
-    <button pButton label="Test" (click)="test()"></button>
+
+    <div class="col-12">
+        <div class="card">
+            <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in" style="float: right" (click)="onCheckIn()"></button>
+            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="onCheckOut()"></button>
+            <h5>
+                Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}" style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
+            </h5>
+            <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date | date: 'd/M/yy à h:mm a' }}</span></small>
+        </div>
+    </div>
 </div>
 
 
@@ -491,8 +501,3 @@
         </div>
     </div>
 </div>
-<!--<div *ngIf="isAdmin">
-    <h2>Outil pour les devs</h2>
-    <button pButton label="PAS TOUCHE" (click)="SCIENCE()"></button>
-
-</div>-->

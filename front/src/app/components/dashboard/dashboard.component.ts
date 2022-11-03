@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Product } from '../../api/product';
 import { ProductService } from '../../service/productservice';
 import { Subscription } from 'rxjs';
@@ -9,7 +9,7 @@ import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';
 import { HttpClient, HttpHeaders, HttpClientModule } from '@angular/common/http';
-import {GalleriaModule} from 'primeng/galleria';
+import { GalleriaModule } from 'primeng/galleria';
 
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { FullCalendar } from 'primeng/fullcalendar';
@@ -34,6 +34,9 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { Dashboard } from 'src/app/models/Dashboard';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { IntimeService } from 'src/app/services/intime.service';
+import { InTime } from 'src/app/models/InTime';
+import { info } from 'console';
 
 @Component({
   templateUrl: './dashboard.component.html',
@@ -206,13 +209,19 @@ export class DashboardComponent implements OnInit {
   ];
 
 
+  //Partie checkin checkout
+  isCheck: boolean = false;
+  statut: string;
+  dailyCheck: InTime;
+
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
     private classeService: ClasseService, private matiereService: MatiereService,
     private seanceService: SeanceService, private diplomeService: DiplomeService,
-    private router: Router, private route: ActivatedRoute, private noteService: NoteService, 
-    private formateurService: FormateurService, private paySer: PaymentService,    
-    private dashboardService: DashboardService, private http: HttpClient
+    private router: Router, private route: ActivatedRoute, private noteService: NoteService,
+    private formateurService: FormateurService, private paySer: PaymentService,
+    private dashboardService: DashboardService, private http: HttpClient,
+    private inTimeService: IntimeService, private messageService: MessageService
   ) { }
 
 
@@ -280,6 +289,9 @@ export class DashboardComponent implements OnInit {
         })
       }
     );
+
+    //Verification du checkin
+    this.onIsCheck();
   }
 
   SCIENCE() {
@@ -371,6 +383,136 @@ export class DashboardComponent implements OnInit {
 
   }
 
+
+
+  //Verification du checkin
+  onIsCheck() {
+    let today = new Date().toLocaleDateString();
+    let todayReplaced = '';
+
+    for (let i = 0; i < today.length; i++) {
+      if (today[i] === '/') {
+        todayReplaced += '-';
+      }
+      else {
+        todayReplaced += today[i];
+      }
+
+    }
+
+    this.inTimeService.getByDateByUserId(this.token.id, todayReplaced)
+      .then((response: InTime) => {
+        if (response) {
+          this.dailyCheck = response;
+          this.statut = this.dailyCheck.statut;
+          this.isCheck = true;
+        }
+        else {
+          this.statut = 'Check in non effectué';
+          this.isCheck = false;
+        }
+      })
+      .catch((error) => { console.log(error) })
+  }
+
+
+  //Methode de check in
+  onCheckIn() {
+
+    this.inTimeService.getIpAdress()
+      .then((response: any) => {
+        const inTime = new InTime();
+
+        inTime.user_id = this.token.id;
+        inTime.in_ip_adress = response.ip;
+
+        let today = new Date().toLocaleDateString();
+        let todayReplaced = '';
+
+        for (let i = 0; i < today.length; i++) {
+          if (today[i] === '/') {
+            todayReplaced += '-';
+          }
+          else {
+            todayReplaced += today[i];
+          }
+
+        }
+
+        inTime.date_of_the_day = todayReplaced;
+        inTime.in_date = new Date();
+        inTime.out_date = null;
+        inTime.statut = 'Au travail';
+        inTime.isCheckable = true;
+
+        this.inTimeService.postJustArrived(inTime)
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Check in effectué' });
+            this.onIsCheck();
+          })
+          .catch((error) => { console.log(error) })
+
+      })
+      .catch((error) => { console.log(error) })
+
+  }
+
+
+  onCheckOut() {
+    this.inTimeService.getIpAdress()
+      .then((response: any) => {
+        const today = new Date().toLocaleDateString();
+        let todayReplaced = '';
+        for (let i = 0; i < today.length; i++) {
+          if (today[i] === '/') {
+            todayReplaced += '-';
+          }
+          else {
+            todayReplaced += today[i];
+          }
+        }
+
+        const userId = this.token.id;
+        const outDate = new Date();
+        const dateOfToday = todayReplaced;
+        const ipAdress = response.ip;
+
+        this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress })
+          .then((response) => {
+            this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
+            this.dailyCheck = response;
+            this.onIsCheck();
+          })
+          .catch((err) => { console.error(err); });
+
+      })
+      .catch((error) => { console.log(error) })
+
+  }
+
+
+  onGetBackgroundColor() {
+    let color = undefined;
+    switch (this.statut) {
+      case 'Check in non effectué':
+        color = '#ffcc00';
+        break;
+      case "Parti avant l'heure":
+        color = 'red';
+        break;
+      case "présent toute la journée":
+        color = 'green';
+        break;
+      case "Au travail":
+        color = '#ff9966';
+        break;
+      default:
+        color = 'green';
+        break;
+    }
+
+    return color;
+  }
 
   //Methode de test pour LW
   test() {
