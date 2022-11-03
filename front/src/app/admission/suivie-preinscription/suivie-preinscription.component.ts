@@ -169,5 +169,9 @@ export class SuiviePreinscriptionComponent implements OnInit {
     event.target = null;
   }
 
+  changementVisa(value){
+    console.log(value)
+  }
+
 
 }

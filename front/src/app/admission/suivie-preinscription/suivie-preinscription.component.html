@@ -126,8 +126,66 @@
                 </div>
             </p-fieldset>-->
             <br>
+            <p-fieldset legend="Veuillez trouver ci-après les informations relatives au cursus choisi"
+                [style]="{'color':'#dc143c','font-weight': 'bold'}">
+
+                <div class="grid" style="color: black;font-weight:normal">
+
+                    <div class="grid">
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12 md:col-6">
+                                    <b *ngIf="ProspectConnected.type_form!=='eduhorizons'">Ecole:</b>
+                                    <b *ngIf="ProspectConnected.type_form=='eduhorizons'">Organisme:</b>
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;">{{ProspectConnected.type_form | uppercase }}</span>
+                                </div>
 
 
+                                <div class=" col-12 md:col-6">
+                                    <b>Vos choix des campus:</b>
+
+                                </div>
+                                <div class="col-12 md:col-6">
+                                    <span style="color: gray;"> 1- {{ProspectConnected.campus_choix_1 }}</span><br>
+                                    <span style="color: gray;"> 2- {{ProspectConnected.campus_choix_2 }}</span><br>
+                                    <span style="color: gray;"> 3- {{ProspectConnected.campus_choix_3 }}</span><br>
+                                </div>
+                                <!--<div class="col-12 md:col-12">
+                                    <b>Statut Visa:</b><br>
+                                    <p-dropdown [options]="[{label:'En attente',value:false},{label:'Reçu',value:true}]"
+                                        [(ngModel)]="ProspectConnected.avancement_visa" (onChange)="changementVisa($event.value)">
+                                    </p-dropdown>
+                                </div>-->
+                            </div>
+                        </div>
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.phase_complementaire">
+                                    <b>Phase complémentaire :</b>
+                                </div>
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.phase_complementaire">
+                                    <span style="color: gray;">{{ProspectConnected?.phase_complementaire }}</span>
+                                </div>
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.decision_admission">
+                                    <b>Decision Admission:</b>
+                                </div>
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.decision_admission">
+                                    <span style="color: gray;">{{ProspectConnected?.decision_admission }}</span>
+                                </div>
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.statut_payement">
+                                    <b>Statut Payement:</b>
+                                </div>
+                                <div class="col-12 md:col-6" *ngIf="ProspectConnected.statut_payement">
+                                    <span style="color: gray;">{{ProspectConnected?.statut_payement}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
             <p-fieldset legend="Veuillez charger votre dossier d'admission" [style]="{'font-weight': 'bold'}">
                 <div class="layout-dashboard">
 
