@@ -514,7 +514,7 @@ export class ListEtudiantComponent implements OnInit {
       remarque,
       isOnStage,
       this.etudiantToUpdate.fileRight,
-      this.etudiantToUpdate.payment_reinscrit,
+      this.etudiantToUpdate.payment_reinscrit,true,
       enic_naric,
       campus,
       statut_dossier,
