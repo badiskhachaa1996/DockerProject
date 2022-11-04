@@ -31,6 +31,7 @@ export class Etudiant {
         public isOnStage?: boolean,
         public fileRight?: [],
         public payment_reinscrit?: [],
+        public isActive?:boolean,
         public enic_naric?: boolean,
         public campus?: string, // Campus ID
         public statut_dossier?: string[],

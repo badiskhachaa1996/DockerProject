@@ -235,6 +235,7 @@ export class ReinscritComponent implements OnInit {
       null,//TODO
       null,
       null,//TODO
+      true,
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
@@ -242,6 +243,8 @@ export class ReinscritComponent implements OnInit {
       true, false,
       this.AssignForm.value.annee_scolaire
     )
+    if (etd.statut_dossier.includes("Non Inscrit") == true)
+      etd.isActive = false
     if (!etd.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
     if (etd.statut_dossier.includes('Paiement non finalisé')) {
@@ -306,12 +309,15 @@ export class ReinscritComponent implements OnInit {
       null,//TODO
       null,
       null,//TODO
+      true,
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
       true, false, ["2022-2023"]
     )
+    if (etd.statut_dossier.includes("Non Inscrit") == true)
+      etd.isActive = false
     if (!etd.custom_id)
       etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims

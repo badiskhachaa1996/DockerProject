@@ -754,7 +754,7 @@
 </div>
 <div class="col-12">
     <div class="card">
-        <h5>Liste des réinscriptions en attente de validation</h5>
+        <h5>Liste des réinscriptions/Inscriptions en attente de validation</h5>
         <p-toast></p-toast>
         <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','user_id.email','custom_id']"
@@ -817,7 +817,7 @@
                             (click)="showPayementEtu=etudiant;showPayementEtuFC(etudiant);scrollToTop()"
                             aria-hidden="true"></i>
                         <!-- showPayementFC(etudiant);etudiantToUpdate=etudiant -->
-                        <i pTooltip="Réinscription" tooltipPosition="bottom" class="pi pi-check"
+                        <i pTooltip="Inscription/Réinscription" tooltipPosition="bottom" class="pi pi-check"
                             (click)="initFormEtu(etudiant);scrollToTop()" aria-hidden="true"></i>
                         <i *ngIf="this.isAdministration" (click)="disable(etudiant)" pTooltip="Désactiver l'étudiant"
                             style="margin-left: 2%;" tooltipPosition="bottom" class="pi pi-trash"
