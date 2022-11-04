@@ -42,6 +42,7 @@ export class ReinscritComponent implements OnInit {
     { value: "Paiement partiel", label: "Paiement partiel" },
     { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Non Inscrit", label: "Non Inscrit" },
     { value: "Abandon", label: "Abandon" }
   ]
 

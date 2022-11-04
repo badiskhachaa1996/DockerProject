@@ -53,11 +53,11 @@
                 <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
             </div>
 
-            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
+            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D' && AssignForm.value.statut=='Initial'">
                 <label>Paiement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
-            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
+            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D' ||AssignForm.value.statut!='Initial' ">
                 <label>&nbsp;</label>
                 <p>&nbsp;</p>
             </div>
@@ -72,7 +72,7 @@
                     formControlName="statut"></p-selectButton>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Année scolaire</label>
+                <label>Année scolaire <span style="color: red;">*</span></label>
                 <p-multiSelect [options]="anneeScolaireReinscrit" formControlName="annee_scolaire"></p-multiSelect>
             </div>
             <!-- Si c'est un alternant -->
@@ -206,11 +206,11 @@
             </div>
 
 
-            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D'">
+            <div class="field col-12 md:col-6" *ngIf="montantPayement!='D' && AssignForm.value.statut=='Initial'">
                 <label>Paiement restant :</label>
                 <p>{{montantPayement}}</p>
             </div>
-            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D'">
+            <div class="field col-12 md:col-6" *ngIf="montantPayement=='D' || AssignForm.value.statut!='Initial'">
                 <label>&nbsp;</label>
                 <p>&nbsp;</p>
             </div>
@@ -225,7 +225,7 @@
                     formControlName="statut"></p-selectButton>
             </div>
             <div class="field col-12 md:col-6">
-                <label>Année scolaire</label>
+                <label>Année scolaire<span style="color: red;">*</span></label>
                 <p-multiSelect [options]="anneeScolaireReinscrit" formControlName="annee_scolaire"></p-multiSelect>
             </div>
             <!-- Si c'est un alternant -->
