@@ -39,6 +39,7 @@ export class ReinscritComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement partiel", label: "Paiement partiel" },
     { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
