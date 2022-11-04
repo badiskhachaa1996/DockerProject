@@ -139,4 +139,9 @@ export class AdmissionService {
     let url = this.apiUrl + "delete/" + p_id + "/" + user_id
     return this.httpClient.get<Prospect>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) })
   }
+
+  updateVisa(p_id, visa: boolean) {
+    let url = this.apiUrl + "updateVisa"
+    return this.httpClient.post<Prospect>(url, { p_id, statut: visa }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+  }
 }

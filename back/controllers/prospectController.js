@@ -682,8 +682,14 @@ app.get('/delete/:p_id/:user_id', (req, res) => {
             })
         }
     })
+})
 
-
+app.post("/updateVisa", (req, res) => {
+    let b = req.body.statut == 'true'
+    Prospect.updateOne({ _id: req.body.p_id }, { avancement_visa: b }).then(doc=>{
+        console.log(doc)
+        res.status(201).send(doc)
+    }).catch((error) => { res.status(500).send(error); });
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

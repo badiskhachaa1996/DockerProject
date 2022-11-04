@@ -23,8 +23,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
   subscription: Subscription;
   ListDocuments: String[] = [];
   ListPiped: String[] = [];
-
-  ProspectConnected: Prospect = {};
+  boolVisa = 'false'
+  ProspectConnected: Prospect = {}
 
   diplomeTest: boolean = false;
   piece_identiteTest: boolean = false;
@@ -66,7 +66,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
     this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
 
     this.ecoleProspect = this.ProspectConnected.type_form
-
+    console.log(this.ProspectConnected,(this.ProspectConnected.avancement_visa)?'true':'false')
+    this.boolVisa=(this.ProspectConnected.avancement_visa)?'true':'false'
 
     this.router.navigate(['/login'])
 
@@ -169,8 +170,8 @@ export class SuiviePreinscriptionComponent implements OnInit {
     event.target = null;
   }
 
-  changementVisa(value){
-    console.log(value)
+  changementVisa(value) {
+    this.admissionService.updateVisa(this.ProspectConnected._id, value)
   }
 
 
