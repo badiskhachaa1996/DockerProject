@@ -564,6 +564,11 @@ export class GestionPreinscriptionsComponent implements OnInit {
       });
   }
 
+  showDossier(p:Prospect){
+    let bypass: any = p.user_id
+    this.router.navigate(['suivi-preinscription', bypass._id]);
+  }
+
   exportExcel() {
     let dataExcel = []
     //Clean the data

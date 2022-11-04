@@ -386,6 +386,9 @@
                             <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
+                            <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
+                                class="pi pi-search" (click)="showDossier(prospect)"
+                                aria-hidden="true"></i>
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>

@@ -232,6 +232,7 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
                     { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+                    { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
 
                 ],
             },
@@ -245,6 +246,7 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
             { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
             { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
+            
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },

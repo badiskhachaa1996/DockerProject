@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import jwt_decode from "jwt-decode";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { FileUpload } from 'primeng/fileupload';
 
@@ -54,60 +54,58 @@ export class SuiviePreinscriptionComponent implements OnInit {
     { value: 'TCF', label: "TCF" }
   ];
 
+
   uploadFileForm: FormGroup = new FormGroup({
     typeDoc: new FormControl(this.DocTypes[0], Validators.required)
   })
-  constructor(private router: Router, private messageService: MessageService, private admissionService: AdmissionService) { }
+  constructor(public activatedRoute: ActivatedRoute, private router: Router, private messageService: MessageService, private admissionService: AdmissionService) { }
 
   ngOnInit(): void {
 
     this.codeCommercial = localStorage.getItem("CommercialCode")
 
-    this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
-
-    this.ecoleProspect = this.ProspectConnected.type_form
-    console.log(this.ProspectConnected,(this.ProspectConnected.avancement_visa)?'true':'false')
-    this.boolVisa=(this.ProspectConnected.avancement_visa)?'true':'false'
-
-    this.router.navigate(['/login'])
-
-
-    this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
-
-      (data) => {
-        this.ListDocuments = data
-
-        for (let doc of this.ListDocuments) {
-
-          let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
-          this.ListPiped.push(docname)
-          if (doc.includes('diplome/')) {
-            this.diplomeTest = true;
-          }
-          if (doc.includes('piece_identite/')) {
-            this.piece_identiteTest = true;
-          }
-          if (doc.includes('CV/')) {
-            this.CVTest = true;
-          }
-          if (doc.includes('LM/')) {
-            this.LMTest = true;
-          }
-          if (doc.includes('releve_notes1/')) {
-            this.RdNTest = true;
-          }
-          if (doc.includes('releve_notes2/')) {
-            this.RdNTest2 = true;
-          }
-          if (doc.includes('TCF/')) {
-            this.TCFTest = true;
-          }
-
-        }
-      },
-      (error) => { console.error(error) }
-    );
-
+    if (this.activatedRoute.snapshot.params?.user_id) {
+      this.admissionService.getPopulateByUserid(this.activatedRoute.snapshot.params?.user_id).subscribe(doc => {
+        this.ProspectConnected = doc
+        console.log(this.ProspectConnected, doc, this.activatedRoute.snapshot.params?.user_id)
+        this.ecoleProspect = this.ProspectConnected.type_form
+        this.boolVisa = (this.ProspectConnected.avancement_visa) ? 'true' : 'false'
+        this.admissionService.getFiles(this.ProspectConnected._id).subscribe(
+          (data) => {
+            this.ListDocuments = data
+            for (let doc of this.ListDocuments) {
+              let docname: string = doc.replace("/", ": ").replace('releve_notes1', '1er relevé de notes ').replace('releve_notes2', '2ème relevé de notes').replace('diplome', 'Diplôme').replace('piece_identite', 'Pièce d\'identité').replace("undefined", "Document");
+              this.ListPiped.push(docname)
+              if (doc.includes('diplome/')) {
+                this.diplomeTest = true;
+              }
+              if (doc.includes('piece_identite/')) {
+                this.piece_identiteTest = true;
+              }
+              if (doc.includes('CV/')) {
+                this.CVTest = true;
+              }
+              if (doc.includes('LM/')) {
+                this.LMTest = true;
+              }
+              if (doc.includes('releve_notes1/')) {
+                this.RdNTest = true;
+              }
+              if (doc.includes('releve_notes2/')) {
+                this.RdNTest2 = true;
+              }
+              if (doc.includes('TCF/')) {
+                this.TCFTest = true;
+              }
+            }
+          },
+          (error) => { console.error(error) }
+        );
+      })
+    } else {
+      this.ProspectConnected = jwt_decode(localStorage.getItem('ProspectConected'))['prospectFromDb'];
+      console.log(this.ProspectConnected)
+    }
 
   }
 
