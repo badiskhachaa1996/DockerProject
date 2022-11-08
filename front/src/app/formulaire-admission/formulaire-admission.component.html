@@ -9,6 +9,8 @@
             class="m-2">
         <img *ngIf="form_origin=='estya'" src="\assets\images\logo-estya-fr.png" alt="logo estya" style="width: 10%;"
             class="m-2">
+        <img *ngIf="form_origin=='studinfo'" src="\assets\images\studinfo_logo.png" alt="logo studinfo" style="width: 10%;"
+            class="m-2">
 
         <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
         <div style="text-align: center;">
@@ -249,9 +251,11 @@
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label>Choix de la rentrée <span style="color: red;"> * </span></label>
-                                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire" placeholder="Choissisez la rentrée scolaire">
+                                <p-dropdown [options]="rentreeList" formControlName="rentree_scolaire"
+                                    placeholder="Choissisez la rentrée scolaire">
                                 </p-dropdown>
-                                <span style="color: red;" class="error">Dans certains pays, la rentrée de janvier 2023 n'est pas disponible suite à la fermeture de campus France</span>
+                                <span style="color: red;" class="error">Dans certains pays, la rentrée de janvier 2023
+                                    n'est pas disponible suite à la fermeture de campus France</span>
                             </div>
 
                             <div class="field col-12 md:col-4">
