@@ -6,11 +6,11 @@
 			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;"
 				(click)="showFormUpdateFormateur = false;" aria-hidden="true">
 			</i>
-			<h3 *ngIf="idFormateurToUpdate && userList[idFormateurToUpdate] && userList[idFormateurToUpdate].firstname"
-				class="text-center" style="font-weight: bold;">Modification de
+			<h3 *ngIf="formateurToUpdate && formateurToUpdate.user_id" class="text-center" style="font-weight: bold;">
+				Modification de
 				: {{
-				userList[idFormateurToUpdate].firstname }} {{
-				userList[idFormateurToUpdate].lastname | uppercase }}
+				formateurToUpdate.user_id.firstname }} {{
+				formateurToUpdate.user_id.lastname | uppercase }}
 			</h3>
 			<p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
 					style="color: red;"> * </span> sont obligatoires</p>
@@ -262,10 +262,9 @@
 		<div class="card">
 			<i class="pi pi-times" style="float:right; font-size: 20px; cursor:pointer" (click)="showUploadFile = null"
 				aria-hidden="true"> </i>
-			<h4 *ngIf="showUploadFile._id && userList[showUploadFile._id]"
-				style="font-weight: bold;text-align: center;">Ajouter un document à : {{
-				userList[showUploadFile._id]?.firstname }} {{
-				userList[showUploadFile._id]?.lastname | uppercase }}</h4>
+			<h4 *ngIf="showUploadFile.user_id" style="font-weight: bold;text-align: center;">Ajouter un document à : {{
+				showUploadFile.user_id?.firstname }} {{
+				showUploadFile.user_id?.lastname | uppercase }}</h4>
 			<form class="p-fluid p-formgrid grid">
 				<div class="col-2 md:col-5"></div>
 				<div class="field col-10 md:col-4">
@@ -286,9 +285,10 @@
 			</div>
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
-			<p-table #dt1 [globalFilterFields]="['type_contrat', 'taux_h', 'nda','userList[formateur._id].lastname','userList[formateur._id].firstname']" [totalRecords]="formateurs.length"
-				[pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10" styleClass="p-datatable-gridlines"
-				[value]="formateurs" dataKey="_id" responsiveLayout="scroll">
+			<p-table #dt1
+				[globalFilterFields]="['type_contrat', 'taux_h', 'nda','user_id.lastname','user_id.firstname']"
+				[totalRecords]="formateurs.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
+				styleClass="p-datatable-gridlines" [value]="formateurs" dataKey="_id" responsiveLayout="scroll">
 
 				<ng-template pTemplate="caption">
 					<div class="flex justify-content-between flex-column sm:flex-row">
@@ -320,7 +320,7 @@
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-formateur let-expanded="expanded">
-					<tr *ngIf="userList && userList[formateur._id]">
+					<tr *ngIf="formateur.user_id">
 						<td>
 							<button type="button" pButton pRipple [pRowToggler]="formateur"
 								class="p-button-text p-button-rounded p-button-plain"
@@ -328,8 +328,8 @@
 								(click)="expandFc(formateur)"></button>
 						</td>
 						<td style="min-width: 12rem;">
-							{{userList[formateur._id].lastname | uppercase}}
-							{{userList[formateur._id].firstname | titlecase}}
+							{{formateur.user_id.lastname | uppercase}}
+							{{formateur.user_id.firstname | titlecase}}
 						</td>
 						<td style="min-width: 8rem;">{{ formateur.type_contrat }}</td>
 
@@ -344,7 +344,7 @@
 						</td>
 						<td>
 							<i style="margin-left: 2%;"
-								(click)="showFormUpdateFormateur = true; showFormAddFormateur = false; idFormateurToUpdate = formateur._id; onGetbyId();"
+								(click)="showFormUpdateFormateur = true; showFormAddFormateur = false; onGetbyId(formateur);"
 								class="pi pi-pencil" aria-hidden="true" pTooltip="Modifier le formateur"></i>
 							<i class="pi pi-calendar" aria-hidden="true" (click)="showCalendar(formateur)"
 								pTooltip="Voir le calendrier du formateur"></i>
@@ -376,13 +376,13 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr>
-						<td *ngIf="userList[formateur._id].civilite"> {{userList[formateur._id].civilite }}</td>
-						<td *ngIf="userList[formateur._id].service_id">{{
-							serviceDic[userList[formateur._id].service_id].label }}</td>
-						<td *ngIf="!userList[formateur._id].service_id">Sans service</td>
-						<td *ngIf="userList[formateur._id].role">
-							{{userList[formateur._id].role=='user'?'Utilisateur':userList[formateur._id].role}}</td>
-						<td *ngIf="userList[formateur._id].email">{{userList[formateur._id].email}}</td>
+						<td> {{formateur.user_id?.civilite }}</td>
+						<td *ngIf="formateur.user_id.service_id">{{
+							serviceDic[formateur.user_id.service_id].label }}</td>
+						<td *ngIf="!formateur.user_id.service_id">Sans service</td>
+						<td>
+							{{formateur.user_id.role=='user'?'Utilisateur':formateur.user_id?.role}}</td>
+						<td>{{formateur.user_id?.email}}</td>
 						<!--<td>{{ formateur.taux_j }} €</td>-->
 						<td *ngIf="formateur.prestataire_id">{{ entrepriseDic[formateur?.prestataire_id]?.r_sociale }}
 						</td>
