@@ -26,7 +26,7 @@ export class PedagogieGuardService implements CanActivate {
     let type : string = currenttoken.type;
     let serviceName
 
-    if (role == 'Admin') {
+    if (role == 'Admin' || type=="Formateur") {
       console.log("accés autorisé")
       return true;
     }
