@@ -176,6 +176,13 @@ app.get("/getPopulate/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
 
+//Recuperation de la liste des users populate sur les services
+app.get("/getAllPopulate", (_, res) => {
+    User.find().populate("service_id")
+        ?.then((usersFromDb) => { res.status(200).send(usersFromDb); })
+        .catch((error) => { res.status(400).send(error.message); });
+});
+
 
 //Récupération de tous les users
 app.get("/getAll", (req, res) => {

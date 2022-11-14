@@ -42,6 +42,19 @@ export class AuthService {
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Recuperation de la liste des utilisateurs en populate sur les services
+  getAllPopulate()
+  {
+    let url = this.apiUrl + "getAllPopulate";
+
+    return new Promise((resolve, reject) => {
+      this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response) => { resolve(response) }),
+        ((error) => { reject(error); })
+      );
+    });
+  }
+
   getNBUser() {
     let loginUrl = this.apiUrl + "getNBUser";
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
