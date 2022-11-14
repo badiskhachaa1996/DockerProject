@@ -19,8 +19,8 @@
                 class="pi pi-sign-out" pTooltip="Revenir à l'outil"></i> Revenir à l'outil</button>
     </div>
 
-    <div style="text-align: right;"><button pButton (click)="resetAuth()"> <i class="pi pi-sign-out"
-                pTooltip="Se déconnecter"></i> Déconnexion</button>
+    <div *ngIf="!activatedRoute.snapshot.params?.user_id" style="text-align: right;"><button pButton
+            (click)="resetAuth()"> <i class="pi pi-sign-out" pTooltip="Se déconnecter"></i> Déconnexion</button>
     </div>
 
     <div class="col-12 p-md-12 p-lg-12">
@@ -74,11 +74,11 @@
                         <div class="grid col-12 md:col-6">
                             <div class="grid">
                                 <div class="col-12 md:col-6">
-                                    <b *ngIf="ProspectConnected.type_form!=='eduhorizons'">Ecole:</b>
-                                    <b *ngIf="ProspectConnected.type_form=='eduhorizons'">Organisme:</b>
+                                    <b *ngIf="ProspectConnected?.type_form!=='eduhorizons'">Ecole:</b>
+                                    <b *ngIf="ProspectConnected?.type_form=='eduhorizons'">Organisme:</b>
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <span style="color: gray;">{{ProspectConnected.type_form | uppercase }}</span>
+                                    <span style="color: gray;">{{ProspectConnected?.type_form | uppercase }}</span>
                                 </div>
 
 
@@ -87,9 +87,9 @@
 
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <span style="color: gray;"> 1- {{ProspectConnected.campus_choix_1 }}</span><br>
-                                    <span style="color: gray;"> 2- {{ProspectConnected.campus_choix_2 }}</span><br>
-                                    <span style="color: gray;"> 3- {{ProspectConnected.campus_choix_3 }}</span><br>
+                                    <span style="color: gray;"> 1- {{ProspectConnected?.campus_choix_1 }}</span><br>
+                                    <span style="color: gray;"> 2- {{ProspectConnected?.campus_choix_2 }}</span><br>
+                                    <span style="color: gray;"> 3- {{ProspectConnected?.campus_choix_3 }}</span><br>
                                 </div>
                             </div>
                         </div>
@@ -99,14 +99,14 @@
                                     <b>Etude du Dossier :</b>
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <span style="color: gray;">{{ProspectConnected.statut_dossier }}</span>
+                                    <span style="color: gray;">{{ProspectConnected?.statut_dossier }}</span>
                                 </div>
                                 <div class="col-12 md:col-6">
                                     <b>Etat de la demande:</b>
 
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <span style="color: gray;">{{ProspectConnected.etat_dossier }}</span>
+                                    <span style="color: gray;">{{ProspectConnected?.etat_dossier }}</span>
                                 </div>
 
 
@@ -116,7 +116,7 @@
 
                                 </div>
                                 <div class="col-12 md:col-6">
-                                    <span style="color: gray;">{{ProspectConnected.date_creation | date:
+                                    <span style="color: gray;">{{ProspectConnected?.date_creation | date:
                                         'dd/MM/yyyy' }}</span>
                                 </div>
 
@@ -126,8 +126,83 @@
                 </div>
             </p-fieldset>-->
             <br>
+            <p-fieldset legend="Veuillez trouver ci-après les informations relatives au cursus choisi"
+                [style]="{'color':'#dc143c','font-weight': 'bold'}">
 
+                <div class="grid" style="color: black;font-weight:normal">
 
+                    <div class="grid">
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12" *ngIf="ProspectConnected?.type_form!=='eduhorizons'">
+                                    <b class="col-6">Ecole:</b>
+                                    <span class="col-6" style="color: gray;">{{ProspectConnected?.type_form | uppercase
+                                        }}</span>
+                                </div>
+                                <div class="col-12">
+                                    <b class="col-6">Campus 1:</b>
+                                    <span class="col-6" style="color: gray;"> {{ProspectConnected?.campus_choix_1
+                                        }}</span><br>
+                                </div>
+                                <div class="col-12">
+                                    <b class="col-6">Campus 2:</b>
+                                    <span class="col-6" style="color: gray;"> {{ProspectConnected?.campus_choix_2
+                                        }}</span><br>
+                                </div>
+                                <div class="col-12">
+                                    <b class="col-6">Campus 3:</b>
+                                    <span class="col-6" style="color: gray;"> {{ProspectConnected?.campus_choix_3
+                                        }}</span><br>
+                                </div>
+                                <div class="col-12">
+                                    <b class="col-6">Programme:</b>
+                                    <span class="col-6" style="color: gray;"> {{ProspectConnected?.programme
+                                        }}</span><br>
+                                </div>
+                                <div class="col-12">
+                                    <b class="col-6">Formation:</b>
+                                    <span class="col-6" style="color: gray;"> {{ProspectConnected?.formation
+                                        }}</span><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="grid col-12 md:col-6">
+                            <div class="grid">
+                                <div class="col-12" *ngIf="!activatedRoute.snapshot.params?.user_id">
+                                    <b class="col-6">Statut Visa:</b>
+                                    <p-selectButton
+                                        [options]="[{label:'En attente',value:'false'},{label:'Reçu',value:'true'}]"
+                                        class="col-6" [(ngModel)]="boolVisa" (onChange)="changementVisa($event.value)">
+                                    </p-selectButton>
+                                </div>
+                                <div class="col-12" *ngIf="activatedRoute.snapshot.params?.user_id">
+                                    <b>Statut Visa: </b>
+                                    <span style="color: gray;" *ngIf="boolVisa">Reçu</span>
+                                    <span style="color: gray;" *ngIf="!boolVisa">En attente</span>
+                                </div>
+                                <div class="col-12">
+                                    <b>Phase complémentaire: </b>
+                                    <span class="col-6" style="color: gray;" *ngIf="boolVisa">{{ProspectConnected?.phase_complementaire }}</span>
+                                </div>
+                                <div class="col-12">
+                                    <b>Decision Admission: </b>
+                                    <span class="col-6" style="color: gray;" *ngIf="boolVisa">{{ProspectConnected?.decision_admission }}</span>
+                                </div>
+                                <div class="col-12">
+                                    <b>Statut Payement: </b>
+                                    <span class="col-6" style="color: gray;" *ngIf="boolVisa">{{ProspectConnected?.statut_payement}}</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-12" *ngIf="ProspectConnected?.remarque">
+                            <b>Remarque:</b><br>
+                            <span style="color: rgb(46, 46, 46);">{{ProspectConnected?.remarque}}</span>
+                        </div>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
             <p-fieldset legend="Veuillez charger votre dossier d'admission" [style]="{'font-weight': 'bold'}">
                 <div class="layout-dashboard">
 

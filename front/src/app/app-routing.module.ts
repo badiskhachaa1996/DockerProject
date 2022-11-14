@@ -242,6 +242,7 @@ import { UsersSettingsComponent } from './users-settings/users-settings.componen
                     { path: 'gestion-des-ressources-humaines', component: GrhComponent },
 
                     /** end */
+                    { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
 
                 ],
             },
@@ -255,6 +256,7 @@ import { UsersSettingsComponent } from './users-settings/users-settings.componen
             { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
             { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
+            
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },

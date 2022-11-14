@@ -39,29 +39,29 @@ export class ReinscritComponent implements OnInit {
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
     { value: "Paiement non finalisé", label: "Paiement non finalisé" },
+    { value: "Paiement partiel", label: "Paiement partiel" },
     { value: "Paiement finalisé", label: "Paiement finalisé" },
     { value: "Dossier Complet", label: "Dossier Complet" },
+    { value: "Non Inscrit", label: "Non Inscrit" },
     { value: "Abandon", label: "Abandon" }
   ]
 
   typePaiement = [
-    {value:"Espèces",label:"Espèces"},
-    {value:"Virement",label:"Virement"},
-    {value:"Chèque de caution",label:"Chèque de caution"},
-    {value:"Chèque en échange d'espèces",label:"Chèque en échange d'espèces"},
-    {value:"Chèque de Garantie",label:"Chèque de Garantie"},
-    {value:"Chèque",label:"Chèque"},
-    {value:"Autre",label:"Autre"},
+    { value: "Espèces", label: "Espèces" },
+    { value: "Virement", label: "Virement" },
+    { value: "Chèque de caution", label: "Chèque de caution" },
+    { value: "Chèque en échange d'espèces", label: "Chèque en échange d'espèces" },
+    { value: "Chèque de Garantie", label: "Chèque de Garantie" },
+    { value: "Chèque", label: "Chèque" },
+    { value: "Autre", label: "Autre" },
   ]
 
   anneeScolaireReinscrit = [
-    { label: "2019", value: "2019" },
-    { label: "2020", value: "2020" },
-    { label: "2021", value: "2021" },
-    { label: "2022", value: "2022" },
-    { label: "2023", value: "2023" },
-    { label: "2024", value: "2024" },
-    { label: "2025", value: "2025" }
+    { value: "2020-2021", label: "2020-2021" },
+    { value: "2021-2022", label: "2021-2022" },
+    { value: "2022-2023", label: "2022-2023" },
+    { value: "2023-2024", label: "2023-2024" },
+    { value: "2024-2025", label: "2024-2025" },
   ]
 
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
@@ -235,13 +235,16 @@ export class ReinscritComponent implements OnInit {
       null,//TODO
       null,
       null,//TODO
+      true,
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
-      true,false,
+      true, false,
       this.AssignForm.value.annee_scolaire
     )
+    if (etd.statut_dossier.includes("Non Inscrit") == true)
+      etd.isActive = false
     if (!etd.custom_id)
       etd.custom_id = this.generateCodeEtu(this.showAssignFormEtu)
     if (etd.statut_dossier.includes('Paiement non finalisé')) {
@@ -306,12 +309,15 @@ export class ReinscritComponent implements OnInit {
       null,//TODO
       null,
       null,//TODO
+      true,
       null,
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
-      true
+      true, false, ["2022-2023"]
     )
+    if (etd.statut_dossier.includes("Non Inscrit") == true)
+      etd.isActive = false
     if (!etd.custom_id)
       etd.custom_id = this.generateCode(this.showAssignForm)
     //this.AssignForm.value.email_ims
@@ -382,7 +388,7 @@ export class ReinscritComponent implements OnInit {
   }
 
   changeMontant(i, event, type) {
-    if(type=="type"){
+    if (type == "type") {
       this.payementList[i][type] = event.value;
     }
     else if (type == "montant") {
@@ -676,14 +682,14 @@ export class ReinscritComponent implements OnInit {
   }
 
   disable(etudiant: Etudiant) {
-    let bypass:any = etudiant.user_id
-    if(confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
-    this.etudiantService.disable(etudiant).subscribe((data) => {
-      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
-      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
-    }, (error) => {
-      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
-      console.error(error)
-    })
+    let bypass: any = etudiant.user_id
+    if (confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+      this.etudiantService.disable(etudiant).subscribe((data) => {
+        this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+        this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+      }, (error) => {
+        this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+        console.error(error)
+      })
   }
 }

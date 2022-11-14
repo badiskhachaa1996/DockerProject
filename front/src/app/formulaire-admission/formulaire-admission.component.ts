@@ -118,24 +118,35 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "BTS NDRC - Négociation et Digitalisation de la Relation Client" },
       { value: "BTS CG - Comptabilité et Gestion" },
       { value: "RNCP CI - Commerce International" },
-      { value: "RNCP NTC - Négociateur Technico-Commercial" },
+      { value: "RNCP NTC 1 - Négociateur Technico-Commercial" },
+      { value: "RNCP NTC 2 - Négociateur Technico-Commercial" },
+      { value: "Chargé de gestion commerciale - Spécialité service commercial" },
       { value: "RNCP - Chargé de Développement Marketing et Commercial" },
-      { value: "RNCP - IA - Ingénieur d'Affaires" },
-      { value: "RNCP Management et Commerce International" },
-      { value: "BTS Services Informatique aux Organisations - SISR" },
-      { value: "BTS Services Informatique aux Organisations - SLAM" },
-      { value: "RNCP TSSR - Technicien Supérieur Systèmes et Réseaux" },
-      { value: "RNCP DWWM - Développeur Web & Web Mobile" },
-      { value: "RNCP AIS - Administrateur d'Infrastructures Sécurisées" },
-      { value: "RNCP CDA - Concepteur Développeur d'Applications" },
+      { value: "RNCP MDO - Manager des organisations" },
+      { value: "RNCP IA - Ingénieur d'Affaires" },
+
+      { value: "BTS SIO Services Informatique aux Organisations" },
+      { value: "RNCP TSSR 1 - Technicien Supérieur Systèmes et Réseaux" },
+      { value: "RNCP TSSR 2 - Technicien Supérieur Systèmes et Réseaux" },
+      { value: "RNCP DWWM 1 - Développeur Web & Web Mobile" },
+      { value: "RNCP DWWM 2 - Développeur Web & Web Mobile" },
+      { value: "Bachelor AIS - Administrateur d'Infrastructures Sécurisées" },
+      { value: "Bachelor CDA - Concepteur Développeur d'Applications" },
       { value: "RNCP MPI Big Data - Expert IT – Applications Intelligentes & Big Data" },
       { value: "RNCP MPI CyberSecurité - Expert IT – Cybersécurité et Haute Disponibilité" },
-      { value: "BTS Collaborateur Juriste Notarial" },
-      { value: "RNCP - Assistant Ressources Humaines" },
-      { value: "RNCP- Management des Ressources Humaines" },
-      { value: "BTS SPSSS - Services et Prestations des Secteurs Sanitaire et Social" },
-      { value: "RNCP - BIM modeleur du Bâtiement" },
-      { value: "RNCP - BIM modeleur du Coordinateur BIM du Bâtiment" },
+
+      { value: "BTS CG - Comptabilité et Gestion" },
+      { value: "RNCP ARH - Assistant Ressources Humaines" },
+      { value: "Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise" },
+      { value: "Bachelor Chargé de Gestion et Management - Comptabilité & Finance d'Entreprise" },
+      { value: "Bachelor Chargé de Gestion et Management - Management & Ressources humaines" },
+      { value: "Manager en ressources humaines" },
+      { value: "RNCP MRH - Management des Ressources Humaines" },
+      { value: "Manager des organisations - Management et stratégies financières" },
+      { value: "RNCP BIM Modeleur du Bâtiment" },
+      { value: "Bachelor Coordinateur BIM du Bâtiment" },
+
+      { value: "BTS SPSSS - Services et Prestations dans les Secteurs Sanitaire et Social" },
     ];
 
   programEnDropdown =
@@ -158,7 +169,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     { value: "Alternance" }
   ];
 
-  form_origin: string = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic
+  form_origin: string = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic studinfo
 
 
   ngOnInit(): void {

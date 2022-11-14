@@ -355,7 +355,7 @@ export class AddEtudiantComponent implements OnInit {
       this.formAddEtudiant.get('remarque').value,
       isOnStage,
       null,
-      null,
+      null,true,
       null,
       campus,//campus
       statut_dossier,//StatutDossier

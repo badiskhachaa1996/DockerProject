@@ -29,7 +29,7 @@ export class AjoutExamenComponent implements OnInit {
 
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: "Choisir une classe", value: null }];
+  dropdownClasse: any[] = [];
 
 
   dropdownFormateur: any[] = [{ libelle: "Choisir un formateur", value: null }];

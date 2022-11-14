@@ -13,9 +13,9 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="classe">Classe<span style="color:red">*</span>:</label><br>
+                    <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
 
-                    <p-dropdown [options]="dropdownClasse" optionLabel="libelle" formControlName="classe_id">
+                    <p-dropdown [options]="dropdownClasse" filter="true" optionLabel="libelle" formControlName="classe_id" placeholder="Choissisez un groupe">
                     </p-dropdown>
 
                 </div>
@@ -23,7 +23,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" formControlName="matiere_id">
+                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" filter="true" formControlName="matiere_id">
                         </p-dropdown>
                     </span>
                 </div>

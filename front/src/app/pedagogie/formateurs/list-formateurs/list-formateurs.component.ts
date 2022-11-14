@@ -38,8 +38,7 @@ export class ListFormateursComponent implements OnInit {
   jury_diplomesList = []
   formUpdateFormateur: FormGroup;
   showFormUpdateFormateur: boolean = false;
-  formateurToUpdate: Formateur = new Formateur();
-  idFormateurToUpdate: string;
+  formateurToUpdate: Formateur;
 
   users: User[] = [];
   civiliteList = environment.civilite;
@@ -64,7 +63,6 @@ export class ListFormateursComponent implements OnInit {
   volumeHList = [];
   affichePrestataire: string;
   tempVolumeCons = null;
-  userList: any = {};
   serviceDic = []
   seanceNB = {};
 
@@ -111,12 +109,8 @@ export class ListFormateursComponent implements OnInit {
     private ServService: ServService, private MatiereService: MatiereService, private SeanceService: SeanceService, private CampusService: CampusService, private EntrepriseService: EntrepriseService) { }
 
   ngOnInit(): void {
-
-    this.getUserList()
-
-
     //Recuperation de la liste des formateurs
-    this.formateurService.getAll().subscribe(
+    this.formateurService.getAllPopulate().subscribe(
       (data) => {
         this.formateurs = [];
         data.forEach(f => {
@@ -127,7 +121,8 @@ export class ListFormateursComponent implements OnInit {
             }
           })
           f.absences = abscList
-          this.formateurs.push(f)
+          if (f.user_id)
+            this.formateurs.push(f)
         })
       },
       (error) => { console.error(error) }
@@ -187,11 +182,11 @@ export class ListFormateursComponent implements OnInit {
   }
 
   //Methode de recuperation du diplome à mettre à jour
-  onGetbyId() {
+  onGetbyId(formateur: Formateur) {
     //Recuperation du formateur à modifier
-    this.formateurService.getById(this.idFormateurToUpdate).subscribe(
+    this.formateurToUpdate = formateur
+    this.formateurService.getById(formateur._id).subscribe(
       ((response) => {
-        this.formateurToUpdate = response;
         this.tempVolumeCons = response.volume_h_consomme
         let arr = []
         if (this.formateurToUpdate.absences)
@@ -376,10 +371,20 @@ export class ListFormateursComponent implements OnInit {
           this.messageService.add({ severity: 'error', summary: 'Erreur lors de la modification de formateur', detail: 'data.error' });
         } else {
           this.messageService.add({ severity: 'success', summary: 'Modification de formateur', detail: 'Cet formateur a bien été modifié' });
-          this.getUserList()
-          this.formateurService.getAll().subscribe(
+          this.formateurService.getAllPopulate().subscribe(
             (dataF) => {
-              this.formateurs = dataF;
+              this.formateurs = [];
+              dataF.forEach(f => {
+                let abscList = []
+                f.absences.forEach(a => {
+                  if (a != null) {
+                    abscList.push(new Date(a))
+                  }
+                })
+                f.absences = abscList
+                if (f.user_id)
+                  this.formateurs.push(f)
+              })
             },
             (error) => { console.error(error) }
           );
@@ -397,14 +402,6 @@ export class ListFormateursComponent implements OnInit {
   onGetStatutToUpdate() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
     return this.formUpdateFormateur.get('type_contrat').value.value;
-  }
-
-  getUserList() {
-    this.formateurService.getAllUser().subscribe((data) => {
-      this.userList = data;
-    }, error => {
-      console.error(error)
-    })
   }
 
   showCalendar(rowData) {
