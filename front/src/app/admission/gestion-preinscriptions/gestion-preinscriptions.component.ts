@@ -574,7 +574,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
     //Clean the data
     this.prospects.forEach(p => {
       let t = {}
-
       t['NOM'] = p?.user_id?.lastname
       t['Prenom'] = p?.user_id?.firstname
       t['Date de la demande'] = p?.date_creation
@@ -606,6 +605,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       t['Statut Paiement'] = p.statut_payement
       t['ID Etudiant'] = p.customid
       t['Att Traité par'] = p.traited_by
+      t['Rentrée Scolaire'] = p.rentree_scolaire
       t['Confirmation CF'] = (p.validated_cf) ? "Oui" : "Non"
       if (p.agent_id && this.users[p.agent_id] && this.users[p.agent_id].lastname) {
         t['Agent'] = this.users[p.agent_id].lastname.toUpperCase() + " " + this.users[p.agent_id].firstname

@@ -28,7 +28,7 @@ mongoose
         console.log(mco2BList)
         Etudiant.find({ classe_id: mco_a_id }).populate('user_id').then(etudiants => {
             etudiants.forEach(etu => {
-                if (mco2BList.includes(etu.user_id.email) == true)
+                if (customIncludes(etu.user_id.email, mco2BList))
                     Etudiant.findByIdAndUpdate(etu._id, { classe_id: mco_b_id }).then(() => {
                         console.log(etu.user_id.email, " convertit en MCO 2B")
                     })
@@ -44,3 +44,12 @@ mongoose
         })
 
     })
+function customIncludes(email, list) {
+    let r = false
+    list.forEach(e => {
+        if (e == email) {
+            r = true
+        }
+    })
+    return r
+}
