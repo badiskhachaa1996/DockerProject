@@ -1,0 +1,153 @@
+<p-toast></p-toast>
+<div class="grid">
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Nombre de comptes IMS </span>
+                    <div class="text-900 font-medium text-xl">{{ users.length }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-folder-open text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3"> Nombre d'étudiants
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ etudiants.length }}</div>
+                </div>
+
+                <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-clock text-pink-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Nombre de formateurs
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ formateurs.length }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-cyan-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-sync text-cyan-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Nombre d'agents
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ agents.length }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-check-circle text-green-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Table d'affichage des utilisateurs -->
+    <div class="col-12">
+		<div class="card" *ngIf="showUsersList">
+			<h5>Gestion des utilisateurs</h5>
+			<p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+                     [globalFilterFields]="['user_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
+                     [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
+				<ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="typeList" filter="true"
+                        (onChange)="dt1.filter($event.value, 'type', 'equals')"
+                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="roleList" filter="true"
+                        (onChange)="dt1.filter($event.value, 'role', 'equals')"
+                        emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
+                                            
+                    <div class="flex table-header">
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="width: 3rem"></th>
+						<th>#</th>
+                        <th>Rôle</th>
+						<th>Nom prénom</th>
+						<th>Téléphone</th>
+                        <th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-user let-expanded="expanded">
+					<tr>
+						<td>
+							<button type="button" pButton pRipple [pRowToggler]="user" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+						</td>
+						<td style="min-width: 8rem;">{{ user._id }}</td>
+						<td style="min-width: 10rem;">{{ user.role }}</td>
+						<td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
+						<td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
+                        <td style="min-width: 10rem;">
+                            <i pTooltip="Modifier"
+                            style="margin-left: 2%;" class="pi pi-pencil" (click)="userToUpdate = user; showFormUpdate = true;"
+                            aria-hidden="true"></i>
+                        </td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="rowexpansion" let-user>
+					<tr>
+						<td colspan="7">
+							<div class="p-3">
+								<p-table responsiveLayout="scroll">
+									<ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Email perso</th>
+                                            <th>Service</th>
+                                            <th>Type</th>
+                                            <th>Rôle</th>
+                                            <th>Dernière connexion</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-user>
+                                        
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td style="min-width: 10rem;">{{ user.email }}</td>
+                                            <td style="min-width: 10rem;">{{ user.email_perso }}</td>
+                                            <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
+                                            <td>{{ user.type }}</td>
+                                            <td>{{ user.role }}</td>
+                                            <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}</td>
+                                        </tr>
+                                    </ng-template>
+			                    </p-table>
+		                    </div>
+		                </td>
+		            </tr>
+		        </ng-template>
+		    </p-table>
+	    </div>
+	</div>
+
+</div>

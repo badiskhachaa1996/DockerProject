@@ -53,7 +53,8 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Accueil',
                 items: [
-                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    { label: 'Gestion des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] }
                 ]
             },
             {
@@ -211,6 +212,12 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
                     { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                ]
+            },
+            {
+                label: 'RH',
+                items: [
+                    { label: 'Gestion des ressources humaines', icon: 'pi pi-list', routerLink: ['/gestion-des-ressources-humaines'] },
                 ]
             },
         ];
