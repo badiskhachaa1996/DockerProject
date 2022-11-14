@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 var XLSX = require('xlsx')
+const { User } = require("../models/user");
 const { Etudiant } = require('../models/etudiant')
 const mco_b_id = "63724fe64d06a260126a2c32"
 const mco_a_id = "6322d512f1eb12342596117b"
@@ -24,18 +25,21 @@ mongoose
         mco2B.forEach(tab => {
             mco2BList.push(tab['Email'])
         })
+        console.log(mco2BList)
         Etudiant.find({ classe_id: mco_a_id }).populate('user_id').then(etudiants => {
             etudiants.forEach(etu => {
                 if (mco2BList.includes(etu.user_id.email) == true)
-                    Etudiant.findByIdAndUpdate(etu._id, { classe_id: mco_b_id }).then(()=>{
-                        console.log(etu.user_id.email," convertit en MCO 2B")
+                    Etudiant.findByIdAndUpdate(etu._id, { classe_id: mco_b_id }).then(() => {
+                        console.log(etu.user_id.email, " convertit en MCO 2B")
                     })
+                else
+                    console.log(etu.user_id.email)
             })
         })
-        Etudiant.updateMany({ classe_id: sio_slam_id }, { classe_id: sio_id }).then((val,err)=>{
+        Etudiant.updateMany({ classe_id: sio_slam_id }, { classe_id: sio_id }).then((val, err) => {
             console.log("SIO SLAM 1 convertit en SIO 1")
         })
-        Etudiant.updateMany({ classe_id: sio_sisr_id }, { classe_id: sio_id }).then((val,err)=>{
+        Etudiant.updateMany({ classe_id: sio_sisr_id }, { classe_id: sio_id }).then((val, err) => {
             console.log("SIO SISR 1 convertit en SIO 1")
         })
 
