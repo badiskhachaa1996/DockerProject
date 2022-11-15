@@ -33,7 +33,7 @@ mongoose
                         console.log(etu.user_id.email, " convertit en MCO 2B")
                     })
                 else
-                    console.log(etu.user_id.email)
+                    console.log("'",etu.user_id.email,"' not found in DB")
             })
         })
         Etudiant.updateMany({ classe_id: sio_slam_id }, { classe_id: sio_id }).then((val, err) => {
@@ -47,7 +47,7 @@ mongoose
 function customIncludes(email, list) {
     let r = false
     list.forEach(e => {
-        if (e == email) {
+        if (e.regex(`/${email}/i`) ) {
             r = true
         }
     })

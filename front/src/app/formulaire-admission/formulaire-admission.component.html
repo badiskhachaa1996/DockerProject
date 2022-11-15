@@ -438,11 +438,16 @@
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                 <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
                                         style="color: red;"> * </span></label>
-                                <input pInputText id="oui_agence" type="text" placeholder="Expériences professionnel" />
+                                <input pInputText id="oui_agence" type="text" placeholder="Eduhorizons" formControlName="nomAgence" (blur)="nomAgenceFinder()" />
+                            </div>
+                            <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
+                                <label For="oui_agence">Si oui, quel est l'adresse mail de cette agence ?<span
+                                        style="color: red;"> * </span></label>
+                                <input pInputText id="oui_agence" type="text" placeholder="contact@eduhorizons.com" formControlName="mailAgence" (blur)="nomAgenceFinder()" />
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label For="code_commercial">Code Commercial<span style="color: red;"> * </span></label>
-                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
+                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01" (blur)="verificationCode()"
                                     formControlName="code_commercial" />
                             </div>
                             <div class="ui-g-12 ui-md-12">

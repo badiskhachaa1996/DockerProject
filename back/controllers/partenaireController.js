@@ -77,7 +77,7 @@ app.post("/inscription", (req, res, next) => {
         {
             user_id: null,
             code_partenaire: partenaireData.code_partenaire,
-            nom : partenaireData.nom,
+            nom: partenaireData.nom,
             phone: partenaireData.phone,
             email: partenaireData.email,
             number_TVA: partenaireData.number_TVA,
@@ -237,6 +237,19 @@ app.get("/getById/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send(error); });
 });
 
+app.post('/getByNameOrEmail', (req, res, next) => {
+    if (req.body.name)
+        Partenaire.findOne({ nom: req.body.name }).then(p => {
+            res.status(201).send(p)
+        })
+    else if (req.body.email)
+        Partenaire.findOne({ email: req.body.email }).then(p => {
+            res.status(201).send(p)
+        })
+    else
+        res.status(201).send(null)
+})
+
 app.get("/getAllCodeCommercial/:code_partenaire", (req, res, next) => {
     Partenaire.findOne({ code_partenaire: req.params.code_partenaire })
         .then((partenaireFromDB) => {
@@ -280,8 +293,10 @@ app.put("/updatePartenaire", (req, res, next) => {
         .then((partenaireFromDB) => {
             res.status(200).json({ message: 'Le partenaire a bien été modifié !' });
         })
-        .catch((error) => { console.log(error)
-             res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' }); })
+        .catch((error) => {
+            console.log(error)
+            res.status(500).json({ 'error': 'Problème de modification, contactez un administrateur' });
+        })
 });
 app.get('/delete/:id', (req, res) => {
     Partenaire.findById(req.params.id).then(p => {
