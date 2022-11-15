@@ -189,6 +189,10 @@ export class AuthService {
     return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Modifier l'utilisateur utilisé sur la page de gestion des utilisateurs
+  patchUser(user: User)
+  {}
+
   /*TESTMAIL(){
     let url = this.apiUrl	+"TESTMAIL"
     return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
