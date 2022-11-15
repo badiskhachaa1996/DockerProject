@@ -55,4 +55,13 @@ export class PartenaireService {
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
+
+  getByNameOrEmail(name:string,email:string){
+    let registreUrl = this.apiUrl + "getByNameOrEmail";
+    return this.httpClient.post<any>(registreUrl,{name,email}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getByCode(cc:string){
+    return null
+  }
 }

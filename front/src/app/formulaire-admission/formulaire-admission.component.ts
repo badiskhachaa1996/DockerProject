@@ -19,6 +19,8 @@ import { Notification } from 'src/app/models/notification';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ServService } from 'src/app/services/service.service';
 import { map } from 'rxjs';
+import { PartenaireService } from '../services/partenaire.service';
+import { Partenaire } from '../models/Partenaire';
 
 
 @Component({
@@ -30,7 +32,9 @@ import { map } from 'rxjs';
 export class FormulaireAdmissionComponent implements OnInit {
   emailExist: boolean;
 
-  constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService, private NotifService: NotificationService,) { }
+  constructor(private route: ActivatedRoute, private servService: ServService, private diplomeService: DiplomeService, private campusService: CampusService, private router: Router,
+    private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private admissionService: AdmissionService,
+    private NotifService: NotificationService, private PartenaireService: PartenaireService) { }
 
   routeItems: MenuItem[];
   cookieCodeCommercial = ""
@@ -310,7 +314,8 @@ export class FormulaireAdmissionComponent implements OnInit {
 
       //****** Une dernière étape *******
       agence: new FormControl(false),
-      nomAgence: new FormControl('', Validators.pattern('[^0-9]+')),
+      nomAgence: new FormControl(''),
+      mailAgence: new FormControl(''),
       donneePerso: new FormControl(false, Validators.required),
       code_commercial: new FormControl(this.route.snapshot.paramMap.get('code_commercial')),
 
@@ -326,6 +331,29 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   previousPage() {
     this.ActiveIndex--
+  }
+
+  partenaireFound: Partenaire = null;
+  nomAgenceFinder() {
+    let agenceNom = this.RegisterForm.value.nomAgence
+    let agenceEmail = this.RegisterForm.value.mailAgence
+    this.PartenaireService.getByNameOrEmail(agenceNom, agenceEmail).subscribe(p => {
+      if (p) {
+        this.partenaireFound = p
+        this.RegisterForm.patchValue({ code_commercial: this.partenaireFound.code_partenaire })
+      } else {
+        this.messageService.add({ severity: "info", summary: "Aucun partenaire trouvé avec cette email ou nom", detail: "Vous pouvez continuez si vous inserez le code commercial" })
+      }
+    })
+  }
+
+  verificationCode() {
+    this.PartenaireService.getByCode(this.RegisterForm.value.code_commercial).subscribe(p => {
+      if (p)
+        this.messageService.add({ severity: "success", summary: "Partenaire trouvé avec succès" })
+      else
+        this.messageService.add({ severity: "error", summary: "Aucun partenaire trouvé avec ce code" })
+    })
   }
 
   verifEmailInBD() {
