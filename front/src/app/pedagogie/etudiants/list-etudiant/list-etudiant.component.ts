@@ -965,14 +965,29 @@ export class ListEtudiantComponent implements OnInit {
       }
       else
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(etudiant.isAlternant)
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
-        this.showNumbersByType = true;
+        if(this.filterByAS)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+          this.showNumbersByType = true;
+        }
+        else 
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+          this.showNumbersByType = true;
+        }
+        
       }
       
     }
@@ -1016,12 +1031,11 @@ export class ListEtudiantComponent implements OnInit {
   {
     if(event.value)
     {
-      this.etudiantsByCampus = [];
       //Recuperation du campus
       this.campusService.getByCampusId(event.value)
           .then((response: Campus) => { 
             this.filterByCampus = response;
-            
+            this.etudiantsByCampus = [];
             this.etudiants.forEach((etudiant) => {
               if(this.filterByAS)
               {
