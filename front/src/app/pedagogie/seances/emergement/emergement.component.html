@@ -89,7 +89,7 @@
     <p-fieldset class="col-12" *ngIf="seance" legend="{{seance.libelle}}">
         <div class="p-fluid grid" style="color: black;font-weight:normal;">
             <div class="col-12 md:col-6 grid"
-                *ngIf="userList && userList[seance.formateur_id] && userList[seance.formateur_id].type!='Formateur'">
+                *ngIf="userList && userList[seance.formateur_id]">
                 <div class="col-6 md:col-6">
                     <strong style="text-align:left !important;">Formateur :</strong>
                     {{userList[seance.formateur_id].lastname | uppercase}}
@@ -183,14 +183,14 @@
         <button pButton class="ui-button-raised ui-button-success" label="Export en PDF" style="float:right;"
             (click)="showPdf=true"></button>
         <button pButton class="ui-button-raised ui-button-success" label="Ajouter un étudiant"
-            style="float:right;margin-right: 2px;" (click)="showAddEtudiant=true"></button>
+            style="float:right;margin-right: 2px;" (click)="showAddEtudiant=true;loadDropdownEtudiant()"></button>
         <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date :
             "dd/MM"}}
         </h3>
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" rowExpandMode="single" [rows]="10"
                 [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length"
-                [globalFilterFields]="">
+                [globalFilterFields]="['user_id.lastname','user_id.firstname']">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
@@ -205,15 +205,15 @@
                 </ng-template>
                 <ng-template pTemplate="header" let-columns>
                     <tr>
-                        <th pSortableColumn="user_id" scope="col">
-                            Nom <p-sortIcon field="user_id"></p-sortIcon>
+                        <th pSortableColumn="user_id.lastname" scope="col">
+                            Nom <p-sortIcon field="user_id.lastname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="user_id" scope="col">
-                            Prénom <p-sortIcon field="user_id"></p-sortIcon>
+                        <th pSortableColumn="user_id.firstname" scope="col">
+                            Prénom <p-sortIcon field="user_id.firstname"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="groupe" scope="col">
+                        <!--<th pSortableColumn="groupe" scope="col">
                             Groupe <p-sortIcon field="groupe"></p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="isPresent" scope="col">
                             Présent <p-sortIcon field="isPresent"></p-sortIcon>
                         </th>
@@ -227,33 +227,35 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr class="bandeau-show">
-                        <td *ngIf="userList[rowData.user_id]">
-                            {{userList[rowData.user_id].lastname}}
+                        <td *ngIf="rowData.user_id">
+                            {{rowData.user_id.lastname}}
                         </td>
-                        <td *ngIf="userList[rowData.user_id]">
-                            {{userList[rowData.user_id].firstname}}
+                        <td *ngIf="rowData.user_id">
+                            {{rowData.user_id.firstname}}
                         </td>
-                        <td
-                            *ngIf="rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type=='Formateur'">
+                        <td *ngIf="rowData.user_id && rowData.user_id.type=='Formateur'">
                             Formateur
                         </td>
-                        <td *ngIf="rowData.user_id && dicEtudiant[rowData.user_id]">
-                            {{dicEtudiant[rowData.user_id].classe_id.abbrv}}
-                        </td>
+                        <!--<td *ngIf="rowData.user_id && rowData.user_id.classe_id">
+                            {{rowData.user_id.classe_id.abbrv}}
+                        </td>-->
                         <td>
                             {{(rowData.isPresent)?"Oui":"Non"}}
                         </td>
-                        <td *ngIf="seance" [style]="colorDate(rowData)">
+                        <td *ngIf="seance && rowData.date_signature" [style]="colorDate(rowData)">
                             {{rowData.date_signature| date:'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td *ngIf="!rowData.date_signature">
+                            Aucune
                         </td>
                         <td>
                             <i *ngIf="rowData.justificatif" pTooltip="Télécharger la justification"
                                 tooltipPosition="bottom" class="pi pi-download" (click)="downloadFile(rowData)"
                                 aria-hidden="true"></i>
-                            <i *ngIf="!rowData.isPresent && rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type!='Formateur'"
+                            <i *ngIf="!rowData.isPresent && rowData.user_id && rowData.user_id.type!='Formateur'"
                                 pTooltip="Marquer comme présent" tooltipPosition="bottom" class="pi pi-check"
                                 (click)="acceptJustif(rowData,true)" aria-hidden="true"></i>
-                            <i *ngIf="rowData.isPresent && rowData.user_id && userList[rowData.user_id] && userList[rowData.user_id].type!='Formateur'"
+                            <i *ngIf="rowData.isPresent && rowData.user_id && rowData.user_id.type!='Formateur'"
                                 pTooltip="Marquer comme absent" tooltipPosition="bottom" class="pi pi-times"
                                 (click)="acceptJustif(rowData,false)" aria-hidden="true"></i>
                         </td>

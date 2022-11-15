@@ -53,7 +53,6 @@ export class EmergementComponent implements OnInit {
   diplomeList = {};
   showCanvas = true;
   presence: any = null;
-  dicEtudiant = {}
   ID = this.route.snapshot.paramMap.get('id');
   seance: Seance;
   showFiles: [{ name: string, right: string, upload_by: string }];
@@ -169,10 +168,10 @@ export class EmergementComponent implements OnInit {
 
 
   reloadPresence() {
-    this.PresenceService.getAllBySeance(this.ID).subscribe(data => {
+    this.PresenceService.getAllPopulateBySeance(this.ID).subscribe(data => {
       this.presences = data;
       data.forEach(element => {
-        if (element.user_id == this.token.id) {
+        if (element.user_id._id == this.token.id) {
           this.presence = element
         }
       });
@@ -241,21 +240,6 @@ export class EmergementComponent implements OnInit {
       this.date_fin = this.date_debut + (15 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
-      this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(data => {
-        data.forEach(etu => {
-          if (etu.user_id != null && etu.classe_id != null) {
-            let temp = {
-              label: etu.user_id.lastname + " " + etu.user_id.firstname + " - " + etu.classe_id.abbrv,
-              value: etu.user_id._id
-            }
-            if (!this.customIncludes(this.dropdownEtudiant, temp)) {
-              this.dropdownEtudiant.push(temp)
-              this.dicEtudiant[etu.user_id._id] = etu
-            }
-          }
-        })
-        this.formAddEtudiant.patchValue({ etudiant_id: this.dropdownEtudiant[0] })
-      })
       this.DiplomeService.getAll().subscribe(diplomes => {
         diplomes.forEach(diplome => {
           this.diplomeList[diplome._id] = diplome
@@ -284,6 +268,24 @@ export class EmergementComponent implements OnInit {
 
     this.socket.on("refreshPresences", () => {
       this.reloadPresence();
+    })
+  }
+
+  loadDropdownEtudiant() {
+    this.etudiantService.getAllByMultipleClasseIDWithoutPresence(this.seance.classe_id, this.presences).subscribe(d => {
+      this.dropdownEtudiant = []
+      d.forEach(etud => {
+        let user: any = etud.user_id
+        let classe: any = etud.classe_id
+        let temp = {
+          label: user.lastname + " " + user.firstname + " - " + classe.abbrv,
+          value: user._id
+        }
+        if (!this.customIncludes(this.dropdownEtudiant, temp)) {
+          this.dropdownEtudiant.push(temp)
+        }
+      })
+      this.formAddEtudiant.patchValue({ etudiant_id: this.dropdownEtudiant[0] })
     })
   }
 
@@ -479,9 +481,8 @@ export class EmergementComponent implements OnInit {
       allowedByFormateur: true
     }).subscribe(data => {
       this.showAddEtudiant = false
-      console.log(data)
       //TODO
-      this.presences.push(data)
+      this.reloadPresence()
       this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
     }, error => {
       console.error(error)
