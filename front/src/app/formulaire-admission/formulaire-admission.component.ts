@@ -340,7 +340,7 @@ export class FormulaireAdmissionComponent implements OnInit {
     this.PartenaireService.getByNameOrEmail(agenceNom, agenceEmail).subscribe(p => {
       if (p) {
         this.partenaireFound = p
-        this.RegisterForm.patchValue({ code_commercial: this.partenaireFound.code_partenaire })
+        this.RegisterForm.patchValue({ code_commercial: p.code_partenaire, nomAgence: p.nom, mailAgence: p.email })
       } else {
         this.messageService.add({ severity: "info", summary: "Aucun partenaire trouvé avec cette email ou nom", detail: "Vous pouvez continuez si vous inserez le code commercial" })
       }

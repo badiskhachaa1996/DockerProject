@@ -250,6 +250,17 @@ app.post('/getByNameOrEmail', (req, res, next) => {
         res.status(201).send(null)
 })
 
+app.get('/verificationCode/:code', (req, res, next) => {
+    Partenaire.findOne({ code_commercial: req.params.code }).then(p => {
+        if (p)
+            res.status(201).send(p)
+        else
+            CommercialPartenaire.findOne({ code_commercial_partenaire: req.params.code }).then(c => {
+                res.status(201).send(c)
+            })
+    })
+})
+
 app.get("/getAllCodeCommercial/:code_partenaire", (req, res, next) => {
     Partenaire.findOne({ code_partenaire: req.params.code_partenaire })
         .then((partenaireFromDB) => {
