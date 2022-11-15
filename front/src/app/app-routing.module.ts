@@ -119,6 +119,8 @@ import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equi
 import { ResponsableCommercialGuard } from './guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
+import { GrhComponent } from './rh/grh/grh.component';
+import { UsersSettingsComponent } from './users-settings/users-settings.component';
 
 
 @NgModule({
@@ -209,7 +211,7 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
                     { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
-                    /** Path Lemon Way */
+                    /** Paths Lemon Way */
 
                     { path: 'mon-compte-bancaire', component: MyAccountComponent },
                     { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
@@ -221,6 +223,7 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
                     { path: 'cancel', component: CancelUrlComponent },
 
                     /** end */
+
                     { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
                     { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
@@ -232,6 +235,13 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
                     { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent },
+
+                    /*** RH paths */
+
+                    { path: 'gestion-des-ressources-humaines', component: GrhComponent },
+
+                    /** end */
                     { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
 
                 ],

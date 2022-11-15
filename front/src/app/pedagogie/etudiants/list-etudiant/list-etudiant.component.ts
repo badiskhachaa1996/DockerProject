@@ -30,6 +30,7 @@ import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
 import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
+import { Campus } from 'src/app/models/Campus';
 
 
 
@@ -44,6 +45,22 @@ export class ListEtudiantComponent implements OnInit {
   expandedRows = {};
 
   etudiants: Etudiant[] = [];
+
+  filterByType: boolean;
+  showNumbersByType = false;
+  etudiantsByType: Etudiant[] = [];
+
+  filterByAS: string = undefined;
+  showNumbersByAS: boolean = false;
+  etudiantsByAS: Etudiant[] = [];
+
+  filterByGroupe: string[] = undefined;
+  showFilterByGroupe: boolean = false;
+  etudiantsByGroupe: any = [];
+
+  filterByCampus: Campus = undefined;
+  showFilterByCampus: boolean = false;
+  etudiantsByCampus: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
 
@@ -926,4 +943,116 @@ export class ListEtudiantComponent implements OnInit {
       }
     })
   }
+
+
+  //Methode pour filtrer les étudiants selon le type choisis dans le filtre
+  onFilterByType(event)
+  {
+    this.filterByType = event.value;
+
+    if(this.filterByType === true)
+    {
+      if(this.filterByAS)
+      {
+        this.etudiantsByType = [];
+        this.etudiants.forEach((etudiant) => {
+          if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
+          {
+            this.etudiantsByType.push(etudiant);
+          }
+        });
+        this.showNumbersByType = true;
+      }
+      else
+      {
+        this.etudiantsByType = [];
+        this.etudiants.forEach((etudiant) => {
+          if(etudiant.isAlternant)
+          {
+            this.etudiantsByType.push(etudiant);
+          }
+        });
+        this.showNumbersByType = true;
+      }
+      
+    }
+    else if(this.filterByType === false)
+    {
+      this.etudiantsByType = [];
+      this.etudiants.forEach((etudiant) => {
+        if(!etudiant.isAlternant)
+        {
+          this.etudiantsByType.push(etudiant);
+        }
+      });
+      this.showNumbersByType = true;
+    }
+    else if(this.filterByType === null)
+    {
+      this.showNumbersByType = false;
+    }
+  }
+
+  //Methode pour filtrer les étudiants par année-scolaire
+  onFilterByAS(event: any)
+  {
+    this.filterByAS = event.value;
+
+    this.etudiantsByAS = [];
+
+    this.etudiants.forEach((etudiant) => {
+      if(etudiant.annee_scolaire.includes(this.filterByAS))
+      {
+        this.etudiantsByAS.push(etudiant);
+      }
+    });
+
+    this.showNumbersByAS = true;
+  } 
+
+
+  //Methode pour filtrer par campus
+  onFilterByCampus(event: any)
+  {
+    if(event.value)
+    {
+      this.etudiantsByCampus = [];
+      //Recuperation du campus
+      this.campusService.getByCampusId(event.value)
+          .then((response: Campus) => { 
+            this.filterByCampus = response;
+            
+            this.etudiants.forEach((etudiant) => {
+              if(this.filterByAS)
+              {
+                if(etudiant.campus == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS))
+                {
+                  this.etudiantsByCampus.push(etudiant);
+                }
+              }
+              else
+              {
+                if(etudiant.campus == this.filterByCampus._id)
+                {
+                  this.etudiantsByCampus.push(etudiant);
+                }
+              }
+            });
+
+            this.showFilterByCampus = true;
+          })
+          .catch((error) => { console.log(error) });
+    }
+    else{
+      this.showFilterByCampus = false;
+    }
+    
+  }
+
+  
+  // filterByGroupe: string[] = undefined;
+  // showFilterByGroupe: boolean = false;
+  // etudiantsByGroupe: any = [];
+
+
 }
