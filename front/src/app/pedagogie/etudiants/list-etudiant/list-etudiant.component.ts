@@ -957,24 +957,55 @@ export class ListEtudiantComponent implements OnInit {
     {
       if(this.filterByAS)
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
+        if(this.filterByGroupe)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+
+            let bypass_etudiant: any = etudiant.classe_id;
+            if(etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        else
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+
         this.showNumbersByType = true;
       }
       else
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(etudiant.isAlternant)
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
+        if(this.filterByGroupe)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            let bypass_etudiant: any = etudiant.classe_id;
+            if(etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        else
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        
         this.showNumbersByType = true;
       }
       
@@ -984,24 +1015,54 @@ export class ListEtudiantComponent implements OnInit {
     {
       if(this.filterByAS)
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(!etudiant.isAlternant  && etudiant.annee_scolaire.includes(this.filterByAS))
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
+        if(this.filterByGroupe)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            let bypass_etudiant: any = etudiant.classe_id;
+            if(!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        else
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(!etudiant.isAlternant  && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        
         this.showNumbersByType = true;
       }
       else
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(!etudiant.isAlternant)
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
+        if(this.filterByGroupe)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            let bypass_etudiant: any = etudiant.classe_id;
+            if(!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        else
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(!etudiant.isAlternant)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+        }
+        
         this.showNumbersByType = true;
       }
     }
