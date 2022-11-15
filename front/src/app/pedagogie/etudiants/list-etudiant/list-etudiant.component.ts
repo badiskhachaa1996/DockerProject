@@ -61,6 +61,7 @@ export class ListEtudiantComponent implements OnInit {
   filterByCampus: Campus = undefined;
   showFilterByCampus: boolean = false;
   etudiantsByCampus: Etudiant[] = [];
+  campusList: any = [];
 
   formUpdateEtudiant: FormGroup;
 
@@ -252,6 +253,8 @@ export class ListEtudiantComponent implements OnInit {
         let n = e.libelle + " - " + c.libelle
         this.dropdownCampus.push({ value: c._id, label: n })
         this.filterCampus.push({ value: c._id, label: c.libelle })
+
+        this.campusList[c._id] = c;
       })
       this.formUpdateEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
     })
@@ -1029,30 +1032,34 @@ export class ListEtudiantComponent implements OnInit {
   //Methode pour filtrer par campus
   onFilterByCampus(event: any)
   {
+        
     if(event.value)
     {
+      this.etudiantsByCampus = [];
+
       //Recuperation du campus
       this.campusService.getByCampusId(event.value)
           .then((response: Campus) => { 
             this.filterByCampus = response;
-            this.etudiantsByCampus = [];
             this.etudiants.forEach((etudiant) => {
               if(this.filterByAS)
               {
-                if(etudiant.campus == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS))
+                let bypass_etudiant: any = etudiant.campus;
+                if(bypass_etudiant._id == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS))
                 {
                   this.etudiantsByCampus.push(etudiant);
                 }
               }
               else
               {
-                if(etudiant.campus == this.filterByCampus._id)
+                let bypass_etudiant: any = etudiant.campus;
+                if(bypass_etudiant._id  == this.filterByCampus._id)
                 {
                   this.etudiantsByCampus.push(etudiant);
                 }
               }
             });
-
+            console.log(this.etudiantsByCampus);
             this.showFilterByCampus = true;
           })
           .catch((error) => { console.log(error) });
@@ -1081,14 +1088,16 @@ export class ListEtudiantComponent implements OnInit {
           this.etudiants.forEach((etudiant) => {
             if(this.filterByAS)
             {
-              if(etudiant.classe_id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
+              let bypass_etudiant: any = etudiant.classe_id;
+              if(bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
               {
                 this.etudiantsByGroupe.push(etudiant);
               }
             }
             else
             {
-              if(etudiant.classe_id == this.filterByGroupe._id)
+              let bypass_etudiant: any = etudiant.classe_id;
+              if(bypass_etudiant._id == this.filterByGroupe._id)
               {
                 this.etudiantsByGroupe.push(etudiant);
               }
