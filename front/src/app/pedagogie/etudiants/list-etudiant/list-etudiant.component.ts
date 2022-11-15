@@ -977,7 +977,6 @@ export class ListEtudiantComponent implements OnInit {
       
     }
 
-
     else if(this.filterByType === false)
     {
       if(this.filterByAS)
@@ -990,7 +989,7 @@ export class ListEtudiantComponent implements OnInit {
           }
         });
         this.showNumbersByType = true;
-        }
+      }
       else
       {
         this.etudiantsByType = [];
