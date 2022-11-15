@@ -28,6 +28,18 @@ export class CampusService {
     return this.http.get<any>(campusUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  //Recuperation d'un campus via un id
+  getByCampusId(id: string)
+  {
+    let url = `${this.apiUrl}getByCampusId/${id}`;
+    return new Promise((resolve, reject) => {
+      this.http.get<Campus>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response) => { resolve(response) }),
+        ((error) => { reject(error) })
+      );
+    });
+  }
+
   createCampus(campus: any) {
     let campusUrl = this.apiUrl + "createcampus";
     return this.http.post<any>(campusUrl, campus, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

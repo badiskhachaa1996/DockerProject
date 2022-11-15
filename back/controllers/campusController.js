@@ -58,6 +58,15 @@ app.get("/getById/:id", (req, res) => {
     })
 });
 
+app.get("/getByCampusId/:id", (req, res) => {
+    //Récupérer un campus via un id
+    Campus.findOne({ _id: req.params.id }).then((datacampus) => {
+        res.status(200).send(datacampus);
+    }).catch((error) => {
+        res.status(404).send(error);
+    })
+});
+
 app.get("/getAllByEcole/:id", (req, res) => {
     //Récupérer un campus via une école
     Campus.find({ ecole_id: req.params.id }).then((datacampus) => {

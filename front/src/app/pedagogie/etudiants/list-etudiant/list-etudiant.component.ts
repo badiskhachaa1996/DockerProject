@@ -30,6 +30,7 @@ import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
 import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
+import { Campus } from 'src/app/models/Campus';
 
 
 
@@ -52,6 +53,14 @@ export class ListEtudiantComponent implements OnInit {
   filterByAS: string = undefined;
   showNumbersByAS: boolean = false;
   etudiantsByAS: Etudiant[] = [];
+
+  filterByGroupe: string[] = undefined;
+  showFilterByGroupe: boolean = false;
+  etudiantsByGroupe: any = [];
+
+  filterByCampus: Campus = undefined;
+  showFilterByCampus: boolean = false;
+  etudiantsByCampus: Etudiant[] = [];
 
   formUpdateEtudiant: FormGroup;
 
@@ -985,4 +994,33 @@ export class ListEtudiantComponent implements OnInit {
 
     this.showNumbersByAS = true;
   } 
+  
+
+  //Methode pour filtrer par campus
+  onFilterByCampus(event: any)
+  {
+    this.etudiantsByCampus = [];
+    //Recuperation du campus
+    this.campusService.getByCampusId(event.value)
+        .then((response: Campus) => { 
+          this.filterByCampus = response;
+          
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.campus == this.filterByCampus._id)
+            {
+              this.etudiantsByCampus.push(etudiant);
+            }
+          });
+
+          this.showFilterByCampus = true;
+        })
+        .catch((error) => { console.log(error) });
+  }
+
+  
+  // filterByGroupe: string[] = undefined;
+  // showFilterByGroupe: boolean = false;
+  // etudiantsByGroupe: any = [];
+
+
 }
