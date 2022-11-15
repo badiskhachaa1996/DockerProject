@@ -952,14 +952,29 @@ export class ListEtudiantComponent implements OnInit {
 
     if(this.filterByType === true)
     {
-      this.etudiantsByType = [];
-      this.etudiants.forEach((etudiant) => {
-        if(etudiant.isAlternant)
-        {
-          this.etudiantsByType.push(etudiant);
-        }
-      });
-      this.showNumbersByType = true;
+      if(this.filterByAS)
+      {
+        this.etudiantsByType = [];
+        this.etudiants.forEach((etudiant) => {
+          if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
+          {
+            this.etudiantsByType.push(etudiant);
+          }
+        });
+        this.showNumbersByType = true;
+      }
+      else
+      {
+        this.etudiantsByType = [];
+        this.etudiants.forEach((etudiant) => {
+          if(etudiant.isAlternant)
+          {
+            this.etudiantsByType.push(etudiant);
+          }
+        });
+        this.showNumbersByType = true;
+      }
+      
     }
     else if(this.filterByType === false)
     {
@@ -978,7 +993,7 @@ export class ListEtudiantComponent implements OnInit {
     }
   }
 
-  //Methode pour filtrer les étudiants par annéé-scolaire
+  //Methode pour filtrer les étudiants par année-scolaire
   onFilterByAS(event: any)
   {
     this.filterByAS = event.value;
@@ -994,27 +1009,44 @@ export class ListEtudiantComponent implements OnInit {
 
     this.showNumbersByAS = true;
   } 
-  
+
 
   //Methode pour filtrer par campus
   onFilterByCampus(event: any)
   {
-    this.etudiantsByCampus = [];
-    //Recuperation du campus
-    this.campusService.getByCampusId(event.value)
-        .then((response: Campus) => { 
-          this.filterByCampus = response;
-          
-          this.etudiants.forEach((etudiant) => {
-            if(etudiant.campus == this.filterByCampus._id)
-            {
-              this.etudiantsByCampus.push(etudiant);
-            }
-          });
+    if(event.value)
+    {
+      this.etudiantsByCampus = [];
+      //Recuperation du campus
+      this.campusService.getByCampusId(event.value)
+          .then((response: Campus) => { 
+            this.filterByCampus = response;
+            
+            this.etudiants.forEach((etudiant) => {
+              if(this.filterByAS)
+              {
+                if(etudiant.campus == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS))
+                {
+                  this.etudiantsByCampus.push(etudiant);
+                }
+              }
+              else
+              {
+                if(etudiant.campus == this.filterByCampus._id)
+                {
+                  this.etudiantsByCampus.push(etudiant);
+                }
+              }
+            });
 
-          this.showFilterByCampus = true;
-        })
-        .catch((error) => { console.log(error) });
+            this.showFilterByCampus = true;
+          })
+          .catch((error) => { console.log(error) });
+    }
+    else{
+      this.showFilterByCampus = false;
+    }
+    
   }
 
   
