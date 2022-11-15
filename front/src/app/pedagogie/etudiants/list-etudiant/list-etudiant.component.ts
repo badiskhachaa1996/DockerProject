@@ -54,9 +54,9 @@ export class ListEtudiantComponent implements OnInit {
   showNumbersByAS: boolean = false;
   etudiantsByAS: Etudiant[] = [];
 
-  filterByGroupe: string[] = undefined;
+  filterByGroupe: Classe = undefined;
   showFilterByGroupe: boolean = false;
-  etudiantsByGroupe: any = [];
+  etudiantsByGroupe: Etudiant[] = [];
 
   filterByCampus: Campus = undefined;
   showFilterByCampus: boolean = false;
@@ -965,14 +965,29 @@ export class ListEtudiantComponent implements OnInit {
       }
       else
       {
-        this.etudiantsByType = [];
-        this.etudiants.forEach((etudiant) => {
-          if(etudiant.isAlternant)
-          {
-            this.etudiantsByType.push(etudiant);
-          }
-        });
-        this.showNumbersByType = true;
+        if(this.filterByAS)
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+          this.showNumbersByType = true;
+        }
+        else 
+        {
+          this.etudiantsByType = [];
+          this.etudiants.forEach((etudiant) => {
+            if(etudiant.isAlternant)
+            {
+              this.etudiantsByType.push(etudiant);
+            }
+          });
+          this.showNumbersByType = true;
+        }
+        
       }
       
     }
@@ -1016,12 +1031,11 @@ export class ListEtudiantComponent implements OnInit {
   {
     if(event.value)
     {
-      this.etudiantsByCampus = [];
       //Recuperation du campus
       this.campusService.getByCampusId(event.value)
           .then((response: Campus) => { 
             this.filterByCampus = response;
-            
+            this.etudiantsByCampus = [];
             this.etudiants.forEach((etudiant) => {
               if(this.filterByAS)
               {
@@ -1050,9 +1064,36 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   
-  // filterByGroupe: string[] = undefined;
+  // filterByGroupe: Classe = undefined;
   // showFilterByGroupe: boolean = false;
-  // etudiantsByGroupe: any = [];
+  // etudiantsByGroupe: Etudiant[] = [];
 
+  onFilterbyGroup(event: any)
+  {
+    //Recuperation du groupe
+    this.classeService.get(event.value).subscribe(
+      ((response) => {
+        this.filterByGroupe = response;
+        this.etudiantsByGroupe = [];
 
+        this.etudiants.forEach((etudiant) => {
+          if(this.filterByAS)
+          {
+            if(etudiant.classe_id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByGroupe.push(etudiant);
+            }
+          }
+          else
+          {
+            if(etudiant.classe_id == this.filterByGroupe._id)
+            {
+              this.etudiantsByGroupe.push(etudiant);
+            }
+          }
+        });
+      }),
+      ((error) => { console.log(error); })
+    );
+  }
 }
