@@ -54,9 +54,9 @@ export class ListEtudiantComponent implements OnInit {
   showNumbersByAS: boolean = false;
   etudiantsByAS: Etudiant[] = [];
 
-  filterByGroupe: string[] = undefined;
+  filterByGroupe: Classe = undefined;
   showFilterByGroupe: boolean = false;
-  etudiantsByGroupe: any = [];
+  etudiantsByGroupe: Etudiant[] = [];
 
   filterByCampus: Campus = undefined;
   showFilterByCampus: boolean = false;
@@ -1064,9 +1064,36 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   
-  // filterByGroupe: string[] = undefined;
+  // filterByGroupe: Classe = undefined;
   // showFilterByGroupe: boolean = false;
-  // etudiantsByGroupe: any = [];
+  // etudiantsByGroupe: Etudiant[] = [];
 
+  onFilterbyGroup(event: any)
+  {
+    //Recuperation du groupe
+    this.classeService.get(event.value).subscribe(
+      ((response) => {
+        this.filterByGroupe = response;
+        this.etudiantsByGroupe = [];
 
+        this.etudiants.forEach((etudiant) => {
+          if(this.filterByAS)
+          {
+            if(etudiant.classe_id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
+            {
+              this.etudiantsByGroupe.push(etudiant);
+            }
+          }
+          else
+          {
+            if(etudiant.classe_id == this.filterByGroupe._id)
+            {
+              this.etudiantsByGroupe.push(etudiant);
+            }
+          }
+        });
+      }),
+      ((error) => { console.log(error); })
+    );
+  }
 }
