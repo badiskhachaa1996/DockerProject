@@ -45,6 +45,14 @@ export class ListEtudiantComponent implements OnInit {
 
   etudiants: Etudiant[] = [];
 
+  filterByType: boolean;
+  showNumbersByType = false;
+  etudiantsByType: Etudiant[] = [];
+
+  filterByAS: string = undefined;
+  showNumbersByAS: boolean = false;
+  etudiantsByAS: Etudiant[] = [];
+
   formUpdateEtudiant: FormGroup;
 
   typeEtudiant = [
@@ -926,4 +934,55 @@ export class ListEtudiantComponent implements OnInit {
       }
     })
   }
+
+
+  //Methode pour filtrer les étudiants selon le type choisis dans le filtre
+  onFilterByType(event)
+  {
+    this.filterByType = event.value;
+
+    if(this.filterByType === true)
+    {
+      this.etudiantsByType = [];
+      this.etudiants.forEach((etudiant) => {
+        if(etudiant.isAlternant)
+        {
+          this.etudiantsByType.push(etudiant);
+        }
+      });
+      this.showNumbersByType = true;
+    }
+    else if(this.filterByType === false)
+    {
+      this.etudiantsByType = [];
+      this.etudiants.forEach((etudiant) => {
+        if(!etudiant.isAlternant)
+        {
+          this.etudiantsByType.push(etudiant);
+        }
+      });
+      this.showNumbersByType = true;
+    }
+    else if(this.filterByType === null)
+    {
+      this.showNumbersByType = false;
+    }
+  }
+
+  //Methode pour filtrer les étudiants par annéé-scolaire
+  onFilterByAS(event: any)
+  {
+    this.filterByAS = event.value;
+
+    this.etudiantsByAS = [];
+
+    this.etudiants.forEach((etudiant) => {
+      if(etudiant.annee_scolaire.includes(this.filterByAS))
+      {
+        this.etudiantsByAS.push(etudiant);
+      }
+    });
+
+    this.showNumbersByAS = true;
+  } 
 }

@@ -64,6 +64,93 @@
         </div>
     </div>
 
+    <!-- Formulaire de mofication des infos utilisateur -->
+    <div class="col-12">
+        <div class="card" *ngIf="showFormUpdate">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                    title="Fermer" (click)="showFormUpdate = false" aria-hidden="true"> </i>
+            
+            <h4 style="text-align: center;">Modifier les infos</h4>
+            <form [formGroup]="formUpdate" (ngSubmit)="onUpdateUser()" class="p-fluid p-formgrid grid">
+                <div class="field col-12">
+                    <label For="Civilite">Civilité</label>
+                    <p-dropdown [options]="civiliteList" formControlName="civilite" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="lastname">Nom</label>
+                    <input pInputText id="lastname" formControlName="lastname" type="text"
+						placeholder="Nom" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="firstname">Prénom</label>
+                    <input pInputText id="firstname" formControlName="firstname" type="text"
+						placeholder="Prénom" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="indicatif">Indicatif</label>
+                    <input pInputText id="indicatif" formControlName="indicatif" type="text"
+						placeholder="0033" />
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="phone">Téléphone</label>
+                    <input pInputText id="phone" formControlName="phone" type="tel"
+						placeholder="0767987887" />
+                </div>
+                <div class="field col-12">
+                    <label For="email">Email</label>
+                    <input pInputText id="email" formControlName="email" type="email"
+						placeholder="s.hue@estya.com" />
+                </div>
+                <div class="field col-12">
+                    <label For="email_perso">Email perso</label>
+                    <input pInputText id="phone" formControlName="email_perso" type="email"
+						placeholder="s.hue@gmail.com" />
+                </div>
+                <div class="field col-12">
+                    <label For="service">Service</label>
+                    <p-dropdown [options]="dropDownService" formControlName="service" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label For="type">Type</label>
+                    <p-dropdown [options]="typeList" formControlName="type" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12">
+                    <label For="role">Rôle</label>
+                    <p-dropdown [options]="roleList" formControlName="role" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12 md:col-7">
+                    <label For="pays">Pays</label>
+                    <input pInputText id="pays" formControlName="pays_adresse" type="text"
+						placeholder="Japon" />
+                </div>
+                <div class="field col-12 md:col-5">
+                    <label For="ville">Ville</label>
+                    <input pInputText id="ville" formControlName="ville_adresse" type="text"
+						placeholder="Paris" />
+                </div>
+                <div class="field col-12 md:col-4">
+                    <label For="numero_adresse">Numéro de rue</label>
+                    <input pInputText id="numero_adresse" formControlName="numero_adresse" type="number"
+						placeholder="15" />
+                </div>
+                <div class="field col-12 md:col-8">
+                    <label For="rue_adresse">Rue</label>
+                    <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text"
+						placeholder="rue du louvre" />
+                </div>
+                <div class="field col-12">
+                    <label For="postal_adresse">Code postale</label>
+                    <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
+						placeholder="94200" />
+                </div>
+                <div>
+                    <button pButton label="Modifier" type="submit" [disabled]="formUpdate.invalid"></button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
 
     <!-- Table d'affichage des utilisateurs -->
     <div class="col-12">
@@ -94,6 +181,8 @@
                         <th>Rôle</th>
 						<th>Nom prénom</th>
 						<th>Téléphone</th>
+                        <th>Email</th>
+                        <th>Email perso</th>
                         <th>Action</th>
 					</tr>
 				</ng-template>
@@ -106,25 +195,27 @@
 						<td style="min-width: 10rem;">{{ user.role }}</td>
 						<td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
 						<td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
+                        <td style="min-width: 10rem;">{{ user.email }}</td>
+                        <td style="min-width: 10rem;">{{ user.email_perso }}</td>
                         <td style="min-width: 10rem;">
                             <i pTooltip="Modifier"
-                            style="margin-left: 2%;" class="pi pi-pencil" (click)="userToUpdate = user; showFormUpdate = true;"
+                            style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil" (click)="userToUpdate = user; onPatchData(); showFormUpdate = true;"
                             aria-hidden="true"></i>
                         </td>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="rowexpansion" let-user>
 					<tr>
-						<td colspan="7">
+						<td colspan="8">
 							<div class="p-3">
 								<p-table responsiveLayout="scroll">
 									<ng-template pTemplate="header">
                                         <tr>
-                                            <th>Email</th>
-                                            <th>Email perso</th>
                                             <th>Service</th>
                                             <th>Type</th>
-                                            <th>Rôle</th>
+                                            <th>Pays</th>
+                                            <th>Ville</th>
+                                            <th>Rue</th>
                                             <th>Dernière connexion</th>
                                         </tr>
                                     </ng-template>
@@ -133,11 +224,11 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td style="min-width: 10rem;">{{ user.email }}</td>
-                                            <td style="min-width: 10rem;">{{ user.email_perso }}</td>
                                             <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
                                             <td>{{ user.type }}</td>
-                                            <td>{{ user.role }}</td>
+                                            <td>{{ user.pays_adresse }}</td>
+                                            <td>{{ user.ville_adresse }}</td>
+                                            <td>{{ user.numero_adresse }} {{ user.rue_adresse }}/ {{ user.postal_adresse }}</td>
                                             <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}</td>
                                         </tr>
                                     </ng-template>

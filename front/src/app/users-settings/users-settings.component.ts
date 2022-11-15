@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Agent } from 'http';
+import { environment } from 'src/environments/environment';
 import { Etudiant } from '../models/Etudiant';
 import { Formateur } from '../models/Formateur';
+import { Service } from '../models/Service';
 import { User } from '../models/User';
 import { AuthService } from '../services/auth.service';
 import { CommercialPartenaireService } from '../services/commercial-partenaire.service';
 import { EtudiantService } from '../services/etudiant.service';
 import { FormateurService } from '../services/formateur.service';
+import { ServService } from '../services/service.service';
 
 @Component({
   selector: 'app-users-settings',
@@ -17,6 +21,7 @@ export class UsersSettingsComponent implements OnInit {
 
   users: User[] = [];
   userToUpdate: User;
+  formUpdate: FormGroup;
   showFormUpdate: boolean = false;
   showUsersList: boolean = true;
 
@@ -40,14 +45,21 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Responsable', value: 'Responsable' },
   ];
 
+  civiliteList: any = [
+    { label: 'Monsieur' },
+    { label: 'Madame' },
+    { label: 'Autre' },
+  ];
 
   etudiants: Etudiant[] = [];
   formateurs: Formateur[] = [];
   agents: User[] = [];
-  
+  services: Service[] = [];
+  dropDownService: any = [{ label: 'Tous les services', value: null }];
 
   constructor(private userService: AuthService, private etudiantService: EtudiantService, 
-              private formateurService: FormateurService, private commercialService: CommercialPartenaireService) { }
+              private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
+              private serviceService: ServService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     //Recuperation de la liste des users
@@ -72,7 +84,81 @@ export class UsersSettingsComponent implements OnInit {
       ((response) => { this.agents = response }),
       ((error) => { console.log(error) })
     );
+
+    //Recuperation de la liste des services
+    this.serviceService.getAll().subscribe(
+      ((response) => { 
+        this.services.forEach((service) => {
+          this.services[service._id] = response;
+          this.dropDownService.push(service);
+        }); 
+      }),
+      ((error) => { console.log(error) })
+    );
+
+    //Initialisation du formulaire de mise à jour des infos
+    this.formUpdate = this.formBuilder.group({
+      civilite: ['', Validators.required],
+      lastname: ['', Validators.required],
+      firstname: ['', Validators.required],
+      indicatif: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+      email_perso: [''],
+      service: [''],
+      type: [''],
+      role: [''],
+      pays_adresse: [''],
+      numero_adresse: [''],
+      postal_adresse: [''],
+      rue_adresse: [''],
+      ville_adresse: [''],
+    });
   }
 
+
+  //Methode pour pre-remplir le formulaire de mise à jour
+  onPatchData()
+  {
+    this.formUpdate.patchValue({
+      civilite: { label: this.userToUpdate.civilite },
+      lastname: this.userToUpdate.lastname,
+      firstname: this.userToUpdate.firstname,
+      indicatif: this.userToUpdate.indicatif,
+      phone: this.userToUpdate.phone,
+      email: this.userToUpdate.email,
+      email_perso: this.userToUpdate.email_perso,
+      service: { label: this.services[this.userToUpdate.service_id]?.label, value: this.services[this.userToUpdate.service_id]?._id },
+      type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
+      role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
+      pays_adresse: this.userToUpdate.pays_adresse,
+      postal_adresse: this.userToUpdate.postal_adresse,
+      rue_adresse: this.userToUpdate.rue_adresse,
+      ville_adresse: this.userToUpdate.ville_adresse,
+    });
+  }
+
+  //Methode de modification des infos
+  onUpdateUser()
+  {
+    const user = new User();
+
+    user.civilite = this.formUpdate.get('civilite')?.value.label;
+    user.lastname = this.formUpdate.get('lastname')?.value;
+    user.firstname = this.formUpdate.get('firstname')?.value;
+    user.indicatif = this.formUpdate.get('indicatif')?.value;
+    user.phone = this.formUpdate.get('phone')?.value;
+    user.email = this.formUpdate.get('email')?.value;
+    user.email_perso = this.formUpdate.get('email_perso')?.value;
+    user.service_id = this.formUpdate.get('service_id')?.value.value;
+    user.type = this.formUpdate.get('type')?.value.value;
+    user.role = this.formUpdate.get('role')?.value.value;
+    user.pays_adresse = this.formUpdate.get('pays_adresse')?.value;
+    user.postal_adresse = this.formUpdate.get('postal_adresse')?.value;
+    user.rue_adresse = this.formUpdate.get('rue_adresse')?.value;
+    user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
+
+    console.log(user);
+  }
 
 }
