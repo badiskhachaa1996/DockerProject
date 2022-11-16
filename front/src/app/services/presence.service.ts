@@ -39,6 +39,11 @@ export class PresenceService {
     return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllPopulateBySeance(id: string) {
+    let registreUrl = this.apiUrl + "getAllPopulateBySeance/" + id;
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
   isPresent(id: string, isPresent) {
     let registreUrl = this.apiUrl + "isPresent/" + id;
     return this.http.post<Presence>(registreUrl, { isPresent }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });

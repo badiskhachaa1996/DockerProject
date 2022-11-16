@@ -791,6 +791,30 @@ app.post('/getAllByMultipleClasseID', (req, res) => {
     })
 });
 
+app.post('/getAllByMultipleClasseIDWithoutPresence', (req, res) => {
+    let p_id = []
+    let r = []
+    req.body.presence.forEach(p => {
+        p_id.push(p.user_id._id)
+    })
+    Etudiant.find({ classe_id: { $in: req.body.classe_id }, isActive: { $ne: false } }).populate("user_id").populate("classe_id").then(result => {
+        result.forEach(p => {
+            if (p.user_id && customIncludes(p_id, p.user_id._id) == false)
+                r.push(p)
+        })
+        res.send(r)
+    })
+});
+
+function customIncludes(list, id) {
+    let r = false
+    list.forEach(ele => {
+        if (ele == id)
+            r = true
+    })
+    return r
+}
+
 app.post('/addNewPayment/:id', (req, res) => {
     Etudiant.findById(req.params.id).then(et => {
         let token = jwt.decode(req.header("token"))

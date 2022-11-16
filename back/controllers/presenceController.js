@@ -52,6 +52,16 @@ app.get("/getAllBySeance/:id", (req, res) => {
     })
 });
 
+app.get("/getAllPopulateBySeance/:id", (req, res) => {
+    Presence.find({ seance_id: req.params.id })
+        .populate('seance_id').populate('user_id')
+        .then((data) => {
+            res.status(200).send(data);
+        }).catch((error) => {
+            res.status(404).send(error);
+        })
+});
+
 
 app.post("/getAssiduitePDF/:id", (req, res) => {
 
@@ -233,12 +243,12 @@ app.post("/getAtt_ssiduitePDF/:id", (req, res) => {
         yi = 0;
         xif = 0;
         yif = 0;
-      
+
 
         ctx.fillText(etudiantData.user_id.civilite + " " + etudiantData.user_id.firstname + " " + etudiantData.user_id.lastname, 230, 400, (214 - 71));
         ctx.fillText(etudiantData.classe_id.diplome_id.titre_long, 200, 540, (214 - 71));
-        ctx.fillText(dateFormat(etudiantData.classe_id.diplome_id.date_debut), 163,612, (214 - 71));
-        ctx.fillText(dateFormat(Date.now()), 414,612, (214 - 71));
+        ctx.fillText(dateFormat(etudiantData.classe_id.diplome_id.date_debut), 163, 612, (214 - 71));
+        ctx.fillText(dateFormat(Date.now()), 414, 612, (214 - 71));
         ctx.addPage()
 
         const buff = canvas.toBuffer('application/pdf', {

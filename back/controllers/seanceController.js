@@ -108,7 +108,6 @@ app.get("/getAll", (req, res, next) => {
         .catch((error) => { req.status(500).send('Impossible de recupérer la liste des séances ' + error.message); });
 });
 
-
 //Recuperation d'une s selon son id
 app.get('/getById/:id', (req, res, next) => {
     Seance.findOne({ _id: req.params.id })

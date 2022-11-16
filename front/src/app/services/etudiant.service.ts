@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Etudiant } from '../models/Etudiant';
+import { Presence } from '../models/Presence';
 
 @Injectable({
   providedIn: 'root'
@@ -128,6 +129,11 @@ export class EtudiantService {
   getAllByMultipleClasseID(classes_id: string[]) {
     let url = this.apiUrl + "getAllByMultipleClasseID"
     return this.httpClient.post<any[]>(url, { classe_id: classes_id }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllByMultipleClasseIDWithoutPresence(classe_id: string[], presence: Presence[]) {
+    let url = this.apiUrl + "getAllByMultipleClasseIDWithoutPresence"
+    return this.httpClient.post<Etudiant[]>(url, { classe_id,presence }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   addNewPayment(_id: string, data: any) {
