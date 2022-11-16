@@ -12,6 +12,7 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { ExamenService } from 'src/app/services/examen.service';
 import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-examen',
@@ -21,7 +22,7 @@ import { MatiereService } from 'src/app/services/matiere.service';
 export class ExamenComponent implements OnInit {
 
   examens: Examen[] = [];
-
+  isFormateur: Formateur = null
 
 
   formUpdateExamen: FormGroup;
@@ -37,12 +38,13 @@ export class ExamenComponent implements OnInit {
 
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: "Toutes les groupes", value: null }];
+  dropdownModule: any[] = [{ libelle: "Toutes les modules", value: null }];
   idClasseToUpdate: String;
   nomClasseToUpdate: String;
 
   dropdownFormateur: any[] = [{ libelle: "", value: "" }];
   formateurToUpdate: Formateur;
-
+  token;
 
   dropdownNiveau: any[] = [
     { label: "Évaluation", value: "Évaluation" },
@@ -72,6 +74,17 @@ export class ExamenComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+
+    try {
+      this.token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      this.token = null
+    }
+    if (this.token) {
+      this.formateurService.getByUserId(this.token.id).subscribe(f => {
+        this.isFormateur = f
+      })
+    }
 
     //Recupération de la liste des examens
     this.examenService.getAll().subscribe(
@@ -120,6 +133,7 @@ export class ExamenComponent implements OnInit {
       ((response) => {
         response.forEach((matiere) => {
           this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
+          this.dropdownMatiere.push({ label: matiere.nom, value: matiere._id });
           this.matieres[matiere._id] = matiere;
         });
       }),
@@ -151,12 +165,12 @@ export class ExamenComponent implements OnInit {
       matiere_id: [
         "", Validators.required],
       formateur_id: ["", Validators.required],
-      libelle: ["", Validators.required],
+      libelle: [""],
       date: ["", Validators.required],
       type: ["", Validators.required],
       note_max: ["", [Validators.required, Validators.pattern("^[0-9.]+$")]],
       coef: ["", Validators.required],
-      niveau: ["",Validators.required]
+      niveau: ["", Validators.required]
     });
   }
 
@@ -264,8 +278,7 @@ export class ExamenComponent implements OnInit {
     );
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-examen']);
   }
 }

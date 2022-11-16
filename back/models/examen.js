@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 //création du schéma de données de la table examen
 const examenSchema = mongoose.Schema({
-    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: 'classe', required: true },
+    classe_id: { type: mongoose.Schema.Types.ObjectId, ref: 'classe'},
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'formateur', required: true },
     date: { type: String, required: true },
