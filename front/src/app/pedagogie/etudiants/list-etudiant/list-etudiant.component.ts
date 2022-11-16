@@ -1174,5 +1174,24 @@ export class ListEtudiantComponent implements OnInit {
     }
   }
 
+  //Methode pour vider tous les compteurs
+  onTrashCount()
+  {
+    this.filterByType = null;
+    this.showNumbersByType = false;
+    this.etudiantsByType = [];
+
+    this.filterByAS = undefined;
+    this.showNumbersByAS = false;
+    this.etudiantsByAS = [];
+
+    this.filterByGroupe = undefined;
+    this.showFilterByGroupe = false;
+    this.etudiantsByGroupe = [];
+
+    this.filterByCampus = undefined;
+    this.showFilterByCampus = false;
+    this.etudiantsByCampus = [];
+  }
 
 }
