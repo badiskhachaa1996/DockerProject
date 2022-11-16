@@ -24,6 +24,8 @@ export class UsersSettingsComponent implements OnInit {
   formUpdate: FormGroup;
   showFormUpdate: boolean = false;
   showUsersList: boolean = true;
+  //Photo de profil
+  profilPicture: any = "assets/images/avatar.PNG";
 
   typeList: any = [
     { label: 'Tous les types', value: null },
@@ -117,6 +119,33 @@ export class UsersSettingsComponent implements OnInit {
   }
 
 
+  //Methode de recuperation de la photo de profil d'un utilisateur
+  onLoadProfilePicture(id: string)
+  {
+    this.userService.getLoadProfilePicture(id)
+    .then((response: any) => { 
+      if(response.image)
+      {
+        const imageDecoded = new Uint8Array(atob(response.image).split('').map(char => char.charCodeAt(0)));
+        let blob: Blob = new Blob([imageDecoded], { type: `image/${response.imgExtension}` })
+        let reader: FileReader = new FileReader();
+        reader.addEventListener("load", () => {
+          this.profilPicture = reader.result;
+        }, false);
+
+        if (blob) {
+          reader.readAsDataURL(blob);
+        }
+        
+      } 
+      else
+      {
+        this.profilPicture = 'assets/images/avatar.PNG'
+      }
+    })
+    .catch((error) => { console.log(error); });
+  }
+
   //Methode pour pre-remplir le formulaire de mise à jour
   onPatchData()
   {
@@ -160,5 +189,7 @@ export class UsersSettingsComponent implements OnInit {
 
     console.log(user);
   }
+
+
 
 }

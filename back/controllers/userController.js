@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 const multer = require('multer');
 const mongoose = require("mongoose");
 const fs = require("fs");
+const path = require("path");
 const { Formateur } = require("../models/formateur")
 const { Etudiant } = require("../models/etudiant")
 const { pwdToken } = require("../models/pwdToken")
@@ -547,6 +548,35 @@ app.get('/getProfilePicture/:id', (req, res) => {
 
     })
 })
+
+//Methode pour recuperer la photo de profil d'un utilisateur methode Idrissa Sall
+app.get("/loadProfilePicture/:id", (req, res) => {
+    User.findOne({ _id: req.params.id })
+    .then((user) => {
+        if(user.pathImageProfil)
+        {
+            let imgPath = path.join('storage', 'profile', user._id.toString(), user.pathImageProfil.toString());
+            let imgExtention = user.pathImageProfil.toString().slice(((user.pathImageProfil.toString().lastIndexOf(".") - 1) + 2) );
+
+            try 
+            {
+                let img = fs.readFileSync(imgPath, { encoding: 'base64' }, (error) => {
+                    if(error) {
+                        res.status(400).json({error: error});
+                    }
+                });
+                res.status(200).json({image: img, imgExtension: imgExtention});
+            } catch(e) {
+                res.status(200).send({ error: e })
+            }
+        }
+        else{
+            res.status(200).json({error: 'Image non definis'});
+        }
+    })
+    .catch((error) => { res.status(400).send(error.message); })
+});
+
 
 app.post('/AuthMicrosoft', (req, res) => {
     User.findOne({ email: req.body.email }, (err, user) => {
