@@ -120,8 +120,7 @@
                 </div>
                 <div class="field col-12 md:col-7">
                     <label For="pays">Pays</label>
-                    <input pInputText id="pays" formControlName="pays_adresse" type="text"
-						placeholder="Japon" />
+                    <p-dropdown [options]="paysList" formControlName="pays_adresse" optionLabel="value"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-5">
                     <label For="ville">Ville</label>

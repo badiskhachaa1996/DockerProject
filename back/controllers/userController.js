@@ -244,6 +244,30 @@ app.post("/updateById/:id", (req, res) => {
         })
 })
 
+//Mise à jour des infos users, utilisé depuis la page de gestion des utilisateurs
+app.patch("/patchById", (req, res) => {
+    const user = new User({ ...req.body });
+    
+    User.updateOne({ _id: user._id }, { 
+        civilite: user.civilite,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        indicatif: user.indicatif,
+        phone: user.phone,
+        email: user.email,
+        email_perso: user.email_perso,
+        service_id: user.service_id,
+        type: user.type,
+        role: user.role,
+        pays_adresse: user.pays_adresse,
+        ville_adresse: user.ville_adresse,
+        rue_adresse: user.rue_adresse,
+        numero_adresse: user.numero_adresse,
+        postal_adresse: user.postal_adresse,
+     })
+    .then((response) => { res.status(201).send(response); })
+    .catch((error) => { res.status(400).json({ msg: error.message }); });
+});
 
 //Mise à jour d'un user
 app.post("/updateByIdForPrivate/:id", (req, res) => {
@@ -549,7 +573,7 @@ app.get('/getProfilePicture/:id', (req, res) => {
     })
 })
 
-//Methode pour recuperer la photo de profil d'un utilisateur methode Idrissa Sall
+//Methode pour envoyer la photo de profil d'un utilisateur methode Idrissa Sall
 app.get("/loadProfilePicture/:id", (req, res) => {
     User.findOne({ _id: req.params.id })
     .then((user) => {
@@ -567,7 +591,7 @@ app.get("/loadProfilePicture/:id", (req, res) => {
                 });
                 res.status(200).json({image: img, imgExtension: imgExtention});
             } catch(e) {
-                res.status(200).send({ error: e })
+                res.status(200).json({ error: e })
             }
         }
         else{

@@ -88,6 +88,20 @@ export class AuthService {
 
   }
 
+  //Methode de mise à jour des infos d'un utilisateur utilisé sur la page de gestion des utilisateur
+  patchById(user: User)
+  {
+    let url = `${this.apiUrl}patchById`;
+
+    return new Promise((resolve, reject) => {
+      this.http.patch<User>(url, user, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response: User) => { resolve(response); }),
+        ((error) => { reject(error); })
+      );
+    });
+  }
+
+
   updateByIdForPrivate(user: User) {
     let registreUrl = this.apiUrl + "updateByIdForPrivate/" + user._id;
     return this.http.post<User>(registreUrl, { user }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
