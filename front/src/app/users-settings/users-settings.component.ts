@@ -11,6 +11,7 @@ import { CommercialPartenaireService } from '../services/commercial-partenaire.s
 import { EtudiantService } from '../services/etudiant.service';
 import { FormateurService } from '../services/formateur.service';
 import { ServService } from '../services/service.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-users-settings',
@@ -30,7 +31,7 @@ export class UsersSettingsComponent implements OnInit {
   typeList: any = [
     { label: 'Tous les types', value: null },
     { label: 'Salarié', value: 'Salarié' },
-    { label: 'CEO Entreprise', value: 'CEO Entreprise' },
+    { label: 'Représentant', value: 'Représentant' },
     { label: 'Tuteur', value: 'Tuteur' },
     { label: 'Etudiant', value: 'Etudiant' },
     { label: 'Initial', value: 'Initial' },
@@ -53,6 +54,8 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Autre' },
   ];
 
+  paysList = environment.pays;
+
   etudiants: Etudiant[] = [];
   formateurs: Formateur[] = [];
   agents: User[] = [];
@@ -61,9 +64,37 @@ export class UsersSettingsComponent implements OnInit {
 
   constructor(private userService: AuthService, private etudiantService: EtudiantService, 
               private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
-              private serviceService: ServService, private formBuilder: FormBuilder) { }
+              private serviceService: ServService, private formBuilder: FormBuilder,
+              private messageService: MessageService) { }
 
   ngOnInit(): void {
+    //Recuperation de toute les data
+    this.onGetAllDatas();
+
+    //Initialisation du formulaire de mise à jour des infos
+    this.formUpdate = this.formBuilder.group({
+      civilite: [this.civiliteList[0], Validators.required],
+      lastname: ['', Validators.required],
+      firstname: ['', Validators.required],
+      indicatif: ['', Validators.required],
+      phone: ['', Validators.required],
+      email: ['', Validators.required],
+      email_perso: [''],
+      service: [''],
+      type: [''],
+      role: [''],
+      pays_adresse: [''],
+      numero_adresse: [''],
+      postal_adresse: [''],
+      rue_adresse: [''],
+      ville_adresse: [''],
+    });
+  }
+
+
+  //Methode de recuperation de la liste des datas
+  onGetAllDatas()
+  {
     //Recuperation de la liste des users
     this.userService.getAllPopulate()
       .then((response: User[]) => { this.users = response })
@@ -97,27 +128,7 @@ export class UsersSettingsComponent implements OnInit {
       }),
       ((error) => { console.log(error) })
     );
-
-    //Initialisation du formulaire de mise à jour des infos
-    this.formUpdate = this.formBuilder.group({
-      civilite: ['', Validators.required],
-      lastname: ['', Validators.required],
-      firstname: ['', Validators.required],
-      indicatif: ['', Validators.required],
-      phone: ['', Validators.required],
-      email: ['', Validators.required],
-      email_perso: [''],
-      service: [''],
-      type: [''],
-      role: [''],
-      pays_adresse: [''],
-      numero_adresse: [''],
-      postal_adresse: [''],
-      rue_adresse: [''],
-      ville_adresse: [''],
-    });
   }
-
 
   //Methode de recuperation de la photo de profil d'un utilisateur
   onLoadProfilePicture(id: string)
@@ -160,7 +171,7 @@ export class UsersSettingsComponent implements OnInit {
       service: { label: this.services[this.userToUpdate.service_id]?.label, value: this.services[this.userToUpdate.service_id]?._id },
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
-      pays_adresse: this.userToUpdate.pays_adresse,
+      pays_adresse: { value: this.userToUpdate.pays_adresse, viewValue: this.userToUpdate.pays_adresse, actif: false },
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,
@@ -172,6 +183,7 @@ export class UsersSettingsComponent implements OnInit {
   {
     const user = new User();
 
+    user._id = this.userToUpdate._id;
     user.civilite = this.formUpdate.get('civilite')?.value.label;
     user.lastname = this.formUpdate.get('lastname')?.value;
     user.firstname = this.formUpdate.get('firstname')?.value;
@@ -182,12 +194,21 @@ export class UsersSettingsComponent implements OnInit {
     user.service_id = this.formUpdate.get('service_id')?.value.value;
     user.type = this.formUpdate.get('type')?.value.value;
     user.role = this.formUpdate.get('role')?.value.value;
-    user.pays_adresse = this.formUpdate.get('pays_adresse')?.value;
+    user.pays_adresse = this.formUpdate.get('pays_adresse')?.value.value;
     user.postal_adresse = this.formUpdate.get('postal_adresse')?.value;
+    user.numero_adresse = this.formUpdate.get('numero_adresse')?.value;
     user.rue_adresse = this.formUpdate.get('rue_adresse')?.value;
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
 
-    console.log(user);
+    this.userService.patchById(user)
+    .then((response) => {
+      this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });
+      this.onGetAllDatas();
+      this.showFormUpdate = false;
+      this.formUpdate.reset();
+    })
+    .catch((error) => { console.log(error.msg); });
+
   }
 
 

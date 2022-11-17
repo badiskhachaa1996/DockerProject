@@ -21,22 +21,9 @@ export class GrhComponent implements OnInit {
         icon: 'pi pi-fw pi-align-left',
       },
       {
-        label: 'Précsences sur une plage de date',
-        icon: 'pi pi-fw pi-shopping-cart',
+        label: 'Démandes de congés',
+        icon: 'pi pi-fw pi-file',
       },
-      {
-        label: 'Shipments',
-        icon: 'pi pi-fw pi-envelope',
-      },
-      {
-        label: 'Profile',
-        icon: 'pi pi-fw pi-user',
-      },
-      { separator: true },
-      {
-        label: 'Quit',
-        icon: 'pi pi-fw pi-sign-out'
-      }
     ];
   }
 
