@@ -189,7 +189,12 @@
 				<ng-template pTemplate="body" let-user let-expanded="expanded">
 					<tr>
 						<td>
-							<button type="button" pButton pRipple [pRowToggler]="user" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+							<button type="button" pButton 
+                                    pRipple [pRowToggler]="user" 
+                                    class="p-button-text p-button-rounded p-button-plain" 
+                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                    (click)="onLoadProfilePicture(user._id)">
+                            </button>
 						</td>
 						<td style="min-width: 8rem;">{{ user._id }}</td>
 						<td style="min-width: 10rem;">{{ user.role }}</td>
@@ -211,6 +216,7 @@
 								<p-table responsiveLayout="scroll">
 									<ng-template pTemplate="header">
                                         <tr>
+                                            <th></th>
                                             <th>Service</th>
                                             <th>Type</th>
                                             <th>Pays</th>
@@ -224,12 +230,13 @@
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
+                                            <td><img [src]="profilPicture" alt="{{ 'Pofile' | uppercase }}" width="80" height="80" /></td>
                                             <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
                                             <td>{{ user.type }}</td>
                                             <td>{{ user.pays_adresse }}</td>
                                             <td>{{ user.ville_adresse }}</td>
-                                            <td>{{ user.numero_adresse }} {{ user.rue_adresse }}/ {{ user.postal_adresse }}</td>
-                                            <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}</td>
+                                            <td>{{ user.numero_adresse }} {{ user.rue_adresse }} <br/> {{ user.postal_adresse }}</td>
+                                            <td style="color: red; font-weight: bolder;">{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}</td>
                                         </tr>
                                     </ng-template>
 			                    </p-table>
