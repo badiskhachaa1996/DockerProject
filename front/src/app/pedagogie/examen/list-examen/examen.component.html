@@ -30,17 +30,17 @@
                     </span>
                 </div>
 
-                <div class="field col-12 md:col-12">
-                    <label>Libellé*:</label><br>
+                <div [ngClass]="{'field col-12 md:col-12':!isFormateur,'field col-12 md:col-6':isFormateur}">
+                    <label>Libellé:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
                         placeholder="Intitulé de l'examen/ évaluation" pInputText>
 
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-6" *ngIf="!isFormateur">
                     <label>Formateur*:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownFormateur" optionLabel="libelle" formControlName="formateur_id">
+                        <p-dropdown [options]="dropdownFormateur" formControlName="formateur_id">
                         </p-dropdown>
                     </span>
                 </div>
@@ -114,6 +114,11 @@
                                 (onChange)="dt1.filter($event.value.value, 'classe_id', 'equals')" optionLabel="libelle"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom de la classe">
                             </p-dropdown>
+
+                            <p-dropdown filter="true" [options]="dropdownModule"
+                            (onChange)="dt1.filter($event.value, 'matiere_id', 'equals')" optionLabel="libelle"
+                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
+                        </p-dropdown>
 
                             <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
                                 <p-dropdown filter="true" [options]="dropdownType"

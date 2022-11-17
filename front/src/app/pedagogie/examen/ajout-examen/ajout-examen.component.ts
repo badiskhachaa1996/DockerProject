@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
 import { Examen } from 'src/app/models/Examen';
@@ -11,6 +11,9 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { ExamenService } from 'src/app/services/examen.service';
 import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
+import jwt_decode from 'jwt-decode';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-ajout-examen',
@@ -18,12 +21,6 @@ import { MatiereService } from 'src/app/services/matiere.service';
   styleUrls: ['./ajout-examen.component.scss']
 })
 export class AjoutExamenComponent implements OnInit {
-
-  examens: Examen[] = [];
-  formAddExamen: FormGroup;
-  users: User[] = [];
-  formateurs: Formateur[] = [];
-
   matieres: Matiere[] = [];
   dropdownMatiere: any[] = [{ libelle: "Choisir un module", value: null }];
 
@@ -31,8 +28,10 @@ export class AjoutExamenComponent implements OnInit {
   classes: Classe[] = [];
   dropdownClasse: any[] = [];
 
+  isFormateur: Formateur = null
+  token;
 
-  dropdownFormateur: any[] = [{ libelle: "Choisir un formateur", value: null }];
+  dropdownFormateur: any[] = [];
 
 
   dropdownNiveau: any[] = [
@@ -51,85 +50,85 @@ export class AjoutExamenComponent implements OnInit {
     { label: "Participation", value: "Participation" }
   ]
 
+  formAddExamen: FormGroup = new FormGroup({
+    conseiller_id: new FormControl('', Validators.required),
+    classe_id: new FormControl('', Validators.required),
+    matiere_id: new FormControl('', Validators.required),
+    libelle: new FormControl(''),
+    formateur_id: new FormControl('', Validators.required),
+    date: new FormControl('', Validators.required),
+    type: new FormControl(this.dropdownType[0].value, Validators.required),
+    niveau: new FormControl(this.dropdownNiveau[0].value, Validators.required),
+    note_max: new FormControl('', [Validators.required, Validators.pattern("^[0-9.]+$")]),
+    coef: new FormControl('', Validators.required),
+  })
+
 
   constructor(private userService: AuthService,
-    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private formateurService: FormateurService,
     private examenService: ExamenService,
     private matiereService: MatiereService,
-    private classeService: ClasseService) { }
+    private classeService: ClasseService,
+    private router: Router,) { }
 
   ngOnInit(): void {
-    this.userService.getAll().subscribe(
-      (responseU) => {
-        //Ensuite on boucle sur les formateurs
-        this.formateurService.getAll().subscribe(
-          responseF => {
-            responseF.forEach(formateur => {
-              responseU.forEach(user => {
-                this.users[user._id] = user;
-                if (user._id == formateur.user_id) {
-                  this.dropdownFormateur.push({
-                    libelle: user.firstname + " " + user.lastname,
-                    value: formateur._id,
-                  });
-                  this.formateurs[formateur._id] = formateur;
-                }
-              });
-            });
-          }),
-          (error) => {
-            console.error(error);
-          };
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-
-
-    //Recuperation de la liste des matières
-    this.matiereService.getAll().subscribe(
-      ((response) => {
-        response.forEach((matiere) => {
-          this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
-          this.matieres[matiere._id] = matiere;
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
-
-
-    //Recuperation de la liste des classes
-    this.classeService.getAll().subscribe(
-      ((response) => {
-        response.forEach((classe) => {
-          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
-          this.classes[classe._id] = classe;
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
+    try {
+      this.token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      this.token = null
+    }
+    this.formateurService.getAllPopulate().subscribe(formateurs => {
+      formateurs.forEach(f => {
+        let bypass_user: any = f.user_id
+        this.dropdownFormateur.push({
+          label: bypass_user.firstname + " " + bypass_user.lastname,
+          value: f._id,
+        })
+      })
+      if (this.isFormateur)
+        this.formAddExamen.patchValue({ formateur_id: this.isFormateur._id })
+    })
 
     //Initialisation des formulaires
-    this.onInitFormAddExamen();
+    try {
+      this.token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      this.token = null
+    }
+    if (this.token) {
+      this.formateurService.getByUserId(this.token.id).subscribe(f => {
+        if (f != null) {
+          //Ce n'est pas Admin, c'est un formateur
+          this.isFormateur = f
+          this.formAddExamen.patchValue({ formateur_id: f._id })
+        } else {
+          //C'est un Admin
+          //Recuperation de la liste des matières
+          this.matiereService.getAll().subscribe(
+            ((response) => {
+              response.forEach((matiere) => {
+                this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
+                this.matieres[matiere._id] = matiere;
+              });
+            }),
+            ((error) => { console.error(error); })
+          );
 
-  }
 
-  //Methode d'initialisation du formulaire d'ajout
-  onInitFormAddExamen() {
-    this.formAddExamen = this.formBuilder.group({
-      classe_id: ["", Validators.required],
-      matiere_id: ["", Validators.required],
-      libelle: ["", Validators.required],
-      formateur_id: ["", Validators.required],
-      date: ["", Validators.required],
-      type: [this.dropdownType[0].value, Validators.required],
-      niveau: [this.dropdownNiveau[0].value, Validators.required],
-      note_max: ["", [Validators.required, Validators.pattern("^[0-9.]+$")]],
-      coef: ["", Validators.required],
-    });
+          //Recuperation de la liste des classes
+          this.classeService.getAll().subscribe(
+            ((response) => {
+              response.forEach((classe) => {
+                this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
+                this.classes[classe._id] = classe;
+              });
+            }),
+            ((error) => { console.error(error); })
+          );
+        }
+      })
+    }
   }
 
   //Methode d'ajout d'un formulaire
@@ -137,7 +136,7 @@ export class AjoutExamenComponent implements OnInit {
     //Recuperation des données du formulaire d'ajout d'examen
     let classe_id = this.formAddExamen.get("classe_id")?.value.value;
     let matiere_id = this.formAddExamen.get("matiere_id")?.value.value;
-    let formateur_id = this.formAddExamen.get("formateur_id")?.value.value;
+    let formateur_id = this.formAddExamen.get("formateur_id")?.value;
     let libelle = this.formAddExamen.get("libelle")?.value;
     let date = this.formAddExamen.get("date")?.value;
     let type = this.formAddExamen.get("type")?.value;
@@ -153,7 +152,7 @@ export class AjoutExamenComponent implements OnInit {
           severity: "success",
           summary: "Nouvel examen ajouté",
         });
-        this.onInitFormAddExamen()
+        this.router.navigate(['/'])
       },
       (error) => {
         console.error(error)

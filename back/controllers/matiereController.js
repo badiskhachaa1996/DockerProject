@@ -142,4 +142,27 @@ app.get("/getAllVolume", (req, res, next) => {
         });
 });
 
+app.get('/getAllByFormateurID/:formateur_id', (req, res, next) => {
+    let listR = []
+    Seance.find({ formateur_id: req.params.formateur_id }).then(seances => {
+        seances.forEach(s => {
+            if (customIncludes(s.matiere_id, listR) == false)
+                listR.push(s.matiere_id)
+        })
+        Matiere.find({ _id: { $in: listR } }).populate('formation_id').then(matieres => {
+            res.send(matieres)
+        })
+    })
+})
+
+function customIncludes(element, list) {
+    let r = false
+    list.forEach(ele => {
+        if (ele == element) {
+            r = true
+        }
+    })
+    return r
+}
+
 module.exports = app;

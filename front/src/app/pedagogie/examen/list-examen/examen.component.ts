@@ -12,6 +12,7 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { ExamenService } from 'src/app/services/examen.service';
 import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
+import jwt_decode from 'jwt-decode';
 
 @Component({
   selector: 'app-examen',
@@ -21,8 +22,8 @@ import { MatiereService } from 'src/app/services/matiere.service';
 export class ExamenComponent implements OnInit {
 
   examens: Examen[] = [];
-
-
+  isFormateur: Formateur = null
+  token;
 
   formUpdateExamen: FormGroup;
   showFormUpdateExamen: boolean = false;
@@ -37,10 +38,11 @@ export class ExamenComponent implements OnInit {
 
   classes: Classe[] = [];
   dropdownClasse: any[] = [{ libelle: "Toutes les groupes", value: null }];
+  dropdownModule: any[] = [{ libelle: "Toutes les modules", value: null }];
   idClasseToUpdate: String;
   nomClasseToUpdate: String;
 
-  dropdownFormateur: any[] = [{ libelle: "", value: "" }];
+  dropdownFormateur: any[] = [];
   formateurToUpdate: Formateur;
 
 
@@ -73,6 +75,17 @@ export class ExamenComponent implements OnInit {
 
   ngOnInit(): void {
 
+    try {
+      this.token = jwt_decode(localStorage.getItem("token"))
+    } catch (e) {
+      this.token = null
+    }
+    if (this.token) {
+      this.formateurService.getByUserId(this.token.id).subscribe(f => {
+        this.isFormateur = f
+      })
+    }
+
     //Recupération de la liste des examens
     this.examenService.getAll().subscribe(
       (response) => {
@@ -97,7 +110,7 @@ export class ExamenComponent implements OnInit {
                 this.users[user._id] = user;
                 if (user._id == formateur.user_id) {
                   this.dropdownFormateur.push({
-                    libelle: user.firstname + " " + user.lastname,
+                    label: user.firstname + " " + user.lastname,
                     value: formateur._id,
                   });
                   this.formateurs[formateur._id] = formateur;
@@ -120,6 +133,7 @@ export class ExamenComponent implements OnInit {
       ((response) => {
         response.forEach((matiere) => {
           this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
+          this.dropdownMatiere.push({ label: matiere.nom, value: matiere._id });
           this.matieres[matiere._id] = matiere;
         });
       }),
@@ -151,13 +165,16 @@ export class ExamenComponent implements OnInit {
       matiere_id: [
         "", Validators.required],
       formateur_id: ["", Validators.required],
-      libelle: ["", Validators.required],
+      libelle: [""],
       date: ["", Validators.required],
       type: ["", Validators.required],
       note_max: ["", [Validators.required, Validators.pattern("^[0-9.]+$")]],
       coef: ["", Validators.required],
-      niveau: ["",Validators.required]
+      niveau: ["", Validators.required]
     });
+    if (this.isFormateur) {
+      this.formUpdateExamen.patchValue({ formateur_id: this.isFormateur._id })
+    }
   }
 
   //Methode de modification d'un examen
@@ -165,7 +182,7 @@ export class ExamenComponent implements OnInit {
     //Recuperation des données du formulaire de modification des examens
     let classe_id = this.formUpdateExamen.get("classe_id")?.value.value;
     let matiere_id = this.formUpdateExamen.get("matiere_id")?.value.value;
-    let formateur_id = this.formUpdateExamen.get("formateur_id")?.value.value;
+    let formateur_id = this.formUpdateExamen.get("formateur_id")?.value;
     let libelle = this.formUpdateExamen.get("libelle")?.value;
     let date = this.formUpdateExamen.get("date")?.value;
     let type = this.formUpdateExamen.get("type")?.value;
@@ -246,10 +263,7 @@ export class ExamenComponent implements OnInit {
             libelle: this.nomMatiereToUpdate,
             value: this.idMatiereToUpdate
           },
-          formateur_id: {
-            libelle: firstname + ' ' + lastname,
-            value: this.examenToUpdate.formateur_id,
-          },
+          formateur_id: this.examenToUpdate.formateur_id,
           date: this.examenToUpdate.date,
           type: this.examenToUpdate.type,
           note_max: this.examenToUpdate.note_max,
@@ -264,8 +278,7 @@ export class ExamenComponent implements OnInit {
     );
   }
 
-  onRedirect()
-  {
+  onRedirect() {
     this.router.navigate(['ajout-examen']);
   }
 }
