@@ -23,7 +23,7 @@ export class ExamenComponent implements OnInit {
 
   examens: Examen[] = [];
   isFormateur: Formateur = null
-
+  token;
 
   formUpdateExamen: FormGroup;
   showFormUpdateExamen: boolean = false;
@@ -42,9 +42,9 @@ export class ExamenComponent implements OnInit {
   idClasseToUpdate: String;
   nomClasseToUpdate: String;
 
-  dropdownFormateur: any[] = [{ libelle: "", value: "" }];
+  dropdownFormateur: any[] = [];
   formateurToUpdate: Formateur;
-  token;
+
 
   dropdownNiveau: any[] = [
     { label: "Évaluation", value: "Évaluation" },
@@ -110,7 +110,7 @@ export class ExamenComponent implements OnInit {
                 this.users[user._id] = user;
                 if (user._id == formateur.user_id) {
                   this.dropdownFormateur.push({
-                    libelle: user.firstname + " " + user.lastname,
+                    label: user.firstname + " " + user.lastname,
                     value: formateur._id,
                   });
                   this.formateurs[formateur._id] = formateur;
@@ -172,6 +172,9 @@ export class ExamenComponent implements OnInit {
       coef: ["", Validators.required],
       niveau: ["", Validators.required]
     });
+    if (this.isFormateur) {
+      this.formUpdateExamen.patchValue({ formateur_id: this.isFormateur._id })
+    }
   }
 
   //Methode de modification d'un examen
@@ -179,7 +182,7 @@ export class ExamenComponent implements OnInit {
     //Recuperation des données du formulaire de modification des examens
     let classe_id = this.formUpdateExamen.get("classe_id")?.value.value;
     let matiere_id = this.formUpdateExamen.get("matiere_id")?.value.value;
-    let formateur_id = this.formUpdateExamen.get("formateur_id")?.value.value;
+    let formateur_id = this.formUpdateExamen.get("formateur_id")?.value;
     let libelle = this.formUpdateExamen.get("libelle")?.value;
     let date = this.formUpdateExamen.get("date")?.value;
     let type = this.formUpdateExamen.get("type")?.value;
@@ -260,10 +263,7 @@ export class ExamenComponent implements OnInit {
             libelle: this.nomMatiereToUpdate,
             value: this.idMatiereToUpdate
           },
-          formateur_id: {
-            libelle: firstname + ' ' + lastname,
-            value: this.examenToUpdate.formateur_id,
-          },
+          formateur_id: this.examenToUpdate.formateur_id,
           date: this.examenToUpdate.date,
           type: this.examenToUpdate.type,
           note_max: this.examenToUpdate.note_max,

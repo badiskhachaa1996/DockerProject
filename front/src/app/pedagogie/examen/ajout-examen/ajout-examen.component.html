@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="grid">
+<div class="grid" *ngIf="formAddExamen">
 
     <div class="col-12" >
         <div class="card">
@@ -28,17 +28,18 @@
                     </span>
                 </div>
 
-                <div class="field col-12 md:col-12">
-                    <label>Libellé<span style="color:red">*</span>:</label><br>
+                <div [ngClass]="{'field col-12 md:col-12':!isFormateur,'field col-12 md:col-6':isFormateur}">
+                    <label>Libellé:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
                         placeholder="Intitulé de l'examen/ évaluation" pInputText>
 
                 </div>
 
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-6" *ngIf="!isFormateur">
+                   
                     <label>Formateur<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownFormateur" optionLabel="libelle" formControlName="formateur_id">
+                        <p-dropdown [options]="dropdownFormateur" placeholder="Choisir un formateur" formControlName="formateur_id">
                         </p-dropdown>
                     </span>
                 </div>
