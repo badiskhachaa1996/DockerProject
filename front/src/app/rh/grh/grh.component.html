@@ -1,15 +1,25 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card card-w-title">
-            <h5>Comptes rendus d'activités</h5>
-            <p-menubar [model]="tieredItems">
-                <ng-template pTemplate="end">
-                    <span class="p-input-icon-right">
-                        <input type="text" pInputText placeholder="Search">
-                        <i class="pi pi-search"></i>
-                    </span>
-                </ng-template>
-            </p-menubar>
+        <div class="card">
+            <div class="col-12">
+                <button pButton pRipple type="button" icon="pi pi-list" label="Présences" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" label="Démandes de congés" class="p-button-outlined mr-2 mb-2"></button>
+            </div>
+            
+            <div class="col-12">
+                <!-- Formulaire de selection de date, s'affiche lorsque le bouton présence est appuyé -->
+                <form class="formgroup-inline">
+                    <div class="field">
+                        <label class="p-sr-only">Début</label>
+                        <p-calendar [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
+                    </div>
+                    <div class="field">
+                        <label class="p-sr-only">Fin</label>
+                        <p-calendar [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
+                    </div>
+                    <button pButton label="Valider"></button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
