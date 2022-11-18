@@ -25,8 +25,9 @@ app.patch("/just-gone", (req, res) => {
     const userId = req.body.user_id;
     const outDate = new Date(req.body.out_date);
     const dateOfToday = req.body.date_of_the_day;
-    const ipAdress = req.body.ip_adress;        
-
+    const ipAdress = req.body.ip_adress;  
+    const principaleActivityDetails = req.body.principale_activity_details;      
+    const activityDetails = req.body.activity_details;
 
     InTime.findOne({ user_id: userId, date_of_the_day: dateOfToday })
           .then((inTimeFromDb) => { 
@@ -61,6 +62,8 @@ app.patch("/just-gone", (req, res) => {
                     out_ip_adress: ipAdress,
                     statut: statut,
                     isCheckable: false,
+                    principale_activity_details: principaleActivityDetails,
+                    activity_details: activityDetails,
                   })
                   .then((inTimeUpdated) => { res.status(201).send(inTimeUpdated) })
                   .catch((error) => { res.status(400).send(error.message) })

@@ -267,11 +267,38 @@
     <div class="col-12">
         <div class="card">
             <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in" style="float: right" (click)="onCheckIn()"></button>
-            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="onCheckOut()"></button>
+            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="showFormDailyActivityDetails = true"></button>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}" style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
             </h5>
             <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date | date: 'd/M/yy à h:mm a' }}</span></small>
+
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails" (ngSubmit)="onCheckOut()">
+                <h2>Veuillez renseigner vos taches éffectué aujourd'hui</h2>
+                <div class="p-formgrid grid">
+                    <div class="field col-12">
+                        <input pInputText type="text" placeholder="tâche 1" formControlName="task"/>
+                    </div>
+                </div>
+                <hr>
+                <div formArrayName="tasks">
+                    <h3>tâches supplémentaires</h3> 
+                    <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
+                        <div class="field col-10">
+                            <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
+                        </div>
+                        <div class="field col-2">
+                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveTask(i)" class="p-button-outlined p-button-danger"></button>
+                        </div>                        
+                    </div>
+                    <button pButton icon="pi pi-plus" type="button" (click)="onAddTask()" class="p-button-outlined p-button-info"></button>
+                </div>
+
+                <div class="field col-4 md:col-2">
+                    <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid" label="Valider"></button>
+                </div>
+                
+            </form>
         </div>
     </div>
 </div>
@@ -419,11 +446,38 @@
         <div class="col-12">
             <div class="card">
                 <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in" style="float: right" (click)="onCheckIn()"></button>
-                <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="onCheckOut()"></button>
+                <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="showFormDailyActivityDetails = true"></button>
                 <h5>
                     Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}" style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
                 </h5>
                 <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date | date: 'd/M/yy à h:mm a' }}</span></small>
+    
+                <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails" (ngSubmit)="onCheckOut()">
+                    <h2>Veuillez renseigner vos taches éffectué aujourd'hui</h2>
+                    <div class="p-formgrid grid">
+                        <div class="field col-12">
+                            <input pInputText type="text" placeholder="tâche 1" formControlName="task"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div formArrayName="tasks">
+                        <h3>tâches supplémentaires</h3> 
+                        <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
+                            <div class="field col-10">
+                                <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
+                            </div>
+                            <div class="field col-2">
+                                <button pButton icon="pi pi-trash" type="button" (click)="onRemoveTask(i)" class="p-button-outlined p-button-danger"></button>
+                            </div>                        
+                        </div>
+                        <button pButton icon="pi pi-plus" type="button" (click)="onAddTask()" class="p-button-outlined p-button-info"></button>
+                    </div>
+    
+                    <div class="field col-4 md:col-2">
+                        <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid" label="Valider"></button>
+                    </div>
+                    
+                </form>
             </div>
         </div>
     </div>
@@ -434,11 +488,38 @@
     <div class="col-12">
         <div class="card">
             <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in" style="float: right" (click)="onCheckIn()"></button>
-            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="onCheckOut()"></button>
+            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="showFormDailyActivityDetails = true"></button>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}" style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
             </h5>
             <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date | date: 'd/M/yy à h:mm a' }}</span></small>
+
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails" (ngSubmit)="onCheckOut()">
+                <h2>Veuillez renseigner vos taches éffectué aujourd'hui</h2>
+                <div class="p-formgrid grid">
+                    <div class="field col-12">
+                        <input pInputText type="text" placeholder="tâche 1" formControlName="task"/>
+                    </div>
+                </div>
+                <hr>
+                <div formArrayName="tasks">
+                    <h3>tâches supplémentaires</h3> 
+                    <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
+                        <div class="field col-10">
+                            <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
+                        </div>
+                        <div class="field col-2">
+                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveTask(i)" class="p-button-outlined p-button-danger"></button>
+                        </div>                        
+                    </div>
+                    <button pButton icon="pi pi-plus" type="button" (click)="onAddTask()" class="p-button-outlined p-button-info"></button>
+                </div>
+
+                <div class="field col-4 md:col-2">
+                    <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid" label="Valider"></button>
+                </div>
+                
+            </form>
         </div>
     </div>
 
@@ -463,11 +544,38 @@
     <div class="col-12">
         <div class="card">
             <button *ngIf="!isCheck" pButton class="p-button-info mr-2 mb-2" label="Check in" icon="pi pi-sign-in" style="float: right" (click)="onCheckIn()"></button>
-            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="onCheckOut()"></button>
+            <button *ngIf="isCheck" [disabled]="!dailyCheck.isCheckable" pButton class="p-button-danger mr-2 mb-2" label="Check out" icon="pi pi-sign-out" style="float: right" (click)="showFormDailyActivityDetails = true"></button>
             <h5>
                 Statut: <span [ngStyle]="{backgroundColor: onGetBackgroundColor()}" style="border-radius: 30px; padding: 3px; color: white;">{{ statut }}</span>
             </h5>
             <small *ngIf="dailyCheck">Vous êtes arrivé au travail le <span style="color: red">{{ dailyCheck.in_date | date: 'd/M/yy à h:mm a' }}</span></small>
+
+            <form *ngIf="showFormDailyActivityDetails" class="p-fluid" [formGroup]="formDailyActivityDetails" (ngSubmit)="onCheckOut()">
+                <h2>Veuillez renseigner vos taches éffectué aujourd'hui</h2>
+                <div class="p-formgrid grid">
+                    <div class="field col-12">
+                        <input pInputText type="text" placeholder="tâche 1" formControlName="task"/>
+                    </div>
+                </div>
+                <hr>
+                <div formArrayName="tasks">
+                    <h3>tâches supplémentaires</h3> 
+                    <div class="p-formgrid grid" *ngFor="let taskControl of getTasks().controls; let i = index">
+                        <div class="field col-10">
+                            <input pInputText type="text" placeholder="Tache {{ i + 2 }}" [formControlName]="i">
+                        </div>
+                        <div class="field col-2">
+                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveTask(i)" class="p-button-outlined p-button-danger"></button>
+                        </div>                        
+                    </div>
+                    <button pButton icon="pi pi-plus" type="button" (click)="onAddTask()" class="p-button-outlined p-button-info"></button>
+                </div>
+
+                <div class="field col-4 md:col-2">
+                    <button pButton type="submit" [disabled]="formDailyActivityDetails.invalid" label="Valider"></button>
+                </div>
+                
+            </form>
         </div>
     </div>
     
