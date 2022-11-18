@@ -33,7 +33,7 @@ import { Formateur } from 'src/app/models/Formateur';
 import { PaymentService } from 'src/app/services/payment.service';
 import { Dashboard } from 'src/app/models/Dashboard';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder, FormArray } from '@angular/forms';
 import { IntimeService } from 'src/app/services/intime.service';
 import { InTime } from 'src/app/models/InTime';
 import { info } from 'console';
@@ -213,6 +213,8 @@ export class DashboardComponent implements OnInit {
   isCheck: boolean = false;
   statut: string;
   dailyCheck: InTime;
+  showFormDailyActivityDetails: boolean = false;
+  formDailyActivityDetails: FormGroup;
 
   constructor(
     private UserService: AuthService, private EtuService: EtudiantService,
@@ -221,7 +223,8 @@ export class DashboardComponent implements OnInit {
     private router: Router, private route: ActivatedRoute, private noteService: NoteService,
     private formateurService: FormateurService, private paySer: PaymentService,
     private dashboardService: DashboardService, private http: HttpClient,
-    private inTimeService: IntimeService, private messageService: MessageService
+    private inTimeService: IntimeService, private messageService: MessageService,
+    private formBuilder: FormBuilder,
   ) { }
 
 
@@ -229,7 +232,6 @@ export class DashboardComponent implements OnInit {
     this.token = jwt_decode(localStorage.getItem('token'));
     this.dashboardService.getByUserID(this.token.id).subscribe(dataDashboard => {
       this.dashboard = dataDashboard
-      console.log(dataDashboard)
     })
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
       if (dataUser) {
@@ -261,7 +263,6 @@ export class DashboardComponent implements OnInit {
             } else {
               this.isEtudiant = false
             }
-            console.log(dataEtu)
           })
           // recuperation de la liste des notes par étudiant
           this.EtuService.getByUser_id(this.token.id).subscribe(
@@ -292,6 +293,10 @@ export class DashboardComponent implements OnInit {
 
     //Verification du checkin
     this.onIsCheck();
+
+    //Initialisation du formulaire de tache
+    this.onInitFormDailyActivityDetails()
+  
   }
 
   SCIENCE() {
@@ -458,6 +463,32 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  //Initialiser le formulaire 
+  onInitFormDailyActivityDetails()
+  {
+    this.formDailyActivityDetails = this.formBuilder.group({
+      task: ['', Validators.required],
+      tasks: this.formBuilder.array([]),
+    });
+  }
+
+  getTasks()
+  {
+    return this.formDailyActivityDetails.get('tasks') as FormArray;
+  }
+
+  onAddTask()
+  {
+    const newTaskControl = this.formBuilder.control('', Validators.required);
+    this.getTasks().push(newTaskControl); 
+  }
+
+  onRemoveTask(i: number)
+  {
+    this.getTasks().removeAt(i);
+  }
+
+
   onCheckOut() {
     this.inTimeService.getIpAdress()
       .then((response: any) => {
@@ -476,11 +507,17 @@ export class DashboardComponent implements OnInit {
         const outDate = new Date();
         const dateOfToday = todayReplaced;
         const ipAdress = response.ip;
+        const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
+        const activityDetails = this.formDailyActivityDetails.get('tasks').value;
 
-        this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress })
+        console.log(activityDetails);
+
+        this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, principale_activity_details: principaleActivityDetails, activity_details: activityDetails })
           .then((response) => {
             this.messageService.add({ severity: 'success', summary: 'Check out effectué' });
             this.dailyCheck = response;
+            this.formDailyActivityDetails.reset();
+            this.showFormDailyActivityDetails = false;
             this.onIsCheck();
           })
           .catch((err) => { console.error(err); });

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { InTime } from 'src/app/models/InTime';
+import { IntimeService } from 'src/app/services/intime.service';
 
 @Component({
   selector: 'app-grh',
@@ -8,23 +10,17 @@ import { MenuItem } from 'primeng/api';
 })
 export class GrhComponent implements OnInit {
 
-  tieredItems: MenuItem[];
+  showSelectDateForm: boolean = false;
+  selectDateForm: FormGroup;
 
-  constructor() { }
+  showPresenceList: boolean = false;
+  presences: InTime[] = [];
+
+  constructor(private formBuilder: FormBuilder, private inTimeService: IntimeService,) { }
 
   ngOnInit(): void {
 
-    //Elements du menu
-    this.tieredItems = [
-      {
-        label: 'Présences',
-        icon: 'pi pi-fw pi-align-left',
-      },
-      {
-        label: 'Démandes de congés',
-        icon: 'pi pi-fw pi-file',
-      },
-    ];
+    
   }
 
 }
