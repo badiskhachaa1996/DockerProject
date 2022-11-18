@@ -149,7 +149,7 @@ app.get('/getAllByFormateurID/:formateur_id', (req, res, next) => {
             if (customIncludes(s.matiere_id, listR) == false)
                 listR.push(s.matiere_id)
         })
-        Matiere.find({ _id: { $in: listR } }).populate('formation_id').then(matieres => {
+        Matiere.find({ _id: { $in: listR } }).then(matieres => {
             res.send(matieres)
         })
     })

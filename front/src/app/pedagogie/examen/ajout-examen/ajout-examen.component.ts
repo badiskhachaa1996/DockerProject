@@ -81,10 +81,11 @@ export class AjoutExamenComponent implements OnInit {
     this.formateurService.getAllPopulate().subscribe(formateurs => {
       formateurs.forEach(f => {
         let bypass_user: any = f.user_id
-        this.dropdownFormateur.push({
-          label: bypass_user.firstname + " " + bypass_user.lastname,
-          value: f._id,
-        })
+        if (bypass_user)
+          this.dropdownFormateur.push({
+            label: bypass_user.firstname + " " + bypass_user.lastname,
+            value: f._id,
+          })
       })
       if (this.isFormateur)
         this.formAddExamen.patchValue({ formateur_id: this.isFormateur._id })
@@ -102,6 +103,7 @@ export class AjoutExamenComponent implements OnInit {
           //Ce n'est pas Admin, c'est un formateur
           this.isFormateur = f
           this.formAddExamen.patchValue({ formateur_id: f._id })
+          this.matiereService.getAllByFormateurID(this.token.id)
         } else {
           //C'est un Admin
           //Recuperation de la liste des matières

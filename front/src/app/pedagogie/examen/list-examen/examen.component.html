@@ -25,7 +25,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module*:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" formControlName="matiere_id">
+                        <p-dropdown [options]="dropdownMatiere" optionLabel="libelle" (onChange)="onLoadModules($event)" formControlName="matiere_id">
                         </p-dropdown>
                     </span>
                 </div>

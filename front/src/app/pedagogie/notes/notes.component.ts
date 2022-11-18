@@ -596,7 +596,7 @@ export class NotesComponent implements OnInit {
 
     for (let exam in this.examens) {
       if (this.examens[exam]._id == examen_id) {
-        classe_id = this.examens[exam].classe_id;
+        classe_id = this.examens[exam].classe_id[0]; //TODO
         matiere_id = this.examens[exam].matiere_id;
       }
     }

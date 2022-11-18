@@ -281,4 +281,9 @@ export class ExamenComponent implements OnInit {
   onRedirect() {
     this.router.navigate(['ajout-examen']);
   }
+
+  onLoadModules(event){
+    console.log(event)
+
+  }
 }
