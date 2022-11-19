@@ -66,7 +66,13 @@ export class AddEtudiantComponent implements OnInit {
     { value: "Abandon", label: "Abandon" }
   ]
 
-
+  dropdownAnneeScolaire = [
+    { value: "2020-2021", label: "2020-2021" },
+    { value: "2021-2022", label: "2021-2022" },
+    { value: "2022-2023", label: "2022-2023" },
+    { value: "2023-2024", label: "2023-2024" },
+    { value: "2024-2025", label: "2024-2025" }
+  ]
   genderMap: any = { 'Monsieur': 'Mr.', 'Madame': 'Mme.', undefined: '', 'other': 'Mel.' };
 
   dropdownRole: any[] = [
@@ -200,7 +206,8 @@ export class AddEtudiantComponent implements OnInit {
       remarque: [''],
       campus_id: [''],
       filiere: ['', Validators.required],
-      statut_dossier: ['']
+      statut_dossier: [''],
+      annee_scolaire:[[],Validators.required]
 
 
     });
@@ -291,14 +298,14 @@ export class AddEtudiantComponent implements OnInit {
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
 
-    let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
+    let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value; 
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
 
     let campus = this.formAddEtudiant.get("campus_id")?.value;
     let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
     let filiere = this.formAddEtudiant.get("filiere")?.value;
 
-
+    let annee_scolaire = this.formAddEtudiant.get("annee_scolaire")?.value;
 
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
@@ -360,7 +367,10 @@ export class AddEtudiantComponent implements OnInit {
       campus,//campus
       statut_dossier,//StatutDossier
       filiere,//filiere
-      false);
+      true,
+      email_ims!=null,
+      annee_scolaire
+      );
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {
