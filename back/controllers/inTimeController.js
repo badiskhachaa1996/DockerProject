@@ -75,10 +75,22 @@ app.patch("/just-gone", (req, res) => {
 
 
 //methode de recuperation de la liste de présence de tous les utilisateurs
-app.get("/get-all", (_, res) => {
-    InTime.find()
+app.get("/get-all-populate-user-id", (_, res) => {
+    InTime.find().populate('user_id')
           .then((inTimes) => { res.status(200).send(inTimes); })
           .catch((error) => { res.status(500).send(error.message) });
+});
+
+
+//methode de recuperation de la liste de presence de tous les utilisateurs sur interval de date
+app.get("/get-all-by-date-between-populate-user-id/:beginDate/:endDate", (req, res) => {
+    //Traitement sur les date envoyé dans l'url
+    let originalBeginDate = req.params.beginDate;
+    let originalEndDate = req.params.endDate;
+
+    InTime.find({ date_of_the_day:{ $gte: req.params.beginDate, $lte: req.params.endDate } }).populate('user_id')
+        .then((inTimes) => { res.status(200).send(inTimes) })
+        .catch((error) => { res.status(400).send(error.message) });
 });
 
 
