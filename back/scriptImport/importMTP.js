@@ -72,6 +72,8 @@ mongoose
                                             if (!err) {
                                                 let code = ""
                                                 if (dn && data['Nationnalité']) {
+                                                    if (!newU.nationnalite)
+                                                        newU.nationnalite = "Inconnu"
                                                     code = generateCode(newU, dn)
                                                 } else {
                                                     newU.nationnalite = "Inconnu"
@@ -126,7 +128,6 @@ mongoose
                                         })
                                     } else {
                                         EmailList.push(mail)
-                                        let adresse = giveAddress(data['Adresse étudiant'])
                                         let u = new User({
                                             firstname: toCamelCase(data['Prénom']),
                                             lastname: data['Nom'].toUpperCase(),
@@ -142,7 +143,9 @@ mongoose
                                             users.push(newUser)
                                             let code = ""
                                             if (dn && data['Nationnalité']) {
-                                                code = generateCode(u, dn)
+                                                if (!newUser.nationalite)
+                                                    newUser.nationnalite = "Inconnu"
+                                                code = generateCode(newUser, dn)
                                             } else {
                                                 newUser.nationnalite = "Inconnu"
                                                 code = generateCode(newUser, new Date())
@@ -255,7 +258,7 @@ function getRemarque(data, sheet) {
 
 function generateCode(user, dn) {
     try {
-        let code_pays = user?.nationnalite.substring(0, 3)
+        let code_pays = user.nationnalite.substring(0, 3)
         dicNationaliteCode.forEach(code => {
             if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
                 code_pays = code[user.nationnalite]
