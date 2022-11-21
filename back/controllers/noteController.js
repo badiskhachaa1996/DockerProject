@@ -13,7 +13,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Recuperation de la liste des notes
 app.get("/getAllPopulate", (req, res, next) => {
-    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}})
+    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}}).populate({path:"examen_id",populate:{path:"formateur_id",populate:{path:"user_id"}}})
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -95,8 +95,8 @@ app.post("/create", (req, res, next) => {
 
 
 //Recuperation d'une liste de note par semestre et par classe
-app.get("/getAllByClasseBySemestre/:classeid/:semestre", (req, res, next) => {
-    Note.find({ classe_id: req.params.classeid, semestre: req.params.semestre })
+app.get("/getAllByExamenID/:examen_id", (req, res, next) => {
+    Note.find({ examen_id: req.params.examen_id }).populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}}).populate({path:"examen_id",populate:{path:"formateur_id",populate:{path:"user_id"}}})
         .then((noteFromDb) => { res.status(200).send(noteFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
 });

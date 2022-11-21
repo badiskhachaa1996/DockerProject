@@ -293,7 +293,7 @@ app.get("/getAllAlternants", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants via un Id de classe
 app.get("/getAllByClasseId/:id", (req, res, next) => {
-    Etudiant.find({ classe_id: req.params.id, isActive: { $ne: false } })
+    Etudiant.find({ classe_id: req.params.id, isActive: { $ne: false } }).populate('user_id')
         .then((etudiantsFromDb) => { res.status(200).send(etudiantsFromDb); })
         .catch((error) => { res.status(500).send('Impossible de recuperer la liste des étudiant'); })
 });

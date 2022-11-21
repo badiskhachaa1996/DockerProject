@@ -4,10 +4,18 @@ const { Seance } = require('../models/seance');
 const app = express();
 app.disable("x-powered-by");
 const { Matiere } = require('./../models/matiere');
+const { Classe } = require('./../models/classe');
 
 //Recuperation des matières
 app.get("/getAll", (req, res, next) => {
     Matiere.find()
+        .then((matieresFromDb) => { res.status(200).send(matieresFromDb) })
+        .catch((error) => { res.status(400).send(error.message) });
+})
+
+//Recuperation des matières
+app.get("/getAllPopulate", (req, res, next) => {
+    Matiere.find().populate('formation_id')
         .then((matieresFromDb) => { res.status(200).send(matieresFromDb) })
         .catch((error) => { res.status(400).send(error.message) });
 })
@@ -143,14 +151,24 @@ app.get("/getAllVolume", (req, res, next) => {
 });
 
 app.get('/getAllByFormateurID/:formateur_id', (req, res, next) => {
-    let listR = []
+    let listModules = []
+    let listGroupes = []
     Seance.find({ formateur_id: req.params.formateur_id }).then(seances => {
         seances.forEach(s => {
-            if (customIncludes(s.matiere_id, listR) == false)
-                listR.push(s.matiere_id)
+            if (customIncludes(s.matiere_id, listModules) == false)
+                listModules.push(s.matiere_id)
+            s.classe_id.forEach(c_id => {
+                if (customIncludes(c_id, listGroupes) == false)
+                    listGroupes.push(c_id)
+            })
+
         })
-        Matiere.find({ _id: { $in: listR } }).then(matieres => {
-            res.send(matieres)
+        console.log
+        Matiere.find({ _id: { $in: listModules } }).populate('formation_id').then(matieres => {
+            Classe.find({ _id: { $in: listGroupes } }).then(groupes => {
+                console.log(listGroupes,groupes)
+                res.send({ matieres, groupes })
+            })
         })
     })
 })

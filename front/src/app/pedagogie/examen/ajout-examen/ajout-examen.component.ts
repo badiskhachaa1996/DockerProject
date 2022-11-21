@@ -21,11 +21,11 @@ import { Router } from '@angular/router';
   styleUrls: ['./ajout-examen.component.scss']
 })
 export class AjoutExamenComponent implements OnInit {
-  matieres: Matiere[] = [];
-  dropdownMatiere: any[] = [{ libelle: "Choisir un module", value: null }];
+  dropdownMatiere: any[] = [];
+  matieres: any = {}
+  formateurs: any = {}
+  groupes: any = {}
 
-
-  classes: Classe[] = [];
   dropdownClasse: any[] = [];
 
   isFormateur: Formateur = null
@@ -51,10 +51,9 @@ export class AjoutExamenComponent implements OnInit {
   ]
 
   formAddExamen: FormGroup = new FormGroup({
-    conseiller_id: new FormControl('', Validators.required),
     classe_id: new FormControl('', Validators.required),
     matiere_id: new FormControl('', Validators.required),
-    libelle: new FormControl(''),
+    libelle: new FormControl('', Validators.required),
     formateur_id: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
     type: new FormControl(this.dropdownType[0].value, Validators.required),
@@ -86,6 +85,7 @@ export class AjoutExamenComponent implements OnInit {
             label: bypass_user.firstname + " " + bypass_user.lastname,
             value: f._id,
           })
+        this.formateurs[f._id] = f
       })
       if (this.isFormateur)
         this.formAddExamen.patchValue({ formateur_id: this.isFormateur._id })
@@ -103,15 +103,32 @@ export class AjoutExamenComponent implements OnInit {
           //Ce n'est pas Admin, c'est un formateur
           this.isFormateur = f
           this.formAddExamen.patchValue({ formateur_id: f._id })
-          this.matiereService.getAllByFormateurID(this.token.id)
+          this.matiereService.getAllByFormateurID(this.token.id).subscribe((r) => {
+            console.log(r)
+            r.matieres.forEach((matiere) => {
+              this.matieres[matiere._id] = matiere
+              if (Array.isArray(matiere.formation_id))
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id[0].titre + " - " + matiere.niveau, value: matiere._id });
+              else
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id.titre + " - " + matiere.niveau, value: matiere._id });
+            });
+            r.groupes.forEach((g) => {
+              this.groupes[g._id] = g
+              this.dropdownClasse.push({ label: g.abbrv, value: g._id });
+            })
+          })
         } else {
           //C'est un Admin
           //Recuperation de la liste des matières
-          this.matiereService.getAll().subscribe(
+          this.matiereService.getAllPopulate().subscribe(
             ((response) => {
               response.forEach((matiere) => {
-                this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
-                this.matieres[matiere._id] = matiere;
+                this.matieres[matiere._id] = matiere
+                let bypa: any = matiere.formation_id
+                if (Array.isArray(matiere.formation_id))
+                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau, value: matiere._id });
+                else
+                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau, value: matiere._id });
               });
             }),
             ((error) => { console.error(error); })
@@ -122,8 +139,8 @@ export class AjoutExamenComponent implements OnInit {
           this.classeService.getAll().subscribe(
             ((response) => {
               response.forEach((classe) => {
-                this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
-                this.classes[classe._id] = classe;
+                this.groupes[classe._id] = classe
+                this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
               });
             }),
             ((error) => { console.error(error); })
@@ -133,11 +150,21 @@ export class AjoutExamenComponent implements OnInit {
     }
   }
 
+  updateLibelle(){
+    let classe_id = this.formAddExamen.get("classe_id")?.value;
+    let matiere_id = this.formAddExamen.get("matiere_id")?.value;
+    let formateur_id = this.formAddExamen.get("formateur_id")?.value;
+    if(classe_id && matiere_id && formateur_id){
+      let libelle=this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id].abbrv
+      this.formAddExamen.patchValue({libelle})
+    }
+  }
+
   //Methode d'ajout d'un formulaire
   onAddExamen() {
     //Recuperation des données du formulaire d'ajout d'examen
-    let classe_id = this.formAddExamen.get("classe_id")?.value.value;
-    let matiere_id = this.formAddExamen.get("matiere_id")?.value.value;
+    let classe_id = this.formAddExamen.get("classe_id")?.value;
+    let matiere_id = this.formAddExamen.get("matiere_id")?.value;
     let formateur_id = this.formAddExamen.get("formateur_id")?.value;
     let libelle = this.formAddExamen.get("libelle")?.value;
     let date = this.formAddExamen.get("date")?.value;
@@ -147,14 +174,13 @@ export class AjoutExamenComponent implements OnInit {
     let niveau = this.formAddExamen.get("niveau")?.value;
 
     let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau);
-    console.log(examen)
     this.examenService.create(examen).subscribe(
       (response) => {
         this.messageService.add({
           severity: "success",
           summary: "Nouvel examen ajouté",
         });
-        this.router.navigate(['/'])
+        this.router.navigate(['/notes'])
       },
       (error) => {
         console.error(error)
