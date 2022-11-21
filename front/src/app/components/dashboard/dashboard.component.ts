@@ -38,6 +38,7 @@ import { IntimeService } from 'src/app/services/intime.service';
 import { InTime } from 'src/app/models/InTime';
 import { info } from 'console';
 
+
 @Component({
   templateUrl: './dashboard.component.html',
 })
@@ -81,7 +82,8 @@ export class DashboardComponent implements OnInit {
       center: 'title',
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay'
     },
-    events: []
+    events: [],
+    minTime:'08:00:00'
   }
 
   //Options du calendrier etudiant
@@ -99,7 +101,8 @@ export class DashboardComponent implements OnInit {
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
     events: [],
-    defaultView: "timeGridDay"
+    defaultView: "timeGridDay",
+    minTime:'08:00:00'
   }
 
   dernotes: Note[] = [];
@@ -118,7 +121,8 @@ export class DashboardComponent implements OnInit {
     contentHeight: 500,
     eventClick: this.eventClickFC.bind(this),
     events: [],
-    defaultView: "timeGridDay"
+    defaultView: "timeGridDay",
+    minTime:'08:00:00'
   }
 
   seanceNow: Seance[] = [];
