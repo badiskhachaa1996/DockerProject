@@ -31,16 +31,15 @@ export class ExamenComponent implements OnInit {
   users: User[] = [];
   formateurs: Formateur[] = [];
 
-  matieres: Matiere[] = [];
-  dropdownMatiere: any[] = [{ libelle: "", value: "" }];
+  matieres = {};
+  dropdownClasse: any[] = [];
+  dropdownMatiere: any[] = [];
   idMatiereToUpdate: String;
-  nomMatiereToUpdate: String;
 
-  classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: "Toutes les groupes", value: null }];
-  dropdownModule: any[] = [{ libelle: "Toutes les modules", value: null }];
-  idClasseToUpdate: String;
-  nomClasseToUpdate: String;
+  classes = {};
+  dropdownGroupe: any[] = [{ label: 'Tous les groupes', value: null }];//Filtre
+  dropdownModule: any[] = [{ label: 'Tous les modules', value: null }];//Filtre
+  idClasseToUpdate: Classe[];
 
   dropdownFormateur: any[] = [];
   formateurToUpdate: Formateur;
@@ -81,21 +80,8 @@ export class ExamenComponent implements OnInit {
       this.token = null
     }
     if (this.token) {
-      this.formateurService.getByUserId(this.token.id).subscribe(f => {
-        this.isFormateur = f
-      })
+      this.loadStuffs()
     }
-
-    //Recupération de la liste des examens
-    this.examenService.getAll().subscribe(
-      (response) => {
-        this.examens = [];
-        this.examens = response;
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
 
 
     //Recuperation de la liste des formateurs
@@ -128,33 +114,79 @@ export class ExamenComponent implements OnInit {
     );
 
 
-    //Recuperation de la liste des matières
-    this.matiereService.getAll().subscribe(
-      ((response) => {
-        response.forEach((matiere) => {
-          this.dropdownMatiere.push({ libelle: matiere.nom, value: matiere._id });
-          this.dropdownMatiere.push({ label: matiere.nom, value: matiere._id });
-          this.matieres[matiere._id] = matiere;
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
-
-
-    //Recuperation de la liste des classes
-    this.classeService.getAll().subscribe(
-      ((response) => {
-        response.forEach((classe) => {
-          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
-          this.classes[classe._id] = classe;
-        });
-      }),
-      ((error) => { console.error(error); })
-    );
 
     //Initialisation des formulaires
 
     this.onInitFormUpdateExamen();
+  }
+
+  loadStuffs() {
+    this.dropdownMatiere = []
+    this.matieres = {}
+    this.dropdownClasse = []
+    this.classes = {}
+    this.dropdownGroupe = [{ label: 'Tous les groupes', value: null }];//Filtre
+    this.dropdownModule = [{ label: 'Tous les modules', value: null }];//Filtre
+    this.formateurService.getByUserId(this.token.id).subscribe(f => {
+      this.isFormateur = f
+      if (!this.isFormateur) {
+        //Récupération des informations en tant qu'Admin ou Agent Péda
+        this.examenService.getAllPopulate().subscribe(
+          (response) => {
+            this.examens = response;
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+        //Recuperation de la liste des matières
+        this.matiereService.getAll().subscribe(
+          ((response) => {
+            response.forEach((matiere) => {
+              this.dropdownMatiere.push({ label: matiere.nom, value: matiere._id });
+              this.dropdownModule.push({ label: matiere.nom, value: matiere._id });
+              this.matieres[matiere._id] = matiere;
+            });
+          }),
+          ((error) => { console.error(error); })
+        );
+
+
+        //Recuperation de la liste des classes
+        this.classeService.getAll().subscribe(
+          ((response) => {
+            response.forEach((classe) => {
+              this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
+              this.dropdownGroupe.push({ label: classe.abbrv, value: classe._id });
+              this.classes[classe._id] = classe;
+            });
+          }),
+          ((error) => { console.error(error); })
+        );
+      } else {
+        //Récupération des informations en tant que Formateur
+        this.matiereService.getAllByFormateurID(this.token.id).subscribe((r) => {
+          r.matieres.forEach((matiere) => {
+            if (Array.isArray(matiere.formation_id))
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id[0].titre + " - " + matiere.niveau, value: matiere._id });
+            else
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id.titre + " - " + matiere.niveau, value: matiere._id });
+            this.dropdownModule.push({ label: matiere.nom, value: matiere._id });
+          });
+          r.groupes.forEach((g) => {
+            this.dropdownClasse.push({ label: g.abbrv, value: g._id });
+            this.dropdownGroupe.push({ label: g.abbrv, value: g._id });
+          })
+        })
+        this.examenService.getAllByFormateurID(this.isFormateur._id).subscribe(
+          (response) => {
+            this.examens = response;
+          },
+          (error) => {
+            console.error(error);
+          })
+      }
+    })
   }
 
   //Methode d'initialisation du formulaire de mise à jours
@@ -180,8 +212,8 @@ export class ExamenComponent implements OnInit {
   //Methode de modification d'un examen
   onUpdateExamen() {
     //Recuperation des données du formulaire de modification des examens
-    let classe_id = this.formUpdateExamen.get("classe_id")?.value.value;
-    let matiere_id = this.formUpdateExamen.get("matiere_id")?.value.value;
+    let classe_id = this.formUpdateExamen.get("classe_id")?.value;
+    let matiere_id = this.formUpdateExamen.get("matiere_id")?.value;
     let formateur_id = this.formUpdateExamen.get("formateur_id")?.value;
     let libelle = this.formUpdateExamen.get("libelle")?.value;
     let date = this.formUpdateExamen.get("date")?.value;
@@ -209,16 +241,7 @@ export class ExamenComponent implements OnInit {
           severity: "success",
           summary: "Examen modifié",
         });
-
-        this.examenService.getAll().subscribe(
-          (responseE) => {
-            this.examens = [];
-            this.examens = responseE;
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+        this.loadStuffs()
 
         this.showFormUpdateExamen = false;
 
@@ -243,26 +266,13 @@ export class ExamenComponent implements OnInit {
     this.examenService.getById(this.idExamenToUpdate).subscribe(
       (response) => {
         this.examenToUpdate = response;
-
-        let firstname: string;
-        let lastname: string;
-
-        if (this.formateurToUpdate.user_id == this.users[this.formateurToUpdate.user_id]._id) {
-          firstname = this.users[this.formateurToUpdate.user_id].firstname;
-          lastname = this.users[this.formateurToUpdate.user_id].lastname;
-        }
-
+        let l_id = []
+        this.idClasseToUpdate.forEach(cid => {
+          l_id.push(cid._id)
+        })
         this.formUpdateExamen.patchValue({
-
-          classe_id: {
-            libelle: this.nomClasseToUpdate,
-            value: this.idClasseToUpdate
-          },
-
-          matiere_id: {
-            libelle: this.nomMatiereToUpdate,
-            value: this.idMatiereToUpdate
-          },
+          classe_id: l_id,
+          matiere_id: this.idMatiereToUpdate,
           formateur_id: this.examenToUpdate.formateur_id,
           date: this.examenToUpdate.date,
           type: this.examenToUpdate.type,
@@ -282,7 +292,7 @@ export class ExamenComponent implements OnInit {
     this.router.navigate(['ajout-examen']);
   }
 
-  onLoadModules(event){
+  onLoadModules(event) {
     console.log(event)
 
   }

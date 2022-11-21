@@ -15,8 +15,8 @@
                 <div class="field col-12 md:col-6">
                     <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
 
-                    <p-dropdown [options]="dropdownClasse" filter="true" (onChange)='updateLibelle()'  formControlName="classe_id" placeholder="Choissisez un groupe">
-                    </p-dropdown>
+                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='updateLibelle()'  formControlName="classe_id" placeholder="Choissisez un groupe">
+                    </p-multiSelect>
 
                 </div>
 

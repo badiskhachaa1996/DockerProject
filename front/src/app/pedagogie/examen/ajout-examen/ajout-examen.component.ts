@@ -150,13 +150,17 @@ export class AjoutExamenComponent implements OnInit {
     }
   }
 
-  updateLibelle(){
+  updateLibelle() {
     let classe_id = this.formAddExamen.get("classe_id")?.value;
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
     let formateur_id = this.formAddExamen.get("formateur_id")?.value;
-    if(classe_id && matiere_id && formateur_id){
-      let libelle=this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id].abbrv
-      this.formAddExamen.patchValue({libelle})
+    if (classe_id && matiere_id && formateur_id) {
+      let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " +this.groupes[classe_id[0]].abbrv
+      classe_id.forEach((cid, index) => {
+        if (index != 0)
+          libelle = ' - ' + this.groupes[cid].abbrv
+      })
+      this.formAddExamen.patchValue({ libelle })
     }
   }
 

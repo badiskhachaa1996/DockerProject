@@ -432,7 +432,8 @@ export class NotesComponent implements OnInit {
     this.etudiantService.getAllByClasseId(this.classeSelected._id).subscribe(r => {
       r.forEach(etu => {
         let by_pass: any = etu.user_id
-        this.dropdownEtudiant.push({ label: by_pass.lastname + " " + by_pass.firstname, value: etu._id })
+        if (by_pass)
+          this.dropdownEtudiant.push({ label: by_pass.lastname + " " + by_pass.firstname, value: etu._id })
       })
     })
 
