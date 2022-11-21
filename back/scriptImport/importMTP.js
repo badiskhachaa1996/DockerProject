@@ -69,7 +69,7 @@ mongoose
                                             nationnalite: data['Nationnalité'],
                                             verifedEmail: true
                                         }, { new: true }, (err, newU) => {
-                                            if (!err) {
+                                            if (!err && newU) {
                                                 let code = ""
                                                 if (dn && data['Nationnalité']) {
                                                     if (!newU.nationnalite)
@@ -151,7 +151,7 @@ mongoose
                                                 code = generateCode(newUser, new Date())
                                                 console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
                                             }
-                                            if (!err) {
+                                            if (!err && newUser) {
                                                 let etu = new Etudiant({
                                                     user_id: newUser._id,
                                                     classe_id: classe,
