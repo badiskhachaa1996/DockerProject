@@ -76,7 +76,7 @@ mongoose
                                                 } else {
                                                     newU.nationnalite = "Inconnu"
                                                     code = generateCode(newU, new Date())
-                                                    console.error("BAD CODE:", data['Nom'], dn, data['Nationalité '])
+                                                    console.error("BAD CODE:", data['Nom'], dn, data['Nationalité'])
                                                 }
                                                 Etudiant.findOne({ user_id: newU._id }).then(dataU => {
                                                     if (dataU) {
@@ -255,7 +255,7 @@ function getRemarque(data, sheet) {
 
 function generateCode(user, dn) {
     try {
-        let code_pays = user.nationnalite.substring(0, 3)
+        let code_pays = user?.nationnalite.substring(0, 3)
         dicNationaliteCode.forEach(code => {
             if (code[user.nationnalite] && code[user.nationnalite] != undefined) {
                 code_pays = code[user.nationnalite]
