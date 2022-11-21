@@ -119,14 +119,21 @@ export class ListEtudiantComponent implements OnInit {
     { value: "Dossier Complet", label: "Dossier Complet" },
     { value: "Abandon", label: "Abandon" }
   ]
-  
-  filterAnneeScolaire=[
+
+  filterAnneeScolaire = [
+    { value: null, label: "Toutes les années" },
     { value: "2020-2021", label: "2020-2021" },
     { value: "2021-2022", label: "2021-2022" },
     { value: "2022-2023", label: "2022-2023" },
     { value: "2023-2024", label: "2023-2024" },
     { value: "2024-2025", label: "2024-2025" },
-
+  ]
+  dropdownAnneeScolaire = [
+    { value: "2020-2021", label: "2020-2021" },
+    { value: "2021-2022", label: "2021-2022" },
+    { value: "2022-2023", label: "2022-2023" },
+    { value: "2023-2024", label: "2023-2024" },
+    { value: "2024-2025", label: "2024-2025" }
   ]
 
   entreprises: Entreprise[] = [];
@@ -438,7 +445,8 @@ export class ListEtudiantComponent implements OnInit {
       enic_naric: [false],
       campus_id: [' '],
       filiere: ['', Validators.required],
-      statut_dossier: ['']
+      statut_dossier: [''],
+      annee_scolaire: ['', Validators.required]
     });
     this.formUpdateDossier = this.formBuilder.group({
       statut_dossier: ['']
@@ -497,7 +505,7 @@ export class ListEtudiantComponent implements OnInit {
     let campus = this.formUpdateEtudiant.get("campus_id")?.value;
 
     let statut_dossier = this.formUpdateEtudiant.get("statut_dossier")?.value;
-    console.log(statut_dossier)
+    let annee_scolaire = this.formUpdateEtudiant.get("annee_scolaire")?.value;
     let filiere = this.formUpdateEtudiant.get("filiere")?.value;
 
     let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
@@ -534,11 +542,14 @@ export class ListEtudiantComponent implements OnInit {
       remarque,
       isOnStage,
       this.etudiantToUpdate.fileRight,
-      this.etudiantToUpdate.payment_reinscrit,true,
+      this.etudiantToUpdate.payment_reinscrit, true,
       enic_naric,
       campus,
       statut_dossier,
-      filiere
+      filiere,
+      true,
+      true,
+      annee_scolaire
     );
 
     this.etudiantService.update(etudiant).subscribe(
@@ -561,7 +572,6 @@ export class ListEtudiantComponent implements OnInit {
   showFUpdate(response: Etudiant) {
     //Campus et Filiere, statut a vérifier
     this.etudiantToUpdate = response;
-    console.log(response)
     let date = new Date(response.date_naissance)
     this.parcoursList = response.parcours
     let bypass: any = response.classe_id
@@ -586,6 +596,7 @@ export class ListEtudiantComponent implements OnInit {
       remarque: this.etudiantToUpdate.remarque,
       isOnStage: this.etudiantToUpdate.isOnStage,
       enic_naric: this.etudiantToUpdate.enic_naric,
+      annee_scolaire: this.etudiantToUpdate.annee_scolaire
     });
     bypass = response.campus
     let bypassv2: any = response.filiere
@@ -949,32 +960,25 @@ export class ListEtudiantComponent implements OnInit {
 
 
   //Methode pour filtrer les étudiants selon le type choisis dans le filtre
-  onFilterByType(event)
-  {
+  onFilterByType(event) {
     this.filterByType = event.value;
 
-    if(this.filterByType === true)
-    {
-      if(this.filterByAS)
-      {
-        if(this.filterByGroupe)
-        {
+    if (this.filterByType === true) {
+      if (this.filterByAS) {
+        if (this.filterByGroupe) {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
 
             let bypass_etudiant: any = etudiant.classe_id;
-            if(etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
-            {
+            if (etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS)) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        else
-        {
+        else {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
-            if(etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS))
-            {
+            if (etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS)) {
               this.etudiantsByType.push(etudiant);
             }
           });
@@ -982,164 +986,137 @@ export class ListEtudiantComponent implements OnInit {
 
         this.showNumbersByType = true;
       }
-      else
-      {
-        if(this.filterByGroupe)
-        {
+      else {
+        if (this.filterByGroupe) {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
             let bypass_etudiant: any = etudiant.classe_id;
-            if(etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id)
-            {
+            if (etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        else
-        {
+        else {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
-            if(etudiant.isAlternant)
-            {
+            if (etudiant.isAlternant) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        
+
         this.showNumbersByType = true;
       }
-      
+
     }
 
-    else if(this.filterByType === false)
-    {
-      if(this.filterByAS)
-      {
-        if(this.filterByGroupe)
-        {
+    else if (this.filterByType === false) {
+      if (this.filterByAS) {
+        if (this.filterByGroupe) {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
             let bypass_etudiant: any = etudiant.classe_id;
-            if(!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
-            {
+            if (!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS)) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        else
-        {
+        else {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
-            if(!etudiant.isAlternant  && etudiant.annee_scolaire.includes(this.filterByAS))
-            {
+            if (!etudiant.isAlternant && etudiant.annee_scolaire.includes(this.filterByAS)) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        
+
         this.showNumbersByType = true;
       }
-      else
-      {
-        if(this.filterByGroupe)
-        {
+      else {
+        if (this.filterByGroupe) {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
             let bypass_etudiant: any = etudiant.classe_id;
-            if(!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id)
-            {
+            if (!etudiant.isAlternant && bypass_etudiant._id == this.filterByGroupe._id) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        else
-        {
+        else {
           this.etudiantsByType = [];
           this.etudiants.forEach((etudiant) => {
-            if(!etudiant.isAlternant)
-            {
+            if (!etudiant.isAlternant) {
               this.etudiantsByType.push(etudiant);
             }
           });
         }
-        
+
         this.showNumbersByType = true;
       }
     }
-    else if(this.filterByType === null)
-    {
+    else if (this.filterByType === null) {
       this.showNumbersByType = false;
     }
   }
 
   //Methode pour filtrer les étudiants par année-scolaire
-  onFilterByAS(event: any)
-  {
+  onFilterByAS(event: any) {
     this.filterByAS = event.value;
 
     this.etudiantsByAS = [];
 
     this.etudiants.forEach((etudiant) => {
-      if(etudiant.annee_scolaire.includes(this.filterByAS))
-      {
+      if (etudiant.annee_scolaire.includes(this.filterByAS)) {
         this.etudiantsByAS.push(etudiant);
       }
     });
 
     this.showNumbersByAS = true;
-  } 
+  }
 
 
   //Methode pour filtrer par campus
-  onFilterByCampus(event: any)
-  {
-        
-    if(event.value)
-    {
+  onFilterByCampus(event: any) {
+
+    if (event.value) {
       this.etudiantsByCampus = [];
 
       //Recuperation du campus
       this.campusService.getByCampusId(event.value)
-          .then((response: Campus) => { 
-            this.filterByCampus = response;
-            this.etudiants.forEach((etudiant) => {
-              if(this.filterByAS)
-              {
-                let bypass_etudiant: any = etudiant.campus;
-                if(bypass_etudiant._id == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS))
-                {
-                  this.etudiantsByCampus.push(etudiant);
-                }
+        .then((response: Campus) => {
+          this.filterByCampus = response;
+          this.etudiants.forEach((etudiant) => {
+            if (this.filterByAS) {
+              let bypass_etudiant: any = etudiant.campus;
+              if (bypass_etudiant._id == this.filterByCampus._id && etudiant.annee_scolaire.includes(this.filterByAS)) {
+                this.etudiantsByCampus.push(etudiant);
               }
-              else
-              {
-                let bypass_etudiant: any = etudiant.campus;
-                if(bypass_etudiant._id  == this.filterByCampus._id)
-                {
-                  this.etudiantsByCampus.push(etudiant);
-                }
+            }
+            else {
+              let bypass_etudiant: any = etudiant.campus;
+              if (bypass_etudiant._id == this.filterByCampus._id) {
+                this.etudiantsByCampus.push(etudiant);
               }
-            });
-            console.log(this.etudiantsByCampus);
-            this.showFilterByCampus = true;
-          })
-          .catch((error) => { console.log(error) });
+            }
+          });
+          console.log(this.etudiantsByCampus);
+          this.showFilterByCampus = true;
+        })
+        .catch((error) => { console.log(error) });
     }
-    else{
+    else {
       this.showFilterByCampus = false;
     }
-    
+
   }
 
-  
+
   // filterByGroupe: Classe = undefined;
   // showFilterByGroupe: boolean = false;
   // etudiantsByGroupe: Etudiant[] = [];
 
-  onFilterbyGroup(event: any)
-  {
-    if(event.value)
-    {
+  onFilterbyGroup(event: any) {
+    if (event.value) {
       //Recuperation du groupe
       this.classeService.get(event.value).subscribe(
         ((response) => {
@@ -1147,19 +1124,15 @@ export class ListEtudiantComponent implements OnInit {
           this.etudiantsByGroupe = [];
 
           this.etudiants.forEach((etudiant) => {
-            if(this.filterByAS)
-            {
+            if (this.filterByAS) {
               let bypass_etudiant: any = etudiant.classe_id;
-              if(bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS))
-              {
+              if (bypass_etudiant._id == this.filterByGroupe._id && etudiant.annee_scolaire.includes(this.filterByAS)) {
                 this.etudiantsByGroupe.push(etudiant);
               }
             }
-            else
-            {
+            else {
               let bypass_etudiant: any = etudiant.classe_id;
-              if(bypass_etudiant._id == this.filterByGroupe._id)
-              {
+              if (bypass_etudiant._id == this.filterByGroupe._id) {
                 this.etudiantsByGroupe.push(etudiant);
               }
             }
@@ -1169,14 +1142,13 @@ export class ListEtudiantComponent implements OnInit {
         ((error) => { console.log(error); })
       );
     }
-    else{
+    else {
       this.showFilterByGroupe = false;
     }
   }
 
   //Methode pour vider tous les compteurs
-  onTrashCount()
-  {
+  onTrashCount() {
     this.filterByType = null;
     this.showNumbersByType = false;
     this.etudiantsByType = [];

@@ -22,7 +22,7 @@
 
                 <div class="field col-12 md:col-12">
                     <label>Etudiant</label>
-                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant" optionLabel="libelle"
+                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant"
                         emptyFilterMessage="Pas d'étudiant trouvé" filterPlaceholder="Etudiant" filter="true">
                     </p-dropdown>
                 </div>
@@ -32,13 +32,13 @@
                     <input pInputText id="appreciation" formControlName="appreciation"
                         placeholder="Veuillez saisir une appreciation" type="text" />
 
-                    <div *ngIf="appreciation_esm.invalid && (appreciation._esmtouched || appreciation_esm.dirty)">
+                    <div *ngIf="appreciation_esm.invalid && (appreciation_esm.touched || appreciation_esm.dirty)">
                         <span *ngIf="appreciation_esm.errors?.pattern" style="color: red;">
                             L'appreciation n'est pas dans le bon format
                         </span>
                     </div>
                 </div>
-                <div class="field col-12 md:col-6" *ngIf="note_val.value!=null && note_val.value<1">
+                <div class="field col-12 md:col-6" *ngIf="note_val_esm.value!=null && note_val_esm.value<1">
                     <label>Absent Justifié ?</label>
                     <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
                         formControlName="isAbsent"></p-selectButton>
@@ -90,7 +90,7 @@
 
                 <div class="field col-12 md:col-12">
                     <label>Etudiant</label>
-                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant" optionLabel="libelle"
+                    <p-dropdown formControlName="etudiant_id" [options]="dropdownEtudiant"
                         emptyFilterMessage="Pas d'étudiant trouvé" filterPlaceholder="Etudiant" filter="true">
                     </p-dropdown>
                 </div>
@@ -150,7 +150,7 @@
             <form [formGroup]="formSelectExam" (ngSubmit)="onSelectExam()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
                     <label>Examen</label>
-                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle"
+                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle" placeholder="Veuillez choisir un examen"
                         emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
                     </p-dropdown>
                 </div>
@@ -765,7 +765,7 @@
             <h3>Saisie de notes</h3>
             <p>
                 Groupe: <strong>{{ classeSelected.abbrv }}</strong> <br />
-                Examen: <strong>{{ matieres[examSelected.matiere_id]?.nom }}</strong> <br />
+                Examen: <strong>{{ examSelected.libelle  }}</strong> <br />
                 Semestre: <strong>{{ semestreSelected }}</strong>
             </p>
 
@@ -809,9 +809,9 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-note>
                     <tr>
-                        <td *ngIf="note && users[etudiants[note.etudiant_id]?.user_id]">{{
-                            users[etudiants[note.etudiant_id]?.user_id]?.firstname }} {{
-                            users[etudiants[note.etudiant_id]?.user_id]?.lastname }} </td>
+                        <td *ngIf="note && note.etudiant_id?.user_id">{{
+                            note.etudiant_id?.user_id?.firstname }} {{
+                                note.etudiant_id?.user_id?.lastname }} </td>
                         <td>{{ note.note_val | number : '0.2-9' }} </td>
                         <td>{{ note.appreciation }} </td>
                         <td><i style="margin-left: 2%;" class="pi pi-pencil" title="Modifier" aria-hidden="true"
@@ -842,7 +842,7 @@
 
             <h5>Notes par étudiants</h5>
             <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [pageLinks]="5"
-                [paginator]="true" [globalFilterFields]="['note_val', 'semestre']" responsiveLayout="scroll"
+                [paginator]="true" [globalFilterFields]="['etudiant_id.user_id.lastname', 'examen_id.libelle','examen_id.matiere_id.abbrv','etudiant_id.user_id.firstname']" responsiveLayout="scroll"
                 rowExpandMode="single" [totalRecords]="notes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -900,7 +900,8 @@
                             {{ note.examen_id?.matiere_id?.abbrv }}
                         </td>
                         <td>
-                            WIP
+                            {{ note.examen_id?.formateur_id?.user_id?.firstname }}
+                            {{ note.examen_id?.formateur_id?.user_id?.lastname }}
                         </td>
                         <td style="min-width: 10rem;">
                             {{ note.examen_id?.libelle }}

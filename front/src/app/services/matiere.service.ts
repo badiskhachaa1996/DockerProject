@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Matiere } from '../models/Matiere';
+import { Classe } from '../models/Classe';
 
 
 @Injectable({
@@ -24,6 +25,11 @@ export class MatiereService {
   //Recuperation de la liste des matieres
   getAll() {
     let registreUrl = this.apiUrl + "getAll";
+    return this.httpClient.get<Matiere[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  //Recuperation de la liste des matieres
+  getAllPopulate() {
+    let registreUrl = this.apiUrl + "getAllPopulate";
     return this.httpClient.get<Matiere[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -61,7 +67,7 @@ export class MatiereService {
 
   getAllByFormateurID(formateur_id) {
     let registreUrl = this.apiUrl + "getAllByFormateurID/" + formateur_id;
-    return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<{ matieres: any[], groupes: any[] }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
 }

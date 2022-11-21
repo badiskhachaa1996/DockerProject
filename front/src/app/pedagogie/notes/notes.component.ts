@@ -291,30 +291,6 @@ export class NotesComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
-    this.userService.getAll().subscribe(
-      ((responseUser) => {
-
-        this.etudiantService.getAll().subscribe(
-          ((responseEt) => {
-
-            responseEt.forEach(etudiant => {
-              responseUser.forEach(user => {
-                this.users[user._id] = user;
-                if (user._id == etudiant.user_id) {
-                  this.dropdownEtudiant.push({ libelle: user.firstname + ' ' + user.lastname, value: etudiant._id });
-                  this.etudiants[etudiant._id] = etudiant;
-                }
-              });
-            });
-
-          }),
-          ((error) => { console.error(error); })
-        );
-
-      }),
-      ((error) => { console.error(error); })
-    );
-
 
 
 
@@ -452,18 +428,26 @@ export class NotesComponent implements OnInit {
         );
       }
     }
+    this.dropdownEtudiant = []
+    this.etudiantService.getAllByClasseId(this.classeSelected._id).subscribe(r => {
+      r.forEach(etu => {
+        let by_pass: any = etu.user_id
+        if (by_pass)
+          this.dropdownEtudiant.push({ label: by_pass.lastname + " " + by_pass.firstname, value: etu._id })
+      })
+    })
 
     //Recuperation de la liste des examens via l'id de la classe
     this.examenService.getAllByClasseId(this.classeSelected._id).subscribe(
       ((response) => {
 
-        this.dropdownExamByClasse = [{ libelle: 'Veuillez choisir un examen', value: null }];
+        this.dropdownExamByClasse = [];
 
         response.forEach((examen) => {
           for (let matiere in this.matieres) {
             if (examen.matiere_id == this.matieres[matiere]._id) {
               this.dropdownExamByClasse.push({
-                libelle: this.matieres[matiere].nom,
+                libelle: examen.libelle,
                 value: examen._id,
               });
             }
@@ -491,7 +475,7 @@ export class NotesComponent implements OnInit {
     }
 
     //Requete de recuperation des notes par classe et par semestre
-    this.noteService.getAllByClasseBySemestre(this.classeSelected._id, this.semestreSelected).subscribe(
+    this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
       ((response) => {
         this.notesByClasseBySemestre = response;
       }),
@@ -509,7 +493,7 @@ export class NotesComponent implements OnInit {
   onAddNoteByClasseByExam() {
     //Recuperation des infos du formulaire
     let note_val = this.formAddNoteByClasseByExam.get('note_val').value;
-    let etudiant_id = this.formAddNoteByClasseByExam.get('etudiant_id').value.value;
+    let etudiant_id = this.formAddNoteByClasseByExam.get('etudiant_id').value;
     let appreciation = this.formAddNoteByClasseByExam.get('appreciation').value;
     let isAbsent = this.formAddNoteByClasseByExam.get('isAbsent').value;
 
@@ -555,9 +539,16 @@ export class NotesComponent implements OnInit {
                     });
 
                     //Recuperation de la liste des notes
-                    this.noteService.getAll().subscribe(
+                    this.noteService.getAllPopulate().subscribe(
                       ((response) => {
                         this.notes = response;
+                      }),
+                      ((error) => { console.error(error); })
+                    );
+                    //Requete de recuperation des notes par classe et par semestre
+                    this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
+                      ((response) => {
+                        this.notesByClasseBySemestre = response;
                       }),
                       ((error) => { console.error(error); })
                     );
@@ -587,7 +578,7 @@ export class NotesComponent implements OnInit {
     //Recuperation des données du formulaire
     let note_val = this.formUpdateNote.get('note_val').value;
     let semestre = this.formUpdateNote.get('semestre').value.value;
-    let etudiant_id = this.formUpdateNote.get('etudiant_id').value.value;
+    let etudiant_id = this.formUpdateNote.get('etudiant_id').value;
     let examen_id = this.formUpdateNote.get('examen_id').value.value;
     let appreciation = this.formUpdateNote.get('appreciation').value;
 
@@ -596,7 +587,7 @@ export class NotesComponent implements OnInit {
 
     for (let exam in this.examens) {
       if (this.examens[exam]._id == examen_id) {
-        classe_id = this.examens[exam].classe_id;
+        classe_id = this.examens[exam].classe_id[0]; //TODO
         matiere_id = this.examens[exam].matiere_id;
       }
     }
@@ -617,9 +608,16 @@ export class NotesComponent implements OnInit {
               });
 
               //Recuperation de la liste des notes
-              this.noteService.getAll().subscribe(
+              this.noteService.getAllPopulate().subscribe(
                 ((response) => {
                   this.notes = response;
+                }),
+                ((error) => { console.error(error); })
+              );
+              //Requete de recuperation des notes par classe et par semestre
+              this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
+                ((response) => {
+                  this.notesByClasseBySemestre = response;
                 }),
                 ((error) => { console.error(error); })
               );
@@ -1015,7 +1013,7 @@ export class NotesComponent implements OnInit {
       this.hideBtn = false
       this.etudiantService.downloadBulletin(this.etudiantToGenerateBulletin._id).subscribe(doc => {
 
-      },err=>{
+      }, err => {
         console.error(err)
       })
     }

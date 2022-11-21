@@ -52,8 +52,8 @@ export class NoteService {
   }
 
   //Recuperation d'une liste de note par semestre et par classe
-  getAllByClasseBySemestre(classeid: string, semestre: string) {
-    let registreUrl = this.apiUrl + "getAllByClasseBySemestre/" + classeid + "/" + semestre;
+  getAllByExamenID(examen_id) {
+    let registreUrl = this.apiUrl + "getAllByExamenID/" + examen_id;
     return this.httpClient.get<Note[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
