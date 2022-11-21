@@ -93,7 +93,8 @@ mongoose
                                                             diplome: data['Filière'],
                                                             remarque: getRemarque(data, sheet),
                                                             valided_by_admin: true,
-                                                            valided_by_support: true
+                                                            valided_by_support: true,
+                                                            annee_scolaire:['2022 - 2023']
                                                         }, { new: true }, (err, newE) => {
                                                             if (err) {
                                                                 console.error(err)
@@ -115,7 +116,8 @@ mongoose
                                                             remarque: getRemarque(data, sheet),
                                                             campus: campus._id,
                                                             valided_by_admin: true,
-                                                            valided_by_support: true
+                                                            valided_by_support: true,
+                                                            annee_scolaire:['2022 - 2023']
                                                         })
                                                         etu.save((errEtu, newEtu) => {
                                                             if (errEtu) {
@@ -169,7 +171,8 @@ mongoose
                                                     remarque: getRemarque(data, sheet),
                                                     campus: campus._id,
                                                     valided_by_admin: true,
-                                                    valided_by_support: true
+                                                    valided_by_support: true,
+                                                    annee_scolaire:['2022 - 2023']
                                                 })
                                                 etu.save((errEtu, newEtu) => {
                                                     if (errEtu) {
