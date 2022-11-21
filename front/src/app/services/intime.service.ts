@@ -42,9 +42,9 @@ export class IntimeService {
 
 
   //methode de recuperation de la liste de présence de tous les utilisateurs
-  getAll()
+  getAllPopulateUserId()
   {
-    let url = `${this.apiUrl}get-all`;
+    let url = `${this.apiUrl}get-all-populate-user-id`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<InTime[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
@@ -59,6 +59,20 @@ export class IntimeService {
   getAllByDate(dateOfTheDay: Date)
   {
     let url = `${this.apiUrl}get-all-by-date/${dateOfTheDay}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<InTime[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => (resolve(response)),
+        (error) => (reject(error))
+      );
+    });
+  }
+
+
+  //methode de recuperation de la liste de presence de tous les utilisateurs sur interval de date
+  getAllByDateBetweenPopulateUserId(beginDate: string, endDate: string)
+  {
+    let url = `${this.apiUrl}get-all-by-date-between-populate-user-id/${beginDate}/${endDate}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get<InTime[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
