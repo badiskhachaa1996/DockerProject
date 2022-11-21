@@ -91,7 +91,9 @@ mongoose
                                                             dernier_diplome: data['Filière'],
                                                             isAlternant: data['Alternant'] != 'NON',
                                                             diplome: data['Filière'],
-                                                            remarque: getRemarque(data, sheet)
+                                                            remarque: getRemarque(data, sheet),
+                                                            valided_by_admin: true,
+                                                            valided_by_support: true
                                                         }, { new: true }, (err, newE) => {
                                                             if (err) {
                                                                 console.error(err)
@@ -111,7 +113,9 @@ mongoose
                                                             isAlternant: data['Alternant'] != 'NON',
                                                             diplome: data['Filière'],
                                                             remarque: getRemarque(data, sheet),
-                                                            campus: campus._id
+                                                            campus: campus._id,
+                                                            valided_by_admin: true,
+                                                            valided_by_support: true
                                                         })
                                                         etu.save((errEtu, newEtu) => {
                                                             if (errEtu) {
@@ -163,7 +167,9 @@ mongoose
                                                     isAlternant: data['Alternant'] != 'NON',
                                                     diplome: data['Filière'],
                                                     remarque: getRemarque(data, sheet),
-                                                    campus: campus._id
+                                                    campus: campus._id,
+                                                    valided_by_admin: true,
+                                                    valided_by_support: true
                                                 })
                                                 etu.save((errEtu, newEtu) => {
                                                     if (errEtu) {
