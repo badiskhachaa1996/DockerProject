@@ -56,8 +56,8 @@ mongoose
                                 }
 
                                 if (data['Email IMS']) {
-                                    let mail = data['Email IMS']
-                                    if (EmailList.includes(mail)) {
+                                    let isValided = data['Email IMS']!=null
+                                    if (EmailList.includes(data['Email IMS'])) {
                                         User.findOneAndUpdate({ email: data['Email IMS'] }, {
                                             firstname: toCamelCase(data['Prénom']),
                                             lastname: data['Nom'].toUpperCase(),
@@ -93,7 +93,8 @@ mongoose
                                                             diplome: data['Filière'],
                                                             remarque: getRemarque(data, sheet),
                                                             valided_by_admin: true,
-                                                            valided_by_support: true,
+                                                            valided_by_support: isValided,
+                                                            campus: campus._id,
                                                             annee_scolaire:['2022 - 2023']
                                                         }, { new: true }, (err, newE) => {
                                                             if (err) {
@@ -116,7 +117,7 @@ mongoose
                                                             remarque: getRemarque(data, sheet),
                                                             campus: campus._id,
                                                             valided_by_admin: true,
-                                                            valided_by_support: true,
+                                                            valided_by_support: isValided,
                                                             annee_scolaire:['2022 - 2023']
                                                         })
                                                         etu.save((errEtu, newEtu) => {
@@ -133,7 +134,7 @@ mongoose
                                             }
                                         })
                                     } else {
-                                        EmailList.push(mail)
+                                        EmailList.push(data['Email IMS'])
                                         let u = new User({
                                             firstname: toCamelCase(data['Prénom']),
                                             lastname: data['Nom'].toUpperCase(),
@@ -171,7 +172,7 @@ mongoose
                                                     remarque: getRemarque(data, sheet),
                                                     campus: campus._id,
                                                     valided_by_admin: true,
-                                                    valided_by_support: true,
+                                                    valided_by_support: isValided,
                                                     annee_scolaire:['2022 - 2023']
                                                 })
                                                 etu.save((errEtu, newEtu) => {
