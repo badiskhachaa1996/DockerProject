@@ -143,7 +143,7 @@ mongoose
                                             users.push(newUser)
                                             let code = ""
                                             if (dn && data['Nationnalité']) {
-                                                if (!newUser.nationalite)
+                                                if (!newUser.nationnalite)
                                                     newUser.nationnalite = "Inconnu"
                                                 code = generateCode(newUser, dn)
                                             } else {
