@@ -157,23 +157,23 @@ export class TuteurComponent implements OnInit {
   //Initialisation du formulaire d'ajout du tuteur - Vérification des erreurs
   onInitFormAddTuteur() {
     this.addTuteurForm = this.formBuilder.group({
-      civilite: [this.civiliteList[0], Validators.required],
+      civilite: [this.civiliteList[0]],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
-      indicatif: ['', [Validators.required]],
-      phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      fonction: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
+      indicatif: [''],
+      phone: ['', [ Validators.pattern("^[0-9+]+$")]],
+      fonction: ['', [ Validators.pattern('[^0-9]+')]],
       entreprise: [''],
-      anciennete: ['', [Validators.required]],
-      niveau_formation: ['', [Validators.required]],
-      email_perso: ['', [Validators.required, Validators.email]],
-      numero_adresse: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      rue_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
-      postal_adresse: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
-      ville_adresse: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
-      pays_adresse: [this.paysList[76], Validators.required],
-      nationnalite: [this.nationList[0].value, Validators.required],
-      date_naissance: ['', [Validators.required]]
+      anciennete: [''],
+      niveau_formation: [''],
+      email_perso: ['', [Validators.email]],
+      numero_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
+      rue_adresse: ['', [Validators.pattern('[^0-9]+')]],
+      postal_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
+      ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
+      pays_adresse: [this.paysList[76]],
+      nationnalite: [this.nationList[0].value],
+      date_naissance: ['']
     })
 
     if (!this.isCEO) {
