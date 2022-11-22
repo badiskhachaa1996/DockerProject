@@ -17,10 +17,10 @@ mongoose
     })
     .then(() => {
         console.log("Start")
-        let listDATA = ['DATA_INFORMATIQUE.xlsx', 'DATA_COMMERCE.xlsx', 'DATA_MANAGEMENT.xlsx']
+        let listDATA = ['DATA_COMMERCE.xlsx']//'DATA_MANAGEMENT.xlsx'
         listDATA.forEach(doc_name => {
             var workbook = XLSX.readFile(doc_name);
-            var sheet_name_list = workbook.SheetNames;
+            var sheet_name_list = [workbook.SheetNames[0]];
             Classe.find({ abbrv: /ESTYA Paris/i }).populate('diplome_id').then(classes => {
                 classes.forEach(c => {
                     dicClasse[c.abbrv] = c
