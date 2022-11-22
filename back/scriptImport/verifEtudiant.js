@@ -50,7 +50,7 @@ mongoose
                                                 console.error("Error Vérification admission par email IMS", err)
                                             } else if (doc) {
                                                 console.log(data['Mail école'], 'validé par Email IMS')
-                                                User.findByIdAndUpdate(etudiant.user_id._id, { email_perso: data['Mail personnel'] })
+                                                User.findByIdAndUpdate(user._id, { email_perso: data['Mail personnel'] })
                                             }
                                         })
                                     else if (data['Mail personnel']) {
@@ -61,7 +61,7 @@ mongoose
                                                         console.error("Error Vérification admission par email PERSO", err)
                                                     } else if (doc) {
                                                         console.log(data['Mail personnel'], 'validé par Email PERSO')
-                                                        User.findByIdAndUpdate(etudiant.user_id._id, { email: data['Mail école'] })
+                                                        User.findByIdAndUpdate(user._id, { email: data['Mail école'] })
                                                     }
                                                 })
                                             else {
@@ -73,17 +73,19 @@ mongoose
                                     }
                                 })
                             else if (data['Mail personnel'])
-                                Etudiant.find().populate({ path: 'user_id', match: { email_perso: { $eq: data['Mail personnel'] } } }).then(etudiants => {
-                                    etudiants.forEach(etudiant => {
-                                        if (etudiant && etudiant.user_id)
-                                            Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: false }, { new: true }, (err, doc) => {
-                                                if (err) {
-                                                    console.error("Error Vérification admission par email Perso 2", doc)
-                                                } else if (doc) {
-                                                    console.log(etudiant.user_id.email_perso, 'validé par Email Perso 2')
-                                                }
-                                            })
-                                    })
+                                User.findOne({ email_perso: data['Mail personnel'] }).then(user => {
+                                    if (user)
+                                        Etudiant.findOneAndUpdate({ user_id: user._id }, { valided_by_admin: true, classe_id: classe_id, valided_by_support: true }, { new: true }, (err, doc) => {
+                                            if (err) {
+                                                console.error("Error Vérification admission par email PERSO", err)
+                                            } else if (doc) {
+                                                console.log(data['Mail personnel'], 'validé par Email PERSO')
+                                                User.findByIdAndUpdate(user._id, { email: data['Mail école'] })
+                                            }
+                                        })
+                                    else {
+                                        console.log(data, "Etudiant invalide")
+                                    }
                                 })
                             else
                                 console.log(data, "Etudiant invalide")
