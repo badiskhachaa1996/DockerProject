@@ -46,18 +46,14 @@ mongoose
                                 Etudiant.find().populate({ path: 'user_id', match: { email: { $eq: data['Mail école'] } } }).then(etudiants => {
                                     etudiants.forEach(etudiant => {
                                         if (etudiant && etudiant.user_id) {
-                                            if (data['Vérification admisson'] && data['Vérification admisson'].toLowerCase().includes('oui'))
-                                                Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: true }, { new: true }, (err, doc) => {
-                                                    if (err) {
-                                                        console.error("Error Vérification admission par email IMS", err)
-                                                    } else if (doc) {
-                                                        console.log(etudiant.user_id.email, 'validé par Email IMS')
-                                                        User.findByIdAndUpdate(etudiant.user_id._id, { email_perso: data['Mail personnel'] })
-                                                    }
-                                                })
-                                            else if (!data['Vérification admisson']) {
-                                                //console.log(data)
-                                            }
+                                            Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: true }, { new: true }, (err, doc) => {
+                                                if (err) {
+                                                    console.error("Error Vérification admission par email IMS", err)
+                                                } else if (doc) {
+                                                    console.log(etudiant.user_id.email, 'validé par Email IMS')
+                                                    User.findByIdAndUpdate(etudiant.user_id._id, { email_perso: data['Mail personnel'] })
+                                                }
+                                            })
                                         }
                                     })
                                 })
@@ -65,17 +61,13 @@ mongoose
                                 Etudiant.find().populate({ path: 'user_id', match: { email_perso: { $eq: data['Mail personnel'] } } }).then(etudiants => {
                                     etudiants.forEach(etudiant => {
                                         if (etudiant && etudiant.user_id)
-                                            if (data['Vérification admisson'] && data['Vérification admisson'].toLowerCase().includes('oui'))
-                                                Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: false }, { new: true }, (err, doc) => {
-                                                    if (err) {
-                                                        console.error("Error Vérification admission par email Perso 2", doc)
-                                                    } else if (doc) {
-                                                        console.log(etudiant.user_id.email_perso, 'validé par Email Perso 2')
-                                                    }
-                                                })
-                                            else if (!data['Vérification admisson']) {
-                                                //console.log(data)
-                                            }
+                                            Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: false }, { new: true }, (err, doc) => {
+                                                if (err) {
+                                                    console.error("Error Vérification admission par email Perso 2", doc)
+                                                } else if (doc) {
+                                                    console.log(etudiant.user_id.email_perso, 'validé par Email Perso 2')
+                                                }
+                                            })
                                     })
                                 })
                             else
