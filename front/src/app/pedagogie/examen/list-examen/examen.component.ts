@@ -46,7 +46,7 @@ export class ExamenComponent implements OnInit {
 
 
   dropdownNiveau: any[] = [
-    { label: "Évaluation", value: "Évaluation" },
+    { label: "Controle Continue", value: "Controle Continue" },
     { label: "Examen finale", value: "Examen finale" },
     { label: "Soutenance", value: "Soutenance" }
   ]
