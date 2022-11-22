@@ -9,7 +9,7 @@ const prompt = require('prompt-sync')();
 let dicClasse = {}
 let listClasse = []
 mongoose
-    .connect(`mongodb://localhost:27017/learningNode`, {
+    .connect(`mongodb://localhost:27017/b`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -43,15 +43,15 @@ mongoose
                         var xlData = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
                         xlData.forEach(data => {
                             if (data['Mail école'])
-                                Etudiant.find().populate({ path: 'user_id', match: { email: { $eq: data['Mail école'] } } }).then(etudiants => {
+                                Etudiant.find().populate({ path: 'user_id', match: { $or: [{ email: { $eq: data['Mail école'] } }, { email_perso: { $eq: data['Mail personnel'] } }] } }).then(etudiants => {
                                     etudiants.forEach(etudiant => {
                                         if (etudiant && etudiant.user_id) {
                                             Etudiant.findByIdAndUpdate(etudiant._id, { valided_by_admin: true, classe_id: classe_id, valided_by_support: true }, { new: true }, (err, doc) => {
                                                 if (err) {
                                                     console.error("Error Vérification admission par email IMS", err)
                                                 } else if (doc) {
-                                                    console.log(etudiant.user_id.email, 'validé par Email IMS')
-                                                    User.findByIdAndUpdate(etudiant.user_id._id, { email_perso: data['Mail personnel'] })
+                                                    console.log(data['Mail école'], 'validé par Email IMS')
+                                                    User.findByIdAndUpdate(etudiant.user_id._id, { email_perso: data['Mail personnel'], email: data['Mail personnel'] })
                                                 }
                                             })
                                         }
