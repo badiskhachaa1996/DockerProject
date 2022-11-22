@@ -9,7 +9,7 @@ const prompt = require('prompt-sync')();
 let dicClasse = {}
 let listClasse = []
 mongoose
-    .connect(`mongodb://localhost:27017/b`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -57,9 +57,6 @@ mongoose
                                                 })
                                             else if (!data['Vérification admisson']) {
                                                 //console.log(data)
-                                            }
-                                            if (etudiant.user_id.email == 'c.djiouleu@estya.com') {
-                                                console.log(etudiant)
                                             }
                                         }
                                     })

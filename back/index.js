@@ -32,7 +32,7 @@ const options = {
 const io = require("socket.io")(httpServer, options);
 
 mongoose
-    .connect(`mongodb://localhost:27017/b`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
