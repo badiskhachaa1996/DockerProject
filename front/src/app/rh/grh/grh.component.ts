@@ -1,7 +1,6 @@
 import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { InTime } from 'src/app/models/InTime';
 import { AuthService } from 'src/app/services/auth.service';
 import { IntimeService } from 'src/app/services/intime.service';
@@ -33,7 +32,7 @@ export class GrhComponent implements OnInit {
     { label: 'Commercial', value: 'Commercial' },
   ];
 
-  constructor(private sanitization: DomSanitizer, private formBuilder: FormBuilder, private inTimeService: IntimeService, private userService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private inTimeService: IntimeService, private userService: AuthService) { }
 
   ngOnInit(): void {
     //Methode d'initialisation du formulaire de selection des dates
