@@ -51,7 +51,6 @@ export class ListEtudiantComponent implements OnInit {
 
   onFilter(event, dt) {
     this.filtedTable = event.filteredValue;
-    console.log(this.filtedTable)
   }
 
   filterByType: boolean;

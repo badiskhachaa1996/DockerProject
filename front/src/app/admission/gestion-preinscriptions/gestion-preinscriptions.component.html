@@ -201,11 +201,12 @@
             <h5>Liste des prospects</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single" 
                 [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single"
                 (onRowSelect)="expandRow($event.data)"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
-                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines"
+                (onFilter)="onFilter($event, 'dt1')">
 
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left mb-2">
