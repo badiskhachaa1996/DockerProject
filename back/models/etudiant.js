@@ -55,7 +55,7 @@ const etudiantSchema = mongoose.Schema({
     etat_contract: { type: String },
     entreprise: { String },
     etat_paiement: { String },
-    source: { String },
+    source: { type: String, default: 'Aucune' },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

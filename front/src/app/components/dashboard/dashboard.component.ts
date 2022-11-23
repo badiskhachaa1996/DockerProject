@@ -83,7 +83,8 @@ export class DashboardComponent implements OnInit {
       right: 'today,dayGridMonth,timeGridWeek,timeGridDay'
     },
     events: [],
-    minTime:'08:00:00'
+    minTime:'08:00:00',
+    firstDay:1
   }
 
   //Options du calendrier etudiant
@@ -102,7 +103,8 @@ export class DashboardComponent implements OnInit {
     eventClick: this.eventClickFC.bind(this),
     events: [],
     defaultView: "timeGridDay",
-    minTime:'08:00:00'
+    minTime:'08:00:00',
+    firstDay:1
   }
 
   dernotes: Note[] = [];
@@ -122,7 +124,8 @@ export class DashboardComponent implements OnInit {
     eventClick: this.eventClickFC.bind(this),
     events: [],
     defaultView: "timeGridDay",
-    minTime:'08:00:00'
+    minTime:'08:00:00',
+    firstDay:1
   }
 
   seanceNow: Seance[] = [];

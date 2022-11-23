@@ -4,7 +4,8 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Nombre d'étudiants du campus {{ filterByCampus.libelle }} {{ filterByAS ? filterByAS : '' }}</span>
+                    <span class="block text-500 font-medium mb-3">Nombre d'étudiants du campus {{ filterByCampus.libelle
+                        }} {{ filterByAS ? filterByAS : '' }}</span>
                     <div class="text-900 font-medium text-xl">{{ etudiantsByCampus.length }}</div>
                 </div>
                 <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -19,7 +20,8 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3"> Nombre d'étudiants du groupe {{ filterByGroupe.abbrv }} {{ filterByAS ? filterByAS : '' }}
+                    <span class="block text-500 font-medium mb-3"> Nombre d'étudiants du groupe {{ filterByGroupe.abbrv
+                        }} {{ filterByAS ? filterByAS : '' }}
                     </span>
                     <div class="text-900 font-medium text-xl">{{ etudiantsByGroupe.length }}</div>
                 </div>
@@ -52,7 +54,9 @@
         <div class="card mb-0">
             <div class="flex justify-content-between mb-3">
                 <div>
-                    <span class="block text-500 font-medium mb-3">Nombre d'étudiants {{ filterByType ? 'alternants' : 'initials' }} {{ filterByGroupe ? filterByGroupe.abbrv : '' }} {{ filterByAS ? filterByAS : '' }}
+                    <span class="block text-500 font-medium mb-3">Nombre d'étudiants {{ filterByType ? 'alternants' :
+                        'initials' }} {{ filterByGroupe ? filterByGroupe.abbrv : '' }} {{ filterByAS ? filterByAS : ''
+                        }}
                     </span>
                     <div class="text-900 font-medium text-xl">{{ etudiantsByType.length }}</div>
                 </div>
@@ -118,7 +122,7 @@
                 </div>
                 <div class="col-12 md:col-6 field">
                     <label>URL Vidéo:</label>
-                    <input pInputText placeholder="Exemple: Linkedin, google drive ou youtube" [(ngModel)]="urlVideo"/>
+                    <input pInputText placeholder="Exemple: Linkedin, google drive ou youtube" [(ngModel)]="urlVideo" />
                 </div>
                 <button type="button" class="mb-2" (click)="onAddSkill()" pButton
                     label="Ajouter une compétences"></button>
@@ -328,8 +332,9 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="annee_scolaire">Année Scolaire<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="dropdownAnneeScolaire" placeholder="Choissisez les années scolaires où cette étudiant à étudié"
-                        formControlName="annee_scolaire" ></p-multiSelect>
+                    <p-multiSelect [options]="dropdownAnneeScolaire"
+                        placeholder="Choissisez les années scolaires où cette étudiant à étudié"
+                        formControlName="annee_scolaire"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -445,12 +450,17 @@
     <div class="col-12">
         <div class="card">
             <div style="float: right;">
-                <button pButton label="Vider les compteurs" icon="pi pi-trash" class="p-button-danger" (click)="onTrashCount();" style="margin-right: 3px;"></button>
+                <button pButton label="Vider les compteurs" icon="pi pi-trash" class="p-button-danger"
+                    (click)="onTrashCount();" style="margin-right: 3px;"></button>
                 <button pButton label="Ajouter" icon="pi pi-plus" (click)="onRedirect();"></button>
+                <button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+                    style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
+                </button>
             </div>
             <h5>Liste des étudiants</h5>
             <p-toast></p-toast>
             <p-table #dt1 [value]="etudiants" dataKey="_id" [expandedRowKeys]="expandedRows" responsiveLayout="scroll"
+                (onFilter)="onFilter($event, 'dt1')"
                 [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso']"
                 [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
                 styleClass="p-datatable-gridlines">
@@ -467,7 +477,8 @@
                         (onChange)="dt1.filter($event.value, 'classe_id._id','in');" [style]="{'margin':'5px'}">
                     </p-multiSelect>-->
                     <p-dropdown [options]="searchClass" placeholder="Choisir un groupe" filter="true"
-                        (onChange)="dt1.filter($event.value, 'classe_id._id','equals'); onFilterbyGroup($event);" [style]="{'margin':'5px'}">
+                        (onChange)="dt1.filter($event.value, 'classe_id._id','equals'); onFilterbyGroup($event);"
+                        [style]="{'margin':'5px'}">
                     </p-dropdown>
 
                     <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
@@ -488,7 +499,8 @@
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="filiere?.titre">Filière <p-sortIcon field="filiere?.titre">
-                        </p-sortIcon></th>
+                            </p-sortIcon>
+                        </th>
                         <th pSortableColumn="classe_id.abbrv">Groupe <p-sortIcon field="classe_id.abbrv"></p-sortIcon>
                         </th>
                         <th pSortableColumn="campus.libelle">Campus <p-sortIcon field="campus.libelle"></p-sortIcon>
@@ -497,7 +509,9 @@
                         </th>
                         <th pSortableColumn="email_perso">Email perso<p-sortIcon field="email_perso"></p-sortIcon>
                         </th>
-                        <th pSortableColumn="nationalite">Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
+                        <th pSortableColumn="source">Source étudiant <p-sortIcon field="source"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="isAlternant">Initial/Alternant<p-sortIcon field="isAlternant"></p-sortIcon>
                         </th>
                         <th>Action </th>
                     </tr>
@@ -523,7 +537,13 @@
                             <span *ngIf="!etudiant.user_id.email" style="color: red;">X</span>
                         </td>
                         <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
-                        <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
+                        <td style="min-width: 10rem;">{{ etudiant.source }}</td>
+                        <td style="min-width: 10rem;" *ngIf="etudiant.isAlternant">
+                            Alternant
+                        </td>
+                        <td style="min-width: 10rem;" *ngIf="!etudiant.isAlternant">
+                            Initial
+                        </td>
                         <td>
                             <i style="margin-left: 2%;" class="pi pi-pencil"
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="

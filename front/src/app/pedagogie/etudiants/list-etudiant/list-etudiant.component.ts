@@ -31,7 +31,8 @@ import { Service } from 'src/app/models/Service';
 import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
 import { Campus } from 'src/app/models/Campus';
-
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 
 @Component({
@@ -45,6 +46,13 @@ export class ListEtudiantComponent implements OnInit {
   expandedRows = {};
 
   etudiants: Etudiant[] = [];
+
+  filtedTable: any[] = []
+
+  onFilter(event, dt) {
+    this.filtedTable = event.filteredValue;
+    console.log(this.filtedTable)
+  }
 
   filterByType: boolean;
   showNumbersByType = false;
@@ -1167,4 +1175,36 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantsByCampus = [];
   }
 
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    if(this.filtedTable.length<1)
+      this.filtedTable=this.etudiants
+    this.filtedTable.forEach(etudiant => {
+      let t = {}
+      t['ID Etudiant'] = etudiant?.custom_id
+      t['NOM'] = etudiant?.user_id?.lastname
+      t['Prenom'] = etudiant?.user_id?.firstname
+      t['Filière'] = etudiant?.filiere?.titre
+      t['Groupe'] = etudiant?.classe_id?.abbrv
+      t['Campus'] = etudiant?.campus?.libelle
+      t['Email Ecole'] = etudiant?.user_id?.email
+      t['Email Personnel'] = etudiant?.user_id?.email_perso
+      t['Source'] = etudiant?.source
+      t['Alternant ?'] = etudiant?.isAlternant
+      t['Date de naissance'] = etudiant?.date_naissance
+      t['Nationalite'] = etudiant?.user_id?.nationnalite
+
+      t['Telephone'] = etudiant?.user_id?.indicatif + etudiant?.user_id?.phone
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
+  }
 }
