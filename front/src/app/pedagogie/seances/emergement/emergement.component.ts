@@ -229,13 +229,14 @@ export class EmergementComponent implements OnInit {
     this.SeanceService.getById(this.ID).subscribe(dataS => {
       this.seance = dataS
       this.showFiles = null
-      this.seance.fileRight.forEach(f => {
-        if (f.right != 'false')
-          if (this.showFiles != null)
-            this.showFiles.push(f)
-          else
-            this.showFiles = [f]
-      })
+      if (dataS.fileRight != null && dataS.fileRight.length != 0)
+        this.seance.fileRight.forEach(f => {
+          if (f.right != 'false')
+            if (this.showFiles != null)
+              this.showFiles.push(f)
+            else
+              this.showFiles = [f]
+        })
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = this.date_debut + (15 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
@@ -421,13 +422,14 @@ export class EmergementComponent implements OnInit {
         if (res.data) {
           this.seance = res.data
           this.showFiles = null
-          this.seance.fileRight.forEach(f => {
-            if (f.right != 'false')
-              if (this.showFiles != null)
-                this.showFiles.push(f)
-              else
-                this.showFiles = [f]
-          })
+          if (res.data.fileRight != null && res.data.fileRight.length != 0)
+            this.seance.fileRight.forEach(f => {
+              if (f.right != 'false')
+                if (this.showFiles != null)
+                  this.showFiles.push(f)
+                else
+                  this.showFiles = [f]
+            })
         }
         this.showUploadFile = false;
       }, error => {
@@ -450,13 +452,14 @@ export class EmergementComponent implements OnInit {
       if (data.data) {
         this.seance = data.data
         this.showFiles = null
-        this.seance.fileRight.forEach(f => {
-          if (f.right != 'false')
-            if (this.showFiles != null)
-              this.showFiles.push(f)
-            else
-              this.showFiles = [f]
-        })
+        if (data.data.fileRight != null && data.data.fileRight.length != 0)
+          this.seance.fileRight.forEach(f => {
+            if (f.right != 'false')
+              if (this.showFiles != null)
+                this.showFiles.push(f)
+              else
+                this.showFiles = [f]
+          })
       }
     }, (error) => {
       this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })

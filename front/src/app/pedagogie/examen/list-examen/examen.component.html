@@ -1,7 +1,7 @@
 <p-toast></p-toast>
 <div class="grid">
     <!-- Partie changement de statut -->
-    
+
     <div class="col-12" *ngIf="showFormUpdateExamen">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
@@ -11,13 +11,15 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
 
                 <div class="field col-12">
-                    <small>Tout les champs marqués d'un asterique <span style="color:red">*</span> sont obligatoires</small>
+                    <small>Tout les champs marqués d'un asterique <span style="color:red">*</span> sont
+                        obligatoires</small>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label>Groupe<span style="color:red">*</span>:</label><br>
 
-                    <p-multiSelect [options]="dropdownClasse" placeholder="Choissisez un groupe" formControlName="classe_id">
+                    <p-multiSelect [options]="dropdownClasse" placeholder="Choissisez un groupe"
+                        formControlName="classe_id">
                     </p-multiSelect>
 
                 </div>
@@ -25,7 +27,8 @@
                 <div class="field col-12 md:col-6">
                     <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownMatiere" laceholder="Choissisez un module" (onChange)="onLoadModules($event)" formControlName="matiere_id">
+                        <p-dropdown [options]="dropdownMatiere" laceholder="Choissisez un module"
+                            (onChange)="onLoadModules($event)" formControlName="matiere_id">
                         </p-dropdown>
                     </span>
                 </div>
@@ -96,29 +99,30 @@
     </div>
     <div class="col-12">
         <div class="card">
-          
-            <div style="float: right;">
+
+            <!--<div style="float: right;">
                 <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
-            </div>
+            </div>-->
             <h3>Examens</h3>
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef']" [rows]="10"
-                [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length" styleClass="p-datatable-gridlines">
+                [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef']"
+                [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="examens.length"
+                styleClass="p-datatable-gridlines">
 
                 <ng-template pTemplate="caption">
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field" *ngIf="dropdownGroupe.length!=1">
                             <p-dropdown filter="true" [options]="dropdownGroupe"
-                                (onChange)="dt1.filter($event.value, 'classe_id._id', 'in')" 
+                                (onChange)="dt1.filter($event.value, 'classe_id._id', 'in')"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du groupe">
                             </p-dropdown>
 
                             <p-dropdown filter="true" [options]="dropdownModule"
-                            (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals')" 
-                            emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
-                        </p-dropdown>
+                                (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals')"
+                                emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
+                            </p-dropdown>
 
                             <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
                                 <p-dropdown filter="true" [options]="dropdownType"
@@ -155,7 +159,7 @@
                 <ng-template pTemplate="body" let-examen let-expanded="expanded">
                     <tr class="bandeau-show">
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="examen"
+                            <button type="button" pButton pRipple [pRowToggler]="examen" (click)="loadNotes(examen)"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
                                 style="background-color:white; color: green; border: 0px"></button>
@@ -164,10 +168,8 @@
                             examen.formateur_id?.user_id?.lastname }}</td>
                         <td>
                             <span *ngFor="let cid of examen.classe_id; let index = index">
-                                <span
-                                    *ngIf="cid && index==0">{{cid.abbrv}}</span>
-                                <span
-                                    *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
+                                <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
+                                <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
                             </span>
                         </td>
                         <td>{{ examen.matiere_id?.abbrv }}</td>
@@ -175,8 +177,8 @@
                         <td>{{ examen.coef }}</td>
                         <td>
                             <button pButton pRipple type="button" pTooltip="Modifier" tooltipPosition="bottom"
-                                icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-text mr-2 mb-2"
-                                (click)="showFormUpdateExamen = true; 
+                                *ngIf="!isFormateur" icon="pi pi-pencil"
+                                class="p-button-rounded p-button-info p-button-text mr-2 mb-2" (click)="showFormUpdateExamen = true; 
                             showFormAddExamen = false;
                             idExamenToUpdate = examen._id;
                             idClasseToUpdate = examen.classe_id;
@@ -189,6 +191,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-examen>
+
                     <tr>
                         <td colspan="9">
                             <div class="p-3">
@@ -200,6 +203,7 @@
                         <th>Note max:</th>
 
                     </tr>
+
                 </ng-template>
                 <ng-template pTemplate="body" let-examen>
 
@@ -209,6 +213,33 @@
                         <td>{{ examen.type }}</td>
                         <td> {{ examen.date | date:'dd/MM/yyyy HH:mm' }}</td>
                         <td>{{ examen.note_max }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <br>
+            <p-table responsiveLayout="scroll" *ngIf="notes">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="firstname">Prénom & Nom</th>
+                        <th pSortableColumn="note_val"> Note <p-sortIcon field="note_val"></p-sortIcon>
+                        </th>
+                        <th>
+                            Appreciation
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr *ngFor="let note of notes">
+                        <td>
+                            {{ note.etudiant_id?.user_id?.firstname }}
+                            {{ note.etudiant_id?.user_id?.lastname }}
+                        </td>
+                        <td style="min-width: 10rem;">
+                            {{ note.note_val | number : '0.2-9' }}
+                        </td>
+                        <td style="min-width: 12rem; ">
+                            {{ note.appreciation }}
+                        </td>
                     </tr>
                 </ng-template>
             </p-table>

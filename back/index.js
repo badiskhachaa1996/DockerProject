@@ -10,9 +10,13 @@ const jwt = require("jsonwebtoken");
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 let origin = ["http://localhost:4200"]
+let dblog = 'mongodb://localhost:27017/learningNode'
 if (process.argv[2]) {
     let argProd = process.argv[2]
-    if (argProd.includes('dev')) {
+    console.log(argProd)
+    if(argProd.includes('changeDB')){
+        dblog = 'mongodb://localhost:27017/b'
+    }else if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
         origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.intedgroup.com"]
@@ -32,7 +36,7 @@ const options = {
 const io = require("socket.io")(httpServer, options);
 
 mongoose
-    .connect(`mongodb://localhost:27017/learningNode`, {
+    .connect(dblog, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,

@@ -286,15 +286,10 @@ export class AppMenuComponent implements OnInit {
                                     label: "Pédagogie",
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
+                                        { label: 'Gestions des examens', icon: 'pi pi-copy', routerLink: 'examens' },
+                                        { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: 'notes' },
                                     ]
-                                },
-                                {
-                                    label: 'Gestions des examens', icon: 'pi pi-copy', items: [
-                                        { label: 'Ajouter un examen', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
-                                        { label: 'Liste des examens', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
-                                    ]
-                                },
-                                { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                                }
                             ];
                         }
                     })
