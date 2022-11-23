@@ -34,10 +34,10 @@
             </div>
             <br>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddEtudiant" (ngSubmit)="onAddEtudiant()">
+                <h2 class="col-12 text-center" style="font-weight: bold;">Informations Etudiants</h2>
                 <div class="field col-5 md:col-4">
-                    <label For="civilite">Civilité</label>
-                    <p-dropdown [options]="civiliteList" optionLabel="value" optionDisabled="actif"
-                        formControlName="civilite"></p-dropdown>
+                    <label For="civilite">Civilité <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="civiliteList" formControlName="civilite"></p-dropdown>
                 </div>
 
                 <div class="field col-12 md:col-4">
@@ -64,10 +64,30 @@
                             format </span>
                     </div>
                 </div>
+                <div class="field col-12 md:col-3">
+                    <label For="date_naissance">Date de naissance<span style="color: red;"> * </span></label>
+                    <input formControlName="date_naissance" pInputText (change)="isMinorFC()" type="date" />
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label For="ville">Pays d'origine<span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="paysList" optionLabel="value" formControlName="pays_origine" filter="true">
+                    </p-dropdown>
+                    <!-- <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
+                        <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
+                            Le nom du pays n'est pas dans le bon format
+                        </span>
+                    </div> -->
+                </div>
+                <div class="field col-12 md:col-3">
+                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
+                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
+                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
+                    </p-dropdown>
+                </div>
 
                 <div class="field col-4 md:col-2">
-                    <label For="indicatif">Indicatif</label>
-                    <input pInputText id="indicatif" type="number" placeholder="+33" formControlName="indicatif" />
+                    <label For="indicatif">Indicatif<span style="color: red;"> * </span></label>
+                    <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
 
                     <!-- <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
                         <span style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">*
@@ -76,8 +96,8 @@
                 </div>
 
                 <div class="field col-8 md:col-4">
-                    <label For="telephone">Numéro de téléphone </label>
-                    <input pInputText id="telephone" type="text" placeholder="Entrez votre numéro de téléphone"
+                    <label >Numéro de téléphone<span style="color: red;"> * </span></label>
+                    <input pInputText type="text" placeholder="Entrez votre numéro de téléphone"
                         formControlName="phone" />
 
                     <!-- <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
@@ -89,14 +109,14 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="mail">Adresse email perso<span style="color: red;"> * </span></label>
-                    <input pInputText id="mail" type="email" placeholder="j.smith@gmail.com"
-                        formControlName="email" />
+                    <label For="mail">Adresse email personnelle<span style="color: red;"> * </span></label>
+                    <input pInputText id="mail" type="email" placeholder="j.smith@gmail.com" formControlName="email" />
 
                     <div *ngIf="email.invalid && (email.touched || email.dirty)">
                         <span style="color: red;" class="error" *ngIf="email.errors?.required" style="color: red;">*
                             L'email est obligatoire </span>
-                        <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon format</span>
+                        <span *ngIf="email.errors?.pattern" style="color: red;"> L'email' n'est pas dans le bon
+                            format</span>
                     </div>
                 </div>
 
@@ -144,7 +164,8 @@
                 <div class="field col-12 md:col-6">
                     <label For="ville">Pays</label>
                     <p-dropdown [options]="paysList" optionLabel="value" optionDisabled="actif"
-                        formControlName="pays_adresse" filter="true"></p-dropdown>
+                        placeholder="Choissisez le pays de l'adresse" formControlName="pays_adresse" filter="true">
+                    </p-dropdown>
                     <!-- <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                         <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
                             Le nom du pays n'est pas dans le bon format
@@ -153,7 +174,27 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="campus">Campus</label>
+                    <label For="sosemail">Email d'une personne en cas d'urgence</label>
+                    <input pInputText type="email" id="sosemail" placeholder="email@gmail.com"
+                        formControlName="sos_email" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="sostel">Téléphone d'une personne en cas d'urgence</label>
+                    <input pInputText type="text" id="sostel" placeholder="+33 0601234589"
+                        formControlName="sos_phone" />
+                </div>
+
+                <div class="field col-12">
+                    <label>Est une Personne à Mobilité Réduite ?</label>
+                    <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
+                        formControlName="isHandicaped"></p-selectButton>
+                </div>
+
+                <h2 class="col-12 text-center" style="font-weight: bold;">Parcours Académique</h2>
+
+                <div class="field col-12 md:col-6">
+                    <label For="campus">Campus<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus"
                         formControlName="campus_id" emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus"
                         filter="true">
@@ -170,40 +211,80 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="statut">Statut Professionel<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="statutList" optionLabel="viewValue" optionDisabled="actif"
-                        formControlName="statut"></p-dropdown>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="statut">Statut Dossier</label>
-                    <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
-                </div>
-
-                <div class="field col-12 md:col-6">
                     <label For="groupe">Groupe<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownClasse" optionLabel="libelle" placeholder="Choissisez un groupe"
+                    <p-dropdown [options]="dropdownClasse" placeholder="Choissisez un groupe"
                         formControlName="classe_id" emptyFilterMessage="Pas de groupe trouvé" filterPlaceholder="Groupe"
                         filter="true">
                     </p-dropdown>
                 </div>
 
-                <div class="field col-12 md:col-3">
-                    <label For="nationalite">Nationalité<span style="color: red;"> * </span></label>
-                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
-                        emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label For="date_naissance">Date de naissance<span style="color: red;"> * </span></label>
-                    <input formControlName="date_naissance" pInputText (change)="isMinorFC()" type="date" />
+                <div class="field col-12 md:col-6">
+                    <label For="annee_scolaire">Année Scolaire<span style="color: red;"> * </span></label>
+                    <p-multiSelect [options]="dropdownAnneeScolaire"
+                        placeholder="Choissisez les années scolaires où cette étudiant à étudié"
+                        formControlName="annee_scolaire"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="annee_scolaire">Année Scolaire<span style="color: red;"> * </span></label>
-                    <p-multiSelect [options]="dropdownAnneeScolaire" placeholder="Choissisez les années scolaires où cette étudiant à étudié"
-                        formControlName="annee_scolaire" ></p-multiSelect>
+                    <label For="ine">Numéro INE</label>
+                    <input pInputText type="text" id="ine" placeholder="1234567890G" formControlName="numero_INE" />
                 </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="nir">Numéro NIR</label>
+                    <input pInputText type="text" id="nir" placeholder="1 53 12 45 007 231 48"
+                        formControlName="numero_NIR" />
+                </div>
+
+                <h2 class="col-12 text-center" style="font-weight: bold;">Rythme d'étude</h2>
+
+                <div class="field col-12">
+                    <label For="statut">Rythme<span style="color: red;"> * </span></label>
+                    <!--<p-dropdown [options]="statutList" placeholder="Choissisez un rythme d'étude"
+                        formControlName="statut"></p-dropdown>-->
+                    <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
+                        formControlName="isAlternant"></p-selectButton>
+
+                </div>
+
+                <div class="field col-12" *ngIf="!formAddEtudiant.value.isAlternant">
+                    <label For="statut">Stage<span style="color: red;"> * </span></label>
+                    <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
+                        formControlName="isOnStage"></p-selectButton>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isAlternant">
+                    <label For="statut">Etat de contract</label>
+                    <p-dropdown [options]="etatContract" placeholder="Choissisez un etat de contract"
+                        formControlName="etat_contract">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="formAddEtudiant.value.isAlternant || formAddEtudiant.value.isOnStage">
+                    <label For="statut">Entreprise</label>
+                    <input pInputText type="text" placeholder="Elitelabs" formControlName="entreprise" />
+                </div>
+
+
+                <h2 class="col-12 text-center" style="font-weight: bold;">Autres informations</h2>
+
+                <div class="field col-12 md:col-6">
+                    <label>Paiement</label>
+                    <p-dropdown [options]="dropdownPaiement" placeholder="Choissisez un etat de paiement"
+                        formControlName="etat_paiement">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Source Etudiant</label>
+                    <p-dropdown [options]="dropdownSrcEtudiant" placeholder="Choissisez une source de l'étudiant"
+                        formControlName="source">
+                    </p-dropdown>
+                </div>
+
+                <h2 class="col-12 text-center" style="font-weight: bold;">Informations complémentaire</h2>
+
+
                 <div class="field col-12 md:col-6">
                     <label For="ville">Dernier diplome obtenu</label>
                     <input pInputText type="text" id="ville" placeholder="Licence en DEV WEB & WEB Mobile"
@@ -211,15 +292,8 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="sosemail">Email d'une personne en cas d'urgence</label>
-                    <input pInputText type="email" id="sosemail" placeholder="email@gmail.com"
-                        formControlName="sos_email" />
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="sostel">Téléphone d'une personne en cas d'urgence</label>
-                    <input pInputText type="text" id="sostel" placeholder="+33 0601234589"
-                        formControlName="sos_phone" />
+                    <label For="statut">Statut Dossier</label>
+                    <p-multiSelect [options]="statutDossier" formControlName="statut_dossier" placeholder="Choissisez des statuts dossiers"></p-multiSelect>
                 </div>
 
                 <!-- Parcous Etudiant-->
@@ -245,17 +319,6 @@
                 <div class="field col-12">
                     <label for="remarque">Remarque</label>
                     <textarea pInputTextarea formControlName="remarque" placeholder="Remarque"></textarea>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="ine">Numéro INE</label>
-                    <input pInputText type="text" id="ine" placeholder="1234567890G" formControlName="numero_INE" />
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label For="nir">Numéro NIR</label>
-                    <input pInputText type="text" id="nir" placeholder="1 53 12 45 007 231 48"
-                        formControlName="numero_NIR" />
                 </div>
 
 
@@ -286,28 +349,18 @@
 
                 </div>
 
-
-                <div class="field col-12">
-                    <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
-                        formControlName="isAlternant"></p-selectButton>
-                </div>
-                <div class="col-12" *ngIf="!formAddEtudiant.value.isAlternant">
-                    <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
-                        formControlName="isOnStage"></p-selectButton>
-
-
-                </div>
-
-                <div class="field col-12">
-                    <label>Est une Personne à Mobilité Réduite ?</label>
-                    <p-selectButton [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
-                        formControlName="isHandicaped"></p-selectButton>
-                </div>
-
                 <div class="field col-12" *ngIf="formAddEtudiant.value.isHandicaped==true">
                     <label>Avez-vous besoin d'un suivi particulier ?</label>
                     <input pInputText type="text" placeholder="Ascenseur" formControlName="suivi_handicaped" />
                 </div>
+
+                <!--<div class="field col-12">
+                    <label For="statut">Validé par l'administration<span style="color: red;"> * </span></label>
+                    <p-selectButton
+                        [options]="[{label:'Validé par l'administration',value:true},{label:'En attente par l'administration',value:false}]"
+                        formControlName="isAlternant"></p-selectButton>
+                </div>-->
+
 
                 <div>
                     <button pButton label="Ajouter l'étudiant" type="submit"

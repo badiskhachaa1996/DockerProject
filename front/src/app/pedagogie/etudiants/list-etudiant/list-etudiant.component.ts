@@ -278,7 +278,8 @@ export class ListEtudiantComponent implements OnInit {
 
     this.tuteurService.getAll().subscribe(data => {
       data.forEach(tuteur => {
-        this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
+        if (tuteur.user_id)
+          this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
       })
     })
 
@@ -292,8 +293,8 @@ export class ListEtudiantComponent implements OnInit {
     this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
       (response) => {
         response.forEach((tuteur) => {
-          this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
-          console.log(this.dropdownTuteurByEntreprise)
+          if (tuteur.user_id)
+            this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
         })
       }); this.dropdownTuteurByEntreprise = [];
   }

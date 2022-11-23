@@ -50,7 +50,13 @@ mongoose
                                                 console.error("Error Vérification admission par email IMS", err)
                                             } else if (doc) {
                                                 console.log(data['Mail école'], 'validé par Email IMS')
-                                                User.findByIdAndUpdate(user._id, { email_perso: data['Mail personnel'] })
+                                                User.findByIdAndUpdate(user._id, { email_perso: data['Mail personnel'] }, { new: true }, (err, doc) => {
+                                                    if (err) {
+                                                        console.error("Error Vérification admission par email IMS", err)
+                                                    }
+                                                })
+                                            } else {
+                                                console.log(email['Mail école'], ' se trouve dans la DB mais pas en tant qu\'étudiant')
                                             }
                                         })
                                     else if (data['Mail personnel']) {
@@ -61,7 +67,13 @@ mongoose
                                                         console.error("Error Vérification admission par email PERSO", err)
                                                     } else if (doc) {
                                                         console.log(data['Mail personnel'], 'validé par Email PERSO')
-                                                        User.findByIdAndUpdate(user._id, { email: data['Mail école'] })
+                                                        User.findByIdAndUpdate(user._id, { email: data['Mail école'] }, { new: true }, (err, doc) => {
+                                                            if (err) {
+                                                                console.error("Error Vérification admission par email IMS", err)
+                                                            }
+                                                        })
+                                                    } else {
+                                                        console.log(email['Mail personnel'], ' se trouve dans la DB mais pas en tant qu\'étudiant')
                                                     }
                                                 })
                                             else {
@@ -80,7 +92,13 @@ mongoose
                                                 console.error("Error Vérification admission par email PERSO", err)
                                             } else if (doc) {
                                                 console.log(data['Mail personnel'], 'validé par Email PERSO')
-                                                User.findByIdAndUpdate(user._id, { email: data['Mail école'] })
+                                                User.findByIdAndUpdate(user._id, { email: data['Mail école'] }, { new: true }, (err, doc) => {
+                                                    if (err) {
+                                                        console.error("Error Vérification admission par email IMS", err)
+                                                    }
+                                                })
+                                            }else {
+                                                console.log(email['Mail personnel'], ' se trouve dans la DB mais pas en tant qu\'étudiant')
                                             }
                                         })
                                     else {

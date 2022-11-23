@@ -152,8 +152,7 @@ app.post("/create", (req, res, next) => {
             //password: bcrypt.hashSync(userData.password, 8),
             role: userData.role,
             service_id: userData.service_id,
-            type: "Initial",
-
+            type: etudiant.isAlternant ? "Alternant" : "Initial",
             pays_adresse: userData.pays_adresse,
             ville_adresse: userData.ville_adresse,
             rue_adresse: userData.rue_adresse,

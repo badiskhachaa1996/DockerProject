@@ -39,6 +39,13 @@ export class Etudiant {
         public valided_by_admin?: boolean,
         public valided_by_support?: boolean,
         public annee_scolaire?: string[],
+        public date_telechargement_bulletin?: Date,
+        public conseiller?: string,
+        public pays_origine?: string,
+        public etat_contract?: string,
+        public entreprise?: string,
+        public etat_paiement?: string,
+        public source?: string,
 
     ) { }
 }
