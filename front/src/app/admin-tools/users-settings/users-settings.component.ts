@@ -123,7 +123,7 @@ export class UsersSettingsComponent implements OnInit {
       ((response) => { 
         this.services.forEach((service) => {
           this.services[service._id] = response;
-          this.dropDownService.push(service);
+          this.dropDownService.push({ label: service.label, value: service._id });
         }); 
       }),
       ((error) => { console.log(error) })

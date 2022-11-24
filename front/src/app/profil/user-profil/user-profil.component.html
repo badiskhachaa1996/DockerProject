@@ -115,7 +115,14 @@
 
             </div>
 
-            <div class="card" *ngIf="demandeConseiller==null">
+            <!-- Partie dedié à la demande de congés -->
+            <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
+                <h3>Demandes de congés</h3>
+            </div>
+            <!-- end -->
+
+            <div class="card" *ngIf="demandeConseiller==null || userConnectedNow.type == 'Etudiant'  || userConnectedNow.type == 'Alternant' || userConnectedNow.role == 'Admin'">
                 <h3>Faire une demande de Conseiller</h3>
                 <form class="p-fluid p-formgrid grid" [formGroup]="demandeConseillerForm" (ngSubmit)="saveDemande()">
                     <div class="field col-12">
