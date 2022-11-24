@@ -31,7 +31,8 @@ import { Service } from 'src/app/models/Service';
 import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
 import { Campus } from 'src/app/models/Campus';
-
+import { info } from 'console';
+import * as moment from 'moment';
 
 
 @Component({
@@ -46,6 +47,7 @@ export class ListEtudiantComponent implements OnInit {
 
   etudiants: Etudiant[] = [];
 
+  /* partie dedié aux filtres */
   filterByType: boolean;
   showNumbersByType = false;
   etudiantsByType: Etudiant[] = [];
@@ -62,6 +64,15 @@ export class ListEtudiantComponent implements OnInit {
   showFilterByCampus: boolean = false;
   etudiantsByCampus: Etudiant[] = [];
   campusList: any = [];
+  /* end */
+
+  /* partie dediée au reporting */
+  studentsByCampus: any;
+  pieOptions: any;
+  etudiantConnectedFromLastWeek: Etudiant[] = [];
+  studentsOfParis: Etudiant[] = [];
+  studentsOfMontpellier: Etudiant[] = [];
+  /* end */
 
   formUpdateEtudiant: FormGroup;
 
@@ -251,7 +262,6 @@ export class ListEtudiantComponent implements OnInit {
       data.forEach(p => {
         this.prospects[p.user_id] = p
       })
-      console.log(this.prospects)
     })
 
     this.campusService.getAllPopulate().subscribe(data => {
@@ -288,18 +298,15 @@ export class ListEtudiantComponent implements OnInit {
   entrepriseIDLoad(entreprise_id) {
     //Liste des tuteurs par entreprise_id
     let entrepriseId = entreprise_id
-    console.log(entrepriseId.value)
     this.tuteurService.getAllByEntrepriseId(entrepriseId.value).subscribe(
       (response) => {
         response.forEach((tuteur) => {
           this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
-          console.log(this.dropdownTuteurByEntreprise)
         })
       }); this.dropdownTuteurByEntreprise = [];
   }
 
   confirmRighFile(file, etudiant) {
-    console.log("confirme right for ", file)
     this.confirmationService.confirm({
       message: 'Voulez vous que ce document soit visible sur le profil de l\'étudiant?',
       header: 'Visibilité',
@@ -361,6 +368,8 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu;
+            // Pour le reporting
+            this.onGetNumbersOfStudentsConnectedbyCampus();
           }),
           ((error) => { console.error(error); })
         );
@@ -368,6 +377,8 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu
+            // Pour le reporting
+            this.onGetNumbersOfStudentsConnectedbyCampus();
           }),
           ((error) => { console.error(error); })
         );
@@ -554,7 +565,6 @@ export class ListEtudiantComponent implements OnInit {
 
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
-        console.log(responde.statut_dossier)
         this.messageService.add({ severity: 'success', summary: 'Etudiant modifié' });
         //Recuperation de la liste des differentes informations
         this.onGetAllClasses();
@@ -614,7 +624,6 @@ export class ListEtudiantComponent implements OnInit {
 
   showFPersonalUpdate(response: User, etudiant: Etudiant) {
     this.etudiantToUpdate = etudiant
-    console.log(etudiant)
     this.formUpdateUser.patchValue({
       firstname: response.firstname,
       lastname: response.lastname,
@@ -789,7 +798,6 @@ export class ListEtudiantComponent implements OnInit {
     })
     this.userService.getPopulate(this.token.id).subscribe(dataU => {
       let bypass: any = dataU?.service_id
-      console.log(this.token.role, bypass, (bypass?.label.includes('sministration') || this.token.role == "Admin"))
       this.isAdministration = bypass?.label.includes('sministration') || this.token.role == "Admin"
     })
   }
@@ -835,7 +843,6 @@ export class ListEtudiantComponent implements OnInit {
       avoidError.value = ""
       himself.clear()
       this.CVService.uploadCV(formData, bypass._id).subscribe(r => {
-        console.log(r.txt)
         this.langueFinder(r.txt)
         this.skillFinder(r.txt)
         this.experiencesFinder(r.txt)
@@ -1099,7 +1106,6 @@ export class ListEtudiantComponent implements OnInit {
               }
             }
           });
-          console.log(this.etudiantsByCampus);
           this.showFilterByCampus = true;
         })
         .catch((error) => { console.log(error) });
@@ -1109,11 +1115,6 @@ export class ListEtudiantComponent implements OnInit {
     }
 
   }
-
-
-  // filterByGroupe: Classe = undefined;
-  // showFilterByGroupe: boolean = false;
-  // etudiantsByGroupe: Etudiant[] = [];
 
   onFilterbyGroup(event: any) {
     if (event.value) {
@@ -1147,6 +1148,7 @@ export class ListEtudiantComponent implements OnInit {
     }
   }
 
+
   //Methode pour vider tous les compteurs
   onTrashCount() {
     this.filterByType = null;
@@ -1165,5 +1167,62 @@ export class ListEtudiantComponent implements OnInit {
     this.showFilterByCampus = false;
     this.etudiantsByCampus = [];
   }
+
+
+  /* Partie reporting */
+  onGetNumbersOfStudentsConnectedbyCampus()
+  {
+    //Date dde la semaine dernière
+    let WeekDate = moment().subtract(7, 'days').format('MM-DD-YYYY');
+    
+    let lastWeekDate = new Date(WeekDate);
+
+    this.etudiants.forEach((etudiant) => {
+      let byPassCampus: any = etudiant.campus;
+      let byPassUser: any = etudiant.user_id;
+      
+      if(byPassUser.last_connection >= lastWeekDate)
+      {
+        this.etudiantConnectedFromLastWeek.push(etudiant);
+
+        if(byPassCampus.libelle == 'ESTYA Paris')
+        {
+          this.studentsOfParis.push(etudiant);
+        } else if(byPassCampus.libelle == 'ESTYA Montpellier') {
+          this.studentsOfMontpellier.push(etudiant);
+        }
+      }
+    });
+    
+
+    this.studentsByCampus = {
+      labels: [`Paris ${this.studentsOfParis.length}`, `Montpellier ${this.studentsOfMontpellier.length}`],
+      datasets: [
+          {
+              data: [this.studentsOfParis.length, this.studentsOfMontpellier.length],
+              backgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+              ],
+              hoverBackgroundColor: [
+                  "#FF6384",
+                  "#36A2EB",
+              ]
+          }
+      ]
+    };
+
+    this.pieOptions = {
+      plugins: {
+          legend: {
+              labels: {
+                  color: '#495057'
+              }
+          }
+      }
+    };
+
+  }
+  /* end */
 
 }

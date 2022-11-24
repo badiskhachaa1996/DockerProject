@@ -70,6 +70,11 @@ export class UserProfilComponent implements OnInit {
   demandeConseiller: DemandeConseiller;
 
 
+  //Partie dedié a la gestion des demandes de congé
+  //utilisateur connecté actuellement
+  userConnectedNow: User;
+
+
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
       if (this.InfoUser.entreprise != null) {
@@ -276,12 +281,11 @@ export class UserProfilComponent implements OnInit {
     if (this.token["role"].includes("user")) {
       this.retour = true;
     }
-
     let decodeToken: any = jwt_decode(localStorage.getItem("token"))
     this.userupdate = decodeToken;
     this.CommercialService.getByUserId(decodeToken.id).subscribe(data => {
       if (data) {
-        this.infoCommercial = data
+        this.infoCommercial = data;
       }
 
     })
@@ -371,7 +375,14 @@ export class UserProfilComponent implements OnInit {
     })
 
 
+    //Recuperation de l'utilisateur connecté actuellement
+    this.AuthService.getInfoById(this.decodeToken.id).subscribe(
+      ((response) => { this.userConnectedNow = response ; console.log(this.userConnectedNow)}),
+      ((error) => { console.log(error) })
+    );
+
   }
+
   clickFile() {
     document.getElementById('selectedFile').click();
   }
@@ -425,5 +436,7 @@ export class UserProfilComponent implements OnInit {
       }
     }, 15);
   }
+
+  //Partie dedié a la gestion des demandes de congé
 
 }
