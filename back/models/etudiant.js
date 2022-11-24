@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const etudiantSchema = mongoose.Schema({
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe", required: false, default: null },
-    statut: { type: String, required: true },
+    statut: { type: String, default: 'Etudiant' },
     nationalite: { type: String },
     date_naissance: { type: Date, required: true },
     code_partenaire: { type: String },
@@ -50,7 +50,12 @@ const etudiantSchema = mongoose.Schema({
     valided_by_support: { type: Boolean, default: false },
     annee_scolaire: { type: [String], default: ["2021-2022"] },
     date_telechargement_bulletin: { type: Date },
-    conseiller: { type: mongoose.Schema.Types.ObjectId, ref: "user" }
+    conseiller: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    pays_origine: { type: String },
+    etat_contract: { type: String },
+    entreprise: { String },
+    etat_paiement: { String },
+    source: { type: String, default: 'Aucune' },
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

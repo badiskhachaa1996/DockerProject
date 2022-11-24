@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { Product } from 'src/app/api/product';
 import { Diplome } from 'src/app/models/Diplome';
-import { ProductService } from 'src/app/service/productservice';
 import { AnneeScolaireService } from 'src/app/services/annee-scolaire.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
@@ -27,7 +25,6 @@ import { CommercialPartenaireService } from 'src/app/services/commercial-partena
 })
 export class ListDiplomeComponent implements OnInit {
 
-  products: Product[];
   isExpanded: boolean = false;
   expandedRows = {};
 
@@ -41,7 +38,7 @@ export class ListDiplomeComponent implements OnInit {
   domaineEtude = [
     { value: "Informatique" },
     { value: "Commerce" },
-    { value: "Construction"},
+    { value: "Construction" },
     { value: "Tertiaire" },
   ]
 
@@ -97,13 +94,11 @@ export class ListDiplomeComponent implements OnInit {
 
   isCommercial: boolean = false;
 
-  constructor(private productService: ProductService, private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
+  constructor(private route: ActivatedRoute, private campusService: CampusService, private diplomeService: DiplomeService, private router: Router, private formBuilder: FormBuilder,
     private messageService: MessageService, private matiereService: MatiereService, private ecoleService: EcoleService, private anneeScolaireService: AnneeScolaireService,
     private formateurService: FormateurService, private AuthService: AuthService, private CommercialService: CommercialPartenaireService) { }
 
   ngOnInit(): void {
-
-    this.productService.getProductsWithOrdersSmall().then(data => this.products = data);
 
     this.campusId = this.route.snapshot.paramMap.get('id');
     //Recuperation de la liste des diplômes
@@ -265,10 +260,10 @@ export class ListDiplomeComponent implements OnInit {
     this.diplomeToUpdate.date_debut_semestre_2 = this.formUpdateDiplome.get('date_debut_semestre_2')?.value;
     this.diplomeToUpdate.date_fin_semestre_2 = this.formUpdateDiplome.get('date_fin_semestre_2')?.value;
     this.diplomeToUpdate.code_diplome = this.formUpdateDiplome.get('code_diplome')?.value;
-    if(this.formUpdateDiplome.get('formateur_id')?.value)
+    if (this.formUpdateDiplome.get('formateur_id')?.value)
       this.diplomeToUpdate.formateur_id = this.formUpdateDiplome.get('formateur_id')?.value.value;
     else
-    this.diplomeToUpdate.formateur_id = null
+      this.diplomeToUpdate.formateur_id = null
 
     this.diplomeService.update(this.diplomeToUpdate).subscribe(
       ((response) => {

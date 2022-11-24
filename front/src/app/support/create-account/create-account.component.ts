@@ -22,11 +22,14 @@ export class CreateAccountComponent implements OnInit {
 
   showAssignForm: Etudiant = null
 
-  AssignEmailForm() {
-    let data = this.formAssignEmail.value.email_ims
-    this.etudiantService.assignEmail(this.showAssignForm._id, data).subscribe(d => {
+  showUpdateForm(etu: any) {
+    this.formAssignEmail.setValue({ email_ims: etu.user_id.email })
+  }
 
-      this.messageService.add({ severity: "success", detail: "Mis à jour avec succès par: " + data, summary: "Assignation de l'émail " })
+  AssignEmailForm() {
+    this.etudiantService.assignEmail(this.showAssignForm._id, this.formAssignEmail.value.email_ims).subscribe(d => {
+
+      this.messageService.add({ severity: "success", detail: "Mis à jour avec succès par: " + this.formAssignEmail.value.email_ims, summary: "Assignation de l'émail " })
       this.etudiants.forEach((val, index) => {
         if (val._id == this.showAssignForm._id) {
           this.etudiants.splice(index, 1)

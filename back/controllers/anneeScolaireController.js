@@ -82,7 +82,7 @@ app.get("/activer/:id", (req, res) => {
    
     AnneeScolaire.findOneAndUpdate({_id:req.params.id} ,
         {
-            etat : "Activer",
+            etat : "Active",
         }, { new: true }, (err,anneeScolaire) => {
             if (err) {
                 res.send(err)

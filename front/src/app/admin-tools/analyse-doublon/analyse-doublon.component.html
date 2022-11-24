@@ -1,0 +1,199 @@
+<div class="grid">
+    <div class="col-6 lg:col-6 xl:col-3" *ngIf="doublonEmailIMS">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Doublon avec Email IMS </span>
+                    <div class="text-900 font-medium text-xl">{{ doublonEmailIMS.length }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-folder-open text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 lg:col-6 xl:col-3" *ngIf="doublonEmailPerso">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3"> Doublon avec Email Perso
+                    </span>
+                    <div class="text-900 font-medium text-xl">{{ doublonEmailPerso.length }}</div>
+                </div>
+
+                <div class="flex align-items-center justify-content-center bg-pink-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-clock text-pink-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-12">
+    <div class="card">
+        <h5>Gestion des doublons avec IMS</h5>
+        <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [totalRecords]="doublonEmailIMS.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Email</th>
+                    <th>Email perso</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doublon let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="doublon"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.civilite }} {{ doublon.data[0]?.lastname |
+                        uppercase }} {{
+                        doublon.data[0]?.firstname
+                        | titlecase }}</td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.email }}</td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.email_perso }}</td>
+                    <td>NUCKED</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-doublon>
+                <tr>
+                    <td colspan="8">
+                        <div class="p-3">
+                            <p-table responsiveLayout="scroll" [value]="doublon.data">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Email</th>
+                    <th>Email perso</th>
+                    <th>Type</th>
+                    <th>Dernier Connexion</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{ user?.civilite }} {{ user?.lastname | uppercase }} {{
+                        user?.firstname
+                        | titlecase }}</td>
+                    <td>{{ user?.email }}</td>
+                    <td>{{ user?.email_perso }}</td>
+                    <td>{{ user?.type }}</td>
+                    <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
+                    </td>
+                    <td>
+                        <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
+                            pTooltip="Rechercher dans la table étudiants" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchEtudiant(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user?.type=='Formateur' || user?.type=='formateur'"
+                            pTooltip="Rechercher dans la table formateurs" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchFormateur(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user?.type=='Commercial' || user?.type=='Conseiller'"
+                            pTooltip="Rechercher dans la table commercials" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchCommercial(user._id)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer entièrement" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-trash" (click)="deleteIMS(user._id,doublon._id)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>
+<div class="col-12">
+    <div class="card">
+        <h5>Gestion des doublons avec Email perso</h5>
+        <p-table [value]="doublonEmailPerso" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [totalRecords]="doublonEmailPerso.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Email</th>
+                    <th>Email perso</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-doublon let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="doublon"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.civilite }} {{ doublon.data[0]?.lastname |
+                        uppercase }} {{
+                        doublon.data[0]?.firstname
+                        | titlecase }}</td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.email }}</td>
+                    <td style="min-width: 10rem;">{{ doublon.data[0]?.email_perso }}</td>
+                    <td>NUCKED</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-doublon>
+                <tr>
+                    <td colspan="8">
+                        <div class="p-3">
+                            <p-table responsiveLayout="scroll" [value]="doublon.data">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Email</th>
+                    <th>Email perso</th>
+                    <th>Type</th>
+                    <th>Dernier Connexion</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{ user?.civilite }} {{ user?.lastname | uppercase }} {{
+                        user?.firstname
+                        | titlecase }}</td>
+                    <td>{{ user?.email }}</td>
+                    <td>{{ user?.email_perso }}</td>
+                    <td>{{ user?.type }}</td>
+                    <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
+                    </td>
+                    <td>
+                        <i *ngIf="user.type=='Prospect' || !user.type"
+                            pTooltip="Rechercher dans la table prospects" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-eye" (click)="searchProspect(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
+                            pTooltip="Rechercher dans la table étudiants" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchEtudiant(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user?.type=='Formateur' || user?.type=='formateur'"
+                            pTooltip="Rechercher dans la table formateurs" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchFormateur(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user?.type=='Commercial' || user?.type=='Conseiller'"
+                            pTooltip="Rechercher dans la table commercials" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="searchCommercial(user._id)" aria-hidden="true"></i>
+                        <i pTooltip="Supprimer entièrement" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-trash" (click)="deletePerso(user._id,doublon._id)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>

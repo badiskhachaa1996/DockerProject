@@ -32,14 +32,18 @@ export class AddAgentComponent implements OnInit {
   emailExists = false;
   roleList = environment.role;
   showForm: boolean = true;
-  civiliteList = environment.civilite;
+  civiliteList = [
+    { value: 'Monsieur', label: 'Monsieur' },
+    { value: 'Madame', label: 'Madame' },
+    { value: 'Autre', label: 'Autre' },
+  ];
   statutList = environment.typeUser
   campusList = []
   formationList = []
   entreprisesList = []
 
   RegisterForm: FormGroup = new FormGroup({
-    civilite: new FormControl(environment.civilite[0], [Validators.required]),
+    civilite: new FormControl('', [Validators.required]),
     lastname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     firstname: new FormControl('', [Validators.required, Validators.pattern('[^0-9]+')]),
     email: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com))$")]),
@@ -48,13 +52,13 @@ export class AddAgentComponent implements OnInit {
     role: new FormControl('', Validators.required),
     service_id: new FormControl("", Validators.required),
     entreprise: new FormControl(""),
-    type: new FormControl(this.statutList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
+    //type: new FormControl(this.statutList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
     pays_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
     ville_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
     rue_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
     postal_adresse: new FormControl("", [Validators.pattern('[0-9]+')]),
-    campus: new FormControl(""),
-    formation: new FormControl(""),
+    //campus: new FormControl(""),
+    //formation: new FormControl(""),
     departement: new FormControl('')
   })
 
@@ -130,16 +134,16 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.indicatif,
       this.RegisterForm.value.phone,
       this.RegisterForm.value.email,
-      this.RegisterForm.value.email,
+      null,
       null,
       this.RegisterForm.value.role.value,
       false,
       this.RegisterForm.value.service_id,
-      this.RegisterForm.value.civilite.value,
+      this.RegisterForm.value.civilite,
       null,
       null,
-      this.RegisterForm.value.type.value,
-      this.RegisterForm.value.entreprise.value,
+      'Agent',
+      null,
       this.RegisterForm.value.pays_adresse,
       this.RegisterForm.value.ville_adresse,
       this.RegisterForm.value.rue_adresse,

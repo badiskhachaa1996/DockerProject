@@ -4,7 +4,8 @@
 		<div class="card">
 			<h5>Liste des agents</h5>
 			<p-table #dt1 dataKey="id" [rows]="10" [rowHover]="true" [value]="tabUser" styleClass="" [paginator]="true"
-				[pageLinks]="5" [globalFilterFields]="['firstname','serviceDic[rowData.service_id]?.label','role','email','lastname']"
+				[pageLinks]="5"
+				[globalFilterFields]="['firstname','serviceDic[rowData.service_id]?.label','role','email','lastname']"
 				responsiveLayout="scroll" styleClass="p-datatable-gridlines">
 
 				<ng-template pTemplate="caption">
@@ -19,10 +20,18 @@
 				</ng-template>
 				<ng-template pTemplate="header">
 					<tr>
-						<th pSortableColumn="firstname" style="text-align: center;">Prénom & Nom <p-sortIcon field="firstname"></p-sortIcon></th>
-						<th pSortableColumn="service_id" style="text-align: center;"> Services <p-sortIcon field="service_id"></p-sortIcon></th>
-						<th pSortableColumn="role" style="text-align: center;"> Rôle <p-sortIcon field="role"></p-sortIcon></th>
-						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="firstname" style="text-align: center;">Prénom & Nom <p-sortIcon
+								field="firstname"></p-sortIcon>
+						</th>
+						<th pSortableColumn="service_id" style="text-align: center;"> Services <p-sortIcon
+								field="service_id"></p-sortIcon>
+						</th>
+						<th pSortableColumn="role" style="text-align: center;"> Rôle <p-sortIcon field="role">
+							</p-sortIcon>
+						</th>
+						<th pSortableColumn="email" style="text-align: center;"> Email <p-sortIcon field="email">
+							</p-sortIcon>
+						</th>
 						<th style="text-align: center;">Action</th>
 				</ng-template>
 				<ng-template pTemplate="body" let-rowData>
@@ -30,8 +39,11 @@
 						<td>
 							{{ rowData.firstname | titlecase }} {{ rowData.lastname | uppercase }}
 						</td>
-						<td>
+						<td *ngIf="rowData.service_id">
 							{{ serviceDic[rowData.service_id]?.label }}
+						</td>
+						<td *ngIf="!rowData.service_id">
+							Aucun
 						</td>
 						<td>
 							{{ rowData.role}}
@@ -40,23 +52,6 @@
 							{{ rowData.email}}
 						</td>
 						<td>
-							<button pButton pRipple type="button" icon="pi pi-sitemap"
-								(click)="seeUnderPartenaire(rowData)"
-								class="p-button-rounded p-button-info p-button-text mr-2 mb-2">
-
-							</button>
-
-
-
-							<button pButton pRipple type="button" icon="pi pi-user"
-								class="p-button-rounded p-button-info p-button-text mr-2 mb-2"
-								pTooltip="Voir les Eleves affiliés" (click)="seeRecruted(rowData)">
-							</button>
-
-							<button pButton pRipple type="button" (click)="seePreRecruted(rowData)" aria-hidden="true"
-								icon="pi pi-envelope" class="p-button-rounded p-button-info p-button-text mr-2 mb-2">
-
-							</button>
 
 						</td>
 					</tr>

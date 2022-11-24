@@ -569,10 +569,19 @@ export class GestionPreinscriptionsComponent implements OnInit {
     this.router.navigate(['suivi-preinscription', bypass._id]);
   }
 
+
+  filtedTable: any[] = []
+
+  onFilter(event, dt) {
+    this.filtedTable = event.filteredValue;
+  }
+
   exportExcel() {
     let dataExcel = []
     //Clean the data
-    this.prospects.forEach(p => {
+    if(this.filtedTable.length<1)
+      this.filtedTable=this.prospects
+    this.filtedTable.forEach(p => {
       let t = {}
       t['NOM'] = p?.user_id?.lastname
       t['Prenom'] = p?.user_id?.firstname

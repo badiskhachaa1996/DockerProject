@@ -13,6 +13,8 @@ import { ExamenService } from 'src/app/services/examen.service';
 import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import jwt_decode from 'jwt-decode';
+import { NoteService } from 'src/app/services/note.service';
+import { Note } from 'src/app/models/Note';
 
 @Component({
   selector: 'app-examen',
@@ -46,7 +48,7 @@ export class ExamenComponent implements OnInit {
 
 
   dropdownNiveau: any[] = [
-    { label: "Évaluation", value: "Évaluation" },
+    { label: "Controle Continue", value: "Controle Continue" },
     { label: "Examen finale", value: "Examen finale" },
     { label: "Soutenance", value: "Soutenance" }
   ]
@@ -69,6 +71,7 @@ export class ExamenComponent implements OnInit {
     private examenService: ExamenService,
     private matiereService: MatiereService,
     private classeService: ClasseService,
+    private NotesService: NoteService,
     private router: Router
   ) { }
 
@@ -128,7 +131,9 @@ export class ExamenComponent implements OnInit {
     this.dropdownGroupe = [{ label: 'Tous les groupes', value: null }];//Filtre
     this.dropdownModule = [{ label: 'Tous les modules', value: null }];//Filtre
     this.formateurService.getByUserId(this.token.id).subscribe(f => {
-      this.isFormateur = f
+
+      if (this.token.role == 'user')
+        this.isFormateur = f
       if (!this.isFormateur) {
         //Récupération des informations en tant qu'Admin ou Agent Péda
         this.examenService.getAllPopulate().subscribe(
@@ -295,5 +300,13 @@ export class ExamenComponent implements OnInit {
   onLoadModules(event) {
     console.log(event)
 
+  }
+  notes: Note[] = []
+  loadNotes(examen) {
+    this.notes=[]
+    this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
+      this.notes = notes
+      console.log(notes)
+    })
   }
 }

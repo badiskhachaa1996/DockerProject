@@ -23,7 +23,7 @@
         <p-toast></p-toast>
         <p-table #dt1 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
             [globalFilterFields]="['statut', 'user_id', 'classe_id','lastname','firstname','custom_id']" [rows]="10"
-            [pageLinks]="5" [paginator]="false" rowExpandMode="single" [totalRecords]="etudiants.length"
+            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
                 <span class="p-input-icon-left mb-2 mr-2">
@@ -40,17 +40,17 @@
                     <th style="width: 3rem"></th>
                     <th pSortableColumn="customid"> ID <p-sortIcon field="customid"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="nom_prenom"> Prénom & Nom<p-sortIcon field="nom_prenom"></p-sortIcon>
+                    <th pSortableColumn="user_id.firstname"> Prénom & Nom<p-sortIcon field="user_id.firstname"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="statut"> Statut Dossier<p-sortIcon field="statut"></p-sortIcon>
+                    <th pSortableColumn="user_id.email"> Email IMS<p-sortIcon field="user_id.email"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="groupe"> Groupe <p-sortIcon field="groupe"></p-sortIcon>
+                    <th pSortableColumn="user_id.email_perso"> Email Perso <p-sortIcon field="user_id.email_perso"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="campus_id"> Campus <p-sortIcon field="campus_id"></p-sortIcon>
+                    <th pSortableColumn="user_id.classe_id.abbrv"> Groupe <p-sortIcon field="user_id.classe_id.abbrv"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="email"> Email <p-sortIcon field="email"></p-sortIcon>
+                    <th pSortableColumn="campus.libelle"> Campus <p-sortIcon field="campus.libelle"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="nationalite"> Nationnalitée <p-sortIcon field="nationalite"></p-sortIcon>
+                    <th pSortableColumn="filiere.titre"> Filière <p-sortIcon field="filiere.titre"></p-sortIcon>
                     </th>
                     <th>Action </th>
                 </tr>
@@ -68,14 +68,15 @@
                     <td>
                         {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                     </td>
-                    <td style="min-width: 8rem;">{{ etudiant.statut_dossier }} {{
-                        etudiant.date_dernier_modif_dossier | date : 'dd/MM hh:mm' }}</td>
-                    <td style="min-width: 10rem;">{{ etudiant.classe_id?.nom }}</td>
-                    <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
-                    <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.classe_id?.abbrv }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>
+
+                    <td *ngIf="etudiant.filiere" style="min-width: 10rem;">{{ etudiant.filiere.titre }}</td>
+                    <td *ngIf="!etudiant.filiere" style="min-width: 10rem;">{{ etudiant.diplome }}</td>
                     <td>
-                        <i style="margin-left: 2%;" class="pi pi-check" (click)="showAssignForm=etudiant"
+                        <i style="margin-left: 2%;" class="pi pi-check" (click)="showAssignForm=etudiant;showUpdateForm(etudiant)"
                             pTooltip="Assigner un email" aria-hidden="true" tooltipPosition="bottom"></i>
                     </td>
                 </tr>

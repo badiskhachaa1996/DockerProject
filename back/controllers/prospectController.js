@@ -21,8 +21,8 @@ let transporterEstya = nodemailer.createTransport({
     secure: false, // true for 587, false for other ports
     requireTLS: true,
     auth: {
-        user: 'admission@estya.com',
-        pass: 'ADMIelite19',
+        user: 'contact@estya.com',
+        pass: 'ESTYAfr@2022*',
     },
 });
 let origin = ["http://localhost:4200"]
@@ -147,7 +147,7 @@ app.post("/create", (req, res, next) => {
                                     let htmlmail = fs.readFileSync('assets/EmailAdmissionEstyaPart1.html', { encoding: "utf-8", flag: "r" }) + r + temp
 
                                     let mailOptions = {
-                                        from: "admission@estya.com",
+                                        from: "contact@estya.com",
                                         to: userCreated.email_perso,
                                         subject: 'Inscription enregistrée - ESTYA UNIVERSITY',
                                         html: htmlmail,

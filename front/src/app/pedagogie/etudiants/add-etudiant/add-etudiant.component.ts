@@ -49,14 +49,18 @@ export class AddEtudiantComponent implements OnInit {
   dropdownUser: any[] = [{ libelle: '', value: '' }];
 
   classes: Classe[] = [];
-  dropdownClasse: any[] = [{ libelle: 'Choissisez une classe', value: null }];
+  dropdownClasse: any[] = [];
   dropdownFiliere: any[] = [];
   dropdownCampus: any[] = [];
 
   searchClass: any[] = [{ libelle: 'Toutes les groupes', value: null }];
 
-  civiliteList = environment.civilite;
-  statutList = environment.profil;
+  civiliteList = [
+    { value: 'Monsieur', label: 'Monsieur' },
+    { value: 'Madame', label: 'Madame' },
+    { value: 'Autre', label: 'Autre' },
+  ];
+  statutList = [{ value: 'Alternant', label: "Alternant" }, { value: 'Initial', label: "Initial" }];
   display: boolean;
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
@@ -88,6 +92,30 @@ export class AddEtudiantComponent implements OnInit {
   isMinor = false;
   formationList = []
   defaultClasse: Classe;
+  entrepriseList = []
+
+  dropdownPaiement = [
+    { label: "Aucun", value: "Aucun" },
+    { label: "Alternant", value: "Alternant" },
+    { label: "Chèques de scolarité", value: "Chèques de scolarité" },
+    { label: "Partiel", value: "Partiel" },
+    { label: "Total payé", value: "Total payé" },
+    { label: "Exonéré", value: "Exonéré" },
+  ]
+
+  dropdownSrcEtudiant = [
+    { label: "Etudiant International", value: "Etudiant International" },
+    { label: "Réinscription", value: "Réinscription" },
+    { label: "Nouvelle inscription - Etudiant Local", value: "Nouvelle inscription - Etudiant Local" },
+  ]
+
+  etatContract = [
+    { label: "En attente d'information", value: "En attente d'information" },
+    { label: "Contrat Etabli", value: "Contrat Etabli" },
+    { label: "Contrat Signé", value: "Contrat Signé" },
+    { label: "Contrat déposé à OPCO", value: "Contrat déposé à OPCO" },
+    { label: "Contrat validé à facturation", value: "Contrat validé à facturation" },
+  ]
 
 
 
@@ -124,18 +152,22 @@ export class AddEtudiantComponent implements OnInit {
         let n = e.libelle + " - " + c.libelle
         this.dropdownCampus.push({ value: c._id, label: n })
       })
-      this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
     })
 
     this.diplomeService.getAll().subscribe(data => {
       data.forEach(d => {
         this.dropdownFiliere.push({ value: d._id, label: d.titre })
       })
-      this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
     })
 
     this.etudiantService.getAll().subscribe(u => {
       this.users = u
+    })
+
+    this.entrepriseService.getAll().subscribe(entreprises => {
+      entreprises.forEach(ent => {
+        this.entrepriseList.push({ label: ent.r_sociale, value: ent._id })
+      })
     })
 
     //Initialisation du formulaire d'ajout et de modification d'un etudiant
@@ -154,12 +186,10 @@ export class AddEtudiantComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.dropdownClasse.push({ libelle: classe.abbrv, value: classe._id });
+          this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
           this.classes[classe._id] = classe;
           this.searchClass.push({ libelle: classe.abbrv, value: classe._id });
         })
-        this.defaultClasse = response[0]
-        this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
       }),
       ((error) => { console.error(error); })
     );
@@ -168,31 +198,43 @@ export class AddEtudiantComponent implements OnInit {
   //Methode d'initialisation du formulaire d'ajout d'un étudiant
   onInitFormAddEtudiant() {
     this.formAddEtudiant = this.formBuilder.group({
-      civilite: [this.civiliteList[0]],
+      civilite: ['', Validators.required],
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
-      indicatif: [''],
-      phone: [''],
-      email: ['', Validators.email],
+      date_naissance: [null, Validators.required],
+      pays_origine: [this.paysList[0], Validators.required],
+      nationalite: [this.nationList[0].value, Validators.required],
+      indicatif: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      phone: ['', [Validators.required, Validators.pattern('[- +()0-9]+')]],
+      email: ['', [Validators.email, Validators.required]],
       email_ims: ['', Validators.email],
-      // email: ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@estya+\\.com$")]],
-      pays_adresse: [this.paysList[0]],
-      ville_adresse: [''],
       rue_adresse: [''],
       numero_adresse: [''],
       postal_adresse: [''],
-      classe_id: ['', Validators.required],
-      statut: [this.statutList[0], Validators.required],
-      nationalite: [this.nationList[0].value, Validators.required],
-      date_naissance: [null, Validators.required],
-      isAlternant: [false],
-      isOnStage: [false],
-      ///Form ETUDIANT
-      dernier_diplome: [''],
+      ville_adresse: [''],
+      pays_adresse: [''],
       sos_email: ['', Validators.email],
       sos_phone: ['', Validators.pattern('[- +()0-9]+')],
+      isHandicaped: [false],
+
+      campus_id: ['', Validators.required],
+      filiere: ['', Validators.required],
+      classe_id: ['', Validators.required],
+      annee_scolaire: [[], Validators.required],
       numero_INE: [''],
       numero_NIR: ['', Validators.pattern('[0-9]+')],
+
+      isAlternant: [false],
+      isOnStage: [false],
+      etat_contract: [''],
+      entreprise: [''],
+
+      etat_paiement: [''],
+      source: [''],
+
+      dernier_diplome: [''],
+      //this.parcousList
+      remarque: [''],
       isMinor: [false],
       nom_rl: ["", Validators.pattern('[^0-9]+')],
       prenom_rl: ["", Validators.pattern('[^0-9]+')],
@@ -200,24 +242,13 @@ export class AddEtudiantComponent implements OnInit {
       phone_rl: ["", Validators.pattern('[- +()0-9]+')],
       email_rl: ["", Validators.email],
       adresse_rl: [""],
-      isHandicaped: [false],
       suivi_handicaped: [''],
-
-      remarque: [''],
-      campus_id: [''],
-      filiere: ['', Validators.required],
       statut_dossier: [''],
-      annee_scolaire:[[],Validators.required]
-
-
     });
   }
 
   resetAddEtudiant() {
     this.onInitFormAddEtudiant()
-    this.formAddEtudiant.patchValue({ campus_id: this.dropdownCampus[0].value })
-    this.formAddEtudiant.patchValue({ classe_id: this.defaultClasse })
-    this.formAddEtudiant.patchValue({ filiere: this.dropdownFiliere[0].value })
   }
 
   //pour la partie de traitement des erreurs sur le formulaire
@@ -265,48 +296,56 @@ export class AddEtudiantComponent implements OnInit {
   //Methode d'ajout d'un étudiant
   onAddEtudiant() {
     //Recuperation des données du formulaire
-    let civilite = this.formAddEtudiant.get('civilite')?.value.value;
+    let civilite = this.formAddEtudiant.get('civilite')?.value;
     let firstname = this.formAddEtudiant.get('firstname')?.value;
     let lastname = this.formAddEtudiant.get('lastname')?.value;
+    let date_naissance = this.formAddEtudiant.get('date_naissance')?.value;
+    let pays_origine = this.formAddEtudiant.get('pays_origine')?.value.value;
+    let nationalite = this.formAddEtudiant.get('nationalite')?.value.value
     let indicatif = this.formAddEtudiant.get('indicatif')?.value;
     let phone = this.formAddEtudiant.get('phone')?.value;
     let email = this.formAddEtudiant.get('email')?.value;
     let email_ims = this.formAddEtudiant.get('email_ims')?.value;
-    let pays_adresse = this.formAddEtudiant.get('pays_adresse')?.value;
-    let ville_adresse = this.formAddEtudiant.get('ville_adresse')?.value;
     let rue_adresse = this.formAddEtudiant.get('rue_adresse')?.value;
     let numero_adresse = this.formAddEtudiant.get('numero_adresse')?.value;
     let postal_adresse = this.formAddEtudiant.get('postal_adresse')?.value;
-
-    let classe_id = this.formAddEtudiant.get('classe_id')?.value.value;
-    let statut = this.formAddEtudiant.get('statut')?.value.value;
-    let nationalite = this.formAddEtudiant.get('nationalite')?.value.value
-    let date_naissance = this.formAddEtudiant.get('date_naissance')?.value;
-    let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
-    let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
-    let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
-
-    let dernier_diplome = this.formAddEtudiant.get('dernier_diplome')?.value;
+    let ville_adresse = this.formAddEtudiant.get('ville_adresse')?.value;
+    let pays_adresse = this.formAddEtudiant.get('pays_adresse')?.value.value;
     let sos_email = this.formAddEtudiant.get('sos_email')?.value;
     let sos_phone = this.formAddEtudiant.get('sos_phone')?.value;
+    let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value;
+
+    let campus = this.formAddEtudiant.get("campus_id")?.value;
+    let filiere = this.formAddEtudiant.get("filiere")?.value;
+    let classe_id = this.formAddEtudiant.get('classe_id')?.value;
+    let annee_scolaire = this.formAddEtudiant.get("annee_scolaire")?.value;
     let numero_INE = this.formAddEtudiant.get('numero_INE')?.value;
     let numero_NIR = this.formAddEtudiant.get('numero_NIR')?.value;
+
+    let isAlternant = this.formAddEtudiant.get('isAlternant')?.value;
+    let isOnStage = this.formAddEtudiant.get('isOnStage')?.value;
+    let etat_contract = this.formAddEtudiant.get('etat_contract')?.value;
+    let entreprise = this.formAddEtudiant.get('entreprise')?.value;
+
+    let etat_paiement = this.formAddEtudiant.get('etat_paiement')?.value;
+    let source = this.formAddEtudiant.get('source')?.value;
+
+    let dernier_diplome = this.formAddEtudiant.get('dernier_diplome')?.value;
+    let parcoursList = this.parcoursList
+    let remarque = this.formAddEtudiant.get('remarque').value
     let nom_rl = this.formAddEtudiant.get('nom_rl')?.value;
     let prenom_rl = this.formAddEtudiant.get('prenom_rl')?.value;
     let indicatif_rl = this.formAddEtudiant.get('indicatif_rl')?.value;
     let phone_rl = this.formAddEtudiant.get('phone_rl')?.value;
     let email_rl = this.formAddEtudiant.get('email_rl')?.value;
     let adresse_rl = this.formAddEtudiant.get('adresse_rl')?.value;
-
-    let isHandicaped = this.formAddEtudiant.get("isHandicaped")?.value; 
     let suivi_handicaped = this.formAddEtudiant.get("suivi_handicaped")?.value;
-
-    let campus = this.formAddEtudiant.get("campus_id")?.value;
     let statut_dossier = this.formAddEtudiant.get("statut_dossier")?.value;
-    let filiere = this.formAddEtudiant.get("filiere")?.value;
 
-    let annee_scolaire = this.formAddEtudiant.get("annee_scolaire")?.value;
-
+    let custom_id = this.generateCode(nationalite, firstname, lastname, date_naissance);
+    let valided_by_support = (email_ims != null && email_ims != '' && email_ims.length > 1)
+    if (!valided_by_support)
+      email_ims = email
     //Pour la création du nouvel étudiant on crée aussi un user
     let newUser = new User(
       null,
@@ -325,18 +364,22 @@ export class AddEtudiantComponent implements OnInit {
       null,
       null,
       '',
-      pays_adresse.value,
+      pays_adresse,
       ville_adresse,
       rue_adresse,
       numero_adresse,
-      postal_adresse);
+      postal_adresse,
+      nationalite,
+      true,
+      new Date()
+    );
 
     //creation et envoi de user et étudiant 
     let newEtudiant = new Etudiant(
       null,
-      '',
+      null,
       classe_id,
-      statut,
+      null,
       nationalite,
       date_naissance,
       null,
@@ -358,19 +401,26 @@ export class AddEtudiantComponent implements OnInit {
       isHandicaped,
       suivi_handicaped,
       null,
-      null,
-      this.formAddEtudiant.get('remarque').value,
+      parcoursList,
+      remarque,
       isOnStage,
       null,
-      null,true,
+      null, true,
       null,
-      campus,//campus
-      statut_dossier,//StatutDossier
-      filiere,//filiere
+      campus,
+      statut_dossier,
+      filiere,
       true,
-      email_ims!=null,
-      annee_scolaire
-      );
+      valided_by_support,
+      annee_scolaire,
+      null,
+      null,
+      pays_origine,
+      etat_contract,
+      entreprise,
+      etat_paiement,
+      source
+    );
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(
       ((response) => {

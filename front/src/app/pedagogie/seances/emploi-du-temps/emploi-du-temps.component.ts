@@ -72,7 +72,8 @@ export class EmploiDuTempsComponent implements OnInit {
     contentHeight: 500,
     defaultView: this.mobilecheck() ? "timeGridDay" : "timeGridWeek",
     events: [],
-    minTime:'08:00:00'
+    minTime:'08:00:00',
+    firstDay:1
 
   }
 

@@ -157,7 +157,7 @@
 <div class="col-12" *ngIf="token.role!='user'  || formateurInfo">
     <div class="col-12 card" *ngIf="seance">
         <p style="font-weight: bold;"> Support de cours & Documents :</p>
-        <ul *ngIf="seance.fileRight!=null || seance.fileRight.length!=0">
+        <ul *ngIf="seance.fileRight && seance.fileRight!=null && seance.fileRight.length!=0">
             <li *ngFor="let file of seance.fileRight; index as i">
                 <i class="pi pi-times" style="float:right; font-size: 20px;cursor:pointer" (click)="deleteFile(file)"
                     aria-hidden="true"> </i>

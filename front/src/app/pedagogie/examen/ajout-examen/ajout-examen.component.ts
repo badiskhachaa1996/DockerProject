@@ -27,15 +27,13 @@ export class AjoutExamenComponent implements OnInit {
   groupes: any = {}
 
   dropdownClasse: any[] = [];
-
-  isFormateur: Formateur = null
   token;
 
   dropdownFormateur: any[] = [];
 
 
   dropdownNiveau: any[] = [
-    { label: "Évaluation", value: "Évaluation" },
+    { label: "Controle Continue", value: "Controle Continue" },
     { label: "Examen finale", value: "Examen finale" },
     { label: "Soutenance", value: "Soutenance" }
   ]
@@ -87,8 +85,6 @@ export class AjoutExamenComponent implements OnInit {
           })
         this.formateurs[f._id] = f
       })
-      if (this.isFormateur)
-        this.formAddExamen.patchValue({ formateur_id: this.isFormateur._id })
     })
 
     //Initialisation des formulaires
@@ -98,55 +94,33 @@ export class AjoutExamenComponent implements OnInit {
       this.token = null
     }
     if (this.token) {
-      this.formateurService.getByUserId(this.token.id).subscribe(f => {
-        if (f != null) {
-          //Ce n'est pas Admin, c'est un formateur
-          this.isFormateur = f
-          this.formAddExamen.patchValue({ formateur_id: f._id })
-          this.matiereService.getAllByFormateurID(this.token.id).subscribe((r) => {
-            console.log(r)
-            r.matieres.forEach((matiere) => {
-              this.matieres[matiere._id] = matiere
-              if (Array.isArray(matiere.formation_id))
-                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id[0].titre + " - " + matiere.niveau, value: matiere._id });
-              else
-                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id.titre + " - " + matiere.niveau, value: matiere._id });
-            });
-            r.groupes.forEach((g) => {
-              this.groupes[g._id] = g
-              this.dropdownClasse.push({ label: g.abbrv, value: g._id });
-            })
-          })
-        } else {
-          //C'est un Admin
-          //Recuperation de la liste des matières
-          this.matiereService.getAllPopulate().subscribe(
-            ((response) => {
-              response.forEach((matiere) => {
-                this.matieres[matiere._id] = matiere
-                let bypa: any = matiere.formation_id
-                if (Array.isArray(matiere.formation_id))
-                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau, value: matiere._id });
-                else
-                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau, value: matiere._id });
-              });
-            }),
-            ((error) => { console.error(error); })
-          );
+      //C'est un Admin
+      //Recuperation de la liste des matières
+      this.matiereService.getAllPopulate().subscribe(
+        ((response) => {
+          response.forEach((matiere) => {
+            this.matieres[matiere._id] = matiere
+            let bypa: any = matiere.formation_id
+            if (Array.isArray(matiere.formation_id))
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau, value: matiere._id });
+            else
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau, value: matiere._id });
+          });
+        }),
+        ((error) => { console.error(error); })
+      );
 
 
-          //Recuperation de la liste des classes
-          this.classeService.getAll().subscribe(
-            ((response) => {
-              response.forEach((classe) => {
-                this.groupes[classe._id] = classe
-                this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
-              });
-            }),
-            ((error) => { console.error(error); })
-          );
-        }
-      })
+      //Recuperation de la liste des classes
+      this.classeService.getAll().subscribe(
+        ((response) => {
+          response.forEach((classe) => {
+            this.groupes[classe._id] = classe
+            this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
+          });
+        }),
+        ((error) => { console.error(error); })
+      );
     }
   }
 
@@ -155,7 +129,7 @@ export class AjoutExamenComponent implements OnInit {
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
     let formateur_id = this.formAddExamen.get("formateur_id")?.value;
     if (classe_id && matiere_id && formateur_id) {
-      let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " +this.groupes[classe_id[0]].abbrv
+      let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
       classe_id.forEach((cid, index) => {
         if (index != 0)
           libelle = ' - ' + this.groupes[cid].abbrv

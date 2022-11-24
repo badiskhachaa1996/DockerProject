@@ -62,9 +62,9 @@
 
             <form [formGroup]="formUpdateNote" (ngSubmit)="onUpdateNote()" class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-12">
-                    <label For="examen">Examen</label>
+                    <label For="examen">Évaluation</label>
                     <p-dropdown formControlName="examen_id" [options]="dropdownExamen" optionLabel="libelle"
-                        emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
+                        emptyFilterMessage="Pas d'évaluation trouvé" filterPlaceholder="Évaluation" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -143,15 +143,15 @@
 
     <div class="col-12" *ngIf="showFormSelectExam">
         <div class="card" *ngIf="isAnneeScolaire">
-            <h3>Veuillez choisir un examen</h3>
+            <h3>Veuillez choisir une évaluation</h3>
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showFormSelectExam = false"
                 aria-hidden="true"></i>
 
             <form [formGroup]="formSelectExam" (ngSubmit)="onSelectExam()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
-                    <label>Examen</label>
-                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle" placeholder="Veuillez choisir un examen"
-                        emptyFilterMessage="Pas d'examen trouvé" filterPlaceholder="Examen" filter="true">
+                    <label>Évaluation</label>
+                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle" placeholder="Veuillez choisir une évaluation"
+                        emptyFilterMessage="Pas d'évaluation trouvé" filterPlaceholder="Examen" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -204,16 +204,16 @@
             <form [formGroup]="formAppreciationGenerale" (ngSubmit)="onSetAppreciationGenerale()"
                 class="p-fluid p-formgrid grid">
                 <div class="field col-12 md:col-12">
-                    <label For="appreciation">Appréciation du semestre</label>
-                    <input type="text" id="appreciation" formControlName="appreciation" placeholder="appreciation"
+                    <label For="appreciation">Appréciation globale du semestre</label>
+                    <input type="text" id="appreciation" formControlName="appreciation" placeholder="Très bon semestre"
                         pInputText>
-                    <small style="color: red;">L'appréciation est définie pour le semestre actuel</small>
+                    <small style="color: red;">*L'appréciation globale est définie pour le semestre actuel</small>
                 </div>
                 <div class="field col-12" *ngFor="let note of notesForGenerateBulletin; let i = index">
                     <div class="grid col-12">
                         <div class="col-6 md:col-6">
                             <label>Module: </label>
-                            <h4>{{note.matiere_name}}</h4>
+                            <p>{{note.matiere_name}}</p>
                         </div>
                         <div class="col-6 md:col-6">
                             <label>Appreciation: </label>
@@ -250,7 +250,7 @@
                     <div class="grid col-12">
                         <div class="col-6 md:col-6">
                             <label>Module: </label>
-                            <h4>{{note.matiere_name}}</h4>
+                            <p>{{note.matiere_name}}</p>
                         </div>
                         <div class="col-6 md:col-6">
                             <label>Appreciation: </label>
@@ -278,34 +278,34 @@
             <form (ngSubmit)="onSubmitRachat()" class="p-fluid p-formgrid grid">
                 <div *ngFor="let r of rachatEtudiant; let i = index" class="col-12">
                     <div class="grid">
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true">
+                        <div class="col-3" *ngIf="rachatEtudiant[i]['isNew']==true">
                             <label>Module: </label>
                             <p-dropdown [options]="matiereRachat"
                                 (onChange)="updateRachatEtudiant(i,$event,'matiere_id')"></p-dropdown>
                         </div>
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==false">
+                        <div class="col-3" *ngIf="rachatEtudiant[i]['isNew']==false">
                             <label>Module: </label>
                             <p>{{matieres[rachatEtudiant[i]['matiere_id']].nom}}</p>
                         </div>
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['dispensed']!=true">
+                        <div class="col-2" *ngIf="rachatEtudiant[i]['dispensed']!=true">
                             <label>Nouvelle Moyenne: </label><br>
                             <input type="number" step="0.01" [value]="rachatEtudiant[i]['fixed_moy']"
                                 (change)="updateRachatEtudiant(i,$event.target.value,'fixed_moy')" placeholder="10.00"
                                 pInputText>
                         </div>
-                        <div class="col-6" *ngIf="rachatEtudiant[i]['isNew']==true && semestreChoose=='Annuel'">
+                        <div class="col-3" *ngIf="rachatEtudiant[i]['isNew']==true && semestreChoose=='Annuel'">
                             <label>Dispenser ? </label><br>
                             <p-selectButton [value]="rachatEtudiant[i]['dispensed']"
                                 [options]="[{label:'Oui',value:true},{label:'Non',value:false}]"
                                 (onChange)="updateRachatEtudiant(i,$event.value,'dispensed')"></p-selectButton>
                         </div>
-                        <div class="col-6"
+                        <div class="col-3"
                             *ngIf="rachatEtudiant[i]['isNew']==false && rachatEtudiant[i]['dispensed']==true">
                             <label>Dispenser:</label><br>
                             <p>Cette étudiant est dispensé de cette matière</p>
                         </div>
 
-                        <div class="col-6"
+                        <div class="col-3"
                             *ngIf="semestreForGenerateBulletin=='Annuel' && rachatEtudiant[i]['isNew']==true">
                             <label>Semestre: </label>
                             <p-dropdown [options]="[{ libelle: 'Choissisez un semestre', value: 'Choissisez un semestre', actif: true },
@@ -319,7 +319,7 @@
                             </p-dropdown>
                         </div>
 
-                        <div class="col-6"
+                        <div class="col-3"
                             *ngIf="semestreForGenerateBulletin=='Annuel' && rachatEtudiant[i]['isNew']==false">
                             <label>Semestre: </label>
                             <p>{{rachatEtudiant[i]['semestre']}}</p>
@@ -346,34 +346,38 @@
 
     <!-- Modèle de bulletin de note -->
     <div class="col-12" *ngIf="showBulletin">
+        <div style="float: left;" class="mt-2 ml-2">
+            <button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
+                label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
+            </button>
+            <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
+                label="Saisir les appréciations" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
+            </button>
+
+            <button pButton (click)="showFormUpdateAppreciationGenerale = true;
+                                    appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
+                class="ml-1" type="button" label="Modifier les appréciations"
+                *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
+            </button>
+
+            <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin()" type="button"
+                style="float:right;" label="Exporter en pdf">
+            </button>
+        </div>
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; color: red"
                 (click)="showBulletin = false; notesForGenerateBulletin = [];" aria-hidden="true">
             </i>
+            <br>
             <h3>Prévisualisation du bulletin</h3>
 
-            <div style="float: right;">
-                <button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
-                    label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
-                </button>
-                <button pButton (click)="showFormAppreciationGenerale = true;initAppreciation('set')" type="button"
-                    label="Saisir les appréciations" *ngIf="!hideBtn && showBtnAddAppreciationGenerale" class="ml-1">
-                </button>
 
-                <button pButton (click)="showFormUpdateAppreciationGenerale = true;
-                                        appreciationToUpdate = appreciationGenerale;initAppreciation('update')"
-                    class="ml-1" type="button" label="Modifier les appréciations"
-                    *ngIf="!hideBtn && showBtnUpdateAppreciationGenerale">
-                </button>
-
-                <button pButton class="ml-1" *ngIf="!hideBtn" (click)="onGenerateBulletin()" type="button"
-                    style="float:right;" label="Exporter en pdf">
-                </button>
-            </div>
 
 
             <div id="content">
-                <div style="float: left; margin-top: 80px; margin-left: 20px;">
+                
+                <div style="float: left; margin-left: 20px;">
+                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
                         Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>
                         Bulletin du {{ semestreForGenerateBulletin }} <br>
@@ -399,7 +403,6 @@
                 </div>
 
                 <figure>
-                    <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
                     <figcaption *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
                         activeCampus.ville }},
                         {{ activeCampus.pays }}</figcaption>
@@ -499,8 +502,7 @@
             <i class="pi pi-times-circle" style="float:right; color: red"
                 (click)="showPVAnnuel = false; notesForGenerateBulletin = [];" aria-hidden="true">
             </i>
-
-            <div style="float: right;">
+            <div style="float: left;">
                 <button pButton (click)="showFormRacheter = true;initRachatEtudiant()" type="button"
                     label="Racheter l'étudiant" class="ml-1" *ngIf="!hideBtn">
                 </button>
@@ -518,12 +520,14 @@
                     type="button" style="float:right;" label="Exporter en pdf">
                 </button>
             </div>
+            <br>
             <h3>Prévisualisation du bulletin Annuel</h3>
 
 
 
             <div id="contentAnnuel">
-                <div style="float: left; margin-top: 80px; margin-left: 20px;">
+                
+                <div style="float: left; margin-left: 20px;">
                     <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
                     <!--TODO Logo different en fonction de l'école-->
                     <p *ngIf="activeCampus" style="margin: 10px;">{{ activeCampus.adresse }} <br> {{
@@ -674,10 +678,10 @@
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
             <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par groupe: {{
-                classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
+                classeForBGenerateBulletin.titre }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="10" [pageLinks]="5"
+                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -691,7 +695,7 @@
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
-                    <tr class="grid">
+                    <tr>
                         <th>
                             <div class="flex justify-content-between align-items-center">
                                 Nom
@@ -716,9 +720,9 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-etudiant>
-                    <tr>
-                        <td>{{ users[etudiant.user_id]?.firstname }}</td>
-                        <td>{{ users[etudiant.user_id]?.lastname }}</td>
+                    <tr *ngIf="etudiant && etudiant.user_id">
+                        <td>{{ etudiant.user_id?.firstname }}</td>
+                        <td>{{ etudiant.user_id?.lastname }}</td>
                         <td *ngIf="etudiant.user_id.date_telechargement_bulletin">{{
                             etudiant.user_id.date_telechargement_bulletin | date:'dd/MM/yyyy' }}</td>
                         <td *ngIf="!etudiant.user_id.date_telechargement_bulletin">Jamais</td>
@@ -765,7 +769,7 @@
             <h3>Saisie de notes</h3>
             <p>
                 Groupe: <strong>{{ classeSelected.abbrv }}</strong> <br />
-                Examen: <strong>{{ examSelected.libelle  }}</strong> <br />
+                Evaluation: <strong>{{ examSelected.libelle  }}</strong> <br />
                 Semestre: <strong>{{ semestreSelected }}</strong>
             </p>
 

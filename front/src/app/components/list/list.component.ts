@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/productservice';
+import { Product } from '../../dev-components/api-template/product';
+import { ProductService } from '../../dev-components/service-template/productservice';
 
 @Component({
     templateUrl: './list.component.html',
