@@ -1020,4 +1020,30 @@ app.get('/deleteDuplicateProspect', async (req, res) => {
     res.status(201).send(r)
 })
 
+app.get('/getAllWithSameEmail', (req, res) => {
+    User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
+        console.log(r)
+        res.status(201).send(r)
+    })
+})
+
+app.get('/deleteEmail/:user_id/:type', (req, res) => {
+    if (req.params.type == 'IMS')
+        User.findByIdAndUpdate(req.params.user_id, { email: null }, { new: true }, (err, doc) => {
+            if (err) {
+                res.status(500).send(err)
+            } else {
+                res.status(200).send(doc)
+            }
+        })
+    else
+        User.findByIdAndUpdate(req.params.user_id, { email_perso: null }, { new: true }, (err, doc) => {
+            if (err) {
+                res.status(500).send(err)
+            } else {
+                res.status(200).send(doc)
+            }
+        })
+})
+
 module.exports = app;
