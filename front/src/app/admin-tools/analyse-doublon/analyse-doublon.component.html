@@ -32,6 +32,24 @@
 </div>
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton
+                pTooltip="Les étudiants sans classe et sans Dossier complet seront renvoyer dans la liste de l'administration pour valider leur dossier"
+                label="Attribuer à l'administration" icon="pi pi-send" class="p-button-danger" (click)="toAdmin();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Les étudiants sans classe et avec un Dossier complet seront renvoyer dans la liste de la pédagogie pour obtenir une classe"
+                label="Attribuer à la pédagogie" icon="pi pi-send" class="p-button-danger" (click)="toPedagogie();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Les étudiants validés par l'administration mais sans email ims seront renvoyer dans la liste du support"
+                label="Attribuer au support" icon="pi pi-send" class="p-button-danger" (click)="toSupport();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc"
+                label="Nettoyer les models" icon="pi pi-trash" class="p-button-danger" (click)="cleanModel();"
+                style="margin-right: 3px;"></button>
+        </div>
         <h5>Gestion des doublons avec IMS</h5>
         <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
             [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
@@ -114,6 +132,12 @@
 </div>
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton
+                pTooltip="Supprimer les doublons de prospects"
+                label="Supprimer les doublons de prospects" icon="pi pi-send" class="p-button-danger" (click)="deleteDuplicateProspect();"
+                style="margin-right: 3px;"></button>
+        </div>
         <h5>Gestion des doublons avec Email perso</h5>
         <p-table [value]="doublonEmailPerso" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
             [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
@@ -170,9 +194,9 @@
                     <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
                     </td>
                     <td>
-                        <i *ngIf="user.type=='Prospect' || !user.type"
-                            pTooltip="Rechercher dans la table prospects" style="margin-left: 2%; cursor: pointer;"
-                            class="pi pi-eye" (click)="searchProspect(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects"
+                            style="margin-left: 2%; cursor: pointer;" class="pi pi-eye"
+                            (click)="searchProspect(user._id)" aria-hidden="true"></i>
                         <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
                             pTooltip="Rechercher dans la table étudiants" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-search" (click)="searchEtudiant(user._id)" aria-hidden="true"></i>

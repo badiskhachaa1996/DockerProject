@@ -883,6 +883,11 @@ app.get('/findDuplicateIMS', async (req, res) => {
     ]);
     */
     let r = []
+    User.updateMany({ email: ' ' }, { email: '' }, { new: true }, (err, doc) => {
+        User.updateMany({ email: '' }, { email: null }, (err, doc) => {
+            console.log('email:"" et email:" " convertir en null')
+        })
+    })
     let agg = await User.aggregate([
         { "$group": { "_id": "$email", "count": { "$sum": 1 } } },
         { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
@@ -890,7 +895,8 @@ app.get('/findDuplicateIMS', async (req, res) => {
     ])
     for (const doc of agg) {
         await User.find({ email: doc.email }).then(users => {
-            r.push({ '_id': users[0]._id, data: users })
+            if (users[0])
+                r.push({ '_id': users[0]._id, data: users })
         })
     }
     res.status(201).send(r)
@@ -898,8 +904,10 @@ app.get('/findDuplicateIMS', async (req, res) => {
 
 app.get('/findDuplicatePerso', async (req, res) => {
     let r = []
-    User.updateMany({ email_perso: ' ' }, { email_perso: '' }).exec(r => {
-        User.updateMany({ email_perso: '' }, { email_perso: null }).exec
+    User.updateMany({ email_perso: ' ' }, { email_perso: '' }, { new: true }, (err, doc) => {
+        User.updateMany({ email_perso: '' }, { email_perso: null }, (err, doc) => {
+            console.log('email_perso:"" et email_perso:" " convertir en null')
+        })
     })
     let agg = await User.aggregate([
         { "$group": { "_id": "$email_perso", "count": { "$sum": 1 } } },
@@ -908,7 +916,8 @@ app.get('/findDuplicatePerso', async (req, res) => {
     ])
     for (const doc of agg) {
         await User.find({ email_perso: doc.email_perso }).then(users => {
-            r.push({ '_id': users[0]._id, data: users })
+            if (users[0])
+                r.push({ '_id': users[0]._id, data: users })
         })
     }
     res.status(201).send(r)
@@ -920,8 +929,96 @@ app.get('/delete/:user_id', (req, res) => {
         User.findByIdAndRemove(req.params.user_id).then(r => {
             res.send(r)
         })
-        //Chercher dans les autres tables si sont ID ne traines pas
+    //Chercher dans les autres tables si son ID ne traine pas dans les Models Formateur, Etudiant, Prospects, Commercial etc
     else
         res.status(403).send('Vous n\'avez pas l\'accès necessaire.')
 })
+
+app.get('/toAdmin', (req, res) => {
+    //Attribuer ceux sans classe_id et !statut : {$in:'Dossier Complet'} en valided_by_admin : false
+    Etudiant.updateMany({ classe_id: null, statut_dossier: { $nin: 'Dossier Complet' } }, { valided_by_admin: false }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.send(doc)
+        } else {
+            res.status(500).send(err)
+        }
+
+    })
+})
+app.get('/toPedagogie', (req, res) => {
+    //Attribuer ceux sans classe_id et statut : {$in:'Dossier Complet'} en valided_by_admin : true
+    Etudiant.updateMany({ classe_id: null, statut_dossier: { $in: 'Dossier Complet' } }, { valided_by_admin: true }, { new: true }, (err, doc) => {
+        if (!err) {
+            res.send(doc)
+        } else {
+            res.status(500).send(err)
+        }
+
+    })
+})
+
+app.get('/toSupport', (req, res) => {
+    //Attribuer ceux en valided_by_admin:true et sans email_ims en valided_by_support : false
+    Etudiant.find({ valided_by_admin: true }).populate('user_id').then(r => {
+        let users = []
+        r.forEach(user => {
+            if (user.user_id)
+                if (user.user_id.email == null || user.user_id.email == '' || user.user_id.email == ' ')
+                    users.push(user)
+        })
+        res.send(users)
+    }, err => {
+        res.status(500).send(err)
+    })
+})
+
+
+app.get('/cleanModel', (req, res) => {
+    //Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc
+    Etudiant.find().populate('user_id').then(r => {
+        r.forEach(user => {
+            if (!user.user_id)
+                Etudiant.findByIdAndRemove(user._id).exec()
+        })
+    })
+    Formateur.find().populate('user_id').then(r => {
+        r.forEach(user => {
+            if (!user.user_id)
+                Formateur.findByIdAndRemove(user._id).exec()
+        })
+    })
+    CommercialPartenaire.find().populate('user_id').then(r => {
+        r.forEach(user => {
+            if (!user.user_id)
+                CommercialPartenaire.findByIdAndRemove(user._id).exec()
+        })
+    })
+    Prospect.find().populate('user_id').then(r => {
+        r.forEach(user => {
+            if (!user.user_id)
+                Prospect.findByIdAndRemove(user._id).exec()
+        })
+    })
+
+    res.status(200).send({})
+})
+
+app.get('/deleteDuplicateProspect', async (req, res) => {
+    //Supprimer les doublons de prospects
+    let agg = await User.aggregate([
+        { "$group": { "_id": "$email_perso", "type": "$type", "count": { "$sum": 1 } } },
+        { "$match": { "_id": { "$ne": null }, $or: [{ type: 'Prospect' }, { type: null }], "count": { "$gt": 1 } } },
+        { "$project": { "email_perso": "$_id", "_id": 0 } }
+    ])
+    let r = []
+    for (const doc of agg) {
+        if (doc.email_perso != '' && doc.email_perso != ' ' && doc.email_perso != null)
+            await User.findOneAndRemove({ email_perso: doc.email_perso }, { new: true }, (err, doc) => {
+                r.push(doc)
+            })
+    }
+    res.status(201).send(r)
+
+})
+
 module.exports = app;
