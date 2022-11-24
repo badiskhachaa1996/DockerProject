@@ -757,7 +757,7 @@
         <h5>Liste des réinscriptions/Inscriptions en attente de validation</h5>
         <p-toast></p-toast>
         <p-table #dt2 [value]="etudiants" dataKey="_id" responsiveLayout="scroll"
-            [globalFilterFields]="['diplome','filiere.titre', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','user_id.email','custom_id']"
+            [globalFilterFields]="['diplome','filiere.titre', 'user_id.email_perso', 'classe_id','user_id.lastname','user_id.firstname','user_id.email','custom_id']"
             [rows]="10" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiants.length"
             styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
@@ -779,6 +779,8 @@
                     <th pSortableColumn="statut"> Statut <p-sortIcon field="statut"></p-sortIcon>
                     </th>
                     <th pSortableColumn="formation"> Formation souhaitée<p-sortIcon field="formation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="email"> Email IMS<p-sortIcon field="email"></p-sortIcon>
                     </th>
                     <th pSortableColumn="email_perso"> Email Perso<p-sortIcon field="email"></p-sortIcon>
                     </th>
@@ -807,6 +809,7 @@
                     <td *ngIf="etudiant.isAlternant" style="min-width: 8rem;">Alternant</td>
                     <td style="min-width: 10rem;" *ngIf="etudiant.filiere">{{ etudiant?.filiere?.titre }}</td>
                     <td style="min-width: 10rem;" *ngIf="!etudiant.filiere">{{ etudiant.diplome }}</td>
+                    <td style="min-width: 10rem;">{{ etudiant.user_id.email }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.user_id.email_perso }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.nationalite }}</td>
                     <td style="min-width: 10rem;">{{ etudiant.statut_dossier }}</td>
