@@ -219,6 +219,12 @@
 
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton
+                pTooltip="Nettoyer une partie en reconnaisant les mails gmail, outlook, yahoo, estya et elitech.education"
+                label="Nettoyer les évidents" icon="pi pi-bolt" class="p-button-danger" (click)="cleanAllWithSameEmail();"
+                style="margin-right: 3px;"></button>
+        </div>
         <h5>Gestion des utilisateurs avec le même email</h5>
         <p-table [value]="sameEmailPersoIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
             [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"

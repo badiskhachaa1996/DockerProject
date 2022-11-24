@@ -183,4 +183,15 @@ export class AnalyseDoublonComponent implements OnInit {
       this.MessageService.add({ severity: 'error', summary: 'Le mail n\'a pas pu êtrer supprimé', detail: err.message })
     })
   }
+
+  cleanAllWithSameEmail() {
+    this.UserService.cleanAllWithSameEmail().subscribe(r => {
+      this.MessageService.add({ severity: 'success', summary: 'Une partie a été supprimé' })
+      this.UserService.getAllWithSameEmail().subscribe(r => {
+        this.sameEmailPersoIMS = r
+      })
+    }, err => {
+      this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu', detail: err.message })
+    })
+  }
 }

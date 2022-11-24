@@ -1022,9 +1022,25 @@ app.get('/deleteDuplicateProspect', async (req, res) => {
 
 app.get('/getAllWithSameEmail', (req, res) => {
     User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
-        console.log(r)
         res.status(201).send(r)
     })
+})
+
+app.get('/cleanAllWithSameEmail', (req, res) => {
+    User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
+        r.forEach(user => {
+            let email = user.email.lowercase()
+            if (email.indexOf('@gmail.com') != -1 || email.indexOf('@yahoo.fr') != -1 || email.indexOf('@outlook.fr') != -1)
+                User.findByIdAndUpdate(user._id, { email: null }, { new: true }, (err, doc) => {
+                    console.log(doc)
+                })
+            else if (email.indexOf('@estya.com') != -1 || email.lowercase().indexOf('@elitech.education') != -1 || email.indexOf('@intedgroup.com') || email.indexOf('@eduhorizons.com'))
+                User.findByIdAndUpdate(user._id, { email_perso: null }, { new: true }, (err, doc) => {
+                    console.log(doc)
+                })
+        })
+    })
+    res.status(200).send({})
 })
 
 app.get('/deleteEmail/:user_id/:type', (req, res) => {

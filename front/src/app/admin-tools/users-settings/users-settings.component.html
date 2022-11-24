@@ -68,8 +68,8 @@
     <div class="col-12">
         <div class="card" *ngIf="showFormUpdate">
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    title="Fermer" (click)="showFormUpdate = false" aria-hidden="true"> </i>
-            
+                title="Fermer" (click)="showFormUpdate = false" aria-hidden="true"> </i>
+
             <h4 style="text-align: center;">Modifier les infos</h4>
             <form [formGroup]="formUpdate" (ngSubmit)="onUpdateUser()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
@@ -78,33 +78,28 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="lastname">Nom</label>
-                    <input pInputText id="lastname" formControlName="lastname" type="text"
-						placeholder="Nom" />
+                    <input pInputText id="lastname" formControlName="lastname" type="text" placeholder="Nom" />
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="firstname">Prénom</label>
-                    <input pInputText id="firstname" formControlName="firstname" type="text"
-						placeholder="Prénom" />
+                    <input pInputText id="firstname" formControlName="firstname" type="text" placeholder="Prénom" />
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="indicatif">Indicatif</label>
-                    <input pInputText id="indicatif" formControlName="indicatif" type="text"
-						placeholder="0033" />
+                    <input pInputText id="indicatif" formControlName="indicatif" type="text" placeholder="0033" />
                 </div>
                 <div class="field col-12 md:col-8">
                     <label For="phone">Téléphone</label>
-                    <input pInputText id="phone" formControlName="phone" type="tel"
-						placeholder="0767987887" />
+                    <input pInputText id="phone" formControlName="phone" type="tel" placeholder="0767987887" />
                 </div>
                 <div class="field col-12">
                     <label For="email">Email</label>
-                    <input pInputText id="email" formControlName="email" type="email"
-						placeholder="s.hue@estya.com" />
+                    <input pInputText id="email" formControlName="email" type="email" placeholder="s.hue@estya.com" />
                 </div>
                 <div class="field col-12">
                     <label For="email_perso">Email perso</label>
                     <input pInputText id="phone" formControlName="email_perso" type="email"
-						placeholder="s.hue@gmail.com" />
+                        placeholder="s.hue@gmail.com" />
                 </div>
                 <div class="field col-12">
                     <label For="service">Service</label>
@@ -124,23 +119,22 @@
                 </div>
                 <div class="field col-12 md:col-5">
                     <label For="ville">Ville</label>
-                    <input pInputText id="ville" formControlName="ville_adresse" type="text"
-						placeholder="Paris" />
+                    <input pInputText id="ville" formControlName="ville_adresse" type="text" placeholder="Paris" />
                 </div>
                 <div class="field col-12 md:col-4">
                     <label For="numero_adresse">Numéro de rue</label>
                     <input pInputText id="numero_adresse" formControlName="numero_adresse" type="number"
-						placeholder="15" />
+                        placeholder="15" />
                 </div>
                 <div class="field col-12 md:col-8">
                     <label For="rue_adresse">Rue</label>
                     <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text"
-						placeholder="rue du louvre" />
+                        placeholder="rue du louvre" />
                 </div>
                 <div class="field col-12">
                     <label For="postal_adresse">Code postale</label>
                     <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
-						placeholder="94200" />
+                        placeholder="94200" />
                 </div>
                 <div>
                     <button pButton label="Modifier" type="submit" [disabled]="formUpdate.invalid"></button>
@@ -153,98 +147,101 @@
 
     <!-- Table d'affichage des utilisateurs -->
     <div class="col-12">
-		<div class="card" *ngIf="showUsersList">
-			<h5>Gestion des utilisateurs</h5>
-			<p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-                     [globalFilterFields]="['user_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
-                     [rows]="5" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
-				<ng-template pTemplate="caption">
+        <div class="card" *ngIf="showUsersList">
+            <h5>Gestion des utilisateurs</h5>
+            <p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+                [globalFilterFields]="['user_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
+                [rows]="5" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
+                <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
 
                     <p-dropdown [style]="{'margin':'5px'}" [options]="typeList" filter="true"
-                        (onChange)="dt1.filter($event.value, 'type', 'equals')"
-                        emptyFilterMessage="Type non trouvé" filterPlaceholder="Type"></p-dropdown>
+                        (onChange)="dt1.filter($event.value, 'type', 'equals')" emptyFilterMessage="Type non trouvé"
+                        filterPlaceholder="Type"></p-dropdown>
 
                     <p-dropdown [style]="{'margin':'5px'}" [options]="roleList" filter="true"
-                        (onChange)="dt1.filter($event.value, 'role', 'equals')"
-                        emptyFilterMessage="Role non trouvé" filterPlaceholder="Rôle"></p-dropdown>
-                                            
+                        (onChange)="dt1.filter($event.value, 'role', 'equals')" emptyFilterMessage="Role non trouvé"
+                        filterPlaceholder="Rôle"></p-dropdown>
+
                     <div class="flex table-header">
-					</div>
-				</ng-template>
-				<ng-template pTemplate="header">
-					<tr>
-						<th style="width: 3rem"></th>
-						<th>#</th>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>#</th>
                         <th>Rôle</th>
-						<th>Nom prénom</th>
-						<th>Téléphone</th>
+                        <th>Nom prénom</th>
+                        <th>Téléphone</th>
                         <th>Email</th>
                         <th>Email perso</th>
                         <th>Action</th>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="body" let-user let-expanded="expanded">
-					<tr>
-						<td>
-							<button type="button" pButton 
-                                    pRipple [pRowToggler]="user" 
-                                    class="p-button-text p-button-rounded p-button-plain" 
-                                    [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                    (click)="onLoadProfilePicture(user._id)">
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="user"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="onLoadProfilePicture(user._id)">
                             </button>
-						</td>
-						<td style="min-width: 8rem;">{{ user._id }}</td>
-						<td style="min-width: 10rem;">{{ user.role }}</td>
-						<td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
-						<td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
+                        </td>
+                        <td style="min-width: 8rem;">{{ user._id }}</td>
+                        <td style="min-width: 10rem;">{{ user.role }}</td>
+                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{
+                            user.firstname | titlecase }}</td>
+                        <td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
                         <td style="min-width: 10rem;">{{ user.email }}</td>
                         <td style="min-width: 10rem;">{{ user.email_perso }}</td>
                         <td style="min-width: 10rem;">
-                            <i pTooltip="Modifier"
-                            style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil" (click)="userToUpdate = user; onPatchData(); showFormUpdate = true;"
-                            aria-hidden="true"></i>
+                            <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
+                                (click)="userToUpdate = user; onPatchData(); showFormUpdate = true;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Supprimer entièrement" style="margin-left: 2%; cursor: pointer;"
+                                class="pi pi-trash" (click)="deletePerso(user)" aria-hidden="true"></i>
                         </td>
-					</tr>
-				</ng-template>
-				<ng-template pTemplate="rowexpansion" let-user>
-					<tr>
-						<td colspan="8">
-							<div class="p-3">
-								<p-table responsiveLayout="scroll">
-									<ng-template pTemplate="header">
-                                        <tr>
-                                            <th></th>
-                                            <th>Service</th>
-                                            <th>Type</th>
-                                            <th>Pays</th>
-                                            <th>Ville</th>
-                                            <th>Rue</th>
-                                            <th>Dernière connexion</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-user>
-                                        
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage">
-                                        <tr>
-                                            <td><img [src]="profilPicture" alt="{{ 'Pofile' | uppercase }}" width="80" height="80" /></td>
-                                            <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
-                                            <td>{{ user.type }}</td>
-                                            <td>{{ user.pays_adresse }}</td>
-                                            <td>{{ user.ville_adresse }}</td>
-                                            <td>{{ user.numero_adresse }} {{ user.rue_adresse }} <br/> {{ user.postal_adresse }}</td>
-                                            <td style="color: red; font-weight: bolder;">{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}</td>
-                                        </tr>
-                                    </ng-template>
-			                    </p-table>
-		                    </div>
-		                </td>
-		            </tr>
-		        </ng-template>
-		    </p-table>
-	    </div>
-	</div>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-user>
+                    <tr>
+                        <td colspan="8">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th></th>
+                        <th>Service</th>
+                        <th>Type</th>
+                        <th>Pays</th>
+                        <th>Ville</th>
+                        <th>Rue</th>
+                        <th>Dernière connexion</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-user>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td><img [src]="profilPicture" alt="{{ 'Pofile' | uppercase }}" width="80" height="80" /></td>
+                        <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
+                        <td>{{ user.type }}</td>
+                        <td>{{ user.pays_adresse }}</td>
+                        <td>{{ user.ville_adresse }}</td>
+                        <td>{{ user.numero_adresse }} {{ user.rue_adresse }} <br /> {{ user.postal_adresse }}</td>
+                        <td style="color: red; font-weight: bolder;">{{ user.last_connection | date:'dd/MM/YYYY à
+                            hh:mm'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+</div>
 
 </div>
