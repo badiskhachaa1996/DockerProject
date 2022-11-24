@@ -103,6 +103,7 @@ const missionController = require('./controllers/missionController');
 const inTimeController = require('./controllers/inTimeController');
 const cvController = require('./controllers/cvController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
+const congeController = require('./controllers/congeController')
 const { User } = require("./models/user");
 const { scrypt } = require("crypto");
 const { use } = require("./controllers/userController");
@@ -238,6 +239,8 @@ app.use('/soc/intime', inTimeController);
 app.use('/soc/teamCommercial', teamCommercialController)
 
 app.use('/soc/demandeConseiller', DemandeConseillerController)
+
+app.use('/soc/conge', congeController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
