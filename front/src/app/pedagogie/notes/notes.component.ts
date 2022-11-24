@@ -49,7 +49,7 @@ export class NotesComponent implements OnInit {
   dropdownEtudiant: any[] = [];
 
   examens: Examen[] = [];
-  dropdownExamen: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
+  dropdownExamen: any[] = [{ libelle: 'Veuillez choisir une évaluation', value: null }];
 
   dropdownClasse: any[] = [{ libelle: 'Toutes les groupes', value: null }];
   filterCampus: any[] = [
@@ -89,7 +89,7 @@ export class NotesComponent implements OnInit {
 
   showTableAddnotes: boolean = false;
 
-  dropdownExamByClasse: any[] = [{ libelle: 'Veuillez choisir un examen', value: null }];
+  dropdownExamByClasse: any[] = [{ libelle: 'Veuillez choisir une évaluation', value: null }];
 
   appreciationModules = {}
   dicFormateurMatiere = {}
@@ -291,6 +291,11 @@ export class NotesComponent implements OnInit {
     );
 
     //Recuperation de la liste des étudiants
+    this.userService.getAll().subscribe(us => {
+      us.forEach(u => {
+        this.users[u._id] = u
+      })
+    })
 
 
 
@@ -511,7 +516,7 @@ export class NotesComponent implements OnInit {
 
           this.messageService.add({
             severity: "error",
-            summary: "Impossible d'attribuer une note, la note maximale pour cet examen est " + response.note_max,
+            summary: "Impossible d'attribuer une note, la note maximale pour cette évaluation est " + response.note_max,
           });
 
         }
@@ -637,7 +642,7 @@ export class NotesComponent implements OnInit {
         else {
           this.messageService.add({
             severity: "error",
-            summary: "Impossible d'attribuer une note, la note maximale pour cet examen est " + response.note_max,
+            summary: "Impossible d'attribuer une note, la note maximale pour cette évaluation est " + response.note_max,
           });
         }
       }),
@@ -920,6 +925,8 @@ export class NotesComponent implements OnInit {
         this.showBtnUpdateAppreciationGenerale = true;
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
+        this.showFormAppreciationGenerale = false
+        this.messageService.add({severity:'success',summary:'Mis à jour de l\'appréciation globale avec succès'})
         if (response.appreciation_matiere)
           this.appreciationModules = response.appreciation_matiere
       }),
@@ -999,6 +1006,7 @@ export class NotesComponent implements OnInit {
 
   //Methode de generation du bulletin de note
   onGenerateBulletin(id = 'content') {
+    console.log(this.etudiantToGenerateBulletin)
     if (this.etudiantToGenerateBulletin.statut_dossier.includes('Dossier complet') || confirm("Le dossier n'est pas complet\nVoulez-vous quand même générer le bulletin de note ?")) {
       this.hideBtn = true
       var element = document.getElementById(id);

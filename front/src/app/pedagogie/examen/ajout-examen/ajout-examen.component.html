@@ -4,7 +4,7 @@
     <div class="col-12" >
         <div class="card">
 
-            <h3 style="text-align: center;">Ajouter un examen</h3>
+            <h3 style="text-align: center;">Ajouter une évaluation</h3>
             <p-toast></p-toast>
             <form class="p-fluid p-formgrid grid" [formGroup]="formAddExamen"
                 (ngSubmit)="onAddExamen();">
@@ -28,13 +28,6 @@
                     </span>
                 </div>
 
-                <div class="field col-12 md:col-6">
-                    <label>Libellé:</label><br>
-                    <input type="text" formControlName="libelle" class="form-control col-12"
-                        placeholder="Intitulé de l'examen/ évaluation" pInputText>
-
-                </div>
-
                 <div class="field col-12 md:col-6" >
                    
                     <label>Formateur<span style="color:red">*</span>:</label><br>
@@ -47,7 +40,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Note max<span style="color:red">*</span>:</label><br>
                     <input type="text" formControlName="note_max" class="form-control col-12"
-                        placeholder="Note maximal à attribuer pour les étudiants lors de cet examen" pInputText>
+                        placeholder="20" pInputText>
 
                     <div *ngIf="note_max.invalid && (note_max.touched || note_max.dirty)">
                         <span *ngIf="note_max.errors?.pattern" style="color: red;">
@@ -59,7 +52,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Coefficient<span style="color:red">*</span>:</label><br>
                     <input type="number" formControlName="coef" class="form-control col-12"
-                        placeholder="Coefficient de cet examen" pInputText>
+                        placeholder="1" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -68,7 +61,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'examen<span style="color:red">*</span>:</label><br>
+                    <label>Niveau de l'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownNiveau" formControlName="niveau">
                         </p-dropdown>
@@ -76,20 +69,26 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Type d'examen<span style="color:red">*</span>:</label><br>
+                    <label>Type d'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownType" formControlName="type">
                         </p-dropdown>
                     </span>
                 </div>
+                <div class="field col-12">
+                    <label>Libellé:</label><br>
+                    <input type="text" formControlName="libelle" class="form-control col-12"
+                        placeholder="Intitulé de l'évaluation" pInputText>
+
+                </div>
                 <div>
-                    <button pButton type="submit" label="Ajouter l'examen" [disabled]="formAddExamen.invalid"></button>
+                    <button pButton type="submit" label="Ajouter l'évaluation" [disabled]="formAddExamen.invalid"></button>
 
                 </div>
 
             </form>
 
-            <a routerLink="/examens" style="float: right;"><i class="pi pi-caret-right"></i> Voir les examens</a>
+            <a routerLink="/examens" style="float: right;"><i class="pi pi-caret-right"></i> Voir les évaluations</a>
 
 
         </div>

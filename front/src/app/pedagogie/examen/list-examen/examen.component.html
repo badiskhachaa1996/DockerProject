@@ -36,7 +36,7 @@
                 <div [ngClass]="{'field col-12 md:col-12':!isFormateur,'field col-12 md:col-6':isFormateur}">
                     <label>Libellé:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
-                        placeholder="Intitulé de l'examen/ évaluation" pInputText>
+                        placeholder="Intitulé de l'évaluation" pInputText>
 
                 </div>
 
@@ -51,7 +51,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Note max<span style="color:red">*</span>:</label><br>
                     <input type="text" formControlName="note_max" class="form-control col-12"
-                        placeholder="Note maximal à attribuer pour les étudiants lors de cet examen" pInputText>
+                        placeholder="20" pInputText>
 
                     <div *ngIf="note_max_m.invalid && (note_max_m.touched || note_max_m.dirty)">
                         <span *ngIf="note_max_m.errors?.pattern" style="color: red;">
@@ -63,7 +63,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Coefficient<span style="color:red">*</span>:</label><br>
                     <input type="number" formControlName="coef" class="form-control col-12"
-                        placeholder="Coefficient de cet examen" pInputText>
+                        placeholder="1" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Type d'examen<span style="color:red">*</span>:</label><br>
+                    <label>Type d'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownType" formControlName="type">
                         </p-dropdown>
@@ -80,14 +80,14 @@
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label>Niveau d'examen<span style="color:red">*</span>:</label><br>
+                    <label>Niveau d'évaluation<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownNiveau" formControlName="niveau">
                         </p-dropdown>
                     </span>
                 </div>
                 <div>
-                    <button pButton type="submit" label="Modifier l'examen"
+                    <button pButton type="submit" label="Modifier l'évaluation"
                         [disabled]="formUpdateExamen.invalid"></button>
 
                 </div>
@@ -127,7 +127,7 @@
                             <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
                                 <p-dropdown filter="true" [options]="dropdownType"
                                     (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="label"
-                                    emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'examens">
+                                    emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'évaluation">
                                 </p-dropdown>
                             </span>
                         </div>
@@ -198,8 +198,8 @@
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
                     <tr>
-                        <th>Type d'examen:</th>
-                        <th>Date d'examen:</th>
+                        <th>Type d'évaluation:</th>
+                        <th>Date de l'évaluation:</th>
                         <th>Note max:</th>
 
                     </tr>
