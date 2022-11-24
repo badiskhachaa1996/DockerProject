@@ -192,7 +192,7 @@ import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant
 import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
-import { ContactComponent } from './contact/contact.component';
+import { ContactComponent } from './footer/contact/contact.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
 import { PolitiqueConfidentialiteComponent } from './footer/politique-confidentialite/politique-confidentialite.component';
 import { InscriptionEntrepriseComponent } from './pedagogie/entreprises/inscription-entreprise/inscription-entreprise.component';

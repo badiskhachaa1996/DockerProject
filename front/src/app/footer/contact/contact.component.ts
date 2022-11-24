@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ReactiveFormsModule } from '@angular/forms';
-import { contactService } from '../services/contact.service';
+import { contactService } from '../../services/contact.service';
 import { catchError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 

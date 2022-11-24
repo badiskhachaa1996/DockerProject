@@ -247,8 +247,8 @@ app.post("/updateById/:id", (req, res) => {
 //Mise à jour des infos users, utilisé depuis la page de gestion des utilisateurs
 app.patch("/patchById", (req, res) => {
     const user = new User({ ...req.body });
-    
-    User.updateOne({ _id: user._id }, { 
+
+    User.updateOne({ _id: user._id }, {
         civilite: user.civilite,
         firstname: user.firstname,
         lastname: user.lastname,
@@ -264,9 +264,9 @@ app.patch("/patchById", (req, res) => {
         rue_adresse: user.rue_adresse,
         numero_adresse: user.numero_adresse,
         postal_adresse: user.postal_adresse,
-     })
-    .then((response) => { res.status(201).send(response); })
-    .catch((error) => { res.status(400).json({ msg: error.message }); });
+    })
+        .then((response) => { res.status(201).send(response); })
+        .catch((error) => { res.status(400).json({ msg: error.message }); });
 });
 
 //Mise à jour d'un user
@@ -576,29 +576,27 @@ app.get('/getProfilePicture/:id', (req, res) => {
 //Methode pour envoyer la photo de profil d'un utilisateur methode Idrissa Sall
 app.get("/loadProfilePicture/:id", (req, res) => {
     User.findOne({ _id: req.params.id })
-    .then((user) => {
-        if(user.pathImageProfil)
-        {
-            let imgPath = path.join('storage', 'profile', user._id.toString(), user.pathImageProfil.toString());
-            let imgExtention = user.pathImageProfil.toString().slice(((user.pathImageProfil.toString().lastIndexOf(".") - 1) + 2) );
+        .then((user) => {
+            if (user.pathImageProfil) {
+                let imgPath = path.join('storage', 'profile', user._id.toString(), user.pathImageProfil.toString());
+                let imgExtention = user.pathImageProfil.toString().slice(((user.pathImageProfil.toString().lastIndexOf(".") - 1) + 2));
 
-            try 
-            {
-                let img = fs.readFileSync(imgPath, { encoding: 'base64' }, (error) => {
-                    if(error) {
-                        res.status(400).json({error: error});
-                    }
-                });
-                res.status(200).json({image: img, imgExtension: imgExtention});
-            } catch(e) {
-                res.status(200).json({ error: e })
+                try {
+                    let img = fs.readFileSync(imgPath, { encoding: 'base64' }, (error) => {
+                        if (error) {
+                            res.status(400).json({ error: error });
+                        }
+                    });
+                    res.status(200).json({ image: img, imgExtension: imgExtention });
+                } catch (e) {
+                    res.status(200).json({ error: e })
+                }
             }
-        }
-        else{
-            res.status(200).json({error: 'Image non definis'});
-        }
-    })
-    .catch((error) => { res.status(400).send(error.message); })
+            else {
+                res.status(200).json({ error: 'Image non definis' });
+            }
+        })
+        .catch((error) => { res.status(400).send(error.message); })
 });
 
 
@@ -876,5 +874,54 @@ app.get("/getAllCommercialV2", (req, res) => {
             res.status(500).send("Le service de commercial n'existe pas")
     })
 });
+app.get('/findDuplicateIMS', async (req, res) => {
+    /*
+    db.collection.aggregate([
+    {"$group" : { "_id": "$name", "count": { "$sum": 1 } } },
+    {"$match": {"_id" :{ "$ne" : null } , "count" : {"$gt": 1} } }, 
+    {"$project": {"name" : "$_id", "_id" : 0} }
+    ]);
+    */
+    let r = []
+    let agg = await User.aggregate([
+        { "$group": { "_id": "$email", "count": { "$sum": 1 } } },
+        { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
+        { "$project": { "email": "$_id", "_id": 0 } }
+    ])
+    for (const doc of agg) {
+        await User.find({ email: doc.email }).then(users => {
+            r.push({ '_id': users[0]._id, data: users })
+        })
+    }
+    res.status(201).send(r)
+})
 
+app.get('/findDuplicatePerso', async (req, res) => {
+    let r = []
+    User.updateMany({ email_perso: ' ' }, { email_perso: '' }).exec(r => {
+        User.updateMany({ email_perso: '' }, { email_perso: null }).exec
+    })
+    let agg = await User.aggregate([
+        { "$group": { "_id": "$email_perso", "count": { "$sum": 1 } } },
+        { "$match": { "_id": { "$ne": null }, "count": { "$gt": 1 } } },
+        { "$project": { "email_perso": "$_id", "_id": 0 } }
+    ])
+    for (const doc of agg) {
+        await User.find({ email_perso: doc.email_perso }).then(users => {
+            r.push({ '_id': users[0]._id, data: users })
+        })
+    }
+    res.status(201).send(r)
+})
+
+app.get('/delete/:user_id', (req, res) => {
+    let token = jwt.decode(req.header("token"))
+    if (token.role == 'Admin')
+        User.findByIdAndRemove(req.params.user_id).then(r => {
+            res.send(r)
+        })
+        //Chercher dans les autres tables si sont ID ne traines pas
+    else
+        res.status(403).send('Vous n\'avez pas l\'accès necessaire.')
+})
 module.exports = app;

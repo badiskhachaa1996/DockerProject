@@ -81,7 +81,7 @@ import { LoginGuard } from './dev-components/guards/login-guard';
 import { FormAdmissionGuard } from './dev-components/guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
 import { NotificationComponent } from './ticketing/notification/notification.component';
-import { ContactComponent } from './contact/contact.component';
+import { ContactComponent } from './footer/contact/contact.component';
 import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
@@ -121,6 +121,7 @@ import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 import { GrhComponent } from './rh/grh/grh.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
+import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 
 
 @NgModule({
@@ -235,7 +236,8 @@ import { UsersSettingsComponent } from './admin-tools/users-settings/users-setti
                     { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent },
+                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate:[AdminGuardService] },
+                    { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate:[AdminGuardService] },
 
                     /*** RH paths */
 

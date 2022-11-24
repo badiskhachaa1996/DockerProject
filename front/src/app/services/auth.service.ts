@@ -43,8 +43,7 @@ export class AuthService {
   }
 
   //Recuperation de la liste des utilisateurs en populate sur les services
-  getAllPopulate()
-  {
+  getAllPopulate() {
     let url = this.apiUrl + "getAllPopulate";
 
     return new Promise((resolve, reject) => {
@@ -89,8 +88,7 @@ export class AuthService {
   }
 
   //Methode de mise à jour des infos d'un utilisateur utilisé sur la page de gestion des utilisateur
-  patchById(user: User)
-  {
+  patchById(user: User) {
     let url = `${this.apiUrl}patchById`;
 
     return new Promise((resolve, reject) => {
@@ -198,31 +196,43 @@ export class AuthService {
     return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllCommercialV2(){
+  getAllCommercialV2() {
     let url = this.apiUrl + "getAllCommercialV2"
     return this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 
   //Modifier l'utilisateur utilisé sur la page de gestion des utilisateurs
-  patchUser(user: User)
-  {}
+  patchUser(user: User) { }
 
   //Methode pour recuperer la photo de profil d'un utilisateur methode Idrissa Sall
-  getLoadProfilePicture(id: string)
-  {
+  getLoadProfilePicture(id: string) {
     let url = `${this.apiUrl}loadProfilePicture/${id}`;
-    
+
     return new Promise((resolve, reject) => {
       this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
-        ((response) => { resolve(response);  }),
+        ((response) => { resolve(response); }),
         ((error) => { reject(error); })
       );
     });
   }
-  /*TESTMAIL(){
-    let url = this.apiUrl	+"TESTMAIL"
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
-  }*/
+  findDuplicateIMS() {
+    let url = this.apiUrl + "findDuplicateIMS"
+    return this.http.get<User[][]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+  findDuplicatePerso() {
+    let url = this.apiUrl + "findDuplicatePerso"
+    return this.http.get<User[][]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  delete(user_id) {
+    let url = this.apiUrl + "delete/" + user_id
+    return this.http.get<User>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
+
 
 }

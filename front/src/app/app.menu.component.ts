@@ -53,8 +53,13 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Accueil',
                 items: [
-                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
-                    { label: 'Gestion des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] }
+                    { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                ]
+            },{
+                label: 'Outils Dev/Admin', icon: 'pi pi-ticket',
+                items: [
+                    { label: 'Gestions des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] },
+                    { label: 'Analyseur de doublons', icon: 'pi pi-server', routerLink: ['/analyseur-doublons'] }
                 ]
             },
             {
