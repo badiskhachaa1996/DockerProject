@@ -157,7 +157,7 @@
 			<h5>Gestion des utilisateurs</h5>
 			<p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
                      [globalFilterFields]="['user_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
-                     [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
+                     [rows]="5" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
 				<ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
