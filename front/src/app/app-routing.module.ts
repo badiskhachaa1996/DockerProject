@@ -66,23 +66,23 @@ import { ValidationEmailComponent } from './authentification/validation-email/va
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
-import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
-import { AuthGuardService } from './guards/auth-guard';
-import { AdminGuardService } from './guards/admin-guard';
-import { AdmissionGuardService } from './guards/admission-guard';
-import { PedagogieGuardService } from './guards/pedagogie-guard';
-import { AdministrationGuardService } from './guards/administration-guard';
+import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
+import { AuthGuardService } from './dev-components/guards/auth-guard';
+import { AdminGuardService } from './dev-components/guards/admin-guard';
+import { AdmissionGuardService } from './dev-components/guards/admission-guard';
+import { PedagogieGuardService } from './dev-components/guards/pedagogie-guard';
+import { AdministrationGuardService } from './dev-components/guards/administration-guard';
 
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
-import { ProspectGuard } from './guards/prospect-guard';
+import { ProspectGuard } from './dev-components/guards/prospect-guard';
 import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
-import { LoginGuard } from './guards/login-guard';
-import { FormAdmissionGuard } from './guards/formAdmission-guard';
+import { LoginGuard } from './dev-components/guards/login-guard';
+import { FormAdmissionGuard } from './dev-components/guards/formAdmission-guard';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
-import { NotificationComponent } from './notification/notification.component';
+import { NotificationComponent } from './ticketing/notification/notification.component';
 import { ContactComponent } from './contact/contact.component';
-import { CollaborateurGuard } from './guards/collaborateur.guard';
+import { CollaborateurGuard } from './dev-components/guards/collaborateur.guard';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { MentionsLegalesComponent } from './footer/mentions-legales/mentions-legales.component';
@@ -97,9 +97,9 @@ import { AppComponent } from './app.component';
 import { TuteurComponent } from './pedagogie/tuteur/tuteur.component';
 
 import { ListeContratsComponent } from './pedagogie/entreprises/liste-contrats/liste-contrats.component';
-import { TuteurEntrepriseGuard } from './guards/tuteur-entreprise.guard';
-import { CeoEntrepriseGuard } from './guards/ceo-entreprise.guard';
-import { CompletionProfilGuard } from './guards/completion-profil.guard';
+import { TuteurEntrepriseGuard } from './dev-components/guards/tuteur-entreprise.guard';
+import { CeoEntrepriseGuard } from './dev-components/guards/ceo-entreprise.guard';
+import { CompletionProfilGuard } from './dev-components/guards/completion-profil.guard';
 import { CreateAccountComponent } from './support/create-account/create-account.component';
 import { MyAccountComponent } from './gestion-bancaire/gestion-des-comptes/my-account/my-account.component';
 import { AddNewIndividualAccountComponent } from './gestion-bancaire/gestion-des-comptes/add-new-individual-account/add-new-individual-account.component';
@@ -116,11 +116,11 @@ import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.comp
 import { MatchingComponent } from './skillsnet/matching/matching.component';
 import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
-import { ResponsableCommercialGuard } from './guards/responsable-commercial.guard';
+import { ResponsableCommercialGuard } from './dev-components/guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 import { GrhComponent } from './rh/grh/grh.component';
-import { UsersSettingsComponent } from './users-settings/users-settings.component';
+import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 
 
 @NgModule({

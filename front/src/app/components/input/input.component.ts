@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CountryService } from '../../service/countryservice';
-import { NodeService } from '../../service/nodeservice';
+import { CountryService } from '../../dev-components/service-template/countryservice';
+import { NodeService } from '../../dev-components/service-template/nodeservice';
 import { SelectItem } from 'primeng/api';
 
 @Component({

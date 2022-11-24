@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ConfigService } from '../../service/app.config.service';
-import { AppConfig } from '../../api/appconfig';
+import { ConfigService } from '../../dev-components/service-template/app.config.service';
+import { AppConfig } from '../../dev-components/api-template/appconfig';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 @Component({

@@ -4,9 +4,9 @@ import { map, Observable } from 'rxjs';
 
 import jwt_decode from "jwt-decode";
 
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
-import { EventEmitterService } from '../services/event-emitter.service';
+import { EventEmitterService } from '../../services/event-emitter.service';
 
 
 @Injectable({

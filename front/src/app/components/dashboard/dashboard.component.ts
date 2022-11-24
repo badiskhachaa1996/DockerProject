@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/productservice';
+import { Product } from '../../dev-components/api-template/product';
+import { ProductService } from '../../dev-components/service-template/productservice';
 import { Subscription } from 'rxjs';
-import { ConfigService } from '../../service/app.config.service';
-import { AppConfig } from '../../api/appconfig';
+import { ConfigService } from '../../dev-components/service-template/app.config.service';
+import { AppConfig } from '../../dev-components/api-template/appconfig';
 import jwt_decode from "jwt-decode";
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/models/User';

@@ -678,10 +678,10 @@
             <i class="pi pi-times-circle" style="float:right; color: red;" (click)="showGenerateBulletin=false"
                 aria-hidden="true"></i>
             <h3 *ngIf="classeForBGenerateBulletin && semestreForGenerateBulletin">Notes par groupe: {{
-                classeForBGenerateBulletin.nom }} - {{ semestreForGenerateBulletin }}</h3>
+                classeForBGenerateBulletin.titre }} - {{ semestreForGenerateBulletin }}</h3>
 
             <p-table #dt1 [value]="etudiantFromClasse" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['user_id', 'examen_id', 'note_val', 'note_max']" [rows]="10" [pageLinks]="5"
+                [globalFilterFields]="['user_id.firstname','user_id.lastname']" [rows]="10" [pageLinks]="5"
                 [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantFromClasse.length"
                 styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">

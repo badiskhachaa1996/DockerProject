@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import jwt_decode from "jwt-decode";
-import { ServService } from '../services/service.service';
+import { ServService } from '../../services/service.service';
 import { truncate } from 'fs';
 
 @Injectable({

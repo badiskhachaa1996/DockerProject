@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationService } from 'src/app/services/notification.service';
-import { TicketService } from '../services/ticket.service';
+import { TicketService } from '../../services/ticket.service';
 import jwt_decode from "jwt-decode";
-import { SujetService } from '../services/sujet.service';
-import { AuthService } from '../services/auth.service';
-import { AppTopBarComponent } from '../app.topbar.component';
+import { SujetService } from '../../services/sujet.service';
+import { AuthService } from '../../services/auth.service';
+import { AppTopBarComponent } from '../../app.topbar.component';
 
 @Component({
   selector: 'app-notification',

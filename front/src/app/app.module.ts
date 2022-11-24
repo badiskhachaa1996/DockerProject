@@ -127,15 +127,15 @@ import { ConfirmationComponent } from './components/menus/confirmation.component
 import { PersonalComponent } from './components/menus/personal.component';
 import { SeatComponent } from './components/menus/seat.component';
 import { LandingComponent } from './components/landing/landing.component';
-import { CountryService } from './service/countryservice';
-import { CustomerService } from './service/customerservice';
-import { EventService } from './service/eventservice';
-import { IconService } from './service/iconservice';
-import { NodeService } from './service/nodeservice';
-import { PhotoService } from './service/photoservice';
-import { ProductService } from './service/productservice';
-import { MenuService } from './service/app.menu.service';
-import { ConfigService } from './service/app.config.service';
+import { CountryService } from './dev-components/service-template/countryservice';
+import { CustomerService } from './dev-components/service-template/customerservice';
+import { EventService } from './dev-components/service-template/eventservice';
+import { IconService } from './dev-components/service-template/iconservice';
+import { NodeService } from './dev-components/service-template/nodeservice';
+import { PhotoService } from './dev-components/service-template/photoservice';
+import { ProductService } from './dev-components/service-template/productservice';
+import { MenuService } from './dev-components/service-template/app.menu.service';
+import { ConfigService } from './dev-components/service-template/app.config.service';
 import { LoginComponent } from './components/login/login.component';
 import { ErrorComponent } from './components/error/error.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
@@ -185,11 +185,11 @@ import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
 import { ProspectsComponent } from './pedagogie/assignation-groupe/prospects.component';
-import { PartenaireInscriptionComponent } from './partenaire-inscription/partenaire-inscription.component';
+import { PartenaireInscriptionComponent } from './partenaire/partenaire-inscription/partenaire-inscription.component';
 import { FirstConnectionComponent } from './profil/first-connection/first-connection.component';
 import { ReinscritComponent } from './administration/validation-prospects/reinscrit.component';
 import { DetailsEtudiantComponent } from './pedagogie/etudiants/details-etudiant/details-etudiant.component';
-import { NotificationComponent } from './notification/notification.component';
+import { NotificationComponent } from './ticketing/notification/notification.component';
 import { MpOublieComponent } from './authentification/mp-oublie/mp-oublie.component';
 import { ResetMpComponent } from './authentification/reset-mp/reset-mp.component';
 import { ContactComponent } from './contact/contact.component';
@@ -220,7 +220,8 @@ import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equi
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
 import { GrhComponent } from './rh/grh/grh.component';
-import { UsersSettingsComponent } from './users-settings/users-settings.component';
+import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
+import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -428,6 +429,7 @@ import { UsersSettingsComponent } from './users-settings/users-settings.componen
     DemandeConseillerComponent,
     GrhComponent,
     UsersSettingsComponent,
+    AnalyseDoublonComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

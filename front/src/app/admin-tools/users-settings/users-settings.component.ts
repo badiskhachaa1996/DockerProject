@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Agent } from 'http';
 import { environment } from 'src/environments/environment';
-import { Etudiant } from '../models/Etudiant';
-import { Formateur } from '../models/Formateur';
-import { Service } from '../models/Service';
-import { User } from '../models/User';
-import { AuthService } from '../services/auth.service';
-import { CommercialPartenaireService } from '../services/commercial-partenaire.service';
-import { EtudiantService } from '../services/etudiant.service';
-import { FormateurService } from '../services/formateur.service';
-import { ServService } from '../services/service.service';
+import { Etudiant } from '../../models/Etudiant';
+import { Formateur } from '../../models/Formateur';
+import { Service } from '../../models/Service';
+import { User } from '../../models/User';
+import { AuthService } from '../../services/auth.service';
+import { CommercialPartenaireService } from '../../services/commercial-partenaire.service';
+import { EtudiantService } from '../../services/etudiant.service';
+import { FormateurService } from '../../services/formateur.service';
+import { ServService } from '../../services/service.service';
 import { MessageService } from 'primeng/api';
 
 @Component({

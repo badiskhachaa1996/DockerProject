@@ -1,7 +1,7 @@
 import jwt_decode from "jwt-decode";
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Injectable } from "@angular/core";
-import { ServService } from "../services/service.service";
+import { ServService } from "../../services/service.service";
 
 @Injectable({
   providedIn: 'root'

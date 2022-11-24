@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../../service/productservice';
-import { PhotoService } from '../../service/photoservice';
-import { Product } from '../../api/product';
+import { ProductService } from '../../dev-components/service-template/productservice';
+import { PhotoService } from '../../dev-components/service-template/photoservice';
+import { Product } from '../../dev-components/api-template/product';
 
 @Component({
   selector: 'app-media',

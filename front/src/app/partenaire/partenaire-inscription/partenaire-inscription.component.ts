@@ -3,11 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
-import { CommercialPartenaire } from '../models/CommercialPartenaire';
-import { Partenaire } from '../models/Partenaire';
-import { User } from '../models/User';
-import { AuthService } from '../services/auth.service';
-import { PartenaireService } from '../services/partenaire.service';
+import { CommercialPartenaire } from '../../models/CommercialPartenaire';
+import { Partenaire } from '../../models/Partenaire';
+import { User } from '../../models/User';
+import { AuthService } from '../../services/auth.service';
+import { PartenaireService } from '../../services/partenaire.service';
 
 @Component({
   selector: 'app-partenaire-inscription',
