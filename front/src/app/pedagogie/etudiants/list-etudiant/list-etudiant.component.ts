@@ -1182,16 +1182,14 @@ export class ListEtudiantComponent implements OnInit {
   /* Partie reporting */
   onGetNumbersOfStudentsConnectedbyCampus()
   {
-    //Date dde la semaine dernière
-    let WeekDate = moment().subtract(7, 'days').format('MM-DD-YYYY');
+    //Date de la semaine dernière
+    let lastWeekDate = moment().subtract(7, 'days').format('MM-DD-YYYY');
     
-    let lastWeekDate = new Date(WeekDate);
-
     this.etudiants.forEach((etudiant) => {
       let byPassCampus: any = etudiant.campus;
       let byPassUser: any = etudiant.user_id;
       
-      if(byPassUser.last_connection >= lastWeekDate)
+      if(new Date(byPassUser.last_connection) >= new Date(lastWeekDate))
       {
         this.etudiantConnectedFromLastWeek.push(etudiant);
 
@@ -1203,7 +1201,6 @@ export class ListEtudiantComponent implements OnInit {
         }
       }
     });
-    
 
     this.studentsByCampus = {
       labels: [`Paris ${this.studentsOfParis.length}`, `Montpellier ${this.studentsOfMontpellier.length}`],
