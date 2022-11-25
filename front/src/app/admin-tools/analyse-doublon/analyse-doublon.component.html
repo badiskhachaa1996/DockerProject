@@ -32,6 +32,24 @@
 </div>
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton
+                pTooltip="Les étudiants sans classe et sans Dossier complet seront renvoyer dans la liste de l'administration pour valider leur dossier"
+                label="Attribuer à l'administration" icon="pi pi-send" class="p-button-danger" (click)="toAdmin();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Les étudiants sans classe et avec un Dossier complet seront renvoyer dans la liste de la pédagogie pour obtenir une classe"
+                label="Attribuer à la pédagogie" icon="pi pi-send" class="p-button-danger" (click)="toPedagogie();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Les étudiants validés par l'administration mais sans email ims seront renvoyer dans la liste du support"
+                label="Attribuer au support" icon="pi pi-send" class="p-button-danger" (click)="toSupport();"
+                style="margin-right: 3px;"></button>
+            <button pButton
+                pTooltip="Nettoyer les tables si user_id renvoie null dans les Models Formateur, Etudiant, Prospects, Commercial etc"
+                label="Nettoyer les models" icon="pi pi-trash" class="p-button-danger" (click)="cleanModel();"
+                style="margin-right: 3px;"></button>
+        </div>
         <h5>Gestion des doublons avec IMS</h5>
         <p-table [value]="doublonEmailIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
             [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
@@ -42,7 +60,6 @@
                     <th>Civilité NOM Prénom</th>
                     <th>Email</th>
                     <th>Email perso</th>
-                    <th>Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-doublon let-expanded="expanded">
@@ -59,7 +76,6 @@
                         | titlecase }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email_perso }}</td>
-                    <td>NUCKED</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-doublon>
@@ -114,6 +130,11 @@
 </div>
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton pTooltip="Supprimer les doublons de prospects" label="Supprimer les doublons de prospects"
+                icon="pi pi-send" class="p-button-danger" (click)="deleteDuplicateProspect();"
+                style="margin-right: 3px;"></button>
+        </div>
         <h5>Gestion des doublons avec Email perso</h5>
         <p-table [value]="doublonEmailPerso" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
             [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
@@ -124,7 +145,6 @@
                     <th>Civilité NOM Prénom</th>
                     <th>Email</th>
                     <th>Email perso</th>
-                    <th>Action</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-doublon let-expanded="expanded">
@@ -141,7 +161,6 @@
                         | titlecase }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email }}</td>
                     <td style="min-width: 10rem;">{{ doublon.data[0]?.email_perso }}</td>
-                    <td>NUCKED</td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-doublon>
@@ -170,9 +189,9 @@
                     <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
                     </td>
                     <td>
-                        <i *ngIf="user.type=='Prospect' || !user.type"
-                            pTooltip="Rechercher dans la table prospects" style="margin-left: 2%; cursor: pointer;"
-                            class="pi pi-eye" (click)="searchProspect(user._id)" aria-hidden="true"></i>
+                        <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects"
+                            style="margin-left: 2%; cursor: pointer;" class="pi pi-eye"
+                            (click)="searchProspect(user._id)" aria-hidden="true"></i>
                         <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
                             pTooltip="Rechercher dans la table étudiants" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-search" (click)="searchEtudiant(user._id)" aria-hidden="true"></i>
@@ -196,4 +215,48 @@
     </tr>
     </ng-template>
     </p-table>
+</div>
+
+<div class="col-12">
+    <div class="card">
+        <div style="float: right;">
+            <button pButton
+                pTooltip="Nettoyer une partie en reconnaisant les mails gmail, outlook, yahoo, estya et elitech.education"
+                label="Nettoyer les évidents" icon="pi pi-bolt" class="p-button-danger" (click)="cleanAllWithSameEmail();"
+                style="margin-right: 3px;"></button>
+        </div>
+        <h5>Gestion des utilisateurs avec le même email</h5>
+        <p-table [value]="sameEmailPersoIMS" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [totalRecords]="sameEmailPersoIMS.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Email</th>
+                    <th>Email perso</th>
+                    <th>Type</th>
+                    <th>Rôle</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user let-expanded="expanded">
+                <tr>
+                    <td style="min-width: 10rem;">
+                        {{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}
+                    </td>
+                    <td style="min-width: 10rem;">{{ user.email }}</td>
+                    <td style="min-width: 10rem;">{{ user.email_perso }}</td>
+                    <td style="min-width: 10rem;">{{ user.type }}</td>
+                    <td *ngIf="user.role!='user'">{{ user.role }}</td>
+                    <td *ngIf="user.role=='user'">Utilisateur</td>
+                    <td>
+                        <i pTooltip="Garder seulement l'email IMS" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-briefcase" (click)="deleteEmail(user._id,'perso')" aria-hidden="true"></i>
+                        <i pTooltip="Garder seulement l'email Personnelle" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-google" (click)="deleteEmail(user._id,'IMS')" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 </div>

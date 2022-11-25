@@ -20,14 +20,14 @@ export class CreateAccountComponent implements OnInit {
     email_ims: new FormControl('', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+((@estya+\.com)|(@estyagroup+\.com)|(@elitech+\.education)|(@eduhorizons+\.com)|(@adgeducation+\.com)|(@intedgroup+\.com)|(@espic+\.com))$")]),
   })
 
-  showAssignForm: Etudiant = null
+  showAssignForm: any = null
 
   showUpdateForm(etu: any) {
     this.formAssignEmail.setValue({ email_ims: etu.user_id.email })
   }
 
   AssignEmailForm() {
-    this.etudiantService.assignEmail(this.showAssignForm._id, this.formAssignEmail.value.email_ims).subscribe(d => {
+    this.etudiantService.assignEmail(this.showAssignForm._id, this.formAssignEmail.value.email_ims, this.showAssignForm.user_id._id).subscribe(d => {
 
       this.messageService.add({ severity: "success", detail: "Mis à jour avec succès par: " + this.formAssignEmail.value.email_ims, summary: "Assignation de l'émail " })
       this.etudiants.forEach((val, index) => {

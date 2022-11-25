@@ -62,10 +62,10 @@ export class UsersSettingsComponent implements OnInit {
   services: Service[] = [];
   dropDownService: any = [{ label: 'Tous les services', value: null }];
 
-  constructor(private userService: AuthService, private etudiantService: EtudiantService, 
-              private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
-              private serviceService: ServService, private formBuilder: FormBuilder,
-              private messageService: MessageService) { }
+  constructor(private userService: AuthService, private etudiantService: EtudiantService,
+    private formateurService: FormateurService, private commercialService: CommercialPartenaireService,
+    private serviceService: ServService, private formBuilder: FormBuilder,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     //Recuperation de toute les data
@@ -93,8 +93,7 @@ export class UsersSettingsComponent implements OnInit {
 
 
   //Methode de recuperation de la liste des datas
-  onGetAllDatas()
-  {
+  onGetAllDatas() {
     //Recuperation de la liste des users
     this.userService.getAllPopulate()
       .then((response: User[]) => { this.users = response })
@@ -120,46 +119,42 @@ export class UsersSettingsComponent implements OnInit {
 
     //Recuperation de la liste des services
     this.serviceService.getAll().subscribe(
-      ((response) => { 
+      ((response) => {
         this.services.forEach((service) => {
           this.services[service._id] = response;
           this.dropDownService.push({ label: service.label, value: service._id });
-        }); 
+        });
       }),
       ((error) => { console.log(error) })
     );
   }
 
   //Methode de recuperation de la photo de profil d'un utilisateur
-  onLoadProfilePicture(id: string)
-  {
+  onLoadProfilePicture(id: string) {
     this.userService.getLoadProfilePicture(id)
-    .then((response: any) => { 
-      if(response.image)
-      {
-        const imageDecoded = new Uint8Array(atob(response.image).split('').map(char => char.charCodeAt(0)));
-        let blob: Blob = new Blob([imageDecoded], { type: `image/${response.imgExtension}` })
-        let reader: FileReader = new FileReader();
-        reader.addEventListener("load", () => {
-          this.profilPicture = reader.result;
-        }, false);
+      .then((response: any) => {
+        if (response.image) {
+          const imageDecoded = new Uint8Array(atob(response.image).split('').map(char => char.charCodeAt(0)));
+          let blob: Blob = new Blob([imageDecoded], { type: `image/${response.imgExtension}` })
+          let reader: FileReader = new FileReader();
+          reader.addEventListener("load", () => {
+            this.profilPicture = reader.result;
+          }, false);
 
-        if (blob) {
-          reader.readAsDataURL(blob);
+          if (blob) {
+            reader.readAsDataURL(blob);
+          }
+
         }
-        
-      } 
-      else
-      {
-        this.profilPicture = 'assets/images/avatar.PNG'
-      }
-    })
-    .catch((error) => { console.log(error); });
+        else {
+          this.profilPicture = 'assets/images/avatar.PNG'
+        }
+      })
+      .catch((error) => { console.log(error); });
   }
 
   //Methode pour pre-remplir le formulaire de mise à jour
-  onPatchData()
-  {
+  onPatchData() {
     this.formUpdate.patchValue({
       civilite: { label: this.userToUpdate.civilite },
       lastname: this.userToUpdate.lastname,
@@ -179,8 +174,7 @@ export class UsersSettingsComponent implements OnInit {
   }
 
   //Methode de modification des infos
-  onUpdateUser()
-  {
+  onUpdateUser() {
     const user = new User();
 
     user._id = this.userToUpdate._id;
@@ -201,14 +195,36 @@ export class UsersSettingsComponent implements OnInit {
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
 
     this.userService.patchById(user)
-    .then((response) => {
-      this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });
-      this.onGetAllDatas();
-      this.showFormUpdate = false;
-      this.formUpdate.reset();
-    })
-    .catch((error) => { console.log(error.msg); });
+      .then((response) => {
+        this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur modifié` });
+        this.onGetAllDatas();
+        this.showFormUpdate = false;
+        this.formUpdate.reset();
+      })
+      .catch((error) => { console.log(error.msg); });
 
+  }
+
+  deletePerso(user) {
+    if (confirm('Etes-vous sur de vouloir supprimer ' + user.lastname + ' ' + user.firstname + " ?"))
+      this.userService.delete(user._id).subscribe(r => {
+        this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur supprimé` });
+        this.users.splice(this.customIndexOf(this.users, user._id),1)
+      }, err => {
+        console.log(err)
+        this.messageService.add({ severity: 'error', summary: 'L\'utilisateur n\'a pas été supprimé' });
+        
+      })
+  }
+
+  customIndexOf(list: User[], id: string) {
+    let r = -1
+    list.forEach((u, index) => {
+      if (u._id == id)
+        r = index
+    })
+    console.log(r)
+    return r
   }
 
 

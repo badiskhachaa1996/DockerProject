@@ -892,9 +892,9 @@ app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
     })
 })
 
-app.get('/assignEmail/:etudiant_id/:email_ims', (req, res) => {
+app.get('/assignEmail/:etudiant_id/:email_ims/:user_id', (req, res) => {
     User.findOne({ email: req.params.email_ims }).then(dataU => {
-        if (!dataU)
+        if (!dataU || dataU._id == req.params.user_id)
             Etudiant.findByIdAndUpdate(req.params.etudiant_id, { valided_by_support: true }, { new: true }, function (err, data) {
                 if (err) {
                     console.error(err)
