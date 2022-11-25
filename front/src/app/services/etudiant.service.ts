@@ -133,7 +133,7 @@ export class EtudiantService {
 
   getAllByMultipleClasseIDWithoutPresence(classe_id: string[], presence: Presence[]) {
     let url = this.apiUrl + "getAllByMultipleClasseIDWithoutPresence"
-    return this.httpClient.post<Etudiant[]>(url, { classe_id,presence }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.post<Etudiant[]>(url, { classe_id, presence }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   addNewPayment(_id: string, data: any) {
@@ -161,8 +161,8 @@ export class EtudiantService {
     return this.httpClient.get<Etudiant[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
-  assignEmail(etudiant_id, email_ims) {
-    let registreUrl = this.apiUrl + "assignEmail/" + etudiant_id + "/" + email_ims;
+  assignEmail(etudiant_id, email_ims, user_id) {
+    let registreUrl = this.apiUrl + "assignEmail/" + etudiant_id + "/" + email_ims + "/" + user_id;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
