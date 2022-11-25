@@ -101,6 +101,7 @@ export class DemandeEventsComponent implements OnInit {
     this.dEventService.create(source).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Merci de votre participation' });
+        this.onInitAddEventForm()
       }),
       ((error) => {
         console.error(error)

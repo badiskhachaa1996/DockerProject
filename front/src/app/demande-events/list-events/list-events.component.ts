@@ -14,10 +14,10 @@ import { sourceForm } from 'src/app/models/sourceForm';
 })
 export class ListEventsComponent implements OnInit {
 
-  events : sourceForm[] = [];
+  events: sourceForm[] = [];
 
-  constructor(private formBuilder: FormBuilder, private dEventService:DemandeEventsService,
-    private messageService:MessageService) { }
+  constructor(private formBuilder: FormBuilder, private dEventService: DemandeEventsService,
+    private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.dEventService.getAll().subscribe(
@@ -25,6 +25,17 @@ export class ListEventsComponent implements OnInit {
         this.events = response;
       }
     )
+  }
+
+  clearDoublon() {
+    this.dEventService.clearDuplicate().subscribe(r => {
+      this.dEventService.getAll().subscribe(
+        (response) => {
+          this.events = response;
+          this.messageService.add({severity:'success',summary:"Liste nettoyé avec succès"})
+        }
+      )
+    })
   }
 
 }

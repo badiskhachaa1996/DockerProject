@@ -1,11 +1,14 @@
 <!-- LISTE DES INSCRIPTIONS POUR AGENT PEDAGOGIE/ADMISSION -->
 <div class="col-12">
     <div class="card">
+        <div style="float: right;">
+            <button pButton icon="pi pi-trash" label="Nettoyer les doublons" (click)="clearDoublon();"></button>
+        </div>
         <h5>Liste des retours du formulaire</h5>
         <p-table #dt1 rowExpandMode="single" [value]="events"
                  dataKey="_id" [rows]="10" 
                  [rowHover]="true"
-                 [globalFilterFields]="['email', 'nom','phone', 'pays_adresse', 'domaines']"
+                 [globalFilterFields]="['email', 'nom','phone', 'source', 'prenom','etablissement']"
                  styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
                  responsiveLayout="scroll">
 
