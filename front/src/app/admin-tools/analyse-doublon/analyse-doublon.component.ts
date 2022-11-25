@@ -152,6 +152,7 @@ export class AnalyseDoublonComponent implements OnInit {
 
   toSupport() {
     this.UserService.toSupport().subscribe(r => {
+      console.log(r)
       this.MessageService.add({ severity: 'success', summary: 'Etudiant transféré avec succès', detail: 'Les étudiants admis et sans email_ims sont envoyés aux supports' })
     }, err => {
       this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu lors du transferts des étudiants', detail: err.message })

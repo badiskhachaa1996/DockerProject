@@ -35,13 +35,13 @@ export class AjoutExamenComponent implements OnInit {
   dropdownNiveau: any[] = [
     { label: "Controle Continue", value: "Controle Continue" },
     { label: "Examen finale", value: "Examen finale" },
-    { label: "Soutenance", value: "Soutenance" }
+    //{ label: "Soutenance", value: "Soutenance" }
   ]
 
   dropdownType: any[] = [
     { label: "Ponctuelle orale", value: "Ponctuelle orale" },
     { label: "Ponctuelle écrite", value: "Ponctuelle écrite" },
-    { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
+   // { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
     { label: "Devoir Sur Table", value: "Devoir Sur Table" },
     { label: "BTS Blanc", value: "BTS Blanc" },
@@ -54,7 +54,7 @@ export class AjoutExamenComponent implements OnInit {
     libelle: new FormControl('', Validators.required),
     formateur_id: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
-    type: new FormControl(this.dropdownType[0].value, Validators.required),
+    type: new FormControl('', Validators.required),
     niveau: new FormControl(this.dropdownNiveau[0].value, Validators.required),
     note_max: new FormControl('', [Validators.required, Validators.pattern("^[0-9.]+$")]),
     coef: new FormControl('', Validators.required),
