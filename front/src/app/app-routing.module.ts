@@ -1,3 +1,4 @@
+import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -184,6 +185,7 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
                     { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
                     { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
                     { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
                     { path: 'assignation-inscrit', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
