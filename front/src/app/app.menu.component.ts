@@ -59,7 +59,8 @@ export class AppMenuComponent implements OnInit {
                 label: 'Outils Dev/Admin', icon: 'pi pi-ticket',
                 items: [
                     { label: 'Gestions des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] },
-                    { label: 'Analyseur de doublons', icon: 'pi pi-server', routerLink: ['/analyseur-doublons'] }
+                    { label: 'Analyseur de doublons', icon: 'pi pi-server', routerLink: ['/analyseur-doublons'] },
+                    { label: 'Gestion des étudiants', icon: 'pi pi-fw pi-briefcase', routerLink: ['/gestion-etudiants'] }
                 ]
             },
             {
