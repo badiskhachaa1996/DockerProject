@@ -239,6 +239,8 @@ export class EmergementComponent implements OnInit {
         })
       this.date_debut = new Date(dataS.date_debut).getTime()
       this.date_fin = this.date_debut + (15 * 60000)
+      if (this.token.id == dataS.formateur_id)
+        this.date_fin = new Date(dataS.date_fin).getTime()
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
       this.DiplomeService.getAll().subscribe(diplomes => {

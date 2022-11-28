@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 //création du schéma de données de la table examen
 const examenSchema = mongoose.Schema({
-    classe_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'classe'},
+    classe_id: { type: [mongoose.Schema.Types.ObjectId], ref: 'classe' },
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'formateur', required: true },
     date: { type: String, required: true },
@@ -10,7 +10,8 @@ const examenSchema = mongoose.Schema({
     note_max: { type: Number, required: true },
     coef: { type: Number, required: true },
     libelle: { type: String, required: true },
-    niveau:  { type: String }
+    niveau: { type: String },
+    semestre: { type: String,default : "Semestre 1" }
 });
 
 //Création de la table examen via le schema de données

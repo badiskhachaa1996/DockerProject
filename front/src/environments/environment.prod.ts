@@ -678,7 +678,7 @@ export const environment = {
     { value: 'Salarié', viewValue: 'Salarié' },
     { value: 'Apprenti', viewValue: 'Apprenti' },
     { value: 'Demandeur d\'emploi', viewValue: 'Demandeur d\'emploi'},
-    { value: 'Paticulier', viewValue: 'Paticulier'},
+    { value: 'Particulier', viewValue: 'Particulier'},
     { value: 'Contrat de professionnalisation', viewValue: 'Contrat de professionnalisation' },
     { value: 'Autre', viewValue: 'Autre' },
   ],

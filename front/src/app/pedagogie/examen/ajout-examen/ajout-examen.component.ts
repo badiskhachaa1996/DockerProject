@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 })
 export class AjoutExamenComponent implements OnInit {
   dropdownMatiere: any[] = [];
+  dropdownMatiereDefault = this.dropdownMatiere
   matieres: any = {}
   formateurs: any = {}
   groupes: any = {}
@@ -29,11 +30,18 @@ export class AjoutExamenComponent implements OnInit {
   dropdownClasse: any[] = [];
   token;
 
+  dropdownSemestre = [
+    { label: 'Semestre 1', value: 'Semestre 1' },
+    { label: 'Semestre 2', value: 'Semestre 2' },
+    { label: 'Semestre 3', value: 'Semestre 3' },
+    { label: 'Semestre 4', value: 'Semestre 4' },
+  ]
+
   dropdownFormateur: any[] = [];
 
 
   dropdownNiveau: any[] = [
-    { label: "Controle Continue", value: "Controle Continue" },
+    { label: "Control Continue", value: "Control Continue" },
     { label: "Examen finale", value: "Examen finale" },
     //{ label: "Soutenance", value: "Soutenance" }
   ]
@@ -41,7 +49,7 @@ export class AjoutExamenComponent implements OnInit {
   dropdownType: any[] = [
     { label: "Ponctuelle orale", value: "Ponctuelle orale" },
     { label: "Ponctuelle écrite", value: "Ponctuelle écrite" },
-   // { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
+    // { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
     { label: "Devoir Sur Table", value: "Devoir Sur Table" },
     { label: "BTS Blanc", value: "BTS Blanc" },
@@ -57,7 +65,8 @@ export class AjoutExamenComponent implements OnInit {
     type: new FormControl('', Validators.required),
     niveau: new FormControl(this.dropdownNiveau[0].value, Validators.required),
     note_max: new FormControl('', [Validators.required, Validators.pattern("^[0-9.]+$")]),
-    coef: new FormControl('', Validators.required),
+    coef: new FormControl(1, Validators.required),
+    semestre: new FormControl('', Validators.required)
   })
 
 
@@ -102,10 +111,11 @@ export class AjoutExamenComponent implements OnInit {
             this.matieres[matiere._id] = matiere
             let bypa: any = matiere.formation_id
             if (Array.isArray(matiere.formation_id))
-              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau, value: matiere._id });
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
             else
-              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau, value: matiere._id });
+              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
           });
+          this.dropdownMatiereDefault = this.dropdownMatiere
         }),
         ((error) => { console.error(error); })
       );
@@ -136,6 +146,29 @@ export class AjoutExamenComponent implements OnInit {
       })
       this.formAddExamen.patchValue({ libelle })
     }
+  }
+
+  filterModule() {
+    let classe_id = this.formAddExamen.get("classe_id")?.value;
+    let cids = []
+    if (classe_id) {
+      classe_id.forEach(c => {
+        cids.push(this.groupes[c].diplome_id)
+      })
+      this.matiereService.getAllPopulateByFormationID(cids).subscribe(response => {
+        console.log(cids, response)
+        this.dropdownMatiere = []
+        response.forEach(matiere => {
+          this.matieres[matiere._id] = matiere
+          let bypa: any = matiere.formation_id
+          if (Array.isArray(matiere.formation_id))
+            this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+          else
+            this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+        })
+      })
+    }
+
   }
 
   //Methode d'ajout d'un formulaire

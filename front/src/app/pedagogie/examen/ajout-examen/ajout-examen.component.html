@@ -15,7 +15,7 @@
                 <div class="field col-12 md:col-6">
                     <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
 
-                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='updateLibelle()'  formControlName="classe_id" placeholder="Choissisez un groupe">
+                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='updateLibelle();filterModule()'  formControlName="classe_id" placeholder="Choissisez un groupe">
                     </p-multiSelect>
 
                 </div>
@@ -32,7 +32,21 @@
                    
                     <label>Formateur<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownFormateur" placeholder="Choisir un formateur" (onChange)='updateLibelle()' formControlName="formateur_id">
+                        <p-dropdown [options]="dropdownFormateur" filter="true"  placeholder="Choisir un formateur" (onChange)='updateLibelle()' formControlName="formateur_id">
+                        </p-dropdown>
+                    </span>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date<span style="color:red">*</span>:</label><br>
+                    <input type="datetime-local" formControlName="date" class="form-control col-12" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6" >
+                   
+                    <label>Semestre<span style="color:red">*</span>:</label><br>
+                    <span>
+                        <p-dropdown [options]="dropdownSemestre"  placeholder="Choisir un semestre" formControlName="semestre">
                         </p-dropdown>
                     </span>
                 </div>
@@ -47,17 +61,6 @@
                             La note maximale n'est pas dans le bon format
                         </span>
                     </div>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label>Coefficient<span style="color:red">*</span>:</label><br>
-                    <input type="number" formControlName="coef" class="form-control col-12"
-                        placeholder="1" pInputText>
-                </div>
-
-                <div class="field col-12 md:col-6">
-                    <label>Date<span style="color:red">*</span>:</label><br>
-                    <input type="datetime-local" formControlName="date" class="form-control col-12" pInputText>
                 </div>
 
                 <div class="field col-12 md:col-6">

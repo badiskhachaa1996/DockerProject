@@ -70,4 +70,10 @@ export class MatiereService {
     return this.httpClient.get<{ matieres: any[], groupes: any[] }>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
 
   }
+
+  getAllPopulateByFormationID(formation_id: string[]) {
+    let registreUrl = this.apiUrl + "getAllPopulateByFormationID";
+    return this.httpClient.post<Matiere[]>(registreUrl,{formation_id}, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
 }
