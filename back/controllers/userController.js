@@ -964,9 +964,11 @@ app.get('/toSupport', (req, res) => {
         r.forEach(user => {
             if (user.user_id)
                 if (user.user_id.email == null || user.user_id.email == '' || user.user_id.email == ' ')
-                    users.push(user)
+                    users.push(user.user_id._id)
         })
-        res.send(users)
+        Etudiant.updateMany({ user_id: { $in: users } }, { valided_by_support: false }, { new: true },(err,doc)=>{
+            res.send(doc)
+        })
     }, err => {
         res.status(500).send(err)
     })
@@ -1029,12 +1031,12 @@ app.get('/getAllWithSameEmail', (req, res) => {
 app.get('/cleanAllWithSameEmail', (req, res) => {
     User.find({ email: { $ne: null } }).$where('this.email==this.email_perso').then(r => {
         r.forEach(user => {
-            let email = user.email.lowercase()
+            let email = user.email.toLowerCase()
             if (email.indexOf('@gmail.com') != -1 || email.indexOf('@yahoo.fr') != -1 || email.indexOf('@outlook.fr') != -1)
                 User.findByIdAndUpdate(user._id, { email: null }, { new: true }, (err, doc) => {
                     console.log(doc)
                 })
-            else if (email.indexOf('@estya.com') != -1 || email.lowercase().indexOf('@elitech.education') != -1 || email.indexOf('@intedgroup.com') || email.indexOf('@eduhorizons.com'))
+            else if (email.indexOf('@estya.com') != -1 || email.indexOf('@elitech.education') != -1 || email.indexOf('@intedgroup.com') || email.indexOf('@eduhorizons.com'))
                 User.findByIdAndUpdate(user._id, { email_perso: null }, { new: true }, (err, doc) => {
                     console.log(doc)
                 })

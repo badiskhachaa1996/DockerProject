@@ -451,94 +451,6 @@ app.post('/sendEDT/:id', (req, res, next) => {
 4- Récupérer la moyenne basse et haute (min() et max()) de chaque matière
 5- Récupérer la moyenne de l'étudiant de chaque matière
 */
-app.get("/getBulletin/:etudiant_id/:semestre", (req, res, next) => {
-    Etudiant.findById(req.params.etudiant_id).then(etudiant => {
-        Classe.findById(etudiant.classe_id).then(classe => {
-            Etudiant.find({ classe_id: etudiant.classe_id }).then(listEtudiant => {
-                var listNotes = []
-                var dicMatiere = {}
-                var listMatiere = []
-                var dicExamen = {}
-                var listeNotesEleves = {}//id_eleve:[id_matiere:[note]]
-                var dicMoy = {}
-                var dicMoyMatiere = {}
-                var MoyenneEtudiant = {} //[id_matiere:moyenne]
-                let my = 0
-                Examen.find({ classe_id: etudiant.classe_id }).then(listExamen => {
-                    let dicNotes = {}
-                    Note.find({ semestre: req.params.semestre }).then(n => {
-                        n.forEach(note => {
-                            if (dicNotes[note.examen_id] && dicNotes[note.examen_id].length != 0) {
-                                dicNotes[note.examen_id].push(note)
-                            } else {
-                                dicNotes[note.examen_id] = [note]
-                            }
-                        })
-                        listExamen.forEach(examen => {
-                            dicExamen[examen._id] = examen
-                            //1- Récupérer toutes les notes de la classe du semestre
-                            listNotes = listNotes.concat(dicNotes[examen._id])
-                            if (!listMatiere.includes(examen.matiere)) {
-                                listMatiere.push(examen.matiere)
-                            }
-                            //2- Récupérer toutes les examens de chaque matière 
-                            if (dicMatiere[examen.matiere] && dicMatiere[examen.matiere].length != 0) {
-                                dicMatiere[examen.matiere].push(examen._id)
-                            } else {
-                                dicMatiere[examen.matiere] = [examen._id]
-                            }
-                        })
-                        //3- Faire la moyenne de chaque étudiant pour chaque matière
-                        let listEtuEx = []
-                        let listMatierev2 = []
-                        listNotes.forEach(note => {
-                            if (listeNotesEleves[note.etudiant_id]) {
-                                if (listeNotesEleves[note.etudiant_id][dicExamen[note.examen_id].matiere_id] && listeNotesEleves[note.etudiant_id][dicExamen[note.examen_id].matiere_id].length != 0) {
-                                    listeNotesEleves[note.etudiant_id][dicExamen[note.examen_id].matiere_id].push(parseInt(note.note_val) / parseInt(dicExamen[note.examen_id].note_max))
-                                } else {
-                                    listeNotesEleves[note.etudiant_id][dicExamen[note.examen_id].matiere_id] = [parseInt(note.note_val) / parseInt(dicExamen[note.examen_id].note_max)]
-                                }
-                            } else {
-                                listeNotesEleves[note.etudiant_id] = {}
-                                listeNotesEleves[note.etudiant_id][dicExamen[note.examen_id].matiere_id] = [parseInt(note.note_val) / parseInt(dicExamen[note.examen_id].note_max)]
-                            }
-                            if (!listEtuEx.includes({ "etudiant": note.etudiant_id, "matiere": dicExamen[note.examen_id].matiere_id })) {
-                                listEtuEx.push({ "etudiant": note.etudiant_id, "matiere": dicExamen[note.examen_id].matiere_id })
-                            }
-                        })
-                        //4- Récupérer la moyenne basse et haute (min() et max()) de chaque matière
-                        listEtuEx.forEach(etuEx => {
-                            if (!dicMoy[etuEx.etudiant] || dicMoy[etuEx.etudiant].length != 0) {
-                                dicMoy[etuEx.etudiant] = {}
-                                dicMoy[etuEx.etudiant][etuEx.matiere] = avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere])
-                            } else {
-                                dicMoy[etuEx.etudiant][etuEx.matiere] = avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere])
-                            }
-                            if (etuEx.etudiant == req.params.etudiant_id) {
-                                //5- Récupérer la moyenne de l'étudiant de chaque matière
-                                MoyenneEtudiant[etuEx.matiere] = avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere])
-                                my += MoyenneEtudiant[etuEx.matiere]
-                                if (!listMatierev2.includes(etuEx.matiere)) {
-                                    listMatierev2.push(etuEx.matiere)
-                                }
-                            }
-                            if (!dicMoyMatiere[etuEx.matiere] || dicMoyMatiere[etuEx.matiere].length != 0) {
-                                dicMoyMatiere[etuEx.matiere] = [avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere])]
-                            } else {
-                                dicMoyMatiere[etuEx.matiere].push(avg(listeNotesEleves[etuEx.etudiant][etuEx.matiere]))
-                            }
-
-                        })
-                        console.log(MoyenneEtudiant, MoyenneEtudiant.length)
-                        my = my / MoyenneEtudiant.length
-                        //                      Moyenne Classe, Moyenne Etudiant, 
-                        res.status(200).send({ dicMoyMatiere, MoyenneEtudiant, listeNotesEleves, listMatiere: listMatierev2, moyenneGeneral: my })
-                    })
-                })
-            })
-        })
-    })
-})
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
     //TODO Mettre les moy sur 20 et calculer les coeffs des examens
@@ -555,30 +467,30 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 listEtudiantID.push(etu._id)
             })
             Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).then(notes => {
-                let listExamenID = []
                 let listMatiereNOM = []
                 let listNotesEtudiants = {} // {etudiant_id:{matiere_id:[number]}}
+                let listNotesEtudiantsCoeff = {}
                 let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
                 let listMoyenne = {} // {matiere_nom:[number]}
                 let dicMatiere = {}
                 let listMoyChoose = {}
                 notes.forEach(n => {
-                    if (n.examen_id != null && !listExamenID.includes(n.examen_id._id)) {
-                        listExamenID.push(n.examen_id._id)
-                    }
-                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.nom)) {
-                        listMatiereNOM.push(n.examen_id.matiere_id.nom)
-                        dicMatiere[n.examen_id.matiere_id.nom] = n.examen_id.matiere_id
+                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau)) {
+                        listMatiereNOM.push(n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau)
+                        dicMatiere[n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau] = n.examen_id.matiere_id
                     }
 
                 })
                 listEtudiantID.forEach(e_id => {
                     listNotesEtudiants[e_id] = {}
+                    listNotesEtudiantsCoeff[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
                         listNotesEtudiants[e_id][m_nom] = []
+                        listNotesEtudiantsCoeff[e_id][m_nom] = []
                         notes.forEach(note => {
-                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.nom == m_nom) {
-                                listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val))
+                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv + " - " + note.examen_id.niveau == m_nom) {
+                                listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)) * parseFloat(note.examen_id.coef))
                             }
                         })
                     })
@@ -587,8 +499,8 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
                         listMoyenneEtudiants[e_id][m_nom] = 0.00000000001
-                        if (listNotesEtudiants[e_id][m_nom] != [] && listNotesEtudiants[e_id][m_nom].length != 0) {
-                            listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiants[e_id][m_nom])
+                        if (listNotesEtudiantsCoeff[e_id][m_nom] != [] && listNotesEtudiantsCoeff[e_id][m_nom].length != 0) {
+                            listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiantsCoeff[e_id][m_nom])
                         }
                     })
                 })

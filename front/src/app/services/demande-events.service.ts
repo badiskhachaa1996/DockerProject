@@ -24,5 +24,10 @@ export class DemandeEventsService {
       return this.httpClient.get<sourceForm[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
     }
 
+    clearDuplicate(){
+      let registreUrl = this.apiUrl + "clearDuplicate";
+      return this.httpClient.get<sourceForm[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+ 
+    }
 
 }
