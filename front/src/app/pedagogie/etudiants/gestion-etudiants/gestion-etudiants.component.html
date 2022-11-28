@@ -1,0 +1,94 @@
+<!-- Partie dedié aux statistiques étudiants -->
+<div class="grid">
+
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des étudiants connectés les 7 derniers jours</h5>
+            <ul>
+                <li>Nombres d'étudiants Paris: {{ studentsOfParisConnectedFromLastWeek.length }}/ {{ studentsOfParis.length }}</li>
+                <li>Nombres d'étudiants montpellier: {{ studentsOfMontpellierConnectedFromLastWeek.length }}/ {{ studentsOfMontpellier.length }}</li>
+            </ul>
+            <p-table #dt1 [value]="etudiantConnectedFromLastWeek" dataKey="_id" responsiveLayout="scroll"
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso']"
+                [rows]="5" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantConnectedFromLastWeek.length">
+                <ng-template pTemplate="caption">
+
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Recherche" />
+
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
+                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals'); onFilterByCampus($event);"
+                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Campus"></p-dropdown>
+
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="user_id.firstname">Prénom Nom</th>
+                        <th pSortableColumn="classe_id.abbrv">Groupe</th>
+                        <th pSortableColumn="email">Email</th>
+                        <th pSortableColumn="user_id.last_connection">Dernière connexion</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-etudiant let-expanded="expanded">
+                    <tr *ngIf="etudiant.user_id">
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="etudiant"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                (click)="loadPP(etudiant)"></button>
+                        </td>
+
+                        <td>
+                            {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
+                        </td>
+                        <td style="min-width: 10rem;">{{ etudiant.classe_id?.abbrv }}</td>
+                        <td style="min-width: 10rem;">
+                            <span *ngIf="etudiant.user_id.email">{{ etudiant.user_id.email }}</span>
+                            <span *ngIf="!etudiant.user_id.email" style="color: red;">X</span>
+                        </td>
+                        <td>{{ etudiant.user_id.last_connection | date: 'dd-LLLL-YYYY, H:mm' }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-etudiant>
+                    <tr>
+                        <td colspan="5">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Date de naissance </th>
+                                            <th>Téléphone </th>
+                                            <th>Téléphone d'urgence</th>
+                                            <th>NB Absences</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-order>
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td>
+                                                {{ etudiant.date_naissance | date:'dd/MM/yyyy' }}
+                                            </td>
+                                            <td *ngIf="etudiant.user_id">
+                                                {{ etudiant.user_id?.phone }}
+                                            </td>
+                                            <td>
+                                                {{ etudiant.sos_phone }}
+                                            </td>
+                                            <td>
+                                                {{absences.length}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+</div>

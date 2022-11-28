@@ -18,6 +18,9 @@ import { CommercialPartenaireService } from 'src/app/services/commercial-partena
 import { DemandeConseillerService } from 'src/app/services/commercial/demande-conseiller.service'
 import { DemandeConseiller } from 'src/app/models/DemandeConseiller';
 import { TeamCommercialService } from 'src/app/services/team-commercial.service';
+import { CongeService } from 'src/app/services/conge.service';
+import { Conge } from 'src/app/models/Conge';
+import { PlatformLocation } from '@angular/common';
 
 @Component({
   selector: 'app-user-profil',
@@ -73,7 +76,12 @@ export class UserProfilComponent implements OnInit {
   //Partie dedié a la gestion des demandes de congé
   //utilisateur connecté actuellement
   userConnectedNow: User;
-
+  selectDateForm: FormGroup;
+  showSelectDateForm: boolean = false;
+  conges: Conge[] = [];
+  showCongeList: boolean = false;
+  showFormNewDemande: boolean = false;
+  formNewDemande: FormGroup;
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -269,7 +277,7 @@ export class UserProfilComponent implements OnInit {
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService) { }
+    private TCService: TeamCommercialService, private congeService: CongeService) { }
 
   ngOnInit(): void {
 
@@ -375,11 +383,18 @@ export class UserProfilComponent implements OnInit {
     })
 
 
+    //Patie dediée à la demande de conge
     //Recuperation de l'utilisateur connecté actuellement
     this.AuthService.getInfoById(this.decodeToken.id).subscribe(
-      ((response) => { this.userConnectedNow = response ; console.log(this.userConnectedNow)}),
+      ((response) => { this.userConnectedNow = response ;}),
       ((error) => { console.log(error) })
     );
+
+    //Methode d'initialisation du formulaire de selection des dates
+    this.selectDateForm = this.formBuilder.group({
+      beginDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+    });
 
   }
 
@@ -437,6 +452,27 @@ export class UserProfilComponent implements OnInit {
     }, 15);
   }
 
+
   //Partie dedié a la gestion des demandes de congé
+  //Methode de recuperation de la liste des demandes de congés de l'utilisateur
+  onGetConges()
+  {
+    //Recuperation des données du formulaire
+    const formValue = this.selectDateForm.value;
+
+    const dateDebut = formValue['beginDate'];
+    const dateFin = formValue['endDate'];
+
+    this.congeService.getByUserIdBetweenPopulate(this.userConnectedNow._id, dateDebut, dateFin)
+    .then((response: Conge[]) => {
+      this.conges = response;
+      this.showCongeList = true;
+    })
+    .catch((error) => {  console.log(error); this.messageService.add({ severity: 'error', summary: 'problème interne', detail: "Veuillez contacter un administrateur s'il vous PlatformLocation, ou faites un ticket au service IMS" }); });
+  }
+
+  //Methode de demande de congés
+  onNewConges()
+  {}
 
 }

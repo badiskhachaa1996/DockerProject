@@ -117,8 +117,111 @@
 
             <!-- Partie dedié à la demande de congés -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
-                <h3>Demandes de congés</h3>
+                <button pButton pRipple type="button" icon="pi pi-plus" style="float: right;" (click)="showFormNewDemande = true;" label="Nouvelle demande" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" (click)="showSelectDateForm = true;" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
+                <h3 *ngIf="!showFormNewDemande && !showSelectDateForm">Demandes de congés</h3>
+                <h3 *ngIf="showFormNewDemande">Formulaire de demande de congés</h3>
+                <h3 *ngIf="showSelectDateForm">Consulter vos demandes</h3>
+
+                <i class="pi pi-times-circle" *ngIf="showSelectDateForm || showFormNewDemande"
+                        style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+                        pTooltip="Fermer" (click)="selectDateForm.reset(); showSelectDateForm = false; showFormNewDemande = false; formNewDemande.reset();" aria-hidden="true"> </i>
+
+                <!-- Formulaire de demande de congés -->
+                <form style="margin-top: 5px" class="formgroup-inline" [formGroup]="formNewDemande" (ngSubmit)="onNewConges()" *ngIf="showFormNewDemande">
+                    <div class="field">
+                        <label>Début</label>
+                        <p-calendar [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
+                    </div>
+                    <div class="field">
+                        <label>Fin</label>
+                        <p-calendar [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
+                    </div>
+                    <button pButton type="submit" label="Soumettre"></button>
+                </form>
+
+                <!-- Formulaire de selection des dates -->
+                <form style="margin-top: 5px" class="formgroup-inline" [formGroup]="selectDateForm" (ngSubmit)="onGetConges()" *ngIf="showSelectDateForm">
+                    <div class="field">
+                        <label class="p-sr-only">Début</label>
+                        <p-calendar formControlName="beginDate" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
+                    </div>
+                    <div class="field">
+                        <label class="p-sr-only">Fin</label>
+                        <p-calendar formControlName="endDate" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
+                    </div>
+                    <button pButton type="submit" [disabled]="selectDateForm.invalid" label="Valider"></button>
+                </form>
+
+                <!-- Table d'affichage des demandes de congés de l'utilisateur connecté -->
+                <p-table #dt4 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['type_conge','statut']" responsiveLayout="scroll" *ngIf="showCongeList">
+                    <ng-template pTemplate="caption">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-input-icon-left mb-2">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" #filter (input)="dt4.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+                            </span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Réferent
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Type de congés
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Début
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Fin
+                                </div>
+                            </th>
+                            <th>
+                                <div class="flex justify-content-between align-items-center">
+                                    Statut
+                                </div>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-conge>
+                        <tr>
+                            <td style="min-width: 12rem;">
+                                {{ conge.referent_id.lastname | uppercase }} {{ conge.referent_id.firstname | titlecase }}
+                            </td>
+                            <td style="min-width: 12rem;">
+                                {{ conge.type_conge }}
+                            </td>
+                            <td style="min-width: 14rem;">
+                                {{ conde.date_debut | date: 'short' }}
+                            </td>
+                            <td style="min-width: 10rem;">
+                                {{ conde.date_fin | date: 'short' }}
+                            </td>
+                            <td style="min-width: 10rem;">
+                                {{ contrat.statut }}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage">
+                        <tr>
+                            <td colspan="5">Aucune demandes de congés enregistrés.</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="loadingbody">
+                        <tr>
+                            <td colspan="5">Chargement des données.</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </div>
             <!-- end -->
 

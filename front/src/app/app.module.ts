@@ -222,6 +222,7 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
 import { GrhComponent } from './rh/grh/grh.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
+import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -430,6 +431,7 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
     GrhComponent,
     UsersSettingsComponent,
     AnalyseDoublonComponent,
+    GestionEtudiantsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

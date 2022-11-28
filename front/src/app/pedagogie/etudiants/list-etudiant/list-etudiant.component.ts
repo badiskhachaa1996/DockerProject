@@ -32,7 +32,6 @@ import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
 import { Campus } from 'src/app/models/Campus';
 import { info } from 'console';
-import * as moment from 'moment';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 
@@ -72,14 +71,6 @@ export class ListEtudiantComponent implements OnInit {
   showFilterByCampus: boolean = false;
   etudiantsByCampus: Etudiant[] = [];
   campusList: any = [];
-  /* end */
-
-  /* partie dediée au reporting */
-  studentsByCampus: any;
-  pieOptions: any;
-  etudiantConnectedFromLastWeek: Etudiant[] = [];
-  studentsOfParis: Etudiant[] = [];
-  studentsOfMontpellier: Etudiant[] = [];
   /* end */
 
   formUpdateEtudiant: FormGroup;
@@ -378,8 +369,6 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllByCode(this.code).subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu;
-            // Pour le reporting
-            this.onGetNumbersOfStudentsConnectedbyCampus();
           }),
           ((error) => { console.error(error); })
         );
@@ -387,8 +376,6 @@ export class ListEtudiantComponent implements OnInit {
         this.etudiantService.getAllEtudiantPopulate().subscribe(
           ((responseEtu) => {
             this.etudiants = responseEtu
-            // Pour le reporting
-            this.onGetNumbersOfStudentsConnectedbyCampus();
           }),
           ((error) => { console.error(error); })
         );
@@ -1178,59 +1165,6 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantsByCampus = [];
   }
 
-
-  /* Partie reporting */
-  onGetNumbersOfStudentsConnectedbyCampus()
-  {
-    //Date de la semaine dernière
-    let lastWeekDate = moment().subtract(7, 'days').format('MM-DD-YYYY');
-    
-    this.etudiants.forEach((etudiant) => {
-      let byPassCampus: any = etudiant.campus;
-      let byPassUser: any = etudiant.user_id;
-      
-      if(new Date(byPassUser.last_connection) >= new Date(lastWeekDate))
-      {
-        this.etudiantConnectedFromLastWeek.push(etudiant);
-
-        if(byPassCampus.libelle == 'ESTYA Paris')
-        {
-          this.studentsOfParis.push(etudiant);
-        } else if(byPassCampus.libelle == 'ESTYA Montpellier') {
-          this.studentsOfMontpellier.push(etudiant);
-        }
-      }
-    });
-
-    this.studentsByCampus = {
-      labels: [`Paris ${this.studentsOfParis.length}`, `Montpellier ${this.studentsOfMontpellier.length}`],
-      datasets: [
-          {
-              data: [this.studentsOfParis.length, this.studentsOfMontpellier.length],
-              backgroundColor: [
-                  "#FF6384",
-                  "#36A2EB",
-              ],
-              hoverBackgroundColor: [
-                  "#FF6384",
-                  "#36A2EB",
-              ]
-          }
-      ]
-    };
-
-    this.pieOptions = {
-      plugins: {
-          legend: {
-              labels: {
-                  color: '#495057'
-              }
-          }
-      }
-    };
-
-  }
-  /* end */
 
   exportExcel() {
     let dataExcel = []
