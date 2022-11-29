@@ -521,9 +521,9 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 let dicMatiere = {}
                 let listMoyChoose = {}
                 notes.forEach(n => {
-                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau)) {
-                        listMatiereNOM.push(n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau)
-                        dicMatiere[n.examen_id.matiere_id.abbrv + " - " + n.examen_id.niveau] = n.examen_id.matiere_id
+                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.abbrv)) {
+                        listMatiereNOM.push(n.examen_id.matiere_id.abbrv)
+                        dicMatiere[n.examen_id.matiere_id.abbrv] = n.examen_id.matiere_id
                     }
 
                 })
@@ -533,10 +533,25 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     listMatiereNOM.forEach(m_nom => {
                         listNotesEtudiants[e_id][m_nom] = []
                         listNotesEtudiantsCoeff[e_id][m_nom] = []
+                        let isBTS = false
+                        let isPP = false
                         notes.forEach(note => {
-                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv + " - " + note.examen_id.niveau == m_nom) {
-                                listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)) * parseFloat(note.examen_id.coef))
+                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false) {
+                                if (note.examen_id.niveau == 'BTS Blanc' && !isBTS) {
+                                    listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
+                                    isBTS = true
+                                } else if (note.examen_id.niveau == 'Projet Professionel' && !isPP) {
+                                    listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
+                                    isPP = true
+                                } else if (isBTS && note.examen_id.niveau == 'BTS Blanc') {
+                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                } else if (isPP && note.examen_id.niveau == 'Projet Professionel') {
+                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                } else if (!isBTS && !isPP) {
+                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                    for (let i = 0; i < note.examen_id.coef; i++)
+                                        listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
+                                }
                             }
                         })
                     })
@@ -568,7 +583,6 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                         if (dicRB[dicMatiere[m_nom]._id]) {
                             old_note = listMoyenneEtudiants[req.params.etudiant_id][m_nom]
                             isDispensed = dicRB[dicMatiere[m_nom]._id].isDispensed
-                            //TODO listMoyenneEtudiants ne prends pas en compte les absences
                             listMoyenneEtudiants[req.params.etudiant_id][m_nom] = +(dicRB[dicMatiere[m_nom]._id].fixed_moy.toString())
                         }
                         r.push({ matiere_name: m_nom, coef: dicMatiere[m_nom].coeff, ects: dicMatiere[m_nom].credit_ects, moy_etu: listMoyenneEtudiants[req.params.etudiant_id][m_nom], moy_classe: avg(listMoyenne[m_nom]), min_classe: min(listMoyenne[m_nom]), max_classe: max(listMoyenne[m_nom]), matiere_id: dicMatiere[m_nom]._id, old_note, isDispensed })
@@ -853,7 +867,7 @@ app.get('/updateDossier/:etudiant_id/:statut_dossier', (req, res) => {
 app.get('/assignEmail/:etudiant_id/:email_ims/:user_id', (req, res) => {
     User.findOne({ email: req.params.email_ims }).then(dataU => {
         if (!dataU || dataU._id == req.params.user_id)
-            Etudiant.findByIdAndUpdate(req.params.etudiant_id, { valided_by_support: true }, { new: true }, function (err, data) {
+            Etudiant.findByIdAndUpdate(req.params.etudiant_id, { valided_by_support: true, date_valided_by_support: new Date() }, { new: true }, function (err, data) {
                 if (err) {
                     console.error(err)
                     res.status(400).send(err)

@@ -336,12 +336,14 @@ export class ExamenComponent implements OnInit {
           if (bypass) {
             oldNote.push(bypass._id)
             this.tableauNotes.push({
-              etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname + ' ' + this.formatDate(bypass.user_id?.date_creation), // + ' ' + n.etudiant_id?.user_id?.date_creation
+              etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname,
               note: parseFloat(n.note_val),
               appreciation: n.appreciation,
               date_note: n.date_creation,
               _id: n._id,
-              isAbsent: n.isAbsent
+              isAbsent: n.isAbsent,
+              date_IMS:this.formatDate(bypass.user_id?.date_creation),
+              date_TEAMS:this.formatDate(bypass.date_valided_by_support)
             })
           }
         })
@@ -349,7 +351,7 @@ export class ExamenComponent implements OnInit {
           let bypass: any = this.examSelected.matiere_id
           if (oldNote.indexOf(etu._id) == -1)
             this.tableauNotes.push({
-              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname + ' ' + this.formatDate(bypass.user_id?.date_creation),
+              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname,
               note: NaN,
               appreciation: '',
               date_note: null,
@@ -359,7 +361,9 @@ export class ExamenComponent implements OnInit {
               classe_id: etu.classe_id._id,
               matiere_id: bypass._id,
               isAbsent: false,
-              semestre: this.examSelected.semestre
+              semestre: this.examSelected.semestre,
+              date_IMS:this.formatDate(etu.user_id?.date_creation),
+              date_TEAMS:this.formatDate(etu.date_valided_by_support)
             })
         })
       })
@@ -431,7 +435,7 @@ export class ExamenComponent implements OnInit {
       rowData.semestre,
       rowData.etudiant_id,
       rowData.examen_id,
-      'Absence Justifié',
+      'Absence Justifiée',
       rowData.classe_id,
       rowData.matiere_id,
       true,

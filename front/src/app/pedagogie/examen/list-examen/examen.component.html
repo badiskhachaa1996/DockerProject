@@ -30,8 +30,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width:30%">Nom & Prénom & Date d'intégration</th>
-                        <th style="width:10%">Date de la note </th>
+                        <th style="width:25%">Nom & Prénom</th>
+                        <th style="width:5%">Date d'intégration IMS </th>
+                        <th style="width:5%">Date d'intégration Teams </th>
+                        <th style="width:5%">Date de notation </th>
                         <th style="width:20%">Note </th>
                         <th style="width:25%">Appreciation </th>
                         <th style="width:15%">Action </th>
@@ -40,6 +42,8 @@
                 <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="data">
                         <td>{{ data.etudiant}}</td>
+                        <td>{{ data.date_IMS }}</td>
+                        <td>{{ data.date_TEAMS }}</td>
                         <td>{{ data.date_note | date:'dd/MM' }}</td>
                         <td>
                             <p-cellEditor>
@@ -49,7 +53,7 @@
                                 <ng-template pTemplate="output">
                                     <p *ngIf="!data.isAbsent && !isNaN(data.note)">{{ data.note }}</p>
                                     <p *ngIf="!data.isAbsent && isNaN(data.note)">Non Noté</p>
-                                    <p *ngIf="data.isAbsent">Absence Justifié</p>
+                                    <p *ngIf="data.isAbsent">Absence Justifiée</p>
                                 </ng-template>
                             </p-cellEditor>
                         </td>

@@ -45,7 +45,8 @@ export class AjoutExamenComponent implements OnInit {
   dropdownNiveau: any[] = [
     { label: "Control Continu", value: "Control Continu" },
     { label: "Examen final", value: "Examen final" },
-    //{ label: "Soutenance", value: "Soutenance" }
+    { label: "BTS Blanc", value: "BTS Blanc" },
+    { label: "Projet Professionel", value: "Projet Professionel" }
   ]
 
   dropdownType: any[] = [
@@ -54,7 +55,6 @@ export class AjoutExamenComponent implements OnInit {
     // { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
     { label: "Devoir Sur Table", value: "Devoir Sur Table" },
-    { label: "BTS Blanc", value: "BTS Blanc" },
     { label: "Participation", value: "Participation" }
   ]
 
@@ -146,7 +146,7 @@ export class AjoutExamenComponent implements OnInit {
       let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
       classe_id.forEach((cid, index) => {
         if (index != 0)
-          libelle = ' - ' + this.groupes[cid].abbrv
+          libelle = libelle + ' - ' + this.groupes[cid].abbrv
       })
       this.formAddExamen.patchValue({ libelle })
     }
@@ -176,7 +176,7 @@ export class AjoutExamenComponent implements OnInit {
 
   filterFormateur() {
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
-    this.dropdownFormateur=[]
+    this.dropdownFormateur = []
     if (matiere_id)
       this.SeanceService.getFormateursFromClasseIDs(matiere_id).subscribe(r => {
         if (r && r.length != 0) {
@@ -207,7 +207,8 @@ export class AjoutExamenComponent implements OnInit {
     let note_max = this.formAddExamen.get("note_max")?.value;
     let coef = this.formAddExamen.get("coef")?.value;
     let niveau = this.formAddExamen.get("niveau")?.value;
-
+    if (niveau == 'Examen final')
+      coef = 2
     let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau);
     this.examenService.create(examen).subscribe(
       (response) => {

@@ -32,7 +32,7 @@ mongoose
                         console.log(etu.user_id.email, " convertit en MCO 2B")
                     })
                 else
-                    console.log("'",etu.user_id.email,"' not found in DB")
+                    console.log(etu.user_id.email, "' not found in DB")
             })
         })
         Etudiant.find({ classe_id: mco_b_id }).populate('user_id').then(etudiants => {
@@ -42,16 +42,15 @@ mongoose
                         console.log(etu.user_id.email, " convertit en MCO 2A")
                     })
                 else
-                    console.log("'",etu.user_id.email,"' not found in DB")
+                    console.log(etu.user_id.email, "' not found in DB")
             })
         })
     })
 function customIncludes(email, list) {
     let r = false
     list.forEach(e => {
-        if (e.regex(`/${email}/i`) ) {
+        if (e == email)
             r = true
-        }
     })
     return r
 }

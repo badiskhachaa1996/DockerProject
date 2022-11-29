@@ -8,10 +8,10 @@ const examenSchema = mongoose.Schema({
     date: { type: String, required: true },
     type: { type: String, required: true },
     note_max: { type: Number, required: true },
-    coef: { type: Number, required: true },
+    coef: { type: Number, required: true, default: 1 },
     libelle: { type: String, required: true },
     niveau: { type: String },
-    semestre: { type: String,default : "Semestre 1" }
+    semestre: { type: String, default: "Semestre 1" }
 });
 
 //Création de la table examen via le schema de données
