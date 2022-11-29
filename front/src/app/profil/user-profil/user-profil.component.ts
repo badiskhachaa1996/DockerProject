@@ -73,7 +73,7 @@ export class UserProfilComponent implements OnInit {
   demandeConseiller: DemandeConseiller;
 
 
-  //Partie dedié a la gestion des demandes de congé
+  //Partie dedié a la gestion des demandes de congés
   //utilisateur connecté actuellement
   userConnectedNow: User;
   selectDateForm: FormGroup;
@@ -82,6 +82,15 @@ export class UserProfilComponent implements OnInit {
   showCongeList: boolean = false;
   showFormNewDemande: boolean = false;
   formNewDemande: FormGroup;
+  showCongeListForService: boolean = false;
+
+  //Motif de demande de congés
+  motifList: any[] = [
+    { label: 'Maladie', value: 'Maladie' },
+    { label: 'Payés', value: 'Payés' },
+    { label: 'Sans soldes', value: 'Sans soldes' },
+    { label: 'Maternité', value: 'Maternité' },
+  ];
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -390,7 +399,14 @@ export class UserProfilComponent implements OnInit {
       ((error) => { console.log(error) })
     );
 
-    //Methode d'initialisation du formulaire de selection des dates
+    //Initialisation du formulaire de demande de congés
+    this.formNewDemande = this.formBuilder.group({
+      date_debut: ['', Validators.required],
+      date_fin: ['', Validators.required],
+      motif: ['', Validators.required],
+    });
+
+    //Initialisation du formulaire de selection des dates
     this.selectDateForm = this.formBuilder.group({
       beginDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -464,7 +480,7 @@ export class UserProfilComponent implements OnInit {
     const dateFin = formValue['endDate'];
 
     this.congeService.getByUserIdBetweenPopulate(this.userConnectedNow._id, dateDebut, dateFin)
-    .then((response: Conge[]) => {
+    .then((response: any) => {
       this.conges = response;
       this.showCongeList = true;
     })
@@ -473,6 +489,56 @@ export class UserProfilComponent implements OnInit {
 
   //Methode de demande de congés
   onNewConges()
-  {}
+  {
+    const formValue = this.formNewDemande.value;
+    const conge = new Conge();
+
+    conge.user_id = this.userConnectedNow._id;
+    conge.type_conge = formValue['motif'].value;
+    conge.date_debut = formValue['date_debut'];
+    conge.date_fin = formValue['date_fin'];
+    conge.statut = 'En attente',
+
+    this.congeService.postNewHolidays(conge)
+    .then((response) => {
+      this.formNewDemande.reset();
+      this.showFormNewDemande = false;
+
+      this.messageService.add({ severity: 'success', summary: 'Demande de congé envoyé en attente de valisation par votre referent' });
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
+  }
+
+  //Methode de recuperation de la liste des congé d'un service pour un responsable
+  onGetCongesForMyService()
+  {
+    this.congeService.getAllBetweenPopulateForService(this.userConnectedNow._id)
+    .then((response: any) => {
+      this.conges = response;
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: error.error }); });
+  }
+
+  //Valider une demande de congés
+  onValidateConge(id: string)
+  {
+    this.congeService.patchValidateHolidays(id)
+    .then((response) => { 
+      this.messageService.add({ severity: 'success', summary: "Demande de congés validé" }); 
+      this.onGetCongesForMyService();
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+  }
+
+  //Refuser une demande de congés
+  onRefuseConge(id: string)
+  {
+    this.congeService.patchValidateHolidays(id)
+    .then((response) => { 
+      this.messageService.add({ severity: 'warning', summary: "Demande de congés Réfusé" }); 
+      this.onGetCongesForMyService();
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+  }
 
 }
