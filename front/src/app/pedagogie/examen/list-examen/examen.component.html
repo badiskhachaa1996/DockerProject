@@ -10,7 +10,7 @@
             </i>
             <h3>Saisie de notes</h3>
             <p>
-                Groupe: <strong>{{ examSelected.classeSelected |json }}</strong> <br />
+                Groupe: <strong>{{ formatClasse(examSelected.classe_id) }}</strong> <br />
                 Evaluation: <strong>{{ examSelected.libelle }}</strong> <br />
                 Date d'examen: <strong>{{ examSelected.date | date:'dd/MM' }}</strong> <br />
             </p>
@@ -30,7 +30,7 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th style="width:30%">Nom & Prénom</th>
+                        <th style="width:30%">Nom & Prénom & Date d'intégration</th>
                         <th style="width:10%">Date de la note </th>
                         <th style="width:20%">Note </th>
                         <th style="width:25%">Appreciation </th>
@@ -184,7 +184,7 @@
             <!--<div style="float: right;">
                 <button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
             </div>-->
-            <h3>Examens</h3>
+            <h3>Evaluations</h3>
             <p-toast></p-toast>
             <p-table #dt1 [value]="examens" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['libelle', 'classe_id.abbrv', 'matiere_id.abbrv', 'note_max', 'coef']"
@@ -195,22 +195,25 @@
 
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field" *ngIf="dropdownGroupe.length!=1">
-                            <p-dropdown filter="true" [options]="dropdownGroupe"
+                            <p-dropdown filter="true" [options]="dropdownGroupe" class="mr-2"
                                 (onChange)="dt1.filter($event.value, 'classe_id._id', 'in')"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du groupe">
                             </p-dropdown>
 
-                            <p-dropdown filter="true" [options]="dropdownModule"
+                            <p-dropdown filter="true" [options]="dropdownModule" class="mr-2"
                                 (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals')"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
                             </p-dropdown>
 
-                            <span style="margin-left: 2px;" *ngIf="dropdownType.length!=1">
-                                <p-dropdown filter="true" [options]="dropdownType"
-                                    (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="label"
-                                    emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'évaluation">
-                                </p-dropdown>
-                            </span>
+                            <p-dropdown filter="true" [options]="filterFormateur" class="mr-2"
+                                (onChange)="dt1.filter($event.value, 'formateur_id._id', 'equals')"
+                                emptyFilterMessage="Pas de formateur trouvé" filterPlaceholder="Nom du formateur">
+                            </p-dropdown>
+
+                            <p-dropdown filter="true" [options]="dropdownType" *ngIf="dropdownType.length!=1"
+                                (onChange)="dt1.filter($event.value.value, 'type', 'equals')" optionLabel="label"
+                                emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Type d'évaluation">
+                            </p-dropdown>
                         </div>
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
@@ -230,8 +233,6 @@
                         <th pSortableColumn="matiere_id">Module <p-sortIcon field="matiere_id"></p-sortIcon>
                         </th>
                         <th pSortableColumn="libelle">Libellé <p-sortIcon field="libelle"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="coef">Coefficient <p-sortIcon field="coef"></p-sortIcon>
                         </th>
                         <th>Action </th>
                     </tr>
@@ -255,7 +256,6 @@
                         </td>
                         <td>{{ examen.matiere_id?.abbrv }}</td>
                         <td>{{ examen.libelle }}</td>
-                        <td>{{ examen.coef }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
                                 class="pi pi-pencil" (click)="showFormUpdateExamen = true; 

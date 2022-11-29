@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const { Seance } = require("./../models/seance");
+const { Formateur } = require("./../models/formateur");
+const { User } = require("./../models/user");
 const { Presence } = require("./../models/presence");
 const { Classe } = require("./../models/classe")
 app.disable("x-powered-by");
@@ -360,6 +362,7 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 }, (error) => { res.status(500).send(error); })
 
 app.get('/getFormateurFromClasseID/:classe_id/:semestre', (req, res, next) => {
+    console.log()
     Seance.find({ classe_id: req.params.classe_id }).then(seanceList => {
         //TODO Enlever les seances en dehors du semestre
         let dicMatiere = {}//matiere_id:{formateur_id:nb,formateur_id:nb}
@@ -401,4 +404,18 @@ app.delete("/delete/:id", (req, res) => {
         res.status(500).send(error)
     })
 })
+
+app.post('/getFormateursFromClasseIDs', (req, res, next) => {
+    console.log(req.body.matieres_ids)
+    Seance.find({ matiere_id: { $in: req.body.matieres_ids } }).then(seanceList => {
+        let f_ids = []
+        seanceList.forEach(s => {
+            f_ids.push(s.formateur_id)
+        })
+        console.log(f_ids)
+        Formateur.find({ user_id: { $in: f_ids } }).populate('user_id').then(r => {
+            res.status(201).send(r)
+        })
+    })
+}, (error) => { res.status(500).send(error); })
 module.exports = app;
