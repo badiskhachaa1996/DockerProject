@@ -4,10 +4,9 @@
         <div class="card">
             <div class="col-12">
                 <button pButton pRipple type="button" icon="pi pi-list" label="Compte rendu d'activité" class="p-button-outlined mr-2 mb-2" (click)="showSelectDateForm = true;"></button>
-                <button pButton pRipple type="button" icon="pi pi-file" label="Démandes de congés" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" label="Démandes de congés" class="p-button-outlined mr-2 mb-2" (click)="onGetConges(); showCongeList = true;"></button>
             </div>
             
-
             <div class="col-12">
                 <!-- Formulaire de selection de date, s'affiche lorsque le bouton présence est appuyé -->
                 <form class="formgroup-inline" [formGroup]="selectDateForm" (ngSubmit)="onGetPresences()" *ngIf="showSelectDateForm">
@@ -88,14 +87,87 @@
                                             <ng-template pTemplate="emptymessage">
                                                 <tr>
                                                     <td>{{ presence.user_id.indicatif }}{{ presence.user_id.phone }}</td>
-                                                    <td>{{ presence.in_date | date: 'hh:mm' }}</td>
-                                                    <td>{{ presence.out_date | date: 'hh:mm' }}</td>
+                                                    <td>{{ presence.in_date | date: 'H:mm' }}</td>
+                                                    <td>{{ presence.out_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.principale_activity_details }}</td>
                                                     <td>
                                                         <ol>
                                                             <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}</li>
                                                         </ol>
                                                     </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+
+            <!-- Affichage de la liste des demandes de congés -->
+            <div class="col-12">
+                <div class="card" *ngIf="showCongeList">
+                    <i class="pi pi-times-circle"
+                        style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                        pTooltip="Fermer" (click)="showCongeList = false; selectDateForm.reset();" aria-hidden="true"> </i>
+
+                    <h5>Liste des demandes de congés</h5>
+                    
+                    <p-table [value]="conges" dataKey="_id" responsiveLayout="scroll"
+                             rowExpandMode="single" [rows]="10" [rowHover]="true" [totalRecords]="presences.length"
+                             [paginator]="true" #dt2 [globalFilterFields]="['statut', 'referent_id.firstname', 'referent_id.lastname', 'referent_id.email', 'user_id.firstname', 'user_id.lastname', 'user_id.email']">
+                    
+                            <ng-template pTemplate="caption">
+                                <input pInputText type="text" #filter (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Recherche" />
+
+                            </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem"></th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Debut</th>
+                                <th>Fin</th>
+                                <th>Statut</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-conge let-expanded="expanded">
+                            <tr>
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td style="min-width: 8rem;">{{ conge.user_id.lastname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id.firstname | titlecase }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id.email }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id.date_debut }}</td>
+                                <td style="min-width: 8rem;">{{ conge.date_fin }}</td>
+                                <td style="min-width: 8rem; color: red; font-weight: bold;">{{ conge.statut }}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-conge>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="p-3">
+                                        <p-table responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Réferent</th>
+                                                    <th>Email du réferent</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-conge>
+                                                <tr>
+                                                    <td colspan="8">Aucune données supplémentaires.</td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td style="min-width: 8rem;">{{ conge.referent_id.lastname | uppercase }} {{ conge.referent_id.firstname | titlecase }}</td>
+                                                    <td>{{ conge.referent_id.email }}</td>
                                                 </tr>
                                             </ng-template>
                                         </p-table>

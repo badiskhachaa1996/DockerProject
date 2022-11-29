@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InTime } from 'src/app/models/InTime';
 import { AuthService } from 'src/app/services/auth.service';
 import { IntimeService } from 'src/app/services/intime.service';
+import { CongeService } from 'src/app/services/conge.service';
+import { Conge } from 'src/app/models/Conge';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-grh',
@@ -12,6 +15,7 @@ import { IntimeService } from 'src/app/services/intime.service';
 })
 export class GrhComponent implements OnInit {
 
+  //Partie dedié aux présences
   showSelectDateForm: boolean = false;
   selectDateForm: FormGroup;
 
@@ -23,16 +27,15 @@ export class GrhComponent implements OnInit {
   typeList: any = [
     { label: 'Tous les types', value: null },
     { label: 'Salarié', value: 'Salarié' },
-    { label: 'Représentant', value: 'Représentant' },
-    { label: 'Tuteur', value: 'Tuteur' },
-    { label: 'Etudiant', value: 'Etudiant' },
-    { label: 'Initial', value: 'Initial' },
     { label: 'Alternant', value: 'Alternant' },
-    { label: 'Formateur', value: 'Formateur' },
     { label: 'Commercial', value: 'Commercial' },
   ];
 
-  constructor(private formBuilder: FormBuilder, private inTimeService: IntimeService, private userService: AuthService) { }
+  //Partie dedié aux demandes de congés
+  conges: Conge[] = [];
+  showCongeList: boolean = false;
+
+  constructor(private messageService: MessageService, private formBuilder: FormBuilder, private congeService: CongeService, private inTimeService: IntimeService, private userService: AuthService) { }
 
   ngOnInit(): void {
     //Methode d'initialisation du formulaire de selection des dates
@@ -87,6 +90,18 @@ export class GrhComponent implements OnInit {
       this.showPresenceList = true;
     })
     .catch((error) => { console.log(error); })
+  }
+
+
+  //Recuperation de la liste des congés
+  onGetConges()
+  {
+    this.congeService.getAllPopulate()
+    .then((response: Conge[]) => {
+      this.conges = response;
+      this.showCongeList = true;
+    })
+    .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); });
   }
 
 }
