@@ -444,6 +444,52 @@ app.post('/sendEDT/:id', (req, res, next) => {
 
     })
 });
+
+app.get('/glaflemedenvoyeralamainducoupjelecode', (req, res, next) => {
+    let mailList = []
+    Etudiant.find({ classe_id: { $ne: null }, valided_by_admin: true }).populate('user_id').then(etudiants => {
+        etudiants.forEach(etudiant => {
+            if (etudiant.email)
+                mailList.push(etudiant.email)
+            if (etudiant.email_perso)
+                mailList.push(etudiant.email_perso)
+        })
+        mailList = ['m.hue@estya.com']
+        let attachments = [{
+            filename: 'signature_peda_estya.png',
+            path: 'assets/signature_peda_estya.png',
+            cid: 'red' //same cid value as in the html img src
+        }]
+        let html = `
+        Bonjour,
+        Suite à la formation de l’outil IMS que vous avez reçu pendant la journée d’intégration ou autre,
+        Vous avez appris à signer votre présence pour vos cours, à voir votre emploi du temps et autre.
+        Vous avez été assigné dans vos groupes de cours par l’administration et le support,
+        Merci de vérifié que c’est le cas (en vérifiant que vous n’avez plus la phrase ‘En attente de validation par l’administration’ sur le tableau de bord), sinon merci d’envoyer un mail à m.hue@estya.com pour régler la situation.
+        L’utilisation de IMS pour signer votre présence est maintenant obligatoire,
+        Vous devez signer sous 15 min après le début de votre séance de cours comme montré durant la présentation, si vous n’avez pas pu suivre la présentation ou si vous avez un oubli,
+        Merci de visionner le PowerPoint en pièce jointe de ce mail,
+        
+        Cordialement,
+        Morgan Hue
+        
+        `
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: mailList,
+            subject: 'Mise en production de IMS',
+            html: html,
+            attachments
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.error(error);
+            }
+            console.log("SEND TO", mailList)
+        });
+    })
+
+})
 /*
 1- Récupérer toutes les notes de la classe du semestre
 2- Récupérer toutes les examens de chaque matière 

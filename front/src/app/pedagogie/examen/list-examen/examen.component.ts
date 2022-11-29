@@ -15,6 +15,8 @@ import { MatiereService } from 'src/app/services/matiere.service';
 import jwt_decode from 'jwt-decode';
 import { NoteService } from 'src/app/services/note.service';
 import { Note } from 'src/app/models/Note';
+import { Etudiant } from 'src/app/models/Etudiant';
+import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
   selector: 'app-examen',
@@ -48,7 +50,7 @@ export class ExamenComponent implements OnInit {
 
 
   dropdownNiveau: any[] = [
-    { label: "Controle Continue", value: "Controle Continue" },
+    { label: "Control Continue", value: "Control Continue" },
     { label: "Examen finale", value: "Examen finale" },
     { label: "Soutenance", value: "Soutenance" }
   ]
@@ -72,7 +74,8 @@ export class ExamenComponent implements OnInit {
     private matiereService: MatiereService,
     private classeService: ClasseService,
     private NotesService: NoteService,
-    private router: Router
+    private router: Router,
+    private EtudiantService: EtudiantService
   ) { }
 
   ngOnInit(): void {
@@ -214,6 +217,8 @@ export class ExamenComponent implements OnInit {
     }
   }
 
+
+
   //Methode de modification d'un examen
   onUpdateExamen() {
     //Recuperation des données du formulaire de modification des examens
@@ -303,10 +308,148 @@ export class ExamenComponent implements OnInit {
   }
   notes: Note[] = []
   loadNotes(examen) {
-    this.notes=[]
+    this.notes = []
     this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
       this.notes = notes
       console.log(notes)
     })
   }
+
+  examSelected: Examen = null
+  notesByClasseBySemestre: Note[] = []
+
+  tableauNotes = [];//{ etudiant: string, note: Number, appreciation: string, date_note: Date }
+  loadEtudiantsForNote(examen: any) {
+    this.examSelected = examen
+    let classe_ids = []
+    let oldNote = []
+    this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
+      examen.classe_id.forEach(c => { classe_ids.push(c._id) })
+      this.EtudiantService.getAllByMultipleClasseID(classe_ids).subscribe(etudiants => {
+        notes.forEach(n => {
+          let bypass: any = n.etudiant_id
+          oldNote.push(bypass._id)
+          this.tableauNotes.push({
+            etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname, // + ' ' + n.etudiant_id?.user_id?.date_creation
+            note: parseFloat(n.note_val),
+            appreciation: n.appreciation,
+            date_note: n.date_creation,
+            _id: n._id
+          })
+        })
+        etudiants.forEach(etu => {
+          let bypass: any = this.examSelected.matiere_id
+          if (oldNote.indexOf(etu._id) == -1)
+            this.tableauNotes.push({
+              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname, // + ' ' + n.etudiant_id?.user_id?.date_creation
+              note: NaN,
+              appreciation: '',
+              date_note: null,
+              _id: etu.user_id._id + "NEW",
+              etudiant_id: etu._id,
+              examen_id: this.examSelected._id,
+              classe_id: etu.classe_id._id,
+              matiere_id: bypass._id,
+              isAbsent: false,
+              semestre: this.examSelected.semestre
+            })
+        })
+      })
+      console.log(notes)
+    })
+  }
+
+  clonedRowData = {}
+  onRowEditInit(rowData) {
+    this.clonedRowData[rowData._id] = { ...rowData };
+  }
+
+  onRowEditSave(rowData, index: number) {
+    if (rowData.note <= this.examSelected.note_max) {
+      delete this.clonedRowData[rowData._id];
+      rowData.isAbsent = false
+      rowData.date_note = new Date()
+
+      let note = new Note(
+        rowData._id,
+        rowData.note.toString(),
+        rowData.semestre,
+        rowData.etudiant_id,
+        rowData.examen_id,
+        rowData.appreciation,
+        rowData.classe_id,
+        rowData.matiere_id,
+        false,
+        new Date()
+      )
+      if (rowData._id.includes('NEW')) {
+        //C'est un Nouvelle Note
+        delete note._id
+        this.NotesService.create(note).subscribe(r => {
+          rowData._id = r._id
+          this.tableauNotes[index] = rowData
+          this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant })
+        }, err => {
+          this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+          console.error(err)
+        })
+      } else {
+        //C'est une mise à jour de Note
+        this.NotesService.updateV2(note).subscribe(r => {
+          this.tableauNotes[index] = rowData
+          this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant })
+        }, err => {
+          this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+          console.error(err)
+        })
+      }
+    }
+    else {
+      this.messageService.add({ severity: "error", summary: "La note est supérieur à la note max de l'évaluation (" + this.examSelected.note_max + ")" })
+      this.onRowEditCancel(rowData, index)
+    }
+  }
+
+  onRowEditCancel(rowData, index: number) {
+    this.tableauNotes[index] = this.clonedRowData[rowData._id];
+    delete this.clonedRowData[rowData._id];
+  }
+
+  onRowUpdateIntoAbsent(rowData, index: number) {
+    rowData.isAbsent = true
+    let note = new Note(
+      rowData._id,
+      '0',
+      rowData.semestre,
+      rowData.etudiant_id,
+      rowData.examen_id,
+      'Absence Justifié',
+      rowData.classe_id,
+      rowData.matiere_id,
+      true,
+      new Date()
+    )
+    if (rowData._id.includes('NEW')) {
+      //C'est un Nouvelle Note
+      delete note._id
+      this.NotesService.create(note).subscribe(r => {
+        rowData._id = r._id
+        this.tableauNotes[index] = rowData
+        this.messageService.add({ severity: 'success', summary: "La note a été crée pour " + rowData.etudiant })
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+        console.error(err)
+      })
+    } else {
+      //C'est une mise à jour de Note
+      this.NotesService.updateV2(note).subscribe(r => {
+        this.tableauNotes[index] = rowData
+        this.messageService.add({ severity: 'success', summary: "La note a été mis à jour pour " + rowData.etudiant })
+      }, err => {
+        this.messageService.add({ severity: "error", summary: "Une erreur est survenue", detail: err?.message })
+        console.error(err)
+      })
+    }
+  }
+  isNaN(value) { return (Number.isNaN(value)) }
 }

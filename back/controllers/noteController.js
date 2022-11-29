@@ -1,5 +1,7 @@
 const express = require("express");
+const { UpdateNote } = require("../models/IMS Monitoring/UpdateNote");
 const app = express();
+const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
 
@@ -13,7 +15,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Recuperation de la liste des notes
 app.get("/getAllPopulate", (req, res, next) => {
-    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}}).populate({path:"examen_id",populate:{path:"formateur_id",populate:{path:"user_id"}}})
+    Note.find().populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } })
         .then((notesFromDb) => { res.status(200).send(notesFromDb); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -81,6 +83,7 @@ app.post("/create", (req, res, next) => {
     //Création du nouvel objet Note
     let data = req.body;
     delete data._id
+    data.date_creation = new Date()
 
     let note = new Note(
         {
@@ -96,7 +99,7 @@ app.post("/create", (req, res, next) => {
 
 //Recuperation d'une liste de note par semestre et par classe
 app.get("/getAllByExamenID/:examen_id", (req, res, next) => {
-    Note.find({ examen_id: req.params.examen_id }).populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({path:"examen_id",populate:{path:"matiere_id"}}).populate({path:"examen_id",populate:{path:"formateur_id",populate:{path:"user_id"}}})
+    Note.find({ examen_id: req.params.examen_id }).populate({ path: 'classe_id', populate: { path: 'diplome_id', populate: { path: 'campus_id' } } }).populate({ path: 'etudiant_id', populate: { path: 'user_id' } }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } })
         .then((noteFromDb) => { res.status(200).send(noteFromDb); })
         .catch((error) => { res.status(400).send(error.message); });
 });
@@ -115,10 +118,25 @@ app.put("/updateById/:id", (req, res, next) => {
             classe_id: req.body.classe_id,
             matiere_id: req.body.matiere_id,
         })
-        .then((noteUpdated) => { res.status(200).send(noteUpdated); })
+        .then((noteUpdated) => {
+            let nUpdated = new UpdateNote({
+                note_id: req.params.id,
+                user_id: jwt.decode(req.header("token")).id,
+                old_note: noteUpdated.note_val,
+                new_note: req.body.note_val,
+                date_creation: new Date
+            })
+            nUpdated.save()
+            res.status(200).send(noteUpdated);
+        })
         .catch((error) => { res.status(400).send(error.message); });
-
 });
+
+app.put("/updateV2/:id", (req, res) => {
+    Note.updateOne({ _id: req.params.id }, { ...req.body } )
+    .then((response) => { res.status(201).send(response); })
+    .catch((error) => { res.status(500).send(error.message); })
+})
 
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

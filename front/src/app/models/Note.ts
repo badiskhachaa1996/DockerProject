@@ -9,7 +9,8 @@ export class Note {
         public appreciation?: string,
         public classe_id?: string,
         public matiere_id?: string,
-        public isAbsent?: boolean
+        public isAbsent?: boolean,
+        public date_creation?: Date
     ) { };
 
 }

@@ -9,7 +9,8 @@ const noteSchema = mongoose.Schema({
     appreciation: { type: String, required: true },
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: 'classe', required: true },
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
-    isAbsent: { type: Boolean, default: false }
+    isAbsent: { type: Boolean, default: false },
+    date_creation: { type: Date, required: true }
 });
 
 //Création de la table note via le schema de données

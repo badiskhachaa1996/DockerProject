@@ -150,8 +150,9 @@
             <form [formGroup]="formSelectExam" (ngSubmit)="onSelectExam()" class="p-fluid p-formgrid grid">
                 <div class="field col-12">
                     <label>Évaluation</label>
-                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle" placeholder="Veuillez choisir une évaluation"
-                        emptyFilterMessage="Pas d'évaluation trouvé" filterPlaceholder="Examen" filter="true">
+                    <p-dropdown formControlName="examen" [options]="dropdownExamByClasse" optionLabel="libelle"
+                        placeholder="Veuillez choisir une évaluation" emptyFilterMessage="Pas d'évaluation trouvé"
+                        filterPlaceholder="Examen" filter="true">
                     </p-dropdown>
                 </div>
 
@@ -375,7 +376,7 @@
 
 
             <div id="content">
-                
+
                 <div style="float: left; margin-left: 20px;">
                     <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
                     <p *ngIf="etudiantToGenerateBulletin && users[etudiantToGenerateBulletin.user_id]">
@@ -526,7 +527,7 @@
 
 
             <div id="contentAnnuel">
-                
+
                 <div style="float: left; margin-left: 20px;">
                     <img src="assets/images/logo-estya-flag.png" alt="LOGO" width="130" height="80">
                     <!--TODO Logo different en fonction de l'école-->
@@ -769,7 +770,8 @@
             <h3>Saisie de notes</h3>
             <p>
                 Groupe: <strong>{{ classeSelected.abbrv }}</strong> <br />
-                Evaluation: <strong>{{ examSelected.libelle  }}</strong> <br />
+                Evaluation: <strong>{{ examSelected.libelle }}</strong> <br />
+                Date d'examen: <strong>{{ examSelected.date | date:'dd/MM' }}</strong> <br />
                 Semestre: <strong>{{ semestreSelected }}</strong>
             </p>
 
@@ -791,7 +793,12 @@
                     <tr>
                         <th>
                             <div class="flex justify-content-between align-items-center">
-                                Nom et prénom
+                                Nom & Prénom & Date d'Intégration
+                            </div>
+                        </th>
+                        <th>
+                            <div class="flex justify-content-between align-items-center">
+                                Date de la note
                             </div>
                         </th>
                         <th>
@@ -815,8 +822,11 @@
                     <tr>
                         <td *ngIf="note && note.etudiant_id?.user_id">{{
                             note.etudiant_id?.user_id?.firstname }} {{
-                                note.etudiant_id?.user_id?.lastname }} </td>
+                            note.etudiant_id?.user_id?.lastname }}
+                            {{ note.etudiant_id?.user_id?.date_creation | date:'dd/MM/YY' }} </td>
+                        <td>{{ note?.date_creation | date:'dd/MM' }} </td>
                         <td>{{ note.note_val | number : '0.2-9' }} </td>
+
                         <td>{{ note.appreciation }} </td>
                         <td><i style="margin-left: 2%;" class="pi pi-pencil" title="Modifier" aria-hidden="true"
                                 (click)="showFormUpdateNote = true; 
@@ -833,6 +843,9 @@
     </div>
 
 
+    
+
+
 
     <!-- Table d'affichage de toutes les notes par étudiants -->
     <div class="col-12">
@@ -846,8 +859,10 @@
 
             <h5>Notes par étudiants</h5>
             <p-table #dt1 [value]="notes" dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" [pageLinks]="5"
-                [paginator]="true" [globalFilterFields]="['etudiant_id.user_id.lastname', 'examen_id.libelle','examen_id.matiere_id.abbrv','etudiant_id.user_id.firstname']" responsiveLayout="scroll"
-                rowExpandMode="single" [totalRecords]="notes.length" styleClass="p-datatable-gridlines">
+                [paginator]="true"
+                [globalFilterFields]="['etudiant_id.user_id.lastname', 'examen_id.libelle','examen_id.matiere_id.abbrv','etudiant_id.user_id.firstname']"
+                responsiveLayout="scroll" rowExpandMode="single" [totalRecords]="notes.length"
+                styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <p-dropdown filter="true" [options]="dropdownClasse"

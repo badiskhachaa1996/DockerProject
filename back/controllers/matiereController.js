@@ -20,6 +20,14 @@ app.get("/getAllPopulate", (req, res, next) => {
         .catch((error) => { res.status(400).send(error.message) });
 })
 
+//Recuperation des matières
+app.post("/getAllPopulateByFormationID", (req, res, next) => {
+
+    Matiere.find({ formation_id: { $in: req.body.formation_id } }).populate('formation_id')
+        .then((matieresFromDb) => { res.status(200).send(matieresFromDb) })
+        .catch((error) => { res.status(400).send(error.message) });
+})
+
 
 //creation d'une nouvelle matiere
 app.post("/create", (req, res, next) => {
@@ -166,7 +174,7 @@ app.get('/getAllByFormateurID/:formateur_id', (req, res, next) => {
         console.log
         Matiere.find({ _id: { $in: listModules } }).populate('formation_id').then(matieres => {
             Classe.find({ _id: { $in: listGroupes } }).then(groupes => {
-                console.log(listGroupes,groupes)
+                console.log(listGroupes, groupes)
                 res.send({ matieres, groupes })
             })
         })

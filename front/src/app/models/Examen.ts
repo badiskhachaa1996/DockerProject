@@ -10,7 +10,8 @@ export class Examen {
         public note_max?: number,
         public coef?: number,
         public libelle?: string,
-        public niveau?: string
-    ){};
+        public niveau?: string,
+        public semestre?: string
+    ) { };
 
 }

@@ -79,4 +79,9 @@ export class NoteService {
     return this.httpClient.put<Note>(registreUrl, note, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  updateV2(note: Note) {
+    let registreUrl = this.apiUrl + "updateV2/" + note._id;
+    return this.httpClient.put<Note>(registreUrl, note, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }
