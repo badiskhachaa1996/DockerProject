@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
  * Les status pour les demandes de congés sont
  * - En attente
  * - Refusé
- * - Approuvé
+ * - Validé
  * 
  * Les types de congés sont
  * - Maladie

@@ -89,7 +89,21 @@ export class CongeService {
     let beginDate = this.onReplaceDate(begin);
     let endDate = this.onReplaceDate(end);    
 
-    const url = `${this.apiUrl}/get-by-user-id-between-populate/${user_id}/${beginDate}/${endDate}`;
+    const url = `${this.apiUrl}/get-by-user-id/${user_id}/${beginDate}/${endDate}`;
+    
+    return new Promise((resolve, reject) => {
+      this.httpClient.get(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response) => { resolve(response); }),
+        ((error) => { reject(error) })
+      );
+    });
+  }
+
+
+  //Methode de recuperation des demandes 
+  getAllPopulate()
+  {
+    const url = `${this.apiUrl}/get-all-populate`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
@@ -100,13 +114,10 @@ export class CongeService {
   }
 
 
-  //Methode de recuperation des demandes entre 2 dates
-  getAllBetweenPopulate(begin: Date, end: Date)
+  //Methode de recuperation des demandes entre 2 dates pour un service
+  getAllBetweenPopulateForService(user_id: string)
   {
-    let beginDate = this.onReplaceDate(begin);
-    let endDate = this.onReplaceDate(end);  
-
-    const url = `${this.apiUrl}/get-all-between-populate/${beginDate}/${endDate}`;
+    const url = `${this.apiUrl}/get-all-between-populate-for-service/${user_id}`;
 
     return new Promise((resolve, reject) => {
       this.httpClient.get(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
