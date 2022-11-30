@@ -134,7 +134,17 @@ app.put("/updateById/:id", (req, res, next) => {
 
 app.put("/updateV2/:id", (req, res) => {
     Note.updateOne({ _id: req.params.id }, { ...req.body } )
-    .then((response) => { res.status(201).send(response); })
+    .then((response) => {
+        let nUpdated = new UpdateNote({
+            note_id: req.params.id,
+            user_id: jwt.decode(req.header("token")).id,
+            old_note: response.note_val,
+            new_note: req.body.note_val,
+            date_creation: new Date
+        })
+        nUpdated.save()
+        res.status(201).send(response);
+    })
     .catch((error) => { res.status(500).send(error.message); })
 })
 

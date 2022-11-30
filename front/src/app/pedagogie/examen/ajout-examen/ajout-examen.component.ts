@@ -13,6 +13,7 @@ import { FormateurService } from 'src/app/services/formateur.service';
 import { MatiereService } from 'src/app/services/matiere.service';
 import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
+import { SeanceService } from 'src/app/services/seance.service';
 
 
 @Component({
@@ -38,12 +39,14 @@ export class AjoutExamenComponent implements OnInit {
   ]
 
   dropdownFormateur: any[] = [];
+  defaultDropdownFormateur = this.dropdownFormateur
 
 
   dropdownNiveau: any[] = [
-    { label: "Control Continue", value: "Control Continue" },
-    { label: "Examen finale", value: "Examen finale" },
-    //{ label: "Soutenance", value: "Soutenance" }
+    { label: "Control Continu", value: "Control Continu" },
+    { label: "Examen final", value: "Examen final" },
+    { label: "BTS Blanc", value: "BTS Blanc" },
+    { label: "Projet Professionel", value: "Projet Professionel" }
   ]
 
   dropdownType: any[] = [
@@ -52,7 +55,6 @@ export class AjoutExamenComponent implements OnInit {
     // { label: "Épreuve ponctuelle pratique et orale", value: "Épreuve ponctuelle pratique et orale" },
     { label: "Ponctuelle écrite orale", value: "Ponctuelle écrite orale" },
     { label: "Devoir Sur Table", value: "Devoir Sur Table" },
-    { label: "BTS Blanc", value: "BTS Blanc" },
     { label: "Participation", value: "Participation" }
   ]
 
@@ -76,7 +78,8 @@ export class AjoutExamenComponent implements OnInit {
     private examenService: ExamenService,
     private matiereService: MatiereService,
     private classeService: ClasseService,
-    private router: Router,) { }
+    private router: Router,
+    private SeanceService: SeanceService) { }
 
   ngOnInit(): void {
     try {
@@ -94,6 +97,7 @@ export class AjoutExamenComponent implements OnInit {
           })
         this.formateurs[f._id] = f
       })
+      this.defaultDropdownFormateur = this.dropdownFormateur
     })
 
     //Initialisation des formulaires
@@ -142,7 +146,7 @@ export class AjoutExamenComponent implements OnInit {
       let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
       classe_id.forEach((cid, index) => {
         if (index != 0)
-          libelle = ' - ' + this.groupes[cid].abbrv
+          libelle = libelle + ' - ' + this.groupes[cid].abbrv
       })
       this.formAddExamen.patchValue({ libelle })
     }
@@ -156,7 +160,6 @@ export class AjoutExamenComponent implements OnInit {
         cids.push(this.groupes[c].diplome_id)
       })
       this.matiereService.getAllPopulateByFormationID(cids).subscribe(response => {
-        console.log(cids, response)
         this.dropdownMatiere = []
         response.forEach(matiere => {
           this.matieres[matiere._id] = matiere
@@ -171,6 +174,27 @@ export class AjoutExamenComponent implements OnInit {
 
   }
 
+  filterFormateur() {
+    let matiere_id = this.formAddExamen.get("matiere_id")?.value;
+    this.dropdownFormateur = []
+    if (matiere_id)
+      this.SeanceService.getFormateursFromClasseIDs(matiere_id).subscribe(r => {
+        if (r && r.length != 0) {
+          r.forEach(f => {
+            let bypass_user: any = f.user_id
+            if (bypass_user)
+              this.dropdownFormateur.push({
+                label: bypass_user.firstname + " " + bypass_user.lastname,
+                value: f._id,
+              })
+          })
+        } else
+          this.dropdownFormateur = this.defaultDropdownFormateur
+      })
+    else
+      this.dropdownFormateur = this.defaultDropdownFormateur
+  }
+
   //Methode d'ajout d'un formulaire
   onAddExamen() {
     //Recuperation des données du formulaire d'ajout d'examen
@@ -183,7 +207,8 @@ export class AjoutExamenComponent implements OnInit {
     let note_max = this.formAddExamen.get("note_max")?.value;
     let coef = this.formAddExamen.get("coef")?.value;
     let niveau = this.formAddExamen.get("niveau")?.value;
-
+    if (niveau == 'Examen final')
+      coef = 2
     let examen = new Examen(null, classe_id, matiere_id, formateur_id, date, type, note_max, coef, libelle, niveau);
     this.examenService.create(examen).subscribe(
       (response) => {

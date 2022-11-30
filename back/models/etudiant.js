@@ -24,8 +24,6 @@ const etudiantSchema = mongoose.Schema({
     adresse_rl: { type: String },
     dernier_diplome: { type: String },
     isAlternant: { type: Boolean, default: false },
-
-
     isHandicaped: { type: Boolean, default: false },
     suivi_handicaped: { type: String, default: null },
     diplome: { type: String, required: false }, //Formation souhaitée pour les reinscrits
@@ -56,6 +54,7 @@ const etudiantSchema = mongoose.Schema({
     entreprise: { String },
     etat_paiement: { String },
     source: { type: String, default: 'Aucune' },
+    date_valided_by_support: { type: Date, default: new Date() }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

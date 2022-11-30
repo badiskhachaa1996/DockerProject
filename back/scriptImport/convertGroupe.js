@@ -2,16 +2,13 @@ const mongoose = require("mongoose");
 var XLSX = require('xlsx')
 const { User } = require("../models/user");
 const { Etudiant } = require('../models/etudiant')
+const mco_a_id = "6322d51cf1eb123425961180"
 const mco_b_id = "63724fe64d06a260126a2c32"
-const mco_a_id = "6322d512f1eb12342596117b"
-const sio_slam_id = "6322d7aff1eb123425961249"
-const sio_sisr_id = "6322d5eaf1eb1234259611ad"
-const sio_id = "63724ef84d06a260126a2c24"
 var workbook = XLSX.readFile('mco2_a_b.xlsx', { cellDates: true });
 var sheet_name_list = workbook.SheetNames;
 var mco2A = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
 var mco2B = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[1]]);
-var users = {}
+var mco2AList = []
 var mco2BList = []
 mongoose
     .connect(`mongodb://localhost:27017/learningNode`, {
@@ -25,7 +22,9 @@ mongoose
         mco2B.forEach(tab => {
             mco2BList.push(tab['Email'])
         })
-        console.log(mco2BList)
+        mco2A.forEach(tab => {
+            mco2AList.push(tab['Email'])
+        })
         Etudiant.find({ classe_id: mco_a_id }).populate('user_id').then(etudiants => {
             etudiants.forEach(etu => {
                 if (customIncludes(etu.user_id.email, mco2BList))
@@ -33,23 +32,25 @@ mongoose
                         console.log(etu.user_id.email, " convertit en MCO 2B")
                     })
                 else
-                    console.log("'",etu.user_id.email,"' not found in DB")
+                    console.log(etu.user_id.email, "' not found in DB")
             })
         })
-        Etudiant.updateMany({ classe_id: sio_slam_id }, { classe_id: sio_id }).then((val, err) => {
-            console.log("SIO SLAM 1 convertit en SIO 1")
+        Etudiant.find({ classe_id: mco_b_id }).populate('user_id').then(etudiants => {
+            etudiants.forEach(etu => {
+                if (customIncludes(etu.user_id.email, mco2AList))
+                    Etudiant.findByIdAndUpdate(etu._id, { classe_id: mco_a_id }).then(() => {
+                        console.log(etu.user_id.email, " convertit en MCO 2A")
+                    })
+                else
+                    console.log(etu.user_id.email, "' not found in DB")
+            })
         })
-        Etudiant.updateMany({ classe_id: sio_sisr_id }, { classe_id: sio_id }).then((val, err) => {
-            console.log("SIO SISR 1 convertit en SIO 1")
-        })
-
     })
 function customIncludes(email, list) {
     let r = false
     list.forEach(e => {
-        if (e.regex(`/${email}/i`) ) {
+        if (e == email)
             r = true
-        }
     })
     return r
 }

@@ -23,7 +23,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle()'  formControlName="matiere_id" placeholder="Choissisez un module">
+                        <p-dropdown [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle();filterFormateur()'  formControlName="matiere_id" placeholder="Choissisez un module">
                         </p-dropdown>
                     </span>
                 </div>

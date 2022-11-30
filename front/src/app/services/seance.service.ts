@@ -23,7 +23,7 @@ export class SeanceService {
 
   //Creation d'une nouvelle séance
   delete(id) {
-    let registreUrl = this.apiUrl + "delete/"+id;
+    let registreUrl = this.apiUrl + "delete/" + id;
     return this.httpClient.delete<Seance>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
@@ -113,6 +113,12 @@ export class SeanceService {
   getFormateurFromClasseID(classe_id, semestre) {
     let url = this.apiUrl + "getFormateurFromClasseID/" + classe_id + "/" + semestre
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
+
+  getFormateursFromClasseIDs(matieres_ids) {
+    let url = this.apiUrl + "getFormateursFromClasseIDs"
+    return this.httpClient.post<any>(url, { matieres_ids }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+
   }
 
 

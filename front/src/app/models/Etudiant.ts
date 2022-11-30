@@ -46,6 +46,6 @@ export class Etudiant {
         public entreprise?: string,
         public etat_paiement?: string,
         public source?: string,
-
+        public date_valided_by_support?: Date,
     ) { }
 }

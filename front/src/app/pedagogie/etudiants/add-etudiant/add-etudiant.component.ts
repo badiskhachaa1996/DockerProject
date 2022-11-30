@@ -419,7 +419,8 @@ export class AddEtudiantComponent implements OnInit {
       etat_contract,
       entreprise,
       etat_paiement,
-      source
+      source,
+      new Date()
     );
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(

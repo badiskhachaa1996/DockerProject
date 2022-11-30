@@ -976,9 +976,9 @@ export class NotesComponent implements OnInit {
         if (response == null || response.appreciation == "") {
           //Si semesestre Validé : Semestre Validée
           if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant >= 10)
-            this.appreciationGenerale = new Appreciation(null, "Semestre Validée", this.semestreChoose, null, null)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Validé", this.semestreChoose, null, null)
           if (this.moyEtudiant && this.semestreChoose != "Annuel" && this.moyEtudiant < 10)
-            this.appreciationGenerale = new Appreciation(null, "Semestre Non Validée", this.semestreChoose, null, null)
+            this.appreciationGenerale = new Appreciation(null, "Semestre Non Validé", this.semestreChoose, null, null)
           //Si Année validé : Année Validée
           if (this.moyEtudiantAnnuel['Annuel'] && this.semestreChoose == "Annuel" && this.moyEtudiantAnnuel['Annuel'] >= 10)
             this.appreciationGenerale = new Appreciation(null, "Année Validée", "Annuel", null, null)

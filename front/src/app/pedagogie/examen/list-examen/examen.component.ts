@@ -46,12 +46,13 @@ export class ExamenComponent implements OnInit {
   idClasseToUpdate: Classe[];
 
   dropdownFormateur: any[] = [];
+  filterFormateur: any[] = [{ label: 'Tous les formateurs', value: null }];
   formateurToUpdate: Formateur;
 
 
   dropdownNiveau: any[] = [
-    { label: "Control Continue", value: "Control Continue" },
-    { label: "Examen finale", value: "Examen finale" },
+    { label: "Control Continu", value: "Control Continu" },
+    { label: "Examen final", value: "Examen final" },
     { label: "Soutenance", value: "Soutenance" }
   ]
 
@@ -106,6 +107,10 @@ export class ExamenComponent implements OnInit {
                     value: formateur._id,
                   });
                   this.formateurs[formateur._id] = formateur;
+                  this.filterFormateur.push({
+                    label: user.firstname + " " + user.lastname,
+                    value: formateur._id,
+                  })
                 }
               });
             });
@@ -311,7 +316,6 @@ export class ExamenComponent implements OnInit {
     this.notes = []
     this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
       this.notes = notes
-      console.log(notes)
     })
   }
 
@@ -320,6 +324,7 @@ export class ExamenComponent implements OnInit {
 
   tableauNotes = [];//{ etudiant: string, note: Number, appreciation: string, date_note: Date }
   loadEtudiantsForNote(examen: any) {
+    this.tableauNotes = []
     this.examSelected = examen
     let classe_ids = []
     let oldNote = []
@@ -328,20 +333,25 @@ export class ExamenComponent implements OnInit {
       this.EtudiantService.getAllByMultipleClasseID(classe_ids).subscribe(etudiants => {
         notes.forEach(n => {
           let bypass: any = n.etudiant_id
-          oldNote.push(bypass._id)
-          this.tableauNotes.push({
-            etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname, // + ' ' + n.etudiant_id?.user_id?.date_creation
-            note: parseFloat(n.note_val),
-            appreciation: n.appreciation,
-            date_note: n.date_creation,
-            _id: n._id
-          })
+          if (bypass) {
+            oldNote.push(bypass._id)
+            this.tableauNotes.push({
+              etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname,
+              note: parseFloat(n.note_val),
+              appreciation: n.appreciation,
+              date_note: n.date_creation,
+              _id: n._id,
+              isAbsent: n.isAbsent,
+              date_IMS:this.formatDate(bypass.user_id?.date_creation),
+              date_TEAMS:this.formatDate(bypass.date_valided_by_support)
+            })
+          }
         })
         etudiants.forEach(etu => {
           let bypass: any = this.examSelected.matiere_id
           if (oldNote.indexOf(etu._id) == -1)
             this.tableauNotes.push({
-              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname, // + ' ' + n.etudiant_id?.user_id?.date_creation
+              etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname,
               note: NaN,
               appreciation: '',
               date_note: null,
@@ -351,7 +361,9 @@ export class ExamenComponent implements OnInit {
               classe_id: etu.classe_id._id,
               matiere_id: bypass._id,
               isAbsent: false,
-              semestre: this.examSelected.semestre
+              semestre: this.examSelected.semestre,
+              date_IMS:this.formatDate(etu.user_id?.date_creation),
+              date_TEAMS:this.formatDate(etu.date_valided_by_support)
             })
         })
       })
@@ -423,7 +435,7 @@ export class ExamenComponent implements OnInit {
       rowData.semestre,
       rowData.etudiant_id,
       rowData.examen_id,
-      'Absence Justifié',
+      'Absence Justifiée',
       rowData.classe_id,
       rowData.matiere_id,
       true,
@@ -452,4 +464,17 @@ export class ExamenComponent implements OnInit {
     }
   }
   isNaN(value) { return (Number.isNaN(value)) }
+  padTo2Digits(num) { return num.toString().padStart(2, '0'); }
+
+  formatDate(date) {
+    date = new Date(date)
+    console.log(date)
+    if (date != 'Invalid Date' && date.getFullYear() != '1970')
+      return [this.padTo2Digits(date.getDate()), this.padTo2Digits(date.getMonth() + 1), date.getFullYear(),].join('/');
+    else return ''
+  }
+
+  formatClasse(classe_id) {
+    return classe_id.map(function (item) { return item.abbrv; })
+  }
 }
