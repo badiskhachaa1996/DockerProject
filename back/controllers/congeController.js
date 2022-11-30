@@ -72,15 +72,10 @@ app.get("/get-all-populate", (_, res) => {
 app.get("/get-all-between-populate-for-service/:user_id", (req, res) => {
     let id = req.params.user_id;
 
-    //recuperation de l'utilisateur
-    User.findOne({ _id: id })
-    .then((user) => {
-        //Recuperation et envoi de la liste des demande du service de l'utilisateur
-        Conge.find({ referent_id: user.service_id })?.populate('user_id')
-        .then((response) => { res.status(200).send(response); })
-        .catch((error) => { res.status(400).send('Aucune demandes ne vous est assigné'); });
-    })
-    .catch((error) => { res.status(400).send('Erreur interne, veuillez contacter un administrateur'); });
+    //Recuperation et envoi de la liste des demande du service de l'utilisateur
+    Conge.find({ referent_id: id })?.populate('user_id')
+    .then((response) => { res.status(200).send(response); })
+    .catch((error) => { res.status(400).send('Aucune demandes ne vous est assigné'); });
 });
 
 

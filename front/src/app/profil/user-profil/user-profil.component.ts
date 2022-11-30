@@ -21,6 +21,8 @@ import { TeamCommercialService } from 'src/app/services/team-commercial.service'
 import { CongeService } from 'src/app/services/conge.service';
 import { Conge } from 'src/app/models/Conge';
 import { PlatformLocation } from '@angular/common';
+import { AbscenceCollaborateur } from 'src/app/models/AbscenceCollaborateur';
+import { JustificatifCollaborateurService } from 'src/app/services/justificatif-collaborateur.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -91,6 +93,18 @@ export class UserProfilComponent implements OnInit {
     { label: 'Sans soldes', value: 'Sans soldes' },
     { label: 'Maternité', value: 'Maternité' },
   ];
+
+  //Partie dedié a la justification des abscences
+  showFormjustification: boolean = false;
+  justificationForm: FormGroup;
+  uploadedFiles: any;
+
+  //Periode abscence
+  periodList: any[] = [
+    { label: 'Matin' },
+    { label: 'Après-midi' },
+    { label: 'Toute la journée' }
+  ]
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -286,7 +300,7 @@ export class UserProfilComponent implements OnInit {
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService, private congeService: CongeService) { }
+    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService) { }
 
   ngOnInit(): void {
 
@@ -410,6 +424,13 @@ export class UserProfilComponent implements OnInit {
     this.selectDateForm = this.formBuilder.group({
       beginDate: ['', Validators.required],
       endDate: ['', Validators.required],
+    });
+
+    //Partie justification d'absence
+    this.justificationForm = this.formBuilder.group({
+      date_of_abscence: ['', Validators.required],
+      motif: ['', Validators.required],
+      periode: [this.periodList[0], Validators.required]
     });
 
   }
@@ -539,6 +560,58 @@ export class UserProfilComponent implements OnInit {
       this.onGetCongesForMyService();
     })
     .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+  }
+
+  //Upload du fichier de justification
+  onUpload(event: any) {
+    if(event.target.files.length > 0)
+    {
+        this.uploadedFiles = event.target.files[0];
+    }
+  }
+
+  //Methode de declaration d'une nouvelle abscence
+  onNewAbscence()
+  {
+    const absence = new AbscenceCollaborateur();
+
+    //Recuperation des données du formualaire
+    const formValue = this.justificationForm.value;
+    absence.user_id = this.userConnectedNow._id;
+    absence.date_of_abscence = this.abscenceCollaborateurService.onReplaceDate(formValue['date_of_abscence']);
+    absence.motif = formValue['motif'];
+    absence.periode = formValue['periode'].label
+    
+    //Recuperation du fichier s'il existe
+    if(this.uploadedFiles)
+    { 
+      absence.file_name = this.uploadedFiles.name;
+      let formData = new FormData();
+      formData.append('id', this.userConnectedNow._id);
+      formData.append('file', this.uploadedFiles);
+      
+      //Enregistrement de l'absence
+      this.abscenceCollaborateurService.postAbscence(absence)
+      .then((absence) => {
+        this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" });
+        
+        //Envoi du document en base de données
+        this.abscenceCollaborateurService.postJustificatif(formData)
+        .then((justificatif) => { 
+                  
+        })
+        .catch((error) => { 
+          this.messageService.add({ severity: 'success', summary: "Justificatif pris en compte" }); 
+          this.justificationForm.reset();  
+         });
+      })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); });
+
+    }else{
+      this.abscenceCollaborateurService.postAbscence(absence)
+      .then((response) => { this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" }); this.justificationForm.reset(); })
+      .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
+    }
   }
 
 }
