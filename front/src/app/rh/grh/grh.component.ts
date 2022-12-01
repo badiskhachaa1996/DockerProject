@@ -122,6 +122,7 @@ export class GrhComponent implements OnInit {
     .catch((error) => { console.log(error); })
   }
 
+  //Methode de téléchargement de fichier
   downloadFile(id: string, fileName: string) 
   {
     this.abscenceService.downloadFile(id, fileName)

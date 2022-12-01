@@ -218,12 +218,10 @@
                         <th>Action</th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-entreprise>
+                <ng-template pTemplate="body" let-entreprise let-expanded="expanded">
                     <tr>
                         <td>
-                            <button type="button" pButton pRipple [pRowToggler]="entreprise"
-                                class="p-button-text p-button-rounded p-button-plain"
-                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                            <button type="button" pButton pRipple [pRowToggler]="entreprise" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 8rem;">{{ entreprise.r_sociale }}</td>
                         <td style="min-width: 8rem;">{{ entreprise.fm_juridique }}</td>
