@@ -90,6 +90,21 @@ export class JustificatifCollaborateurService {
     });
   }
 
+
+  //Methode de téléchargement de fichier
+  downloadFile(id: string, fileName: string)
+  {
+    const url = `${this.apiUrl}/download-file/${id}/${fileName}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        ((response) => { resolve(response); }),
+        ((error) => { reject(error); })
+      );
+    });
+  }
+
+
   //Methode de mise en forme des dates
   onReplaceDate(date1: Date)
   {

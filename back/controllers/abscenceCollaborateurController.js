@@ -75,5 +75,24 @@ app.get("/get-by-id-populate/:user_id", (req, res) => {
     .catch((error) => { res.status(400).send(error.message); });
 });
 
+//Methode de téléchargement du justificatif, l'id correspond à celui du justificatif et non du user
+app.get("/download-file/:id/:fileName", (req, res) => {
+    
+    let filePath = path.join('storage', 'justificatifs', req.params.id.toString(), req.params.fileName.toString())
+    let fileExtention = filePath.toString().slice(((filePath.toString().lastIndexOf(".") - 1) + 2));
+
+    try {
+        let file = fs.readFileSync(filePath, { encoding: 'base64' }, (error) => {
+            if (error) {
+                res.status(400).json({ error: error });
+            }
+            console.log(file);
+        });
+        
+        res.status(200).json({ file: file, extension: fileExtention });
+    } catch (e) {
+        res.status(200).json({ error: e })
+    }
+});
 
 module.exports = app;
