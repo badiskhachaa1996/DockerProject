@@ -110,6 +110,7 @@ export class ListFormateursComponent implements OnInit {
 
   ngOnInit(): void {
     //Recuperation de la liste des formateurs
+    this.token = jwt_decode(localStorage.getItem('token'))
     this.formateurService.getAllPopulate().subscribe(
       (data) => {
         this.formateurs = [];
