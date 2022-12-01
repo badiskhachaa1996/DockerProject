@@ -118,6 +118,7 @@ export class TuteurComponent implements OnInit {
             this.entrepriseService.getAll().subscribe(
               (data) => {
                 data.forEach(entreprise => {
+                  this.entreprises[entreprise._id] = entreprise;
                   this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
                 })
               })
