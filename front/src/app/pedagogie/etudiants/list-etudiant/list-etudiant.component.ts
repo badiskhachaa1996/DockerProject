@@ -428,6 +428,10 @@ export class ListEtudiantComponent implements OnInit {
   //Methode d'initialisation du formulaire de modification d'un étudiant
   onInitFormUpdateEtudiant() {
     this.formUpdateEtudiant = this.formBuilder.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email_ims: ['', [Validators.required, Validators.email]],
+      email_perso: ['', [Validators.required, Validators.email]],
       classe_id: ['', Validators.required],
       statut: ['', Validators.required],
       nationalite: ['', Validators.required],
@@ -563,10 +567,23 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant modifié' });
-        //Recuperation de la liste des differentes informations
-        this.onGetAllClasses();
+        
+        let bypass: any = this.etudiantToUpdate.user_id
+        bypass.firstname = this.formUpdateEtudiant.value.firstname
+        bypass.lastname = this.formUpdateEtudiant.value.lastname.toUpperCase()
+        bypass.email = this.formUpdateEtudiant.value.email_ims
+        bypass.email_perso = this.formUpdateEtudiant.value.email_perso
+        
+        this.AuthService.updateByIdForPrivate(bypass).subscribe(v => {
+          this.messageService.add({ severity: 'success', summary: 'Modification d\'un étudiant', detail: 'Mise à jour de l\'étudiant avec succès' });
+          let bp: any = this.etudiantToUpdate
+          bp.user_id = v
+          this.etudiants[this.etudiants.indexOf(this.etudiantToUpdate)] = bp;
+          //Recuperation de la liste des differentes informations
+          this.onGetAllClasses();
 
-        this.showFormUpdateEtudiant = false;
+          this.showFormUpdateEtudiant = false;
+        });
         //this.resetForms();
       }),
       ((error) => { console.error(error); })
@@ -576,7 +593,7 @@ export class ListEtudiantComponent implements OnInit {
   entrepriseEtu: any = { libelle: '', value: '' };
   // tuteurEtudiant: any = { libelle: '', value: '' };
 
-  showFUpdate(response: Etudiant) {
+  showFUpdate(user: User, response: Etudiant) {
     //Campus et Filiere, statut a vérifier
     this.etudiantToUpdate = response;
     let date = new Date(response.date_naissance)
@@ -584,6 +601,10 @@ export class ListEtudiantComponent implements OnInit {
     let bypass: any = response.classe_id
 
     this.formUpdateEtudiant.patchValue({
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email_ims: user.email,
+      email_perso: user.email_perso,
       statut: { value: response.statut, viewValue: response.statut },
       classe_id: { libelle: bypass.nom, value: bypass._id },
       nationalite: { value: response.nationalite, viewValue: response.nationalite },
