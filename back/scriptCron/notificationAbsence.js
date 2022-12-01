@@ -18,6 +18,7 @@ let transporter = nodemailer.createTransport({
         pass: 'InTeDGROUP@@0908',
     },
 });
+//
 mongoose
     .connect(`mongodb://localhost:27017/b`, {
         useCreateIndex: true,

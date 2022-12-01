@@ -277,7 +277,8 @@ app.post("/getAtt_ssiduitePDF/:id", (req, res) => {
 app.post("/isPresent/:id", (req, res) => {
     Presence.findByIdAndUpdate(req.params.id,
         {
-            isPresent: req.body.isPresent
+            isPresent: req.body.isPresent,
+            allowedByFormateur: req.body.isPresent
         }, { new: true }, (err, campus) => {
             if (err) {
                 res.send(err)
@@ -310,6 +311,7 @@ app.post("/create", (req, res) => {
         } else {
             res.send(data);
         }
+        console.log(req.body.signature)
         if (req.body.signature && req.body.signature != null && req.body.signature != '') {
             fs.mkdir("./storage/signature/",
                 { recursive: true }, (err3) => {
