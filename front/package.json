@@ -27,6 +27,7 @@
         "@fullcalendar/interaction": "^4.0.2",
         "@fullcalendar/list": "^5.10.1",
         "@fullcalendar/timegrid": "^4.0.1",
+        "angular2-signaturepad": "^4.0.2",
         "chart.js": "^3.3.2",
         "file-saver": "^2.0.5",
         "google-libphonenumber": "^3.2.30",

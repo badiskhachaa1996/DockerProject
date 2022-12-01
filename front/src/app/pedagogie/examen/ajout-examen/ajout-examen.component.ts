@@ -65,7 +65,7 @@ export class AjoutExamenComponent implements OnInit {
     formateur_id: new FormControl('', Validators.required),
     date: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
-    niveau: new FormControl(this.dropdownNiveau[0].value, Validators.required),
+    niveau: new FormControl('', Validators.required),
     note_max: new FormControl('', [Validators.required, Validators.pattern("^[0-9.]+$")]),
     coef: new FormControl(1, Validators.required),
     semestre: new FormControl('', Validators.required)
@@ -142,14 +142,17 @@ export class AjoutExamenComponent implements OnInit {
     let classe_id = this.formAddExamen.get("classe_id")?.value;
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
     let formateur_id = this.formAddExamen.get("formateur_id")?.value;
-    if (classe_id && matiere_id && formateur_id) {
-      let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
-      classe_id.forEach((cid, index) => {
-        if (index != 0)
-          libelle = libelle + ' - ' + this.groupes[cid].abbrv
-      })
-      this.formAddExamen.patchValue({ libelle })
-    }
+    let niveau = this.formAddExamen.get("niveau")?.value;
+    if (niveau != 'Control Continu')
+      if (classe_id && matiere_id && formateur_id && niveau) {
+        let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
+        classe_id.forEach((cid, index) => {
+          if (index != 0)
+            libelle = libelle + ' - ' + this.groupes[cid].abbrv
+        })
+        libelle = libelle + ' | ' + niveau
+        this.formAddExamen.patchValue({ libelle })
+      }
   }
 
   filterModule() {

@@ -357,17 +357,17 @@
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="rowexpansion" let-formateur>
-					<tr>
+					<tr *ngIf="formateur.user_id">
 						<td colspan="7">
 							<div class="p-3">
 								<p-table responsiveLayout="scroll">
 									<ng-template pTemplate="header">
-					<tr>
+					<tr *ngIf="formateur.user_id">
 						<th>Civilité</th>
 						<th>Service</th>
 						<th>Role</th>
 						<th>Email</th>
-						<!--<th>Coût/jour</th>-->
+						<th *ngIf="token && token.role=='Admin'">Taux Horaire / Taux Journalier</th>
 						<th *ngIf="formateur.prestataire_id">Entreprise</th>
 					</tr>
 				</ng-template>
@@ -375,7 +375,7 @@
 
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
-					<tr>
+					<tr *ngIf="formateur.user_id">
 						<td> {{formateur.user_id?.civilite }}</td>
 						<td *ngIf="formateur.user_id.service_id">{{
 							serviceDic[formateur.user_id.service_id].label }}</td>
@@ -383,7 +383,7 @@
 						<td>
 							{{formateur.user_id.role=='user'?'Utilisateur':formateur.user_id?.role}}</td>
 						<td>{{formateur.user_id?.email}}</td>
-						<!--<td>{{ formateur.taux_j }} €</td>-->
+						<td *ngIf="token && token.role=='Admin'">{{ formateur.taux_h }} €/{{ formateur.taux_j }} €</td>
 						<td *ngIf="formateur.prestataire_id">{{ entrepriseDic[formateur?.prestataire_id]?.r_sociale }}
 						</td>
 					</tr>
@@ -423,13 +423,13 @@
 				</ng-template>
 				<ng-template pTemplate="emptymessage">
 					<tr *ngFor="let fvh of formateur.volume_h |keyvalue">
-						<td>
+						<td *ngIf="matiereDic[fvh.key]">
 							{{matiereDic[fvh.key].nom}}
 						</td>
 						<td>
 							{{fvh.value}}
 						</td>
-						<td>
+						<td *ngIf="formateur.volume_h_consomme && formateur.volume_h_consomme[fvh.key]">
 							{{formateur.volume_h_consomme[fvh.key]}}
 						</td>
 					</tr>

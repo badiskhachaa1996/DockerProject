@@ -5,8 +5,8 @@ export class Presence {
         public seance_id?: string,
         public user_id?: string,
         public isPresent?: boolean,
-        public signature?: string,
-        public justificatif?: string,
+        public signature?: any,
+        public justificatif?: boolean,
         public date_signature?: Date,
         public allowedByFormateur?: Boolean
     ) { }
