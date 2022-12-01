@@ -275,6 +275,26 @@
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateEtudiant" (ngSubmit)="onUpdateEtudiant()">
 
                 <div class="field col-12 md:col-6">
+                    <label For="lastname">Nom de famille <span style="color: red;"> * </span></label>
+                    <input formControlName="lastname" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="firstname">Prénom <span style="color: red;"> * </span></label>
+                    <input formControlName="firstname" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="email_ims">Email IMS <span style="color: red;"> * </span></label>
+                    <input formControlName="email_ims" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="email_perso">Email Personnel <span style="color: red;"> * </span></label>
+                    <input formControlName="email_perso" pInputText type="text" />
+                </div>
+
+                <div class="field col-12 md:col-6">
                     <label For="statut">Statut Professionel<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="statutList" optionLabel="viewValue" placeholder="Choissisez un statut"
                         formControlName="statut"></p-dropdown>
@@ -547,7 +567,7 @@
                         <td>
                             <i style="margin-left: 2%;" class="pi pi-pencil"
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
-                                    showFUpdate(etudiant)" pTooltip="Modifier" aria-hidden="true"
+                                    showFUpdate(etudiant.user_id, etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <i style="margin-left: 2%;" class="pi pi-file-pdf" (click)="
                                     showUpdateCV(etudiant)" pTooltip="Modifier le CV" aria-hidden="true"
