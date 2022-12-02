@@ -179,7 +179,7 @@ import { ValidationEmailComponent } from './authentification/validation-email/va
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
 
 import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
-import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MsalGuardConfiguration } from '@azure/msal-angular';
+import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MsalGuardConfiguration, MsalInterceptorConfiguration } from '@azure/msal-angular';
 
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
@@ -226,6 +226,46 @@ import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudian
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
+
+export function MSALInstanceFactory(): IPublicClientApplication {
+  return new PublicClientApplication({
+    auth: {
+      // clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // Prod enviroment. Uncomment to use.
+      clientId: environment.clientId, // DEV
+      // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
+      authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
+      redirectUri: '/',
+      postLogoutRedirectUri: '/login'
+    },
+    cache: {
+      cacheLocation: BrowserCacheLocation.LocalStorage,
+      storeAuthStateInCookie: window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1 ? true: false, // set to true for IE 11
+    },
+  });
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set("https://graph.microsoft.com/v1.0/me", ["user.read"]);
+
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap,
+  };
+}
+
+export function MSALGuardConfigFactory(): MsalGuardConfiguration {
+  return {
+    interactionType: InteractionType.Popup,
+    authRequest: {
+      scopes: ['user.read']
+    }
+  };
+}
+export function loggerCallback(logLevel: LogLevel, message: string) {
+  console.log("Connexion à Microsoft");
+}
+
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -457,38 +497,3 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-export function MSALInstanceFactory(): IPublicClientApplication {
-  return new PublicClientApplication({
-    auth: {
-      // clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // Prod enviroment. Uncomment to use.
-      clientId: environment.clientId, // DEV
-      // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
-      authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
-      redirectUri: '/',
-      postLogoutRedirectUri: '/login'
-    },
-    cache: {
-      cacheLocation: BrowserCacheLocation.LocalStorage,
-      storeAuthStateInCookie: window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1, // set to true for IE 11
-    },
-    system: {
-      loggerOptions: {
-        loggerCallback,
-        logLevel: LogLevel.Info,
-        piiLoggingEnabled: false
-      }
-    }
-  });
-}
-export function MSALGuardConfigFactory(): MsalGuardConfiguration {
-  return {
-    interactionType: InteractionType.Popup,
-    authRequest: {
-      scopes: ['user.read']
-    }
-  };
-}
-export function loggerCallback(logLevel: LogLevel, message: string) {
-  console.log("Connexion à Microsoft");
-}

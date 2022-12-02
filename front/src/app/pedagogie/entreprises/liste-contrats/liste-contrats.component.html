@@ -126,7 +126,7 @@
                             <label For="form">Formation<span style="color: red;"> *
                                 </span></label>
                                 
-                            <p-dropdown [options]="formationList" id="form" formControlName="form">
+                            <p-dropdown [options]="formationList" id="form" formControlName="form" filter="true" emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Filtrer">
                             </p-dropdown>
                             <div *ngIf="form.invalid && (form.touched || form.dirty)">
                                 <span style="color: red;" class="error" *ngIf="form.errors?.required">*
@@ -339,7 +339,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 8rem;"></th>
-                        <th pSortableColumn="alternant_id"> Prenom & Nom <p-sortIcon field="alternant_id">
+                        <th pSortableColumn="alternant_id"> Prenom &amp; Nom <p-sortIcon field="alternant_id">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn=" intitule">Intitulé du poste <p-sortIcon field="intitule">
