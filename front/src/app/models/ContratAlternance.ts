@@ -18,6 +18,7 @@ export class ContratAlternance {
         public tuteur_id?: Tuteur,
         public code_commercial?: string,
         public statut?: string,
+        public anne_scolaire?: string[],
     ) { }
 
 }
