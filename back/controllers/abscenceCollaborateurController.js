@@ -4,7 +4,7 @@ const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
 app.disable("x-powered-by");
-const { AbscenceCollaborateur } = require('./../models/AbscenceCollaborateur');
+const { AbscenceCollaborateur } = require('./../models/abscenceCollaborateur');
 const { User } = require("./../models/user");
 
 //upload du justificatif
