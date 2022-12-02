@@ -57,6 +57,15 @@ export class ListeContratsComponent implements OnInit {
   formUpdateCa: FormGroup;
   contratToUpdate: ContratAlternance;
 
+  //Liste des années scolaire
+  dropDownAnneeList: any[] = [
+    { label: '2021-2022' },
+    { label: '2022-2023' },
+    { label: '2023-2024' },
+    { label: '2024-2025' },
+    { label: '2025-2026' },
+  ];
+
 
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
@@ -124,7 +133,6 @@ export class ListeContratsComponent implements OnInit {
           altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
           this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
         })
-        console.log(this.listAlternantDD)
       })
 
 
@@ -225,8 +233,8 @@ export class ListeContratsComponent implements OnInit {
       coeff_hier: new FormControl(''),
       form: new FormControl(this.formationList[0].value, Validators.required),
       code_commercial: new FormControl('', Validators.required),
-
       professionnalisation: new FormControl(''),
+      anne_scolaire: new FormControl(),
 
     })
   }
@@ -245,7 +253,8 @@ export class ListeContratsComponent implements OnInit {
       niv: new FormControl(''),
       coeff_hier: new FormControl(''),
       form: new FormControl('', Validators.required),
-      code_commercial: new FormControl('', Validators.required),
+      code_commercial: new FormControl(''),
+      anne_scolaire: new FormControl(''),
 
       professionnalisation: new FormControl(''),
 
@@ -282,8 +291,13 @@ export class ListeContratsComponent implements OnInit {
 
   }
   createNewCA() {
+    let annee_scolaires = [];
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, this.code_commercial, 'créé')
+    this.RegisterNewCA.get('anne_scolaire')?.value.forEach((annee) => {
+      annee_scolaires.push(annee.label);
+    });
+
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, this.code_commercial, 'créé', annee_scolaires)
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
       this.formAddNewCA = false
@@ -294,7 +308,13 @@ export class ListeContratsComponent implements OnInit {
 
   //Mise à jour
   onUpdateCa() {
-    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, this.code_commercial_m, 'créé')
+    let annee_scolaires = [];
+
+    this.formUpdateCa.get('anne_scolaire')?.value.forEach((annee) => {
+      annee_scolaires.push(annee.label);
+    });
+
+    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, this.code_commercial_m, 'créé', annee_scolaires)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -310,7 +330,6 @@ export class ListeContratsComponent implements OnInit {
   onFillFormUpdate(contrat: ContratAlternance) {
     this.contratToUpdate = contrat;
     this.loadTuteur(contrat.tuteur_id.entreprise_id, contrat.tuteur_id._id)
-    console.log(contrat)
     let bypass_alternant: any = contrat.alternant_id
     let bypass_formation: any = contrat.formation
     let bypass_commercial: any = contrat.code_commercial
@@ -327,6 +346,7 @@ export class ListeContratsComponent implements OnInit {
       coeff_hier: contrat.coeff_hierachique,
       form: bypass_formation._id,
       code_commercial: bypass_commercial._id,
+      anne_scolaire: contrat.anne_scolaire,
 
       professionnalisation: contrat.classification != "",
     });
