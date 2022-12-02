@@ -14,7 +14,7 @@ const contrat_alternanceSch = mongoose.Schema({
     tuteur_id: { type: mongoose.Schema.Types.ObjectId, ref: "tuteur" },
     code_commercial: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
     statut: { type: String, required: false },
-
+    anne_scolaire: { type: [String], required: false },
 });
 
 //creation de la table avec le nom Diplome ( model/classe) à l'aide de la biblio mongoose et son schema

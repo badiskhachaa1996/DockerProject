@@ -145,8 +145,7 @@
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
-                            <label For="code_commercial">Commercial référent<span style="color: red;"> *
-                                </span></label>
+                            <label For="code_commercial">Commercial référent</label>
                             <p-dropdown class="p-dropdown-clearable" [autoDisplayFirst]=false
                                 [options]="dropDownCommecialList" dataKey="_id" filter="true" formControlName="code_commercial">
                             </p-dropdown>
@@ -156,6 +155,12 @@
                                     Le
                                     champs est obligatoire.</span>
                             </div>
+                        </div>
+                        <div class="field col-12">
+                            <label>Année scolaire</label>
+                            <p-multiSelect class="p-dropdown-clearable" [autoDisplayFirst]=false
+                                [options]="dropDownAnneeList" optionLabel="label" filter="true" formControlName="anne_scolaire">
+                            </p-multiSelect>
                         </div>
                         <div classe="field">
                             <button pButton type="submit" label="Ajouter" style="float: right;"
@@ -321,6 +326,12 @@
                                     Le
                                     champs est obligatoire.</span>
                             </div>
+                        </div>
+                        <div class="field col-12">
+                            <label>Année scolaire</label>
+                            <p-multiSelect class="p-dropdown-clearable" [autoDisplayFirst]=false
+                                [options]="dropDownAnneeList" optionLabel="label" filter="true" formControlName="anne_scolaire">
+                            </p-multiSelect>
                         </div>
                         <div classe="field">
                             <button pButton type="submit" label="Modifier" style="float: right;"
