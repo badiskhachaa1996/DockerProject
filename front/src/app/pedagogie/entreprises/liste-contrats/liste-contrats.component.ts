@@ -124,7 +124,6 @@ export class ListeContratsComponent implements OnInit {
           altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
           this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
         })
-        console.log(this.listAlternantDD)
       })
 
 
@@ -310,7 +309,6 @@ export class ListeContratsComponent implements OnInit {
   onFillFormUpdate(contrat: ContratAlternance) {
     this.contratToUpdate = contrat;
     this.loadTuteur(contrat.tuteur_id.entreprise_id, contrat.tuteur_id._id)
-    console.log(contrat)
     let bypass_alternant: any = contrat.alternant_id
     let bypass_formation: any = contrat.formation
     let bypass_commercial: any = contrat.code_commercial

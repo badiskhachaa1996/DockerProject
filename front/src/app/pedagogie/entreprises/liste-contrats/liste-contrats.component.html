@@ -44,28 +44,38 @@
                         <div class="field col-12 md:col-6">
                             <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
-                                [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                [yearRange]="rangeYearC">
+                            <p-calendar 
+                                formControlName="debut_contrat"
+                                [monthNavigator]="true" 
+                                [yearNavigator]="true" 
+                                [required]="true" 
+                                [showOnFocus]="false" 
+                                [showIcon]="true"  
+                                placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
                             <div
                                 *ngIf="debut_contrat.invalid && (debut_contrat.touched || debut_contrat.dirty)">
                                 <span style="color: red;" class="error" *ngIf="debut_contrat.errors?.required">*
-                                    Le champs est obligatoire.</span>
+                                    Le champs est vide ou n'est pas dans le format JJ/MM/AAAA</span>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
-                                [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                [yearRange]="rangeYearC">
+                            <p-calendar 
+                                formControlName="fin_contrat"
+                                [monthNavigator]="true" 
+                                [yearNavigator]="true" 
+                                [required]="true" 
+                                [showOnFocus]="false" 
+                                [showIcon]="true"  
+                                placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
                             <div *ngIf="fin_contrat.invalid && (fin_contrat.touched || fin_contrat.dirty)">
                                 <span style="color: red;" class="error" *ngIf="fin_contrat.errors?.required">*
-                                    Le champs est obligatoire.</span>
+                                    Le champs est vide ou n'est pas dans le format JJ/MM/AAAA</span>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
@@ -200,28 +210,38 @@
                         <div class="field col-12 md:col-6">
                             <label For="debut_contrat">Date de debut du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="debut_contrat" dateFormat="dd/mm/yy"
-                                [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                [yearRange]="rangeYearC">
+                            <p-calendar 
+                                formControlName="debut_contrat"
+                                [monthNavigator]="true" 
+                                [yearNavigator]="true" 
+                                [required]="true" 
+                                [showOnFocus]="false" 
+                                [showIcon]="true"  
+                                placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
                             <div
                                 *ngIf="debut_contrat_m.invalid && (debut_contrat_m.touched || debut_contrat_m.dirty)">
                                 <span style="color: red;" class="error" *ngIf="debut_contrat_m.errors?.required">*
-                                    Le champs est obligatoire.</span>
+                                    Le champs est vide ou n'est pas dans le format JJ/MM/AAAA</span>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
                             <label For="fin_contrat">Date de fin du contrat<span style="color: red;"> *
                                 </span></label>
-                            <p-calendar formControlName="fin_contrat" dateFormat="dd/mm/yy"
-                                [minDate]="minDateCalendarC" [maxDate]="maxDateCalendarC" [readonlyInput]="true"
-                                [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"
-                                [yearRange]="rangeYearC">
+                            <p-calendar 
+                                formControlName="fin_contrat"
+                                [monthNavigator]="true" 
+                                [yearNavigator]="true" 
+                                [required]="true" 
+                                [showOnFocus]="false" 
+                                [showIcon]="true"  
+                                placeHolder="26/05/1998"
+                                dateFormat="dd/mm/yy">
                             </p-calendar>
                             <div *ngIf="fin_contrat_m.invalid && (fin_contrat_m.touched || fin_contrat_m.dirty)">
                                 <span style="color: red;" class="error" *ngIf="fin_contrat_m.errors?.required">*
-                                    Le champs est obligatoire.</span>
+                                    Le champs est vide ou n'est pas dans le format JJ/MM/AAAA</span>
                             </div>
                         </div>
                         <div class="field col-12 md:col-6">
@@ -281,7 +301,7 @@
                         <div class="field col-12 md:col-6">
                             <label For="form">Formation<span style="color: red;"> *
                                 </span></label>
-                            <p-dropdown [options]="formationList" id="form" formControlName="form">
+                            <p-dropdown [options]="formationList" id="form" formControlName="form" filter="true" emptyFilterMessage="Pas de formation trouvé" filterPlaceholder="Filtrer">
                             </p-dropdown>
                             <div *ngIf="form_m.invalid && (form_m.touched || form_m.dirty)">
                                 <span style="color: red;" class="error" *ngIf="form_m.errors?.required">*
