@@ -6,7 +6,8 @@ export class RenduDevoir {
         public devoir_id?: string,
         public etudiant_id?: string,
         public date_rendu?: Date,
-        public haveFiles?: Number
+        public haveFiles?: Number,
+        public verified?: Boolean
     ) { }
 
 }

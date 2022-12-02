@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
     libelle: { type: String },
     description: { type: String },
-    groupe_id: { type: mongoose.Schema.Types.ObjectId, ref: "classe" },
+    groupe_id: { type: [mongoose.Schema.Types.ObjectId], ref: "classe" },
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     date_rendu: { type: Date },
     date_debut: { type: Date },
-    haveFiles: { type: Number, default: 0 }
+    haveFiles: { type: Number, default: 0 },
+    rendu: { type: [mongoose.Schema.Types.Mixed], default: [] }
 });
 
 //Creation de la table ecole et export du model Ecole

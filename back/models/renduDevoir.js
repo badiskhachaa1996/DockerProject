@@ -6,7 +6,9 @@ const schema = new mongoose.Schema({
     devoir_id: { type: mongoose.Schema.Types.ObjectId, ref: "devoir" },
     etudiant_id: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
     date_rendu: { type: Date },
-    haveFiles: { type: Number, default: 0 }
+    haveFiles: { type: Number, default: 0 },
+    verified: { type: Boolean, default: false }
+
 });
 
 //Creation de la table ecole et export du model Ecole

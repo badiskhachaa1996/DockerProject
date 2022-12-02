@@ -1,16 +1,78 @@
 <div *ngIf="showDevoir">
+    <div class="col-12">
+        <div class="card">
 
+            <h3 style="text-align: center;">Ajouter un devoir</h3>
+            <p-toast></p-toast>
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddDevoir" (ngSubmit)="onAddDevoir();">
+                <div class="field col-12 ">
+                    <small>Tout les champs marqués d'un asterique <span style="color:red">*</span> sont
+                        obligatoires</small>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label For="classe">Groupe<span style="color:red">*</span>:</label><br>
+
+                    <p-multiSelect [options]="dropdownClasse" filter="true" (onChange)='filterModule()'
+                        formControlName="classe_id" placeholder="Choissisez un groupe">
+                    </p-multiSelect>
+
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Module:</label><br>
+                    <p-dropdown [options]="dropdownMatiere" filter="true" (onChange)='updateLibelle();'
+                        formControlName="matiere" placeholder="Choissisez un module">
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de debut<span style="color:red">*</span>:</label><br>
+                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12" pInputText>
+                </div>
+
+                <div class="field col-12 md:col-6">
+                    <label>Date de rendu<span style="color:red">*</span>:</label><br>
+                    <input type="datetime-local" formControlName="date_rendu" class="form-control col-12" pInputText>
+                </div>
+
+
+
+                <div class="field col-12">
+                    <label>Libellé<span style="color:red">*</span>:</label><br>
+                    <input type="text" formControlName="libelle" class="form-control col-12"
+                        placeholder="Intitulé de l'évaluation" pInputText>
+
+                </div>
+
+                <div class="field col-12">
+                    <label>Description<span style="color:red">*</span>:</label><br>
+                    <textarea type="text" formControlName="description" class="form-control col-12"
+                        placeholder="Vous devez expliquer la 2nd Loi de Newton grace à ce que vous avez vu durant le dernier cours"
+                        pInputTextarea>
+                    </textarea>
+
+                </div>
+                <div>
+                    <button pButton type="submit" label="Ajouter le devoir" [disabled]="formAddDevoir.invalid"></button>
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
 </div>
 <div class="col-12">
     <div class="card">
         <div style="float: right;">
-            <button pButton label="Ajouter un devoir" icon="pi pi-send" class="p-button-text" (click)="showDevoir=true"
+            <button pButton label="Ajouter un devoir" icon="pi pi-send" (click)="showDevoir=true"
                 style="margin-right: 3px;"></button>
         </div>
         <h5>Liste des devoirs crées</h5>
-        <p-table [value]="devoirs" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
-            [totalRecords]="devoirs.length">
+        <p-table [value]="devoirs" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1 [rows]="10"
+            [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="devoirs.length">
             <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
@@ -22,22 +84,27 @@
                     <th>Action</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-devoir let-expanded="expanded">
+            <ng-template pTemplate="body" let-devoir let-expanded="expanded" let-rione="rowIndex">
                 <tr>
                     <td>
-                        <button type="button" pButton pRipple [pRowToggler]="devoir"
+                        <button type="button" pButton pRipple [pRowToggler]="devoir" (click)="devoirSelected=rione"
                             class="p-button-text p-button-rounded p-button-plain"
                             [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                         </button>
                     </td>
                     <td style="min-width: 10rem;"> {{ devoir.libelle }} </td>
-                    <td style="min-width: 10rem;">{{ devoir.groupe_id?.abbrv }}</td>
+                    <td style="min-width: 10rem;">
+                        <span *ngFor="let cid of devoir.groupe_id; let index = index">
+                            <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
+                            <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
+                        </span>
+                    </td>
                     <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à hh:mm"}}</td>
                     <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à hh:mm" }}</td>
-                    <td style="min-width: 10rem;">{{ devoir.rendu.length}}</td>
+                    <td style="min-width: 10rem;">{{(devoir?.rendu)? devoir.rendu.length : 0}}</td>
                     <td>
-                        <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;"
-                            class="pi pi-search" (click)="console.log(devoir)" aria-hidden="true"></i>
+                        <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;" class="pi pi-search"
+                            (click)="test()" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
@@ -45,16 +112,31 @@
                 <tr>
                     <td colspan="8">
                         <div class="p-3">
-                            <p-table responsiveLayout="scroll" [value]="devoir.rendu">
+                            <p-table responsiveLayout="scroll" dataKey="_id" [value]="devoir.rendu" #dt2 [rows]="5"
+                                [pageLinks]="5" [paginator]="true" rowExpandMode="single"
+                                [totalRecords]="devoir.rendu.length"
+                                [globalFilterFields]="['etudiant_id.lastname', 'etudiant_id.firstname', 'description']">
+                                <ng-template pTemplate="caption">
+                                    <div class="flex justify-content-between flex-column sm:flex-row">
+                                        <span class="p-input-icon-left mb-2">
+                                            <i class="pi pi-search"></i>
+                                            <input pInputText type="text"
+                                                (input)="dt2.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Recherche" class="w-full" />
+                                        </span>
+                                    </div>
+                                </ng-template>
                                 <ng-template pTemplate="header">
                 <tr>
                     <th style="width: 3rem"></th>
                     <th>Civilité NOM Prénom</th>
                     <th>Date Rendu</th>
+                    <th pSortableColumn="verified">Validé <p-sortIcon field="verified"></p-sortIcon>
+                    </th>
                     <th>Action</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rendu let-expandedRendu="expanded">
+            <ng-template pTemplate="body" let-rendu let-expandedRendu="expanded" let-ri="rowIndex">
                 <tr>
                     <td>
                         <button type="button" pButton pRipple [pRowToggler]="rendu"
@@ -68,14 +150,34 @@
                         {{ rendu.etudiant_id.firstname | titlecase }}
                     </td>
                     <td>{{ rendu.date_rendu | date:'dd/MM/YYYY à hh:mm'}} </td>
+                    <td>{{rendu.verified ? "Oui":"Non"}}</td>
                     <td>
-                        <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;" class="pi pi-search"
-                            (click)="console.log(rendu)" aria-hidden="true"></i>
+                        <i *ngIf="!rendu.verified" pTooltip="Test" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-check" (click)="valided(rendu,ri)" aria-hidden="true"></i>
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="rowexpansion" let-rendu>
-                {{rendu|json}}
+                <tr>
+                    <td colspan="8">
+                        <p-accordion>
+                            <p-accordionTab header="Description">
+                                {{rendu.description}}
+                            </p-accordionTab>
+                            <p-accordionTab header="Documents">
+                                Content 2
+                            </p-accordionTab>
+                        </p-accordion>
+                    </td>
+                </tr>
+                <!--<p-accordion>
+                    <p-accordionTab header="Description">
+                        {{rendu.description}}
+                    </p-accordionTab>
+                    <p-accordionTab header="Documents">
+                        Content 2
+                    </p-accordionTab>
+                </p-accordion>-->
             </ng-template>
             <ng-template pTemplate="emptymessage">
 
