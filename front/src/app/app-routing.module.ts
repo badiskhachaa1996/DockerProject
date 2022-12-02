@@ -123,6 +123,8 @@ import { DemandeConseillerComponent } from './commercial/demande-conseiller/dema
 import { GrhComponent } from './rh/grh/grh.component';
 import { UsersSettingsComponent } from './admin-tools/users-settings/users-settings.component';
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
+import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
+import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 
 
 @NgModule({
@@ -204,9 +206,10 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
                     { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
                     { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
                     { path: 'contact', component: ContactComponent },
-                    { path: 'list-events', component: ListEventsComponent },
-                    { path: 'assign-ims', component: CreateAccountComponent },
-
+                    { path: 'list-events', component: ListEventsComponent, canActivate: [AuthGuardService] },
+                    { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
+                    { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+                    { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
                     { path: 'tuteur', component: TuteurComponent },
                     { path: 'tuteur/:entreprise', component: TuteurComponent },
 
@@ -238,8 +241,8 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
                     { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
                     { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate:[AdminGuardService] },
-                    { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate:[AdminGuardService] },
+                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
+                    { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
 
                     /*** RH paths */
 
@@ -260,7 +263,7 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
             { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
             { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
             { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
-            
+
             { path: 'pages/landing', component: LandingComponent },
             { path: 'pages/error', component: ErrorComponent },
             { path: 'pages/notfound', component: NotfoundComponent },

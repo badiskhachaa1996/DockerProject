@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="mail">Adresse mail personnel <span style="color: red;"> * </span></label>
+                        <label For="mail">Adresse mail personnel</label>
                         <input pInputText id="mail" type="email" placeholder="j.smith@gmail.com"
                             formControlName="email_perso" />
                         <div *ngIf="email_perso.invalid && (email_perso.touched || email_perso.dirty)">
@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="nom_rue">Nom de la rue <span style="color: red;"> * </span></label>
+                        <label For="nom_rue">Nom de la rue </label>
                         <input pInputText id="nom_rue" type="text" placeholder="Nom de votre rue"
                             formControlName="rue_adresse" />
                         <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
@@ -140,17 +140,17 @@
                         </div>
                     </div>
                     <div class="field col-6 md:col-3">
-                        <label For="numero_rue">Numéro de la rue <span style="color: red;"> * </span></label>
+                        <label For="numero_rue">Numéro de la rue </label>
                         <input pInputText id="numero_rue" type="number" placeholder="Numéro de votre rue"
                             formControlName="numero_adresse" />
                     </div>
                     <div class="field col-6 md:col-3">
-                        <label For="code_postale">Code postale<span style="color: red;"> * </span></label>
+                        <label For="code_postale">Code postale</label>
                         <input pInputText id="code_postale" type="number" placeholder="Code postale"
                             formControlName="postal_adresse" />
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="pays">Pays <span style="color: red;"> * </span></label>
+                        <label For="pays">Pays</label>
                         <input pInputText id="pays" type="text" placeholder="Pays" formControlName="pays_adresse" />
                         <div *ngIf="pays_adresse.invalid && (pays_adresse.touched || pays_adresse.dirty)">
                             <span *ngIf="pays_adresse.errors?.pattern" style="color: red;">
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                     <div class="field col-12 md:col-6">
-                        <label For="ville">Ville<span style="color: red;"> * </span></label>
+                        <label For="ville">Ville</label>
                         <input pInputText id="ville" type="text" placeholder="Ville" formControlName="ville_adresse" />
                         <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
                             <span *ngIf="ville_adresse.errors?.pattern" style="color: red;">
@@ -177,7 +177,7 @@
                     <div class="field col-12 md:col-6"
                         *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="isPrestataire">Entreprise</label>
-                        <p-dropdown [options]="prestataireList" optionLabel="label" formControlName="prestataire_id">
+                        <p-dropdown [options]="prestataireList" optionLabel="label" filter='true' formControlName="prestataire_id">
                         </p-dropdown>
                     </div>
 
@@ -344,7 +344,7 @@
                             <div class="grid">
                                 <div class="col-6 md:col-6">
                                     <label>Module: </label>
-                                    <p-dropdown [options]="matiereList"
+                                    <p-dropdown [options]="matiereList" filter="true"
                                         (onChange)="changeVolumeH(i,$event,'matiere_id')" [group]="true"></p-dropdown>
                                 </div>
                                 <div class="col-6 md:col-4">
@@ -370,7 +370,7 @@
                             <div class="grid">
                                 <div class="col-12 md:col-6">
                                     <label>Diplome:</label><br>
-                                    <p-dropdown [options]="diplomesListe" optionLabel="titre"
+                                    <p-dropdown [options]="diplomesListe" optionLabel="titre" filter="true"
                                         (onChange)="changeCout(i, $event,'titre')"
                                         [(value)]="jury_diplomesList[i]['titre']" placeholder="Choissisez un Diplome"
                                         class="form-control"></p-dropdown>

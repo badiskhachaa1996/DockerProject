@@ -497,7 +497,7 @@ export class AddSeanceComponent implements OnInit {
         }
         else {
           let str: any = m.formation_id
-          this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[str].titre + " - " + m.niveau, value: m._id });
+          this.dropdownMatiere.push({ nom: m.nom + " - " + this.diplomeDic[str].titre + " - " + m.niveau + " - " + m.semestre, value: m._id });
         }
 
       }

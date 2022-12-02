@@ -108,10 +108,11 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Gestions des évaluations', icon: 'pi pi-copy', items: [
                             { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
-                            { label: 'Liste des évalutions', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                            { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
                         ]
                     },
-                    { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                    { label: 'Gestions des Bulletins de notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                    { label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                 ]
 
             },
@@ -291,9 +292,9 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
                                         { label: 'Gestions de mes évaluations', icon: 'pi pi-copy', routerLink: 'examens' },
-                                        { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: 'notes' },
+                                        { label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                                     ]
                                 }
                             ];
@@ -315,7 +316,7 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: "Pédagogie",
                                     items: [
-                                        { label: 'Emploi du temps', icon: 'pi pi-video', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                        { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                     ]
                                 },
                                 {
@@ -589,7 +590,7 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
                                     ]
                                 },
-                                { label: 'Gestions des notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
+                                { label: 'Gestions des Bulletins de notes', icon: 'pi pi-pencil', routerLink: ['/notes'] },
                                 {
                                     label: 'Gestions des diplômes', icon: 'pi pi-bookmark',
                                     items: [

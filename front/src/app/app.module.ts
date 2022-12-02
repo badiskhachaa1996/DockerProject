@@ -224,6 +224,8 @@ import { UsersSettingsComponent } from './admin-tools/users-settings/users-setti
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
 import { SignaturePadModule } from 'angular2-signaturepad';
+import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
+import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -434,6 +436,8 @@ import { SignaturePadModule } from 'angular2-signaturepad';
     UsersSettingsComponent,
     AnalyseDoublonComponent,
     GestionEtudiantsComponent,
+    DevoirsComponent,
+    DevoirsEtudiantsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

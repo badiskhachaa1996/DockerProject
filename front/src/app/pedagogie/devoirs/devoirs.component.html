@@ -1,0 +1,89 @@
+<div *ngIf="showDevoir">
+
+</div>
+<div class="col-12">
+    <div class="card">
+        <div style="float: right;">
+            <button pButton label="Ajouter un devoir" icon="pi pi-send" class="p-button-text" (click)="showDevoir=true"
+                style="margin-right: 3px;"></button>
+        </div>
+        <h5>Liste des devoirs crées</h5>
+        <p-table [value]="devoirs" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
+            [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single"
+            [totalRecords]="devoirs.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th>Libelle</th>
+                    <th>Groupe</th>
+                    <th>Date Rendu</th>
+                    <th>Date Debut</th>
+                    <th>Nombre de Rendu</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-devoir let-expanded="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="devoir"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td style="min-width: 10rem;"> {{ devoir.libelle }} </td>
+                    <td style="min-width: 10rem;">{{ devoir.groupe_id?.abbrv }}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à hh:mm"}}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à hh:mm" }}</td>
+                    <td style="min-width: 10rem;">{{ devoir.rendu.length}}</td>
+                    <td>
+                        <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;"
+                            class="pi pi-search" (click)="console.log(devoir)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-devoir>
+                <tr>
+                    <td colspan="8">
+                        <div class="p-3">
+                            <p-table responsiveLayout="scroll" [value]="devoir.rendu">
+                                <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 3rem"></th>
+                    <th>Civilité NOM Prénom</th>
+                    <th>Date Rendu</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rendu let-expandedRendu="expanded">
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="rendu"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expandedRendu ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                        </button>
+                    </td>
+                    <td>
+                        {{ rendu.etudiant_id?.civilite }}
+                        {{ rendu.etudiant_id?.lastname | uppercase }}
+                        {{ rendu.etudiant_id.firstname | titlecase }}
+                    </td>
+                    <td>{{ rendu.date_rendu | date:'dd/MM/YYYY à hh:mm'}} </td>
+                    <td>
+                        <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;" class="pi pi-search"
+                            (click)="console.log(rendu)" aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-rendu>
+                {{rendu|json}}
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+    </tr>
+    </ng-template>
+    </p-table>
+</div>
