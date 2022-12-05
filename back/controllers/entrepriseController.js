@@ -332,7 +332,7 @@ app.post("/createContratAlternance", (req, res, next) => {
     let NewContrat = new CAlternance({
         ...ContratData
     })
-    console.log(NewContrat);
+    
     //création du contrat
     NewContrat.save()
         .then((NewContData) => {
