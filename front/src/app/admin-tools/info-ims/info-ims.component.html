@@ -1,0 +1,91 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Ajouter une tâches" (click)="showFormAdd = true;"></button>
+            </div>
+            <h5>Etat d'avancement IMS</h5>
+            <p-toast></p-toast>
+            <p-table [value]="avancements" dataKey="_id" responsiveLayout="scroll">
+
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Filtrer" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            Module
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Avancement général
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-avancement let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="avancement"
+                                class="p-button-text p-button-rounded p-button-plain" 
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                            </button>
+                        </td>
+                        <td>Nom du module</td>
+                        <td>
+                            Description
+                        </td>
+                        <td>
+                            <p-progressBar [value]="20" [showValue]="true"></p-progressBar>
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="avancementToUpdate = avancement; showFormUpdate = true;" aria-hidden="true" style="margin-left: 7px"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-avancement>
+                    <tr>
+                        <td colspan="5">
+                            <div class="p-3">
+                                <p-table [value]="avancement.details" dataKey="id" responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>
+                                                Tâches
+                                            </th>
+                                            <th>
+                                                Avancement
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-detail>
+                                        <tr>
+                                            <td>taches</td>
+                                            <td>
+                                                <p-progressBar [value]="50" [showValue]="true"></p-progressBar>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="5">
+                                                Aucune taches enregistrés.
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
