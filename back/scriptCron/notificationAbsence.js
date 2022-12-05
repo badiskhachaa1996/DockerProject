@@ -61,7 +61,7 @@ mongoose
                     `
                     let attachments = [{
                         filename: 'signature_mh.png',
-                        path: '../assets/signature_mh.png',
+                        path: '/home/ubuntu/ems3/back/assets/signature_mh.png',
                         cid: 'red' //same cid value as in the html img src
                     }]
                     let mailOptions = {
@@ -75,7 +75,7 @@ mongoose
                         if (error) {
                             console.error(error);
                         }
-                        console.log("SEND TO", mailOptions.bcc)
+                        console.log("SEND TO "+mailOptions.bcc.length.toString()+".", mailOptions.bcc)
                         process.exit()
                     });
                     //Envoyer le mail
