@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Devoir } from 'src/app/models/devoir';
+import { Devoir } from 'src/app/models/Devoir';
 import { MatiereService } from 'src/app/services/matiere.service';
 import jwt_decode from 'jwt-decode';
 import { ClasseService } from 'src/app/services/classe.service';
