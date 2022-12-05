@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MessageService, PrimeNGConfig } from 'primeng/api';
-import { Table } from 'primeng/table';
+import { MessageService } from 'primeng/api';
 import { Classe } from 'src/app/models/Classe';
 import { Matiere } from 'src/app/models/Matiere';
 import { Seance } from 'src/app/models/Seance';

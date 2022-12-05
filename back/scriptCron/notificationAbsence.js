@@ -6,7 +6,6 @@ const { Classe } = require('../models/classe')
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
 let date = new Date()
-console.log(date)
 
 let transporter = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -20,7 +19,7 @@ let transporter = nodemailer.createTransport({
 });
 //
 mongoose
-    .connect(`mongodb://localhost:27017/b`, {
+    .connect(`mongodb://localhost:27017/learningNode`, {
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -51,8 +50,8 @@ mongoose
                     let htmlmail = `
                     <p style="font-size:20px; color:black">Bonjour,</p>
                     <p>   </p>
-                    <p style="font-size:20px; color:black">Votre séance a commencé depuis 10min et nous avons remarqué que vous n'avez pas signé sur la plateforme <a href='https://ims.intedgroup.com'>IMS</a>.</p>
-                    <p style="font-size:20px; color:black">Il vous reste 5 minutes pour aller signer votre présence, au delà vous serez noté Absent.</p>
+                    <p style="font-size:20px; color:black">Votre séance a commencé depuis 20min et nous avons remarqué que vous n'avez pas signé sur la plateforme <a href='https://ims.intedgroup.com'>IMS</a>.</p>
+                    <p style="font-size:20px; color:black">Il vous reste 10 minutes pour aller signer votre présence, au delà vous serez noté Absent.</p>
                     <p style="font-size:20px; color:black">Si vous arrivez en retard, vous pouvez demandé au formateur en justifiant la raison de votre retard,</p>
                     <p>   </p>
                     <p style="font-size:20px;">Cordialement,</p>
