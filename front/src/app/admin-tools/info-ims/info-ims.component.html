@@ -1,0 +1,82 @@
+<div class="grid">
+    <!-- Table d'affichage de l'état d'avancement -->
+    <div class="col-12">
+        <div class="card">
+            <h5>Etat d'avancement IMS</h5>
+            <p-toast></p-toast>
+            <p-table #dt1 [value]="avancements" dataKey="module" 
+                    rowExpandMode="single" responsiveLayout="scroll" 
+                    [globalFilterFields]="['module']">
+
+                <ng-template pTemplate="caption">
+                    <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Filtrer" />
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th>
+                            Module
+                        </th>
+                        <th>
+                            To Do
+                        </th>
+                        <th>
+                            Avancement général
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-avancement let-expanded="expanded">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="avancement"
+                                class="p-button-text p-button-rounded p-button-plain" 
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
+                            </button>
+                        </td>
+                        <td>{{ avancement.module }}</td>
+                        <td>{{ avancement.todo }}</td>
+                        <td>
+                            <p-progressBar [value]="avancement.global" [showValue]="true"></p-progressBar>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-avancement>
+                    <tr>
+                        <td colspan="4">
+                            <div class="p-3">
+                                <p-table [value]="avancement.details" dataKey="tache" responsiveLayout="scroll">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>
+                                                Tâches
+                                            </th>
+                                            <th>
+                                                Avancement
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-detail>
+                                        <tr>
+                                            <td>{{ detail.tache }}</td>
+                                            <td>
+                                                <p-progressBar [value]="detail.percent" [showValue]="true"></p-progressBar>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage">
+                                        <tr>
+                                            <td colspan="4">
+                                                Aucune taches enregistrés.
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
