@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { Avancement } from 'src/app/models/Avancement';
 
 @Component({
   selector: 'app-info-ims',
@@ -9,27 +7,23 @@ import { Avancement } from 'src/app/models/Avancement';
 })
 export class InfoImsComponent implements OnInit {
 
-  avancements: Avancement[];
-  avancementToUpdate: Avancement;
+  avancements: any[] = [
+    {
+      module: 'Pédagogie',
+      global: 92,
+      todo: "Rétouches ...",
+      details: [
+        {
+          tache: 'Tache 1',
+          percent: 60
+        },
+        {
+          tache: 'Tache 2',
+          percent: 40
+        },
+      ]
+    },
 
-  showFormAdd: boolean;
-  formAdd: FormGroup;
-
-  showFormUpdate: boolean;
-  formUpdate: FormGroup;
-
-  moduleList: any[] = [
-    { label: 'Ticketing' },
-    { label: 'Pédagogie' },
-    { label: 'Administration' },
-    { label: 'Admission' },
-    { label: 'Alternance' },
-    { label: 'Partenaires' },
-    { label: 'Commercial' },
-    { label: 'Support' },
-    { label: 'Booking' },
-    { label: 'SkillsNet' },
-    { label: 'RH' },
   ];
 
   constructor() { }

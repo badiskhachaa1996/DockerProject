@@ -1,12 +1,10 @@
 <div class="grid">
+    <!-- Table d'affichage de l'état d'avancement -->
     <div class="col-12">
         <div class="card">
-            <div style="float: right;">
-                <button pButton label="Ajouter une tâches" (click)="showFormAdd = true;"></button>
-            </div>
             <h5>Etat d'avancement IMS</h5>
             <p-toast></p-toast>
-            <p-table [value]="avancements" dataKey="_id" responsiveLayout="scroll">
+            <p-table [value]="avancements" dataKey="id" responsiveLayout="scroll">
 
                 <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -19,13 +17,10 @@
                             Module
                         </th>
                         <th>
-                            Description
+                            To Do
                         </th>
                         <th>
                             Avancement général
-                        </th>
-                        <th>
-                            Action
                         </th>
                     </tr>
                 </ng-template>
@@ -37,22 +32,16 @@
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'">
                             </button>
                         </td>
-                        <td>Nom du module</td>
+                        <td>{{ avancement.module }}</td>
+                        <td>{{ avancement.todo }}</td>
                         <td>
-                            Description
-                        </td>
-                        <td>
-                            <p-progressBar [value]="20" [showValue]="true"></p-progressBar>
-                        </td>
-                        <td>
-                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                                (click)="avancementToUpdate = avancement; showFormUpdate = true;" aria-hidden="true" style="margin-left: 7px"></i>
+                            <p-progressBar [value]="avancement.global" [showValue]="true"></p-progressBar>
                         </td>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-avancement>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="4">
                             <div class="p-3">
                                 <p-table [value]="avancement.details" dataKey="id" responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
@@ -67,15 +56,15 @@
                                     </ng-template>
                                     <ng-template pTemplate="body" let-detail>
                                         <tr>
-                                            <td>taches</td>
+                                            <td>{{ detail.tache }}</td>
                                             <td>
-                                                <p-progressBar [value]="50" [showValue]="true"></p-progressBar>
+                                                <p-progressBar [value]="detail.percent" [showValue]="true"></p-progressBar>
                                             </td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
                                         <tr>
-                                            <td colspan="5">
+                                            <td colspan="4">
                                                 Aucune taches enregistrés.
                                             </td>
                                         </tr>
