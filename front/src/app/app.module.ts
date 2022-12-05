@@ -226,6 +226,7 @@ import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudian
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
+import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -438,6 +439,7 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
     GestionEtudiantsComponent,
     DevoirsComponent,
     DevoirsEtudiantsComponent,
+    InfoImsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

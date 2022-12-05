@@ -125,6 +125,7 @@ import { UsersSettingsComponent } from './admin-tools/users-settings/users-setti
 import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-doublon.component';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
+import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 
 
 @NgModule({
@@ -249,6 +250,7 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
                     { path: 'gestion-des-ressources-humaines', component: GrhComponent },
 
                     /** end */
+                    { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
                     { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
 
                 ],

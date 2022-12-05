@@ -60,7 +60,8 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Gestions des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] },
                     { label: 'Analyseur de doublons', icon: 'pi pi-server', routerLink: ['/analyseur-doublons'] },
-                    { label: 'Gestion des étudiants', icon: 'pi pi-fw pi-briefcase', routerLink: ['/gestion-etudiants'] }
+                    { label: 'Gestion des étudiants', icon: 'pi pi-fw pi-briefcase', routerLink: ['/gestion-etudiants'] },
+                    { label: 'Infos IMS', icon: 'pi pi-info-circle', routerLink: ['/infos-ims'] }
                 ]
             },
             {
