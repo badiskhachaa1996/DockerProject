@@ -14,9 +14,9 @@ let dblog = 'mongodb://localhost:27017/learningNode'
 if (process.argv[2]) {
     let argProd = process.argv[2]
     console.log(argProd)
-    if(argProd.includes('changeDB')){
+    if (argProd.includes('changeDB')) {
         dblog = 'mongodb://localhost:27017/b'
-    }else if (argProd.includes('dev')) {
+    } else if (argProd.includes('dev')) {
         origin = ["https://t.dev.estya.com"]
     } else (
         origin = ["https://ims.estya.com", "https://ticket.estya.com", "https://estya.com", "https://adgeducations.com", "https://eduhorizons.com", "https://espic.com", "https://partenaire.eduhorizons.com", "https://login.eduhorizons.com", "https://ims.intedgroup.com"]
@@ -108,10 +108,10 @@ const inTimeController = require('./controllers/inTimeController');
 const cvController = require('./controllers/cvController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
 const congeController = require('./controllers/congeController');
+const devoirController = require('./controllers/devoirController')
+const renduDevoirController = require('./controllers/renduDevoirController')
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const { User } = require("./models/user");
-const { scrypt } = require("crypto");
-const { use } = require("./controllers/userController");
 
 
 app.use('/', function (req, res, next) {
@@ -247,6 +247,10 @@ app.use('/soc/demandeConseiller', DemandeConseillerController)
 
 app.use('/soc/conge', congeController);
 
+app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
+
+app.use('/soc/devoir', devoirController);
+app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
 
 io.on("connection", (socket) => {

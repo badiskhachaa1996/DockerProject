@@ -79,7 +79,7 @@ app.get("/getMatiereList", (req, res, next) => {
                     matiereList.forEach(matiere => {
                         if (matiere.formation_id.toString() == diplome._id.toString()) {
 
-                            items.push({ label: matiere.nom, value: matiere._id })
+                            items.push({ label: matiere.nom + ' - ' + diplome.titre + ' - ' + matiere.niveau + ' - ' + matiere.semestre, value: matiere._id })
                         }
                     })
                     if (items.length != 0) {

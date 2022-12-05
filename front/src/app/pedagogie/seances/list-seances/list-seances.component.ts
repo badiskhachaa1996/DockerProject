@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Classe } from 'src/app/models/Classe';
-import { Formateur } from 'src/app/models/Formateur';
 import { Matiere } from 'src/app/models/Matiere';
 import { Seance } from 'src/app/models/Seance';
 import { CampusService } from 'src/app/services/campus.service';
@@ -180,13 +179,12 @@ export class ListSeancesComponent implements OnInit {
     this.dicCampus[rowData.campus_id].salles.forEach(s => {
       this.salleNames.push({ value: s, label: s })
     })
-    console.log(rowData.date_debut,new Date(rowData.date_debut),new Date(rowData.date_debut).toISOString(),new Date(rowData.date_debut).toISOString().slice(0, 16))
     this.seanceFormUpdate = new FormGroup({
       classe: new FormControl(classeList),
       matiere: new FormControl({ nom: this.matieres[rowData.matiere_id].nom, value: rowData.matiere_id }, Validators.required),
       libelle: new FormControl(rowData.libelle),
-      date_debut: new FormControl(new Date(rowData.date_debut).toISOString().slice(0, 16), Validators.required),
-      date_fin: new FormControl(new Date(rowData.date_fin).toISOString().slice(0, 16), Validators.required),
+      date_debut: new FormControl(this.toDateString(new Date(rowData.date_debut)), Validators.required),
+      date_fin: new FormControl(this.toDateString(new Date(rowData.date_fin)), Validators.required),
       formateur: new FormControl("", Validators.required),
       isPresentiel: new FormControl(rowData.isPresentiel),
       salle_name: new FormControl({ value: rowData.salle_name, label: rowData.salle_name }),
@@ -345,5 +343,12 @@ export class ListSeancesComponent implements OnInit {
         },
       );
   }
+
+  private toDateString(date: Date): string {
+    return (date.getFullYear().toString() + '-' 
+       + ("0" + (date.getMonth() + 1)).slice(-2) + '-' 
+       + ("0" + (date.getDate())).slice(-2))
+       + 'T' + date.toTimeString().slice(0,5);
+}
 
 }

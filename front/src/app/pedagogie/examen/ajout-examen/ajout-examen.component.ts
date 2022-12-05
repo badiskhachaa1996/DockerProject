@@ -99,13 +99,6 @@ export class AjoutExamenComponent implements OnInit {
       })
       this.defaultDropdownFormateur = this.dropdownFormateur
     })
-
-    //Initialisation des formulaires
-    try {
-      this.token = jwt_decode(localStorage.getItem("token"))
-    } catch (e) {
-      this.token = null
-    }
     if (this.token) {
       //C'est un Admin
       //Recuperation de la liste des matières
@@ -174,7 +167,6 @@ export class AjoutExamenComponent implements OnInit {
         })
       })
     }
-
   }
 
   filterFormateur() {
