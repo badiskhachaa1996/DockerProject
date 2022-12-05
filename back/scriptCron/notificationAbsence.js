@@ -42,10 +42,11 @@ mongoose
                 })
                 Etudiant.find({ classe_id: { $in: listIds }, user_id: { $nin: userIds }, valided_by_support: true }).populate('user_id').then(etudiants => {
                     etudiants.forEach(etu => {
-                        if (etu.user_id.email)
-                            emailList.push(etu.user_id.email)
-                        else if (etu.user_id.email_perso)
-                            emailList.push(etu.user_id.email_perso)
+                        if (etu.user_id)
+                            if (etu.user_id.email)
+                                emailList.push(etu.user_id.email)
+                            else if (etu.user_id.email_perso)
+                                emailList.push(etu.user_id.email_perso)
                     })
                     let htmlmail = `
                     <p style="font-size:20px; color:black">Bonjour,</p>
