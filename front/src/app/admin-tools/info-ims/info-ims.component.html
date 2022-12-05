@@ -4,7 +4,9 @@
         <div class="card">
             <h5>Etat d'avancement IMS</h5>
             <p-toast></p-toast>
-            <p-table [value]="avancements" dataKey="id" responsiveLayout="scroll">
+            <p-table #dt1 [value]="avancements" dataKey="module" 
+                    rowExpandMode="single" responsiveLayout="scroll" 
+                    [globalFilterFields]="['module']">
 
                 <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -43,7 +45,7 @@
                     <tr>
                         <td colspan="4">
                             <div class="p-3">
-                                <p-table [value]="avancement.details" dataKey="id" responsiveLayout="scroll">
+                                <p-table [value]="avancement.details" dataKey="tache" responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
                                         <tr>
                                             <th>
