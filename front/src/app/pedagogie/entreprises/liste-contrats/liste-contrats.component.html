@@ -434,6 +434,7 @@
                                             <th>Entreprise</th>
                                             <th>Coeff hierachique</th>
                                             <th>Commercial</th>
+                                            <th>Année-scolaires</th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
@@ -446,6 +447,11 @@
                                             </td>
                                             <td>{{contrat.coeff_hierachique}}</td>
                                             <td>{{ nomCompletComm }}</td>
+                                            <td>
+                                                <ul>
+                                                    <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>
+                                                </ul>
+                                            </td>
                                         </tr>
                                     </ng-template>
                                 </p-table>
