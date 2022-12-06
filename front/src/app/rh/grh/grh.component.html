@@ -59,10 +59,10 @@
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="presence" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
-                                <td style="min-width: 8rem;">{{ presence.user_id.lastname | uppercase }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id.firstname | titlecase }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id.email }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id.type }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.lastname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.firstname | titlecase }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.email }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.type }}</td>
                                 <td style="min-width: 8rem;">{{ presence.date_of_the_day }}</td>
                                 <td style="min-width: 8rem; color: red; font-weight: bold;">{{ presence.statut }}</td>
                             </tr>
@@ -88,7 +88,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage">
                                                 <tr>
-                                                    <td>{{ presence.user_id.indicatif }}{{ presence.user_id.phone }}</td>
+                                                    <td>{{ presence.user_id?.indicatif }}{{ presence.user_id?.phone }}</td>
                                                     <td>{{ presence.in_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.out_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.principale_activity_details }}</td>
@@ -142,10 +142,10 @@
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="conge" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
-                                <td style="min-width: 8rem;">{{ conge.user_id.lastname | uppercase }}</td>
-                                <td style="min-width: 8rem;">{{ conge.user_id.firstname | titlecase }}</td>
-                                <td style="min-width: 8rem;">{{ conge.user_id.email }}</td>
-                                <td style="min-width: 8rem;">{{ conge.user_id.date_debut }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id?.lastname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id?.firstname | titlecase }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id?.email }}</td>
+                                <td style="min-width: 8rem;">{{ conge.user_id?.date_debut }}</td>
                                 <td style="min-width: 8rem;">{{ conge.date_fin }}</td>
                                 <td style="min-width: 8rem; color: red; font-weight: bold;">{{ conge.statut }}</td>
                             </tr>
@@ -168,8 +168,8 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage">
                                                 <tr>
-                                                    <td style="min-width: 8rem;">{{ conge.referent_id.lastname | uppercase }} {{ conge.referent_id.firstname | titlecase }}</td>
-                                                    <td>{{ conge.referent_id.email }}</td>
+                                                    <td style="min-width: 8rem;">{{ conge.referent_id?.lastname | uppercase }} {{ conge.referent_id?.firstname | titlecase }}</td>
+                                                    <td>{{ conge.referent_id?.email }}</td>
                                                 </tr>
                                             </ng-template>
                                         </p-table>

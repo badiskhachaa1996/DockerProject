@@ -54,6 +54,12 @@
                                             <th>
                                                 Avancement
                                             </th>
+                                            <th>
+                                                Detail
+                                            </th>
+                                            <th>
+                                                Date de livraison
+                                            </th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-detail>
@@ -62,6 +68,8 @@
                                             <td>
                                                 <p-progressBar [value]="detail.percent" [showValue]="true"></p-progressBar>
                                             </td>
+                                            <td>{{ detail?.detail }}</td>
+                                            <td>{{ detail?.date_liv }}</td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage">
