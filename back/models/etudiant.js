@@ -31,7 +31,8 @@ const etudiantSchema = mongoose.Schema({
     remarque: { type: String },
     isOnStage: { type: Boolean, default: false },
     fileRight: {
-        type: mongoose.Schema.Types.Mixed, required: false
+        type: mongoose.Schema.Types.Mixed, required: false,
+        default:[]
     },
     payment_reinscrit: {
         type: [mongoose.Schema.Types.Mixed],

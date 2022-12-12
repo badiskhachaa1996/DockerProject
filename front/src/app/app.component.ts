@@ -37,22 +37,23 @@ export class AppComponent {
             .subscribe(async () => {
                 if (this.authenticated) {
                     let response = this.msalService.instance.getActiveAccount()
-                    this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
-                        localStorage.setItem("token", data.token)
-                        //this.socket.isAuth()
-                        if (data.message) {
-                            localStorage.setItem("modify", "true")
-                            this.router.navigate(['completion-profil'])
-                        } else {
-                            this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-                                this.ss.connected()
-                            });
+                    if (response)
+                        this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
+                            localStorage.setItem("token", data.token)
+                            //this.socket.isAuth()
+                            if (data.message) {
+                                localStorage.setItem("modify", "true")
+                                this.router.navigate(['completion-profil'])
+                            } else {
+                                this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+                                    this.ss.connected()
+                                });
 
-                        }
+                            }
 
-                    }, (error) => {
-                        console.error(error)
-                    })
+                        }, (error) => {
+                            console.error(error)
+                        })
                 }
             });
 

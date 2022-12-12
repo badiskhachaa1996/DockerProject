@@ -46,6 +46,26 @@ export class ExterneComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: "N'essayer pas d'usurper l'identité de quelqu'un s'il vous plaît", detail: tokenError.message })
       }
     }
+    if (this.msalService.instance.getActiveAccount()) {
+      let response = this.msalService.instance.getActiveAccount()
+      if (response)
+        this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
+          localStorage.setItem("token", data.token)
+          //this.socket.isAuth()
+          if (data.message) {
+            localStorage.setItem("modify", "true")
+            this.router.navigate(['completion-profil'])
+          } else {
+            this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+              this.ss.connected()
+            });
+
+          }
+
+        }, (error) => {
+          console.error(error)
+        })
+    }
   }
 
   Login() {
@@ -84,6 +104,8 @@ export class ExterneComponent implements OnInit {
   }
 
   toLoginMiscroft() {
+    localStorage.clear()
+    this.msalService.instance.setActiveAccount(null)
     this.msalService.instance.loginRedirect({
       scopes: ['user.read'],
     });
