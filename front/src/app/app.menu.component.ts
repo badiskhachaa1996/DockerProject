@@ -55,7 +55,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
                 ]
-            },{
+            }, {
                 label: 'Outils Dev/Admin', icon: 'pi pi-ticket',
                 items: [
                     { label: 'Gestions des utilisateurs', icon: 'pi pi-fw pi-user', routerLink: ['/gestion-des-utilisateurs'] },
@@ -228,6 +228,12 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Gestion des ressources humaines', icon: 'pi pi-list', routerLink: ['/gestion-des-ressources-humaines'] },
                 ]
             },
+            {
+                label: 'Finance',
+                items: [
+                    { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                ]
+            }
         ];
 
         this.userService.getPopulate(this.token.id).subscribe(dataUser => {

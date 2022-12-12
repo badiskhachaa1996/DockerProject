@@ -126,6 +126,7 @@ import { AnalyseDoublonComponent } from './admin-tools/analyse-doublon/analyse-d
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
+import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 
 const routes: Routes = [
     {
@@ -226,6 +227,7 @@ const routes: Routes = [
             /** end */
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
+            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] }
 
         ],
     },
