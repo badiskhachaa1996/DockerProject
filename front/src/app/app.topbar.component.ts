@@ -8,6 +8,7 @@ import { Notification } from './models/notification';
 import { environment } from 'src/environments/environment';
 import jwt_decode from "jwt-decode";
 import { ServService } from './services/service.service';
+import { MsalService } from '@azure/msal-angular';
 
 const io = require("socket.io-client");
 
@@ -22,16 +23,17 @@ export class AppTopBarComponent {
   Notifications: Notification[] = [];
   socket = io(environment.origin.replace('/soc', ''));
 
-  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService,) { }
+  constructor(public appMain: AppMainComponent, private serv: ServService, private router: Router, private NotificationService: NotificationService,private msalService:MsalService) { }
 
   //Methode de deconnexion
   onDisconnect() {
     localStorage.removeItem('token');
+    this.msalService.logoutRedirect();
     this.router.navigate(['login']);
   }
   setToZero() {
 
-this.Notifications= []
+    this.Notifications = []
 
   }
   ngOnInit() {
