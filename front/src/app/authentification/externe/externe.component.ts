@@ -84,35 +84,9 @@ export class ExterneComponent implements OnInit {
   }
 
   toLoginMiscroft() {
-
-    if (this.msalGuardConfig.authRequest) {
-      console.log(this.msalGuardConfig.authRequest)
-      this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
-        .subscribe((response: AuthenticationResult) => {
-          console.log(response)
-          this.msalService.instance.setActiveAccount(response.account);
-          if (response.account) {
-            this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
-              localStorage.setItem("token", data.token)
-              this.socket.isAuth()
-              if (data.message) {
-                localStorage.setItem("modify", "true")
-                this.router.navigate(['completion-profil'])
-              } else {
-                this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-                  this.ss.connected()
-                });
-
-              }
-
-            }, (error) => {
-              console.error(error)
-            })
-          } else {
-            console.error("ERROR MICROSOFT")
-          }
-        });
-    }
+    this.msalService.instance.loginRedirect({
+      scopes: ['user.read'],
+    });
   }
 
 

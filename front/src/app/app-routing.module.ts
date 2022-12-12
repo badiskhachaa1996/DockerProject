@@ -1,5 +1,5 @@
 import { GestionEtudiantsComponent } from './pedagogie/etudiants/gestion-etudiants/gestion-etudiants.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { FormLayoutComponent } from './components/formlayout/formlayout.component';
@@ -127,155 +127,134 @@ import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 
+const routes: Routes = [
+    {
+        path: '', component: AppMainComponent,
+        children: [
+            { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
+            { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
+            { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+            { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
+            { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
+            { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
+            { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ajout-annee-scolaire', component: AddAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ecole', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ecole/:id', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ajout-ecole', component: AddEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'campus/:id', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ajout-campus', component: AddCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'diplomes/:id', component: ListDiplomeComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
+            { path: 'ajout-diplome', component: AddDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'groupes', component: ListGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'ajout-groupe', component: AddGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'admin/agents', component: ListAgentComponent, canActivate: [AuthGuardService, AdminGuardService] },
+            { path: 'admin/ajout-agent', component: AddAgentComponent, canActivate: [AuthGuardService, AdminGuardService] },
+            { path: 'gestion-tickets', component: GestionTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
+            { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
+            { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'matieres/:id', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
+            { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
+            { path: 'assignation-inscrit', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
+            { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
+            { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
+            { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
+            { path: 'emploi-du-temps/:type/:id', component: EmploiDuTempsComponent },
+            { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
+            { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
+            { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
+            { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
+            { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
+            { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
+            { path: 'contact', component: ContactComponent },
+            { path: 'list-events', component: ListEventsComponent, canActivate: [AuthGuardService] },
+            { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
+            { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
+            { path: 'tuteur', component: TuteurComponent },
+            { path: 'tuteur/:entreprise', component: TuteurComponent },
+
+            { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
+            { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
+            { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
+
+            /** Paths Lemon Way */
+
+            { path: 'mon-compte-bancaire', component: MyAccountComponent },
+            { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
+            { path: 'list-accounts', component: ListeDesComptesComponent },
+            { path: 'account-details/:id', component: AccountDetailsComponent },
+            { path: 'payment', component: PaymentComponent },
+            { path: 'success', component: ReturnUrlComponent },
+            { path: 'error', component: ErrorUrlComponent },
+            { path: 'cancel', component: CancelUrlComponent },
+
+            /** end */
+
+            { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
+            { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
+
+            { path: 'missions', component: MissionComponent, canActivate: [AuthGuardService] },
+            { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
+            { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
+            { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
+            { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
+            { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
+            { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+            { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
+            { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
+            { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
+
+            /*** RH paths */
+
+            { path: 'gestion-des-ressources-humaines', component: GrhComponent },
+
+            /** end */
+            { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
+            { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
+
+        ],
+    },
+    { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
+    { path: 'formulaire', component: DemandeEventsComponent },
+    { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
+    { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
+    { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
+    { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
+    { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
+    { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
+
+    { path: 'pages/landing', component: LandingComponent },
+    { path: 'pages/error', component: ErrorComponent },
+    { path: 'pages/notfound', component: NotfoundComponent },
+    { path: 'pages/access', component: AccessComponent },
+    { path: 'validation-email/:mail', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
+    { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
+    { path: 'mentions-legales', component: MentionsLegalesComponent },
+    { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
+    { path: 'auth', component: MsalRedirectComponent },
+]
+
 
 @NgModule({
     imports: [
-        RouterModule.forRoot([
-            {
-                path: '', component: AppMainComponent,
-                children: [
-                    { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
-                    /*{ path: 'uikit/formlayout', component: FormLayoutComponent },
-                    { path: 'uikit/input', component: InputComponent },
-                    { path: 'uikit/floatlabel', component: FloatLabelComponent },
-                    { path: 'uikit/invalidstate', component: InvalidStateComponent },
-                    { path: 'uikit/button', component: ButtonComponent },
-                    { path: 'uikit/table', component: TableComponent },
-                    { path: 'uikit/list', component: ListComponent },
-                    { path: 'uikit/tree', component: TreeComponent },
-                    { path: 'uikit/panel', component: PanelsComponent },
-                    { path: 'uikit/overlay', component: OverlaysComponent },
-                    { path: 'uikit/media', component: MediaComponent },
-                    { path: 'uikit/menu', loadChildren: () => import('./components/menus/menus.module').then(m => m.MenusModule) },
-                    { path: 'uikit/message', component: MessagesComponent },
-                    { path: 'uikit/misc', component: MiscComponent },
-                    { path: 'uikit/charts', component: ChartsComponent },
-                    { path: 'uikit/file', component: FileComponent },
-                    { path: 'pages/crud', component: CrudComponent },
-                    { path: 'pages/timeline', component: TimelineComponent },
-                    { path: 'pages/empty', component: EmptyComponent },
-                    { path: 'icons', component: IconsComponent },
-                    { path: 'blocks', component: BlocksComponent },
-                    { path: 'documentation', component: DocumentationComponent },
-                    /***************************/
-                    { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
-                    { path: 'collaborateur', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
-                    { path: 'collaborateur/:id', component: ListCollaborateurComponent, canActivate: [AuthGuardService] },
-                    { path: 'annee-scolaire', component: ListAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ajout-annee-scolaire', component: AddAnneeScolaireComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ecole', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ecole/:id', component: ListEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ajout-ecole', component: AddEcoleComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'campus', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'campus/:id', component: ListCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ajout-campus', component: AddCampusComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'diplomes', component: ListDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'diplomes/:id', component: ListDiplomeComponent, canActivate: [AuthGuardService, AdministrationGuardService] },
-                    { path: 'ajout-diplome', component: AddDiplomeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'groupes', component: ListGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'ajout-groupe', component: AddGroupeComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'admin/agents', component: ListAgentComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'admin/ajout-agent', component: AddAgentComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'gestion-tickets', component: GestionTicketsComponent, canActivate: [AuthGuardService] },
-                    { path: 'suivi-ticket', component: SuiviTicketsComponent, canActivate: [AuthGuardService] },
-                    { path: 'admin/gestion-services', component: GestionServicesComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'matieres', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'matieres/:id', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
-                    { path: 'etudiants/:code', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'ajout-entreprise', component: AddEntrepriseComponent, canActivate: [AuthGuardService] },
-                    { path: 'assignation-inscrit', component: ProspectsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'validation-inscrit', component: ReinscritComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'entreprises', component: ListEntrepriseComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-preinscriptions', component: GestionPreinscriptionsComponent, canActivate: [AuthGuardService, AdmissionGuardService] },//Admission
-                    { path: 'gestion-preinscriptions/:code', component: GestionPreinscriptionsComponent, canActivate: [CollaborateurGuard] },//Collaborateur/Partenaire type:Commercial
-                    { path: 'ajout-seance', component: AddSeanceComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'seances', component: ListSeancesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'emploi-du-temps', component: EmploiDuTempsComponent },
-                    { path: 'emploi-du-temps/:type/:id', component: EmploiDuTempsComponent },
-                    { path: "emergement/:id", component: EmergementComponent, canActivate: [AuthGuardService] },
-                    { path: 'examens', component: ExamenComponent, canActivate: [AuthGuardService] },
-                    { path: 'ajout-examen', component: AjoutExamenComponent, canActivate: [AuthGuardService] },
-                    { path: 'profil', component: UserProfilComponent, canActivate: [AuthGuardService] },
-                    { path: 'details/:id', component: DetailsEtudiantComponent, canActivate: [TuteurEntrepriseGuard] },
-                    { path: 'notifications', component: NotificationComponent, canActivate: [AuthGuardService] },
-                    { path: 'contact', component: ContactComponent },
-                    { path: 'list-events', component: ListEventsComponent, canActivate: [AuthGuardService] },
-                    { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
-                    { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
-                    { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
-                    { path: 'tuteur', component: TuteurComponent },
-                    { path: 'tuteur/:entreprise', component: TuteurComponent },
-
-                    { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
-                    { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
-                    { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
-
-                    /** Paths Lemon Way */
-
-                    { path: 'mon-compte-bancaire', component: MyAccountComponent },
-                    { path: 'new-individual-account', component: AddNewIndividualAccountComponent },
-                    { path: 'list-accounts', component: ListeDesComptesComponent },
-                    { path: 'account-details/:id', component: AccountDetailsComponent },
-                    { path: 'payment', component: PaymentComponent },
-                    { path: 'success', component: ReturnUrlComponent },
-                    { path: 'error', component: ErrorUrlComponent },
-                    { path: 'cancel', component: CancelUrlComponent },
-
-                    /** end */
-
-                    { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
-                    { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
-
-                    { path: 'missions', component: MissionComponent, canActivate: [AuthGuardService] },
-                    { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
-                    { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-                    { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
-                    { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
-                    { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
-                    { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-                    { path: 'liste-demande-commercial/:equipe_id', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
-                    { path: 'gestion-des-utilisateurs', component: UsersSettingsComponent, canActivate: [AdminGuardService] },
-                    { path: 'analyseur-doublons', component: AnalyseDoublonComponent, canActivate: [AdminGuardService] },
-
-                    /*** RH paths */
-
-                    { path: 'gestion-des-ressources-humaines', component: GrhComponent },
-
-                    /** end */
-                    { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
-                    { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
-
-                ],
-            },
-            { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },
-            { path: 'formulaire', component: DemandeEventsComponent },
-            { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
-            { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
-            { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
-            { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
-            { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },
-            { path: 'mot-de-passe_oublie', component: MpOublieComponent, canActivate: [LoginGuard] },
-            { path: 'mot_de_passe_reinit/:pwdtokenID', component: ResetMpComponent, canActivate: [LoginGuard] },
-            { path: 'suivre-ma-preinscription', component: SuiviePreinscriptionComponent, canActivate: [ProspectGuard] },
-
-            { path: 'pages/landing', component: LandingComponent },
-            { path: 'pages/error', component: ErrorComponent },
-            { path: 'pages/notfound', component: NotfoundComponent },
-            { path: 'pages/access', component: AccessComponent },
-            { path: 'validation-email/:mail', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
-            { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
-            { path: 'mentions-legales', component: MentionsLegalesComponent },
-            { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
-            { path: '**', redirectTo: 'pages/notfound' },
-        ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
+        RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', useHash: false })
     ],
 
     exports: [RouterModule]
