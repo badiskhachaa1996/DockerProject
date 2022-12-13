@@ -23,6 +23,8 @@ import { Conge } from 'src/app/models/Conge';
 import { PlatformLocation } from '@angular/common';
 import { AbscenceCollaborateur } from 'src/app/models/AbscenceCollaborateur';
 import { JustificatifCollaborateurService } from 'src/app/services/justificatif-collaborateur.service';
+import { InTime } from 'src/app/models/InTime';
+import { IntimeService } from 'src/app/services/intime.service';
 
 @Component({
   selector: 'app-user-profil',
@@ -105,6 +107,14 @@ export class UserProfilComponent implements OnInit {
     { label: 'Après-midi' },
     { label: 'Toute la journée' }
   ]
+
+  //Pour voir son compte rendu d'activité
+  showCraDateForm: boolean = false;
+  craDateForm: FormGroup;
+  showPresenceList: boolean = false;
+  presences: InTime[] = [];
+  from: string;
+  to: string;
 
   changeStatut(event) {
     if (event.value.value == "Salarié" || event.value.value == "Alternant/Stagiaire") {
@@ -300,7 +310,7 @@ export class UserProfilComponent implements OnInit {
   constructor(private prospectService: AdmissionService, private AuthService: AuthService, private messageService: MessageService, private formBuilder: FormBuilder,
     private ClasseService: ClasseService, private EntrepriseService: EntrepriseService, private CampusService: CampusService, private DiplomeService: DiplomeService,
     private EtudiantService: EtudiantService, private CommercialService: CommercialPartenaireService, private DemandeConseillerService: DemandeConseillerService,
-    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService) { }
+    private TCService: TeamCommercialService, private congeService: CongeService, private abscenceCollaborateurService: JustificatifCollaborateurService, private inTimeService: IntimeService) { }
 
   ngOnInit(): void {
 
@@ -431,6 +441,12 @@ export class UserProfilComponent implements OnInit {
       date_of_abscence: ['', Validators.required],
       motif: ['', Validators.required],
       periode: [this.periodList[0], Validators.required]
+    });
+
+    //Methode d'initialisation du formulaire de selection des dates pour voir son cra
+    this.craDateForm = this.formBuilder.group({
+      beginDate: ['', Validators.required],
+      endDate: ['', Validators.required],
     });
 
   }
@@ -612,6 +628,52 @@ export class UserProfilComponent implements OnInit {
       .then((response) => { this.messageService.add({ severity: 'success', summary: "Abscence pris en compte" }); this.justificationForm.reset(); })
       .catch((error) => { this.messageService.add({ severity: 'error', summary: "Erreur interne, veuillez contacter un administrateur" }); })
     }
+  }
+
+  //Methode de recuperation des presences
+  onGetPresences()
+  {
+    const formValue = this.craDateForm.value;
+
+    let originalBeginDate = formValue['beginDate'].toLocaleDateString();
+    let beginDate = '';
+
+    for(let i = 0; i < originalBeginDate.length; i++)
+    {
+      if(originalBeginDate[i] === '/')
+      {
+        beginDate += '-';
+      }
+      else
+      {
+        beginDate += originalBeginDate[i];
+      }
+    }
+    this.from = beginDate;
+
+    let originalEndDate = formValue['endDate'].toLocaleDateString();
+    let endDate = '';
+
+    for(let i = 0; i < originalEndDate.length; i++)
+    {
+      if(originalEndDate[i] === '/')
+      {
+        endDate += '-';
+      }
+      else
+      {
+        endDate += originalEndDate[i];
+      }
+    }
+    this.to = endDate;
+
+    // Recuperation de la liste des présences
+    this.inTimeService.getAllByDateBetweenPopulateUserId(beginDate, endDate)
+    .then((response: InTime[]) => {
+      this.presences = response;
+      this.showPresenceList = true;
+    })
+    .catch((error) => { console.log(error); })
   }
 
 }
