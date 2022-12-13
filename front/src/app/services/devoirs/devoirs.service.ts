@@ -21,7 +21,12 @@ export class DevoirsService {
     let anneeScolaireUrl = this.apiUrl + "create";
     return this.http.post<any>(anneeScolaireUrl, devoir, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
-  uploadFile(){
-    
+
+  getAllByClasseID(classe_id) {
+    let anneeScolaireUrl = this.apiUrl + "getAllByClasseID/" + classe_id;
+    return this.http.get<any>(anneeScolaireUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+  uploadFile() {
+
   }
 }

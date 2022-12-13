@@ -49,7 +49,6 @@ export class DevoirsComponent implements OnInit {
       this.token = null
     }
     this.formateurService.getByUserId(this.token.id).subscribe(f => {
-
       if (this.token.role == 'user')
         this.isFormateur = f
       if (this.isFormateur) {

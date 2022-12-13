@@ -8,7 +8,6 @@ const schema = new mongoose.Schema({
     date_rendu: { type: Date },
     haveFiles: { type: Number, default: 0 },
     verified: { type: Boolean, default: false }
-
 });
 
 //Creation de la table ecole et export du model Ecole
