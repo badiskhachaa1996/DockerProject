@@ -250,7 +250,8 @@ const routes: Routes = [
     { path: 'validation-email', component: ValidationEmailComponent }, // platforme activer mon compte en validant mon email
     { path: 'mentions-legales', component: MentionsLegalesComponent },
     { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
-    { path: 'auth', component: MsalRedirectComponent }
+    { path: 'auth', component: MsalRedirectComponent },
+    { path: 'code', redirectTo: '' }
 ]
 
 

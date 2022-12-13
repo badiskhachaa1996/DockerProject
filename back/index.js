@@ -111,6 +111,7 @@ const congeController = require('./controllers/congeController');
 const devoirController = require('./controllers/devoirController')
 const renduDevoirController = require('./controllers/renduDevoirController')
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
+const factureFormateurController = require('./controllers/factureFormateurController');
 const { User } = require("./models/user");
 
 
@@ -247,8 +248,7 @@ app.use('/soc/demandeConseiller', DemandeConseillerController)
 
 app.use('/soc/conge', congeController);
 
-app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
-
+app.use('/soc/factureFormateur',factureFormateurController)
 app.use('/soc/devoir', devoirController);
 app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);

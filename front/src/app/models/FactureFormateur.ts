@@ -5,9 +5,9 @@ export class FactureFormateur {
 
     constructor(
         public _id?: string,
-        public formateur_id?: string | Formateur,
-        public seance_id?: string | Seance,
-        public date_creation? : Date
+        public formateur_id?: any,
+        public seance_id?: any,
+        public date_creation?: Date
     ) { };
 
 }

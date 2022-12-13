@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const sch = mongoose.Schema({
     date_creation: { type: Date },
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
-    seance_id: { type: mongoose.Schema.Types.ObjectId, ref: "seance", required: true }
+    mois: { type: String, required: true }
 });
 
 //creation de la table matiere
-const FactureFormateur = mongoose.model('factureFormateur', sch);
+const FactureFormateurMensuel = mongoose.model('factureFormateurMensuel', sch);
 //export du model matiere
-module.exports = { FactureFormateur };
+module.exports = { FactureFormateurMensuel };

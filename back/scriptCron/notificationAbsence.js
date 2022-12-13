@@ -57,6 +57,8 @@ mongoose
                     <p style="font-size:20px; color:black">Il vous reste 10 minutes pour aller signer votre présence, au delà vous serez noté Absent.</p>
                     <p style="font-size:20px; color:black">Si vous arrivez en retard, vous pouvez demandé au formateur en justifiant la raison de votre retard,</p>
                     <p>   </p>
+                    <p style="font-size:20px; color:red">Ce mail étant envoyé par un robot, merci d'adressé vos demandes à <a href='mailto:m.hue@intedgroup.com'>m.hue@intedgroup.com</a></p>
+                    <p>   </p>
                     <p style="font-size:20px;">Cordialement,</p>
                     
                     <footer> <img src="cid:red"/></footer>
