@@ -15,7 +15,7 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="lastname">Nom <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="lastname" placeholder="Nom" pInputText>
+                    <input type="text" formControlName="lastname" placeholder="Ex: Smith" pInputText>
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                         <span class="error" *ngIf="lastname.errors?.required" style="color: red;">* Le nom est
                             obligatoire</span>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="firstname">Prénom <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="firstname" placeholder="Prénom" pInputText>
+                    <input type="text" formControlName="firstname" placeholder="Ex: John" pInputText>
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
                         <span class="error" *ngIf="firstname.errors?.required" style="color: red;">* Le prénom est
                             obligatoire.</span>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="field col-12 md:col-4">
                     <label for="Indicatif">Indicatif <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="indicatif" placeholder="Indicatif" pInputText>
+                    <input type="text" formControlName="indicatif" placeholder="Ex: +33" pInputText>
                     <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
                         <span style="color: red;" class="error" *ngIf="indicatif.errors?.required" style="color: red;">*
                             L'indicatif est obligatoire</span>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="field col-12 md:col-8">
                     <label for="phone">Téléphone <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="phone" placeholder="Téléphone" pInputText>
+                    <input type="text" formControlName="phone" placeholder="Ex: 0666420619" pInputText>
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
                         <span class="error" *ngIf="phone.errors?.required" style="color: red;">* Le téléphone est
                             obligatoire.</span>
@@ -57,7 +57,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Statut </label>
                     <p-dropdown formControlName="type" [options]="statutList" optionLabel="value"
-                        placeholder="Choissiez un statut"></p-dropdown>
+                        placeholder="Choisissez un statut"></p-dropdown>
                     <div *ngIf="type.invalid && (type.touched || type.dirty)">
                     </div>
                 </div>
@@ -78,13 +78,14 @@
                         formControlName="entreprise" [options]="dropdownEntreprise" optionLabel="libelle"
                         emptyFilterMessage="Pas d'entreprise trouvé" filterPlaceholder="Entreprise"
                         filter="true"> -->
-                    <input type="text" formControlName="entreprise" placeholder="Entreprise" pInputText>
+                    <input type="text" placeholder="Ex: Microsoft" formControlName="entreprise"
+                        pInputText>
                     <!-- </p-dropdown> -->
                 </div>
 
                 <div class="field col-12 md:col-2">
                     <label for="numero_adresse">Numéro de la rue <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="numero_adresse" placeholder="20" pInputText>
+                    <input type="text" formControlName="numero_adresse" placeholder="Ex: 15" pInputText>
                     <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
                         <span class="error" *ngIf="numero_adresse.errors?.required" style="color: red;">* Le numéro de
                             l'adresse est obligatoire.</span>
@@ -95,7 +96,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label for="rue_adresse">Nom de la rue <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="rue_adresse" placeholder="Rue du Louvre" pInputText>
+                    <input type="text" formControlName="rue_adresse" placeholder="Ex: Avenue Montaigne" pInputText>
                     <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
                         <span class="error" *ngIf="rue_adresse.errors?.required" style="color: red;">* Le nom de la rue
                             est obligatoire.</span>
@@ -106,7 +107,7 @@
 
                 <div class="field col-12 md:col-4">
                     <label for="postal_adresse">Code postal <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="postal_adresse" placeholder="75001" pInputText>
+                    <input type="text" formControlName="postal_adresse" placeholder="Ex: 75008" pInputText>
                     <div *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">
                         <span class="error" *ngIf="postal_adresse.errors?.required" style="color: red;">* Le code postal
                             est obligatoire.</span>
@@ -116,7 +117,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label for="ville_adresse">Ville <span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="ville_adresse" placeholder="Paris" pInputText>
+                    <input type="text" formControlName="ville_adresse" placeholder="Ex: Paris" pInputText>
                     <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
                         <span class="error" *ngIf="ville_adresse.errors?.required" style="color: red;">* La ville est
                             obligatoire.</span>
@@ -140,8 +141,9 @@
 
                 <div class="field col-12 md:col-6">
                     <label for="date_naissance">Date de naissance <span style="color: red;"> * </span></label>
-                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [readonlyInput]="true" [maxDate]="maxDateCalendar"
-                        [locale]="fr" [monthNavigator]="true" [yearNavigator]="true"></p-calendar>
+                    <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [readonlyInput]="true"
+                        [maxDate]="maxDateCalendar" [locale]="fr" [monthNavigator]="true"
+                        [yearNavigator]="true"></p-calendar>
                     <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
                         <span class="error" *ngIf="date_naissance.errors?.required" style="color: red;">* La date de
                             naissance est obligatoire.</span>
@@ -152,7 +154,7 @@
 
                 <div class="field col-12 md:col-6">
                     <label for="nationalite">Nationalité <span style="color: red;"> * </span></label>
-                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue" 
+                    <p-dropdown formControlName="nationalite" [options]="nationList" optionLabel="viewValue"
                         emptyFilterMessage="Pas de nationalité trouvé" filterPlaceholder="Nationalité" filter="true">
                     </p-dropdown>
                     <div *ngIf="nationalite.invalid && (nationalite.touched || nationalite.dirty)">
@@ -163,7 +165,8 @@
                     </div>
                 </div>
                 <div class="field col-12 md:col-4">
-                    <button pButton type="submit" [disabled]="RegisterForm.invalid || nationalite.value==null" label="Enregistrer"></button>
+                    <button pButton type="submit" [disabled]="RegisterForm.invalid || nationalite.value==null"
+                        label="Enregistrer"></button>
                 </div>
             </form>
 

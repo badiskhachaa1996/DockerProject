@@ -293,6 +293,19 @@ export class InfoImsComponent implements OnInit {
         },
       ]
     },
+    {
+      module: 'Finance',
+      global: 80,
+      todo: "En attente de test",
+      details: [
+        {
+          tache: 'Module de création des factures des formateurs',
+          detail: "Ajouter, voir les factures des formateurs par séance et par mois",
+          date_liv: '13/12/2022',
+          percent: 80
+        }
+      ]
+    },
 
   ];
 

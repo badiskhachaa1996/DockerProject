@@ -6,7 +6,7 @@ const noteSchema = mongoose.Schema({
     semestre: { type: String, required: true },
     etudiant_id: { type: mongoose.Schema.Types.ObjectId, ref: 'etudiant', required: true },
     examen_id: { type: mongoose.Schema.Types.ObjectId, ref: 'examen', required: true },
-    appreciation: { type: String, required: true },
+    appreciation: { type: String,default:"" },
     classe_id: { type: mongoose.Schema.Types.ObjectId, ref: 'classe', required: true },
     matiere_id: { type: mongoose.Schema.Types.ObjectId, ref: 'matiere', required: true },
     isAbsent: { type: Boolean, default: false },

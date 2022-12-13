@@ -173,8 +173,7 @@
 					</p-tabView>
 				</div>
 
-				<div class="field col-12 md:col-4"
-					*ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' ">
+				<div class="field col-12 md:col-4"					> <!-- *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' " -->
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
 						formControlName="taux_h" />

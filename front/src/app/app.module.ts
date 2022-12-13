@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -178,9 +178,6 @@ import { EmergementComponent } from './pedagogie/seances/emergement/emergement.c
 import { ValidationEmailComponent } from './authentification/validation-email/validation-email.component';
 import { ExamenComponent } from './pedagogie/examen/list-examen/examen.component';
 
-import { IPublicClientApplication, PublicClientApplication, InteractionType, BrowserCacheLocation, LogLevel } from '@azure/msal-browser';
-import { MsalGuard, MsalBroadcastService, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE, MsalGuardConfiguration } from '@azure/msal-angular';
-
 import { environment } from 'src/environments/environment';
 import { UserProfilComponent } from './profil/user-profil/user-profil.component';
 import { AjoutExamenComponent } from './pedagogie/examen/ajout-examen/ajout-examen.component';
@@ -227,6 +224,16 @@ import { SignaturePadModule } from 'angular2-signaturepad';
 import { DevoirsComponent } from './pedagogie/devoirs/devoirs.component';
 import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs-etudiants.component';
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
+
+import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
+import {
+  MsalInterceptor,
+  MsalModule,
+  MsalRedirectComponent,
+} from "@azure/msal-angular";
+import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
+
+
 @NgModule({
   imports: [
     SignaturePadModule,
@@ -319,7 +326,33 @@ import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
     AppCodeModule,
     StyleClassModule,
     FullCalendarModule,
-    NgxIntlTelInputModule
+    NgxIntlTelInputModule,
+    MsalModule.forRoot(
+      new PublicClientApplication({
+        auth: {
+          clientId: environment.clientId,
+          authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
+          redirectUri: '/',
+          postLogoutRedirectUri: '/login'
+        },
+        cache: {
+          cacheLocation: "localStorage",
+          storeAuthStateInCookie: window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1, // set to true for IE 11
+        },
+      }),
+      {
+        interactionType: InteractionType.Redirect, // Msal Guard Configuration
+        authRequest: {
+          scopes: ["user.read"],
+        },
+      },
+      {
+        interactionType: InteractionType.Redirect,
+        protectedResourceMap: new Map([
+          ["https://graph.microsoft.com/v1.0/me", ["user.read"]],
+        ]),
+      }
+    ),
   ],
   declarations: [
     AppComponent,
@@ -440,57 +473,17 @@ import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
     DevoirsComponent,
     DevoirsEtudiantsComponent,
     InfoImsComponent,
+    FactureFormateurComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
-    CountryService, CustomerService, EventService, IconService, NodeService,
-    PhotoService, ProductService, MenuService, ConfigService, {
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
-    },
+    MenuService, ConfigService,
     {
-      provide: MSAL_GUARD_CONFIG,
-      useFactory: MSALGuardConfigFactory
+      provide: HTTP_INTERCEPTORS,
+      useClass: MsalInterceptor,
+      multi: true,
     },
-    MsalService,
-    MsalGuard,
-    MsalBroadcastService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent]
 })
 export class AppModule { }
-
-export function MSALInstanceFactory(): IPublicClientApplication {
-  return new PublicClientApplication({
-    auth: {
-      // clientId: 'c2fdb74f-1c56-4ebb-872b-0e0279e91612', // Prod enviroment. Uncomment to use.
-      clientId: environment.clientId, // DEV
-      // authority: 'https://login.microsoftonline.com/common', // Prod environment. Uncomment to use.
-      authority: 'https://login.microsoftonline.com/680e0b0b-c23d-4c18-87b7-b9be3abc45c6', // PPE testing environment.
-      redirectUri: '/',
-      postLogoutRedirectUri: '/login'
-    },
-    cache: {
-      cacheLocation: BrowserCacheLocation.LocalStorage,
-      storeAuthStateInCookie: window.navigator.userAgent.indexOf("MSIE ") > -1 || window.navigator.userAgent.indexOf("Trident/") > -1, // set to true for IE 11
-    },
-    system: {
-      loggerOptions: {
-        loggerCallback,
-        logLevel: LogLevel.Info,
-        piiLoggingEnabled: false
-      }
-    }
-  });
-}
-export function MSALGuardConfigFactory(): MsalGuardConfiguration {
-  return {
-    interactionType: InteractionType.Popup,
-    authRequest: {
-      scopes: ['user.read']
-    }
-  };
-}
-export function loggerCallback(logLevel: LogLevel, message: string) {
-  console.log("Connexion à Microsoft");
-}

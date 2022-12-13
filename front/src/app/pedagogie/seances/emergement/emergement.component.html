@@ -312,7 +312,7 @@
                     <td>{{ data.date_signature | date:'HH:mm dd/MM/YYYY' }}</td>
                     <td>
                         <i *ngIf="data.justificatif" pTooltip="Télécharger la justification" tooltipPosition="bottom"
-                            class="pi pi-download" (click)="downloadFile(rowData)" aria-hidden="true"></i>
+                            class="pi pi-download" (click)="downloadFile(data)" aria-hidden="true"></i>
                         <!-- Action -->
                     </td>
                 </tr>

@@ -46,6 +46,26 @@ export class ExterneComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: "N'essayer pas d'usurper l'identité de quelqu'un s'il vous plaît", detail: tokenError.message })
       }
     }
+    if (this.msalService.instance.getActiveAccount()) {
+      let response = this.msalService.instance.getActiveAccount()
+      if (response)
+        this.AuthService.AuthMicrosoft(response.username, response.name).subscribe((data) => {
+          localStorage.setItem("token", data.token)
+          //this.socket.isAuth()
+          if (data.message) {
+            localStorage.setItem("modify", "true")
+            this.router.navigate(['completion-profil'])
+          } else {
+            this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
+              this.ss.connected()
+            });
+
+          }
+
+        }, (error) => {
+          console.error(error)
+        })
+    }
   }
 
   Login() {
@@ -84,35 +104,11 @@ export class ExterneComponent implements OnInit {
   }
 
   toLoginMiscroft() {
-
-    if (this.msalGuardConfig.authRequest) {
-      console.log(this.msalGuardConfig.authRequest)
-      this.msalService.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
-        .subscribe((response: AuthenticationResult) => {
-          console.log(response)
-          this.msalService.instance.setActiveAccount(response.account);
-          if (response.account) {
-            this.AuthService.AuthMicrosoft(response.account.username, response.account.name).subscribe((data) => {
-              localStorage.setItem("token", data.token)
-              this.socket.isAuth()
-              if (data.message) {
-                localStorage.setItem("modify", "true")
-                this.router.navigate(['completion-profil'])
-              } else {
-                this.router.navigateByUrl('/#/', { skipLocationChange: true }).then(() => {
-                  this.ss.connected()
-                });
-
-              }
-
-            }, (error) => {
-              console.error(error)
-            })
-          } else {
-            console.error("ERROR MICROSOFT")
-          }
-        });
-    }
+    localStorage.clear()
+    this.msalService.instance.setActiveAccount(null)
+    this.msalService.instance.loginRedirect({
+      scopes: ['user.read'],
+    });
   }
 
 

@@ -28,12 +28,14 @@ mongoose
     .then(() => {
         console.log('Start DB')
         let emailList = []
-        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date } }).then(seances => {
+        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date } }).populate('matiere_id').then(seances => {
             let seanceIds = []
             let listIds = []
             seances.forEach(s => {
-                listIds = s.classe_id.concat(listIds)
-                seanceIds.push(s._id)
+                if(s.matiere_id && !s.matiere_id.hors_bulletin){
+                    listIds = s.classe_id.concat(listIds)
+                    seanceIds.push(s._id)
+                }
             })
             Presence.find({ seance_id: { $in: seanceIds } }).then(presences => {
                 let userIds = []
@@ -55,6 +57,8 @@ mongoose
                     <p style="font-size:20px; color:black">Il vous reste 10 minutes pour aller signer votre présence, au delà vous serez noté Absent.</p>
                     <p style="font-size:20px; color:black">Si vous arrivez en retard, vous pouvez demandé au formateur en justifiant la raison de votre retard,</p>
                     <p>   </p>
+                    <p style="font-size:20px; color:red">Ce mail étant envoyé par un robot, merci d'adressé vos demandes à <a href='mailto:m.hue@intedgroup.com'>m.hue@intedgroup.com</a></p>
+                    <p>   </p>
                     <p style="font-size:20px;">Cordialement,</p>
                     
                     <footer> <img src="cid:red"/></footer>
@@ -75,7 +79,7 @@ mongoose
                         if (error) {
                             console.error(error);
                         }
-                        console.log("SEND TO "+mailOptions.bcc.length.toString()+".", mailOptions.bcc)
+                        console.log("SEND TO " + mailOptions.bcc.length.toString() + ".", mailOptions.bcc)
                         process.exit()
                     });
                     //Envoyer le mail

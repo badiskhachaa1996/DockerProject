@@ -177,7 +177,8 @@
                     <div class="field col-12 md:col-6"
                         *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
                         <label For="isPrestataire">Entreprise</label>
-                        <p-dropdown [options]="prestataireList" optionLabel="label" filter='true' formControlName="prestataire_id">
+                        <p-dropdown [options]="prestataireList" optionLabel="label" filter='true'
+                            formControlName="prestataire_id">
                         </p-dropdown>
                     </div>
 
@@ -324,8 +325,7 @@
                         </p-tabView>
                     </div>
 
-                    <div class="field col-12 md:col-4"
-                        *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' ">
+                    <div class="field col-12 md:col-4"> <!-- *ngIf="onGetStatut()=='Prestation et Vacation' || onGetStatut()=='Sous-traitance' " -->
                         <label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
                         <input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
                             formControlName="taux_h" />

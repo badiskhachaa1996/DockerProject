@@ -346,6 +346,8 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     } else {
         Seance.findById(req.params.id).then(data => {
             let arr = data.fileRight
+            if(!arr)
+                arr= []
             arr.push({ name: file.filename, right: req.body.etat, upload_by: req.body.user })
             Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
                 if (err) {
