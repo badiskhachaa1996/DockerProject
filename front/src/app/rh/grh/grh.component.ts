@@ -53,7 +53,7 @@ export class GrhComponent implements OnInit {
   }
 
 
-  //Methode de recuperation des presence
+  //Methode de recuperation des presences
   onGetPresences()
   {
     const formValue = this.selectDateForm.value;

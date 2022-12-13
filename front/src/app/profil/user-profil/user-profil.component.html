@@ -340,11 +340,12 @@
             <!-- justification d'abscence -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
                 <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
-                <h3>Abscences</h3>
+                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir son CRA" class="p-button-outlined mr-2 mb-2" (click)="showCraDateForm=true"></button>
+                <h3>CRA</h3>
 
-                <i class="pi pi-times-circle" *ngIf="showFormjustification"
+                <i class="pi pi-times-circle" *ngIf="showFormjustification || showCraDateForm"
                     style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showFormjustification = false;" aria-hidden="true">
+                    pTooltip="Fermer" (click)="showFormjustification = false; showCraDateForm = false; showPresenceList = false;" aria-hidden="true">
                 </i>
 
                 <!-- Formulaire de justification d'abscence -->
@@ -371,6 +372,96 @@
                         </div>
                     </div>
                 </form>
+
+                <!-- Pour voir son CRA -->
+                <form class="formgroup-inline" [formGroup]="craDateForm" (ngSubmit)="onGetPresences()" *ngIf="showCraDateForm">
+                    <div class="field">
+                        <label class="p-sr-only">Début</label>
+                        <p-calendar formControlName="beginDate" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
+                    </div>
+                    <div class="field">
+                        <label class="p-sr-only">Fin</label>
+                        <p-calendar formControlName="endDate" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
+                    </div>
+                    <button pButton type="submit" [disabled]="craDateForm.invalid" label="Valider"></button>
+                </form>
+
+                <!-- Table d'affichage du compte rendu d'activité -->
+                <div *ngIf="showPresenceList">
+                    
+                    <h5>Liste des présence de {{ from }} à {{ to }}</h5>
+                    
+                    <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll"
+                             rowExpandMode="single" [rows]="10" [rowHover]="true" [totalRecords]="presences.length"
+                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'user_id.firstname', 'user_id.lastname', 'user_id.email', 'user_id.type', 'user_id.email_perso']">
+                    
+                            <ng-template pTemplate="caption">
+                                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Recherche" />
+                            </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width: 3rem"></th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Type</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-presence let-expanded="expanded">
+                            <tr>
+                                <td>
+                                    <button type="button" pButton pRipple [pRowToggler]="presence" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                </td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.lastname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.firstname | titlecase }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.email }}</td>
+                                <td style="min-width: 8rem;">{{ presence.user_id?.type }}</td>
+                                <td style="min-width: 8rem;">{{ presence.date_of_the_day }}</td>
+                                <td style="min-width: 8rem; color: red; font-weight: bold;">{{ presence.statut }}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="rowexpansion" let-presence>
+                            <tr>
+                                <td colspan="7">
+                                    <div class="p-3">
+                                        <p-table responsiveLayout="scroll">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <th>Téléphone</th>
+                                                    <th>Heure d'arrivé</th>
+                                                    <th>heure de depart</th>
+                                                    <th>Tâche principale</th>
+                                                    <th>Tâches sécondaire</th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-presence>
+                                                <tr>
+                                                    <td colspan="8">Aucune données supplémentaires.</td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage">
+                                                <tr>
+                                                    <td>{{ presence.user_id?.indicatif }}{{ presence.user_id?.phone }}</td>
+                                                    <td>{{ presence.in_date | date: 'H:mm' }}</td>
+                                                    <td>{{ presence.out_date | date: 'H:mm' }}</td>
+                                                    <td>{{ presence.principale_activity_details }}</td>
+                                                    <td>
+                                                        <ol>
+                                                            <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}</li>
+                                                        </ol>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
 
             </div>
 
