@@ -32,6 +32,11 @@ export class FormateurFactureService {
     return this.http.get<{ file, documentType, fileName }>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
   }
 
+  downloadMensuel(formateur_id, mois) {
+    let registerUrl = this.apiUrl + "downloadMensuel/" + formateur_id + "/" + mois.toString()
+    return this.http.get<{ file, documentType, fileName }>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+
   getAll() {
     let registerUrl = this.apiUrl + 'getAll';
     return this.http.get<FactureFormateur[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })

@@ -95,8 +95,25 @@ app.get("/download/:formateur_id/:_id", (req, res) => {
             }
         });
     });
-
-
+});
+app.get("/downloadMensuel/:formateur_id/:mois", (req, res) => {
+    let pathFile = "storage/facture/formateur/" + req.params.formateur_id + "/mensuel/"
+    fs.readdir(pathFile, (err, files) => {
+        if (err) {
+            return console.error(err);
+        }
+        files.forEach(function (file) {
+            if (file.startsWith(req.params.mois)) {
+                const pathFileFinal = `${pathFile}/${file}`
+                let fileFinal = fs.readFileSync(pathFileFinal, { encoding: 'base64' }, (err) => {
+                    if (err) {
+                        return console.error(err);
+                    }
+                });
+                res.status(201).send({ file: fileFinal, documentType: mime.contentType(path.extname(pathFileFinal)), fileName: file })
+            }
+        });
+    });
 });
 
 module.exports = app;

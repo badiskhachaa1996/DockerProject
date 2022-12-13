@@ -98,6 +98,13 @@ export class FactureFormateurComponent implements OnInit {
     })
   }
 
+  downloadFactureMensuel(facture: FactureFormateurMensuel) {
+    this.FactureFormateurService.downloadMensuel(facture.formateur_id._id, facture.mois).subscribe(data => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
+    })
+  }
+
   onAddFacture() {
     this.FactureFormateurService.create(new FactureFormateur(null,
       this.formAddFacture.value.formateur_id,
