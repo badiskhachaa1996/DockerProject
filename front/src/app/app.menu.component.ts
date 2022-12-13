@@ -34,6 +34,7 @@ export class AppMenuComponent implements OnInit {
     isAdmin: Boolean = false
     isAdmission: Boolean = false
     isPedagogie: Boolean = false
+    isFinance: Boolean = false
     isEtudiant: Boolean = false
     isFormateur: Boolean = false
     isCommercial: Boolean = false
@@ -250,6 +251,7 @@ export class AppMenuComponent implements OnInit {
                     this.isPedagogie = service.label.includes('dagogie')
                     this.isEvent = service.label.includes('Event')
                     this.isAdministration = service.label.includes('dministration')
+                    this.isFinance = service.label.includes('inanc')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -676,7 +678,30 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                } else if (this.isAdministration) {
+                }else if (this.isEvent) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Finance",
+                            items: [
+                                { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                            ]
+                        },
+                    ]
+                }  else if (this.isAdministration) {
                     this.model = [
                         {
                             label: 'Accueil',

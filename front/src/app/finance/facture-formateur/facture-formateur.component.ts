@@ -67,7 +67,6 @@ export class FactureFormateurComponent implements OnInit {
     })
     this.FactureFormateurService.getAll().subscribe(data => {
       this.factures = data
-      console.log(data)
     })
     this.FactureFormateurService.getAllMensuel().subscribe(data => {
       this.facturesMensuel = data
@@ -112,6 +111,10 @@ export class FactureFormateurComponent implements OnInit {
           this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
           this.showAddFacture = false
           this.formAddFacture.reset()
+          //WIP Faire un getBYID populate puis le push dans la liste
+          this.FactureFormateurService.getAll().subscribe(data => {
+            this.factures = data
+          })
         }, err => {
           this.MessageService.add({ severity: "error", summary: "Erreur lors de la création de la facture", detail: err.error })
           console.error(err)
@@ -133,6 +136,10 @@ export class FactureFormateurComponent implements OnInit {
           this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
           this.showAddFactureMensuel = false
           this.formAddFactureMensuel.reset()
+          //WIP Faire un getBYID populate puis le push dans la liste
+          this.FactureFormateurService.getAllMensuel().subscribe(data => {
+            this.facturesMensuel = data
+          })
         }, err => {
           this.MessageService.add({ severity: "error", summary: "Erreur lors de la création de la facture", detail: err.error })
           console.error(err)
