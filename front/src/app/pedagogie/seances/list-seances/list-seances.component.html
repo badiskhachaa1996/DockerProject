@@ -137,11 +137,7 @@
                         </th>
 
                         <th pSortableColumn="date_debut" scope="col" style="text-align:center">
-                            Début <p-sortIcon field="date_debut"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="date_fin" scope="col" style="text-align:center">
-                            Fin
-                            <p-sortIcon field="date_fin"></p-sortIcon>
+                            Date <p-sortIcon field="date_debut"></p-sortIcon>
                         </th>
 
                         <th scope="col" style="text-align:center">
@@ -172,12 +168,8 @@
                         </td>
 
                         <td style="min-width: 12rem;">
-                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
+                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}} - {{rowData.date_fin | date:'HH:mm'}}
                         </td>
-                        <td style="min-width: 12rem;">
-                            {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
-                        </td>
-
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData);" aria-hidden="true"></i>

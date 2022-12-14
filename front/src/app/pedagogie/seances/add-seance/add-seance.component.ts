@@ -29,9 +29,12 @@ export class AddSeanceComponent implements OnInit {
   matieres: Matiere[] = [];
   campus = {}
   dicClasse = {}
-
-  salleNames = [
+  typeSeance = [
+    { label: 'Matin', value: 'Matin' },
+    { label: 'Après-Midi', value: 'Après-Midi' },
+    { label: 'Autre', value: 'Autre' }
   ]
+  salleNames = []
   dropdownSeanceType: any[] = [
     { label: "Séance", value: "Séance" },
     { label: "Séance sans Formateur", value: "Séance sans Formateur" }
@@ -55,7 +58,8 @@ export class AddSeanceComponent implements OnInit {
     nbseance: new FormControl(""),
     isUnique: new FormControl(true, Validators.required),
     date_fin_plannification: new FormControl(''),
-    seance_type: new FormControl('Séance')
+    seance_type: new FormControl('Séance'),
+    periode_seance: new FormControl('', Validators.required)
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
@@ -535,6 +539,19 @@ export class AddSeanceComponent implements OnInit {
       this.seanceForm.controls.formateur.setValidators([Validators.required])
       this.seanceForm.patchValue({ formateur: '' })
     }
+  }
+
+  changeDate(value) {
+    let date_debut = new Date(value)
+    let date_fin = new Date(value)
+    if (this.seanceForm.value.periode_seance == 'Matin') {
+      date_debut.setHours(9)
+      date_fin.setHours(12, 30)
+    } else {
+      date_debut.setHours(13, 30)
+      date_fin.setHours(17)
+    }
+    this.seanceForm.patchValue({ date_debut, date_fin })
   }
 
 
