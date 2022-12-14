@@ -82,6 +82,11 @@ export class PresenceService {
     return this.http.post<any>(registreUrl, id, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getAllByUserIDMois(user_id:string,mois:number){
+    let registreUrl = this.apiUrl + "getAllByUserIDMois/" + user_id + "/" + mois;
+    return this.http.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 
 
   getAllAbsences(id: string) {

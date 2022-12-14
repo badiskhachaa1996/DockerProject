@@ -350,6 +350,7 @@ export class ExamenComponent implements OnInit {
           if (bypass) {
             oldNote.push(bypass._id)
             this.tableauNotes.push({
+              id: bypass.custom_id,
               etudiant: bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname,
               note: parseFloat(n.note_val),
               appreciation: n.appreciation,
@@ -365,6 +366,7 @@ export class ExamenComponent implements OnInit {
           let bypass: any = this.examSelected.matiere_id
           if (oldNote.indexOf(etu._id) == -1)
             this.tableauNotes.push({
+              id: etu.custom_id,
               etudiant: etu.user_id.firstname + ' ' + etu.user_id.lastname,
               note: NaN,
               appreciation: '',
