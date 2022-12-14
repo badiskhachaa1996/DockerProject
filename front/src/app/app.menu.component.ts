@@ -506,7 +506,6 @@ export class AppMenuComponent implements OnInit {
 
 
                 }
-
                 else if (this.isCeoEntreprise) {
 
                     this.model = [
@@ -653,6 +652,17 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
+                    if (this.isEtudiant) {
+                        this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
+                            this.model.push({
+                                label: 'Coté Etudiant',
+                                items: [
+                                    { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
+                                    { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
+                                ]
+                            })
+                        })
+                    }
                 }
                 else if (this.isEvent) {
                     this.model = [
@@ -678,7 +688,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                }else if (this.isEvent) {
+                } else if (this.isEvent) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -701,7 +711,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                }  else if (this.isAdministration) {
+                } else if (this.isAdministration) {
                     this.model = [
                         {
                             label: 'Accueil',

@@ -101,6 +101,10 @@ export class FactureFormateurComponent implements OnInit {
   }
 
   calculMensuel() {
+    let c_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
+    if (!c_h || c_h == "" || c_h == " ") {
+      this.MessageService.add({ severity: 'error', summary: "Le formateur n'a pas de taux horaire", detail: "Le cout ne pourra pas être calculé car le taux horaire du formateur n'a pas été renseigné" })
+    }
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois).subscribe(r => {
       this.seances = r
     })
