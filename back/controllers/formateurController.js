@@ -54,7 +54,7 @@ app.get("/getByUserId/:id", (req, res, next) => {
         Formateur.findOne({ user_id: req.params.id })
             .then((formateurFromDb) => { res.status(200).send(formateurFromDb) })
             .catch((error) => { res.status(400).json({ error: "Impossible de recuperer cet formateur via son userId " + error.message }) });
-    else{
+    else {
         res.status(200).send(null)
     }
 })
@@ -252,6 +252,7 @@ app.post('/sendEDT/:id/:update', (req, res, next) => {
 });
 
 const multer = require('multer');
+const { Seance } = require('../models/seance');
 
 
 app.get("/getFiles/:id", (req, res) => {

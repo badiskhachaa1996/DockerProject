@@ -3,6 +3,7 @@ const app = express(); //à travers ça je peux faire la creation des services
 app.disable("x-powered-by");
 const { Classe } = require("./../models/classe");
 const { Diplome } = require("./../models/diplome");
+const { Seance } = require('./../models/seance')
 //Création d'une nouveau classe 
 app.post("/create", (req, res) => {
     //Sauvegarde d'une classe

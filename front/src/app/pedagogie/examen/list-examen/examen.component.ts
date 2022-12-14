@@ -17,6 +17,7 @@ import { NoteService } from 'src/app/services/note.service';
 import { Note } from 'src/app/models/Note';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { SeanceService } from 'src/app/services/seance.service';
 
 @Component({
   selector: 'app-examen',
@@ -43,10 +44,12 @@ export class ExamenComponent implements OnInit {
   classes = {};
   dropdownGroupe: any[] = [{ label: 'Tous les groupes', value: null }];//Filtre
   dropdownModule: any[] = [{ label: 'Tous les modules', value: null }];//Filtre
+  defaultdropdownModule = this.dropdownModule
   idClasseToUpdate: Classe[];
 
   dropdownFormateur: any[] = [];
   filterFormateur: any[] = [{ label: 'Tous les formateurs', value: null }];
+  defaultFilterFormateur = this.filterFormateur
   formateurToUpdate: Formateur;
 
 
@@ -76,7 +79,8 @@ export class ExamenComponent implements OnInit {
     private classeService: ClasseService,
     private NotesService: NoteService,
     private router: Router,
-    private EtudiantService: EtudiantService
+    private EtudiantService: EtudiantService,
+    private SeanceService: SeanceService
   ) { }
 
   ngOnInit(): void {
@@ -114,6 +118,7 @@ export class ExamenComponent implements OnInit {
                 }
               });
             });
+            this.defaultFilterFormateur = this.filterFormateur
           }),
           (error) => {
             console.error(error);
@@ -153,13 +158,20 @@ export class ExamenComponent implements OnInit {
           }
         );
         //Recuperation de la liste des matières
-        this.matiereService.getAll().subscribe(
+        this.matiereService.getAllPopulate().subscribe(
           ((response) => {
             response.forEach((matiere) => {
-              this.dropdownMatiere.push({ label: matiere.nom, value: matiere._id });
-              this.dropdownModule.push({ label: matiere.nom, value: matiere._id });
+              let bypa: any = matiere.formation_id
+              if (Array.isArray(matiere.formation_id)) {
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+                this.dropdownModule.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+              } else {
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+                this.dropdownModule.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+              }
               this.matieres[matiere._id] = matiere;
             });
+            this.defaultdropdownModule = this.dropdownModule
           }),
           ((error) => { console.error(error); })
         );
@@ -169,8 +181,9 @@ export class ExamenComponent implements OnInit {
         this.classeService.getAll().subscribe(
           ((response) => {
             response.forEach((classe) => {
+
               this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
-              this.dropdownGroupe.push({ label: classe.abbrv, value: classe._id });
+              this.dropdownGroupe.push({ label: classe.abbrv, value: classe });
               this.classes[classe._id] = classe;
             });
           }),
@@ -186,9 +199,10 @@ export class ExamenComponent implements OnInit {
               this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id.titre + " - " + matiere.niveau, value: matiere._id });
             this.dropdownModule.push({ label: matiere.nom, value: matiere._id });
           });
+          this.defaultdropdownModule = this.dropdownModule
           r.groupes.forEach((g) => {
             this.dropdownClasse.push({ label: g.abbrv, value: g._id });
-            this.dropdownGroupe.push({ label: g.abbrv, value: g._id });
+            this.dropdownGroupe.push({ label: g.abbrv, value: g });
           })
         })
         this.examenService.getAllByFormateurID(this.isFormateur._id).subscribe(
@@ -342,8 +356,8 @@ export class ExamenComponent implements OnInit {
               date_note: n.date_creation,
               _id: n._id,
               isAbsent: n.isAbsent,
-              date_IMS:this.formatDate(bypass.user_id?.date_creation),
-              date_TEAMS:this.formatDate(bypass.date_valided_by_support)
+              date_IMS: this.formatDate(bypass.user_id?.date_creation),
+              date_TEAMS: this.formatDate(bypass.date_valided_by_support)
             })
           }
         })
@@ -362,12 +376,11 @@ export class ExamenComponent implements OnInit {
               matiere_id: bypass._id,
               isAbsent: false,
               semestre: this.examSelected.semestre,
-              date_IMS:this.formatDate(etu.user_id?.date_creation),
-              date_TEAMS:this.formatDate(etu.date_valided_by_support)
+              date_IMS: this.formatDate(etu.user_id?.date_creation),
+              date_TEAMS: this.formatDate(etu.date_valided_by_support)
             })
         })
       })
-      console.log(notes)
     })
   }
 
@@ -476,5 +489,40 @@ export class ExamenComponent implements OnInit {
 
   formatClasse(classe_id) {
     return classe_id.map(function (item) { return item.abbrv; })
+  }
+
+  filterModuleByGroupe(classe_id, test) {
+    if (!classe_id)
+      this.dropdownModule = this.defaultdropdownModule
+    else
+      this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
+        this.dropdownModule = [{ label: 'Tous les modules', value: null }]
+        modules.forEach(matiere => {
+          let bypa: any = matiere.formation_id
+          if (Array.isArray(matiere.formation_id))
+            this.dropdownModule.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+          else
+            this.dropdownModule.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+        })
+      })
+  }
+
+  filterFormateurByModule(module_id) {
+    console.log(module_id)
+    if (!module_id)
+      this.filterFormateur = this.defaultFilterFormateur
+    else
+      this.examenService.getFormateurByModuleID(module_id).subscribe(formateurs => {
+        this.filterFormateur = [{ label: 'Tous les formateurs', value: null }]
+        formateurs.forEach(f => {
+          if (f && f.user_id) {
+            let user: any = f.user_id
+            this.filterFormateur.push({
+              label: user.firstname + " " + user.lastname,
+              value: f._id,
+            })
+          }
+        })
+      })
   }
 }

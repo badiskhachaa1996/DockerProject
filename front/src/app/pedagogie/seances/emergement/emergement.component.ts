@@ -113,7 +113,7 @@ export class EmergementComponent implements OnInit {
         })
         etudiants.forEach(etu => {
           if (etu.user_id)
-            if (oldPresence.indexOf(etu.user_id._id) == -1)
+            if (this.customIndexOf(oldPresence, etu.user_id._id) == -1)
               this.tableauPresence.push({
                 etudiant: etu.user_id?.firstname + ' ' + etu.user_id?.lastname,
                 _id: etu._id + "NEW",
@@ -512,6 +512,15 @@ export class EmergementComponent implements OnInit {
   onRowEditCancel(rowData, index: number) {
     this.tableauPresence[index] = this.clonedRowData[rowData._id];
     delete this.clonedRowData[rowData._id];
+  }
+
+  customIndexOf(array: string[], id: string) {
+    let idx = -1
+    array.forEach((ele, index) => {
+      if (ele == id)
+        idx = index
+    })
+    return idx
   }
 
 

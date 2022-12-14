@@ -15,7 +15,7 @@
                 Date d'examen: <strong>{{ examSelected.date | date:'dd/MM' }}</strong> <br />
             </p>
 
-            <p-table #dt1 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
+            <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
                 [globalFilterFields]="['etudiant', 'appreciation']" [rows]="10" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="tableauNotes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -23,7 +23,7 @@
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
                     </div>
@@ -200,12 +200,12 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field" *ngIf="dropdownGroupe.length!=1">
                             <p-dropdown filter="true" [options]="dropdownGroupe" class="mr-2"
-                                (onChange)="dt1.filter($event.value, 'classe_id._id', 'in')"
+                                (onChange)="dt1.filterGlobal($event.value.abbrv,'contains');filterModuleByGroupe($event.value,$event)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du groupe">
                             </p-dropdown>
 
                             <p-dropdown filter="true" [options]="dropdownModule" class="mr-2"
-                                (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals')"
+                                (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals');filterFormateurByModule($event.value)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
                             </p-dropdown>
 
