@@ -107,7 +107,8 @@ export class EmergementComponent implements OnInit {
               Sign: p.signature,
               justificatif: p.justificatif,
               date_signature: p.date_signature,
-              user_id: bypass._id
+              user_id: bypass._id,
+              isFormateur: bypass?.type == "Formateur"
             })
           }
         })
@@ -121,7 +122,8 @@ export class EmergementComponent implements OnInit {
                 Sign: false,
                 justificatif: false,
                 date_signature: null,
-                user_id: etu.user_id?._id
+                user_id: etu.user_id?._id,
+                isFormateur: etu.user_id?.type == "Formateur"
               })
         })
       })

@@ -296,7 +296,8 @@
             </ng-template>
             <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
                 <tr [pEditableRow]="data">
-                    <td>{{ data.etudiant}}</td>
+                    <td *ngIf="!data.isFormateur">{{ data.etudiant}}</td>
+                    <td *ngIf="data.isFormateur"><b>{{ data.etudiant}}</b></td>
                     <td pEditableColumn>
                         <p-cellEditor>
                             <ng-template pTemplate="input">
