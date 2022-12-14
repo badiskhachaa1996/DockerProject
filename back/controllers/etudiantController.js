@@ -5,6 +5,7 @@ const { Etudiant } = require("./../models/etudiant");
 const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
+const { Matiere } = require("./../models/matiere");
 const { User } = require('./../models/user');
 const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
@@ -453,7 +454,6 @@ app.post('/sendEDT/:id', (req, res, next) => {
 */
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
-    //TODO Mettre les moy sur 20 et calculer les coeffs des examens
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
@@ -892,6 +892,14 @@ app.get('/disable/:id', (req, res) => {
     }, err => {
         console.err(err)
         res.send(err)
+    })
+})
+
+app.post('/getMatiereByMatiereListAndEtudiantID/:etudiant_id', (req, res) => {
+    Etudiant.findById(req.params.etudiant_id).populate('classe_id').then(etudiant => {
+        Matiere.findOne({ formation_id: etudiant.classe_id.diplome_id, _id: { $in: req.body.matiere_id } }).then(r => {
+            res.send(r)
+        })
     })
 })
 module.exports = app;

@@ -118,7 +118,12 @@ export class SeanceService {
   getFormateursFromClasseIDs(matieres_ids) {
     let url = this.apiUrl + "getFormateursFromClasseIDs"
     return this.httpClient.post<any>(url, { matieres_ids }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
 
+  getAllByMatiere(module_id){
+    let url = this.apiUrl + "getAllByMatiere/"+module_id
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+ 
   }
 
 

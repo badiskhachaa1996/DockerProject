@@ -143,7 +143,6 @@ export class AddSeanceComponent implements OnInit {
 
   showSalles(value, def = false) {
     this.salleNames = []
-    console.log(value)
     this.campus[value].salles.forEach(s => {
       console.log(s)
       this.salleNames.push({ value: s, label: s })
@@ -156,8 +155,6 @@ export class AddSeanceComponent implements OnInit {
   }
 
   saveSeance() {
-    //TODO get nbSeance
-
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
       if (index != 0)
@@ -313,7 +310,6 @@ export class AddSeanceComponent implements OnInit {
 
         newNumeroSeance += 1;
 
-        //TODO get nbSeance
         let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
         this.seanceForm.value.classe.forEach((c, index) => {
           if (index != 0)
@@ -552,6 +548,12 @@ export class AddSeanceComponent implements OnInit {
       date_fin.setHours(17)
     }
     this.seanceForm.patchValue({ date_debut, date_fin })
+  }
+
+  loadNBSeance() {
+    this.seanceService.getAllByMatiere(this.seanceForm.value.matiere.value).subscribe(matieres => {
+      this.seanceForm.patchValue({ nbseance: matieres.length+1 })
+    })
   }
 
 

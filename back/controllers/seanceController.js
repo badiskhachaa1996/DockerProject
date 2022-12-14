@@ -78,6 +78,13 @@ app.post('/create', (req, res, next) => {
         })
 });
 
+app.get('/getAllByMatiere/:module_id', (req, res) => {
+    Seance.find({ matiere_id: req.params.module_id }).then(r => {
+        //CAN BE POPULATE
+        res.send(r)
+    })
+})
+
 
 //Modification d'une  via son id
 app.post('/edit/:id', (req, res, next) => {

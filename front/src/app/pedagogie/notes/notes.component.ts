@@ -308,16 +308,13 @@ export class NotesComponent implements OnInit {
           (responseE) => {
             console.log(responseE);
             responseE.forEach((examen) => {
-
               responseM.forEach((matiere) => {
                 this.matieres[matiere._id] = matiere;
-                //TODO Should not be [0]
-                if (matiere._id == examen.matiere_id[0]) {
+                if (examen.matiere_id.includes(matiere._id)) {
                   this.dropdownExamen.push({
                     libelle: matiere.nom,
                     value: examen._id,
                   });
-
                   this.examens[examen._id] = examen;
                 }
 
@@ -450,8 +447,7 @@ export class NotesComponent implements OnInit {
 
         response.forEach((examen) => {
           for (let matiere in this.matieres) {
-            //TODO
-            if (examen.matiere_id[0] == this.matieres[matiere]._id) {
+            if (examen.matiere_id.includes(this.matieres[matiere]._id)) {
               this.dropdownExamByClasse.push({
                 libelle: examen.libelle,
                 value: examen._id,
@@ -534,39 +530,43 @@ export class NotesComponent implements OnInit {
 
               }
               else if (response.success) {
-                //Création de la nouvelle note à créer dans la BD //TODO matiere_id
-                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id[0], isAbsent);
+                //Création de la nouvelle note à créer dans la BD 
+                //TODO matiere_id Should not be [0] Récupérer la formation de l'étudiant puis voir quel est la matière de l'examen correspondant
+                this.etudiantService.getMatiereByMatiereListAndEtudiantID(etudiant_id, matiere_id).subscribe(module_id => {
+                  let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, module_id._id, isAbsent);
 
-                this.noteService.create(note).subscribe(
-                  ((response) => {
-                    this.messageService.add({
-                      severity: "success",
-                      summary: "Nouvelle note attribuée",
-                    });
+                  this.noteService.create(note).subscribe(
+                    ((response) => {
+                      this.messageService.add({
+                        severity: "success",
+                        summary: "Nouvelle note attribuée",
+                      });
+  
+                      //Recuperation de la liste des notes
+                      this.noteService.getAllPopulate().subscribe(
+                        ((response) => {
+                          this.notes = response;
+                        }),
+                        ((error) => { console.error(error); })
+                      );
+                      //Requete de recuperation des notes par classe et par semestre
+                      this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
+                        ((response) => {
+                          this.notesByClasseBySemestre = response;
+                        }),
+                        ((error) => { console.error(error); })
+                      );
+  
+                    }),
+                    ((error) => {
+                      this.messageService.add({
+                        severity: "error",
+                        summary: "Impossible d'attribuer une note, veuillez contacter un administrateur.",
+                      });
+                    })
+                  );
+                })
 
-                    //Recuperation de la liste des notes
-                    this.noteService.getAllPopulate().subscribe(
-                      ((response) => {
-                        this.notes = response;
-                      }),
-                      ((error) => { console.error(error); })
-                    );
-                    //Requete de recuperation des notes par classe et par semestre
-                    this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
-                      ((response) => {
-                        this.notesByClasseBySemestre = response;
-                      }),
-                      ((error) => { console.error(error); })
-                    );
-
-                  }),
-                  ((error) => {
-                    this.messageService.add({
-                      severity: "error",
-                      summary: "Impossible d'attribuer une note, veuillez contacter un administrateur.",
-                    });
-                  })
-                );
               }
             }),
             ((error) => { console.error(error); })
@@ -594,7 +594,7 @@ export class NotesComponent implements OnInit {
     for (let exam in this.examens) {
       if (this.examens[exam]._id == examen_id) {
         classe_id = this.examens[exam].classe_id[0]; //TODO
-        matiere_id = this.examens[exam].matiere_id[0];
+        matiere_id = this.examens[exam].matiere_id[0];//TODO Should not be [0]
       }
     }
 
@@ -927,7 +927,7 @@ export class NotesComponent implements OnInit {
         this.showFormUpdateAppreciationGenerale = false;
         this.showGenerateBulletin = true;
         this.showFormAppreciationGenerale = false
-        this.messageService.add({severity:'success',summary:'Mis à jour de l\'appréciation globale avec succès'})
+        this.messageService.add({ severity: 'success', summary: 'Mis à jour de l\'appréciation globale avec succès' })
         if (response.appreciation_matiere)
           this.appreciationModules = response.appreciation_matiere
       }),

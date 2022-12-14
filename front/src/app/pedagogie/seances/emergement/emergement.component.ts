@@ -452,7 +452,7 @@ export class EmergementComponent implements OnInit {
       allowedByFormateur: true
     }).subscribe(data => {
       this.showAddEtudiant = false
-      //TODO
+      //TODO Changer le reload en push (avec Populate)
       this.reloadPresence()
       this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
     }, error => {
