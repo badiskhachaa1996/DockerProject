@@ -105,7 +105,7 @@ app.post('/edit/:id', (req, res, next) => {
 
 //Recuperation de toutes les s
 app.get("/getAll", (req, res, next) => {
-    Seance.find()
+    Seance.find().sort({ date_debut: asc })
         .then((SeanceFromdb) => { res.status(200).send(SeanceFromdb); })
         .catch((error) => { req.status(500).send('Impossible de recupérer la liste des séances ' + error.message); });
 });
@@ -120,7 +120,7 @@ app.get('/getById/:id', (req, res, next) => {
 
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByClasseId/:id', (req, res, next) => {
-    Seance.find({ classe_id: { $in: req.params.id } })
+    Seance.find({ classe_id: { $in: req.params.id } }).sort({ date_debut: asc })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => {
             console.error(error)
@@ -131,7 +131,7 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
 app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
     let ListSeanceFinished;
     let ListPresences = [];
-    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } })
+    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } }).sort({ date_debut: asc })
         .then((SeanceFromdb) => {
             ListSeanceFinished = SeanceFromdb;
             let dernierS = SeanceFromdb[SeanceFromdb.length - 1]
@@ -195,7 +195,7 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByDiplomeID/:id', (req, res, next) => {
     let cids = []
-    Classe.find({ diplome_id: req.params.id }).then(classe => {
+    Classe.find({ diplome_id: req.params.id }).sort({ date_debut: asc }).then(classe => {
         classe.forEach(c => {
             cids.push(c._id)
         })
@@ -211,7 +211,7 @@ app.get('/getAllByDiplomeID/:id', (req, res, next) => {
 
 //Recuperation de toute les s selon l'identifiant du formateur
 app.get('/getAllbyFormateur/:id', (req, res, next) => {
-    Seance.find({ formateur_id: req.params.id })
+    Seance.find({ formateur_id: req.params.id }).sort({ date_debut: asc })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -232,7 +232,7 @@ app.get('/getAllbyFormateurToday/:id', (req, res, next) => {
 app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
     let dd = new Date(req.params.date_debut)
     let df = new Date(req.params.date_fin)
-    Seance.find({ date_debut: { $gte: dd, $lt: df } })
+    Seance.find({ date_debut: { $gte: dd, $lt: df } }).sort({ date_debut: asc })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -346,8 +346,8 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     } else {
         Seance.findById(req.params.id).then(data => {
             let arr = data.fileRight
-            if(!arr)
-                arr= []
+            if (!arr)
+                arr = []
             arr.push({ name: file.filename, right: req.body.etat, upload_by: req.body.user })
             Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
                 if (err) {
