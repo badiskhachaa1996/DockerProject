@@ -138,9 +138,18 @@ export class AjoutExamenComponent implements OnInit {
     let niveau = this.formAddExamen.get("niveau")?.value;
     if (niveau != 'Control Continu')
       if (classe_id && matiere_id && formateur_id && niveau) {
-        let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " - " + this.matieres[matiere_id].abbrv + " - " + this.groupes[classe_id[0]].abbrv
+        let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " | "
+        matiere_id.forEach((mid, index) => {
+          if (index == 0)
+            libelle = libelle + this.matieres[mid].abbrv
+          else
+            libelle = libelle + ' - ' + this.matieres[mid].abbrv
+        })
+        libelle = libelle + " | "
         classe_id.forEach((cid, index) => {
-          if (index != 0)
+          if (index == 0)
+            libelle = libelle + this.groupes[cid].abbrv
+          else
             libelle = libelle + ' - ' + this.groupes[cid].abbrv
         })
         libelle = libelle + ' | ' + niveau
@@ -211,7 +220,7 @@ export class AjoutExamenComponent implements OnInit {
           severity: "success",
           summary: "Nouvel examen ajouté",
         });
-        this.router.navigate(['/notes'])
+        this.router.navigate(['/examens'])
       },
       (error) => {
         console.error(error)

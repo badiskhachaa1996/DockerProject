@@ -311,8 +311,8 @@ export class NotesComponent implements OnInit {
 
               responseM.forEach((matiere) => {
                 this.matieres[matiere._id] = matiere;
-
-                if (matiere._id == examen.matiere_id) {
+                //TODO Should not be [0]
+                if (matiere._id == examen.matiere_id[0]) {
                   this.dropdownExamen.push({
                     libelle: matiere.nom,
                     value: examen._id,
@@ -450,7 +450,8 @@ export class NotesComponent implements OnInit {
 
         response.forEach((examen) => {
           for (let matiere in this.matieres) {
-            if (examen.matiere_id == this.matieres[matiere]._id) {
+            //TODO
+            if (examen.matiere_id[0] == this.matieres[matiere]._id) {
               this.dropdownExamByClasse.push({
                 libelle: examen.libelle,
                 value: examen._id,
@@ -533,8 +534,8 @@ export class NotesComponent implements OnInit {
 
               }
               else if (response.success) {
-                //Création de la nouvelle note à créer dans la BD
-                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id, isAbsent);
+                //Création de la nouvelle note à créer dans la BD //TODO matiere_id
+                let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, matiere_id[0], isAbsent);
 
                 this.noteService.create(note).subscribe(
                   ((response) => {
@@ -593,7 +594,7 @@ export class NotesComponent implements OnInit {
     for (let exam in this.examens) {
       if (this.examens[exam]._id == examen_id) {
         classe_id = this.examens[exam].classe_id[0]; //TODO
-        matiere_id = this.examens[exam].matiere_id;
+        matiere_id = this.examens[exam].matiere_id[0];
       }
     }
 
