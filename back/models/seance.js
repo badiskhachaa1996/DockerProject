@@ -7,7 +7,7 @@ const seanceSchema = mongoose.Schema({
     libelle: { type: String, required: false },
     date_debut: { type: Date, required: true },
     date_fin: { type: Date, required: true },
-    formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'formateur', required: false },
+    formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
     infos: { type: String, required: false },
     isPresentiel: { type: String, default: false },
     salle_name: { type: String },

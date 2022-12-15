@@ -346,15 +346,15 @@ export class ListSeancesComponent implements OnInit {
           if (val._id == rowData._id) {
             this.seances.splice(index, 1)
           }
-          if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette suppresion ?")) {
-            this.seanceService.sendMailDelete(rowData).subscribe(data => {
-              this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès" })
-            }, err => {
-              console.error(err)
-              this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
-            })
-          }
         })
+        if (!rowData.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette suppresion ?")) {
+          this.seanceService.sendMailDelete(rowData).subscribe(data => {
+            this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès" })
+          }, err => {
+            console.error(err)
+            this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
+          })
+        }
       }, error => {
         console.error(error)
       })

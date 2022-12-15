@@ -442,12 +442,16 @@ let transporter = nodemailer.createTransport({
 app.post('/sendMailModify', (req, res) => {
     let dataPast = req.body.pastSeance
     let dataNew = req.body.newSeance
+    let dateP = new Date(dataPast.date_debut)
+    let dateN = new Date(dataNew.date_debut)
+    let strDateP = "" + dateP.getDate() + "/" + (dateP.getMonth() + 1) + "/" + dateP.getFullYear() + " à " + dateP.getHours() + ":" + dateP.getMinutes()
+    let strDateN = "" + dateN.getDate() + "/" + (dateN.getMonth() + 1) + "/" + dateN.getFullYear() + " à " + dateN.getHours() + ":" + dateN.getMinutes()
     let mailUpdateOptions = {
         from: 'ims@intedgroup.com',
         to: 'm.hue@intedgroup.com',
         subject: 'IMS - Modification d\'une séance',
         html: `<p>Bonjour,<br>
-        La séance du ${dataPast.date_debut} a été modifié au ${dataNew.date_debut}<br>
+        La séance du ${strDateP} a été modifié au ${strDateN}<br>
         Merci de vérifier votre emploi du temps,
         Cordialement,
         </p>
@@ -459,7 +463,7 @@ app.post('/sendMailModify', (req, res) => {
         to: 'm.hue@intedgroup.com',
         subject: 'IMS - Ajout d\'une séance',
         html: `<p>Bonjour,<br>
-        Une nouvelle séance a été crée pour le ${dataPast.date_debut}<br>
+        Une nouvelle séance a été crée pour le ${strDateP}<br>
         Merci de vérifier votre emploi du temps,
         Cordialement,
         </p>
@@ -470,7 +474,7 @@ app.post('/sendMailModify', (req, res) => {
         to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
         subject: 'IMS - Suppression d\'une séance',
         html: `<p>Bonjour,<br>
-        La séance prévue pour le ${dataPast.date_debut} a été supprimé<br>
+        La séance prévue pour le ${strDateP} a été supprimé<br>
         Merci de votre compréhension
         </p>
         `
@@ -478,7 +482,7 @@ app.post('/sendMailModify', (req, res) => {
     if (dataNew.formateur_id != dataPast.formateur_id) {
         //Notifier l'ancien et le nouveau formateur
         Formateur.findById(dataPast.formateur_id).populate('user_id').then(pastFormateur => {
-            //mailDeleteOptions.to = pastFormateur.user_id.email
+            mailDeleteOptions.to = pastFormateur.user_id.email
             transporter.sendMail(mailDeleteOptions, function (error, info) {
                 if (error) {
                     console.error(error);
@@ -486,7 +490,7 @@ app.post('/sendMailModify', (req, res) => {
             });
         })
         Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
-            //mailAddOptions.to = newFormateur.user_id.email
+            mailAddOptions.to = newFormateur.user_id.email
             transporter.sendMail(mailAddOptions, function (error, info) {
                 if (error) {
                     console.error(error);
@@ -495,7 +499,7 @@ app.post('/sendMailModify', (req, res) => {
         })
     } else {
         Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
-            //mailUpdateOptions.to = newFormateur.user_id.email
+            mailUpdateOptions.to = newFormateur.user_id.email
             transporter.sendMail(mailUpdateOptions, function (error, info) {
                 if (error) {
                     console.error(error);
@@ -513,7 +517,7 @@ app.post('/sendMailModify', (req, res) => {
                     etudiants.forEach(etu => {
                         mailsModifier.push(etu.user_id.email)
                     })
-                    //mailUpdateOptions.to = mailsModifier
+                    mailUpdateOptions.to = mailsModifier
                     transporter.sendMail(mailUpdateOptions, function (error, info) {
                         if (error) {
                             console.error(error);
@@ -526,7 +530,7 @@ app.post('/sendMailModify', (req, res) => {
                     etudiants.forEach(etu => {
                         mailsDelete.push(etu.user_id.email)
                     })
-                    //mailDeleteOptions.to = mailsDelete
+                    mailDeleteOptions.to = mailsDelete
                     transporter.sendMail(mailDeleteOptions, function (error, info) {
                         if (error) {
                             console.error(error);
@@ -544,7 +548,7 @@ app.post('/sendMailModify', (req, res) => {
                     etudiants.forEach(etu => {
                         mailsAdd.push(etu.user_id.email)
                     })
-                    //mailAddOptions.to = mailsAdd
+                    mailAddOptions.to = mailsAdd
                     transporter.sendMail(mailAddOptions, function (error, info) {
                         if (error) {
                             console.error(error);
@@ -558,14 +562,19 @@ app.post('/sendMailModify', (req, res) => {
 
 app.post('/sendMailDelete', (req, res) => {
     let seance = req.body
-    Formateur.findById(seance.formateur_id).populate('user_id').then(pastFormateur => {
-        let mails = [pastFormateur.user_id.email]
+    let mails = []
+    User.findById(seance.formateur_id).then(pastFormateur => {
+        if (pastFormateur)
+            mails.push(pastFormateur.email)
+
+        let date = new Date(seance.date_debut)
+        let string_date = "" + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " à " + date.getHours() + ":" + date.getMinutes()
         let mailOptions = {
             from: 'ims@intedgroup.com',
-            to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
+            to: 'm.hue@intedgroup.com',
             subject: 'IMS - Suppression d\'une séance',
             html: `<p>Bonjour,<br>
-                La séance prévue pour le ${seance.date_debut} a été supprimé<br>
+                La séance prévue pour le ${string_date} a été supprimé<br>
                 Merci de votre compréhension
                 </p>
                 `
@@ -574,11 +583,12 @@ app.post('/sendMailDelete', (req, res) => {
             etudiants.forEach(etu => {
                 mails.push(etu.user_id.email)
             })
-            //mailOptions.to = mails
+            mailOptions.to = mails
             transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     console.error(error);
                 }
+                res.send(mails)
             });
         })
 
