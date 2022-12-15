@@ -531,7 +531,7 @@ export class NotesComponent implements OnInit {
               }
               else if (response.success) {
                 //Création de la nouvelle note à créer dans la BD 
-                //TODO matiere_id Should not be [0] Récupérer la formation de l'étudiant puis voir quel est la matière de l'examen correspondant
+                //Pas tester
                 this.etudiantService.getMatiereByMatiereListAndEtudiantID(etudiant_id, matiere_id).subscribe(module_id => {
                   let note = new Note(null, note_val, this.semestreSelected, etudiant_id, this.examSelected._id, appreciation, classe_id, module_id._id, isAbsent);
 
@@ -541,7 +541,7 @@ export class NotesComponent implements OnInit {
                         severity: "success",
                         summary: "Nouvelle note attribuée",
                       });
-  
+
                       //Recuperation de la liste des notes
                       this.noteService.getAllPopulate().subscribe(
                         ((response) => {
@@ -556,7 +556,7 @@ export class NotesComponent implements OnInit {
                         }),
                         ((error) => { console.error(error); })
                       );
-  
+
                     }),
                     ((error) => {
                       this.messageService.add({
@@ -589,12 +589,12 @@ export class NotesComponent implements OnInit {
     let appreciation = this.formUpdateNote.get('appreciation').value;
 
     let classe_id: string;
-    let matiere_id: string;
+    let matiere_id: string[];
 
     for (let exam in this.examens) {
       if (this.examens[exam]._id == examen_id) {
         classe_id = this.examens[exam].classe_id[0]; //TODO
-        matiere_id = this.examens[exam].matiere_id[0];//TODO Should not be [0]
+        matiere_id = this.examens[exam].matiere_id;
       }
     }
 
@@ -604,41 +604,43 @@ export class NotesComponent implements OnInit {
 
         if (response.note_max >= note_val) {
           //Création de la nouvelle note à créer dans la BD
-          let note = new Note(this.noteToUpdate._id, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, matiere_id);
+          this.etudiantService.getMatiereByMatiereListAndEtudiantID(etudiant_id, matiere_id).subscribe(module_id => {
+            let note = new Note(this.noteToUpdate._id, note_val, semestre, etudiant_id, examen_id, appreciation, classe_id, module_id._id);
 
-          this.noteService.update(note).subscribe(
-            ((response) => {
-              this.messageService.add({
-                severity: "success",
-                summary: "Note modifiée",
-              });
+            this.noteService.update(note).subscribe(
+              ((response) => {
+                this.messageService.add({
+                  severity: "success",
+                  summary: "Note modifiée",
+                });
 
-              //Recuperation de la liste des notes
-              this.noteService.getAllPopulate().subscribe(
-                ((response) => {
-                  this.notes = response;
-                }),
-                ((error) => { console.error(error); })
-              );
-              //Requete de recuperation des notes par classe et par semestre
-              this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
-                ((response) => {
-                  this.notesByClasseBySemestre = response;
-                }),
-                ((error) => { console.error(error); })
-              );
+                //Recuperation de la liste des notes
+                this.noteService.getAllPopulate().subscribe(
+                  ((response) => {
+                    this.notes = response;
+                  }),
+                  ((error) => { console.error(error); })
+                );
+                //Requete de recuperation des notes par classe et par semestre
+                this.noteService.getAllByExamenID(this.examSelected._id).subscribe(
+                  ((response) => {
+                    this.notesByClasseBySemestre = response;
+                  }),
+                  ((error) => { console.error(error); })
+                );
 
-              this.showFormUpdateNote = false;
-              this.formUpdateNote.reset()
+                this.showFormUpdateNote = false;
+                this.formUpdateNote.reset()
 
-            }),
-            ((error) => {
-              this.messageService.add({
-                severity: "error",
-                summary: "Impossible de modifier la note",
-              });
-            })
-          );
+              }),
+              ((error) => {
+                this.messageService.add({
+                  severity: "error",
+                  summary: "Impossible de modifier la note",
+                });
+              })
+            );
+          })
         }
         else {
           this.messageService.add({

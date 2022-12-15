@@ -22,10 +22,12 @@ import { Campus } from 'src/app/models/Campus';
 })
 export class ListSeancesComponent implements OnInit {
   seances: Seance[] = [];
-  matieres: Matiere[] = [];
+  matieres = {};
   classes: Classe[] = [];
   formateurs = [];
   user: User[] = []
+  listMatiere: Matiere[] = []
+
 
   //Variable d'affichage par rapport à la provenance des séances
   titre: String = "";
@@ -72,6 +74,7 @@ export class ListSeancesComponent implements OnInit {
     //remplissage de la liste des Matières
     this.matiereService.getAll().subscribe(
       ((response) => {
+        this.listMatiere = response
         response.forEach(item => {
           this.matieres[item._id] = item;
           this.dropdownMatiere.push({ nom: item.nom, value: item._id });
@@ -83,7 +86,7 @@ export class ListSeancesComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id });
+          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id  });
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }
@@ -200,7 +203,7 @@ export class ListSeancesComponent implements OnInit {
 
   showSalles(value) {
     this.salleNames = []
-    value.forEach(cid => {
+    this.dicCampus[value].salles.forEach(cid => {
       this.dicCampus[cid].salles.forEach(s => {
         this.salleNames.push({ value: s, label: s })
       })
@@ -212,9 +215,11 @@ export class ListSeancesComponent implements OnInit {
   }
 
   showCampus(value) {
-    this.dropdownCampus = []
     console.log(value)
+    this.dropdownCampus = []
+    let listIDs = []
     value.forEach(cid => {
+      listIDs.push(cid.diplome_id)
       let groupe: Classe = this.classes[cid.value]
       let diplome = this.dicDiplome[groupe.diplome_id]
       if (groupe) {
@@ -232,7 +237,30 @@ export class ListSeancesComponent implements OnInit {
         })
       }
     })
+    this.dropdownMatiere = []
+    console.log(this.listMatiere,listIDs)
+    this.listMatiere.forEach(m => {
+      if (this.customIncludesv2(m.formation_id, listIDs) == true) {
+        console.log(m.formation_id)
+        if (Array.isArray(m.formation_id)) {
+          let str = m.nom + " - "
+          m.formation_id.forEach((formation, index) => {
+            if (index != 0)
+              str = str + ", " + this.dicDiplome[formation].titre
+            else
+              str = str + this.dicDiplome[formation].titre
+          })
+          str = str + " - " + m.niveau
+          this.dropdownMatiere.push({ nom: str, value: m._id });
+        }
+        else {
+          let str: any = m.formation_id
+          this.dropdownMatiere.push({ nom: m.nom + " - " + this.dicDiplome[str].titre + " - " + m.niveau + " - " + m.semestre, value: m._id });
+        }
+      }
+    })
     this.seanceFormUpdate.patchValue({ campus_id: this.dropdownCampus[0].value })
+    this.showSalles(this.dropdownCampus[0].value)
   }
 
   modifySeance() {
@@ -344,10 +372,29 @@ export class ListSeancesComponent implements OnInit {
   }
 
   private toDateString(date: Date): string {
-    return (date.getFullYear().toString() + '-' 
-       + ("0" + (date.getMonth() + 1)).slice(-2) + '-' 
-       + ("0" + (date.getDate())).slice(-2))
-       + 'T' + date.toTimeString().slice(0,5);
-}
+    return (date.getFullYear().toString() + '-'
+      + ("0" + (date.getMonth() + 1)).slice(-2) + '-'
+      + ("0" + (date.getDate())).slice(-2))
+      + 'T' + date.toTimeString().slice(0, 5);
+  }
+
+  customIncludesv2(l: any, d: any[]) {
+    let r = false
+    if (Array.isArray(l)) {
+      d.forEach(e => {
+        if (this.customIncludesv2(e, l) == true) {
+          r = true
+        }
+      })
+    } else {
+      d.forEach(e => {
+        if (e == l) {
+          r = true
+        }
+      })
+    }
+    return r
+
+  }
 
 }
