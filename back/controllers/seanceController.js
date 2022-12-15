@@ -104,7 +104,7 @@ app.post('/edit/:id', (req, res, next) => {
             isPlanified: req.body.isPlanified,
             campus_id: req.body.campus_id,
             nbseance: req.body.nbseance
-        }
+        }, { new: true }
     ).then((Seancefromdb) => res.status(201).send(Seancefromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -270,6 +270,7 @@ app.get('/getNb/:c_id/:f_id', (req, res) => {
 })
 
 const multer = require('multer');
+const { Etudiant } = require('../models/etudiant');
 
 
 app.get("/getFiles/:id", (req, res) => {
@@ -415,7 +416,6 @@ app.delete("/delete/:id", (req, res) => {
 })
 
 app.post('/getFormateursFromClasseIDs', (req, res, next) => {
-    console.log(req.body.matieres_ids)
     Seance.find({ matiere_id: { $in: req.body.matieres_ids } }).then(seanceList => {
         let f_ids = []
         seanceList.forEach(s => {
@@ -427,4 +427,150 @@ app.post('/getFormateursFromClasseIDs', (req, res, next) => {
         })
     })
 }, (error) => { res.status(500).send(error); })
+
+app.post('/sendMailModify', (req, res) => {
+    let dataPast = req.body.pastSeance
+    let dataNew = req.body.newSeance
+    let mailUpdateOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',
+        subject: 'IMS - Modification d\'une séance',
+        html: `<p>Bonjour,<br>
+        La séance du ${dataPast.date_debut} a été modifié au ${dataNew.date_debut}<br>
+        Merci de vérifier votre emploi du temps,
+        Cordialement,
+        </p>
+        `
+    };
+    let mailAddOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',
+        subject: 'IMS - Ajout d\'une séance',
+        html: `<p>Bonjour,<br>
+        Une nouvelle séance a été crée pour le ${dataPast.date_debut}<br>
+        Merci de vérifier votre emploi du temps,
+        Cordialement,
+        </p>
+        `
+    };
+    let mailDeleteOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
+        subject: 'IMS - Suppression d\'une séance',
+        html: `<p>Bonjour,<br>
+        La séance prévue pour le ${dataPast.date_debut} a été supprimé<br>
+        Merci de votre compréhension
+        </p>
+        `
+    };
+    if (dataNew.formateur_id != dataPast.formateur_id) {
+        //Notifier l'ancien et le nouveau formateur
+        Formateur.findById(dataPast.formateur_id).populate('user_id').then(pastFormateur => {
+            //mailDeleteOptions.to = pastFormateur.user_id.email
+            transporter.sendMail(mailDeleteOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+        Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
+            //mailAddOptions.to = newFormateur.user_id.email
+            transporter.sendMail(mailAddOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+    } else {
+        Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
+            //mailUpdateOptions.to = newFormateur.user_id.email
+            transporter.sendMail(mailUpdateOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+    }
+    if (dataNew.classe_id != dataPast.classe_id) {
+        dataPast.classe_id.forEach(cid => {
+            let mailsModifier = []
+            let mailsDelete = []
+            if (dataNew.classe_id.includes(cid)) {
+                //Alors ce groupe est doit être informer d'une modification
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsModifier.push(etu.user_id.email)
+                    })
+                    //mailUpdateOptions.to = mailsModifier
+                    transporter.sendMail(mailUpdateOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+            } else {
+                //Alors ce groupe est doit être informer d'une suppression
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsDelete.push(etu.user_id.email)
+                    })
+                    //mailDeleteOptions.to = mailsDelete
+                    transporter.sendMail(mailDeleteOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+
+            }
+        })
+        dataNew.classe_id.forEach(cid => {
+            let mailsAdd = []
+            if (!dataPast.classe_id.includes(cid)) {
+                //Alors ce groupe est doit être informer d'un ajout
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsAdd.push(etu.user_id.email)
+                    })
+                    //mailAddOptions.to = mailsAdd
+                    transporter.sendMail(mailAddOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+
+            }
+        })
+    }
+})
+
+app.post('/sendMailDelete', (req, res) => {
+    let seance = req.body
+    Formateur.findById(seance.formateur_id).populate('user_id').then(pastFormateur => {
+        let mails = [pastFormateur.user_id.email]
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
+            subject: 'IMS - Suppression d\'une séance',
+            html: `<p>Bonjour,<br>
+                La séance prévue pour le ${seance.date_debut} a été supprimé<br>
+                Merci de votre compréhension
+                </p>
+                `
+        };
+        Etudiant.find({ classe_id: { $in: seance.classe_id } }).populate('user_id').then(etudiants => {
+            etudiants.forEach(etu => {
+                mails.push(etu.user_id.email)
+            })
+            //mailOptions.to = mails
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+
+    })
+})
 module.exports = app;

@@ -86,7 +86,7 @@ export class ListSeancesComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id  });
+          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }
@@ -238,7 +238,7 @@ export class ListSeancesComponent implements OnInit {
       }
     })
     this.dropdownMatiere = []
-    console.log(this.listMatiere,listIDs)
+    console.log(this.listMatiere, listIDs)
     this.listMatiere.forEach(m => {
       if (this.customIncludesv2(m.formation_id, listIDs) == true) {
         console.log(m.formation_id)
@@ -285,15 +285,15 @@ export class ListSeancesComponent implements OnInit {
           this.loadEvents(datas)
         },
       );
-      this.showFormUpdateSeance = null;
       if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette modification ?")) {
-        this.formateurService.sendEDT(this.seanceFormUpdate.value.formateur.value, "/YES").subscribe(data => {
-          this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès", detail: "Nous vous conseillons d'envoyer un mail au groupe via la liste des groupes pour les notifier du changement" })
+        this.seanceService.sendMailModify(this.showFormUpdateSeance, data).subscribe(data => {
+          this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès" })
         }, err => {
           console.error(err)
           this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
         })
       }
+      this.showFormUpdateSeance = null;
       this.seanceFormUpdate.reset();
     }, (error) => {
       console.error(error)
@@ -345,6 +345,14 @@ export class ListSeancesComponent implements OnInit {
         this.seances.forEach((val, index) => {
           if (val._id == rowData._id) {
             this.seances.splice(index, 1)
+          }
+          if (!this.seanceFormUpdate.value.isPlanified && confirm("Voulez-vous avertir le formateur et le groupe de cette suppresion ?")) {
+            this.seanceService.sendMailDelete(rowData).subscribe(data => {
+              this.messageService.add({ severity: "success", summary: "Envoi du mail avec succès" })
+            }, err => {
+              console.error(err)
+              this.messageService.add({ severity: "error", summary: "Le mail ne s'est pas envoyé", detail: err.error })
+            })
           }
         })
       }, error => {

@@ -120,10 +120,20 @@ export class SeanceService {
     return this.httpClient.post<any>(url, { matieres_ids }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
   }
 
-  getAllByMatiere(module_id){
-    let url = this.apiUrl + "getAllByMatiere/"+module_id
+  getAllByMatiere(module_id) {
+    let url = this.apiUrl + "getAllByMatiere/" + module_id
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
- 
+
+  }
+
+  sendMailDelete(deletedSeance: Seance) {
+    let url = this.apiUrl + "sendMailDelete"
+    return this.httpClient.post<any>(url, { ...deletedSeance }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
+  }
+
+  sendMailModify(pastSeance: Seance, newSeance: Seance) {
+    let url = this.apiUrl + "sendMailModify"
+    return this.httpClient.post<any>(url, { pastSeance, newSeance }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }).append('token', localStorage.getItem('token')) });
   }
 
 
