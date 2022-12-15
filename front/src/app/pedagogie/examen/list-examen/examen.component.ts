@@ -39,7 +39,7 @@ export class ExamenComponent implements OnInit {
   matieres = {};
   dropdownClasse: any[] = [];
   dropdownMatiere: any[] = [];
-  idMatiereToUpdate: String;
+  idMatiereToUpdate: Matiere[];
 
   classes = {};
   dropdownGroupe: any[] = [{ label: 'Tous les groupes', value: null }];//Filtre
@@ -299,9 +299,13 @@ export class ExamenComponent implements OnInit {
         this.idClasseToUpdate.forEach(cid => {
           l_id.push(cid._id)
         })
+        let m_id = []
+        this.idMatiereToUpdate.forEach(mid=>{
+          m_id.push(mid._id)
+        })
         this.formUpdateExamen.patchValue({
           classe_id: l_id,
-          matiere_id: this.idMatiereToUpdate,
+          matiere_id: m_id,
           formateur_id: this.examenToUpdate.formateur_id,
           date: this.examenToUpdate.date,
           type: this.examenToUpdate.type,
@@ -323,7 +327,6 @@ export class ExamenComponent implements OnInit {
 
   onLoadModules(event) {
     console.log(event)
-
   }
   notes: Note[] = []
   loadNotes(examen) {

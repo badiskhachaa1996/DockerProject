@@ -95,7 +95,7 @@
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 title="Fermer" (click)="showFormUpdateExamen = false;formUpdateExamen.reset()" aria-hidden="true">
             </i>
-            <h3 style="text-align: center;" *ngIf="examenToUpdate">Modification de {{examenToUpdate.libelle}}</h3>
+            <h3 style="text-align: center;" *ngIf="examenToUpdate">  de {{examenToUpdate.libelle}}</h3>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
 
                 <div class="field col-12">
@@ -260,7 +260,12 @@
                                 <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
                             </span>
                         </td>
-                        <td>{{ examen.matiere_id?.abbrv }}</td>
+                        <td>
+                            <span *ngFor="let cid of examen.matiere_id; let index = index">
+                                <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
+                                <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
+                            </span>
+                        </td>
                         <td>{{ examen.libelle }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
@@ -268,7 +273,7 @@
                             showFormAddExamen = false;
                             idExamenToUpdate = examen._id;
                             idClasseToUpdate = examen.classe_id;
-                            idMatiereToUpdate = examen.matiere_id._id;
+                            idMatiereToUpdate = examen.matiere_id;
                             formateurToUpdate = examen.formateur_id;
                             onGetById();" aria-hidden="true"></i>
 
