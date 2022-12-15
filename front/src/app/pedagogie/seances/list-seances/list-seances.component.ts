@@ -31,6 +31,7 @@ export class ListSeancesComponent implements OnInit {
 
   //Variable d'affichage par rapport à la provenance des séances
   titre: String = "";
+  first = 0;
 
   //Variables de filtre
   diplomeFilter: [{ label: string, value: string }];
@@ -110,6 +111,7 @@ export class ListSeancesComponent implements OnInit {
 
   loadEvents(data) {
     let diplomeList = {}
+    this.first = 0
     this.classeService.getAll().subscribe(datac => {
       //TODO Filter all the classe and not the first one
       datac.forEach(classe => {
@@ -320,12 +322,16 @@ export class ListSeancesComponent implements OnInit {
         },
       );
     }*/
-    if (this.calendar_value[0] && this.calendar_value[1])
-      this.seanceService.getAllByRange(this.calendar_value[0], this.calendar_value[1]).subscribe(
+    if (this.calendar_value[0] && this.calendar_value[1]) {
+      let end = this.calendar_value[1]
+      end.setHours(23, 59, 59)
+      this.seanceService.getAllByRange(this.calendar_value[0], end).subscribe(
         (datas) => {
           this.loadEvents(datas)
         },
       );
+    }
+
   }
   clearFilter() {
     /*this.date_filter_debut = null

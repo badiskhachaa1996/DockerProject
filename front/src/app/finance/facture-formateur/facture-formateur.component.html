@@ -18,22 +18,23 @@
                         (onChange)="calculMensuel()" placeholder="Choissisez un formateur">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
+                <div class="field col-12 md:col-3">
                     <label For="contrat">Mois<span style="color: red;"> * </span></label>
                     <p-dropdown [options]="dropdownMonth" filter="true" formControlName="mois"
                         (onChange)="calculMensuel()" placeholder="Choissisez le mois">
                     </p-dropdown>
                 </div>
-                <!--<div class="field col-3">
+                <div class="field col-12 md:col-3">
+                    <label For="contrat">Année<span style="color: red;"> * </span></label>
+                    <input type="text" formControlName="year" class="form-control col-12" pInputText>
+
+                </div>
+                <div class="field col-3">
                     <label For="contrat">Facture<span style="color: red;"> * </span></label>
                     <p-fileUpload #fileUpload1 mode="basic" chooseLabel="Télécharger la Facture" maxFileSize="10000000"
                         [auto]="true" (uploadHandler)="FileUploadMensuel($event.files,fileUpload1)"
                         [customUpload]="true"></p-fileUpload>
                 </div>
-                <div class="field col-3">
-                    <label>&nbsp;</label>
-                    {{formAddFactureMensuel.value.file?.name}}
-                </div>-->
                 <div class="field col-12">
                     <p-accordion *ngIf="formAddFactureMensuel.value.mois && formAddFactureMensuel.value.formateur_id">
                         <p-accordionTab header="Séance du mois de {{convert[formAddFactureMensuel.value.mois]}}">
@@ -106,7 +107,7 @@
             </div>
             <h5>Liste des factures mensuel des formateurs</h5>
             <p-table #dt2
-                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle']"
+                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle','year']"
                 [totalRecords]="facturesMensuel.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                 [rows]="10" styleClass="p-datatable-gridlines" [value]="facturesMensuel" dataKey="_id"
                 responsiveLayout="scroll">
@@ -117,6 +118,16 @@
                             <input pInputText type="text" #filter
                                 (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
+                        </span>
+                        <p-dropdown [options]="filterFormateur" filter="true"
+                            (onChange)="dt2.filter($event.value, 'formateur_id._id','equals');"
+                            [style]="{'margin':'5px'}">
+                        </p-dropdown>
+                        <span>
+                            <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                                (onSelect)="filterMonth(dt2,$event)"></p-calendar>
+                            <i class="pi pi-filter-slash"
+                                (click)="dt2.filter(null, 'mois', 'equals');dt2.filter(null, 'year', 'equals')"></i>
                         </span>
                     </div>
                 </ng-template>
@@ -145,7 +156,7 @@
                             {{facture.formateur_id.firstname | titlecase}}
                         </td>
                         <td>
-                            {{convert[facture.mois]}}
+                            {{convert[facture.mois]}} {{facture.year}}
                         </td>
                         <td>
                             {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}

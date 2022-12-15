@@ -27,7 +27,10 @@ export class FactureFormateurComponent implements OnInit {
     formateur_id: ['', Validators.required],
     mois: ['', Validators.required],
     file: ['', Validators.required],
+    year: [new Date().getFullYear(), Validators.required]
   });
+
+  filterFormateur = [{ value: null, label: "Tous les formateurs" }]
 
   dropdownMonth = [
     { label: "Janvier", value: 1 },
@@ -55,6 +58,7 @@ export class FactureFormateurComponent implements OnInit {
         let bypass: any = formateur.user_id
         if (bypass) {
           this.formateurList.push({ value: bypass._id, label: bypass.lastname + " " + bypass.firstname })
+          this.filterFormateur.push({ value: bypass._id, label: bypass.lastname + " " + bypass.firstname })
           this.formateurDic[bypass._id] = formateur
         }
       })
@@ -65,7 +69,7 @@ export class FactureFormateurComponent implements OnInit {
   }
 
   downloadFactureMensuel(facture: FactureFormateurMensuel) {
-    this.FactureFormateurService.downloadMensuel(facture.formateur_id._id, facture.mois).subscribe(data => {
+    this.FactureFormateurService.downloadMensuel(facture.formateur_id._id, facture.mois.toString() + "-" + facture.year.toString()).subscribe(data => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
     })
@@ -75,11 +79,11 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.createMensuel(new FactureFormateurMensuel(null,
       this.formAddFactureMensuel.value.formateur_id,
       this.formAddFactureMensuel.value.mois,
-      new Date())).subscribe(data => {
+      new Date(), this.formAddFactureMensuel.value.year)).subscribe(data => {
         const formData = new FormData();
         formData.append('_id', data._id)
         formData.append('formateur_id', data.formateur_id)
-        formData.append('mois', data.mois.toString())
+        formData.append('mois', data.mois.toString() + "-" + data.year.toString())
         formData.append('file', this.formAddFactureMensuel.value.file)
         this.FactureFormateurService.upload(formData).subscribe(fD => {
           this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
@@ -108,6 +112,12 @@ export class FactureFormateurComponent implements OnInit {
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois).subscribe(r => {
       this.seances = r
     })
+  }
+
+  filterMonth(tableau, value) {
+    let date = new Date(value)
+    tableau.filter(date.getMonth() + 1, 'mois', 'equals')
+    tableau.filter(date.getFullYear(), 'year', 'equals')
   }
 
 }
