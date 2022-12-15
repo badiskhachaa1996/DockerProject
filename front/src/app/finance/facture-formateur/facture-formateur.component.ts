@@ -104,12 +104,14 @@ export class FactureFormateurComponent implements OnInit {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
 
-  calculMensuel() {
+  calculMensuel(value) {
+    let date = new Date(value)
+    this.formAddFactureMensuel.patchValue({ mois: date.getMonth() + 1, year: date.getFullYear() })
     let c_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
     if (!c_h || c_h == "" || c_h == " ") {
       this.MessageService.add({ severity: 'error', summary: "Le formateur n'a pas de taux horaire", detail: "Le cout ne pourra pas être calculé car le taux horaire du formateur n'a pas été renseigné" })
     }
-    this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois).subscribe(r => {
+    this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois, this.formAddFactureMensuel.value.year).subscribe(r => {
       this.seances = r
     })
   }

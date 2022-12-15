@@ -19,15 +19,9 @@
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-3">
-                    <label For="contrat">Mois<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownMonth" filter="true" formControlName="mois"
-                        (onChange)="calculMensuel()" placeholder="Choissisez le mois">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-3">
-                    <label For="contrat">Année<span style="color: red;"> * </span></label>
-                    <input type="text" formControlName="year" class="form-control col-12" pInputText>
-
+                    <label For="contrat">Mois & Année<span style="color: red;"> * </span></label>
+                    <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                        (onSelect)="calculMensuel($event)"></p-calendar>
                 </div>
                 <div class="field col-3">
                     <label For="contrat">Facture<span style="color: red;"> * </span></label>

@@ -621,7 +621,7 @@ app.get("/getAllAbsences/:user_id", (req, res) => {
     })
 })
 
-app.get('/getAllByUserIDMois/:user_id/:mois', (req, res) => {
+app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
     Presence.find({ user_id: req.params.user_id }).populate({ path: 'seance_id', populate: { path: 'classe_id' } }).populate({ path: 'seance_id', populate: { path: 'matiere_id' } }).then(presences => {
         let r = []
         let idSeance = []
@@ -634,9 +634,9 @@ app.get('/getAllByUserIDMois/:user_id/:mois', (req, res) => {
             let date_debut = new Date(p.seance_id.date_debut)
             let totalHeure = 0
             let classes = ""
-            if (date_debut.getMonth() + 1 == parseInt(req.params.mois)) {
+            if (date_debut.getMonth() + 1 == parseInt(req.params.mois) && date_debut.getFullYear() == parseInt(req.params.year)) {
                 totalHeure += date_fin.getHours() - date_debut.getHours()
-                p.seance_id.classe_id.forEach(c=>{
+                p.seance_id.classe_id.forEach(c => {
                     classes = classes + c.abbrv
                 })
                 if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
@@ -652,11 +652,11 @@ app.get('/getAllByUserIDMois/:user_id/:mois', (req, res) => {
                 let date_debut = new Date(s.date_debut)
                 let totalHeure = 0
                 let classes = ""
-                if (date_debut.getMonth() + 1 == parseInt(req.params.mois)) {
+                if (date_debut.getMonth() + 1 == parseInt(req.params.mois) && date_debut.getFullYear() == parseInt(req.params.year)) {
                     totalHeure += date_fin.getHours() - date_debut.getHours()
                     if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
                         totalHeure = totalHeure + 0.5
-                    s.classe_id.forEach(c=>{
+                    s.classe_id.forEach(c => {
                         classes = classes + c.abbrv
                     })
                     r.push({ libelle: s.libelle, classes, matiere: s.matiere_id.nom, date_debut, presence: 'Absent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi' })
