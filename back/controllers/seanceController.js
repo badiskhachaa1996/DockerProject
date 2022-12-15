@@ -427,6 +427,17 @@ app.post('/getFormateursFromClasseIDs', (req, res, next) => {
         })
     })
 }, (error) => { res.status(500).send(error); })
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
 
 app.post('/sendMailModify', (req, res) => {
     let dataPast = req.body.pastSeance
@@ -442,6 +453,7 @@ app.post('/sendMailModify', (req, res) => {
         </p>
         `
     };
+    res.send(mailUpdateOptions)
     let mailAddOptions = {
         from: 'ims@intedgroup.com',
         to: 'm.hue@intedgroup.com',
@@ -539,7 +551,6 @@ app.post('/sendMailModify', (req, res) => {
                         }
                     });
                 })
-
             }
         })
     }
