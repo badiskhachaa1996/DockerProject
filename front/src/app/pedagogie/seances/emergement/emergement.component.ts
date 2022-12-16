@@ -98,7 +98,7 @@ export class EmergementComponent implements OnInit {
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(etudiants => {
         this.presences.forEach(p => {
           let bypass: any = p.user_id
-          if (bypass) {
+          if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {
             oldPresence.push(bypass._id)
             this.tableauPresence.push({
               etudiant: bypass?.firstname + ' ' + bypass?.lastname,
@@ -114,7 +114,8 @@ export class EmergementComponent implements OnInit {
         })
         etudiants.forEach(etu => {
           if (etu.user_id)
-            if (this.customIndexOf(oldPresence, etu.user_id._id) == -1)
+            if (this.customIndexOf(oldPresence, etu.user_id._id) == -1) {
+              oldPresence.push(etu.user_id._id)
               this.tableauPresence.push({
                 etudiant: etu.user_id?.firstname + ' ' + etu.user_id?.lastname,
                 _id: etu._id + "NEW",
@@ -125,6 +126,7 @@ export class EmergementComponent implements OnInit {
                 user_id: etu.user_id?._id,
                 isFormateur: etu.user_id?.type == "Formateur"
               })
+            }
         })
       })
       data.forEach(element => {
@@ -268,13 +270,6 @@ export class EmergementComponent implements OnInit {
     if (!this.presence) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
-          if (data) {
-            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
-              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })*/
-          }
-        })
         this.SocketService.addPresence();
         this.reloadPresence()
       }, err => {
@@ -285,13 +280,6 @@ export class EmergementComponent implements OnInit {
       presence._id = this.presence._id
       this.PresenceService.addSignature(presence).subscribe(data => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
-          if (data) {
-            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
-              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })*/
-          }
-        })
         this.SocketService.addPresence();
         this.reloadPresence()
       }, err => {
@@ -299,8 +287,6 @@ export class EmergementComponent implements OnInit {
         console.error(err)
       })
     }
-
-
   }
 
   showPdf = false
@@ -442,7 +428,6 @@ export class EmergementComponent implements OnInit {
     if (this.formAddEtudiant.value.etudiant_id?.value != null) {
       id = this.formAddEtudiant.value.etudiant_id.value
     }
-    console.log(this.formAddEtudiant.value.etudiant_id, this.formAddEtudiant.value.etudiant_id?.value, id)
     this.PresenceService.create({
       _id: null,
       user_id: id,

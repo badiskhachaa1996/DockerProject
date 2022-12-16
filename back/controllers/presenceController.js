@@ -303,29 +303,35 @@ app.post("/create", (req, res) => {
         date_signature: (req.body.signature) ? Date.now() : null,
         allowedByFormateur: req.body.allowedByFormateur
     });
-    presence.save((err, data) => {
-        //Sauvegarde de la signature si il y en a une
-        if (err) {
-            console.error(err)
-            res.send(err)
-        } else {
-            res.send(data);
-        }
-        console.log(req.body.signature)
-        if (req.body.signature && req.body.signature != null && req.body.signature != '') {
-            fs.mkdir("./storage/signature/",
-                { recursive: true }, (err3) => {
-                    if (err3) {
-                        console.error(err3);
-                    }
-                });
-            fs.writeFile("storage/signature/" + data._id + ".png", req.body.signature, 'base64', function (err2) {
-                if (err2) {
-                    console.error(err2);
+    Presence.findOne({ seance_id: req.body.seance_id, user_id: req.body.user_id }).then(p => {
+        if (!p)
+            presence.save((err, data) => {
+                //Sauvegarde de la signature si il y en a une
+                if (err) {
+                    console.error(err)
+                    res.send(err)
+                } else {
+                    res.send(data);
                 }
-            });
-        }
+                console.log(req.body.signature)
+                if (req.body.signature && req.body.signature != null && req.body.signature != '') {
+                    fs.mkdir("./storage/signature/",
+                        { recursive: true }, (err3) => {
+                            if (err3) {
+                                console.error(err3);
+                            }
+                        });
+                    fs.writeFile("storage/signature/" + data._id + ".png", req.body.signature, 'base64', function (err2) {
+                        if (err2) {
+                            console.error(err2);
+                        }
+                    });
+                }
+            })
+        else
+            Presence.findByIdAndUpdate(p._id,{...presence}).exec()
     })
+
 });
 
 //Mets un étudiant en présent
