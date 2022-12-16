@@ -313,7 +313,6 @@ app.post("/create", (req, res) => {
                 } else {
                     res.send(data);
                 }
-                console.log(req.body.signature)
                 if (req.body.signature && req.body.signature != null && req.body.signature != '') {
                     fs.mkdir("./storage/signature/",
                         { recursive: true }, (err3) => {
@@ -329,7 +328,21 @@ app.post("/create", (req, res) => {
                 }
             })
         else
-            Presence.findByIdAndUpdate(p._id,{...presence}).exec()
+            Presence.findByIdAndUpdate(p._id,{...presence}).exec().then(()=>{
+                if (req.body.signature && req.body.signature != null && req.body.signature != '') {
+                    fs.mkdir("./storage/signature/",
+                        { recursive: true }, (err3) => {
+                            if (err3) {
+                                console.error(err3);
+                            }
+                        });
+                    fs.writeFile("storage/signature/" + p._id + ".png", req.body.signature, 'base64', function (err2) {
+                        if (err2) {
+                            console.error(err2);
+                        }
+                    });
+                }
+            })
     })
 
 });
