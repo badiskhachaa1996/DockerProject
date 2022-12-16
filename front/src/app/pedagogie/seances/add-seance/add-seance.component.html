@@ -54,7 +54,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
                     <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
-                        (onChange)="loadNBSeance()" placeholder="Choissisez un module"
+                        (onChange)="loadNBSeance();" placeholder="Choissisez un module"
                         emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>

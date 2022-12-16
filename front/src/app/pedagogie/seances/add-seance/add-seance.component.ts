@@ -556,5 +556,4 @@ export class AddSeanceComponent implements OnInit {
     })
   }
 
-
 }

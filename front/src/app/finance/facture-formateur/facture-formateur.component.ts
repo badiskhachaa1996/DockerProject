@@ -26,7 +26,7 @@ export class FactureFormateurComponent implements OnInit {
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
     mois: ['', Validators.required],
-    file: ['', Validators.required],
+    file: [''],
     year: [new Date().getFullYear(), Validators.required]
   });
 
@@ -72,6 +72,8 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.downloadMensuel(facture.formateur_id._id, facture.mois.toString() + "-" + facture.year.toString()).subscribe(data => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
+    },err=>{
+      console.error(err)
     })
   }
 
@@ -80,23 +82,25 @@ export class FactureFormateurComponent implements OnInit {
       this.formAddFactureMensuel.value.formateur_id,
       this.formAddFactureMensuel.value.mois,
       new Date(), this.formAddFactureMensuel.value.year)).subscribe(data => {
-        const formData = new FormData();
-        formData.append('_id', data._id)
-        formData.append('formateur_id', data.formateur_id)
-        formData.append('mois', data.mois.toString() + "-" + data.year.toString())
-        formData.append('file', this.formAddFactureMensuel.value.file)
-        this.FactureFormateurService.upload(formData).subscribe(fD => {
-          this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
-          this.showAddFactureMensuel = false
-          this.formAddFactureMensuel.reset()
-          //WIP Faire un getBYID populate puis le push dans la liste
-          this.FactureFormateurService.getAllMensuel().subscribe(data => {
-            this.facturesMensuel = data
+        this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
+        if(this.formAddFactureMensuel.value.file){
+          const formData = new FormData();
+          formData.append('_id', data._id)
+          formData.append('formateur_id', data.formateur_id)
+          formData.append('mois', data.mois.toString() + "-" + data.year.toString())
+          formData.append('file', this.formAddFactureMensuel.value.file)
+          this.FactureFormateurService.upload(formData).subscribe(fD => {
+            this.showAddFactureMensuel = false
+            this.formAddFactureMensuel.reset()
+            //WIP Faire un getBYID populate puis le push dans la liste
+            this.FactureFormateurService.getAllMensuel().subscribe(data => {
+              this.facturesMensuel = data
+            })
+          }, err => {
+            this.MessageService.add({ severity: "error", summary: "Erreur lors de la création de la facture", detail: err.error })
+            console.error(err)
           })
-        }, err => {
-          this.MessageService.add({ severity: "error", summary: "Erreur lors de la création de la facture", detail: err.error })
-          console.error(err)
-        })
+        }
       })
   }
 

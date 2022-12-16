@@ -87,7 +87,7 @@ export class ListSeancesComponent implements OnInit {
     this.classeService.getAll().subscribe(
       ((response) => {
         for (let classeID in response) {
-          this.dropdownClasse.push({ nom: response[classeID].abbrv, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
+          this.dropdownClasse.push({ label: response[classeID].abbrv, value: response[classeID]._id, diplome_id: response[classeID]?.diplome_id });
           //this.dropdownClasse[response[classeID]._id] = response[classeID];
           this.classes[response[classeID]._id] = response[classeID];
         }
@@ -177,7 +177,7 @@ export class ListSeancesComponent implements OnInit {
 
     let classeList = [];
     rowData.classe_id.forEach(classeID => {
-      classeList.push({ nom: this.classes[classeID]?.abbrv, value: this.classes[classeID]?._id });
+      classeList.push(this.classes[classeID]?._id);
     });
     this.salleNames = []
     this.dicCampus[rowData.campus_id].salles.forEach(s => {
@@ -268,9 +268,9 @@ export class ListSeancesComponent implements OnInit {
   modifySeance() {
     let classeList = []
     this.seanceFormUpdate.value.classe.forEach(c => {
-      classeList.push(c.value)
+      classeList.push(c)
     })
-    let seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, 'classe: ' + this.seanceFormUpdate.value.classe.nom + ' Formateur: ' + this.seanceFormUpdate.value.formateur.nom,
+    let seance = new Seance(this.showFormUpdateSeance._id, classeList, this.seanceFormUpdate.value.matiere.value, this.seanceFormUpdate.value.libelle, this.seanceFormUpdate.value.date_debut, this.seanceFormUpdate.value.date_fin, this.seanceFormUpdate.value.formateur.value, null,
       this.seanceFormUpdate.value.isPresentiel, this.seanceFormUpdate.value.salle_name.value, this.seanceFormUpdate.value.isPlanified, this.seanceFormUpdate.value.campus_id.value);
     /*if (this.seanceFormUpdate.value.libelle == "" || this.seanceFormUpdate.value.libelle == null) {
       let classeStr = ""
