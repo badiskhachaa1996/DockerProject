@@ -14,6 +14,10 @@
                 <li><span style="color: red;">Nom du groupe</span> : Sélectionner un ou plusieurs groupes pour lesquels
                     vous voulez ajouter une séance.</li>
                 <li><span style="color: red;">Module</span> : Sélectionner la module de la séance.</li>
+                <li><span style="color: red;">Remarque</span> : Permez de rajouter une informations supplémentaire sur
+                    le libelle de la séance.</li>
+                <li><span style="color: red;">Temps Max pour signer (en Min)</span> : Le temps maximum pendant lequels
+                    les étudiants peuvent signer en début de séance.</li>
                 <li><span style="color: red;">Début / Fin </span> : Choissisez la date ainsi que l'heure de début et de
                     fin de la séance.</li>
                 <li><span style="color: red;">Campus</span> : Sélectionner le campus où se déroulera la séance.</li>
@@ -25,6 +29,16 @@
                 <li><span style="color: red;">Planifiée/Validée</span> : Une séance planifiée est une séance qui est en
                     attente de validation. Une séance validée est une séance validé par l'équipe pédaogique et par le
                     formateur.</li>
+                <li><span style="color: red;">Autorisation de la signature</span> : <br><span style="color: blue;">Signature
+                        autorisée par le
+                        formateur seulement</span>: Les étudiants ne pourront pas signés pendant la séance sauf si le
+                    formateur
+                    les mets présents.<br>
+                    <span style="color: blue;">Signature en début de séance</span>: Les étudiants pourront signés sans
+                    autorisations pendant les x
+                    premiers minutes de la séance (x correspond au Temps Max pour signer (en Min)) puis le formateur
+                    pourra les autorisés à signer au delà.
+                </li>
             </ul>
             <ng-template pTemplate="footer">
                 <button pButton icon="pi pi-check" (click)="display=false" label="Ok"
@@ -58,9 +72,14 @@
                         emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-12">
+                <div class="field col-12 md:col-6">
                     <label>Remarque</label><br>
                     <input pInputText type="text" formControlName="libelle" placeholder="Examen"
+                        class="form-control col-12">
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Temps Max pour signer (en Min)<span style="color: red;"> * </span></label><br>
+                    <input pInputText type="number" formControlName="time_max_sign" placeholder="30"
                         class="form-control col-12">
                 </div>
                 <div class="field col-12 md:col-6">
@@ -137,6 +156,12 @@
                     <label>Veuillez saisir la date de fin: <span style="color: red;"> * </span></label>
                     <input type="date" formControlName="date_fin_plannification"
                         min="{{ seanceForm.value.date_debut | date:'yyyy-MM-dd' }}" pInputText>
+                </div>
+                <div class="field col-12">
+                    <label>Autorisation de signature <span style="color: red;"> * </span></label>
+                    <p-selectButton
+                        [options]="[{name:'Signature autorisée par le formateur seulement',value:true},{name:'Signature en début de séance',value:false}]"
+                        formControlName="forcedAllowedByFormateur"></p-selectButton>
                 </div>
                 <div>
                     <button pButton class="ui-button-raised ui-button-success" [disabled]="seanceForm.invalid"

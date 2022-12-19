@@ -567,13 +567,13 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantService.update(etudiant).subscribe(
       ((responde) => {
         this.messageService.add({ severity: 'success', summary: 'Etudiant modifié' });
-        
+
         let bypass: any = this.etudiantToUpdate.user_id
         bypass.firstname = this.formUpdateEtudiant.value.firstname
         bypass.lastname = this.formUpdateEtudiant.value.lastname.toUpperCase()
         bypass.email = this.formUpdateEtudiant.value.email_ims
         bypass.email_perso = this.formUpdateEtudiant.value.email_perso
-        
+
         this.AuthService.updateByIdForPrivate(bypass).subscribe(v => {
           this.messageService.add({ severity: 'success', summary: 'Modification d\'un étudiant', detail: 'Mise à jour de l\'étudiant avec succès' });
           let bp: any = this.etudiantToUpdate
@@ -1190,8 +1190,8 @@ export class ListEtudiantComponent implements OnInit {
   exportExcel() {
     let dataExcel = []
     //Clean the data
-    if(this.filtedTable.length<1)
-      this.filtedTable=this.etudiants
+    if (this.filtedTable.length < 1)
+      this.filtedTable = this.etudiants
     this.filtedTable.forEach(etudiant => {
       let t = {}
       t['ID Etudiant'] = etudiant?.custom_id

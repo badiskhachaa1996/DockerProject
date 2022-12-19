@@ -59,7 +59,9 @@ export class AddSeanceComponent implements OnInit {
     isUnique: new FormControl(true, Validators.required),
     date_fin_plannification: new FormControl(''),
     seance_type: new FormControl('Séance'),
-    periode_seance: new FormControl('', Validators.required)
+    periode_seance: new FormControl('', Validators.required),
+    time_max_sign: new FormControl(30, Validators.required),
+    forcedAllowedByFormateur: new FormControl(false, Validators.required)
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
@@ -175,7 +177,7 @@ export class AddSeanceComponent implements OnInit {
       libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
     }
     let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, formateur, info,
-      this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type);
+      this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type, this.seanceForm.value.time_max_sign);
     let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
     this.formateurService.getByUserId(formateur).subscribe(data => {
@@ -328,7 +330,7 @@ export class AddSeanceComponent implements OnInit {
           info = 'Classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom
         }
         let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, newDateDebut, newDateFin, formateur, info,
-          this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type);
+          this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type, this.seanceForm.value.time_max_sign);
         console.log(seance)
         seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + newNumeroSeance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
         let calc = newDateFin.getHours() - newDateDebut.getHours()
@@ -400,28 +402,26 @@ export class AddSeanceComponent implements OnInit {
             }
           }
           if (choice)
-            console.log(seance)
-          this.seanceService.create(seance).subscribe((data) => {
-            console.log(data)
-            this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
-          }, (error) => {
-            console.error(error)
-            let serror: Seance = error.error.seance
-            this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
-            let classeStr = ""
-            serror.classe_id.forEach(c => {
-              classeStr = classeStr + this.classes[c].abbrv + ","
-            })
-            this.messageService.add({
-              severity: 'error', summary: "Informations de :" + error.seance, detail:
-                "Debut: " + this.convertDate(new Date(serror.date_debut)) +
-                "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
-                "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
-                "\nModule: " + this.matieres[serror.matiere_id].nom +
-                "\nClasse: " + classeStr
-            })
+            this.seanceService.create(seance).subscribe((data) => {
+              this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
+            }, (error) => {
+              console.error(error)
+              let serror: Seance = error.error.seance
+              this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
+              let classeStr = ""
+              serror.classe_id.forEach(c => {
+                classeStr = classeStr + this.classes[c].abbrv + ","
+              })
+              this.messageService.add({
+                severity: 'error', summary: "Informations de :" + error.seance, detail:
+                  "Debut: " + this.convertDate(new Date(serror.date_debut)) +
+                  "\nFin: " + this.convertDate(new Date(serror.date_fin)) +
+                  "\nFormateur: " + this.formateurs[serror.formateur_id].firstname + " " + this.formateurs[serror.formateur_id].lastname +
+                  "\nModule: " + this.matieres[serror.matiere_id].nom +
+                  "\nClasse: " + classeStr
+              })
 
-          });
+            });
         })
 
 
@@ -492,7 +492,7 @@ export class AddSeanceComponent implements OnInit {
             else
               str = str + this.diplomeDic[formation].titre
           })
-          str = str + " - " + m.niveau  + " - " + m.semestre
+          str = str + " - " + m.niveau + " - " + m.semestre
           this.dropdownMatiere.push({ nom: str, value: m._id });
         }
         else {
@@ -552,7 +552,7 @@ export class AddSeanceComponent implements OnInit {
 
   loadNBSeance() {
     this.seanceService.getAllByMatiere(this.seanceForm.value.matiere.value).subscribe(matieres => {
-      this.seanceForm.patchValue({ nbseance: matieres.length+1 })
+      this.seanceForm.patchValue({ nbseance: matieres.length + 1 })
     })
   }
 

@@ -14,8 +14,8 @@ import { saveAs as importedSaveAs } from "file-saver";
 import { CampusService } from 'src/app/services/campus.service';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { DiplomeService } from 'src/app/services/diplome.service';
-import { concat } from 'rxjs';
-import { stringify } from 'querystring';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-list-formateurs',
@@ -486,5 +486,47 @@ export class ListFormateursComponent implements OnInit {
 
   onRedirect() {
     this.router.navigate(['ajout-formateur']);
+  }
+
+  exportExcel() {
+    let dataExcel = []
+    //Clean the data
+    this.formateurs.forEach(formateur => {
+      let t = {}
+      let bypass: any = formateur.user_id
+      let ent: any = formateur.prestataire_id
+      t['NOM'] = bypass.lastname
+      t['Prenom'] = bypass.firstname
+      t['Email Ecole'] = bypass?.email
+      t['Email Personnel'] = bypass?.email_perso
+      t['Telephone'] = bypass?.indicatif + bypass?.phone
+      if (!bypass?.indicatif)
+        t['Telephone'] = bypass?.phone
+      t['Nom Rue'] = bypass?.rue_adresse
+      t['Numéro Rue'] = bypass?.numero_adresse
+      t['Code Postal'] = bypass?.postal_adresse
+      t['Pays de Résidence'] = bypass?.pays_adresse
+      t['Ville'] = bypass?.ville_adresse
+      t['Numéro de Déclaration d\'Activité'] = formateur.nda
+      t['Type de contrat'] = formateur.type_contrat
+      t['Cout horaire'] = formateur.taux_h
+      if (formateur?.campus_id)
+        formateur?.campus_id.forEach((cid, index) => {
+          if (index == 0)
+            t['Campus'] = this.campusList[cid]?.libelle
+          else
+            t['Campus'] = t['Campus'] + "," + this.campusList[cid]?.libelle
+        })
+      t['Entreprise'] = ent?.r_sociale
+      t['Remarque'] = formateur.remarque
+      dataExcel.push(t)
+    })
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(dataExcel);
+    const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const data: Blob = new Blob([excelBuffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+    });
+    FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
   }
 }
