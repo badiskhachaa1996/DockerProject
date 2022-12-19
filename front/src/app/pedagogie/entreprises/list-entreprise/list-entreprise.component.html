@@ -201,7 +201,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem;"></th>
-                        <th pSortableColumn="raison_sociale"> Raison sociale <p-sortIcon field="raison_sociale">
+                        <th pSortableColumn="r_sociale"> Raison sociale <p-sortIcon field="r_sociale">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique">
@@ -233,9 +233,6 @@
                         <td>
                             <i style="margin-left: 2%; cursor: pointer" class="pi pi-pencil"
                                 (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
-
-                            <i style="margin-left: 2%; cursor: pointer" class="pi pi-file" title="Voir les contrats"
-                                (click)="onGoToContractList(entreprise._id);" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
