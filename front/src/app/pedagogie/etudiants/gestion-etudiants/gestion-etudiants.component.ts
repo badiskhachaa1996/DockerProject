@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { MessageService } from 'primeng/api';
+import { Campus } from 'src/app/models/Campus';
 import { Etudiant } from 'src/app/models/Etudiant';
+import { CampusService } from 'src/app/services/campus.service';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 
 @Component({
@@ -12,29 +14,40 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 export class GestionEtudiantsComponent implements OnInit {
 
   etudiants: Etudiant[] = [];
+  campus: Campus[] = [];
+
+  dropdownCampus: any = [
+    { label: 'Tous les campus', value: 'null' }
+  ];
 
   /* partie dediée au reporting */
-  studentsByCampus: any;
   etudiantConnectedFromLastWeek: Etudiant[] = [];
-  studentsOfParisConnectedFromLastWeek: Etudiant[] = [];
-  studentsOfParis: Etudiant[] = [];
-  studentsOfMontpellierConnectedFromLastWeek: Etudiant[] = [];
-  studentsOfMontpellier: Etudiant[] = [];
   /* end */
 
-  constructor(private etudiantService: EtudiantService, private messageService: MessageService) { }
+  constructor(private etudiantService: EtudiantService, private campusService: CampusService, private messageService: MessageService) { }
 
   ngOnInit(): void {
     //Recuperation de la liste de l'ensemble des étudiants
     this.etudiantService.getAllEtudiantPopulate().subscribe(
       ((response) => { 
         this.etudiants = response; 
-      
         //Pour le reporting
         this.onGetNumbersOfStudentsConnectedbyCampus(this.etudiants);
       }),
       ((error) => { console.log(error); })
     );
+
+
+    // campus recovery
+    this.campusService.getAll().subscribe(
+      ((response) => {
+        response.forEach((campus) => {
+          this.dropdownCampus.push({ label: campus.libelle, value: campus._id });
+        });
+      }),
+      ((error) => { console.log(error); })
+    );
+
   }
 
 
@@ -48,24 +61,9 @@ export class GestionEtudiantsComponent implements OnInit {
       let byPassCampus: any = etudiant.campus;
       let byPassUser: any = etudiant.user_id;
       
-      if(byPassCampus.ville === 'Champs sur Marne')
-      {
-        this.studentsOfParis.push(etudiant);
-      } else if(byPassCampus.ville === 'Montpellier')
-      {
-        this.studentsOfMontpellier.push(etudiant);
-      }
-
       if(new Date(byPassUser?.last_connection) >= new Date(lastWeekDate))
       {
         this.etudiantConnectedFromLastWeek.push(etudiant);
-
-        if(byPassCampus.ville === 'Champs sur Marne')
-        {
-          this.studentsOfParisConnectedFromLastWeek.push(etudiant);
-        } else if(byPassCampus.ville === 'Montpellier') {
-          this.studentsOfMontpellierConnectedFromLastWeek.push(etudiant);
-        }
       }
     });
 

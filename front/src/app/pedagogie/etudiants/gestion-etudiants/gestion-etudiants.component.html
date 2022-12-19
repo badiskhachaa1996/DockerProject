@@ -4,21 +4,17 @@
     <div class="col-12">
         <div class="card">
             <h5>Liste des étudiants connectés les 7 derniers jours</h5>
-            <ul>
-                <li>Nombres d'étudiants Champs sur Marne: {{ studentsOfParisConnectedFromLastWeek.length }}/ {{ studentsOfParis.length }}</li>
-                <li>Nombres d'étudiants montpellier: {{ studentsOfMontpellierConnectedFromLastWeek.length }}/ {{ studentsOfMontpellier.length }}</li>
-            </ul>
+
             <p-table #dt1 [value]="etudiantConnectedFromLastWeek" dataKey="_id" responsiveLayout="scroll"
-                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso']"
-                [rows]="5" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantConnectedFromLastWeek.length">
+                [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso', 'campus._id']"
+                [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="etudiantConnectedFromLastWeek.length">
                 <ng-template pTemplate="caption">
 
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
 
-                    <p-dropdown [style]="{'margin':'5px'}" [options]="filterCampus" filter="true"
-                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals'); onFilterByCampus($event);"
-                        emptyFilterMessage="Pas de type trouvé" filterPlaceholder="Campus"></p-dropdown>
+                    <p-dropdown [style]="{'margin':'5px'}" [options]="dropdownCampus"
+                        (onChange)="dt1.filter($event.value, 'campus._id', 'equals');"></p-dropdown>
 
                 </ng-template>
                 <ng-template pTemplate="header">
