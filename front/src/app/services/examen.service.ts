@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Examen } from '../models/Examen';
+import { Formateur } from '../models/Formateur';
+import { Matiere } from '../models/Matiere';
 
 @Injectable({
   providedIn: 'root'
@@ -59,6 +61,17 @@ export class ExamenService {
   update(examen: Examen) {
     let registreUrl = this.apiUrl + "updateById/" + examen._id;
     return this.httpClient.put<Examen>(registreUrl, examen, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getModulesByGroupeID(classe_id){
+    let url = this.apiUrl + "getModulesByGroupeID/" + classe_id
+    return this.httpClient.get<Matiere[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  
+  getFormateurByModuleID(module_id){
+    let url = this.apiUrl + "getFormateurByModuleID/" + module_id
+    return this.httpClient.get<Formateur[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

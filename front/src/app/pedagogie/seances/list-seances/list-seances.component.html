@@ -9,7 +9,7 @@
                 <div class="field col-12 md:col-6">
                     <label>Nom du groupe</label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse"
-                        (onChange)="showCampus($event.value)" defaultLabel="Selection des groupes" optionLabel="nom"
+                        (onChange)="showCampus($event.value)" defaultLabel="Selection des groupes"
                         filter="true"></p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
@@ -93,7 +93,7 @@
         <div class="col-12 card shadow-lg my-5 ">
             <p-table #dt1 *ngIf="seances" [columns]="cols" [value]="seances" rowExpandMode="single" [rows]="10"
                 responsiveLayout="scroll" [paginator]="true" [pageLinks]="5" [responsive]="true"
-                [totalRecords]="seances.length" [filterDelay]="0"
+                [totalRecords]="seances.length" [filterDelay]="0" [(first)]="first"
                 [globalFilterFields]="['libelle','date_debut','date_fin','formateur_id','matiere','diplome_titre','classe_abbrv']"
                 styleClass="p-datatable-gridlines">
 
@@ -137,11 +137,7 @@
                         </th>
 
                         <th pSortableColumn="date_debut" scope="col" style="text-align:center">
-                            Début <p-sortIcon field="date_debut"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="date_fin" scope="col" style="text-align:center">
-                            Fin
-                            <p-sortIcon field="date_fin"></p-sortIcon>
+                            Date <p-sortIcon field="date_debut"></p-sortIcon>
                         </th>
 
                         <th scope="col" style="text-align:center">
@@ -172,12 +168,8 @@
                         </td>
 
                         <td style="min-width: 12rem;">
-                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}}
+                            {{rowData.date_debut | date:'dd/MM/yyyy HH:mm'}} - {{rowData.date_fin | date:'HH:mm'}}
                         </td>
-                        <td style="min-width: 12rem;">
-                            {{rowData.date_fin | date:'dd/MM/yyyy HH:mm'}}
-                        </td>
-
                         <td>
                             <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
                                 (click)="showModify(rowData);" aria-hidden="true"></i>

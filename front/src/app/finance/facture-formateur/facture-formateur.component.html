@@ -1,54 +1,4 @@
-<div class="col-12">
-
-</div>
 <div class="grid">
-    <!-- Formulaire de modification d'un formateur -->
-    <div class="col-12" *ngIf="showAddFacture">
-        <div class="card">
-            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;"
-                (click)="showAddFacture = false;" aria-hidden="true">
-            </i>
-            <h3 class="text-center" style="font-weight: bold;">
-                Ajout d'une Facture
-            </h3>
-            <p style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                    style="color: red;"> * </span> sont obligatoires</p>
-
-            <form class="p-fluid p-formgrid grid" [formGroup]="formAddFacture" (ngSubmit)="onAddFacture()">
-                <div class="field col-12 md:col-6">
-                    <label For="contrat">Formateur<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="formateurList" filter="true" formControlName="formateur_id"
-                        placeholder="Choissisez un formateur" (onChange)="filterSeanceByFormateur()">
-                    </p-dropdown>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label For="contrat">Seance<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="seanceList" filter="true" formControlName="seance_id"
-                        placeholder="Choissisez la séance du Formateur">
-                    </p-dropdown>
-                </div>
-                <div class="field col-3">
-                    <label For="contrat">Facture<span style="color: red;"> * </span></label>
-                    <p-fileUpload #fileUpload mode="basic" chooseLabel="Télécharger la Facture" maxFileSize="10000000"
-                        [auto]="true" (uploadHandler)="FileUploadAdd($event.files,fileUpload)"
-                        [customUpload]="true"></p-fileUpload>
-                </div>
-                <div class="field col-3">
-                    <label>&nbsp;</label>
-                    {{formAddFacture.value.file?.name}}
-                </div>
-                <div class="field col-6">
-                    <label>Coût Horaire * Nombre Heure de la séance</label><br>
-                    {{calcul()}}
-                </div>
-                <div>
-                    <button pButton label="Ajouter la Facture" type="submit"
-                        [disabled]="formAddFacture.invalid"></button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <div class="col-12" *ngIf="showAddFactureMensuel">
         <div class="card">
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red;"
@@ -68,113 +18,79 @@
                         (onChange)="calculMensuel()" placeholder="Choissisez un formateur">
                     </p-dropdown>
                 </div>
-                <div class="field col-12 md:col-6">
-                    <label For="contrat">Mois<span style="color: red;"> * </span></label>
-                    <p-dropdown [options]="dropdownMonth" filter="true" formControlName="mois"
-                        (onChange)="calculMensuel()" placeholder="Choissisez le mois">
-                    </p-dropdown>
+                <div class="field col-12 md:col-3">
+                    <label For="contrat">Mois & Année<span style="color: red;"> * </span></label>
+                    <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                        (onSelect)="calculMensuel($event)"></p-calendar>
                 </div>
-                <div class="field col-3">
-                    <label For="contrat">Facture<span style="color: red;"> * </span></label>
+                <div class="field col-12 md:col-3">
+                    <label For="contrat">Facture</label>
                     <p-fileUpload #fileUpload1 mode="basic" chooseLabel="Télécharger la Facture" maxFileSize="10000000"
                         [auto]="true" (uploadHandler)="FileUploadMensuel($event.files,fileUpload1)"
                         [customUpload]="true"></p-fileUpload>
                 </div>
-                <div class="field col-3">
-                    <label>&nbsp;</label>
-                    {{formAddFactureMensuel.value.file?.name}}
-                </div>
-                <div class="field col-6">
-                    <label>Coût Horaire * Nombre Heure de la séance</label><br>
-                    {{affichageMensuel}}
+                <div class="field col-12">
+                    <p-accordion *ngIf="formAddFactureMensuel.value.mois && formAddFactureMensuel.value.formateur_id">
+                        <p-accordionTab header="Séance du mois de {{convert[formAddFactureMensuel.value.mois]}}">
+                            <p-table [value]="seances">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="libelle" style="text-align: center;">
+                                            Libelle
+                                            <p-sortIcon field="libelle"></p-sortIcon>
+                                        </th>
+
+                                        <th pSortableColumn="classe_id" style="text-align: center;">
+                                            Groupe
+                                            <p-sortIcon field="classe_id"> </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="matiere_id.nom" style="text-align: center;">
+                                            Module
+                                            <p-sortIcon field="matiere_id.nom"> </p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="date_debut">
+                                            Date<p-sortIcon field="date_debut"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="presence">
+                                            Présence<p-sortIcon field="presence"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="presence">
+                                            Coût
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-data>
+                                    <tr>
+                                        <td>
+                                            {{data.libelle}}
+                                        </td>
+                                        <td>
+                                            {{data.classes}}
+                                        </td>
+                                        <td>
+                                            {{data.matiere}}
+                                        </td>
+                                        <td>
+                                            {{data.date_debut | date : 'dd/MM/yyyy'}}
+                                            {{data.matin}}
+                                        </td>
+                                        <td>
+                                            {{data.presence}}
+                                        </td>
+                                        <td>
+                                            {{data.calcul}}*{{formateurDic[formAddFactureMensuel.value.formateur_id]?.taux_h}}={{data.calcul*formateurDic[formAddFactureMensuel.value.formateur_id]?.taux_h}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-accordionTab>
+                    </p-accordion>
                 </div>
                 <div>
                     <button pButton label="Ajouter la Facture Mensuel" type="submit"
                         [disabled]="formAddFactureMensuel.invalid"></button>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <div class="col-12">
-        <div class="card">
-            <div style="float: right;">
-                <button class="mr-2" pButton icon="pi pi-plus" label="Ajouter une Facture d'une séance"
-                    (click)="showAddFacture=true"></button>
-            </div>
-            <h5>Liste des factures des formateurs</h5>
-            <p-toast></p-toast>
-            <p-table #dt1
-                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle']"
-                [totalRecords]="factures.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10"
-                styleClass="p-datatable-gridlines" [value]="factures" dataKey="_id" responsiveLayout="scroll">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
-                                class="w-full" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="formateur_id.lastname" style="text-align: center;">
-                            Formateur
-                            <p-sortIcon field="formateur_id.lastname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="seance_id.classe_id" style="text-align: center;">
-                            Groupes
-                            <p-sortIcon field="seance_id.classe_id"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="date_creation" style="text-align: center;">
-                            Date d'Upload
-                            <p-sortIcon field="date_creation"> </p-sortIcon>
-                        </th>
-                        <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
-                            Date de la Séance
-                            <p-sortIcon field="seance_id.date_debut"> </p-sortIcon>
-                        </th>
-                        <th pSortableColumn="seance_id.classe_id[0].diplome_id.titre" style="text-align: center;">
-                            Formation
-                            <p-sortIcon field="seance_id.classe_id[0].diplome_id.titre"> </p-sortIcon>
-                        </th>
-                        <th style="text-align: center;">Action</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-facture>
-                    <tr *ngIf="facture.formateur_id && facture.seance_id">
-                        <td>
-                            {{facture.formateur_id.lastname | uppercase}}
-                            {{facture.formateur_id.firstname | titlecase}}
-                        </td>
-                        <td>
-                            <span *ngFor="let classe of facture?.seance_id?.classe_id; let index = index">
-                                <span *ngIf="classe && classe.abbrv && index==0">{{classe.abbrv}}</span>
-                                <span *ngIf="classe && classe.abbrv && index!=0">,<br>{{classe.abbrv}}</span>
-                            </span>
-                        </td>
-                        <td>
-                            {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}
-                        </td>
-                        <td>
-                            {{facture.seance_id.date_debut | date : 'dd/MM/yyyy à hh:mm'}}
-                        </td>
-                        <td>
-                            <span *ngFor="let classe of facture?.seance_id?.classe_id; let index = index">
-                                <span *ngIf="classe && classe.diplome_id && index==0">{{classe.diplome_id?.titre}}</span>
-                                <span *ngIf="classe && classe.diplome_id && index!=0">,<br>{{classe.diplome_id?.titre}}</span>
-                            </span>
-                        </td>
-                        <td>
-                            <i (click)="downloadFacture(facture)" class="pi pi-upload" aria-hidden="true"
-                                pTooltip="Télécharger la facture">
-                            </i>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
         </div>
     </div>
     <div class="col-12">
@@ -185,7 +101,7 @@
             </div>
             <h5>Liste des factures mensuel des formateurs</h5>
             <p-table #dt2
-                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle']"
+                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle','year']"
                 [totalRecords]="facturesMensuel.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                 [rows]="10" styleClass="p-datatable-gridlines" [value]="facturesMensuel" dataKey="_id"
                 responsiveLayout="scroll">
@@ -196,6 +112,16 @@
                             <input pInputText type="text" #filter
                                 (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
+                        </span>
+                        <p-dropdown [options]="filterFormateur" filter="true"
+                            (onChange)="dt2.filter($event.value, 'formateur_id._id','equals');"
+                            [style]="{'margin':'5px'}">
+                        </p-dropdown>
+                        <span>
+                            <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                                (onSelect)="filterMonth(dt2,$event)"></p-calendar>
+                            <i class="pi pi-filter-slash"
+                                (click)="dt2.filter(null, 'mois', 'equals');dt2.filter(null, 'year', 'equals')"></i>
                         </span>
                     </div>
                 </ng-template>
@@ -224,7 +150,7 @@
                             {{facture.formateur_id.firstname | titlecase}}
                         </td>
                         <td>
-                            {{convert[facture.mois]}}
+                            {{convert[facture.mois]}} {{facture.year}}
                         </td>
                         <td>
                             {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}

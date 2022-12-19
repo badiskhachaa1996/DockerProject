@@ -55,12 +55,8 @@
                 </div>
                 <div>
                     <button pButton type="submit" label="Ajouter le devoir" [disabled]="formAddDevoir.invalid"></button>
-
                 </div>
-
             </form>
-
-
         </div>
     </div>
 </div>
@@ -78,8 +74,8 @@
                     <th style="width: 3rem"></th>
                     <th>Libelle</th>
                     <th>Groupe</th>
-                    <th>Date Rendu</th>
-                    <th>Date Debut</th>
+                    <th>Date rendu maximum</th>
+                    <th>Date debut</th>
                     <th>Nombre de Rendu</th>
                     <th>Action</th>
                 </tr>
@@ -131,7 +127,7 @@
                     <th style="width: 3rem"></th>
                     <th>Civilité NOM Prénom</th>
                     <th>Date Rendu</th>
-                    <th pSortableColumn="verified">Validé <p-sortIcon field="verified"></p-sortIcon>
+                    <th pSortableColumn="verified">Vu <p-sortIcon field="verified"></p-sortIcon>
                     </th>
                     <th>Action</th>
                 </tr>
@@ -152,7 +148,7 @@
                     <td>{{ rendu.date_rendu | date:'dd/MM/YYYY à hh:mm'}} </td>
                     <td>{{rendu.verified ? "Oui":"Non"}}</td>
                     <td>
-                        <i *ngIf="!rendu.verified" pTooltip="Test" style="margin-left: 2%; cursor: pointer;"
+                        <i *ngIf="!rendu.verified" pTooltip="Noté comme Vu" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-check" (click)="valided(rendu,ri)" aria-hidden="true"></i>
                     </td>
                 </tr>
@@ -170,14 +166,6 @@
                         </p-accordion>
                     </td>
                 </tr>
-                <!--<p-accordion>
-                    <p-accordionTab header="Description">
-                        {{rendu.description}}
-                    </p-accordionTab>
-                    <p-accordionTab header="Documents">
-                        Content 2
-                    </p-accordionTab>
-                </p-accordion>-->
             </ng-template>
             <ng-template pTemplate="emptymessage">
 

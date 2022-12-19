@@ -15,7 +15,7 @@
                 Date d'examen: <strong>{{ examSelected.date | date:'dd/MM' }}</strong> <br />
             </p>
 
-            <p-table #dt1 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
+            <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
                 [globalFilterFields]="['etudiant', 'appreciation']" [rows]="10" [pageLinks]="10" [paginator]="true"
                 rowExpandMode="single" [totalRecords]="tableauNotes.length" styleClass="p-datatable-gridlines">
                 <ng-template pTemplate="caption">
@@ -23,24 +23,26 @@
                         <span class="p-input-icon-left mb-2">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
                                 class="w-full" />
                         </span>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width:10%">ID Etudiant </th>
                         <th style="width:25%">Nom & Prénom</th>
                         <th style="width:5%">Date d'intégration IMS </th>
                         <th style="width:5%">Date d'intégration Teams </th>
                         <th style="width:5%">Date de notation </th>
-                        <th style="width:20%">Note </th>
-                        <th style="width:25%">Appreciation </th>
-                        <th style="width:15%">Action </th>
+                        <th style="width:15%">Note </th>
+                        <th style="width:25%">Appreciation</th>
+                        <th style="width:10%">Action </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
                     <tr [pEditableRow]="data">
+                        <td>{{ data.id}}</td>
                         <td>{{ data.etudiant}}</td>
                         <td>{{ data.date_IMS }}</td>
                         <td>{{ data.date_TEAMS }}</td>
@@ -93,7 +95,7 @@
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 title="Fermer" (click)="showFormUpdateExamen = false;formUpdateExamen.reset()" aria-hidden="true">
             </i>
-            <h3 style="text-align: center;" *ngIf="examenToUpdate">Modification de {{examenToUpdate.libelle}}</h3>
+            <h3 style="text-align: center;" *ngIf="examenToUpdate">  de {{examenToUpdate.libelle}}</h3>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
 
                 <div class="field col-12">
@@ -113,9 +115,9 @@
                 <div class="field col-12 md:col-6">
                     <label>Module<span style="color:red">*</span>:</label><br>
                     <span>
-                        <p-dropdown [options]="dropdownMatiere" laceholder="Choissisez un module"
+                        <p-multiSelect [options]="dropdownMatiere" laceholder="Choissisez un module"
                             (onChange)="onLoadModules($event)" formControlName="matiere_id">
-                        </p-dropdown>
+                        </p-multiSelect>
                     </span>
                 </div>
 
@@ -200,12 +202,12 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field" *ngIf="dropdownGroupe.length!=1">
                             <p-dropdown filter="true" [options]="dropdownGroupe" class="mr-2"
-                                (onChange)="dt1.filter($event.value, 'classe_id._id', 'in')"
+                                (onChange)="dt1.filterGlobal($event.value.abbrv,'contains');filterModuleByGroupe($event.value,$event)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du groupe">
                             </p-dropdown>
 
                             <p-dropdown filter="true" [options]="dropdownModule" class="mr-2"
-                                (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals')"
+                                (onChange)="dt1.filter($event.value, 'matiere_id._id', 'equals');filterFormateurByModule($event.value)"
                                 emptyFilterMessage="Pas de classe trouvé" filterPlaceholder="Nom du module">
                             </p-dropdown>
 
@@ -258,7 +260,12 @@
                                 <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
                             </span>
                         </td>
-                        <td>{{ examen.matiere_id?.abbrv }}</td>
+                        <td>
+                            <span *ngFor="let cid of examen.matiere_id; let index = index">
+                                <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
+                                <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
+                            </span>
+                        </td>
                         <td>{{ examen.libelle }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
@@ -266,7 +273,7 @@
                             showFormAddExamen = false;
                             idExamenToUpdate = examen._id;
                             idClasseToUpdate = examen.classe_id;
-                            idMatiereToUpdate = examen.matiere_id._id;
+                            idMatiereToUpdate = examen.matiere_id;
                             formateurToUpdate = examen.formateur_id;
                             onGetById();" aria-hidden="true"></i>
 

@@ -98,7 +98,7 @@ export class EmergementComponent implements OnInit {
       this.etudiantService.getAllByMultipleClasseID(this.seance.classe_id).subscribe(etudiants => {
         this.presences.forEach(p => {
           let bypass: any = p.user_id
-          if (bypass) {
+          if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {
             oldPresence.push(bypass._id)
             this.tableauPresence.push({
               etudiant: bypass?.firstname + ' ' + bypass?.lastname,
@@ -107,13 +107,15 @@ export class EmergementComponent implements OnInit {
               Sign: p.signature,
               justificatif: p.justificatif,
               date_signature: p.date_signature,
-              user_id: bypass._id
+              user_id: bypass._id,
+              isFormateur: bypass?.type == "Formateur"
             })
           }
         })
         etudiants.forEach(etu => {
           if (etu.user_id)
-            if (oldPresence.indexOf(etu.user_id._id) == -1)
+            if (this.customIndexOf(oldPresence, etu.user_id._id) == -1) {
+              oldPresence.push(etu.user_id._id)
               this.tableauPresence.push({
                 etudiant: etu.user_id?.firstname + ' ' + etu.user_id?.lastname,
                 _id: etu._id + "NEW",
@@ -121,8 +123,10 @@ export class EmergementComponent implements OnInit {
                 Sign: false,
                 justificatif: false,
                 date_signature: null,
-                user_id: etu.user_id?._id
+                user_id: etu.user_id?._id,
+                isFormateur: etu.user_id?.type == "Formateur"
               })
+            }
         })
       })
       data.forEach(element => {
@@ -266,13 +270,6 @@ export class EmergementComponent implements OnInit {
     if (!this.presence) {
       this.PresenceService.create(presence).subscribe((data) => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
-          if (data) {
-            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
-              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })*/
-          }
-        })
         this.SocketService.addPresence();
         this.reloadPresence()
       }, err => {
@@ -283,13 +280,6 @@ export class EmergementComponent implements OnInit {
       presence._id = this.presence._id
       this.PresenceService.addSignature(presence).subscribe(data => {
         this.MessageService.add({ severity: 'success', summary: 'Signature', detail: 'Vous êtes compté comme présent avec signature' })
-        this.FormateurService.getByUserId(this.token.id).subscribe(data => {
-          if (data) {
-            /*this.FormateurService.updateMatiere(data, this.seance).subscribe(dataVH => {
-              this.MessageService.add({ severity: 'success', summary: 'Volume Horaire', detail: "Votre volume horaire réalisé a bien été mis à jour" })
-            })*/
-          }
-        })
         this.SocketService.addPresence();
         this.reloadPresence()
       }, err => {
@@ -297,8 +287,6 @@ export class EmergementComponent implements OnInit {
         console.error(err)
       })
     }
-
-
   }
 
   showPdf = false
@@ -440,7 +428,6 @@ export class EmergementComponent implements OnInit {
     if (this.formAddEtudiant.value.etudiant_id?.value != null) {
       id = this.formAddEtudiant.value.etudiant_id.value
     }
-    console.log(this.formAddEtudiant.value.etudiant_id, this.formAddEtudiant.value.etudiant_id?.value, id)
     this.PresenceService.create({
       _id: null,
       user_id: id,
@@ -450,7 +437,7 @@ export class EmergementComponent implements OnInit {
       allowedByFormateur: true
     }).subscribe(data => {
       this.showAddEtudiant = false
-      //TODO
+      //TODO Changer le reload en push (avec Populate)
       this.reloadPresence()
       this.MessageService.add({ severity: "success", summary: "L'étudiant peut signer" })
     }, error => {
@@ -512,6 +499,15 @@ export class EmergementComponent implements OnInit {
   onRowEditCancel(rowData, index: number) {
     this.tableauPresence[index] = this.clonedRowData[rowData._id];
     delete this.clonedRowData[rowData._id];
+  }
+
+  customIndexOf(array: string[], id: string) {
+    let idx = -1
+    array.forEach((ele, index) => {
+      if (ele == id)
+        idx = index
+    })
+    return idx
   }
 
 

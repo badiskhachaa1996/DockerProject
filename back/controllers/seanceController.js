@@ -78,6 +78,13 @@ app.post('/create', (req, res, next) => {
         })
 });
 
+app.get('/getAllByMatiere/:module_id', (req, res) => {
+    Seance.find({ matiere_id: req.params.module_id }).then(r => {
+        //CAN BE POPULATE
+        res.send(r)
+    })
+})
+
 
 //Modification d'une  via son id
 app.post('/edit/:id', (req, res, next) => {
@@ -97,7 +104,7 @@ app.post('/edit/:id', (req, res, next) => {
             isPlanified: req.body.isPlanified,
             campus_id: req.body.campus_id,
             nbseance: req.body.nbseance
-        }
+        }, { new: true }
     ).then((Seancefromdb) => res.status(201).send(Seancefromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -105,7 +112,7 @@ app.post('/edit/:id', (req, res, next) => {
 
 //Recuperation de toutes les s
 app.get("/getAll", (req, res, next) => {
-    Seance.find()
+    Seance.find().sort({ date_debut: 'asc' })
         .then((SeanceFromdb) => { res.status(200).send(SeanceFromdb); })
         .catch((error) => { req.status(500).send('Impossible de recupérer la liste des séances ' + error.message); });
 });
@@ -120,7 +127,7 @@ app.get('/getById/:id', (req, res, next) => {
 
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByClasseId/:id', (req, res, next) => {
-    Seance.find({ classe_id: { $in: req.params.id } })
+    Seance.find({ classe_id: { $in: req.params.id } }).sort({ date_debut: 'asc' })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => {
             console.error(error)
@@ -131,7 +138,7 @@ app.get('/getAllByClasseId/:id', (req, res, next) => {
 app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
     let ListSeanceFinished;
     let ListPresences = [];
-    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } })
+    Seance.find({ classe_id: { $in: req.params.id }, date_fin: { $lt: Date.now() } }).sort({ date_debut: 'asc' })
         .then((SeanceFromdb) => {
             ListSeanceFinished = SeanceFromdb;
             let dernierS = SeanceFromdb[SeanceFromdb.length - 1]
@@ -195,7 +202,7 @@ app.post('/getAllFinishedByClasseId/:id', (req, res, next) => {
 //Recuperation de toute les s selon l'id d'une classe
 app.get('/getAllByDiplomeID/:id', (req, res, next) => {
     let cids = []
-    Classe.find({ diplome_id: req.params.id }).then(classe => {
+    Classe.find({ diplome_id: req.params.id }).sort({ date_debut: 'asc' }).then(classe => {
         classe.forEach(c => {
             cids.push(c._id)
         })
@@ -211,7 +218,7 @@ app.get('/getAllByDiplomeID/:id', (req, res, next) => {
 
 //Recuperation de toute les s selon l'identifiant du formateur
 app.get('/getAllbyFormateur/:id', (req, res, next) => {
-    Seance.find({ formateur_id: req.params.id })
+    Seance.find({ formateur_id: req.params.id }).sort({ date_debut: 'asc' })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -232,7 +239,7 @@ app.get('/getAllbyFormateurToday/:id', (req, res, next) => {
 app.get('/getAllByRange/:date_debut/:date_fin', (req, res, next) => {
     let dd = new Date(req.params.date_debut)
     let df = new Date(req.params.date_fin)
-    Seance.find({ date_debut: { $gte: dd, $lt: df } })
+    Seance.find({ date_debut: { $gte: dd, $lt: df } }).sort({ date_debut: 'asc' })
         .then((SeanceFromdb) => res.status(200).send(SeanceFromdb))
         .catch(error => res.status(400).send(error));
 });
@@ -263,6 +270,7 @@ app.get('/getNb/:c_id/:f_id', (req, res) => {
 })
 
 const multer = require('multer');
+const { Etudiant } = require('../models/etudiant');
 
 
 app.get("/getFiles/:id", (req, res) => {
@@ -346,8 +354,8 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
     } else {
         Seance.findById(req.params.id).then(data => {
             let arr = data.fileRight
-            if(!arr)
-                arr= []
+            if (!arr)
+                arr = []
             arr.push({ name: file.filename, right: req.body.etat, upload_by: req.body.user })
             Seance.findByIdAndUpdate(req.params.id, { fileRight: arr }, { new: true }).exec(function (err, data) {
                 if (err) {
@@ -408,7 +416,6 @@ app.delete("/delete/:id", (req, res) => {
 })
 
 app.post('/getFormateursFromClasseIDs', (req, res, next) => {
-    console.log(req.body.matieres_ids)
     Seance.find({ matiere_id: { $in: req.body.matieres_ids } }).then(seanceList => {
         let f_ids = []
         seanceList.forEach(s => {
@@ -420,4 +427,171 @@ app.post('/getFormateursFromClasseIDs', (req, res, next) => {
         })
     })
 }, (error) => { res.status(500).send(error); })
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
+
+app.post('/sendMailModify', (req, res) => {
+    let dataPast = req.body.pastSeance
+    let dataNew = req.body.newSeance
+    let dateP = new Date(dataPast.date_debut)
+    let dateN = new Date(dataNew.date_debut)
+    let strDateP = "" + dateP.getDate() + "/" + (dateP.getMonth() + 1) + "/" + dateP.getFullYear() + " à " + dateP.getHours() + ":" + dateP.getMinutes()
+    let strDateN = "" + dateN.getDate() + "/" + (dateN.getMonth() + 1) + "/" + dateN.getFullYear() + " à " + dateN.getHours() + ":" + dateN.getMinutes()
+    let mailUpdateOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',
+        subject: 'IMS - Modification d\'une séance',
+        html: `<p>Bonjour,<br>
+        La séance du ${strDateP} a été modifié au ${strDateN}<br>
+        Merci de vérifier votre emploi du temps,
+        Cordialement,
+        </p>
+        `
+    };
+    res.send(mailUpdateOptions)
+    let mailAddOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',
+        subject: 'IMS - Ajout d\'une séance',
+        html: `<p>Bonjour,<br>
+        Une nouvelle séance a été crée pour le ${strDateP}<br>
+        Merci de vérifier votre emploi du temps,
+        Cordialement,
+        </p>
+        `
+    };
+    let mailDeleteOptions = {
+        from: 'ims@intedgroup.com',
+        to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
+        subject: 'IMS - Suppression d\'une séance',
+        html: `<p>Bonjour,<br>
+        La séance prévue pour le ${strDateP} a été supprimé<br>
+        Merci de votre compréhension
+        </p>
+        `
+    };
+    if (dataNew.formateur_id != dataPast.formateur_id) {
+        //Notifier l'ancien et le nouveau formateur
+        Formateur.findById(dataPast.formateur_id).populate('user_id').then(pastFormateur => {
+            mailDeleteOptions.to = pastFormateur.user_id.email
+            transporter.sendMail(mailDeleteOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+        Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
+            mailAddOptions.to = newFormateur.user_id.email
+            transporter.sendMail(mailAddOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+    } else {
+        Formateur.findById(dataNew.formateur_id).populate('user_id').then(newFormateur => {
+            mailUpdateOptions.to = newFormateur.user_id.email
+            transporter.sendMail(mailUpdateOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        })
+    }
+    if (dataNew.classe_id != dataPast.classe_id) {
+        dataPast.classe_id.forEach(cid => {
+            let mailsModifier = []
+            let mailsDelete = []
+            if (dataNew.classe_id.includes(cid)) {
+                //Alors ce groupe est doit être informer d'une modification
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsModifier.push(etu.user_id.email)
+                    })
+                    mailUpdateOptions.to = mailsModifier
+                    transporter.sendMail(mailUpdateOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+            } else {
+                //Alors ce groupe est doit être informer d'une suppression
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsDelete.push(etu.user_id.email)
+                    })
+                    mailDeleteOptions.to = mailsDelete
+                    transporter.sendMail(mailDeleteOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+
+            }
+        })
+        dataNew.classe_id.forEach(cid => {
+            let mailsAdd = []
+            if (!dataPast.classe_id.includes(cid)) {
+                //Alors ce groupe est doit être informer d'un ajout
+                Etudiant.find({ classe_id: cid }).populate('user_id').then(etudiants => {
+                    etudiants.forEach(etu => {
+                        mailsAdd.push(etu.user_id.email)
+                    })
+                    mailAddOptions.to = mailsAdd
+                    transporter.sendMail(mailAddOptions, function (error, info) {
+                        if (error) {
+                            console.error(error);
+                        }
+                    });
+                })
+            }
+        })
+    }
+})
+
+app.post('/sendMailDelete', (req, res) => {
+    let seance = req.body
+    let mails = []
+    User.findById(seance.formateur_id).then(pastFormateur => {
+        if (pastFormateur)
+            mails.push(pastFormateur.email)
+
+        let date = new Date(seance.date_debut)
+        let string_date = "" + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + " à " + date.getHours() + ":" + date.getMinutes()
+        let mailOptions = {
+            from: 'ims@intedgroup.com',
+            to: 'm.hue@intedgroup.com',
+            subject: 'IMS - Suppression d\'une séance',
+            html: `<p>Bonjour,<br>
+                La séance prévue pour le ${string_date} a été supprimé<br>
+                Merci de votre compréhension
+                </p>
+                `
+        };
+        Etudiant.find({ classe_id: { $in: seance.classe_id } }).populate('user_id').then(etudiants => {
+            etudiants.forEach(etu => {
+                mails.push(etu.user_id.email)
+            })
+            mailOptions.to = mails
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.error(error);
+                }
+                res.send(mails)
+            });
+        })
+
+    })
+})
 module.exports = app;

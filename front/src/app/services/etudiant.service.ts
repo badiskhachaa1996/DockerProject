@@ -3,6 +3,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Etudiant } from '../models/Etudiant';
 import { Presence } from '../models/Presence';
+import { Matiere } from '../models/Matiere';
 
 @Injectable({
   providedIn: 'root'
@@ -175,6 +176,12 @@ export class EtudiantService {
   disable(etudiant: Etudiant) {
     let registreUrl = this.apiUrl + "disable/" + etudiant._id;
     return this.httpClient.get<Etudiant>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getMatiereByMatiereListAndEtudiantID(etudiant_id: string, matiere_id: string[]) {
+    let registreUrl = this.apiUrl + "getMatiereByMatiereListAndEtudiantID/" + etudiant_id;
+    return this.httpClient.post<Matiere>(registreUrl, { matiere_id }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
   }
 
 }

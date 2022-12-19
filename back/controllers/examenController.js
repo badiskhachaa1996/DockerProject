@@ -86,5 +86,39 @@ app.put("/updateById/:id", (req, res, next) => {
 
 });
 
+app.get('/getModules/:classe_id', (req, res) => {
+    Examen.find({ classe_id: { $in: req.params.classe_id } }).populate({ path: 'matiere_id', populate: { path: "formation_id" } }).then(seances => {
+        let modules = []
+        seances.forEach(s => {
+            if (!modules.includes(s.matiere_id))
+                modules.push(s.matiere_id)
+        })
+        res.status(201).send(modules)
+    })
+})
+
+app.get('/getModulesByGroupeID/:classe_id', (req, res) => {
+    Examen.find({ classe_id: { $in: req.params.classe_id } }).populate({ path: 'matiere_id', populate: { path: "formation_id" } }).then(seances => {
+        let modules = []
+        seances.forEach(s => {
+            if (!modules.includes(s.matiere_id))
+                modules.push(s.matiere_id)
+        })
+        res.status(201).send(modules)
+    })
+})
+
+
+app.get('/getFormateurByModuleID/:module_id', (req, res) => {
+    Examen.find({ matiere_id: { $in: req.params.module_id } }).populate({ path: 'formateur_id', populate: { path: "user_id" } }).then(seances => {
+        let formateurs = []
+        seances.forEach(s => {
+            if (!formateurs.includes(s.formateur_id))
+                formateurs.push(s.formateur_id)
+        })
+        res.status(201).send(formateurs)
+    })
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

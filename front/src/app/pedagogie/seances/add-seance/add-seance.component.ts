@@ -29,9 +29,12 @@ export class AddSeanceComponent implements OnInit {
   matieres: Matiere[] = [];
   campus = {}
   dicClasse = {}
-
-  salleNames = [
+  typeSeance = [
+    { label: 'Matin', value: 'Matin' },
+    { label: 'Après-Midi', value: 'Après-Midi' },
+    { label: 'Autre', value: 'Autre' }
   ]
+  salleNames = []
   dropdownSeanceType: any[] = [
     { label: "Séance", value: "Séance" },
     { label: "Séance sans Formateur", value: "Séance sans Formateur" }
@@ -55,7 +58,8 @@ export class AddSeanceComponent implements OnInit {
     nbseance: new FormControl(""),
     isUnique: new FormControl(true, Validators.required),
     date_fin_plannification: new FormControl(''),
-    seance_type: new FormControl('Séance')
+    seance_type: new FormControl('Séance'),
+    periode_seance: new FormControl('', Validators.required)
   });
 
   get isPresentiel() { return this.seanceForm.get('isPresentiel'); }
@@ -139,7 +143,6 @@ export class AddSeanceComponent implements OnInit {
 
   showSalles(value, def = false) {
     this.salleNames = []
-    console.log(value)
     this.campus[value].salles.forEach(s => {
       console.log(s)
       this.salleNames.push({ value: s, label: s })
@@ -152,8 +155,6 @@ export class AddSeanceComponent implements OnInit {
   }
 
   saveSeance() {
-    //TODO get nbSeance
-
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
       if (index != 0)
@@ -309,7 +310,6 @@ export class AddSeanceComponent implements OnInit {
 
         newNumeroSeance += 1;
 
-        //TODO get nbSeance
         let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
         this.seanceForm.value.classe.forEach((c, index) => {
           if (index != 0)
@@ -492,7 +492,7 @@ export class AddSeanceComponent implements OnInit {
             else
               str = str + this.diplomeDic[formation].titre
           })
-          str = str + " - " + m.niveau
+          str = str + " - " + m.niveau  + " - " + m.semestre
           this.dropdownMatiere.push({ nom: str, value: m._id });
         }
         else {
@@ -537,5 +537,23 @@ export class AddSeanceComponent implements OnInit {
     }
   }
 
+  changeDate(value) {
+    let date_debut = new Date(value)
+    let date_fin = new Date(value)
+    if (this.seanceForm.value.periode_seance == 'Matin') {
+      date_debut.setHours(9)
+      date_fin.setHours(12, 30)
+    } else {
+      date_debut.setHours(13, 30)
+      date_fin.setHours(17)
+    }
+    this.seanceForm.patchValue({ date_debut, date_fin })
+  }
+
+  loadNBSeance() {
+    this.seanceService.getAllByMatiere(this.seanceForm.value.matiere.value).subscribe(matieres => {
+      this.seanceForm.patchValue({ nbseance: matieres.length+1 })
+    })
+  }
 
 }

@@ -167,6 +167,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       { value: "Level 7 - Health and Social care Management", }
 
     ];
+  defaultDropdown = this.programeFrDropdown
 
   typeFormationDropdown = [
     { value: "Intiale" },
@@ -175,16 +176,25 @@ export class FormulaireAdmissionComponent implements OnInit {
 
   form_origin: string = this.route.snapshot.paramMap.get('ecole'); //eduhorizons estya adg espic studinfo
 
+  choixCampus() {
+    if (this.RegisterForm.value.campusChoix1.value == "UAE - Dubai") {
+      this.programeFrDropdown = [
+        { value: 'English Foundation Year - Rentrée Janvier' },
+        { value: 'Negociateur technico-commercial 2eme année - Rentrée Janvier ' },
+        { value: 'Development Web et Web Mobile 2eme année - Rentrée Janvier ' },
+        { value: 'Management en commerce international 2eme année' },
+        { value: 'Ingenieur d\'affaires Master 1er année - Rentrée Mars' },
+        { value: 'Master en Ressource Humaine 1er année - Rentrée Mars' },
+      ]
+    } else
+      this.programeFrDropdown = this.defaultDropdown
+  }
+
 
   ngOnInit(): void {
-
-    console.log(this.route.snapshot.paramMap.get('code_commercial'))
-
     if (localStorage.getItem("CommercialCode")) {
       this.cookieCodeCommercial = localStorage.getItem("CommercialCode")
     }
-
-
     if (this.form_origin == "eduhorizons") {
       this.campusDropdown = [
         { value: "France - Paris" },
@@ -207,6 +217,7 @@ export class FormulaireAdmissionComponent implements OnInit {
         { value: "Brazzaville - Congo" },
         { value: "Rabat - Maroc " },
         { value: "Malte" },
+        { value: "UAE - Dubai" },
         { value: "En ligne" }
       ]
     } else if (this.form_origin == "adg") {
@@ -251,7 +262,7 @@ export class FormulaireAdmissionComponent implements OnInit {
       ]
 
     }
-
+    this.defaultDropdown = this.programeFrDropdown
 
     this.onInitRegisterForm();
 

@@ -28,19 +28,25 @@ mongoose
     .then(() => {
         console.log('Start DB')
         let emailList = []
-        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date } }).populate('matiere_id').then(seances => {
+        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date } }).populate('matiere_id').populate('formateur_id').then(seances => {
             let seanceIds = []
+            let formateurIds = {}
             let listIds = []
             seances.forEach(s => {
-                if(s.matiere_id && !s.matiere_id.hors_bulletin){
+                if (s.matiere_id && !s.matiere_id.hors_bulletin) {
                     listIds = s.classe_id.concat(listIds)
                     seanceIds.push(s._id)
+                    if (s.formateur_id) {
+                        formateurIds[s.formateur_id._id] = s.formateur_id.email
+                    }
                 }
             })
             Presence.find({ seance_id: { $in: seanceIds } }).then(presences => {
                 let userIds = []
                 presences.forEach(s => {
                     userIds.push(s.user_id)
+                    if (formateurIds.hasKey(s.user_id))
+                        delete formateurIds[s.user_id]
                 })
                 Etudiant.find({ classe_id: { $in: listIds }, user_id: { $nin: userIds }, valided_by_support: true }).populate('user_id').then(etudiants => {
                     etudiants.forEach(etu => {
@@ -63,6 +69,10 @@ mongoose
                     
                     <footer> <img src="cid:red"/></footer>
                     `
+                    var values = Object.keys(formateurIds).map(function (key) {
+                        return formateurIds[key];
+                    });
+                    emailList = emailList.concat(values)
                     let attachments = [{
                         filename: 'signature_mh.png',
                         path: '/home/ubuntu/ems3/back/assets/signature_mh.png',

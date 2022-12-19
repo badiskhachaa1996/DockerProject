@@ -15,7 +15,6 @@ app.post("/postIndividualAccount", (req, res, next) => {
         lastname: account.lastName,
         email: account.email,
         civilite: account.title,
-        //todo la suite à remplir
     });
 
     User.findOne({ email: req.body.email})

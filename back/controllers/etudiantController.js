@@ -5,6 +5,7 @@ const { Etudiant } = require("./../models/etudiant");
 const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
 const { Note } = require("./../models/note");
+const { Matiere } = require("./../models/matiere");
 const { User } = require('./../models/user');
 const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
@@ -453,7 +454,6 @@ app.post('/sendEDT/:id', (req, res, next) => {
 */
 
 app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
-    //TODO Mettre les moy sur 20 et calculer les coeffs des examens
     // MATIERE, COEF, MOY ETU, MOY CLASSE, MIN CLASSE, Max Classe, Appreciation
     // MOY TT ETU
     // { matiere_name: "Template", coef: 2, moy_etu: 10.00, moy_classe: 10.00, min_classe: 0.00, max_classe: 20.00, appreciation: "J'adore ce test",matiere_id: matiere_id._id }
@@ -466,7 +466,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
             etudiants.forEach(etu => {
                 listEtudiantID.push(etu._id)
             })
-            Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).then(notes => {
+            Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
                 let listMatiereNOM = []
                 let listNotesEtudiants = {} // {etudiant_id:{matiere_id:[number]}}
                 let listNotesEtudiantsCoeff = {}
@@ -475,11 +475,14 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 let dicMatiere = {}
                 let listMoyChoose = {}
                 notes.forEach(n => {
-                    if (n.examen_id != null && n.examen_id.matiere_id != null && !listMatiereNOM.includes(n.examen_id.matiere_id.abbrv)) {
-                        listMatiereNOM.push(n.examen_id.matiere_id.abbrv)
-                        dicMatiere[n.examen_id.matiere_id.abbrv] = n.examen_id.matiere_id
-                    }
-
+                    n.examen_id.matiere_id.forEach(mid => {
+                        if (mid.formation_id == n.etudiant_id.classe_id.diplome_id) {
+                            if (n.examen_id != null && !listMatiereNOM.includes(mid.abbrv)) {
+                                listMatiereNOM.push(mid.abbrv)
+                                dicMatiere[mid.abbrv] = mid
+                            }
+                        }
+                    })
                 })
                 listEtudiantID.forEach(e_id => {
                     listNotesEtudiants[e_id] = {}
@@ -490,23 +493,27 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                         let isBTS = false
                         let isPP = false
                         notes.forEach(note => {
-                            if (note.etudiant_id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false) {
-                                if (note.examen_id.niveau == 'BTS Blanc' && !isBTS) {
-                                    listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
-                                    isBTS = true
-                                } else if (note.examen_id.niveau == 'Projet Professionel' && !isPP) {
-                                    listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
-                                    isPP = true
-                                } else if (isBTS && note.examen_id.niveau == 'BTS Blanc') {
-                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                } else if (isPP && note.examen_id.niveau == 'Projet Professionel') {
-                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                } else if (!isBTS && !isPP) {
-                                    listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                    for (let i = 0; i < note.examen_id.coef; i++)
-                                        listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
-                                }
-                            }
+                            //TODO examen_id.matiere_id[]
+                            n.examen_id.matiere_id.forEach(mid => {
+                                if (mid.formation_id == note.etudiant_id.classe_id.diplome_id)
+                                    if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false) {
+                                        if (note.examen_id.niveau == 'BTS Blanc' && !isBTS) {
+                                            listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
+                                            isBTS = true
+                                        } else if (note.examen_id.niveau == 'Projet Professionel' && !isPP) {
+                                            listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
+                                            isPP = true
+                                        } else if (isBTS && note.examen_id.niveau == 'BTS Blanc') {
+                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                        } else if (isPP && note.examen_id.niveau == 'Projet Professionel') {
+                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                        } else if (!isBTS && !isPP) {
+                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                            for (let i = 0; i < note.examen_id.coef; i++)
+                                                listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
+                                        }
+                                    }
+                            })
                         })
                     })
                 })
@@ -892,6 +899,14 @@ app.get('/disable/:id', (req, res) => {
     }, err => {
         console.err(err)
         res.send(err)
+    })
+})
+
+app.post('/getMatiereByMatiereListAndEtudiantID/:etudiant_id', (req, res) => {
+    Etudiant.findById(req.params.etudiant_id).populate('classe_id').then(etudiant => {
+        Matiere.findOne({ formation_id: etudiant.classe_id.diplome_id, _id: { $in: req.body.matiere_id } }).then(r => {
+            res.send(r)
+        })
     })
 })
 module.exports = app;

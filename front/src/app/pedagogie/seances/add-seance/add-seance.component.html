@@ -47,14 +47,15 @@
                 <div class="field col-12 md:col-6" *ngIf="type!='classe'">
                     <label>Nom du groupe <span style="color: red;"> * </span></label><br>
                     <p-multiSelect formControlName="classe" [options]="dropdownClasse"
-                        (onChange)="changeGroupe($event.value)" defaultLabel="Selection des groupes" optionLabel="nom" filter="true">
+                        (onChange)="changeGroupe($event.value)" defaultLabel="Selection des groupes" optionLabel="nom"
+                        filter="true">
                     </p-multiSelect>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Module</label><br>
                     <p-dropdown formControlName="matiere" [options]="dropdownMatiere" optionLabel="nom"
-                        placeholder="Choissisez un module" emptyFilterMessage="Pas de module trouvé"
-                        filterPlaceholder="Nom de module" filter="true">
+                        (onChange)="loadNBSeance();" placeholder="Choissisez un module"
+                        emptyFilterMessage="Pas de module trouvé" filterPlaceholder="Nom de module" filter="true">
                     </p-dropdown>
                 </div>
                 <div class="field col-12 md:col-12">
@@ -63,21 +64,33 @@
                         class="form-control col-12">
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label>Début: <span style="color: red;"> * </span></label>
-                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
-                        placeholder="Début de la séance" pInputText>
-                </div>
-                <div class="field col-12 md:col-6">
-                    <label>Fin: <span style="color: red;"> * </span></label>
-                    <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
-                        placeholder="Fin de la séance" pInputText>
-                </div>
-                <div class="field col-12 md:col-12">
                     <label>Campus <span style="color: red;"> * </span></label><br>
                     <p-dropdown formControlName="campus_id" [options]="dropdownCampus"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
                     </p-dropdown>
+                </div>
+                <div class="field col-12 md:col-6">
+                    <label>Période <span style="color: red;"> * </span></label><br>
+                    <p-dropdown formControlName="periode_seance" [options]="typeSeance"
+                        placeholder="Choissisez une période">
+                    </p-dropdown>
+                </div>
+                <div class="field col-12"
+                    *ngIf="seanceForm.value.periode_seance!='Autre' && seanceForm.value.periode_seance">
+                    <label>Date: <span style="color: red;"> * </span></label>
+                    <p-calendar (onSelect)="changeDate($event)" placeholder="Date de la séance"></p-calendar>
+                </div>
+
+                <div class="field col-12 md:col-6" *ngIf="seanceForm.value.periode_seance=='Autre'">
+                    <label>Début: <span style="color: red;"> * </span></label>
+                    <input type="datetime-local" formControlName="date_debut" class="form-control col-12"
+                        placeholder="Début de la séance" pInputText>
+                </div>
+                <div class="field col-12 md:col-6" *ngIf="seanceForm.value.periode_seance=='Autre'">
+                    <label>Fin: <span style="color: red;"> * </span></label>
+                    <input type="datetime-local" formControlName="date_fin" class="form-control col-12"
+                        placeholder="Fin de la séance" pInputText>
                 </div>
                 <div class="field col-12 md:col-6" *ngIf="type!='formateur' && seanceForm.value.seance_type=='Séance'">
                     <label>Nom du formateur <span style="color: red;"> * </span></label><br>
@@ -86,7 +99,8 @@
                         filterPlaceholder="Nom de formateur" filter="true">
                     </p-dropdown>
                 </div>
-                <div [ngClass]="{'field col-12 md:col-6':(type!='formateur' && seanceForm.value.seance_type=='Séance'),'field col-12':!(type!='formateur' && seanceForm.value.seance_type=='Séance')}" class="field col-12 md:col-6">
+                <div [ngClass]="{'field col-12 md:col-6':(type!='formateur' && seanceForm.value.seance_type=='Séance'),'field col-12':!(type!='formateur' && seanceForm.value.seance_type=='Séance')}"
+                    class="field col-12 md:col-6">
                     <label>Numéro de séance</label><br>
                     <input pInputText type="number" formControlName="nbseance" placeholder="1"
                         class="form-control col-12">
@@ -110,8 +124,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Type de séance <span style="color: red;"> * </span></label>
-                    <p-selectButton (onChange)="changeType($event.value)"
-                        [options]="dropdownSeanceType"
+                    <p-selectButton (onChange)="changeType($event.value)" [options]="dropdownSeanceType"
                         formControlName="seance_type"></p-selectButton>
                 </div>
                 <div class="field col-12 md:col-6">
