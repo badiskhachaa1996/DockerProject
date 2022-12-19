@@ -103,8 +103,6 @@ export class TuteurComponent implements OnInit {
             //   this.tuteurs.push(tuteur);
             // })
             this.tuteurs = dataTuteur;
-            console.log(this.tuteurs)
-
 
             //récupération des user
             this.UserService.getAll().subscribe(
