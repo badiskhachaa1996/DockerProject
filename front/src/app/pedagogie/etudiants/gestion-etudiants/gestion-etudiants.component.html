@@ -5,7 +5,7 @@
         <div class="card">
             <h5>Liste des étudiants connectés les 7 derniers jours</h5>
             <ul>
-                <li>Nombres d'étudiants Paris: {{ studentsOfParisConnectedFromLastWeek.length }}/ {{ studentsOfParis.length }}</li>
+                <li>Nombres d'étudiants Champs sur Marne: {{ studentsOfParisConnectedFromLastWeek.length }}/ {{ studentsOfParis.length }}</li>
                 <li>Nombres d'étudiants montpellier: {{ studentsOfMontpellierConnectedFromLastWeek.length }}/ {{ studentsOfMontpellier.length }}</li>
             </ul>
             <p-table #dt1 [value]="etudiantConnectedFromLastWeek" dataKey="_id" responsiveLayout="scroll"

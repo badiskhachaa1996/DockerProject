@@ -48,7 +48,7 @@ export class GestionEtudiantsComponent implements OnInit {
       let byPassCampus: any = etudiant.campus;
       let byPassUser: any = etudiant.user_id;
       
-      if(byPassCampus.ville === 'Paris')
+      if(byPassCampus.ville === 'Champs sur Marne')
       {
         this.studentsOfParis.push(etudiant);
       } else if(byPassCampus.ville === 'Montpellier')
@@ -60,7 +60,7 @@ export class GestionEtudiantsComponent implements OnInit {
       {
         this.etudiantConnectedFromLastWeek.push(etudiant);
 
-        if(byPassCampus.ville === 'Paris')
+        if(byPassCampus.ville === 'Champs sur Marne')
         {
           this.studentsOfParisConnectedFromLastWeek.push(etudiant);
         } else if(byPassCampus.ville === 'Montpellier') {

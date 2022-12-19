@@ -43,7 +43,7 @@ export class UsersSettingsComponent implements OnInit {
   roleList: any = [
     { label: 'Tous les rôles', value: null },
     { label: 'Admin', value: 'Admin' },
-    { label: 'User', value: 'user' },
+    { label: 'user', value: 'user' },
     { label: 'Agent', value: 'Agent' },
     { label: 'Responsable', value: 'Responsable' },
   ];
