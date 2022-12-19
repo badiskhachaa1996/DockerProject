@@ -90,7 +90,7 @@
                             </p-table>
                         </p-accordionTab>
                         <p-accordionTab header="Facture Type 1">
-                            <div #facture1 class="grid">
+                            <div id="facture1" class="grid">
                                 <span class="col-6"
                                     style="text-align:left;font-weight: bold;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.lastname
                                     | uppercase}}
@@ -157,8 +157,12 @@
                                 <span class="col-12" style="text-align:left;">N° de SIRET :</span>
                                 <span class="col-12" style="text-align:left;">N° de Formateur :</span>
                                 <span class="col-12" style="text-align:left;">N° URSSAF :</span>
-                                <span class="col-12" style="text-align:left;">Membre d'une Association de Gestion Agréée. Règlement des honoraires par chèque accepté.</span>
+                                <span class="col-12" style="text-align:left;">Membre d'une Association de Gestion
+                                    Agréée. Règlement des honoraires par chèque accepté.</span>
                             </div>
+                            <button pButton *ngIf="!hideBtn" (click)="onGenerateFacture('facture1')" type="button"
+                            label="Exporter en pdf">
+                        </button>
                         </p-accordionTab>
                     </p-accordion>
                 </div>

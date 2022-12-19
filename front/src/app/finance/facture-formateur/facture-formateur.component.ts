@@ -9,6 +9,7 @@ import { FactureFormateurMensuel } from 'src/app/models/FactureFormateurMensuel'
 import { MessageService } from 'primeng/api';
 import { Seance } from 'src/app/models/Seance';
 import { PresenceService } from 'src/app/services/presence.service';
+import * as html2pdf from 'html2pdf.js';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -126,6 +127,18 @@ export class FactureFormateurComponent implements OnInit {
     let date = new Date(value)
     tableau.filter(date.getMonth() + 1, 'mois', 'equals')
     tableau.filter(date.getFullYear(), 'year', 'equals')
+  }
+
+  onGenerateFacture(id = 'facture1') {
+    var element = document.getElementById(id);
+    var opt = {
+      margin: 0,
+      filename: id + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
   }
 
 }
