@@ -30,6 +30,10 @@
                         [customUpload]="true"></p-fileUpload>
                 </div>
                 <div class="field col-12">
+                    <label>Remarque</label>
+                    <textarea pInputTextarea formControlName="remarque" placeholder="Ex:Ce formateur sera payé le 8/Ce formateur a été payée"></textarea>
+                </div>
+                <div class="field col-12">
                     <p-accordion *ngIf="formAddFactureMensuel.value.mois && formAddFactureMensuel.value.formateur_id">
                         <p-accordionTab header="Séance du mois de {{convert[formAddFactureMensuel.value.mois]}}">
                             <p-table [value]="seances">
@@ -140,6 +144,10 @@
                             Date d'Upload
                             <p-sortIcon field="date_creation"> </p-sortIcon>
                         </th>
+                        <th pSortableColumn="remarque" style="text-align: center;">
+                            Remarque
+                            <p-sortIcon field="remarque"> </p-sortIcon>
+                        </th>
                         <th style="text-align: center;">Action</th>
                     </tr>
                 </ng-template>
@@ -154,6 +162,9 @@
                         </td>
                         <td>
                             {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}
+                        </td>
+                        <td>
+                            {{facture.remarque}}
                         </td>
                         <td>
                             <i (click)="downloadFactureMensuel(facture)" class="pi pi-upload" aria-hidden="true"

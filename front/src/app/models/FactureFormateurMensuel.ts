@@ -5,7 +5,8 @@ export class FactureFormateurMensuel {
         public formateur_id?: any,
         public mois?: String,
         public date_creation?: Date,
-        public year?: String
+        public year?: String,
+        public remarque?: string
     ) { };
 
 }
