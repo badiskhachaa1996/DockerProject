@@ -190,7 +190,6 @@ const routes: Routes = [
             { path: 'tuteur/:entreprise', component: TuteurComponent },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
-            { path: 'liste-contrats/:entrepriseId', component: ListeContratsComponent, canActivate: [AdminGuardService] }, // Listes des contrats d'une entreprise
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
 
