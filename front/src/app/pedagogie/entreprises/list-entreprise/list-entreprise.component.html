@@ -201,7 +201,7 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem;"></th>
-                        <th pSortableColumn="raison_sociale"> Raison sociale <p-sortIcon field="raison_sociale">
+                        <th pSortableColumn="r_sociale"> Raison sociale <p-sortIcon field="r_sociale">
                             </p-sortIcon>
                         </th>
                         <th pSortableColumn="forme_juridique"> Forme juridique <p-sortIcon field="forme_juridique">
@@ -232,7 +232,7 @@
                         <td *ngIf="!entreprise.isInterne">Externe</td>
                         <td>
                             <i style="margin-left: 2%; cursor: pointer" class="pi pi-pencil"
-                                (click)="initFormUpdateEntreprise(entreprise, users[entreprise.directeur_id]);" aria-hidden="true"></i>
+                                (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
@@ -305,10 +305,10 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{users[entreprise.directeur_id].civilite}}</td>
-                        <td>{{users[entreprise.directeur_id].lastname | uppercase}} {{users[entreprise.directeur_id].firstname | titlecase}}</td>
-                        <td>{{users[entreprise.directeur_id].email_perso}}</td>
-                        <td>{{users[entreprise.directeur_id].indicatif}} {{users[entreprise.directeur_id].phone}}</td>
+                        <td>{{users[entreprise.directeur_id]?.civilite}}</td>
+                        <td>{{users[entreprise.directeur_id]?.lastname | uppercase}} {{users[entreprise.directeur_id]?.firstname | titlecase}}</td>
+                        <td>{{users[entreprise.directeur_id]?.email_perso}}</td>
+                        <td>{{users[entreprise.directeur_id]?.indicatif}} {{users[entreprise.directeur_id]?.phone}}</td>
                     </tr>
                 </ng-template>
             </p-table>

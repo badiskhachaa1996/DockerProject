@@ -80,8 +80,8 @@ export class AddEntrepriseComponent implements OnInit {
       nom_rep: ['', Validators.required],
       prenom_rep: ['', Validators.required],
       email_rep: ['', [Validators.required, Validators.email, Validators.pattern('[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$')]],
-      indicatif_rep: ['', Validators.required],
-      phone_rep: ['', Validators.required],
+      indicatif_rep: [''],
+      phone_rep: [''],
     })
   }
 

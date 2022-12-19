@@ -70,8 +70,7 @@ export class ListEntrepriseComponent implements OnInit {
     //Recuperation de la liste des entreprises
     this.entrepriseService.getAll().subscribe(
       ((response) => { 
-        this.entreprises = response; 
-        console.log(response);
+        this.entreprises = response;
       }),
       ((error) => { console.error(error); })
     );
@@ -118,9 +117,9 @@ export class ListEntrepriseComponent implements OnInit {
     })
   }
 
-  initFormUpdateEntreprise(entreprise: Entreprise, representant: User) {
-    this.representantToUpdate = representant;
-    this.showFormUpdateEntreprise = entreprise
+  initFormUpdateEntreprise(entreprise: Entreprise) {
+  
+    this.showFormUpdateEntreprise = entreprise;
     this.formUpdateEntreprise.patchValue({
       r_sociale: entreprise.r_sociale,
       fm_juridique: entreprise.fm_juridique,
@@ -147,12 +146,12 @@ export class ListEntrepriseComponent implements OnInit {
       OPCO: entreprise.OPCO,
       organisme_prevoyance: entreprise.organisme_prevoyance,
 
-      civilite_rep: representant.civilite,
-      nom_rep: representant.lastname,
-      prenom_rep: representant.firstname,
-      email_rep: representant.email_perso,
-      indicatif_rep: representant.indicatif,
-      phone_rep: representant.phone,
+      civilite_rep: this.representantToUpdate?.civilite,
+      nom_rep: this.representantToUpdate?.lastname,
+      prenom_rep: this.representantToUpdate?.firstname,
+      email_rep: this.representantToUpdate?.email_perso,
+      indicatif_rep: this.representantToUpdate?.indicatif,
+      phone_rep: this.representantToUpdate?.phone,
 
     })
   }
@@ -246,9 +245,9 @@ export class ListEntrepriseComponent implements OnInit {
       telecopie, 
       OPCO, 
       organisme_prevoyance, 
-      null,
+      this.showFormUpdateEntreprise.directeur_id,
       ); 
-
+      
       let representant = new User(
         this.representantToUpdate._id,
         prenom_rep,
@@ -288,7 +287,7 @@ export class ListEntrepriseComponent implements OnInit {
           ((error) => { console.error(error); })
         );
         this.showFormUpdateEntreprise = null;
-
+        this.ActiveIndex = 0;
       }),
       ((error) => { console.error(error); })
     );

@@ -260,7 +260,7 @@
                 (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
         </div>
         <h5>Liste des tuteurs</h5>
-        <p-table #dt1 [globalFilterFields]="['fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
+        <p-table #dt1 [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
             [totalRecords]="tuteurs.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
             responsiveLayout="scroll">
 
@@ -300,7 +300,7 @@
                         {{ tuteur.user_id.phone }}
                     </td>
                     <td>
-                        {{ tuteur.user_id.email}}
+                        {{ tuteur.user_id.email_perso}}
                     </td>
                     <td>
                         {{ entreprises[tuteur.user_id.entreprise].r_sociale }}
