@@ -16,6 +16,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 })
 export class FactureFormateurComponent implements OnInit {
   showAddFactureMensuel = false
+  today: Date = new Date()
   formateurList = []
   seanceList = []
   formateurDic = {}

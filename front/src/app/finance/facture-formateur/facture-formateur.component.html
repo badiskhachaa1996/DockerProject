@@ -31,7 +31,8 @@
                 </div>
                 <div class="field col-12">
                     <label>Remarque</label>
-                    <textarea pInputTextarea formControlName="remarque" placeholder="Ex:Ce formateur sera payé le 8/Ce formateur a été payée"></textarea>
+                    <textarea pInputTextarea formControlName="remarque"
+                        placeholder="Ex:Ce formateur sera payé le 8/Ce formateur a été payée"></textarea>
                 </div>
                 <div class="field col-12">
                     <p-accordion *ngIf="formAddFactureMensuel.value.mois && formAddFactureMensuel.value.formateur_id">
@@ -87,6 +88,77 @@
                                     </tr>
                                 </ng-template>
                             </p-table>
+                        </p-accordionTab>
+                        <p-accordionTab header="Facture Type 1">
+                            <div #facture1 class="grid">
+                                <span class="col-6"
+                                    style="text-align:left;font-weight: bold;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.lastname
+                                    | uppercase}}
+                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.firstname |
+                                    titlecase}}</span>
+                                <span class="col-6" style="text-align:right;font-weight: bold;">Elitech</span>
+                                <span class="col-6"
+                                    style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.numero_adresse}}
+                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.rue_adresse}}</span>
+                                <span class="col-6" style="text-align:right;">23-25 rue Jean-jacques Rousseau</span>
+                                <span class="col-6"
+                                    style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.postal_adresse}}
+                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.ville_adresse}}</span>
+                                <span class="col-6" style="text-align:right;">75001 PARIS</span>
+                                <span class="col-12" style="text-align:left;">Tél :
+                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.phone}}</span>
+                                <span class="col-12" style="text-align:right;">Le {{today| date: 'dd/MM/YYYY'}}</span>
+                                <br>
+                                <span class="col-12" style="font-weight: bold;text-decoration: underline;">
+                                    FACTURE n° {{facturesMensuel.length+1}} : du
+                                    01/{{formAddFactureMensuel.value.mois}}/{{formAddFactureMensuel.value.year}} au
+                                    31/{{formAddFactureMensuel.value.mois}}/{{formAddFactureMensuel.value.year}}
+                                </span>
+                                <p-table class="col-12" [value]="seances">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th style="text-align: center;">
+                                                Date
+                                            </th>
+                                            <th style="text-align: center;">
+                                                Module
+                                            </th>
+                                            <th style="text-align: center;">
+                                                Durée
+                                            </th>
+                                            <th style="text-align: center;">
+                                                Taux Horaire
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-seance>
+                                        <tr *ngIf="seance.presence">
+                                            <td>
+                                                {{seance.date_debut | date : 'dd/MM/yyyy'}} {{seance.matin}}
+                                            </td>
+                                            <td>
+                                                {{seance.matiere}}
+                                            </td>
+                                            <td>
+                                                {{seance.calcul}}
+                                            </td>
+                                            <td>
+                                                WIP
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <span class="col-6" style="text-align:left;">Total heure: WIP heures</span>
+                                <span class="col-6" style="text-align:right;">Taux horaire:
+                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.taux_h}} €</span>
+                                <span class="col-6" style="text-align:left;">HT : WIP €</span>
+                                <span class="col-6" style="text-align:right;">TVA 20 % : WIP €</span>
+                                <span class="col-12" style="text-align:right;">NET A PAYER : WIP €</span>
+                                <span class="col-12" style="text-align:left;">N° de SIRET :</span>
+                                <span class="col-12" style="text-align:left;">N° de Formateur :</span>
+                                <span class="col-12" style="text-align:left;">N° URSSAF :</span>
+                                <span class="col-12" style="text-align:left;">Membre d'une Association de Gestion Agréée. Règlement des honoraires par chèque accepté.</span>
+                            </div>
                         </p-accordionTab>
                     </p-accordion>
                 </div>
