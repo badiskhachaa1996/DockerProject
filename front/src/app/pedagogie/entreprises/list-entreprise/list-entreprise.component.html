@@ -233,6 +233,9 @@
                         <td>
                             <i style="margin-left: 2%; cursor: pointer" class="pi pi-pencil"
                                 (click)="representantToUpdate = users[entreprise.directeur_id]; initFormUpdateEntreprise(entreprise);" aria-hidden="true"></i>
+
+                            <i style="margin-left: 2%; cursor: pointer" class="pi pi-file" title="Voir les contrats"
+                                (click)="onGoToContractList(entreprise._id);" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </ng-template>
