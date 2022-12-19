@@ -136,7 +136,7 @@ export class ListeContratsComponent implements OnInit {
       })
 
 
-      //LISTE A AFFICHER POUR LADMIN
+      // LISTE A AFFICHER POUR LADMIN
       if (this.token.role == "Admin") {
 
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {

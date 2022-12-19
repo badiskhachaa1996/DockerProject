@@ -307,9 +307,4 @@ export class ListEntrepriseComponent implements OnInit {
     this.router.navigate(['ajout-entreprise']);
   }
 
-  // method for go to the compagny's contracts page
-  onGoToContractList(id: string)
-  {
-    this.router.navigate(['/liste-contrats', id]);
-  }
 }
