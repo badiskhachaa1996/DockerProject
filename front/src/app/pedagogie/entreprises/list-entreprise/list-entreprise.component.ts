@@ -119,6 +119,7 @@ export class ListEntrepriseComponent implements OnInit {
   }
 
   initFormUpdateEntreprise(entreprise: Entreprise, representant: User) {
+    console.log('initformupdate entreprise')
     this.representantToUpdate = representant;
     this.showFormUpdateEntreprise = entreprise
     this.formUpdateEntreprise.patchValue({
@@ -147,12 +148,12 @@ export class ListEntrepriseComponent implements OnInit {
       OPCO: entreprise.OPCO,
       organisme_prevoyance: entreprise.organisme_prevoyance,
 
-      civilite_rep: representant.civilite,
-      nom_rep: representant.lastname,
-      prenom_rep: representant.firstname,
-      email_rep: representant.email_perso,
-      indicatif_rep: representant.indicatif,
-      phone_rep: representant.phone,
+      civilite_rep: representant?.civilite,
+      nom_rep: representant?.lastname,
+      prenom_rep: representant?.firstname,
+      email_rep: representant?.email_perso,
+      indicatif_rep: representant?.indicatif,
+      phone_rep: representant?.phone,
 
     })
   }
