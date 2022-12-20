@@ -151,7 +151,7 @@ export class FactureFormateurComponent implements OnInit {
         }
       })
       this.data.ht = ht
-      this.data.tva = this.data.tva * 0.2
+      this.data.tva = this.data.ht * 0.2
       this.data.total = this.data.ht + this.data.tva
     })
   }
