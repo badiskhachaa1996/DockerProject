@@ -328,7 +328,7 @@ app.post("/create", (req, res) => {
                 }
             })
         else
-            Presence.findByIdAndUpdate(p._id,{...presence}).exec().then(()=>{
+            Presence.findByIdAndUpdate(p._id, { ...presence }).exec().then(() => {
                 if (req.body.signature && req.body.signature != null && req.body.signature != '') {
                     fs.mkdir("./storage/signature/",
                         { recursive: true }, (err3) => {
@@ -641,7 +641,7 @@ app.get("/getAllAbsences/:user_id", (req, res) => {
 })
 
 app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
-    Formateur.find({user_id:req.params.user_id}).populate('user_id').then(formateur=>{
+    Formateur.find({ user_id: req.params.user_id }).populate('user_id').then(formateur => {
         Presence.find({ user_id: req.params.user_id }).populate({ path: 'seance_id', populate: { path: 'classe_id' } }).populate({ path: 'seance_id', populate: { path: 'matiere_id' } }).then(presences => {
             let r = []
             let idSeance = []
@@ -661,7 +661,10 @@ app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
                     })
                     if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
                         totalHeure = totalHeure + 0.5
-                    r.push({ libelle: p.seance_id.libelle, classes, matiere: p.seance_id.matiere_id.nom, date_debut, presence: 'Présent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: formateur?.coutHbyModule[p.seance_id.matiere_id._id] })
+                    let d = { libelle: p.seance_id.libelle, classes, matiere: p.seance_id.matiere_id.nom, date_debut, presence: 'Présent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: 0 }
+                    if (formateur?.coutHbyModule && formateur?.coutHbyModule[p.seance_id.matiere_id._id])
+                        d.taux_h = formateur?.coutHbyModule[p.seance_id.matiere_id._id]
+                    r.push(d)
                     idSeance.push(p.seance_id._id)
                     total += totalHeure
                 }
@@ -679,9 +682,12 @@ app.get('/getAllByUserIDMois/:user_id/:mois/:year', (req, res) => {
                         s.classe_id.forEach(c => {
                             classes = classes + c.abbrv
                         })
-                        r.push({ libelle: s.libelle, classes, matiere: s.matiere_id.nom, date_debut, presence: 'Absent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: formateur?.coutHbyModule[ s.matiere_id._id] })
+                        let d = { libelle: s.libelle, classes, matiere: s.matiere_id.nom, date_debut, presence: 'Absent', calcul: totalHeure, matin: date_debut.getHours() < 12 ? "Matin" : 'Après-Midi', taux_h: 0 }
+                        if (formateur?.coutHbyModule && formateur?.coutHbyModule[s.matiere_id._id])
+                            d.taux_h = formateur?.coutHbyModule[s.matiere_id._id]
+                        r.push(d)
                     }
-    
+
                 })
                 r.push({ libelle: 'TOTAL Présent', classe: '', matiere: '', date_debut: '', presence: '', calcul: total, matin: "" })
                 res.status(201).send(r)
