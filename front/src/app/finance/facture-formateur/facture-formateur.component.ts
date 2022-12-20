@@ -134,17 +134,23 @@ export class FactureFormateurComponent implements OnInit {
     let date = new Date(value)
     this.formAddFactureMensuel.patchValue({ mois: date.getMonth() + 1, year: date.getFullYear() })
     let c_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
-    if (!c_h || c_h == "" || c_h == " ") {
+    if (!c_h || c_h == "" || c_h == " " || c_h == "0") {
       this.MessageService.add({ severity: 'error', summary: "Le formateur n'a pas de taux horaire", detail: "Le cout ne pourra pas être calculé car le taux horaire du formateur n'a pas été renseigné" })
     }
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois, this.formAddFactureMensuel.value.year).subscribe(r => {
       this.seances = r
+      let ht = 0
       this.data.taux_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
       r.forEach(element => {
-        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent')
+        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent') {
           this.data.totalHeure += element.calcul
+          if (element.taux_h != 0)
+            ht += element.calcul * element.taux_h
+          else
+            ht += element.calcul * this.data.taux_h
+        }
       })
-      this.data.ht = this.data.ht * this.data.totalHeure
+      this.data.ht = ht
       this.data.tva = this.data.tva * 0.2
       this.data.total = this.data.ht + this.data.tva
     })

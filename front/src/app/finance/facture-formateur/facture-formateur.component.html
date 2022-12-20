@@ -156,8 +156,11 @@
                                             <td style="text-align:center;">
                                                 {{seance.calcul}}
                                             </td>
-                                            <td style="text-align:center;">
+                                            <td style="text-align:center;" *ngIf="seance.taux_h!=0">
                                                 {{seance.taux_h}}
+                                            </td>
+                                            <td style="text-align:center;" *ngIf="seance.taux_h==0">
+                                                {{data.taux_h}}
                                             </td>
                                         </tr>
                                     </ng-template>
