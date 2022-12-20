@@ -16,7 +16,9 @@ export class Seance {
         public nbseance?: number,
         public fileRight?: any[],
         public remarque?: string,
-        public seance_type?: string
+        public seance_type?: string,
+        public time_max_sign?: number,
+        public forcedAllowedByFormateur?: Boolean
     ) { }
 }
 

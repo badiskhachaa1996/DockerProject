@@ -78,7 +78,7 @@ export class AddFormateurComponent implements OnInit {
   }
 
   onAddMatiere() {
-    this.volumeHList.push({ volume_init: 0, matiere_id: this.matiereList[0].items[0].value })
+    this.volumeHList.push({ volume_init: 0, matiere_id: this.matiereList[0].items[0].value, cout_h: 0 })
   }
 
   changeVolumeH(i, event, type) {
@@ -88,6 +88,8 @@ export class AddFormateurComponent implements OnInit {
       this.volumeHList[i][type] = event.value;
       this.volumeHList[i]["volume_init"] = parseInt(this.matiereDic[event.value].volume_init)
     }
+    else if (type == "cout_h")
+      this.volumeHList[i][type] = parseInt(event.target.value);
   }
 
   deleteMatiereAdd(i) {
@@ -161,9 +163,9 @@ export class AddFormateurComponent implements OnInit {
       indicatif: ['', [Validators.required]],
       phone: ['', [Validators.required, Validators.pattern("^[0-9+]+$")]],
       email: ['', [Validators.required, Validators.pattern("^[a-zA-Z0-9._%+-]+@estya+\\.com$")]],
-      email_perso:['',Validators.email],
+      email_perso: ['', Validators.email],
       pays_adresse: ['', [Validators.pattern("^[a-zA-Z0-9éèàêô -]+$")]],
-      ville_adresse: ['', [ Validators.pattern('[^0-9]+')]],
+      ville_adresse: ['', [Validators.pattern('[^0-9]+')]],
       rue_adresse: [''],
       numero_adresse: [''],
       postal_adresse: [''],
@@ -242,11 +244,13 @@ export class AddFormateurComponent implements OnInit {
     //let prestataire_id = this.formAddFormateur.get('prestataire_id')?.value.value;
     let volumeH_i = {};
     let volumeH_consomme = {};
+    let cout_h = {}
     let campus = this.formAddFormateur.get('campus')?.value;
     let nda = this.formAddFormateur.get('nda')?.value;
     this.volumeHList.forEach((VH, index) => {
       volumeH_i[VH["matiere_id"]] = VH["volume_init"]
       volumeH_consomme[VH["matiere_id"]] = 0
+      cout_h[VH["matiere_id"]] = VH["cout_h"]
     });
     let jury = {}
     this.jury_diplomesList.forEach((VH, index) => {
@@ -291,7 +295,7 @@ export class AddFormateurComponent implements OnInit {
     let newUser = new User(null, firstname, lastname, indicatif, phone, email, email_perso, null, 'user', null, null, civilite, null, null, 'Formateur', null, pays_adresse, ville_adresse, rue_adresse, numero_adresse, postal_adresse);
     //création et envoie du nouvelle objet formateur
     let newFormateur = new Formateur(null, '', type_contrat, taux_h, taux_j, null, volumeH_i, volumeH_consomme, monday_available, tuesday_available, wednesday_available, thursday_available, friday_available, remarque, campus, nda,
-      jury, absences);
+      jury, absences,cout_h);
 
     this.formateurService.create({ 'newUser': newUser, 'newFormateur': newFormateur }).subscribe(
       ((response) => {

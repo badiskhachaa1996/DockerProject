@@ -173,7 +173,8 @@
 					</p-tabView>
 				</div>
 
-				<div class="field col-12 md:col-4"					> <!-- *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' " -->
+				<div class="field col-12 md:col-4">
+					<!-- *ngIf="onGetStatutToUpdate()=='Prestation et Vacation' || onGetStatutToUpdate()=='Sous-traitance' " -->
 					<label For="cout_horaire">Coût horaire<span style="color: red;"> * </span></label>
 					<input pInputText id="cout_horaire" type="text" placeholder="Coût/horaire"
 						formControlName="taux_h" />
@@ -282,6 +283,9 @@
 			<div style="float: right;">
 				<button pButton icon="pi pi-plus" label="Ajouter" (click)="onRedirect();"></button>
 			</div>
+			<button pButton icon="pi pi-file" label="Exporter" (click)="exportExcel()" type="button"
+				style="margin-left: 2px;" *ngIf="token && token.role!='user' && token.role!='Agent'">
+			</button>
 			<h5>Liste des formateurs</h5>
 			<p-toast></p-toast>
 			<p-table #dt1

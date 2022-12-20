@@ -16,7 +16,9 @@ const seanceSchema = mongoose.Schema({
     nbseance: { type: Number, required: false },
     fileRight: { type: [mongoose.Schema.Types.Mixed], default: [] },//{name:"",right:false,upload_by:mongoose.Schema.Types.ObjectId}
     remarque: { type: String },
-    seance_type: { type: String, default: "Séance" }
+    seance_type: { type: String, default: "Séance" },
+    time_max_sign: { type: Number, default: 30 },
+    forcedAllowedByFormateur: { type: Boolean, default: false }
 });
 
 //Creation de la table seance et export du model Seance

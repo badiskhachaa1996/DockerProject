@@ -36,7 +36,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Recupère la liste des formateurs
 app.get("/getAllPopulate", (req, res, next) => {
-    Formateur.find().populate('user_id')
+    Formateur.find().populate('user_id').populate('prestataire_id')
         .then((formateursFromDb) => { res.status(200).send(formateursFromDb) })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer la liste des formateur " + error.Message }) })
 });

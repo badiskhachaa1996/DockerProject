@@ -206,7 +206,12 @@ export class EmergementComponent implements OnInit {
               this.showFiles = [f]
         })
       this.date_debut = new Date(dataS.date_debut).getTime()
-      this.date_fin = this.date_debut + (30 * 60000)
+      let minutes_max = 30
+      if (dataS && dataS.time_max_sign)
+        minutes_max = dataS.time_max_sign
+      if (dataS && dataS.forcedAllowedByFormateur)
+        minutes_max = 0
+      this.date_fin = this.date_debut + (minutes_max * 60000)
       if (this.token.id == dataS.formateur_id)
         this.date_fin = new Date(dataS.date_fin).getTime()
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)

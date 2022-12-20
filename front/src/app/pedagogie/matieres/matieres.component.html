@@ -73,7 +73,7 @@
                             placeholder="Exemple : CGE" />
                     </div>
                     <div class="field col-12 md:col-4">
-                        <label For="seance_max">Nombre de séances <span style="color: red;"> * </span></label>
+                        <label For="seance_max">Nombre de séances</label>
                         <input pInputText id="seance_max" type="number" formControlName="seance_max" placeholder="0" />
                     </div>
                     <div class="field col-12 md:col-4">
@@ -204,8 +204,8 @@
                     <div class="flex justify-content-between flex-column sm:flex-row">
                         <div class="field">
                             <span style="margin-left: 2px;">
-                                <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                    (onChange)="dt1.filter($event.value._id, 'formation_id', 'contains')"
+                                <p-dropdown filter="true" [options]="filterFormation"
+                                    (onChange)="dt1.filter($event.value, 'formation_id', 'contains')"
                                     emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
                                 </p-dropdown>
                             </span>

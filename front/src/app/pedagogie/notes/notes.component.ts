@@ -1009,7 +1009,6 @@ export class NotesComponent implements OnInit {
 
   //Methode de generation du bulletin de note
   onGenerateBulletin(id = 'content') {
-    console.log(this.etudiantToGenerateBulletin)
     if ((this.etudiantToGenerateBulletin.statut_dossier && this.etudiantToGenerateBulletin.statut_dossier.includes('Dossier complet')) || confirm("Le dossier n'est pas complet\nVoulez-vous quand même générer le bulletin de note ?")) {
       this.hideBtn = true
       var element = document.getElementById(id);

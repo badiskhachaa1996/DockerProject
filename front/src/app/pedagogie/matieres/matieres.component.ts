@@ -27,6 +27,7 @@ export class MatieresComponent implements OnInit {
 
   idMatiereToUpdate: string;
 
+  filterFormation = [{ label: "Toutes les formations", value: null }];
   formationList: any = [];
   formationDic: any = {};
 
@@ -54,7 +55,9 @@ export class MatieresComponent implements OnInit {
 
     this.diplomeService.getAll().subscribe(data => {
       this.formationList = data
+
       data.forEach(formation => {
+        this.filterFormation.push({ label: formation.titre, value: formation._id })
         this.formationDic[formation._id] = formation;
       })
       //Initialisation du formulaire d'ajout de matieres
@@ -81,7 +84,7 @@ export class MatieresComponent implements OnInit {
       volume: ['', [Validators.required]],
       abbrv: ['', Validators.required],
       formation_id: [[], Validators.required],
-      seance_max: ['', Validators.required],
+      seance_max: [1],
       coeff: ['', [Validators.required]],
       credit_ects: ['', Validators.required],
       remarque: [''],
@@ -230,10 +233,10 @@ export class MatieresComponent implements OnInit {
   showHorsBulletin = true
   changeMatiereSeanceAdd(value) {
     //WIP
-    if (value){
+    if (value) {
       //hors bulletin
       //this.formAddMatiere.controls.gngn.setValidators([])
-    }else{
+    } else {
 
     }
 

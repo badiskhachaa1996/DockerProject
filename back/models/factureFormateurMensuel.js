@@ -5,7 +5,8 @@ const sch = mongoose.Schema({
     formateur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
     mois: { type: String, required: true },
     date_creation: { type: Date },
-    year: { type: String, default: "2023" }
+    year: { type: String, default: "2023" },
+    remarque: { type: String, default: "" }
 });
 
 //creation de la table matiere

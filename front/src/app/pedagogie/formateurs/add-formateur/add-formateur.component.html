@@ -347,10 +347,16 @@
                                     <p-dropdown [options]="matiereList" filter="true"
                                         (onChange)="changeVolumeH(i,$event,'matiere_id')" [group]="true"></p-dropdown>
                                 </div>
-                                <div class="col-6 md:col-4">
+                                <div class="col-6 md:col-2">
                                     <label>Volume Horaire: </label>
                                     <input type="number" (onChange)="changeVolumeH(i,$event,'volume_init')"
-                                        placeholder="Volume horaire" [(value)]="volumeHList[i]['volume_init']"
+                                        placeholder="11" [(value)]="volumeHList[i]['volume_init']"
+                                        pInputText>
+                                </div>
+                                <div class="col-6 md:col-2">
+                                    <label>Coût Horaire: </label>
+                                    <input type="number" (onChange)="changeVolumeH(i,$event,'cout_h')"
+                                        placeholder="55" [(value)]="volumeHList[i]['cout_h']"
                                         pInputText>
                                 </div>
                                 <div class="col-12 md:col-2">

@@ -9,6 +9,7 @@ import { FactureFormateurMensuel } from 'src/app/models/FactureFormateurMensuel'
 import { MessageService } from 'primeng/api';
 import { Seance } from 'src/app/models/Seance';
 import { PresenceService } from 'src/app/services/presence.service';
+import * as html2pdf from 'html2pdf.js';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -16,6 +17,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 })
 export class FactureFormateurComponent implements OnInit {
   showAddFactureMensuel = false
+  today: Date = new Date()
   formateurList = []
   seanceList = []
   formateurDic = {}
@@ -27,7 +29,8 @@ export class FactureFormateurComponent implements OnInit {
     formateur_id: ['', Validators.required],
     mois: ['', Validators.required],
     file: [''],
-    year: [new Date().getFullYear(), Validators.required]
+    year: [new Date().getFullYear(), Validators.required],
+    remarque: ['']
   });
 
   filterFormateur = [{ value: null, label: "Tous les formateurs" }]
@@ -72,7 +75,7 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.downloadMensuel(facture.formateur_id._id, facture.mois.toString() + "-" + facture.year.toString()).subscribe(data => {
       const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
       importedSaveAs(new Blob([byteArray], { type: data.documentType }), data.fileName)
-    },err=>{
+    }, err => {
       console.error(err)
     })
   }
@@ -81,9 +84,9 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.createMensuel(new FactureFormateurMensuel(null,
       this.formAddFactureMensuel.value.formateur_id,
       this.formAddFactureMensuel.value.mois,
-      new Date(), this.formAddFactureMensuel.value.year)).subscribe(data => {
+      new Date(), this.formAddFactureMensuel.value.year, this.formAddFactureMensuel.value.remarque)).subscribe(data => {
         this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
-        if(this.formAddFactureMensuel.value.file){
+        if (this.formAddFactureMensuel.value.file) {
           const formData = new FormData();
           formData.append('_id', data._id)
           formData.append('formateur_id', data.formateur_id)
@@ -108,6 +111,14 @@ export class FactureFormateurComponent implements OnInit {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
 
+  data = {
+    totalHeure: 0,
+    taux_h: 0,
+    ht: 0,
+    tva: 0,
+    total: 0
+  }
+
   calculMensuel(value) {
     let date = new Date(value)
     this.formAddFactureMensuel.patchValue({ mois: date.getMonth() + 1, year: date.getFullYear() })
@@ -117,6 +128,14 @@ export class FactureFormateurComponent implements OnInit {
     }
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois, this.formAddFactureMensuel.value.year).subscribe(r => {
       this.seances = r
+      this.data.taux_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
+      r.forEach(element => {
+        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent')
+          this.data.totalHeure += element.calcul
+      })
+      this.data.ht = this.data.ht * this.data.totalHeure
+      this.data.tva = this.data.tva * 0.2
+      this.data.total = this.data.ht + this.data.tva
     })
   }
 
@@ -124,6 +143,18 @@ export class FactureFormateurComponent implements OnInit {
     let date = new Date(value)
     tableau.filter(date.getMonth() + 1, 'mois', 'equals')
     tableau.filter(date.getFullYear(), 'year', 'equals')
+  }
+
+  onGenerateFacture(id = 'facture1') {
+    var element = document.getElementById(id);
+    var opt = {
+      margin: 0,
+      filename: id + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
   }
 
 }
