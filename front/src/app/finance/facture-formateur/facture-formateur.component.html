@@ -132,28 +132,29 @@
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-seance>
-                                        <tr *ngIf="seance.presence">
+                                        <tr *ngIf="seance.presence!='Absent' && seance.libelle!='TOTAL Présent'">
                                             <td>
                                                 {{seance.date_debut | date : 'dd/MM/yyyy'}} {{seance.matin}}
                                             </td>
                                             <td>
                                                 {{seance.matiere}}
                                             </td>
-                                            <td>
+                                            <td style="text-align:center;">
                                                 {{seance.calcul}}
                                             </td>
-                                            <td>
-                                                WIP
+                                            <td style="text-align:center;">
+                                                WIP {{seance.presence}}
                                             </td>
                                         </tr>
                                     </ng-template>
                                 </p-table>
-                                <span class="col-6" style="text-align:left;">Total heure: WIP heures</span>
+                                <span class="col-6" style="text-align:left;">Total heure: {{data.totalHeure}}
+                                    heures</span>
                                 <span class="col-6" style="text-align:right;">Taux horaire:
-                                    {{formateurDic[formAddFactureMensuel.value.formateur_id]?.taux_h}} €</span>
-                                <span class="col-6" style="text-align:left;">HT : WIP €</span>
-                                <span class="col-6" style="text-align:right;">TVA 20 % : WIP €</span>
-                                <span class="col-12" style="text-align:right;">NET A PAYER : WIP €</span>
+                                    {{data.taux_h}} €</span>
+                                <span class="col-6" style="text-align:left;">HT : {{data.ht}} €</span>
+                                <span class="col-6" style="text-align:right;">TVA 20 % : {{data.tva}} €</span>
+                                <span class="col-12" style="text-align:right;">NET A PAYER : {{data.total}} €</span>
                                 <span class="col-12" style="text-align:left;">N° de SIRET :</span>
                                 <span class="col-12" style="text-align:left;">N° de Formateur :</span>
                                 <span class="col-12" style="text-align:left;">N° URSSAF :</span>
@@ -161,8 +162,8 @@
                                     Agréée. Règlement des honoraires par chèque accepté.</span>
                             </div>
                             <button pButton *ngIf="!hideBtn" (click)="onGenerateFacture('facture1')" type="button"
-                            label="Exporter en pdf">
-                        </button>
+                                label="Exporter en pdf">
+                            </button>
                         </p-accordionTab>
                     </p-accordion>
                 </div>

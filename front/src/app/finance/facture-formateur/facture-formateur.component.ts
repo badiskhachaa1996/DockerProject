@@ -111,6 +111,14 @@ export class FactureFormateurComponent implements OnInit {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
 
+  data = {
+    totalHeure: 0,
+    taux_h: 0,
+    ht: 0,
+    tva: 0,
+    total: 0
+  }
+
   calculMensuel(value) {
     let date = new Date(value)
     this.formAddFactureMensuel.patchValue({ mois: date.getMonth() + 1, year: date.getFullYear() })
@@ -120,6 +128,14 @@ export class FactureFormateurComponent implements OnInit {
     }
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois, this.formAddFactureMensuel.value.year).subscribe(r => {
       this.seances = r
+      this.data.taux_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
+      r.forEach(element => {
+        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent')
+          this.data.totalHeure += element.calcul
+      })
+      this.data.ht = this.data.ht * this.data.totalHeure
+      this.data.tva = this.data.tva * 0.2
+      this.data.total = this.data.ht + this.data.tva
     })
   }
 
