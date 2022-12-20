@@ -16,8 +16,14 @@ export class GestionEtudiantsComponent implements OnInit {
   etudiants: Etudiant[] = [];
   campus: Campus[] = [];
 
+  //Liste des campus pour rassembler les étudiants
+  montpellier: Etudiant[] = [];
+  champs: Etudiant[] = [];
+  dubai: Etudiant[] = [];
+  londres: Etudiant[] = [];
+
   dropdownCampus: any = [
-    { label: 'Tous les campus', value: 'null' }
+    { label: 'Tous les campus', value: null }
   ];
 
   /* partie dediée au reporting */
@@ -64,6 +70,26 @@ export class GestionEtudiantsComponent implements OnInit {
       if(new Date(byPassUser?.last_connection) >= new Date(lastWeekDate))
       {
         this.etudiantConnectedFromLastWeek.push(etudiant);
+
+        //Remplissage des differents tableau de campus
+        switch(byPassCampus.ville)
+        {
+          case('Champs sur Marne'):
+            this.champs.push(etudiant);
+            break;
+          case('Montpellier'):
+            this.montpellier.push(etudiant);
+            break;
+          case('Dubaï'):
+            this.dubai.push(etudiant);
+            break;
+          case('Londres'):
+            this.londres.push(etudiant);
+            break;
+          default:
+            break;
+        }
+
       }
     });
 
