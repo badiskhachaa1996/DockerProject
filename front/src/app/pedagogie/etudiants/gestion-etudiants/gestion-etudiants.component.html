@@ -4,6 +4,16 @@
     <div class="col-12">
         <div class="card">
             <h5>Liste des étudiants connectés les 7 derniers jours</h5>
+            
+            <p>
+                {{ etudiantConnectedFromLastWeek.length }}/ {{ etudiants.length }} étudiants <br>
+            </p>
+            <ul>
+                <li>Champs sur Marne: {{ champs.length }}</li>
+                <li>Montpellier: {{ montpellier.length }}</li>
+                <li>Dubaï: {{ dubai.length }}</li>
+                <li>Londres: {{ londres.length }}</li>
+            </ul>
 
             <p-table #dt1 [value]="etudiantConnectedFromLastWeek" dataKey="_id" responsiveLayout="scroll"
                 [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email','user_id.email_perso', 'campus._id']"
