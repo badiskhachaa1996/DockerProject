@@ -10,6 +10,7 @@ import { MessageService } from 'primeng/api';
 import { Seance } from 'src/app/models/Seance';
 import { PresenceService } from 'src/app/services/presence.service';
 import * as html2pdf from 'html2pdf.js';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -34,6 +35,7 @@ export class FactureFormateurComponent implements OnInit {
   });
 
   filterFormateur = [{ value: null, label: "Tous les formateurs" }]
+  entrepriseList = []
 
   dropdownMonth = [
     { label: "Janvier", value: 1 },
@@ -52,7 +54,7 @@ export class FactureFormateurComponent implements OnInit {
 
   convert = [null, 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 
-  constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private SeanceService: SeanceService,
+  constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
     private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService) { }
 
   ngOnInit(): void {
@@ -68,6 +70,10 @@ export class FactureFormateurComponent implements OnInit {
     })
     this.FactureFormateurService.getAllMensuel().subscribe(data => {
       this.facturesMensuel = data
+    })
+    this.EntrepriseService.getAll().subscribe(data => {
+      this.entrepriseList = data
+      this.formFactureType1.patchValue({ entreprise: data[0] })
     })
   }
 
@@ -110,6 +116,11 @@ export class FactureFormateurComponent implements OnInit {
   FileUploadMensuel(event, fileupload) {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
+
+  formFactureType1: FormGroup = this.formBuilder.group({
+    entreprise: ['', Validators.required],
+    tva: [true, Validators.required]
+  });
 
   data = {
     totalHeure: 0,

@@ -90,21 +90,35 @@
                             </p-table>
                         </p-accordionTab>
                         <p-accordionTab header="Facture Type 1">
+                            <form class="p-fluid p-formgrid grid" [formGroup]="formFactureType1">
+                                <div class="field col-12 md:col-6">
+                                    <label For="contrat">Entreprise<span style="color: red;"> * </span></label>
+                                    <p-dropdown [options]="entrepriseList" optionLabel="r_sociale" filter="true" formControlName="entreprise">
+                                    </p-dropdown>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="contrat">TVA ?<span style="color: red;"> * </span></label>
+                                    <p-selectButton [options]="[{label:'Sans TVA',value:false},{label:'Avec TVA',value:true}]" formControlName="tva">
+                                    </p-selectButton>
+                                </div>
+                            </form>
                             <div id="facture1" class="grid">
                                 <span class="col-6"
                                     style="text-align:left;font-weight: bold;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.lastname
                                     | uppercase}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.firstname |
                                     titlecase}}</span>
-                                <span class="col-6" style="text-align:right;font-weight: bold;">Elitech</span>
+                                <span class="col-6" style="text-align:right;font-weight: bold;">
+                                    {{formFactureType1.value.entreprise.r_sociale}}
+                                </span>
                                 <span class="col-6"
                                     style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.numero_adresse}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.rue_adresse}}</span>
-                                <span class="col-6" style="text-align:right;">23-25 rue Jean-jacques Rousseau</span>
+                                <span class="col-6" style="text-align:right;">{{formFactureType1.value.entreprise?.adresse_ent}}</span>
                                 <span class="col-6"
                                     style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.postal_adresse}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.ville_adresse}}</span>
-                                <span class="col-6" style="text-align:right;">75001 PARIS</span>
+                                <span class="col-6" style="text-align:right;">{{formFactureType1.value.entreprise?.code_postale_ent}} {{formFactureType1.value.entreprise?.ville_ent}}</span>
                                 <span class="col-12" style="text-align:left;">Tél :
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.phone}}</span>
                                 <span class="col-12" style="text-align:right;">Le {{today| date: 'dd/MM/YYYY'}}</span>
@@ -143,7 +157,7 @@
                                                 {{seance.calcul}}
                                             </td>
                                             <td style="text-align:center;">
-                                                WIP {{seance.presence}}
+                                                {{seance.taux_h}}
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -153,9 +167,10 @@
                                 <span class="col-6" style="text-align:right;">Taux horaire:
                                     {{data.taux_h}} €</span>
                                 <span class="col-6" style="text-align:left;">HT : {{data.ht}} €</span>
-                                <span class="col-6" style="text-align:right;">TVA 20 % : {{data.tva}} €</span>
-                                <span class="col-12" style="text-align:right;">NET A PAYER : {{data.total}} €</span>
-                                <span class="col-12" style="text-align:left;">N° de SIRET :</span>
+                                <span class="col-6" style="text-align:right;" *ngIf="formFactureType1.value.tva">TVA 20 % : {{data.tva}} €</span>
+                                <span class="col-12" style="text-align:right;" *ngIf="formFactureType1.value.tva">NET A PAYER : {{data.total}} €</span>
+                                <span class="col-12" style="text-align:right;" *ngIf="!formFactureType1.value.tva">NET A PAYER : {{data.ht}} €</span>
+                                <span class="col-12" style="text-align:left;">N° de SIRET : {{formFactureType1.value.entreprise?.siret}}</span>
                                 <span class="col-12" style="text-align:left;">N° de Formateur :</span>
                                 <span class="col-12" style="text-align:left;">N° URSSAF :</span>
                                 <span class="col-12" style="text-align:left;">Membre d'une Association de Gestion
