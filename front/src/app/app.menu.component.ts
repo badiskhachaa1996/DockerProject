@@ -688,7 +688,7 @@ export class AppMenuComponent implements OnInit {
                                 })
                         })
                     }
-                } else if (this.isEvent) {
+                } else if (this.isFinance) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -708,6 +708,29 @@ export class AppMenuComponent implements OnInit {
                             label: "Finance",
                             items: [
                                 { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                            ]
+                        },
+                    ]
+                }else if (this.isEvent) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Evenementiel",
+                            items: [
+                                { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
                             ]
                         },
                     ]
