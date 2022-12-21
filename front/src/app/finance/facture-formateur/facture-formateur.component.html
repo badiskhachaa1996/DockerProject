@@ -217,7 +217,7 @@
                             [style]="{'margin':'5px'}">
                         </p-dropdown>
                         <span>
-                            <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                            <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true" placeholder="Choissisez un mois"
                                 (onSelect)="filterMonth(dt2,$event)"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt2.filter(null, 'mois', 'equals');dt2.filter(null, 'year', 'equals')"></i>
@@ -230,10 +230,13 @@
                             Formateur
                             <p-sortIcon field="formateur_id.lastname"></p-sortIcon>
                         </th>
-
                         <th pSortableColumn="mois" style="text-align: center;">
                             Mois
                             <p-sortIcon field="mois"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nombre_heure" style="text-align: center;">
+                            Nombre d'heure
+                            <p-sortIcon field="nombre_heure"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="date_creation" style="text-align: center;">
                             Date d'Upload
@@ -254,6 +257,9 @@
                         </td>
                         <td>
                             {{convert[facture.mois]}} {{facture.year}}
+                        </td>
+                        <td>
+                            {{facture?.nombre_heure}}
                         </td>
                         <td>
                             {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}

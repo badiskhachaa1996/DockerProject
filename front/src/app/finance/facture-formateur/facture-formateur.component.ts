@@ -90,7 +90,7 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.createMensuel(new FactureFormateurMensuel(null,
       this.formAddFactureMensuel.value.formateur_id,
       this.formAddFactureMensuel.value.mois,
-      new Date(), this.formAddFactureMensuel.value.year, this.formAddFactureMensuel.value.remarque)).subscribe(data => {
+      new Date(), this.formAddFactureMensuel.value.year, this.formAddFactureMensuel.value.remarque, this.data.totalHeure)).subscribe(data => {
         this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
         if (this.formAddFactureMensuel.value.file) {
           const formData = new FormData();

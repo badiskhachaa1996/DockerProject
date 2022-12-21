@@ -6,7 +6,8 @@ const sch = mongoose.Schema({
     mois: { type: String, required: true },
     date_creation: { type: Date },
     year: { type: String, default: "2023" },
-    remarque: { type: String, default: "" }
+    remarque: { type: String, default: "" },
+    nombre_heure: { type: Number, default: 0 }
 });
 
 //creation de la table matiere
