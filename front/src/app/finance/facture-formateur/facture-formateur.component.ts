@@ -28,6 +28,7 @@ export class FactureFormateurComponent implements OnInit {
   seances: Seance[] = []
 
   infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }];
+  clonedTables;
 
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
@@ -77,6 +78,7 @@ export class FactureFormateurComponent implements OnInit {
     let d = new Date()
     this.FormateurService.getAllInfos(d.getMonth() + 1, d.getFullYear()).subscribe(data => {
       this.infosFormateur = data
+      this.clonedTables = data
     })
     this.EntrepriseService.getAll().subscribe(data => {
       this.entrepriseList = data
@@ -165,15 +167,18 @@ export class FactureFormateurComponent implements OnInit {
 
   affichageMois = `${new Date().getMonth() + 1}/${new Date().getFullYear()}`
 
-  filterMonth(tableau, value,tab='dt2') {
+  filterMonth(tableau, value, tab = 'dt2') {
     let date = new Date(value)
-    tableau.filter(date.getMonth() + 1, 'mois', 'equals')
-    tableau.filter(date.getFullYear(), 'year', 'equals')
     if (tab == "dt1") {
       this.FormateurService.getAllInfos(date.getMonth(), date.getFullYear()).subscribe(data => {
         this.infosFormateur = data
-        this.affichageMois = `${date.getMonth()+ 1}/${date.getFullYear()}`
+        this.clonedTables = data
+        console.log(this.infosFormateur)
+        this.affichageMois = `${date.getMonth() + 1}/${date.getFullYear()}`
       })
+    } else {
+      tableau.filter(date.getMonth() + 1, 'mois', 'equals')
+      tableau.filter(date.getFullYear(), 'year', 'equals')
     }
   }
 
@@ -187,6 +192,22 @@ export class FactureFormateurComponent implements OnInit {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
+  }
+
+
+  onRowEditInit(product) {
+    this.clonedTables[product.formateur_id._id] = { ...product };
+  }
+
+  onRowEditSave(product) {
+    delete this.clonedTables[product.formateur_id._id];
+    //TODO Send
+    console.log(product)
+  }
+
+  onRowEditCancel(product, index: number) {
+    this.infosFormateur[index] = this.clonedTables[product.formateur_id._id];
+    delete this.clonedTables[product.formateur_id._id];
   }
 
 }

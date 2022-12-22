@@ -334,10 +334,13 @@
                             Nombre de rapport
                             <p-sortIcon field="rapport.length"> </p-sortIcon>
                         </th>
-                        <th style="text-align: center;">Action</th>
+                        <th pSortableColumn="remarque" style="text-align: center;">
+                            Remarque
+                            <p-sortIcon field="remarque"> </p-sortIcon>
+                        </th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-data>
+                <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
                     <tr>
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="data"
@@ -356,6 +359,18 @@
                         </td>
                         <td>
                             {{data.rapport?.length}}
+                        </td>
+                        <td [pEditableColumn]="data.remarque.remarque" pEditableColumnField="remarque.remarque">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="data.remarque.remarque">
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(data)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(data,ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{data?.remarque?.remarque}}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
                     </tr>
                 </ng-template>

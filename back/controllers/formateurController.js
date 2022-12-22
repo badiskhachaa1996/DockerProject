@@ -5,6 +5,7 @@ app.disable("x-powered-by");
 const { Formateur } = require('./../models/formateur');
 const { Presence } = require('./../models/presence');
 const { User } = require('./../models/user');
+const { RemarqueFacture } = require('./../models/remarqueFacture')
 const fs = require("fs");
 const path = require('path');
 var mime = require('mime-types');
@@ -323,42 +324,52 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 
 app.get('/getAllInfos/:month/:year', (req, res, next) => {
     //[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }]
-    let db = new Date(parseInt(req.params.year), parseInt(req.params.month), 1, 1)
+    let db = new Date(parseInt(req.params.year), parseInt(req.params.month), 1, 0)
     let df = new Date(parseInt(req.params.year), parseInt(req.params.month), 31, 23)
-    Presence.find({ date_signature: { $gt: db, $lt: df }, signature: true }).populate('user_id').populate('seance_id').then(presences => {
-        let rapport = []
-        let documents = {} //{formateur_id:[{ seance: Seance }]}
-        let formateurIds = []
-        let totalHeureFormateur = {}//{formateur_id:Number}
-        console.log(db, df)
-        presences.forEach(p => {
-            if (p.seance_id && p.user_id && p.user_id.type == "Formateur") {
-                let date_fin = new Date(p.seance_id.date_fin)
-                let date_debut = new Date(p.seance_id.date_debut)
-                let totalHeure = 0
-                totalHeure += date_fin.getHours() - date_debut.getHours()
-                if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
-                    totalHeure = totalHeure + 0.5
-                if (!formateurIds.includes(p.user_id)) {
-                    formateurIds.push(p.user_id)
-                    totalHeureFormateur[p.user_id._id] = totalHeure
-                    if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
-                        documents[p.user_id._id] = [p.seance_id]
-                } else {
-                    totalHeureFormateur[p.user_id._id] += totalHeure
-                    if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
-                        documents[p.user_id._id].push(p.seance_id)
+    let dicRemarque = {}
+    RemarqueFacture.find({ mois: parseInt(req.params.month), year: parseInt(req.params.year) }).then(remarques => {
+        remarques.forEach(r => {
+            dicRemarque[r.user_id] = r
+        })
+        Presence.find({ date_signature: { $gt: db, $lt: df }, signature: true }).populate('user_id').populate('seance_id').then(presences => {
+            let rapport = []
+            let documents = {} //{formateur_id:[{ seance: Seance }]}
+            let formateurIds = []
+            let totalHeureFormateur = {}//{formateur_id:Number}
+            console.log(db, df)
+            presences.forEach(p => {
+                if (p.seance_id && p.user_id && p.user_id.type == "Formateur") {
+                    let date_fin = new Date(p.seance_id.date_fin)
+                    let date_debut = new Date(p.seance_id.date_debut)
+                    let totalHeure = 0
+                    totalHeure += date_fin.getHours() - date_debut.getHours()
+                    if ((date_fin.getMinutes() == 30 && date_debut.getMinutes() != 30) || (date_fin.getMinutes() != 30 && date_debut.getMinutes() == 30))
+                        totalHeure = totalHeure + 0.5
+                    if (!formateurIds.includes(p.user_id)) {
+                        formateurIds.push(p.user_id)
+                        totalHeureFormateur[p.user_id._id] = totalHeure
+                        if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
+                            documents[p.user_id._id] = [p.seance_id]
+                    } else {
+                        totalHeureFormateur[p.user_id._id] += totalHeure
+                        if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
+                            documents[p.user_id._id].push(p.seance_id)
+                    }
                 }
-            }
+            })
+            formateurIds.forEach(f => {
+                let d = []
+                let remarque = new RemarqueFacture({ user_id: f._id, remarque: "", mois: parseInt(req.params.month), year: parseInt(req.params.year) })
+                if (dicRemarque[f_id])
+                    remarque = dicRemarque[f_id]
+                if (documents[f._id])
+                    d = documents[f._id]
+                rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: d, remarque })
+            })
+            res.send(rapport)
         })
-        formateurIds.forEach(f => {
-            let d = []
-            if (documents[f._id])
-                d = documents[f._id]
-            rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: d })
-        })
-        res.send(rapport)
     })
+
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application
