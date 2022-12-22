@@ -76,7 +76,7 @@ export class FactureFormateurComponent implements OnInit {
       this.facturesMensuel = data
     })
     let d = new Date()
-    this.FormateurService.getAllInfos(d.getMonth() + 1, d.getFullYear()).subscribe(data => {
+    this.FormateurService.getAllInfos(d.getMonth() , d.getFullYear()).subscribe(data => {
       this.infosFormateur = data
       this.clonedTables = data
     })
