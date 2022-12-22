@@ -2,6 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Formateur } from '../models/Formateur';
+import { Seance } from '../models/Seance';
+import { User } from '../models/User';
 
 
 @Injectable({
@@ -82,6 +84,11 @@ export class FormateurService {
   uploadFile(formData, id) {
     let url = this.apiUrl + "uploadFile/" + id
     return this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  getAllInfos(mois: Number, year: Number) {
+    let url = `${this.apiUrl}getAllInfos/${mois}/${year}`
+    return this.httpClient.get<[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }
