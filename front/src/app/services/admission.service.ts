@@ -144,4 +144,10 @@ export class AdmissionService {
     let url = this.apiUrl + "updateVisa"
     return this.httpClient.post<Prospect>(url, { p_id, statut: visa }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
   }
+
+  getByAllAlternance() {
+    let url = this.apiUrl + "getByAllAlternance"
+    return this.httpClient.get<Prospect[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
 }

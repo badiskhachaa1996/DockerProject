@@ -692,5 +692,12 @@ app.post("/updateVisa", (req, res) => {
     }).catch((error) => { res.status(500).send(error); });
 })
 
+app.get("/getByAllAlternance" , (req, res, next) =>{
+    Prospect.find({rythme_formation: 'Alternance'}).populate("user_id").populate('agent_id')
+            .then((prospect) => { res.status(200).send(prospect); })
+            .catch((error) => { res.status(500).send(error); })
+});
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;
+        

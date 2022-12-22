@@ -52,7 +52,8 @@ export class Prospect {
         public haveDoc?:boolean,
         public origin?:string,
         public source?:string,
-        public rentree_scolaire?:string
+        public rentree_scolaire?:string,
+        public isCalled?:boolean
     ) { }
 
 }

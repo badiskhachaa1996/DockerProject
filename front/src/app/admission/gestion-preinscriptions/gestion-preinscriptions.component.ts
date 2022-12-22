@@ -34,6 +34,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   users: User[] = [];
   prospects: any[] = [];
+  alternants: Prospect[] = [];
   inscriptionSelected: Prospect;
   showUploadFile: Prospect;
   ListDocuments: String[] = []
@@ -344,6 +345,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
+    this.onGetProspectAlternance()
   }
 
   afterProspectload(data: Prospect[]) {
@@ -564,7 +566,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       });
   }
 
-  showDossier(p:Prospect){
+  showDossier(p: Prospect) {
     let bypass: any = p.user_id
     this.router.navigate(['suivi-preinscription', bypass._id]);
   }
@@ -579,8 +581,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   exportExcel() {
     let dataExcel = []
     //Clean the data
-    if(this.filtedTable.length<1)
-      this.filtedTable=this.prospects
+    if (this.filtedTable.length < 1)
+      this.filtedTable = this.prospects
     this.filtedTable.forEach(p => {
       let t = {}
       t['NOM'] = p?.user_id?.lastname
@@ -630,4 +632,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
     FileSaver.saveAs(data, "preinscrit" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
+
+  onGetProspectAlternance() {
+    this.admissionService.getByAllAlternance().subscribe(
+      ((response) => { this.alternants = response; console.log(response) }),
+      ((error) => { console.error(error); })
+    )
+  }
+
 }
