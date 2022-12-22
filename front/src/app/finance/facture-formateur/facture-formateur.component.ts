@@ -11,6 +11,7 @@ import { Seance } from 'src/app/models/Seance';
 import { PresenceService } from 'src/app/services/presence.service';
 import * as html2pdf from 'html2pdf.js';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -25,6 +26,8 @@ export class FactureFormateurComponent implements OnInit {
   seanceDic = {}
   facturesMensuel = []
   seances: Seance[] = []
+
+  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }] = [null];
 
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
@@ -70,6 +73,10 @@ export class FactureFormateurComponent implements OnInit {
     })
     this.FactureFormateurService.getAllMensuel().subscribe(data => {
       this.facturesMensuel = data
+    })
+    let d = new Date()
+    this.FormateurService.getAllInfos(d.getMonth() + 1, d.getFullYear()).subscribe(data => {
+      this.infosFormateur = data
     })
     this.EntrepriseService.getAll().subscribe(data => {
       this.entrepriseList = data
@@ -160,6 +167,12 @@ export class FactureFormateurComponent implements OnInit {
     let date = new Date(value)
     tableau.filter(date.getMonth() + 1, 'mois', 'equals')
     tableau.filter(date.getFullYear(), 'year', 'equals')
+    if(tableau.id=="pr_id_3"){
+      this.FormateurService.getAllInfos(date.getMonth() + 1, date.getFullYear()).subscribe(data => {
+        this.infosFormateur = data
+        console.log(data)
+      })
+    }
   }
 
   onGenerateFacture(id = 'facture1') {
