@@ -27,7 +27,7 @@ export class FactureFormateurComponent implements OnInit {
   facturesMensuel = []
   seances: Seance[] = []
 
-  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }] = [null];
+  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }];
 
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
@@ -165,14 +165,14 @@ export class FactureFormateurComponent implements OnInit {
 
   affichageMois = `${new Date().getMonth() + 1}/${new Date().getFullYear()}`
 
-  filterMonth(tableau, value) {
+  filterMonth(tableau, value,tab='dt2') {
     let date = new Date(value)
     tableau.filter(date.getMonth() + 1, 'mois', 'equals')
     tableau.filter(date.getFullYear(), 'year', 'equals')
-    if (tableau.id == "pr_id_3") {
-      this.FormateurService.getAllInfos(date.getMonth() + 1, date.getFullYear()).subscribe(data => {
+    if (tab == "dt1") {
+      this.FormateurService.getAllInfos(date.getMonth(), date.getFullYear()).subscribe(data => {
         this.infosFormateur = data
-        this.affichageMois = `${date.getMonth() + 1}/${date.getFullYear()}`
+        this.affichageMois = `${date.getMonth()+ 1}/${date.getFullYear()}`
       })
     }
   }

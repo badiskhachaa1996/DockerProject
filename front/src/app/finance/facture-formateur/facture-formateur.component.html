@@ -309,7 +309,7 @@
                         </p-dropdown>
                         <span>
                             <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt1,$event)"></p-calendar>
+                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt1,$event,'dt1')"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt1.filter(null, 'mois', 'equals');dt1.filter(null, 'year', 'equals')"></i>
                         </span>

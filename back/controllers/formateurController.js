@@ -323,14 +323,14 @@ app.post('/uploadFile/:id', upload.single('file'), (req, res, next) => {
 
 app.get('/getAllInfos/:month/:year', (req, res, next) => {
     //[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }]
-    let db = new Date(parseInt(req.params.year), parseInt(req.params.month), 1, 0)
+    let db = new Date(parseInt(req.params.year), parseInt(req.params.month), 1, 1)
     let df = new Date(parseInt(req.params.year), parseInt(req.params.month), 31, 23)
     Presence.find({ date_signature: { $gt: db, $lt: df }, signature: true }).populate('user_id').populate('seance_id').then(presences => {
         let rapport = []
         let documents = {} //{formateur_id:[{ seance: Seance }]}
         let formateurIds = []
         let totalHeureFormateur = {}//{formateur_id:Number}
-        console.log(db, df, presences)
+        console.log(db, df)
         presences.forEach(p => {
             if (p.seance_id && p.user_id && p.user_id.type == "Formateur") {
                 let date_fin = new Date(p.seance_id.date_fin)
