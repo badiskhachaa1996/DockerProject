@@ -408,7 +408,7 @@ export class ExamenComponent implements OnInit {
         rowData.examen_id,
         rowData.appreciation,
         rowData.classe_id,
-        rowData.matiere_id,
+        rowData.matiere_id[0],
         false,
         new Date()
       )
