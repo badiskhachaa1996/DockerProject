@@ -9,8 +9,10 @@
             class="m-2">
         <img *ngIf="form_origin=='estya'" src="\assets\images\logo-estya-fr.png" alt="logo estya" style="width: 10%;"
             class="m-2">
-        <img *ngIf="form_origin=='studinfo'" src="\assets\images\studinfo_logo.png" alt="logo studinfo" style="width: 10%;"
-            class="m-2">
+        <img *ngIf="form_origin=='studinfo'" src="\assets\images\studinfo_logo.png" alt="logo studinfo"
+            style="width: 10%;" class="m-2">
+        <img *ngIf="form_origin=='intuns'" src="\assets\images\studinfo_logo.png" alt="logo intuns"
+            style="width: 10%;" class="m-2">
 
         <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
         <div style="text-align: center;">
@@ -428,8 +430,8 @@
                     <div class="grid" style="color: black;font-weight:normal">
                         <div class="p-fluid p-formgrid grid">
                             <div class="field col-12 md:col-12">
-                                <label For="agence">Faites vous vos procédures d'admission avec une agence intermédiaire ? <span
-                                        style="color: red;"> *
+                                <label For="agence">Faites vous vos procédures d'admission avec une agence intermédiaire
+                                    ? <span style="color: red;"> *
                                     </span></label>
                                 <p-selectButton formControlName="agence"
                                     [options]="[{label:'Oui',value:true},{label:'Non',value:false}]">
@@ -438,17 +440,19 @@
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                 <label For="oui_agence">Si oui, quel est le nom de cette agence ?<span
                                         style="color: red;"> * </span></label>
-                                <input pInputText id="oui_agence" type="text" placeholder="Eduhorizons" formControlName="nomAgence" (blur)="nomAgenceFinder()" />
+                                <input pInputText id="oui_agence" type="text" placeholder="Eduhorizons"
+                                    formControlName="nomAgence" (blur)="nomAgenceFinder()" />
                             </div>
                             <div class="field col-12 md:col-6" *ngIf="RegisterForm.value.agence">
                                 <label For="oui_agence">Si oui, quel est l'adresse mail de cette agence ?<span
                                         style="color: red;"> * </span></label>
-                                <input pInputText id="oui_agence" type="text" placeholder="contact@eduhorizons.com" formControlName="mailAgence" (blur)="nomAgenceFinder()" />
+                                <input pInputText id="oui_agence" type="text" placeholder="contact@eduhorizons.com"
+                                    formControlName="mailAgence" (blur)="nomAgenceFinder()" />
                             </div>
                             <div class="field col-12 md:col-12">
                                 <label For="code_commercial">Code Commercial<span style="color: red;"> * </span></label>
-                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01" (blur)="verificationCode()"
-                                    formControlName="code_commercial" />
+                                <input pInputText id="code_commercial" type="text" placeholder="EHPFRA01"
+                                    (blur)="verificationCode()" formControlName="code_commercial" />
                             </div>
                             <div class="ui-g-12 ui-md-12">
                                 <h6>J'ai pris connaissances et lu les <a href="/#/mentions-legales"
