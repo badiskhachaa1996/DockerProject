@@ -163,14 +163,16 @@ export class FactureFormateurComponent implements OnInit {
     })
   }
 
+  affichageMois = `${new Date().getMonth() + 1}/${new Date().getFullYear()}`
+
   filterMonth(tableau, value) {
     let date = new Date(value)
     tableau.filter(date.getMonth() + 1, 'mois', 'equals')
     tableau.filter(date.getFullYear(), 'year', 'equals')
-    if(tableau.id=="pr_id_3"){
+    if (tableau.id == "pr_id_3") {
       this.FormateurService.getAllInfos(date.getMonth() + 1, date.getFullYear()).subscribe(data => {
         this.infosFormateur = data
-        console.log(data)
+        this.affichageMois = `${date.getMonth() + 1}/${date.getFullYear()}`
       })
     }
   }

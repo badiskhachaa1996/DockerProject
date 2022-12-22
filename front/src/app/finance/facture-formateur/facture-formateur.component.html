@@ -288,12 +288,8 @@
         </div>
     </div>
     <div class="col-12">
-        <div class="card">
-            <div style="float: right;">
-                <button pButton icon="pi pi-plus" label="Ajouter une Facture du mois"
-                    (click)="showAddFactureMensuel=true"></button>
-            </div>
-            <h5>Liste des informations mensuel des formateurs</h5>
+        <div class="card" *ngIf="infosFormateur">
+            <h5>Liste des informations des formateurs du {{affichageMois}}</h5>
             <p-table #dt1
                 [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
                 [totalRecords]="infosFormateur.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
@@ -342,7 +338,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-data>
-                    <tr *ngIf="data">
+                    <tr>
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="data"
                                 class="p-button-text p-button-rounded p-button-plain"
@@ -353,13 +349,13 @@
                             {{data.formateur_id.firstname | titlecase}}
                         </td>
                         <td>
-                            {{convert[facture.mois]}} {{facture.year}}
+                            {{affichageMois}}
                         </td>
                         <td>
                             {{data.nombre_heure}}
                         </td>
                         <td>
-                            {{data.rapport.length}}
+                            {{data.rapport?.length}}
                         </td>
                     </tr>
                 </ng-template>

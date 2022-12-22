@@ -330,9 +330,9 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
         let documents = {} //{formateur_id:[{ seance: Seance }]}
         let formateurIds = []
         let totalHeureFormateur = {}//{formateur_id:Number}
-        console.log(db, df,presences)
+        console.log(db, df, presences)
         presences.forEach(p => {
-            if (p.seance_id && p.user_id && p.user_id.type=="Formateur") {
+            if (p.seance_id && p.user_id && p.user_id.type == "Formateur") {
                 let date_fin = new Date(p.seance_id.date_fin)
                 let date_debut = new Date(p.seance_id.date_debut)
                 let totalHeure = 0
@@ -351,9 +351,11 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
                 }
             }
         })
-        console.log(formateurIds, totalHeureFormateur, rapport)
         formateurIds.forEach(f => {
-            rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: documents[f._id] })
+            let d = []
+            if (documents[f._id])
+                d = documents[f._id]
+            rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: d })
         })
         res.send(rapport)
     })
