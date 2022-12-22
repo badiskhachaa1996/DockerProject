@@ -332,7 +332,7 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
         let totalHeureFormateur = {}//{formateur_id:Number}
         console.log(db, df,presences)
         presences.forEach(p => {
-            if (p.seance_id && p.user_id) {
+            if (p.seance_id && p.user_id && p.user_id.type=="Formateur") {
                 let date_fin = new Date(p.seance_id.date_fin)
                 let date_debut = new Date(p.seance_id.date_debut)
                 let totalHeure = 0
