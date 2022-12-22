@@ -342,11 +342,11 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
                 if (!formateurIds.includes(p.user_id)) {
                     formateurIds.push(p.user_id)
                     totalHeureFormateur[p.user_id._id] = totalHeure
-                    if (p.seance_id.fileRight.length != 0)
+                    if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
                         documents[p.user_id._id] = [p.seance_id]
                 } else {
                     totalHeureFormateur[p.user_id._id] += totalHeure
-                    if (p.seance_id.fileRight.length != 0)
+                    if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
                         documents[p.user_id._id].push(p.seance_id)
                 }
             }
