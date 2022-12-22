@@ -314,7 +314,12 @@ export class AppMenuComponent implements OnInit {
                                     label: "Pédagogie",
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
-                                        { label: 'Gestions de mes évaluations', icon: 'pi pi-copy', routerLink: 'examens' },
+                                        {
+                                            label: 'Gestions des évaluations', icon: 'pi pi-copy', items: [
+                                                { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
+                                                { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                                            ]
+                                        },
                                         { label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                                     ]
                                 }

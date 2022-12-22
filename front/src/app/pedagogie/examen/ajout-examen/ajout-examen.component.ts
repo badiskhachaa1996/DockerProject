@@ -29,6 +29,7 @@ export class AjoutExamenComponent implements OnInit {
   groupes: any = {}
 
   dropdownClasse: any[] = [];
+  isFormateur: Formateur = null
   token;
 
   dropdownSemestre = [
@@ -100,34 +101,57 @@ export class AjoutExamenComponent implements OnInit {
       this.defaultDropdownFormateur = this.dropdownFormateur
     })
     if (this.token) {
-      //C'est un Admin
-      //Recuperation de la liste des matières
-      this.matiereService.getAllPopulate().subscribe(
-        ((response) => {
-          response.forEach((matiere) => {
-            this.matieres[matiere._id] = matiere
-            let bypa: any = matiere.formation_id
-            if (Array.isArray(matiere.formation_id))
-              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
-            else
-              this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
-          });
-          this.dropdownMatiereDefault = this.dropdownMatiere
-        }),
-        ((error) => { console.error(error); })
-      );
+      this.formateurService.getByUserId(this.token.id).subscribe(f => {
+        if (f != null) {
+          //Ce n'est pas Admin, c'est un formateur
+          this.isFormateur = f
+          this.formAddExamen.patchValue({ formateur_id: f._id })
+          this.matiereService.getAllByFormateurID(this.token.id).subscribe((r) => {
+            r.matieres.forEach((matiere) => {
+              this.matieres[matiere._id] = matiere
+              if (Array.isArray(matiere.formation_id))
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id[0].titre + " - " + matiere.niveau, value: matiere._id });
+              else
+                this.dropdownMatiere.push({ label: matiere.nom + ' - ' + matiere.formation_id.titre + " - " + matiere.niveau, value: matiere._id });
+            });
+            r.groupes.forEach((g) => {
+              this.groupes[g._id] = g
+              this.dropdownClasse.push({ label: g.abbrv, value: g._id });
+            })
+          })
+        } else {
+
+          //C'est un Admin
+          //Recuperation de la liste des matières
+          this.matiereService.getAllPopulate().subscribe(
+            ((response) => {
+              response.forEach((matiere) => {
+                this.matieres[matiere._id] = matiere
+                let bypa: any = matiere.formation_id
+                if (Array.isArray(matiere.formation_id))
+                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa[0].titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+                else
+                  this.dropdownMatiere.push({ label: matiere.nom + ' - ' + bypa.titre + " - " + matiere.niveau + " - " + matiere.semestre, value: matiere._id });
+              });
+              this.dropdownMatiereDefault = this.dropdownMatiere
+            }),
+            ((error) => { console.error(error); })
+          );
 
 
-      //Recuperation de la liste des classes
-      this.classeService.getAll().subscribe(
-        ((response) => {
-          response.forEach((classe) => {
-            this.groupes[classe._id] = classe
-            this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
-          });
-        }),
-        ((error) => { console.error(error); })
-      );
+          //Recuperation de la liste des classes
+          this.classeService.getAll().subscribe(
+            ((response) => {
+              response.forEach((classe) => {
+                this.groupes[classe._id] = classe
+                this.dropdownClasse.push({ label: classe.abbrv, value: classe._id });
+              });
+            }),
+            ((error) => { console.error(error); })
+          );
+        }
+      })
+
     }
   }
 
@@ -136,25 +160,28 @@ export class AjoutExamenComponent implements OnInit {
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
     let formateur_id = this.formAddExamen.get("formateur_id")?.value;
     let niveau = this.formAddExamen.get("niveau")?.value;
-    if (niveau != 'Control Continu')
-      if (classe_id && matiere_id && formateur_id && niveau) {
-        let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " | "
-        matiere_id.forEach((mid, index) => {
-          if (index == 0)
-            libelle = libelle + this.matieres[mid].abbrv
-          else
-            libelle = libelle + ' - ' + this.matieres[mid].abbrv
-        })
-        libelle = libelle + " | "
-        classe_id.forEach((cid, index) => {
-          if (index == 0)
-            libelle = libelle + this.groupes[cid].abbrv
-          else
-            libelle = libelle + ' - ' + this.groupes[cid].abbrv
-        })
-        libelle = libelle + ' | ' + niveau
+    if (classe_id && matiere_id && formateur_id && niveau) {
+      let libelle = this.formateurs[formateur_id].user_id.lastname + " " + this.formateurs[formateur_id].user_id.firstname + " | "
+      matiere_id.forEach((mid, index) => {
+        if (index == 0)
+          libelle = libelle + this.matieres[mid].abbrv
+        else
+          libelle = libelle + ' - ' + this.matieres[mid].abbrv
+      })
+      libelle = libelle + " | "
+      classe_id.forEach((cid, index) => {
+        if (index == 0)
+          libelle = libelle + this.groupes[cid].abbrv
+        else
+          libelle = libelle + ' - ' + this.groupes[cid].abbrv
+      })
+      libelle = libelle + ' | ' + niveau
+      this.examenService.getAllByFormateurID(formateur_id).subscribe(e => {
+        libelle = libelle + " " + (e.length + 1).toString()
         this.formAddExamen.patchValue({ libelle })
-      }
+      })
+    }
+
   }
 
   filterModule() {
@@ -180,6 +207,7 @@ export class AjoutExamenComponent implements OnInit {
 
   filterFormateur() {
     let matiere_id = this.formAddExamen.get("matiere_id")?.value;
+    this.formAddExamen.patchValue({ semestre: this.matieres[matiere_id[0]].semestre })
     this.dropdownFormateur = []
     if (matiere_id)
       this.SeanceService.getFormateursFromClasseIDs(matiere_id).subscribe(r => {

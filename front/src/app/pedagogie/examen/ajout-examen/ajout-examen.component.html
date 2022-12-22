@@ -26,7 +26,7 @@
                     </p-multiSelect>
                 </div>
 
-                <div class="field col-12 md:col-6" >
+                <div class="field col-12 md:col-6" *ngIf="!isFormateur">
                    
                     <label>Formateur<span style="color:red">*</span>:</label><br>
                     <span>
@@ -34,20 +34,26 @@
                         </p-dropdown>
                     </span>
                 </div>
+                <div class="field col-12 md:col-6">
+                    <label>Coefficient/Poids<span style="color:red">*</span>:</label><br>
+                    <input type="number" formControlName="coef" class="form-control col-12"
+                        placeholder="Ex:1" pInputText>
+                </div>
+
 
                 <div class="field col-12 md:col-6">
                     <label>Date<span style="color:red">*</span>:</label><br>
                     <p-calendar formControlName="date"></p-calendar>
                 </div>
 
-                <div class="field col-12 md:col-6" >
+                <!--<div class="field col-12 md:col-6" >
                    
                     <label>Semestre<span style="color:red">*</span>:</label><br>
                     <span>
                         <p-dropdown [options]="dropdownSemestre"  placeholder="Choisir un semestre" formControlName="semestre">
                         </p-dropdown>
                     </span>
-                </div>
+                </div>-->
 
                 <div class="field col-12 md:col-6">
                     <label>Note max<span style="color:red">*</span>:</label><br>
@@ -76,7 +82,7 @@
                         </p-dropdown>
                     </span>
                 </div>
-                <div class="field col-12">
+                <div [ngClass]="{'field col-12 md:col-12':!isFormateur,'field col-12 md:col-6':isFormateur}">
                     <label>Libellé:</label><br>
                     <input type="text" formControlName="libelle" class="form-control col-12"
                         placeholder="Intitulé de l'évaluation" pInputText>
