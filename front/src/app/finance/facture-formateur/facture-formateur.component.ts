@@ -59,7 +59,8 @@ export class FactureFormateurComponent implements OnInit {
   convert = [null, 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 
   constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
-    private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService) { }
+    private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService,
+    private SeanceService:SeanceService) { }
 
   ngOnInit(): void {
     this.FormateurService.getAllPopulate().subscribe(r => {
@@ -208,6 +209,16 @@ export class FactureFormateurComponent implements OnInit {
   onRowEditCancel(product, index: number) {
     this.infosFormateur[index] = this.clonedTables[product.formateur_id._id];
     delete this.clonedTables[product.formateur_id._id];
+  }
+
+  downloadFileCours(rapport,id){
+    this.SeanceService.downloadFileCours(rapport.name, id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.fileType }), rapport.name)
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
   }
 
 }

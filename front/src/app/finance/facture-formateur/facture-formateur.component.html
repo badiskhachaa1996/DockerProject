@@ -290,8 +290,7 @@
     <div class="col-12">
         <div class="card" *ngIf="infosFormateur">
             <h5>Liste des informations des formateurs du {{affichageMois}}</h5>
-            <p-table #dt1
-                [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
+            <p-table #dt1 [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
                 [totalRecords]="infosFormateur.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                 [rows]="10" styleClass="p-datatable-gridlines" [value]="infosFormateur" dataKey="_id"
                 responsiveLayout="scroll">
@@ -309,7 +308,8 @@
                         </p-dropdown>
                         <span>
                             <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt1,$event,'dt1')"></p-calendar>
+                                placeholder="Choissisez un mois"
+                                (onSelect)="filterMonth(dt1,$event,'dt1')"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt1.filter(null, 'mois', 'equals');dt1.filter(null, 'year', 'equals')"></i>
                         </span>
@@ -364,8 +364,12 @@
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
                                     <input pInputText type="text" [(ngModel)]="data.remarque.remarque">
-                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(data)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
-                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(data,ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                    <button pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                                        (click)="onRowEditSave(data)"
+                                        class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                                        (click)="onRowEditCancel(data,ri)"
+                                        class="p-button-rounded p-button-text p-button-danger"></button>
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{data?.remarque?.remarque}}
@@ -373,6 +377,36 @@
                             </p-cellEditor>
                         </td>
                     </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-data>
+                    <div class="card grid">
+                        <p-accordion>
+                            <p-accordionTab *ngFor="let rap of data.rapport" header="Séance {{rap.libelle}}">
+                                <p-table [value]="rap.fileRight">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th pSortableColumn="name" style="text-align: center;">
+                                                Nom
+                                                <p-sortIcon field="name"></p-sortIcon>
+                                            </th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rapport>
+                                        <tr>
+                                            <td>
+                                                {{rapport.name}}
+                                            </td>
+                                            <td>
+                                                <i (click)="downloadFileCours(rapport,rap._id)" class="pi pi-upload"
+                                                    aria-hidden="true" pTooltip="Télécharger le rapport"></i>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </p-accordionTab>
+                        </p-accordion>
+                    </div>
                 </ng-template>
             </p-table>
         </div>
