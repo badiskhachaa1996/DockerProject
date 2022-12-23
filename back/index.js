@@ -105,7 +105,7 @@ const teamCommercialController = require('./controllers/teamCommercialController
 const logementController = require('./controllers/logementController');
 const missionController = require('./controllers/missionController');
 const inTimeController = require('./controllers/inTimeController');
-const cvController = require('./controllers/cvController')
+//const cvController = require('./controllers/cvController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
 const congeController = require('./controllers/congeController');
 const devoirController = require('./controllers/devoirController')
@@ -213,7 +213,7 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
-app.use('/soc/cv', cvController)
+//app.use('/soc/cv', cvController)
 
 app.use('/soc/prestataire', prestataireController);
 
