@@ -99,69 +99,7 @@
             </form>
         </div>
     </div>
-    <!-- partie Ajouter cv-->
-    <div class="col-12" *ngIf="showCV!=null">
-        <div class="card">
-            <i class="pi pi-times-circle" style="float:right; color: red; cursor: pointer;" (click)="showCV = null"
-                aria-hidden="true"> </i>
-            <h3 *ngIf="showCV.user_id" class="text-center" style="font-weight: bold;">Ajouter/Modifier un CV à : {{
-                showCV.user_id?.firstname }} {{
-                showCV.user_id?.lastname | uppercase }}
-            </h3>
-            <div class="col-12 p-fluid p-formgrid grid">
-                <div class="field col-12">
-                    <p-fileUpload #fileUpload mode="basic" accept="application/pdf" maxFileSize="1000000"
-                        [customUpload]="true" (uploadHandler)="onUploadPDF($event,fileUpload)" [auto]="true"
-                        chooseLabel="Importer un CV sous PDF">
-                    </p-fileUpload>
-                </div>
-                <div class="col-12 md:col-6 field">
-                    <label>Langues:</label>
-                    <p-multiSelect [options]="languesList" placeholder="Choissisez la langue" [(ngModel)]="languesCV">
-                    </p-multiSelect>
-                </div>
-                <div class="col-12 md:col-6 field">
-                    <label>URL Vidéo:</label>
-                    <input pInputText placeholder="Exemple: Linkedin, google drive ou youtube" [(ngModel)]="urlVideo" />
-                </div>
-                <button type="button" class="mb-2" (click)="onAddSkill()" pButton
-                    label="Ajouter une compétences"></button>
-                <div class="field col-12 grid" *ngFor="let skill of skillsCV; let i = index">
-                    <div class="field col-5 grid">
-                        <label>Compétences N°{{i+1}}</label>
-                        <input pInputText [(ngModel)]="skillsCV[i].skill" />
-                    </div>
-                    <div class="field col-6 grid">
-                        <label>Niveau</label>
-                        <input pInputText placeholder [(ngModel)]="skillsCV[i].niveau" />
-                    </div>
-                    <div class="col-12 md:col-1">
-                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteSkill(i)" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <button type="button" (click)="onAddExp()" class="mb-2" pButton
-                    label="Ajouter une expériences"></button>
-                <div class="field col-12 grid" *ngFor="let exp of experiencesCV; let i = index">
-                    <div class="field col-12 md:col-5 grid">
-                        <label>Expériences N°{{i+1}}</label>
-                        <input pInputText [(ngModel)]="experiencesCV[i].skill" />
-                    </div>
-                    <div class="field col-6 md:col-3 grid">
-                        <label>Date Debut</label>
-                        <input pInputText placeholder type="date" [(ngModel)]="experiencesCV[i].date_debut" />
-                    </div>
-                    <div class="field col-6 md:col-3 grid">
-                        <label>Date Fin</label>
-                        <input pInputText placeholder type="date" [(ngModel)]="experiencesCV[i].date_fin" />
-                    </div>
-                    <div class="col-12 md:col-1">
-                        <i style="cursor: pointer;" class="pi pi-trash" (click)="deleteExp(i)" aria-hidden="true"></i>
-                    </div>
-                </div>
-                <button type="button" (click)="submitCV()" class="mb-2" pButton label="Enregister le CV"></button>
-            </div>
-        </div>
-    </div>
+    
     <!-- partie Voir/Ajouter des payements -->
     <div class="col-12" *ngIf="showPayement!=null">
         <div class="card">
@@ -569,8 +507,7 @@
                                 *ngIf="(!this.isCommercial && !this.isAdministration) || token.role=='Admin'" (click)="
                                     showFUpdate(etudiant.user_id, etudiant)" pTooltip="Modifier" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
-                            <i style="margin-left: 2%;" class="pi pi-file-pdf" (click)="
-                                    showUpdateCV(etudiant)" pTooltip="Modifier le CV" aria-hidden="true"
+                            <i style="margin-left: 2%;" class="pi pi-file-pdf" pTooltip="CV" aria-hidden="true"
                                 tooltipPosition="bottom"></i>
                             <i style="margin-left: 2%;" *ngIf="this.isCommercial || token.role=='Admin'"
                                 class="pi pi-search" (click)="findMission(etudiant.user_id._id)"
@@ -607,7 +544,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-etudiant>
                     <tr>
-                        <td colspan="10">
+                        <td colspan="11">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll">
                                     <ng-template pTemplate="header">
