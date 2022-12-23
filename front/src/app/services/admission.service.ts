@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Prospect } from '../models/Prospect';
+import { ProspectIntuns } from '../models/ProspectIntuns';
 
 
 @Injectable({
@@ -143,5 +144,11 @@ export class AdmissionService {
   updateVisa(p_id, visa: boolean) {
     let url = this.apiUrl + "updateVisa"
     return this.httpClient.post<Prospect>(url, { p_id, statut: visa }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+  }
+
+  createIntuns(data: ProspectIntuns){
+    let url = this.apiUrl + "createIntuns"
+    return this.httpClient.post<ProspectIntuns>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+ 
   }
 }

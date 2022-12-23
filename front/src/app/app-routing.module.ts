@@ -128,6 +128,7 @@ import { DevoirsEtudiantsComponent } from './pedagogie/devoirs-etudiants/devoirs
 import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
+import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
 
 const routes: Routes = [
     {
@@ -237,6 +238,7 @@ const routes: Routes = [
     { path: 'formulaire', component: DemandeEventsComponent },
     { path: 'completion-profil', canActivate: [AuthGuardService, CompletionProfilGuard], component: FirstConnectionComponent },
     { path: 'formulaire-admission/:ecole', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
+    { path: 'formulaire-admission-intuns', component: FormulaireIntunsComponent },
     { path: 'formulaire-admission/:ecole/:code_commercial', component: FormulaireAdmissionComponent, canActivate: [FormAdmissionGuard] },
     { path: 'partenaireInscription', component: PartenaireInscriptionComponent },
     { path: 'login', component: ExterneComponent, canActivate: [LoginGuard] },

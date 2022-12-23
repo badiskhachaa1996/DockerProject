@@ -233,6 +233,7 @@ import {
 } from "@azure/msal-angular";
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
+import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
 
 
 @NgModule({
@@ -476,6 +477,7 @@ import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
     InfoImsComponent,
     FactureFormateurComponent,
     AnnoncesComponent,
+    FormulaireIntunsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

@@ -1,0 +1,166 @@
+<p-toast></p-toast>
+<div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
+    <div class="card">
+        <img src="\assets\images\intuns-logo.png" alt="logo intuns" style="width: 10%;" class="m-2">
+        <h4 style="text-align: center;">Formulaire de demande d'admission</h4>
+        <div style="text-align: center;">
+            <small>Tous les champs marqués d'un asterique <span style="color: red;"> * </span> sont
+                obligatoires</small><br>
+        </div>
+        <br>
+        <form [formGroup]="RegisterForm" (ngSubmit)="onAddProspect()">
+            <div *ngIf="ActiveIndex==0">
+                <div style="text-align: center;">
+                    <small>Remplissez les données de votre profil. Cela ne vous prendra que quelques
+                        minutes.</small><br>
+                </div>
+                <p-fieldset legend="Informations personnelles" [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label For="nom">Nom <span style="color: red;"> * </span></label>
+                                <input pInputText id="nom" type="text" placeholder="Entrez votre nom"
+                                    formControlName="nom" />
+                                <div *ngIf="nom.invalid && (nom.touched || nom.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="nom.errors?.required">* Le nom
+                                        est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="nom.errors?.pattern">* Seul les
+                                        lettres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label For="prenom">Prénom <span style="color: red;"> * </span></label>
+                                <input pInputText id="prenom" type="text" placeholder="Entrez votre prénom"
+                                    formControlName="prenom" />
+                                <div *ngIf="prenom.invalid && (prenom.touched || prenom.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="prenom.errors?.required">* Le
+                                        prénom est obligatoire.</span>
+                                    <span style="color: red;" class="error" *ngIf="prenom.errors?.pattern">* Seul les
+                                        lettres sont acceptés.</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Pays de résidence :<span style="color:red"> *</span></label><br>
+                                <p-dropdown formControlName="pays" [options]="paysList" placeholder="Pays"
+                                    optionLabel="value" emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays"
+                                    filter="true" optionDisabled="actif"></p-dropdown>
+                                <div *ngIf="pays.invalid && (pays.touched || pays.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="pays.errors?.required"
+                                        style="color: red;">* Le pays est obligatoire </span>
+                                    <span style="color: red;" class="error" *ngIf="pays.errors?.pattern"
+                                        style="color: red;">* Le pays de résidence n'est pas dans le bon format </span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label>Adresse mail :<span style="color:red"> *</span></label>
+                                <input type="email" formControlName="email" placeholder="Email" pInputText>
+                                <div *ngIf="email.invalid && (email.touched || email.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="email.errors?.required"
+                                        style="color: red;">* L'email est obligatoire </span>
+                                    <span style="color: red;" class="error" *ngIf="email.errors?.email"
+                                        style="color: red;">* L'email n'est pas dans le bon format </span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label For="indicatif">Indicatif <span style="color: red;"> * </span></label>
+                                <input pInputText id="indicatif" type="text" placeholder="+33"
+                                    formControlName="indicatif" />
+                                <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">*
+                                        L'indicatif est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern">* Seul les
+                                        chiffres sont acceptés</span>
+                                </div>
+                            </div>
+                            <div class="field col-12 md:col-9">
+                                <label For="telephone">Numéro de téléphone <span style="color: red;"> * </span></label>
+                                <input pInputText id="telephone" type="number"
+                                    placeholder="Entrez votre numéro de téléphone" formControlName="phone" />
+                                <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le
+                                        téléphone est obligatoire</span>
+                                    <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les
+                                        chiffres sont acceptés</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Suivant" style="float: right;"
+                            [disabled]="phone.invalid ||indicatif.invalid || prenom.invalid || pays.invalid || nom.invalid || email.invalid"
+                            (click)="nextPage();"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==1">
+                <div style="text-align: center;">
+                    <small>Pour mieux évaluer votre candidature, nous avons besoins de connaître votre statut
+                        professionel.</small><br>
+                </div>
+                <p-fieldset legend="Parcours académique et professionnel"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label>Votre statut actuel <span style="color: red;"> * </span></label>
+                                <p-dropdown [options]="statutList" formControlName="statut_actuel" placeholder="Choissiez votre statut professionel">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12" *ngIf="RegisterForm.value.statut_actuel=='Autre'">
+                                <label For="autre">Si "Autre", veuillez mentionner <span style="color: red;"> *
+                                    </span></label>
+                                <textarea pInputTextarea id="autre" type="text" placeholder="Autre"
+                                    formControlName="other"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;"
+                            (click)="previousPage()"></button>
+                        <button pButton type="button" label="Suivant"
+                            [disabled]="statut_actuel.invalid || other.invalid" style="float: right;"
+                            (click)="nextPage()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==2">
+                <div style="text-align: center;">
+                    <small>Maintenant, l'étape la plus importante, que voulez-vous étudiez avec nous ?</small><br>
+                </div>
+                <p-fieldset class="col-12" legend="Choix du pays de destination, du programme et de la formation"
+                    [style]="{'color': 'red', 'font-weight': 'bold'}">
+                    <div style="color: black;font-weight:normal">
+                        <div class="p-fluid p-formgrid grid">
+
+                            <div class="field col-12">
+                                <label For="programme_fr">Choix de la formation <span style="color: red;"> *
+                                    </span></label>
+                                <p-dropdown [options]="programeFrDropdown" formControlName="programme" placeholder="Choissisez un programme"></p-dropdown>
+                            </div>
+                            <div class="field col-12">
+                                <label>Commentaire</label><br>
+                                <textarea pInputTextarea formControlName="remarque"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button pButton type="button" label="Précedent" style="float: left;" (click)="previousPage()">
+                        </button>
+                        <button pButton type="button" label="Suivant" [disabled]="remarque.invalid || programme.invalid"
+                            style="float: right;" (click)="nextPage();onAddProspect()"></button>
+                    </div>
+                </p-fieldset>
+            </div>
+
+            <div *ngIf="ActiveIndex==3">
+                <h2 class="col-12 flex justify-content-center flex-wrap card-container">Félicitations !
+                    Votre candidature a été envoyé !</h2>
+                <div class="col-12 flex justify-content-center flex-wrap card-container">
+                    <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
