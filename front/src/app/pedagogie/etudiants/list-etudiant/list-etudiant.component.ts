@@ -837,39 +837,6 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  showCV: Etudiant = null
-  showUpdateCV(etudiant) {
-    this.showCV = etudiant
-    this.CVService.getByUserID(etudiant.user_id._id).subscribe(cv => {
-      this.languesCV = cv.langues
-      this.experiencesCV = cv.experiences
-      this.skillsCV = cv.connaissances
-      this.messageService.add({ severity: "info", summary: "Importation d'un CV existant", detail: "Si vous importez un CV via PDF, celui-ci sera écraser." })
-    }, err => {
-      console.error(err)
-    })
-  }
-
-
-  onUploadPDF(event, himself) {
-    if (event.files) {
-      const formData = new FormData();
-      let bypass: any = this.showCV.user_id
-      formData.append('user_id', bypass._id)
-      formData.append('file', event.files[0])
-      let avoidError: any = document.getElementById('selectedFile')
-      avoidError.value = ""
-      himself.clear()
-      this.CVService.uploadCV(formData, bypass._id).subscribe(r => {
-        this.langueFinder(r.txt)
-        this.skillFinder(r.txt)
-        this.experiencesFinder(r.txt)
-      }, err => {
-        console.error(err)
-      })
-    }
-  }
-
   langueFinder(pdf: string) {
     let pdf_lower = pdf.toLowerCase()
     this.languesCV = []
@@ -908,79 +875,10 @@ export class ListEtudiantComponent implements OnInit {
     { skill: String, date_debut: Date, date_fin: Date }
   ]
 
-  skillFinder(pdf: string) {
-    let pdf_lower = pdf.toLowerCase()
-    this.CVService.getSkills().subscribe(skills => {
-      this.skillsCV = null
-      skills.forEach(skill => {
-        if (pdf_lower.indexOf(skill) != -1) {
-          if (this.skillsCV != null)
-            this.skillsCV.push({ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() })
-          else
-            this.skillsCV = [{ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() }]
-        }
-      })
-    })
-  }
 
-  experiencesFinder(pdf: string) {
-    let pdf_lower = pdf.toLowerCase()
-    this.CVService.getExperiences().subscribe(experiences => {
-      this.experiencesCV = null
-      experiences.forEach(skill => {
-        if (pdf_lower.indexOf(skill) != -1) {
-          if (this.experiencesCV != null)
-            this.experiencesCV.push({ skill, date_debut: null, date_fin: null })
-          else
-            this.experiencesCV = [{ skill, date_debut: null, date_fin: null }]
-        }
-      })
-    })
-  }
   ImagineYaPasDeCountEnJS(string, substring) {
     //return (string.match("/" + substring + "/g") || []).length;
     return string.split(substring).length - 1;
-  }
-
-  onAddSkill() {
-    this.skillsCV.push({ skill: "", niveau: "" })
-  }
-
-  onAddExp() {
-    this.experiencesCV.push({ skill: "", date_debut: null, date_fin: null })
-  }
-
-  deleteSkill(i) {
-    this.skillsCV.splice(i, 1)
-  }
-  deleteExp(i) {
-    this.experiencesCV.splice(i, 1)
-  }
-
-  submitCV() {
-    let bypass: any = this.showCV.user_id
-    let cv: CV = new CV(null,
-      bypass._id,
-      this.languesCV,
-      this.experiencesCV,
-      this.skillsCV,
-      this.urlVideo
-    )
-    this.CVService.create(cv).subscribe(data => {
-      this.showCV = null
-      this.messageService.add(data.message)
-    }, err => {
-      console.error(err)
-      this.messageService.add({ severity: 'error', summary: "Une erreur est survenu", detail: err.error })
-    })
-  }
-
-  findMission(user_id) {
-    this.missionService.getMissionFromCV(user_id).then(d => {
-      if (d) {
-        this.router.navigate(['matching', user_id])
-      }
-    })
   }
 
 
@@ -1102,7 +1000,6 @@ export class ListEtudiantComponent implements OnInit {
 
   //Methode pour filtrer par campus
   onFilterByCampus(event: any) {
-
     if (event.value) {
       this.etudiantsByCampus = [];
 
