@@ -698,7 +698,7 @@ app.post('/createIntuns', (req, res) => {
         ...req.body
     })
     ProspectIntuns.findOne({ email: f_intuns.email, nom: f_intuns.nom, prenom: f_intuns.prenom, parcours: f_intuns.parcours }).then(r => {
-        if (!r)
+        if (r == null)
             f_intuns.save()
                 .then((userUpdated) => { res.status(200).send(userUpdated) })
                 .catch((error) => { res.status(400).send(error); });
