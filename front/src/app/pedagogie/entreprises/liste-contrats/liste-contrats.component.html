@@ -353,7 +353,7 @@
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
-                [globalFilterFields]="['code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
+                [globalFilterFields]="['_id', 'code_commercial.lastname','code_commercial.firstname','statut','classification','alternant_id.user_id.firstname','alternant_id.user_id.lastname']"
                 [pageLinks]="5" [paginator]="true" rowExpandMode="single" dataKey="_id" responsiveLayout="scroll"
                 [rows]="10">
                 <ng-template pTemplate="caption">
@@ -391,12 +391,12 @@
                     <tr>
                         <td>
                             <button type="button" pButton pRipple [pRowToggler]="contrat"
-                                class="p-button-text p-button-rounded p-button-plain" (click)="loadcomName(contrat)"
+                                class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                         </td>
                         <td style="min-width: 11rem;">
-                            {{ contrat.alternant_id.user_id.firstname }}
-                            {{ contrat.alternant_id.user_id.lastname }}
+                            {{ contrat.alternant_id?.user_id?.firstname }}
+                            {{ contrat.alternant_id?.user_id?.lastname }}
                         </td>
                         <td style="min-width: 8rem;text-align: center; ">{{ contrat.intitule }}</td>
                         <td style="min-width: 8rem;text-align: center; ">
@@ -434,6 +434,7 @@
                                             <th>Entreprise</th>
                                             <th>Coeff hierachique</th>
                                             <th>Commercial</th>
+                                            <th>Tuteur</th>
                                             <th>Année-scolaires</th>
                                         </tr>
                                     </ng-template>
@@ -442,11 +443,14 @@
                                             <td>{{contrat.horaire}}</td>
                                             <td>{{contrat.classification}}</td>
                                             <td>{{contrat.niveau_formation}}</td>
-                                            <td style="min-width: 5rem;">{{
+                                            <td style="min-width: 5rem;" *ngIf="contrat.tuteur_id != null">{{
                                                 EntreprisesName[contrat.tuteur_id.entreprise_id]?.r_sociale }}
                                             </td>
+                                            <td *ngIf="contrat.directeur_id != null">{{ EntreprisesNameByDirId[contrat.directeur_id._id]?.r_sociale }}</td>
                                             <td>{{contrat.coeff_hierachique}}</td>
-                                            <td>{{ nomCompletComm }}</td>
+                                            <td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
+                                            <td *ngIf="contrat.tuteur_id != null">{{ contrat.tuteur_id?.user_id?.lastname }} {{ contrat.tuteur_id?.user_id?.firstname }}</td>
+                                            <td *ngIf="contrat.directeur_id != null">{{ contrat.directeur_id?.lastname }} {{ contrat.directeur_id?.firstname }}</td>
                                             <td>
                                                 <ul>
                                                     <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>

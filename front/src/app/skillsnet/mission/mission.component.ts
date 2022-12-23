@@ -280,7 +280,8 @@ export class MissionComponent implements OnInit {
     this.router.navigate(['/entreprise-missions']);
   }
 
-  onFillForm()
+  // methode de remplissage du formulaire de modification
+  onFillForm(): void
   {
     this.formUpdate.patchValue({
       entreprise_id:    { label: this.entreprises[this.missionSelected.entreprise_id].r_sociale, value: this.missionSelected.entreprise_id },
