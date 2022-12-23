@@ -12,6 +12,7 @@ import { PresenceService } from 'src/app/services/presence.service';
 import * as html2pdf from 'html2pdf.js';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { User } from 'src/app/models/User';
+import { RemarqueFormateur } from 'src/app/models/RemarqueFormateur';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -27,7 +28,7 @@ export class FactureFormateurComponent implements OnInit {
   facturesMensuel = []
   seances: Seance[] = []
 
-  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }];
+  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }], remarque: RemarqueFormateur }];
   clonedTables;
 
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
@@ -59,7 +60,8 @@ export class FactureFormateurComponent implements OnInit {
   convert = [null, 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 
   constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
-    private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService) { }
+    private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService,
+    private SeanceService: SeanceService) { }
 
   ngOnInit(): void {
     this.FormateurService.getAllPopulate().subscribe(r => {
@@ -76,7 +78,7 @@ export class FactureFormateurComponent implements OnInit {
       this.facturesMensuel = data
     })
     let d = new Date()
-    this.FormateurService.getAllInfos(d.getMonth() , d.getFullYear()).subscribe(data => {
+    this.FormateurService.getAllInfos(d.getMonth(), d.getFullYear()).subscribe(data => {
       this.infosFormateur = data
       this.clonedTables = data
     })
@@ -199,15 +201,32 @@ export class FactureFormateurComponent implements OnInit {
     this.clonedTables[product.formateur_id._id] = { ...product };
   }
 
-  onRowEditSave(product) {
+  onRowEditSave(product, index: number) {
     delete this.clonedTables[product.formateur_id._id];
-    //TODO Send
-    console.log(product)
+    let remarque = new RemarqueFormateur({ ...product.remarque })
+    this.FactureFormateurService.updateRemarque(remarque).subscribe(r => {
+      console.log(r)
+      this.MessageService.add({ severity: 'success', summary: 'Mis à jour de la remarque avec succès' })
+      this.infosFormateur[index].remarque = r
+    }, err => {
+      this.MessageService.add({ severity: 'error', summary: 'Mis à jour de la remarque impossible', detail: err.message })
+      this.onRowEditCancel(product, index)
+    })
   }
 
   onRowEditCancel(product, index: number) {
     this.infosFormateur[index] = this.clonedTables[product.formateur_id._id];
     delete this.clonedTables[product.formateur_id._id];
+  }
+
+  downloadFileCours(rapport, id) {
+    this.SeanceService.downloadFileCours(rapport.name, id).subscribe((data) => {
+      const byteArray = new Uint8Array(atob(data.file).split('').map(char => char.charCodeAt(0)));
+      importedSaveAs(new Blob([byteArray], { type: data.fileType }), rapport.name)
+    }, (error) => {
+      this.MessageService.add({ severity: 'error', summary: 'Contacté un Admin', detail: error })
+      console.error(error)
+    })
   }
 
 }

@@ -353,15 +353,18 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
                     } else {
                         totalHeureFormateur[p.user_id._id] += totalHeure
                         if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
-                            documents[p.user_id._id].push(p.seance_id)
+                            if (documents[p.user_id._id])
+                                documents[p.user_id._id].push(p.seance_id)
+                            else
+                                documents[p.user_id._id] = [p.seance_id]
                     }
                 }
             })
             formateurIds.forEach(f => {
                 let d = []
                 let remarque = new RemarqueFacture({ user_id: f._id, remarque: "", mois: parseInt(req.params.month), year: parseInt(req.params.year) })
-                if (dicRemarque[f_id])
-                    remarque = dicRemarque[f_id]
+                if (dicRemarque[f._id])
+                    remarque = dicRemarque[f._id]
                 if (documents[f._id])
                     d = documents[f._id]
                 rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: d, remarque })
@@ -369,7 +372,6 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
             res.send(rapport)
         })
     })
-
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

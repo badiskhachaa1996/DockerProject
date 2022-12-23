@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FactureFormateur } from 'src/app/models/FactureFormateur';
 import { FactureFormateurMensuel } from 'src/app/models/FactureFormateurMensuel';
+import { RemarqueFormateur } from 'src/app/models/RemarqueFormateur';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -44,5 +45,10 @@ export class FormateurFactureService {
   getAllMensuel() {
     let registerUrl = this.apiUrl + 'getAllMensuel';
     return this.http.get<FactureFormateur[]>(registerUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  }
+  updateRemarque(remarque: RemarqueFormateur) {
+    let url = this.apiUrl + 'updateRemarqueFormateur'
+    return this.http.post<RemarqueFormateur>(url, remarque, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+
   }
 }
