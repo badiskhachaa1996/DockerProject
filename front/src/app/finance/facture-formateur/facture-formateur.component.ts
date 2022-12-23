@@ -28,7 +28,7 @@ export class FactureFormateurComponent implements OnInit {
   facturesMensuel = []
   seances: Seance[] = []
 
-  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }];
+  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }], remarque: RemarqueFormateur }];
   clonedTables;
 
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
@@ -203,14 +203,14 @@ export class FactureFormateurComponent implements OnInit {
 
   onRowEditSave(product, index: number) {
     delete this.clonedTables[product.formateur_id._id];
-    //TODO Send
-    console.log(product.remarque)
-    let remarque = new RemarqueFormateur(...product.remarque)
+    let remarque = new RemarqueFormateur({ ...product.remarque })
     this.FactureFormateurService.updateRemarque(remarque).subscribe(r => {
       console.log(r)
       this.MessageService.add({ severity: 'success', summary: 'Mis à jour de la remarque avec succès' })
+      this.infosFormateur[index].remarque = r
     }, err => {
       this.MessageService.add({ severity: 'error', summary: 'Mis à jour de la remarque impossible', detail: err.message })
+      this.onRowEditCancel(product, index)
     })
   }
 
