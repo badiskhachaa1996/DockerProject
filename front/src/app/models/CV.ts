@@ -1,10 +1,12 @@
 export class CV {
     constructor(
-        public _id:             string,
-        public user_id:         string,
-        public langues?:        string[],
-        public experiences?:    any[], 
-        public connaissances?:  any[],
-        public video_lien?:     string,
+        public _id:                 string,
+        public user_id:             string,
+        public experiences_pro?:    any[], 
+        public experiences_sco?:    any[], 
+        public competences?:        any[],
+        public langues?:            string[],
+        public video_lien?:         string,
+        public filename?:           string
     ){}
 }
