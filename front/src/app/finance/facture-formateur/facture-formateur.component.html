@@ -379,36 +379,40 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-data>
-                    <div class="card grid">
-                        <p-accordion>
-                            <p-accordionTab *ngFor="let rap of data.rapport" header="Séance {{rap.libelle}}">
-                                <p-table [value]="rap.fileRight">
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th pSortableColumn="name" style="text-align: center;">
-                                                Nom
-                                                <p-sortIcon field="name"></p-sortIcon>
-                                            </th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-rapport>
-                                        <tr>
-                                            <td>
-                                                {{rapport.name}}
-                                            </td>
-                                            <td>
-                                                <i (click)="downloadFileCours(rapport,rap._id)" class="pi pi-upload"
-                                                    aria-hidden="true" pTooltip="Télécharger le rapport"></i>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </p-accordionTab>
-                        </p-accordion>
-                    </div>
+                    <tr>
+                        <td colspan="5">
+                            <div class="card grid">
+                                <p-accordion>
+                                    <p-accordionTab *ngFor="let rap of data.rapport" header="Séance {{rap.libelle}}">
+                                        <p-table [value]="rap.fileRight">
+                                            <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name" style="text-align: center;">
+                            Nom
+                            <p-sortIcon field="name"></p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rapport>
+                    <tr>
+                        <td>
+                            {{rapport.name}}
+                        </td>
+                        <td>
+                            <i (click)="downloadFileCours(rapport,rap._id)" class="pi pi-upload" aria-hidden="true"
+                                pTooltip="Télécharger le rapport"></i>
+                        </td>
+                    </tr>
                 </ng-template>
             </p-table>
+            </p-accordionTab>
+            </p-accordion>
         </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
     </div>
+</div>
 </div>
