@@ -372,7 +372,6 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
             res.send(rapport)
         })
     })
-
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

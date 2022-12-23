@@ -7,6 +7,7 @@ const multer = require('multer');
 const fs = require("fs")
 var mime = require('mime-types')
 const path = require('path');
+const { RemarqueFacture } = require("../models/remarqueFacture");
 
 app.post("/create", (req, res) => {
     delete req.body._id
@@ -115,5 +116,22 @@ app.get("/downloadMensuel/:formateur_id/:mois", (req, res) => {
         });
     });
 });
+
+app.post('/updateRemarqueFormateur', (req, res) => {
+    let remarque = new RemarqueFacture({ ...data })
+    RemarqueFacture.findById(remarque._id).then(r => {
+        if (r)
+            RemarqueFacture.findByIdAndUpdate(remarque._id, remarque, (err, doc) => {
+                if (!err && doc)
+                    res.status(201).send(doc)
+                else if (err)
+                    res.status(500).send(error);
+            })
+        else
+            remarque.save()
+                .then((response) => { res.status(201).send(response); })
+                .catch((error) => { res.status(400).send(error); })
+    })
+})
 
 module.exports = app;
