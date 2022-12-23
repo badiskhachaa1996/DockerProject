@@ -290,7 +290,7 @@
     <div class="col-12">
         <div class="card" *ngIf="infosFormateur">
             <h5>Liste des informations des formateurs du {{affichageMois}}</h5>
-            <p-table #dt1 [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
+            <p-table #dt1 [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']" editMode="row"
                 [totalRecords]="infosFormateur.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                 [rows]="10" styleClass="p-datatable-gridlines" [value]="infosFormateur" dataKey="formateur_id._id"
                 responsiveLayout="scroll">
