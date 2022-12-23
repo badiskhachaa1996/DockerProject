@@ -361,7 +361,7 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
                 let d = []
                 let remarque = new RemarqueFacture({ user_id: f._id, remarque: "", mois: parseInt(req.params.month), year: parseInt(req.params.year) })
                 if (dicRemarque[f_id])
-                    remarque = dicRemarque[f_id]
+                    remarque = dicRemarque[f._id]
                 if (documents[f._id])
                     d = documents[f._id]
                 rapport.push({ formateur_id: f, mois: parseInt(req.params.month), nombre_heure: totalHeureFormateur[f._id], rapport: d, remarque })
