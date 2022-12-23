@@ -353,7 +353,10 @@ app.get('/getAllInfos/:month/:year', (req, res, next) => {
                     } else {
                         totalHeureFormateur[p.user_id._id] += totalHeure
                         if (p.seance_id.fileRight && p.seance_id.fileRight.length != 0)
-                            documents[p.user_id._id].push(p.seance_id)
+                            if (documents[p.user_id._id])
+                                documents[p.user_id._id].push(p.seance_id)
+                            else
+                                documents[p.user_id._id] = [p.seance_id]
                     }
                 }
             })
