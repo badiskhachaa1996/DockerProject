@@ -707,5 +707,11 @@ app.post('/createIntuns', (req, res) => {
     })
 })
 
+app.get('/getAllProspectsIntuns', (req, res) => {
+    ProspectIntuns.find().then(data => {
+        res.status(200).send(data)
+    }).catch((error) => { res.status(500).send(error); });
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

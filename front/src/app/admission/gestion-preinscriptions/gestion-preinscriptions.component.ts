@@ -18,6 +18,7 @@ import { SocketService } from 'src/app/services/socket.service';
 
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { environment } from 'src/environments/environment';
+import { ProspectIntuns } from 'src/app/models/ProspectIntuns';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
   prospects: any[] = [];
   inscriptionSelected: Prospect;
   showUploadFile: Prospect;
+  prospectsIntuns: ProspectIntuns[];
   ListDocuments: String[] = []
   token;
   dataCommercial: CommercialPartenaire;
@@ -269,6 +271,9 @@ export class GestionPreinscriptionsComponent implements OnInit {
             this.prospects[this.prospects.indexOf(pros)].enTraitement = prospect.enTraitement;
           }
         })
+      })
+      this.admissionService.getAllProspectsIntuns().subscribe(tempIntuns => {
+        this.prospectsIntuns = tempIntuns
       })
     })
 
@@ -564,7 +569,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       });
   }
 
-  showDossier(p:Prospect){
+  showDossier(p: Prospect) {
     let bypass: any = p.user_id
     this.router.navigate(['suivi-preinscription', bypass._id]);
   }
@@ -579,8 +584,8 @@ export class GestionPreinscriptionsComponent implements OnInit {
   exportExcel() {
     let dataExcel = []
     //Clean the data
-    if(this.filtedTable.length<1)
-      this.filtedTable=this.prospects
+    if (this.filtedTable.length < 1)
+      this.filtedTable = this.prospects
     this.filtedTable.forEach(p => {
       let t = {}
       t['NOM'] = p?.user_id?.lastname

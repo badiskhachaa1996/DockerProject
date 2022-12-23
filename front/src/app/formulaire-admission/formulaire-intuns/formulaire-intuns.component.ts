@@ -84,18 +84,20 @@ export class FormulaireIntunsComponent implements OnInit {
   get remarque() { return this.RegisterForm.get('remarque'); }
 
   onAddProspect() {
+    let situation_actuel = this.RegisterForm.value.statut_actuel
+    if (situation_actuel == 'Autre')
+      situation_actuel = this.RegisterForm.value.other
     let formulaire_intuns = new ProspectIntuns(null,
       this.RegisterForm.value.nom,
       this.RegisterForm.value.prenom,
       new Date(),
       this.RegisterForm.value.email,
       this.RegisterForm.value.indicatif + " " + this.RegisterForm.value.phone,
-      this.RegisterForm.value.parcours,
-      this.RegisterForm.value.situation,
+      this.RegisterForm.value.programme,
+      situation_actuel,
       this.RegisterForm.value.pays.value,
       this.RegisterForm.value.remarque
     )
-    console.log(formulaire_intuns)
     this.ProspectService.createIntuns(formulaire_intuns).subscribe(r => {
       console.log(r)
       this.ActiveIndex = 3
