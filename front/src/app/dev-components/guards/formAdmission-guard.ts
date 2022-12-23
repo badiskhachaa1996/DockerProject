@@ -18,14 +18,14 @@ export class FormAdmissionGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> | boolean | UrlTree {
 
-        if (route.params.ecole.toLowerCase() =="espic" || route.params.ecole.toLowerCase() == "estya" || route.params.ecole.toLowerCase() == "eduhorizons" || route.params.ecole.toLowerCase() == "adg" || route.params.ecole.toLowerCase() == "studinfo") {
+        if (route.params.ecole.toLowerCase() == "intuns" ||route.params.ecole.toLowerCase() == "espic" || route.params.ecole.toLowerCase() == "estya" || route.params.ecole.toLowerCase() == "eduhorizons" || route.params.ecole.toLowerCase() == "adg" || route.params.ecole.toLowerCase() == "studinfo") {
             return true
         }
-        else{
-          return this.router.createUrlTree(['/pages/access']) ;
-          
-            
-             
+        else {
+            return this.router.createUrlTree(['/pages/access']);
+
+
+
         }
     }
 }

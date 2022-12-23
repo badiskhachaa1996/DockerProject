@@ -300,7 +300,7 @@ export class ExamenComponent implements OnInit {
           l_id.push(cid._id)
         })
         let m_id = []
-        this.idMatiereToUpdate.forEach(mid=>{
+        this.idMatiereToUpdate.forEach(mid => {
           m_id.push(mid._id)
         })
         this.formUpdateExamen.patchValue({
@@ -347,6 +347,7 @@ export class ExamenComponent implements OnInit {
     let oldNote = []
     this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
       examen.classe_id.forEach(c => { classe_ids.push(c._id) })
+
       this.EtudiantService.getAllByMultipleClasseID(classe_ids).subscribe(etudiants => {
         notes.forEach(n => {
           let bypass: any = n.etudiant_id
@@ -361,12 +362,14 @@ export class ExamenComponent implements OnInit {
               _id: n._id,
               isAbsent: n.isAbsent,
               date_IMS: this.formatDate(bypass.user_id?.date_creation),
-              date_TEAMS: this.formatDate(bypass.date_valided_by_support)
+              date_TEAMS: this.formatDate(bypass.date_valided_by_support),
+              matiere_id: examen.matiere_id[0]._id
             })
           }
         })
         etudiants.forEach(etu => {
           let bypass: any = this.examSelected.matiere_id
+          let ids = bypass[0]._id
           if (oldNote.indexOf(etu._id) == -1)
             this.tableauNotes.push({
               id: etu.custom_id,
@@ -378,7 +381,7 @@ export class ExamenComponent implements OnInit {
               etudiant_id: etu._id,
               examen_id: this.examSelected._id,
               classe_id: etu.classe_id._id,
-              matiere_id: bypass._id,
+              matiere_id: ids,
               isAbsent: false,
               semestre: this.examSelected.semestre,
               date_IMS: this.formatDate(etu.user_id?.date_creation),
@@ -455,7 +458,7 @@ export class ExamenComponent implements OnInit {
       rowData.examen_id,
       'Absence Justifiée',
       rowData.classe_id,
-      rowData.matiere_id,
+      rowData.matiere_id[0],
       true,
       new Date()
     )

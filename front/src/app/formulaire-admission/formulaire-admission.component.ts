@@ -260,7 +260,14 @@ export class FormulaireAdmissionComponent implements OnInit {
         { value: "France - Montpellier" },
         { value: "En ligne" }
       ]
-
+    }else if (this.form_origin == "intuns") {
+      this.programeFrDropdown = [
+        { value: "Niveau 6 : Chargé de Gestion et Management" },//(Titre RNCP No 34734)
+        { value: "Niveau 6 : Chargé de Gestion Commerciale" },// (Titre RNCP No 34465)
+        { value: "Niveau 7 : Manager en Ressources Humaines" },// (Titre RNCP No 35125)
+        { value: "Titre : Ingénieur d’affaire" }, //(Titre RNCP No 23692)
+        { value: "ENGLISH PROGRAM L7 Project Management" },//(1-year Master program)
+      ]
     }
     this.defaultDropdown = this.programeFrDropdown
 

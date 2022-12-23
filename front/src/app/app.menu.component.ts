@@ -315,7 +315,12 @@ export class AppMenuComponent implements OnInit {
                                     label: "Pédagogie",
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
-                                        { label: 'Gestions de mes évaluations', icon: 'pi pi-copy', routerLink: 'examens' },
+                                        {
+                                            label: 'Gestions des évaluations', icon: 'pi pi-copy', items: [
+                                                { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
+                                                { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
+                                            ]
+                                        },
                                         { label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                                     ]
                                 }
@@ -689,7 +694,7 @@ export class AppMenuComponent implements OnInit {
                                 })
                         })
                     }
-                } else if (this.isEvent) {
+                } else if (this.isFinance) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -709,6 +714,29 @@ export class AppMenuComponent implements OnInit {
                             label: "Finance",
                             items: [
                                 { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
+                            ]
+                        },
+                    ]
+                }else if (this.isEvent) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: "Evenementiel",
+                            items: [
+                                { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
                             ]
                         },
                     ]

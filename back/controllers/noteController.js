@@ -84,7 +84,7 @@ app.post("/create", (req, res, next) => {
     let data = req.body;
     delete data._id
     data.date_creation = new Date()
-
+    console.log(data)
     let note = new Note(
         {
             ...data

@@ -10,6 +10,8 @@ import { MessageService } from 'primeng/api';
 import { Seance } from 'src/app/models/Seance';
 import { PresenceService } from 'src/app/services/presence.service';
 import * as html2pdf from 'html2pdf.js';
+import { EntrepriseService } from 'src/app/services/entreprise.service';
+import { User } from 'src/app/models/User';
 @Component({
   selector: 'app-facture-formateur',
   templateUrl: './facture-formateur.component.html',
@@ -25,6 +27,9 @@ export class FactureFormateurComponent implements OnInit {
   facturesMensuel = []
   seances: Seance[] = []
 
+  infosFormateur: [{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }];
+  clonedTables;
+
   formAddFactureMensuel: FormGroup = this.formBuilder.group({
     formateur_id: ['', Validators.required],
     mois: ['', Validators.required],
@@ -34,6 +39,7 @@ export class FactureFormateurComponent implements OnInit {
   });
 
   filterFormateur = [{ value: null, label: "Tous les formateurs" }]
+  entrepriseList = []
 
   dropdownMonth = [
     { label: "Janvier", value: 1 },
@@ -52,7 +58,7 @@ export class FactureFormateurComponent implements OnInit {
 
   convert = [null, 'Janvier', 'Fevrier', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Decembre']
 
-  constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private SeanceService: SeanceService,
+  constructor(private formBuilder: FormBuilder, private FormateurService: FormateurService, private EntrepriseService: EntrepriseService,
     private FactureFormateurService: FormateurFactureService, private MessageService: MessageService, private PresenceService: PresenceService) { }
 
   ngOnInit(): void {
@@ -69,6 +75,15 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.getAllMensuel().subscribe(data => {
       this.facturesMensuel = data
     })
+    let d = new Date()
+    this.FormateurService.getAllInfos(d.getMonth() , d.getFullYear()).subscribe(data => {
+      this.infosFormateur = data
+      this.clonedTables = data
+    })
+    this.EntrepriseService.getAll().subscribe(data => {
+      this.entrepriseList = data
+      this.formFactureType1.patchValue({ entreprise: data[0] })
+    })
   }
 
   downloadFactureMensuel(facture: FactureFormateurMensuel) {
@@ -84,7 +99,7 @@ export class FactureFormateurComponent implements OnInit {
     this.FactureFormateurService.createMensuel(new FactureFormateurMensuel(null,
       this.formAddFactureMensuel.value.formateur_id,
       this.formAddFactureMensuel.value.mois,
-      new Date(), this.formAddFactureMensuel.value.year, this.formAddFactureMensuel.value.remarque)).subscribe(data => {
+      new Date(), this.formAddFactureMensuel.value.year, this.formAddFactureMensuel.value.remarque, this.data.totalHeure)).subscribe(data => {
         this.MessageService.add({ severity: "success", summary: "Création de la facture avec succès" })
         if (this.formAddFactureMensuel.value.file) {
           const formData = new FormData();
@@ -111,6 +126,11 @@ export class FactureFormateurComponent implements OnInit {
     if (event && event.length > 0) { this.formAddFactureMensuel.patchValue({ file: event[0] }); fileupload.clear() }
   }
 
+  formFactureType1: FormGroup = this.formBuilder.group({
+    entreprise: ['', Validators.required],
+    tva: [true, Validators.required]
+  });
+
   data = {
     totalHeure: 0,
     taux_h: 0,
@@ -123,26 +143,43 @@ export class FactureFormateurComponent implements OnInit {
     let date = new Date(value)
     this.formAddFactureMensuel.patchValue({ mois: date.getMonth() + 1, year: date.getFullYear() })
     let c_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
-    if (!c_h || c_h == "" || c_h == " ") {
+    if (!c_h || c_h == "" || c_h == " " || c_h == "0") {
       this.MessageService.add({ severity: 'error', summary: "Le formateur n'a pas de taux horaire", detail: "Le cout ne pourra pas être calculé car le taux horaire du formateur n'a pas été renseigné" })
     }
     this.PresenceService.getAllByUserIDMois(this.formAddFactureMensuel.value.formateur_id, this.formAddFactureMensuel.value.mois, this.formAddFactureMensuel.value.year).subscribe(r => {
       this.seances = r
+      let ht = 0
       this.data.taux_h = this.formateurDic[this.formAddFactureMensuel.value.formateur_id]?.taux_h
       r.forEach(element => {
-        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent')
+        if (element.calcul && element.presence != 'Absent' && element.libelle != 'TOTAL Présent') {
           this.data.totalHeure += element.calcul
+          if (element.taux_h != 0)
+            ht += element.calcul * element.taux_h
+          else
+            ht += element.calcul * this.data.taux_h
+        }
       })
-      this.data.ht = this.data.ht * this.data.totalHeure
-      this.data.tva = this.data.tva * 0.2
+      this.data.ht = ht
+      this.data.tva = this.data.ht * 0.2
       this.data.total = this.data.ht + this.data.tva
     })
   }
 
-  filterMonth(tableau, value) {
+  affichageMois = `${new Date().getMonth() + 1}/${new Date().getFullYear()}`
+
+  filterMonth(tableau, value, tab = 'dt2') {
     let date = new Date(value)
-    tableau.filter(date.getMonth() + 1, 'mois', 'equals')
-    tableau.filter(date.getFullYear(), 'year', 'equals')
+    if (tab == "dt1") {
+      this.FormateurService.getAllInfos(date.getMonth(), date.getFullYear()).subscribe(data => {
+        this.infosFormateur = data
+        this.clonedTables = data
+        console.log(this.infosFormateur)
+        this.affichageMois = `${date.getMonth() + 1}/${date.getFullYear()}`
+      })
+    } else {
+      tableau.filter(date.getMonth() + 1, 'mois', 'equals')
+      tableau.filter(date.getFullYear(), 'year', 'equals')
+    }
   }
 
   onGenerateFacture(id = 'facture1') {
@@ -155,6 +192,22 @@ export class FactureFormateurComponent implements OnInit {
       jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
     };
     html2pdf().set(opt).from(element).save();
+  }
+
+
+  onRowEditInit(product) {
+    this.clonedTables[product.formateur_id._id] = { ...product };
+  }
+
+  onRowEditSave(product) {
+    delete this.clonedTables[product.formateur_id._id];
+    //TODO Send
+    console.log(product)
+  }
+
+  onRowEditCancel(product, index: number) {
+    this.infosFormateur[index] = this.clonedTables[product.formateur_id._id];
+    delete this.clonedTables[product.formateur_id._id];
   }
 
 }

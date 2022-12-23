@@ -6,7 +6,8 @@ export class FactureFormateurMensuel {
         public mois?: String,
         public date_creation?: Date,
         public year?: String,
-        public remarque?: string
+        public remarque?: string,
+        public nombre_heure?: Number
     ) { };
 
 }

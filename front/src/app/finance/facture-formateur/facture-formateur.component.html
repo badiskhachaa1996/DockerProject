@@ -90,21 +90,41 @@
                             </p-table>
                         </p-accordionTab>
                         <p-accordionTab header="Facture Type 1">
-                            <div id="facture1" class="grid">
+                            <form class="p-fluid p-formgrid grid" [formGroup]="formFactureType1">
+                                <div class="field col-12 md:col-6">
+                                    <label For="contrat">Entreprise<span style="color: red;"> * </span></label>
+                                    <p-dropdown [options]="entrepriseList" optionLabel="r_sociale" filter="true"
+                                        formControlName="entreprise">
+                                    </p-dropdown>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label For="contrat">TVA ?<span style="color: red;"> * </span></label>
+                                    <p-selectButton
+                                        [options]="[{label:'Sans TVA',value:false},{label:'Avec TVA',value:true}]"
+                                        formControlName="tva">
+                                    </p-selectButton>
+                                </div>
+                            </form>
+                            <div id="facture1" class="grid p-2">
                                 <span class="col-6"
                                     style="text-align:left;font-weight: bold;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.lastname
                                     | uppercase}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.firstname |
                                     titlecase}}</span>
-                                <span class="col-6" style="text-align:right;font-weight: bold;">Elitech</span>
+                                <span class="col-6" style="text-align:right;font-weight: bold;">
+                                    {{formFactureType1.value.entreprise.r_sociale}}
+                                </span>
                                 <span class="col-6"
                                     style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.numero_adresse}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.rue_adresse}}</span>
-                                <span class="col-6" style="text-align:right;">23-25 rue Jean-jacques Rousseau</span>
+                                <span class="col-6"
+                                    style="text-align:right;">{{formFactureType1.value.entreprise?.adresse_ent}}</span>
                                 <span class="col-6"
                                     style="text-align:left;">{{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.postal_adresse}}
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id?.ville_adresse}}</span>
-                                <span class="col-6" style="text-align:right;">75001 PARIS</span>
+                                <span class="col-6"
+                                    style="text-align:right;">{{formFactureType1.value.entreprise?.code_postale_ent}}
+                                    {{formFactureType1.value.entreprise?.ville_ent}}</span>
                                 <span class="col-12" style="text-align:left;">Tél :
                                     {{formateurDic[formAddFactureMensuel.value.formateur_id]?.user_id.phone}}</span>
                                 <span class="col-12" style="text-align:right;">Le {{today| date: 'dd/MM/YYYY'}}</span>
@@ -142,8 +162,11 @@
                                             <td style="text-align:center;">
                                                 {{seance.calcul}}
                                             </td>
-                                            <td style="text-align:center;">
-                                                WIP {{seance.presence}}
+                                            <td style="text-align:center;" *ngIf="seance.taux_h!=0">
+                                                {{seance.taux_h}}
+                                            </td>
+                                            <td style="text-align:center;" *ngIf="seance.taux_h==0">
+                                                {{data.taux_h}}
                                             </td>
                                         </tr>
                                     </ng-template>
@@ -153,9 +176,14 @@
                                 <span class="col-6" style="text-align:right;">Taux horaire:
                                     {{data.taux_h}} €</span>
                                 <span class="col-6" style="text-align:left;">HT : {{data.ht}} €</span>
-                                <span class="col-6" style="text-align:right;">TVA 20 % : {{data.tva}} €</span>
-                                <span class="col-12" style="text-align:right;">NET A PAYER : {{data.total}} €</span>
-                                <span class="col-12" style="text-align:left;">N° de SIRET :</span>
+                                <span class="col-6" style="text-align:right;" *ngIf="formFactureType1.value.tva">TVA 20
+                                    % : {{data.tva}} €</span>
+                                <span class="col-12" style="text-align:right;" *ngIf="formFactureType1.value.tva">NET A
+                                    PAYER : {{data.total}} €</span>
+                                <span class="col-12" style="text-align:right;" *ngIf="!formFactureType1.value.tva">NET A
+                                    PAYER : {{data.ht}} €</span>
+                                <span class="col-12" style="text-align:left;">N° de SIRET :
+                                    {{formFactureType1.value.entreprise?.siret}}</span>
                                 <span class="col-12" style="text-align:left;">N° de Formateur :</span>
                                 <span class="col-12" style="text-align:left;">N° URSSAF :</span>
                                 <span class="col-12" style="text-align:left;">Membre d'une Association de Gestion
@@ -182,7 +210,7 @@
             </div>
             <h5>Liste des factures mensuel des formateurs</h5>
             <p-table #dt2
-                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstanme','seance_id.libelle','year']"
+                [globalFilterFields]="['formateur_id.user_id.lastname','formateur_id.user_id.firstname','seance_id.libelle','year']"
                 [totalRecords]="facturesMensuel.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
                 [rows]="10" styleClass="p-datatable-gridlines" [value]="facturesMensuel" dataKey="_id"
                 responsiveLayout="scroll">
@@ -200,7 +228,7 @@
                         </p-dropdown>
                         <span>
                             <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
-                                (onSelect)="filterMonth(dt2,$event)"></p-calendar>
+                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt2,$event)"></p-calendar>
                             <i class="pi pi-filter-slash"
                                 (click)="dt2.filter(null, 'mois', 'equals');dt2.filter(null, 'year', 'equals')"></i>
                         </span>
@@ -212,10 +240,13 @@
                             Formateur
                             <p-sortIcon field="formateur_id.lastname"></p-sortIcon>
                         </th>
-
                         <th pSortableColumn="mois" style="text-align: center;">
                             Mois
                             <p-sortIcon field="mois"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nombre_heure" style="text-align: center;">
+                            Nombre d'heure
+                            <p-sortIcon field="nombre_heure"> </p-sortIcon>
                         </th>
                         <th pSortableColumn="date_creation" style="text-align: center;">
                             Date d'Upload
@@ -238,6 +269,9 @@
                             {{convert[facture.mois]}} {{facture.year}}
                         </td>
                         <td>
+                            {{facture?.nombre_heure}}
+                        </td>
+                        <td>
                             {{facture.date_creation | date : 'dd/MM/yyyy à hh:mm'}}
                         </td>
                         <td>
@@ -247,6 +281,96 @@
                             <i (click)="downloadFactureMensuel(facture)" class="pi pi-upload" aria-hidden="true"
                                 pTooltip="Télécharger la facture">
                             </i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="card" *ngIf="infosFormateur">
+            <h5>Liste des informations des formateurs du {{affichageMois}}</h5>
+            <p-table #dt1
+                [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
+                [totalRecords]="infosFormateur.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
+                [rows]="10" styleClass="p-datatable-gridlines" [value]="infosFormateur" dataKey="_id"
+                responsiveLayout="scroll">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" #filter
+                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                                class="w-full" />
+                        </span>
+                        <p-dropdown [options]="filterFormateur" filter="true"
+                            (onChange)="dt1.filter($event.value, 'formateur_id._id','equals');"
+                            [style]="{'margin':'5px'}">
+                        </p-dropdown>
+                        <span>
+                            <p-calendar view="month" dateFormat="mm/yy" [readonlyInput]="true"
+                                placeholder="Choissisez un mois" (onSelect)="filterMonth(dt1,$event,'dt1')"></p-calendar>
+                            <i class="pi pi-filter-slash"
+                                (click)="dt1.filter(null, 'mois', 'equals');dt1.filter(null, 'year', 'equals')"></i>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem"></th>
+                        <th pSortableColumn="formateur_id.lastname" style="text-align: center;">
+                            Formateur
+                            <p-sortIcon field="formateur_id.lastname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="mois" style="text-align: center;">
+                            Mois
+                            <p-sortIcon field="mois"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nombre_heure" style="text-align: center;">
+                            Nombre d'heure
+                            <p-sortIcon field="nombre_heure"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rapport.length" style="text-align: center;">
+                            Nombre de rapport
+                            <p-sortIcon field="rapport.length"> </p-sortIcon>
+                        </th>
+                        <th pSortableColumn="remarque" style="text-align: center;">
+                            Remarque
+                            <p-sortIcon field="remarque"> </p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-data let-editing="editing" let-ri="rowIndex">
+                    <tr>
+                        <td>
+                            <button type="button" pButton pRipple [pRowToggler]="data"
+                                class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td>
+                            {{data.formateur_id.lastname | uppercase}}
+                            {{data.formateur_id.firstname | titlecase}}
+                        </td>
+                        <td>
+                            {{affichageMois}}
+                        </td>
+                        <td>
+                            {{data.nombre_heure}}
+                        </td>
+                        <td>
+                            {{data.rapport?.length}}
+                        </td>
+                        <td [pEditableColumn]="data.remarque.remarque" pEditableColumnField="remarque.remarque">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input pInputText type="text" [(ngModel)]="data.remarque.remarque">
+                                    <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check" (click)="onRowEditSave(data)" class="p-button-rounded p-button-text p-button-success mr-2"></button>
+                                    <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times" (click)="onRowEditCancel(data,ri)" class="p-button-rounded p-button-text p-button-danger"></button>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{data?.remarque?.remarque}}
+                                </ng-template>
+                            </p-cellEditor>
                         </td>
                     </tr>
                 </ng-template>
