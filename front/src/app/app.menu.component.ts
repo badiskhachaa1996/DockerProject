@@ -221,6 +221,7 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: 'Missions', icon: 'pi pi-briefcase', routerLink: ['/missions'] },
                     { label: 'Mes missions', icon: 'pi pi-user', routerLink: ['/mes-missions'] },
+                    { label: 'Annonces', icon: 'pi pi-volume-up', routerLink: ['/annonces'] },
                 ]
             },
             {

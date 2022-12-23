@@ -232,6 +232,7 @@ import {
   MsalRedirectComponent,
 } from "@azure/msal-angular";
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
+import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 
 
 @NgModule({
@@ -474,6 +475,7 @@ import { FactureFormateurComponent } from './finance/facture-formateur/facture-f
     DevoirsEtudiantsComponent,
     InfoImsComponent,
     FactureFormateurComponent,
+    AnnoncesComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
