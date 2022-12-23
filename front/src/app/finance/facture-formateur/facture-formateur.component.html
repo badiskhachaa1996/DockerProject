@@ -292,7 +292,7 @@
             <h5>Liste des informations des formateurs du {{affichageMois}}</h5>
             <p-table #dt1 [globalFilterFields]="['formateur_id.lastname','formateur_id.firstname']"
                 [totalRecords]="infosFormateur.length" [pageLinks]="5" [paginator]="true" rowExpandMode="single"
-                [rows]="10" styleClass="p-datatable-gridlines" [value]="infosFormateur" dataKey="_id"
+                [rows]="10" styleClass="p-datatable-gridlines" [value]="infosFormateur" dataKey="formateur_id._id"
                 responsiveLayout="scroll">
                 <ng-template pTemplate="caption">
                     <div class="flex justify-content-between flex-column sm:flex-row">
@@ -380,10 +380,10 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-data>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="card grid">
-                                <p-accordion>
-                                    <p-accordionTab *ngFor="let rap of data.rapport" header="Séance {{rap.libelle}}">
+                                <p-accordion class="col-12">
+                                    <p-accordionTab *ngFor="let rap of data.rapport" header="Séance {{rap.libelle}} du {{rap.date_debut | date:'dd/MM à hh:mm'}}">
                                         <p-table [value]="rap.fileRight">
                                             <ng-template pTemplate="header">
                     <tr>
