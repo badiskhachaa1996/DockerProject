@@ -332,31 +332,77 @@ app.post("/createContratAlternance", (req, res, next) => {
     let NewContrat = new CAlternance({
         ...ContratData
     })
-    
-    //création du contrat
-    NewContrat.save()
-        .then((NewContData) => {
-            console.log("créé");
-            res.status(200).send(NewContData);
-        })
-        .catch((error) => {
-            console.log(error)
-            res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
-        })
+
+    console.log(ContratData)
+
+    // verification si le tuteur est un directeur
+    Tuteur.findOne({_id: NewContrat.tuteur_id})
+    .then((tuteur) => {
+        if(tuteur)
+        {
+            NewContrat.directeur_id = null;
+            //création du contrat
+            NewContrat.save()
+            .then((NewContData) => {
+                res.status(200).send(NewContData);
+            })
+            .catch((error) => {
+                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+            })
+        }
+        else{
+            NewContrat.directeur_id = NewContrat.tuteur_id;
+            NewContrat.tuteur_id = null;
+            
+            //création du contrat
+            NewContrat.save()
+            .then((NewContData) => {
+                res.status(200).send(NewContData);
+            })
+            .catch((error) => {
+                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+            })
+        }
+    })
+    .catch((error) => { res.status(500).send(error); });
 
 });
 
 app.post("/updateContratAlternance", (req, res, next) => {
-    let ContratData = req.body;
-    CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true },(err,value)=>{
-        if(err){
-            console.error(err)
-            res.status(500).send(err)
-        }else{
-            res.status(201).send(value)
+    let ContratData = new CAlternance({...req.body });
+
+    // verification si le tuteur est un directeur
+    Tuteur.findOne({_id: ContratData.tuteur_id})
+    .then((tuteur) => {
+        if(tuteur)
+        {
+            ContratData.directeur_id = null;
+
+            CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).send(value)
+                }
+            })
+        
+        } else {
+            ContratData.directeur_id = ContratData.tuteur_id;
+            ContratData.tuteur_id = null;
+
+            CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
+                if (err) {
+                    console.error(err)
+                    res.status(500).send(err)
+                } else {
+                    res.status(201).send(value)
+                }
+            })
+            
         }
     })
-
+    .catch((error) => { res.status(500).send(error); });
 });
 
 
@@ -398,10 +444,9 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 });
 
 app.get("/getAllContrats/", (req, res, next) => {
-    console.log("getAllContrats")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'code_commercial' })
+
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation').populate('code_commercial').populate('directeur_id')
         .then((CAFromDb) => {
-            console.log(CAFromDb)
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
@@ -416,6 +461,13 @@ app.get("/getAllContrats/", (req, res, next) => {
 //Recuperation d'une entreprise selon un id
 app.get("/getById/:id", (req, res, next) => {
     Entreprise.findOne({ _id: req.params.id })
+        .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
+        .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
+});
+
+//Recuperation d'une entreprise selon un id en populate
+app.get("/getByIdPopulate/:id", (req, res, next) => {
+    Entreprise.findOne({ _id: req.params.id })?.populate('directeur_id')
         .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
 });
