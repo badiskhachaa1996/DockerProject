@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { Etudiant } from 'src/app/models/Etudiant';
@@ -228,7 +228,37 @@ export class ListEtudiantComponent implements OnInit {
     }*/
   }
 
-  constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
+  // partie dedié aux CV
+  cvLists: CV[] = [];
+  showFormAddCV: boolean = false;
+  formAddCV: FormGroup;
+
+  showFormUpdateCV: boolean = false;
+  formUpdateCV: FormGroup;
+
+  userForCV: User;
+  verifCV: boolean = false; // savoir si le cv existe
+
+  languesList: any[] = [
+    { label: 'Français' },
+    { label: 'Anglais' },
+    { label: 'Espagnol' },
+    { label: 'Allemand' },
+    { label: 'Arabe' },
+    { label: 'Italien' },
+  ]
+
+  competencesList: any[] = [
+    { label: "PHP" },
+    { label: "HTML 5" },
+    { label: "CSS 3" },
+    { label: "Java" },
+  ];
+
+  selectedMultiCpt: string[] = [];
+  selectedMultilang: string[] = [];
+
+  constructor(private cvService: CvService, private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
     private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService: MissionService) { }
@@ -290,7 +320,10 @@ export class ListEtudiantComponent implements OnInit {
         if (tuteur.user_id)
           this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
       })
-    })
+    });
+
+    //partie gestion de cv
+    this.onInitFormAddCV();
 
   }
 
@@ -381,6 +414,17 @@ export class ListEtudiantComponent implements OnInit {
         );
       }
     });
+
+    // recuperation des cv par user_id
+    this.cvService.getCvs()
+    .then((response: CV[]) => { 
+      // this.cvLists = response; 
+      response.forEach((cv) => {
+        let byPassUserId: any = cv.user_id;
+        this.cvLists[byPassUserId._id] = cv;
+      });
+    })
+    .catch((error) => { console.error(error); })
 
   }
 
@@ -856,15 +900,6 @@ export class ListEtudiantComponent implements OnInit {
       this.languesCV.push('allemand')
   }
 
-  languesList = [
-    { label: "Français", value: "français" },
-    { label: "Anglais", value: "anglais" },
-    { label: "Arabe", value: "arabe" },
-    { label: "Espagnol", value: "espagnol" },
-    { label: "Japonais", value: "japonais" },
-    { label: "Chinos", value: "chinois" },
-    { label: "Allemand", value: "allemand" }
-  ]
 
   languesCV = []
   urlVideo = ""
@@ -1083,6 +1118,103 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantsByCampus = [];
   }
 
+
+  // partie dedié à la gestion des CVs
+  onInitFormAddCV(): void
+  {
+    this.formAddCV = this.formBuilder.group({
+      experiences_pro:            this.formBuilder.array([]),
+      experiences_sco:            this.formBuilder.array([]),
+      competences:                [],
+      langues:                    [],
+      video_lien:                 [],
+    });
+  }
+
+  //Traitement des formArray
+  /* Xp pro */
+  getXpPros()
+  {
+    return this.formAddCV.get('experiences_pro') as FormArray;
+  }
+
+  onAddXpPro()
+  {
+    const newXpProControl = this.formBuilder.control('', Validators.required);
+    this.getXpPros().push(newXpProControl); 
+  }
+
+  onRemoveXpPro(i: number)
+  {
+    this.getXpPros().removeAt(i);
+  }
+  /* end Xp pro */
+
+  /* Xp sco */
+  getXpScos()
+  {
+    return this.formAddCV.get('experiences_sco') as FormArray;
+  }
+
+  onAddXpSco()
+  {
+    const newXpScoControl = this.formBuilder.control('', Validators.required);
+    this.getXpScos().push(newXpScoControl); 
+  }
+
+  onRemoveXpSco(i: number)
+  {
+    this.getXpScos().removeAt(i);
+  }
+  /* end xp sco */
+
+  // ethode d'ajout du cv
+  onAddCV(): void
+  {
+    // recuperation des données du formulaire
+    const formValue = this.formAddCV.value;
+    //création du cv
+    const cv = new CV();
+    
+    cv.user_id = this.userForCV._id;
+    cv.experiences_pro = [];
+    formValue.experiences_pro.forEach(xpPro => {
+      cv.experiences_pro.push(xpPro);
+    });
+
+    cv.experiences_sco = [];
+    formValue.experiences_sco.forEach(xpSco => {
+      cv.experiences_sco.push(xpSco);
+    });
+
+    cv.competences = [];
+    formValue.competences.forEach(cpt => {
+      cv.competences.push(cpt.label);
+    });
+
+    cv.langues = [];
+    formValue.langues.forEach(langue => {
+      cv.langues.push(langue.label);
+    });
+
+    cv.video_lien = formValue.video_lien;
+
+    //ajout du cv
+    this.cvService.postCv(cv)
+    .then((response: CV) => {
+      this.messageService.add({ severity: "success", summary: `Le cv à été ajouté pour ${this.userForCV.lastname} ${this.userForCV.firstname}` })
+      this.formAddCV.reset();
+      this.showFormAddCV = false;
+      this.onGetAllClasses();
+    })
+    .catch((error) => { console.log(error); });
+  }
+
+  // verification de l'existance du cv de l'utilisateur
+  onCVExist(id: string): void
+  {
+    this.verifCV = this.cvService.cvExists(id, this.cvLists); 
+  }
 
   exportExcel() {
     let dataExcel = []

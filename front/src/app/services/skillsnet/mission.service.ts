@@ -76,15 +76,6 @@ export class MissionService {
       );
     });
   }
-  getMissionFromCV(user_id: string) {
-    const url = `${this.apiUrl}getMissionFromCV/${user_id}`;
-    return new Promise<[{ mission: Mission, score: Number }]>((resolve, reject) => {
-      this.httpClient.get<[{ mission: Mission, score: Number }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
-        (response) => { resolve(response); },
-        (error) => { reject(error); }
-      );
-    });
-  }
 
   //Methode de modification d'une mission
   putMission(mission: Mission)
