@@ -14,6 +14,7 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const bcrypt = require("bcryptjs");
 const { Etudiant } = require('../models/etudiant');
+const { ProspectIntuns } = require('../models/ProspectIntuns');
 // initialiser transporteur de nodeMailer
 let transporterEstya = nodemailer.createTransport({
     host: "smtp.office365.com",
@@ -686,9 +687,29 @@ app.get('/delete/:p_id/:user_id', (req, res) => {
 
 app.post("/updateVisa", (req, res) => {
     let b = req.body.statut == 'true'
-    Prospect.updateOne({ _id: req.body.p_id }, { avancement_visa: b }).then(doc=>{
+    Prospect.updateOne({ _id: req.body.p_id }, { avancement_visa: b }).then(doc => {
         console.log(doc)
         res.status(201).send(doc)
+    }).catch((error) => { res.status(500).send(error); });
+})
+
+app.post('/createIntuns', (req, res) => {
+    let f_intuns = new ProspectIntuns({
+        ...req.body
+    })
+    ProspectIntuns.findOne({ email: f_intuns.email, nom: f_intuns.nom, prenom: f_intuns.prenom, parcours: f_intuns.parcours }).then(r => {
+        if (r == null)
+            f_intuns.save()
+                .then((userUpdated) => { res.status(200).send(userUpdated) })
+                .catch((error) => { res.status(400).send(error); });
+        else
+            res.status(409).send({ message: 'Vous avez déjà rempli un formulaire chez nous!' });
+    })
+})
+
+app.get('/getAllProspectsIntuns', (req, res) => {
+    ProspectIntuns.find().then(data => {
+        res.status(200).send(data)
     }).catch((error) => { res.status(500).send(error); });
 })
 

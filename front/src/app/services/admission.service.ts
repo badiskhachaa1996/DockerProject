@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Prospect } from '../models/Prospect';
+import { ProspectIntuns } from '../models/ProspectIntuns';
 
 
 @Injectable({
@@ -143,5 +144,15 @@ export class AdmissionService {
   updateVisa(p_id, visa: boolean) {
     let url = this.apiUrl + "updateVisa"
     return this.httpClient.post<Prospect>(url, { p_id, statut: visa }, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+  }
+
+  createIntuns(data: ProspectIntuns) {
+    let url = this.apiUrl + "createIntuns"
+    return this.httpClient.post<ProspectIntuns>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*' }) })
+  }
+  //recuperation de la liste des admissions
+  getAllProspectsIntuns() {
+    let registreUrl = this.apiUrl + 'getAllProspectsIntuns';
+    return this.httpClient.get<ProspectIntuns[]>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 }
