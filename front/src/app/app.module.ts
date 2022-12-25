@@ -234,6 +234,7 @@ import {
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
+import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 
 
 @NgModule({
@@ -478,6 +479,7 @@ import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-int
     FactureFormateurComponent,
     AnnoncesComponent,
     FormulaireIntunsComponent,
+    CvthequeComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

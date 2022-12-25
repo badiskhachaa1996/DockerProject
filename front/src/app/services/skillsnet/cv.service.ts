@@ -25,16 +25,17 @@ export class CvService {
     });
   }
 
-  //Methode d'envoi d'un justificatif d'abscence
-  postJustificatif(formData: FormData)
+  //Methode d'envoi du fichier brute
+  postCVBrute(formData: FormData)
   {
     const url = `${this.apiUrl}/upload-cv`;
 
     return new Promise((resolve, reject) => {
-      this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
-        ((response) => { resolve(response); }),
-        ((error) => { reject(error); })
-      );
+      this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Fichier ajouté'),
+      })
     });
   }
 

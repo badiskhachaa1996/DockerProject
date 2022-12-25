@@ -19,7 +19,6 @@ import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
-import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -28,7 +27,6 @@ import { Diplome } from 'src/app/models/Diplome';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
-import { CV } from 'src/app/models/CV';
 import { MissionService } from 'src/app/services/skillsnet/mission.service';
 import { Campus } from 'src/app/models/Campus';
 import { info } from 'console';
@@ -228,40 +226,11 @@ export class ListEtudiantComponent implements OnInit {
     }*/
   }
 
-  // partie dedié aux CV
-  cvLists: CV[] = [];
-  showFormAddCV: boolean = false;
-  formAddCV: FormGroup;
-
-  showFormUpdateCV: boolean = false;
-  formUpdateCV: FormGroup;
-
-  userForCV: User;
-  verifCV: boolean = false; // savoir si le cv existe
-
-  languesList: any[] = [
-    { label: 'Français' },
-    { label: 'Anglais' },
-    { label: 'Espagnol' },
-    { label: 'Allemand' },
-    { label: 'Arabe' },
-    { label: 'Italien' },
-  ]
-
-  competencesList: any[] = [
-    { label: "PHP" },
-    { label: "HTML 5" },
-    { label: "CSS 3" },
-    { label: "Java" },
-  ];
-
-  selectedMultiCpt: string[] = [];
-  selectedMultilang: string[] = [];
-
-  constructor(private cvService: CvService, private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
+  
+  constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService: MissionService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private missionService: MissionService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -321,9 +290,6 @@ export class ListEtudiantComponent implements OnInit {
           this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
       })
     });
-
-    //partie gestion de cv
-    this.onInitFormAddCV();
 
   }
 
@@ -414,17 +380,6 @@ export class ListEtudiantComponent implements OnInit {
         );
       }
     });
-
-    // recuperation des cv par user_id
-    this.cvService.getCvs()
-    .then((response: CV[]) => { 
-      // this.cvLists = response; 
-      response.forEach((cv) => {
-        let byPassUserId: any = cv.user_id;
-        this.cvLists[byPassUserId._id] = cv;
-      });
-    })
-    .catch((error) => { console.error(error); })
 
   }
 
@@ -1119,102 +1074,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  // partie dedié à la gestion des CVs
-  onInitFormAddCV(): void
-  {
-    this.formAddCV = this.formBuilder.group({
-      experiences_pro:            this.formBuilder.array([]),
-      experiences_sco:            this.formBuilder.array([]),
-      competences:                [],
-      langues:                    [],
-      video_lien:                 [],
-    });
-  }
-
-  //Traitement des formArray
-  /* Xp pro */
-  getXpPros()
-  {
-    return this.formAddCV.get('experiences_pro') as FormArray;
-  }
-
-  onAddXpPro()
-  {
-    const newXpProControl = this.formBuilder.control('', Validators.required);
-    this.getXpPros().push(newXpProControl); 
-  }
-
-  onRemoveXpPro(i: number)
-  {
-    this.getXpPros().removeAt(i);
-  }
-  /* end Xp pro */
-
-  /* Xp sco */
-  getXpScos()
-  {
-    return this.formAddCV.get('experiences_sco') as FormArray;
-  }
-
-  onAddXpSco()
-  {
-    const newXpScoControl = this.formBuilder.control('', Validators.required);
-    this.getXpScos().push(newXpScoControl); 
-  }
-
-  onRemoveXpSco(i: number)
-  {
-    this.getXpScos().removeAt(i);
-  }
-  /* end xp sco */
-
-  // ethode d'ajout du cv
-  onAddCV(): void
-  {
-    // recuperation des données du formulaire
-    const formValue = this.formAddCV.value;
-    //création du cv
-    const cv = new CV();
-    
-    cv.user_id = this.userForCV._id;
-    cv.experiences_pro = [];
-    formValue.experiences_pro.forEach(xpPro => {
-      cv.experiences_pro.push(xpPro);
-    });
-
-    cv.experiences_sco = [];
-    formValue.experiences_sco.forEach(xpSco => {
-      cv.experiences_sco.push(xpSco);
-    });
-
-    cv.competences = [];
-    formValue.competences.forEach(cpt => {
-      cv.competences.push(cpt.label);
-    });
-
-    cv.langues = [];
-    formValue.langues.forEach(langue => {
-      cv.langues.push(langue.label);
-    });
-
-    cv.video_lien = formValue.video_lien;
-
-    //ajout du cv
-    this.cvService.postCv(cv)
-    .then((response: CV) => {
-      this.messageService.add({ severity: "success", summary: `Le cv à été ajouté pour ${this.userForCV.lastname} ${this.userForCV.firstname}` })
-      this.formAddCV.reset();
-      this.showFormAddCV = false;
-      this.onGetAllClasses();
-    })
-    .catch((error) => { console.log(error); });
-  }
-
-  // verification de l'existance du cv de l'utilisateur
-  onCVExist(id: string): void
-  {
-    this.verifCV = this.cvService.cvExists(id, this.cvLists); 
-  }
+  
 
   exportExcel() {
     let dataExcel = []

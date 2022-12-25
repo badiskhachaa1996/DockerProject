@@ -600,7 +600,7 @@ export class UserProfilComponent implements OnInit {
     
     //Recuperation du fichier s'il existe
     if(this.uploadedFiles)
-    { 
+    {
       absence.file_name = this.uploadedFiles.name;
       let formData = new FormData();
       formData.append('id', this.userConnectedNow._id);
