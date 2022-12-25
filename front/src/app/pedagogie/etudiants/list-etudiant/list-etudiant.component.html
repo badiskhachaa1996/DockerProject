@@ -406,90 +406,6 @@
         </div>
     </div>
 
-    <!-- Formulaire d'ajout de cv étudiant -->
-    <div class="col-12" *ngIf="showFormAddCV">
-        <div class="card">
-            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                (click)="showFormAddCV = false; formAddCV.reset()" aria-hidden="true"></i>
-
-            <h4 style="text-align: center;">Ajout de CV</h4>
-
-            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCV" (ngSubmit)="onAddCV()">
-                <div formArrayName="experiences_pro">
-                    <label>Expériences professionnelles</label> <br/>
-                    <div class="p-formgrid grid" *ngFor="let xpProControl of getXpPros().controls; let i = index">
-                        <div class="field col-10">
-                            <textarea pInputTextarea type="text" placeholder="2018-2019: expérience" [formControlName]="i"></textarea>
-                        </div>
-                        <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveXpPro(i)" class="p-button-outlined p-button-danger"></button>
-                        </div>                        
-                    </div>
-                    <button pButton icon="pi pi-plus" label="Ajouter une expérience" type="button" (click)="onAddXpPro()" class="p-button-outlined p-button-info"></button>
-                </div>
-
-                <div class="field col-12">
-                    <label>Compétences</label>
-                    <p-multiSelect [options]="competencesList" [(ngModel)]="selectedMultiCpt" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
-                        <ng-template let-value pTemplate="selectedItems">
-                            <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiCpt">
-                                <div>{{option.label}}</div>
-                            </div>
-                            <div *ngIf="!selectedMultiCpt || selectedMultiCpt.length === 0" class="country-placeholder">
-                                Selectionner une ou plusieurs compétences
-                            </div>
-                        </ng-template>
-                        <ng-template let-competence pTemplate="item">
-                            <div class="flex align-items-center country-item">
-                                <div>{{competence.label}}</div>
-                            </div>
-                        </ng-template>
-                    </p-multiSelect>
-                </div>
-
-                <div class="field col-12">
-                    <label>Langues</label>
-                    <p-multiSelect [options]="languesList" [(ngModel)]="selectedMultilang" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="langues">
-                        <ng-template let-value pTemplate="selectedItems">
-                            <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultilang">
-                                <div>{{option.label}}</div>
-                            </div>
-                            <div *ngIf="!selectedMultilang || selectedMultilang.length === 0" class="country-placeholder">
-                                Selectionner une ou plusieurs langues
-                            </div>
-                        </ng-template>
-                        <ng-template let-langue pTemplate="item">
-                            <div class="flex align-items-center country-item">
-                                <div>{{langue.label}}</div>
-                            </div>
-                        </ng-template>
-                    </p-multiSelect>
-                </div>
-
-                <div formArrayName="experiences_sco">
-                    <label>expériences scolaires</label> <br/>
-                    <div class="p-formgrid grid" *ngFor="let xpScoControl of getXpScos().controls; let i = index">
-                        <div class="field col-10">
-                            <textarea pInputTextarea type="text" placeholder="2018-2019: expérience" [formControlName]="i"></textarea>
-                        </div>
-                        <div class="field col-2">
-                            <button pButton icon="pi pi-trash" type="button" (click)="onRemoveXpSco(i)" class="p-button-outlined p-button-danger"></button>
-                        </div>
-                    </div>
-                    <button pButton icon="pi pi-plus" label="Ajouter un parcours scolaire" type="button" (click)="onAddXpSco()" class="p-button-outlined p-button-info"></button>
-                </div>
-                
-                <div class="field col-12">
-                    <label>Lien présentation vidéo</label>
-                    <input pInputText type="text" placeholder="Vous pouvez nous faire part d'une présentation vidéo sous forme de lien" formControlName="video_lien" />
-                </div>
-                <div>
-                    <button pButton label="Valider" type="submit" [disabled]="formAddCV.invalid"></button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <!-- Listing des étudiants -->
     <div class="col-12">
         <div class="card">
@@ -566,7 +482,7 @@
                             <button type="button" pButton pRipple [pRowToggler]="etudiant"
                                 class="p-button-text p-button-rounded p-button-plain"
                                 [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                                (click)="loadPP(etudiant); onCVExist(etudiant.user_id._id)"></button>
+                                (click)="loadPP(etudiant);"></button>
                         </td>
                         <td style="min-width: 12rem;">{{ etudiant.custom_id }}</td>
 
@@ -643,7 +559,6 @@
                         <th>Numéro INE</th>
                         <th>Numéro NIR </th>
                         <th>NB Absences</th>
-                        <th>CV</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-order>
@@ -682,13 +597,6 @@
                         </td>
                         <td>
                             {{absences.length}}
-                        </td>
-                        <td>
-                            <i *ngIf="!verifCV" style="margin-left: 2%;" class="pi pi-file-pdf" pTooltip="Ajouter un CV" aria-hidden="true"
-                                tooltipPosition="bottom" (click)="userForCV = etudiant.user_id; showFormAddCV = true;"></i>
-
-                            <i *ngIf="verifCV" style="margin-left: 2%;" class="pi pi-book" pTooltip="Voir le CV" aria-hidden="true"
-                                tooltipPosition="bottom" (click)="userForCV = etudiant.user_id;"></i>
                         </td>
                     </tr>
                 </ng-template>

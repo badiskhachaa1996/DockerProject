@@ -42,9 +42,20 @@ app.post("/upload-cv", uploadCV.single('file'), (req, res, next) => {
 // ajout de CV
 app.post("/post-cv", (req, res) => {
     const cv = new CvType({ ...req.body });
-    cv.save()
-    .then((response) => { res.status(201).send(response); })
-    .catch((error) => { res.status(500).send(error.message); });
+
+    // requete de securite pour verifier que l'utilisateur n'a pas de CV existant
+    CvType.findOne({ user_id: cv.user_id })
+    .then((response) => {
+        if(response)
+        {
+            res.status(400).send(error);
+        } else {
+            cv.save()
+            .then((response) => { res.status(201).send(response); })
+            .catch((error) => { res.status(500).send(error.message); });
+        }
+    })
+    .catch((error) => { res.status(500).send(error.message); })
 });
 
 

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 //creation du schema de la table diplome
 const cvTypeSchema = mongoose.Schema({
-    user_id:            { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false },
+    user_id:            { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false, unique: true },
     experiences_pro:    { type: [String], required: false },
     experiences_sco:    { type: [String], required: false },
     competences:        { type: [String], required: false },

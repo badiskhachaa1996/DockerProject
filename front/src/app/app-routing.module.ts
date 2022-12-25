@@ -129,6 +129,7 @@ import { InfoImsComponent } from './admin-tools/info-ims/info-ims.component';
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
+import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 
 const routes: Routes = [
     {
@@ -215,7 +216,9 @@ const routes: Routes = [
             { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
-            { path: 'annonces', component:AnnoncesComponent },
+            { path: 'annonces', component: AnnoncesComponent },
+            { path: 'cvtheque', component: CvthequeComponent },
+            { path: 'cvtheque/:id', component: CvthequeComponent },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
