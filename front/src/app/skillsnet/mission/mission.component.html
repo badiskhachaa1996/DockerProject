@@ -97,7 +97,7 @@
 						<p-dropdown id="profil" [options]="profilsList" optionLabel="label" formControlName="profil" (onChange)="chargeCompetence($event)"></p-dropdown>
 					</div>
 					<div class="field col-12 md:col-6">
-						<label htmlFor="competences">Compétences</label>
+						<label htmlFor="competences">Outils &amp; Compétences</label>
 						<p-multiSelect [options]="competencesList" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="competences">
 							<ng-template let-value pTemplate="selectedItems">
 								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">

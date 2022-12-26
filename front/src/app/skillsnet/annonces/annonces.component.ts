@@ -27,10 +27,10 @@ export class AnnoncesComponent implements OnInit {
   profilsList: any = [
     { label: '' },
     { label: 'Développeur' },
-    { label: 'Réseaux' },
-    { label: 'Commercial' },
-    { label: 'Comptable' },
-    { label: 'Support' },
+    { label: 'DevOps' },
+    { label: 'Testeur' },
+    { label: 'Expert base de données' },
+    { label: 'Expert architecture fonctionnelle' },
   ];
 
   locationOptions = [
@@ -39,10 +39,35 @@ export class AnnoncesComponent implements OnInit {
     {label: 'Alterné à définir'}
   ];
 
-  //Initialiser à vide ensuite modifier dans le ngOnInit
-  competencesList: any = [];
+  outilsList: any[] = [
+    { label: 'Visual studio Code' },
+    { label: 'Android studio' },
+    { label: 'Wamp Server' },
+    { label: 'Xamp Server' },
+    { label: 'Mamp Server' },
+    { label: "MySQl Workbench" },
+    { label: "JMerise" },
+    { label: "DIA" },
+    { label: "StarUML" },
+    { label: "mongoDb Compas" },
+    { label: 'Eclipse' },
+    { label: 'Git' },
+    { label: 'Mercurial' },
+    { label: 'IDL' },
+    { label: 'Matlab' },
+    { label: 'Netcdf' },
+    { label: 'IDFS' },
+    { label: 'Teamviewer' },
+    { label: 'Ocean' },
+    { label: 'Jira' },
+    { label: 'Trello' },
+  ];
+
+  //Initialiser à vide ensuite modifier dans la selection des profil
+  competencesList: any[] = [];
 
   selectedMulti: string[] = [];
+  selectedMultiOutils: string[] = [];
 
   missionTypes: any = [
     { label: 'Stage' },
@@ -85,6 +110,7 @@ export class AnnoncesComponent implements OnInit {
       missionName:                        [''],
       profil:                             [this.profilsList[0]],
       competences:                        [''],
+      outils:                             [''],
       workplaceType:                      [this.locationOptions[1]],
       missionDesc:                        [''],
       missionType:                        [this.missionTypes[0]],
@@ -102,6 +128,7 @@ export class AnnoncesComponent implements OnInit {
       missionName:                        [''],
       profil:                             [this.profilsList[0]],
       competences:                        [''],
+      outils:                             [''],
       workplaceType:                      [this.locationOptions[1]],
       missionDesc:                        [''],
       missionType:                        [this.missionTypes[0]],
@@ -116,24 +143,192 @@ export class AnnoncesComponent implements OnInit {
   {
     const label = event.value.label;
 
-    if(label == "Développeur")
-    {
-      this.competencesList = [
-        { label: "PHP" },
-        { label: "HTML 5" },
-        { label: "CSS 3" },
-        { label: "Java" },
-      ];
-    } 
-    else if(label == "Réseaux")
-    {
-      this.competencesList = [
-        { label: "TCP IP" },
-        { label: "Ip config" },
-        { label: "DHCP" },
-        { label: "DNS" },
-      ];
+    switch(label){
+      case 'Développeur':
+        this.competencesList = [
+          { label: "HTML 5" },
+          { label: "CSS 3" },
+          { label: "Java" },
+          { label: "Javascript" },
+          { label: "XML" },
+          { label: "C" },
+          { label: "C#" },
+          { label: "Python" },
+          { label: "PHP" },
+          { label: "Kotlin" },
+          { label: "SQL" },
+          { label: "NoSQL" },
+          { label: "Android" },
+          { label: "C#-ASP.NET" },
+          { label: "VB.NET" },
+          { label: "ASP" },
+          { label: "PrimeFaces" },
+          { label: "Bootstrap" },
+          { label: "Talwind" },
+          { label: "AngularJS" },
+          { label: "Angular" },
+          { label: "Ionic" },
+          { label: "Node.js" },
+          { label: "Express" },
+          { label: "React" },
+          { label: "React Native" },
+          { label: "Flutter" },
+          { label: "Vue.js" },
+          { label: "Next.js" },
+          { label: "Symfony" },
+          { label: "Laravel" },
+          { label: "CakePhp" },
+          { label: "Fortran" },
+          { label: "Coffeescript" },
+          { label: "Django" },
+          { label: "Tornado" },
+          { label: "Pyramid" },
+          { label: "Flask" },
+          { label: "Panda" },
+          { label: "Canvas" },
+          { label: "JQuery" },
+          { label: "MariaDb" },
+          { label: "MySql" },
+          { label: "SQL server" },
+          { label: "PL/SQL" },
+          { label: "PostgreSQL" },
+          { label: "Sqlite" },
+          { label: "Oracle database" },
+          { label: "MongoDb" },
+          { label: "Firebase" },
+          { label: "Cassandra" },
+          { label: "Redis" },
+          { label: "Apache HBase" },
+          { label: "Neo4J" },
+          { label: "RavenDb" },
+          { label: "DynamoDb" },
+          { label: "CouchBase" },
+          { label: "CouchDB" },
+          { label: "Git/ Gitlab CLI" },
+          { label: "GitLab" },
+          { label: "GitHub" },
+          { label: "Docker" },
+          { label: "Kubernetes" },
+          { label: "Jenkins" },
+          { label: "Linux" },
+          { label: "Windows" },
+          { label: "MacOS" },
+          { label: "Pattern MVC" },
+          { label: "Pattern Observer" },
+          { label: "Pattern Strategy" },
+          { label: "Pattern Composite" },
+          { label: "Agile Scrum" },
+          { label: "UML" },
+          { label: "Merise" },
+        ];
+
+        break;
+      case 'DevOps':
+        this.competencesList = [
+          { label: "Linux" },
+          { label: "Windows" },
+          { label: "MacOS" },
+          { label: "Python" },
+          { label: "Bash" },
+          { label: "Java" },
+          { label: "C" },
+          { label: "HTML" },
+          { label: "CSS" },
+          { label: "Javascript" },
+          { label: "PHP" },
+          { label: "Bootstrap" },
+          { label: "JQuery" },
+          { label: "NodeJs" },
+          { label: "Express" },
+          { label: "Django" },
+          { label: "React" },
+          { label: "Azure" }, 
+          { label: "Cisco Packet Tracer" }, 
+          { label: "Nginx" }, 
+          { label: "Tomcat" }, 
+          { label: "JBoss" },
+          { label: "Apach Maven" },
+          { label: "Git/ Gitlab CLI" },
+          { label: "GitLab" },
+          { label: "GitHub" },
+          { label: "Docker" },
+          { label: "Confluence" },
+          { label: "Jenkins" },
+          { label: "Ansible" },
+          { label: "Swarm" },
+          { label: "Kubernetes" },
+          { label: "Prometheus" },
+          { label: "Opensearch" },
+          { label: "Grafana" },
+          { label: "VmWare" },
+          { label: "Selenium Grid" },
+          { label: "Pattern MVC" },
+          { label: "Pattern Observer" },
+          { label: "Pattern Strategy" },
+          { label: "Pattern Composite" },
+          { label: "TDMA" },
+          { label: "FDMA" },
+          { label: "CDMA/CD" },
+          { label: "LAN" },
+          { label: "WAN" },
+          { label: "VPN" },
+          { label: "Routage statique" },
+          { label: "Routage dynamique" },
+          { label: "Office Excel" },
+          { label: "Office Word" },
+          { label: "Office Power Point" },
+          { label: "Office Access" },
+          { label: "RSA" },
+          { label: "Honeypots" },
+          { label: "OWASP ZAP" },
+          { label: "Metasploit" },
+          { label: "IDS" },
+          { label: "DMZ" },
+          { label: "Dos(flood)" },
+          { label: "Agile Scrum" },
+          { label: "UML" },
+          { label: "Merise" },
+        ];
+
+        break;
+      case 'Testeur':
+        this.competencesList = [
+          { label: "Réseau IP" },
+          { label: "OSI" },
+          { label: "Shell" },
+          { label: "Linux" },
+          { label: "Full Unix" },
+        ];
+
+        break;
+      case 'Expert base de données':
+        this.competencesList = [
+          { label: "MariaDb" },
+          { label: "MySql" },
+          { label: "SQL server" },
+          { label: "PL/SQL" },
+          { label: "PostgreSQL" },
+          { label: "Sqlite" },
+          { label: "Oracle database" },
+          { label: "MongoDb" },
+          { label: "Firebase" },
+          { label: "Cassandra" },
+          { label: "Redis" },
+          { label: "Apache HBase" },
+          { label: "Neo4J" },
+          { label: "RavenDb" },
+          { label: "DynamoDb" },
+          { label: "CouchBase" },
+          { label: "CouchDB" },
+          { label: "UML" },
+          { label: "Merise" },
+        ];
+
+        break;
+      default: 
+        this.competencesList = [];
     }
+
   }
 
 
@@ -156,12 +351,18 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.profil                    = this.form.get('profil')?.value.label;
     annonce.competences               = [];
+    annonce.outils                    = [];
     annonce.workplaceType             = this.form.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.form.get('competences')?.value.forEach((competence) => {
       annonce.competences.push(competence.label);
     });
+
+    this.form.get('outils')?.value.forEach((outil) => {
+      annonce.outils.push(outil.label);
+    });
+
     annonce.source                    = this.form.get('source')?.value;
     annonce.isClosed                  = false;
 
@@ -202,12 +403,18 @@ export class AnnoncesComponent implements OnInit {
 
     annonce.profil                    = this.formUpdate.get('profil')?.value.label;
     annonce.competences               = [];
+    annonce.outils                    = [];
     annonce.workplaceType             = this.formUpdate.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.formUpdate.get('competences')?.value.forEach((competence) => {
       annonce.competences.push(competence.label);
     });
+
+    this.formUpdate.get('outils')?.value.forEach((outil) => {
+      annonce.outils.push(outil.label);
+    });
+
     annonce.source                    = this.formUpdate.get('source')?.value;
     annonce.isClosed                  = false;
 

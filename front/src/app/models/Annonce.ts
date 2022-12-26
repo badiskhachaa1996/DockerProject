@@ -13,6 +13,7 @@ export class Annonce {
         public entreprise_phone?:   string,
         public profil?:             string,
         public competences?:        string[],
+        public outils?:             string[],
         public workplaceType?:      string,
         public publicationDate?:    Date,
         public source?:             string,

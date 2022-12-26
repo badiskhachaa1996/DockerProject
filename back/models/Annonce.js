@@ -13,6 +13,7 @@ const annonceSchema = mongoose.Schema({
     entreprise_phone:           { type: String, required: false },
     profil:                     { type: String, required: false },
     competences:                { type: [String], required: false },
+    outils:                     { type: [String], required: false },
     workplaceType:              { type: String, required: false },
     publicationDate:            { type: Date, required: false },
     source:                     { type: String, required: false },
