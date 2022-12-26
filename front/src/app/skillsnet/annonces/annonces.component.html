@@ -58,6 +58,24 @@
 						</p-multiSelect>
 					</div>
 					<div class="field col-12">
+						<label htmlFor="outils">Outils</label>
+						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="outils">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiOutils">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0" class="country-placeholder">
+									Selectionner un ou plusieurs outils
+								</div>
+							</ng-template>
+							<ng-template let-outil pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{outil.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label" formControlName="workplaceType"></p-selectButton>
 					</div>
 					<div class="field col-12">
@@ -144,6 +162,24 @@
 						</p-multiSelect>
 					</div>
 					<div class="field col-12">
+						<label htmlFor="outils">Outils</label>
+						<p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="outils">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiOutils">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0" class="country-placeholder">
+									Selectionner un ou plusieurs outils
+								</div>
+							</ng-template>
+							<ng-template let-outil pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{outil.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+					<div class="field col-12">
 						<p-selectButton [options]="locationOptions" optionLabel="label" formControlName="workplaceType"></p-selectButton>
 					</div>
 					<div class="field col-12">
@@ -164,7 +200,7 @@
 					</div>
 
 					<div>
-						<button pButton type="submit" label="Modifier l'annonce" icon="pi pi-plus" [disabled]="formUpdate.invalid"></button>
+						<button pButton type="submit" label="Modifier l'annonce" icon="pi pi-pencil" [disabled]="formUpdate.invalid"></button>
 					</div>
 				</div>
 			</form>
@@ -213,24 +249,30 @@
 					</div>
 
 					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000">
-						<h3 style="font-weight:bold">{{ annonceSelected?.missionName }}</h3>
+						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
 						<hr/>
 						<p>
 							{{ annonceSelected.entreprise_name }} - {{ annonceSelected.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
 							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
 						</p>
 						
-						<h4 style="font-weight: bold">Description</h4>
+						<h5 style="font-weight: bold">Description</h5>
 						<p>
 							{{ annonceSelected?.missionDesc }} <br/>
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
 						</p>
 						
-						<h4 style="font-weight: bold">Compétences</h4>
+						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
-						<ul >
+						<ul>
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+						</ul>
+
+						<h5 style="font-weight: bold">Outils</h5>
+						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+						<ul>
+							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
 						<hr/>
@@ -264,24 +306,30 @@
 					</div>
 
 					<p-sidebar [(visible)]="visibleSidebar" position="right" [baseZIndex]="10000">
-						<h3 style="font-weight:bold">{{ annonceSelected?.missionName }}</h3>
+						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
 						<hr/>
 						<p>
 							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
 							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
 						</p>
 						
-						<h4 style="font-weight: bold">Description</h4>
+						<h5 style="font-weight: bold">Description</h5>
 						<p>
 							{{ annonceSelected?.missionDesc }} <br/>
 							Type de contrat: <span style="font-weight: bold; font-size: 13px">{{ annonceSelected?.missionType }}</span> <br/>
 							<span style="font-weight: bold">Débute le {{ annonceSelected?.debut | date: 'dd/MM/YYY' }}</span>
 						</p>
 
-						<h4 style="font-weight: bold">Compétences</h4>
+						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul >
 							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+						</ul>
+
+						<h5 style="font-weight: bold">Outils</h5>
+						<p>Vous devez avoir des savoir utiliser les outils suivants:</p>
+						<ul>
+							<li *ngFor="let outil of annonceSelected?.outils">{{ outil }}</li>
 						</ul>
 
 						<hr/>

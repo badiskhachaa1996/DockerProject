@@ -47,7 +47,26 @@
                     </p-multiSelect>
                 </div>
 
-                <div class="field col-12">
+                <div class="field col-12 md:col-12">
+                    <label>Outils</label>
+                    <p-multiSelect [options]="outilsList" [(ngModel)]="selectedMultiOutils" defaultLabel="Selectionner les outils" optionLabel="label" class="multiselect-custom" formControlName="outils">
+                        <ng-template let-value pTemplate="selectedItems">
+                            <div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMultiOutils">
+                                <div>{{option.label}}</div>
+                            </div>
+                            <div *ngIf="!selectedMultiOutils || selectedMultiOutils.length === 0" class="country-placeholder">
+                                Selectionner un ou plusieurs outils
+                            </div>
+                        </ng-template>
+                        <ng-template let-outil pTemplate="item">
+                            <div class="flex align-items-center country-item">
+                                <div>{{outil.label}}</div>
+                            </div>
+                        </ng-template>
+                    </p-multiSelect>
+                </div>
+
+                <div class="field col-12 md:col-12">
                     <label>Langues</label>
                     <p-multiSelect [options]="languesList" [(ngModel)]="selectedMultilang" defaultLabel="Selectionner les compétences" optionLabel="label" class="multiselect-custom" formControlName="langues">
                         <ng-template let-value pTemplate="selectedItems">

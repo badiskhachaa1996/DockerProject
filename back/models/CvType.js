@@ -6,6 +6,7 @@ const cvTypeSchema = mongoose.Schema({
     experiences_pro:    { type: [String], required: false },
     experiences_sco:    { type: [String], required: false },
     competences:        { type: [String], required: false },
+    outils:             { type: [String], required: false },
     langues:            { type: [String], required: false },
     video_lien:         { type: String, required: false },
     filename:           { type: String, required: false }
