@@ -112,10 +112,7 @@ import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/
 import { PaymentComponent } from './gestion-bancaire/gestion-des-transactions/payment/payment.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
-import { MissionComponent } from './skillsnet/mission/mission.component';
-import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
-import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { ResponsableCommercialGuard } from './dev-components/guards/responsable-commercial.guard';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
@@ -130,6 +127,7 @@ import { FactureFormateurComponent } from './finance/facture-formateur/facture-f
 import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
 import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
+import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 
 const routes: Routes = [
     {
@@ -212,11 +210,9 @@ const routes: Routes = [
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },
             { path: 'gestion-reservations', canActivate: [AuthGuardService, AdminGuardService], component: GestionLogementComponent },
 
-            { path: 'missions', component: MissionComponent, canActivate: [AuthGuardService] },
-            { path: 'mes-missions', component: MesMissionsComponent, canActivate: [AuthGuardService] },
+            { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
+            { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'entreprise-missions', component: EntreprisesMissionsComponent },
-            { path: 'annonces', component: AnnoncesComponent },
             { path: 'cvtheque', component: CvthequeComponent },
             { path: 'cvtheque/:id', component: CvthequeComponent },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },

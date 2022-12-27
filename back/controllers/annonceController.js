@@ -15,16 +15,23 @@ app.post("/post-annonce", (req, res) => {
 
 //Recuperation de la liste des annonces
 app.get("/get-annonces", (_, res) => {
-    Annonce.find()
+    Annonce.find()?.populate('entreprise_id')
         .then((annonces) => { res.status(200).send(annonces); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 
-//Récuperation d'une annonce via on identifiant
-app.get("/get-annonce", (req, res) => {
-    Annonce.findById(req.params.annonceId)
+//Récuperation d'une annonce via son identifiant
+app.get("/get-annonce/:annonceId", (req, res) => {
+    Annonce.findOne({ _id: req.params.annonceId })?.populate('entreprise_id')
         .then((annonce) => { res.status(200).send(annonce); })
+        .catch((error) => { res.status(500).send(error.message); });
+});
+
+//Récuperation des annonces via un user id
+app.get("/get-annonces-by-user-id/:userId", (req, res) => {
+    Annonce.find({ user_id: req.params.userId })?.populate('entreprise_id')
+        .then((annonces) => { res.status(200).send(annonces); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
