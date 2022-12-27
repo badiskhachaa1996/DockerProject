@@ -52,6 +52,18 @@ export class AnnonceService {
     });
   }
 
+  //Recuperation des annonces via le user Id
+  getAnnoncesByUserId(userId: string) {
+    const url = `${this.apiUrl}get-annonces-by-user-id/${userId}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<Annonce[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
+        (response) => { resolve(response); },
+        (error) => { reject(error); }
+      );
+    });
+  }
+
   //Methode de modification d'une annonce
   putAnnonce(annonce: Annonce)
   {

@@ -12,11 +12,11 @@ import { Tuteur } from 'src/app/models/Tuteur';
 import { TuteurService } from 'src/app/services/tuteur.service';
 
 @Component({
-  selector: 'app-annonces',
-  templateUrl: './annonces.component.html',
-  styleUrls: ['./annonces.component.scss']
+  selector: 'app-mes-offres',
+  templateUrl: './mes-offres.component.html',
+  styleUrls: ['./mes-offres.component.scss']
 })
-export class AnnoncesComponent implements OnInit {
+export class MesOffresComponent implements OnInit {
 
   annonces: Annonce[] = [];
 
@@ -157,7 +157,7 @@ export class AnnoncesComponent implements OnInit {
     );
 
     //Recuperation de la liste des annonces
-    this.annonceService.getAnnonces()
+    this.annonceService.getAnnoncesByUserId(this.token.id)
     .then((response: Annonce[]) => {
       this.annonces = response;
     })
@@ -450,17 +450,8 @@ export class AnnoncesComponent implements OnInit {
   {
     const annonce = new Annonce();
 
-    //Si l'utilisateur est rattaché à une entreprise: tuteur ou representant, l'entreprise id de la mission sera l'entreprise id de l'utilisateur
-    if(this.userConnected.type == 'CEO Entreprise' || this.userConnected.type == 'Tuteur')
-    {
-      annonce.entreprise_id = this.annonceSelected.entreprise_id;
-    } 
-    else 
-    {
-      annonce.entreprise_id   = this.formUpdate.get('entreprise_id')?.value.value;
-    }
-
     annonce.is_interne                = this.annonceSelected.is_interne; 
+    annonce.entreprise_id             = this.annonceSelected.entreprise_id;
     annonce._id                       = this.annonceSelected._id;
     annonce.user_id                   = this.token.id;
     annonce.missionType               = this.formUpdate.get('missionType')?.value.label;

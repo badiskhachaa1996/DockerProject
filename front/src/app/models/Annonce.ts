@@ -1,11 +1,13 @@
 export class Annonce {
     constructor(
+        public is_interne?:         boolean,
         public _id?:                string,
         public user_id?:            string,
         public missionType?:        string,
         public debut?:              Date,
         public missionName?:        string,
         public missionDesc?:        string,
+        public entreprise_id?:      string,
         public entreprise_name?:    string,
         public entreprise_ville?:   string,
         public entreprise_mail?:    string,

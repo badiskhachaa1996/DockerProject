@@ -103,7 +103,6 @@ const demandeEventsController = require('./controllers/demandeEventsController')
 const paymentController = require('./controllers/paymentController');
 const teamCommercialController = require('./controllers/teamCommercialController')
 const logementController = require('./controllers/logementController');
-const missionController = require('./controllers/missionController');
 const inTimeController = require('./controllers/inTimeController');
 const cvTypeController = require('./controllers/cvTypeController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
@@ -240,8 +239,6 @@ app.use("/soc/lemon", paymentController);
 app.use("/soc/logement", logementController);
 
 app.use('/soc/dashboard', dashboardController);
-
-app.use('/soc/mission', missionController);
 
 app.use('/soc/intime', inTimeController);
 app.use('/soc/teamCommercial', teamCommercialController)

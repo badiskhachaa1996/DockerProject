@@ -5,8 +5,6 @@ import { MessageService } from 'primeng/api';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
-import { MissionService } from 'src/app/services/skillsnet/mission.service';
-import { Mission } from 'src/app/models/Mission';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
