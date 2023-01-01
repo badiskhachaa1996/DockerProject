@@ -45,7 +45,15 @@ export class MesOffresComponent implements OnInit {
     { label: 'DevOps' },
     { label: 'Testeur' },
     { label: 'Expert base de données' },
-    // { label: 'Expert architecture fonctionnelle' },
+    { label: 'Chargé(e) Relation Clients' },
+    { label: 'Chargé(e) de recrutement bilingue Anglais' },
+    { label: 'Office Manager' },
+    { label: 'Assistant(e) de direction' },
+    { label: 'Commercial Junior Solutions' },
+    { label: 'Assistant(e) marketing' },
+    { label: 'Commercial junior' },
+    { label: 'Chargé de Communication' },
+    { label: 'Commercial/Business Developer' },
   ];
 
   locationOptions = [
@@ -369,6 +377,144 @@ export class MesOffresComponent implements OnInit {
           { label: "CouchDB" },
           { label: "UML" },
           { label: "Merise" },
+        ];
+
+        break;
+      case 'Chargé(e) Relation Clients':
+        this.competencesList = [
+          { label: "Polyvalent(e) et capable de gérer plusieurs dossiers en parallèle" },
+          { label: "Travail en équipe" },
+          { label: "Qualités relationnelles (bienveillance et patience)" },
+          { label: "Autonome et rigoureux" },
+          { label: "Pack Office" },
+          { label: "Zendesk" },
+          { label: "Trello" },
+          { label: "Crisp" },
+          { label: "Télémarketing" },
+        ];
+
+        break;
+      case 'Chargé(e) de recrutement bilingue Anglais':
+        this.competencesList = [
+          { label: "Identification des profils recherchés auprès des opérationnels" },
+          { label: "Diffusion des annonces" },
+          { label: "Sourcing" },
+          { label: "Tri des candidatures" },
+          { label: "Rédaction des comptes rendus d'entretien" },
+          { label: "Suivi des contrats: du recrutement jusqu’à la facturation" },
+          { label: "Suivi et analyse des indicateurs de performance du processus de recrutement" },
+          { label: "Participation à divers projets RH" },
+        ];
+
+        break;
+      case 'Office Manager':
+        this.competencesList = [
+          { label: "Thématiques bien-être" },
+          { label: "Pratiques de quelques thérapies (hypnose, énergéticien, massages thérapeutiques, magnétiseurs, psychologue, coach)" },
+          { label: "Capacité d'organisation et de gestion des priorités" },
+          { label: "Tu as le sens du contact, et la sororité t'inspire" },
+          { label: "Capacité d'adaptation " },
+          { label: "Esprit d'initiative" },
+          { label: "Tu as une belle plume" },
+          { label: "Autonome" },
+          { label: "Force de proposition" },
+          { label: "Esprit compétitif" },
+          { label: "On dit de toi que tu es brute, authentique, et sincère" },
+        ];
+
+        break;
+      case 'Assistant(e) de direction':
+        this.competencesList = [
+          { label: "MAJ prévisionnel" },
+          { label: "Analyse des performances, aide aux décisions stratégiques" },
+          { label: "Optimisation : mise en place de processus et d’outils opérationnels pour fluidifier les opérations" },
+          { label: "Mise en place de partenariats avec des marques et fédérations" },
+          { label: "Monitoring et reporting" },
+          { label: "Création de supports de communication marketing" },
+          { label: "Gestion des activités courante de la start-up" },
+        ];
+
+        break;
+      case 'Commercial Junior Solutions':
+        this.competencesList = [
+          { label: "Prospection, démarchage et suivi clientèle" },
+          { label: "Marketing, élaboration d’une offre commerciale" },
+          { label: "Animation du site antalis.fr pour l’activité Solutions" },
+          { label: "Gestion de la bourse de fret" },
+          { label: "Déplacements en clientèle" },
+          { label: "Autonomie" },
+          { label: "Persévérance" },
+          { label: "Ecoute active" },
+          { label: "Qualités organisationnelles et relationnelles" },
+          { label: "Pugnacité et curiosité" },
+        ];
+
+        break;
+      case 'Assistant(e) marketing':
+        this.competencesList = [
+          { label: "Communication(réseaux sociaux, emailing)" },
+          { label: "Création de visuels" },
+          { label: "Support aux actions marketing (newsletters, emailings, mise à jour du site e-commerce...)" },
+          { label: "Participation à la modération des communautés sur les réseaux sociaux" },
+          { label: "Aide au développement des partenariats et du programme d’affiliation" },
+          { label: "Études et analyses de marché pour aider au positionnement des futures offres de formation" },
+          { label: "Goût pour les nouveaux médias et aisance pour la découverte de nouveaux logiciels et outils de gestion" },
+          { label: "Maîtrise des codes du web" },
+          { label: "Excellente expression écrite, maîtrise de l’orthographe" },
+          { label: "Connaissances des logiciels d’édition visuelle (Canva, Photoshop, Illustrator...)" },
+          { label: "Esprit d’équipe" },
+          { label: "Créativité" },
+          { label: "Sens de l'écoute" },
+          { label: "Diplomatie" },
+          { label: "Proactivité" },
+          { label: "Force de proposition" },
+        ];
+
+        break;
+      case 'Commercial junior':
+        this.competencesList = [
+          { label: "Détecter des nouveaux projets de transformation digitale au travers d’une activité de prospection commerciale quotidienne" },
+          { label: "Apprendre à identifier les nouveaux prospects et à qualifier les projets : identifier les besoins et les attentes" },
+          { label: "Planifier des nouveaux rendez-vous prospects dans le cadre des avant-vente gérées par l’équipe avant-vente" },
+          { label: "Identifier les besoins en vente de produit" },
+        ];
+
+        break;
+      case 'Chargé de Communication':
+        this.competencesList = [
+          { label: "Plan de communication" },
+          { label: "Reporting" },
+          { label: "Community management" },
+          { label: "Organisation d'evènements" },
+          { label: "Indesign" },
+          { label: "Photoshop" },
+          { label: "Illustrator" },
+          { label: "Sens de l'initiative" },
+          { label: "Sens de l'organisation" },
+          { label: "Aisance relationnelle et rédactionnelle" },
+          { label: "Créativité" },
+          { label: "Rigueur" },
+          { label: "Réactivité" },
+        ];
+
+        break;
+      case 'Commercial/Business Developer':
+        this.competencesList = [
+          { label: "Prospection commerciale" },
+          { label: "Définir et appliquer une stratégie de prospection" },
+          { label: "Négocier des contrats" },
+          { label: "Prospecter par téléphone" },
+          { label: "Conclure de nouveaux partenariats" },
+          { label: "Etablir et suivre les KPI Marketing" },
+          { label: "Revoir et développer la stratégie Marketing" },
+          { label: "Créer des campagnes marketing ciblées" },
+          { label: "Création de supports de com à destination des cibles BtoB (avec la cellule Communication)" },
+          { label: "Répondre aux demandes de réservations de salle ou de devis événementiel + suivi/relance" },
+          { label: "Organiser les visites de nos espaces pour les clients et prospects" },
+          { label: "Faire le suivi hebdomadaire avec l’équipe opérationnelle du planning de réservation/événementiel" },
+          { label: "Mettre à jour et gérer des plateformes de réservation partenaires CRM" },
+          { label: "Réaliser un audit de nos bases de données CRM et diagnostique stratégique" },
+          { label: "Améliorer et exploiter le système du CRM" },
         ];
 
         break;
