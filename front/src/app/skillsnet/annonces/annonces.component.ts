@@ -45,7 +45,7 @@ export class AnnoncesComponent implements OnInit {
     { label: 'DevOps' },
     { label: 'Testeur' },
     { label: 'Expert base de données' },
-    { label: 'Expert architecture fonctionnelle' },
+    // { label: 'Expert architecture fonctionnelle' },
   ];
 
   locationOptions = [
@@ -105,7 +105,7 @@ export class AnnoncesComponent implements OnInit {
 
     //Initialisation du formulaire d'ajout
     this.form = this.formBuilder.group({
-      is_interne:                          [true, Validators.required],
+      is_interne:                         [true],
       entreprise_id:                      [''],
       entreprise_name:                    [''],
       entreprise_ville:                   [''],

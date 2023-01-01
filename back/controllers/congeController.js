@@ -48,12 +48,10 @@ app.patch("/refuse-holidays", (req, res) => {
 
 
 //Methode de recuperation des demandes d'un utilisateur entre 2 dates
-app.get("/get-by-user-id/:user_id/:beginDate/:endDate", (req, res) => {
+app.get("/get-by-user-id/:user_id", (req, res) => {
     let id = req.params.user_id;
-    let beginDate = req.params.beginDate;
-    let endDate = req.params.endDate;
 
-    Conge.find({ _id: id, beginDate: { $gte: beginDate, $lte: endDate } }).populate("user_id").populate("referent_id")
+    Conge.find({ _id: id }).populate("user_id").populate("referent_id")
     .then((response) => { res.status(200).send(response); })
     .catch((error) => { res.status(400).send(error.message); });
 });

@@ -117,19 +117,16 @@
 
             <!-- Partie dedié à la demande de congés -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button pButton pRipple type="button" icon="pi pi-briefcase" style="float: right;" (click)="onGetCongesForMyService(); showCongeListForService = true; showFormNewDemande = false; showSelectDateForm = false;" label="Les demandes de mon service" class="p-button-outlined mr-2 mb-2"></button>
-                <button pButton pRipple type="button" icon="pi pi-plus" style="float: right;" (click)="showFormNewDemande = true; showSelectDateForm = false; showCongeListForService = false" label="Nouvelle demande" class="p-button-outlined mr-2 mb-2"></button>
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" (click)="showSelectDateForm = true; showFormNewDemande = false; showCongeListForService = false" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
-                <h3 *ngIf="!showFormNewDemande && !showSelectDateForm && !showCongeListForService">Congés</h3>
-                <h3 *ngIf="showFormNewDemande">Formulaire de demande de congés</h3>
-                <h3 *ngIf="showSelectDateForm">Consulter vos demandes de congés</h3>
-                <h3 *ngIf="showCongeListForService">Demandes de mon service</h3>
+                <button  *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Responsable'" pButton pRipple type="button" icon="pi pi-briefcase" style="float: right;" (click)="onGetCongesForMyService(); showCongeListForService = true; showFormNewDemande = false; showCongeList = false;" label="Les demandes de mon service" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-plus" style="float: right;" (click)="showFormNewDemande = true; showCongeList = false; showCongeListForService = false" label="Nouvelle demande" class="p-button-outlined mr-2 mb-2"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" (click)="onGetConges(); showCongeList = true; showFormNewDemande = false; showCongeListForService = false" label="Mes demandes" class="p-button-outlined mr-2 mb-2"></button>
+                <h3>Congés</h3>
 
 
                 <!-- Pour fermer les tables -->
-                <i class="pi pi-times-circle" *ngIf="showCongeList || showSelectDateForm || showFormNewDemande || showCongeListForService"
+                <i class="pi pi-times-circle" *ngIf="showCongeList || showFormNewDemande || showCongeListForService"
                     style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="selectDateForm.reset(); showSelectDateForm = false; showCongeList = false; showFormNewDemande = false; formNewDemande.reset(); showCongeListForService = false;" aria-hidden="true">
+                    pTooltip="Fermer" (click)="showCongeList = false; showFormNewDemande = false; formNewDemande.reset(); showCongeListForService = false;" aria-hidden="true">
                 </i>
 
                 
@@ -156,20 +153,8 @@
                 </form>
 
 
-                <!-- Formulaire de selection des dates -->
-                <form style="margin-top: 5px" class="formgroup-inline" [formGroup]="selectDateForm" (ngSubmit)="onGetConges()" *ngIf="showSelectDateForm">
-                    <div class="field">
-                        <label class="p-sr-only">Début</label>
-                        <p-calendar formControlName="beginDate" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
-                    </div>
-                    <div class="field">
-                        <label class="p-sr-only">Fin</label>
-                        <p-calendar formControlName="endDate" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
-                    </div>
-                    <button pButton type="submit" [disabled]="selectDateForm.invalid" label="Valider"></button>
-                </form>
-
                 <!-- Table d'affichage des demandes de congés de l'utilisateur connecté -->
+                <div style="margin-top: 50px" *ngIf="showCongeList"></div>
                 <p-table #dt4 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['type_conge','statut']" responsiveLayout="scroll" *ngIf="showCongeList">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between flex-column sm:flex-row">
@@ -241,7 +226,7 @@
 
 
                 <!-- Table d'affichage des demandes de congés des membres de service de l'utilisateur connecté -->
-                <div style="height: 20px" *ngIf="showCongeListForService"></div>
+                <div style="margin-top: 50px" *ngIf="showCongeListForService"></div>
                 <p-table #dt5 [value]="conges" dataKey="_id" [rows]="10" [loading]="loading" [rowHover]="true" [paginator]="true" [globalFilterFields]="['type_conge','statut', 'user_id.firstname', 'user_id.email', 'user_id.lastname']" responsiveLayout="scroll" *ngIf="showCongeListForService">
                     <ng-template pTemplate="caption">
                         <div class="flex justify-content-between flex-column sm:flex-row">
@@ -340,12 +325,12 @@
             <!-- justification d'abscence -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
                 <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
-                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir son CRA" class="p-button-outlined mr-2 mb-2" (click)="showCraDateForm=true"></button>
+                <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir son CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
                 <h3>CRA</h3>
 
-                <i class="pi pi-times-circle" *ngIf="showFormjustification || showCraDateForm"
+                <i class="pi pi-times-circle" *ngIf="showFormjustification"
                     style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                    pTooltip="Fermer" (click)="showFormjustification = false; showCraDateForm = false; showPresenceList = false;" aria-hidden="true">
+                    pTooltip="Fermer" (click)="showFormjustification = false; showPresenceList = false;" aria-hidden="true">
                 </i>
 
                 <!-- Formulaire de justification d'abscence -->
@@ -373,27 +358,14 @@
                     </div>
                 </form>
 
-                <!-- Pour voir son CRA -->
-                <form class="formgroup-inline" [formGroup]="craDateForm" (ngSubmit)="onGetPresences()" *ngIf="showCraDateForm">
-                    <div class="field">
-                        <label class="p-sr-only">Début</label>
-                        <p-calendar formControlName="beginDate" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
-                    </div>
-                    <div class="field">
-                        <label class="p-sr-only">Fin</label>
-                        <p-calendar formControlName="endDate" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
-                    </div>
-                    <button pButton type="submit" [disabled]="craDateForm.invalid" label="Valider"></button>
-                </form>
-
                 <!-- Table d'affichage du compte rendu d'activité -->
                 <div *ngIf="showPresenceList">
                     
-                    <h5>Liste des présence de {{ from }} à {{ to }}</h5>
+                    <h5>Compte rendu d'activités</h5>
                     
                     <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll"
                              rowExpandMode="single" [rows]="10" [rowHover]="true" [totalRecords]="presences.length"
-                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'user_id.firstname', 'user_id.lastname', 'user_id.email', 'user_id.type', 'user_id.email_perso']">
+                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'date_of_the_day']">
                     
                             <ng-template pTemplate="caption">
                                 <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
