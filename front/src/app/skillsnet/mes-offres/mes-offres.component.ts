@@ -45,7 +45,7 @@ export class MesOffresComponent implements OnInit {
     { label: 'DevOps' },
     { label: 'Testeur' },
     { label: 'Expert base de données' },
-    { label: 'Expert architecture fonctionnelle' },
+    // { label: 'Expert architecture fonctionnelle' },
   ];
 
   locationOptions = [

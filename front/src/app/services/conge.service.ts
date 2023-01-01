@@ -83,13 +83,9 @@ export class CongeService {
 
 
   //Methode de recuperation des demandes d'un utilisateur entre 2 dates
-  getByUserIdBetweenPopulate(user_id: string, begin: Date, end: Date)
+  getByUserIdBetweenPopulate(user_id: string)
   {
-    //Mise en place des dates de debut et de fin
-    let beginDate = this.onReplaceDate(begin);
-    let endDate = this.onReplaceDate(end);    
-
-    const url = `${this.apiUrl}/get-by-user-id/${user_id}/${beginDate}/${endDate}`;
+    const url = `${this.apiUrl}/get-by-user-id/${user_id}`;
     
     return new Promise((resolve, reject) => {
       this.httpClient.get(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(

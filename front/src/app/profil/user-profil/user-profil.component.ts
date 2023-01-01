@@ -80,8 +80,6 @@ export class UserProfilComponent implements OnInit {
   //Partie dedié a la gestion des demandes de congés
   //utilisateur connecté actuellement
   userConnectedNow: User;
-  selectDateForm: FormGroup;
-  showSelectDateForm: boolean = false;
   conges: Conge[] = [];
   showCongeList: boolean = false;
   showFormNewDemande: boolean = false;
@@ -109,8 +107,6 @@ export class UserProfilComponent implements OnInit {
   ]
 
   //Pour voir son compte rendu d'activité
-  showCraDateForm: boolean = false;
-  craDateForm: FormGroup;
   showPresenceList: boolean = false;
   presences: InTime[] = [];
   from: string;
@@ -430,23 +426,11 @@ export class UserProfilComponent implements OnInit {
       motif: ['', Validators.required],
     });
 
-    //Initialisation du formulaire de selection des dates
-    this.selectDateForm = this.formBuilder.group({
-      beginDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-    });
-
     //Partie justification d'absence
     this.justificationForm = this.formBuilder.group({
       date_of_abscence: ['', Validators.required],
       motif: ['', Validators.required],
       periode: [this.periodList[0], Validators.required]
-    });
-
-    //Methode d'initialisation du formulaire de selection des dates pour voir son cra
-    this.craDateForm = this.formBuilder.group({
-      beginDate: ['', Validators.required],
-      endDate: ['', Validators.required],
     });
 
   }
@@ -510,13 +494,7 @@ export class UserProfilComponent implements OnInit {
   //Methode de recuperation de la liste des demandes de congés de l'utilisateur
   onGetConges()
   {
-    //Recuperation des données du formulaire
-    const formValue = this.selectDateForm.value;
-
-    const dateDebut = formValue['beginDate'];
-    const dateFin = formValue['endDate'];
-
-    this.congeService.getByUserIdBetweenPopulate(this.userConnectedNow._id, dateDebut, dateFin)
+    this.congeService.getByUserIdBetweenPopulate(this.userConnectedNow._id)
     .then((response: any) => {
       this.conges = response;
       this.showCongeList = true;
@@ -633,42 +611,8 @@ export class UserProfilComponent implements OnInit {
   //Methode de recuperation des presences
   onGetPresences()
   {
-    const formValue = this.craDateForm.value;
-
-    let originalBeginDate = formValue['beginDate'].toLocaleDateString();
-    let beginDate = '';
-
-    for(let i = 0; i < originalBeginDate.length; i++)
-    {
-      if(originalBeginDate[i] === '/')
-      {
-        beginDate += '-';
-      }
-      else
-      {
-        beginDate += originalBeginDate[i];
-      }
-    }
-    this.from = beginDate;
-
-    let originalEndDate = formValue['endDate'].toLocaleDateString();
-    let endDate = '';
-
-    for(let i = 0; i < originalEndDate.length; i++)
-    {
-      if(originalEndDate[i] === '/')
-      {
-        endDate += '-';
-      }
-      else
-      {
-        endDate += originalEndDate[i];
-      }
-    }
-    this.to = endDate;
-
     // Recuperation de la liste des présences
-    this.inTimeService.getAllByDateBetweenPopulateUserId(beginDate, endDate)
+    this.inTimeService.getAllByUserId(this.userConnectedNow._id)
     .then((response: InTime[]) => {
       this.presences = response;
       this.showPresenceList = true;

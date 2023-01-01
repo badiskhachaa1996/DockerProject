@@ -112,7 +112,7 @@ app.get("/get-all-by-user-id/:userId", (req, res) => {
 
 //Methode de recuperation de la liste de presence d'un utilisateur via son id et sur une plage de date
 app.get("/get-all-by-userId-between/:userId/:from/:to", (req, res) => {
-    InTime.find({ userId: req.params.userId, date_of_the_day: { $gte: req.params.from, $lt: req.params.to } })
+    InTime.find({ user_id: req.params.userId, date_of_the_day: { $gte: req.params.from, $lt: req.params.to } })
           .then((inTimes) => { res.status(200).send(inTimes) })
           .catch((error) => { res.status(400).send(error.message) });
 });
