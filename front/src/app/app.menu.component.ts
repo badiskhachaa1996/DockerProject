@@ -219,7 +219,7 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'SkillsNet',
                 items: [
-                    { label: 'Offres', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                    { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                     { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                     { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                 ]
@@ -352,6 +352,12 @@ export class AppMenuComponent implements OnInit {
                                         { label: 'Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
                                     ]
                                 },
+                                {
+                                    label: 'SkillsNet',
+                                    items: [
+                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
+                                    ]
+                                },
                             ];
                         } else {
                             this.model = [
@@ -388,10 +394,11 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'SkillsNet',
                                     items: [
-                                        { label: 'Offres', icon: 'pi pi-briefcase', routerLink: ['/offres'] },
+                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                         { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
+                                        { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                                     ]
-                                }
+                                },
                             ];
                         }
 
@@ -416,8 +423,9 @@ export class AppMenuComponent implements OnInit {
                                 {
                                     label: 'SkillsNet',
                                     items: [
-                                        { label: 'Offres', icon: 'pi pi-briefcase', routerLink: ['/offres'] },
+                                        { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                         { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
+                                        { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                                     ]
                                 },
                             ];
@@ -527,9 +535,9 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres', icon: 'pi pi-briefcase', routerLink: ['/offres'] },
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Les missions de mon entreprise', icon: 'pi pi-building', routerLink: ['/entreprise-missions'] },
+                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
@@ -564,9 +572,9 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: 'SkillsNet',
                             items: [
-                                { label: 'Offres', icon: 'pi pi-briefcase', routerLink: ['/offres'] },
+                                { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Les missions de mon entreprise', icon: 'pi pi-building', routerLink: ['/entreprise-missions'] },
+                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
