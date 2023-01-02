@@ -182,6 +182,10 @@ const prospect_schema = new mongoose.Schema({
     rentree_scolaire: {
         type: String,
         default: "Septembre 2022"
+    },
+    isCalled: {
+        type: Boolean,
+        default : false
     }
 });
 
