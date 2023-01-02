@@ -77,26 +77,76 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
             ...representantData
         });
 
-    User.findOne({ email_perso: representantData.email_perso })
-        .then((userFromDb) => {
-            if (userFromDb) {
-                entreprise.directeur_id = userFromDb._id;
-                entreprise.save()
-                    .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
-                    .catch((error) => { res.status(400).send('Impossible de créer la nouvelle entreprise') })
-            }
-            else {
-                representant.save()
-                    .then((userCreated) => {
-                        entreprise.directeur_id = userCreated._id;
-                        entreprise.save()
-                            .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
-                            .catch((error) => { res.status(400).send('Impossible de créer une nouvelle entreprise') });
+    // verification de la raison sociale de l'entreprise 
+    Entreprise.findOne()
+        .then((enterpriseFromDB) => {
+            if (enterpriseFromDB) {
+                res.status(400).send("L'entreprise existe déjà");
+            } else {
+                User.findOne({ email_perso: representantData.email_perso })
+                    .then((userFromDb) => {
+                        if (userFromDb) {
+                            entreprise.directeur_id = userFromDb._id;
+                            entreprise.save()
+                                .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
+                                .catch((error) => { res.status(400).send('Impossible de créer la nouvelle entreprise') })
+                        }
+                        else {
+                            //Création des accès pour les CEO
+                            let Ceo_Pwd = representant.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
+                            representant.password = bcrypt.hashSync(Ceo_Pwd, 8);
+
+                            representant.save()
+                                .then((userCreated) => {
+                                    entreprise.directeur_id = userCreated._id;
+                                    entreprise.save()
+                                        .then((entrepriseSaved) => {
+                                            // création du mail à envoyer
+                                            let Ceo_htmlmail =
+                                                "<p>Bonjour,</p><p>Votre accés sur notre plateforme a été créé. Pour vous connecter, utilisez votre adresse mail et votre mot de passe : <strong> " +
+                                                Ceo_Pwd + "</strong></p>" +
+                                                "<p ><span style=\"color: rgb(36, 36, 36);font-weight: bolder;\"> Activer votre compte et valider votre email en cliquant sur" +
+                                                " <a href=\"" + origin[0] + "/#/validation-email/" + userCreated.email_perso + "\">J\'active mon compte IMS</a></span></p> " +
+                                                "<p>Si vous avez des difficultés à vous connecter, vous pouvez nous contacter directement sur l'adresse mail <a href=\"mailto:contact@intedgroup.com\">contact@intedgroup.com</a></p>" +
+                                                "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
+                                                " <p>Cordialement.</p>";
+
+
+                                            let Ceo_mailOptions =
+                                            {
+                                                from: "ims@intedgroup.com",
+                                                to: userCreated.email_perso,
+                                                subject: 'Votre acces [IMS] ',
+                                                html: Ceo_htmlmail,
+                                                // attachments: [{
+                                                //     filename: 'Image1.png',
+                                                //     path: 'assets/Image1.png',
+                                                //     cid: 'Image1' //same cid value as in the html img src
+                                                // }]
+                                            };
+
+
+                                            // envoi du mail
+                                            transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                                console.log('Acces CEO Envoyés')
+                                                if (error) {
+                                                    console.error(error);
+                                                }
+                                            });
+
+                                            // envoi de la reponse du serveur
+                                            res.status(201).send(entrepriseSaved);
+                                        })
+                                        .catch((error) => { res.status(400).send('Impossible de créer une nouvelle entreprise') });
+                                })
+                                .catch((error) => { res.status(400).send('Impossible de créer un nouvel utilisateur') });
+                        }
                     })
-                    .catch((error) => { res.status(400).send('Impossible de créer un nouvel utilisateur') });
+                    .catch((error) => { res.status(500).send("Impossible de vérifier l'existence de l'utilisateur") });
             }
         })
-        .catch((error) => { res.status(500).send("Impossible de vérifier l'existence de l'utilisateur") });
+        .catch((error) => { res.status(500).send("Impossible de verifier l'existence de l'entreprise") })
+
 
 });
 
@@ -336,73 +386,71 @@ app.post("/createContratAlternance", (req, res, next) => {
     console.log(ContratData)
 
     // verification si le tuteur est un directeur
-    Tuteur.findOne({_id: NewContrat.tuteur_id})
-    .then((tuteur) => {
-        if(tuteur)
-        {
-            NewContrat.directeur_id = null;
-            //création du contrat
-            NewContrat.save()
-            .then((NewContData) => {
-                res.status(200).send(NewContData);
-            })
-            .catch((error) => {
-                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
-            })
-        }
-        else{
-            NewContrat.directeur_id = NewContrat.tuteur_id;
-            NewContrat.tuteur_id = null;
-            
-            //création du contrat
-            NewContrat.save()
-            .then((NewContData) => {
-                res.status(200).send(NewContData);
-            })
-            .catch((error) => {
-                res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
-            })
-        }
-    })
-    .catch((error) => { res.status(500).send(error); });
+    Tuteur.findOne({ _id: NewContrat.tuteur_id })
+        .then((tuteur) => {
+            if (tuteur) {
+                NewContrat.directeur_id = null;
+                //création du contrat
+                NewContrat.save()
+                    .then((NewContData) => {
+                        res.status(200).send(NewContData);
+                    })
+                    .catch((error) => {
+                        res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+                    })
+            }
+            else {
+                NewContrat.directeur_id = NewContrat.tuteur_id;
+                NewContrat.tuteur_id = null;
+
+                //création du contrat
+                NewContrat.save()
+                    .then((NewContData) => {
+                        res.status(200).send(NewContData);
+                    })
+                    .catch((error) => {
+                        res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
+                    })
+            }
+        })
+        .catch((error) => { res.status(500).send(error); });
 
 });
 
 app.post("/updateContratAlternance", (req, res, next) => {
-    let ContratData = new CAlternance({...req.body });
+    let ContratData = new CAlternance({ ...req.body });
 
     // verification si le tuteur est un directeur
-    Tuteur.findOne({_id: ContratData.tuteur_id})
-    .then((tuteur) => {
-        if(tuteur)
-        {
-            ContratData.directeur_id = null;
+    Tuteur.findOne({ _id: ContratData.tuteur_id })
+        .then((tuteur) => {
+            if (tuteur) {
+                ContratData.directeur_id = null;
 
-            CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
-                if (err) {
-                    console.error(err)
-                    res.status(500).send(err)
-                } else {
-                    res.status(201).send(value)
-                }
-            })
-        
-        } else {
-            ContratData.directeur_id = ContratData.tuteur_id;
-            ContratData.tuteur_id = null;
+                CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
+                    if (err) {
+                        console.error(err)
+                        res.status(500).send(err)
+                    } else {
+                        res.status(201).send(value)
+                    }
+                })
 
-            CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
-                if (err) {
-                    console.error(err)
-                    res.status(500).send(err)
-                } else {
-                    res.status(201).send(value)
-                }
-            })
-            
-        }
-    })
-    .catch((error) => { res.status(500).send(error); });
+            } else {
+                ContratData.directeur_id = ContratData.tuteur_id;
+                ContratData.tuteur_id = null;
+
+                CAlternance.findByIdAndUpdate(ContratData._id, ContratData, { new: true }, (err, value) => {
+                    if (err) {
+                        console.error(err)
+                        res.status(500).send(err)
+                    } else {
+                        res.status(201).send(value)
+                    }
+                })
+
+            }
+        })
+        .catch((error) => { res.status(500).send(error); });
 });
 
 
