@@ -35,6 +35,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
 
   users: User[] = [];
   prospects: any[] = [];
+  alternants: Prospect[] = [];
   inscriptionSelected: Prospect;
   showUploadFile: Prospect;
   prospectsIntuns: ProspectIntuns[];
@@ -349,6 +350,7 @@ export class GestionPreinscriptionsComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
+    this.onGetProspectAlternance()
   }
 
   afterProspectload(data: Prospect[]) {
@@ -635,4 +637,12 @@ export class GestionPreinscriptionsComponent implements OnInit {
     FileSaver.saveAs(data, "preinscrit" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
   }
+
+  onGetProspectAlternance() {
+    this.admissionService.getByAllAlternance().subscribe(
+      ((response) => { this.alternants = response; console.log(response) }),
+      ((error) => { console.error(error); })
+    )
+  }
+
 }

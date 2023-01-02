@@ -32,7 +32,8 @@ angular_dependencies:
     - cd front
     - rm -rf node_modules/
     - npm install
-    - npm install web-animations-js
+    - npm uninstall angular2-signaturepad
+    - npm install angular2-signaturepad@3.0.4
   # only:
   #   - dev
   only:
