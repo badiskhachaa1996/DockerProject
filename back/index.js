@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 let origin = ["http://localhost:4200"]
-let dblog = 'mongodb://localhost:27017/learningNode'
+let dblog = 'mongodb://127.0.0.1:27017/learningNode'
 if (process.argv[2]) {
     let argProd = process.argv[2]
     console.log(argProd)
