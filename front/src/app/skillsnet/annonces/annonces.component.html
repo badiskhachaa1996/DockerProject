@@ -8,7 +8,7 @@
                     style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
                     pTooltip="Fermer" (click)="showForm = false" aria-hidden="true"> </i>
 
-			<h3>Nouvelle offre</h3>
+			<h3>Nouvelle offre d'emploi</h3>
 			<form class="p-fluid" [formGroup]="form" (ngSubmit)="onAddAnnonce()">
 				<div class="p-formgrid grid">
 					<div class="field col-12" *ngIf="token.role == 'Admin' || token.role == 'Commercial'">
@@ -234,7 +234,7 @@
             <button pButton pRipple label="Ajouter une offre" icon="pi pi-plus" class="mr-2 mb-2" (click)="showForm = true" style="float: right"></button>
             <button pButton pRipple label="Voir les CV" icon="pi pi-file" class="mr-2 mb-2" style="float: right"></button>
 
-			<h3>Offres</h3>
+			<h3>Offres d'emplois</h3>
 
 			<p-dataView #dv [value]="annonces" [paginator]="true" [rows]="9" filterBy="missionName" layout="grid">
 				<ng-template pTemplate="header">
@@ -278,7 +278,7 @@
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
 						<hr/>
 						<p>
-							{{ annonceSelected.entreprise_name }} - {{ annonceSelected.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
+							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
 							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
 						</p>
 						

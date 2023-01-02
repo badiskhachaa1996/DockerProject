@@ -31,7 +31,7 @@ export class UsersSettingsComponent implements OnInit {
   typeList: any = [
     { label: 'Tous les types', value: null },
     { label: 'Salarié', value: 'Salarié' },
-    { label: 'Représentant', value: 'Représentant' },
+    { label: 'CEO Entreprise', value: 'CEO Entreprise' },
     { label: 'Tuteur', value: 'Tuteur' },
     { label: 'Etudiant', value: 'Etudiant' },
     { label: 'Initial', value: 'Initial' },
