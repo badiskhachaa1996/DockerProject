@@ -209,10 +209,7 @@ import { CancelUrlComponent } from './gestion-bancaire/gestion-des-transactions/
 import { ErrorUrlComponent } from './gestion-bancaire/gestion-des-transactions/return-pages/error-url/error-url.component';
 import { LogementComponent } from './ims+/logement/logement.component';
 import { GestionLogementComponent } from './ims+/gestion-logement/gestion-logement.component';
-import { MissionComponent } from './skillsnet/mission/mission.component';
-import { MesMissionsComponent } from './skillsnet/mes-missions/mes-missions.component';
 import { MatchingComponent } from './skillsnet/matching/matching.component';
-import { EntreprisesMissionsComponent } from './skillsnet/entreprises-missions/entreprises-missions.component';
 import { GestionEquipeComponent } from './commercial/gestion-equipe/gestion-equipe.component';
 import { DetailEquipeComponent } from './commercial/detail-equipe/detail-equipe.component';
 import { DemandeConseillerComponent } from './commercial/demande-conseiller/demande-conseiller.component';
@@ -232,6 +229,10 @@ import {
   MsalRedirectComponent,
 } from "@azure/msal-angular";
 import { FactureFormateurComponent } from './finance/facture-formateur/facture-formateur.component';
+import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
+import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
+import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
+import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 
 
 @NgModule({
@@ -459,10 +460,7 @@ import { FactureFormateurComponent } from './finance/facture-formateur/facture-f
     ErrorUrlComponent,
     LogementComponent,
     GestionLogementComponent,
-    MissionComponent,
-    MesMissionsComponent,
     MatchingComponent,
-    EntreprisesMissionsComponent,
     GestionEquipeComponent,
     DetailEquipeComponent,
     DemandeConseillerComponent,
@@ -474,6 +472,10 @@ import { FactureFormateurComponent } from './finance/facture-formateur/facture-f
     DevoirsEtudiantsComponent,
     InfoImsComponent,
     FactureFormateurComponent,
+    AnnoncesComponent,
+    FormulaireIntunsComponent,
+    CvthequeComponent,
+    MesOffresComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

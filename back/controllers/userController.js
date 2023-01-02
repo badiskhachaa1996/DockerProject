@@ -183,6 +183,15 @@ app.get("/getPopulate/:id", (req, res, next) => {
         .catch((error) => { res.status(500).send('Impossible de recuperer ce utilisateur: ' + error.message); })
 });
 
+
+//Recuperation de la liste des users pour la cv theque
+app.get("/get-all-for-cv", (_, res) => {
+    User.find({ $or: [{type: 'Etudiant'}, {type: 'Initial'}, {type: 'Alternant'}, {type: 'formateur'}] })
+        .then((usersFromDb) => { res.status(200).send(usersFromDb); })
+        .catch((error) => { res.status(400).send(error.message); });
+});
+
+
 //Recuperation de la liste des users populate sur les services
 app.get("/getAllPopulate", (_, res) => {
     User.find().populate("service_id")

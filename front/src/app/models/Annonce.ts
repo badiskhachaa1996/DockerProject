@@ -1,5 +1,6 @@
-export class Mission {
+export class Annonce {
     constructor(
+        public is_interne?:         boolean,
         public _id?:                string,
         public user_id?:            string,
         public missionType?:        string,
@@ -7,10 +8,17 @@ export class Mission {
         public missionName?:        string,
         public missionDesc?:        string,
         public entreprise_id?:      string,
+        public entreprise_name?:    string,
+        public entreprise_ville?:   string,
+        public entreprise_mail?:    string,
+        public entreprise_phone_indicatif?: string,
+        public entreprise_phone?:   string,
         public profil?:             string,
         public competences?:        string[],
+        public outils?:             string[],
         public workplaceType?:      string,
         public publicationDate?:    Date,
+        public source?:             string,
         public isClosed?:           boolean,
     ){}
 }

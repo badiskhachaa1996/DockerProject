@@ -201,12 +201,11 @@
             <h5>Liste des prospects</h5>
 
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single" 
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="prospects" [paginator]="true" [pageLinks]="5" selectionMode="single"
                 (onRowSelect)="expandRow($event.data)"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
-                responsiveLayout="scroll" styleClass="p-datatable-gridlines"
-                (onFilter)="onFilter($event, 'dt1')">
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines" (onFilter)="onFilter($event, 'dt1')">
 
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left mb-2">
@@ -658,6 +657,86 @@
         </tr>
         </ng-template>
         </p-table>
+    </div>
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des prospects Intuns</h5>
+            <p-table #dt3 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
+                [value]="prospectsIntuns" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                [globalFilterFields]="['nom', 'prenom', 'email', 'phone','parcours','situation','pays','remarque']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="date_creation" scope="col" style="text-align: center;">
+                            Date d'inscription <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="nom" scope="col" style="text-align: center;">
+                            Nom <p-sortIcon field="nom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="prenom" scope="col" style="text-align: center;">
+                            Prénom <p-sortIcon field="prenom"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="email" scope="col" style="text-align: center;">
+                            Email <p-sortIcon field="email"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="phone" scope="col" style="text-align: center;">
+                            Téléphone <p-sortIcon field="phone"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="parcours" scope="col" style="text-align: center;">
+                            Formation <p-sortIcon field="parcours"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="situation" scope="col" style="text-align: center;">
+                            Situation <p-sortIcon field="situation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="pays" scope="col" style="text-align: center;">
+                            Pays <p-sortIcon field="pays"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="remarque" scope="col" style="text-align: center;">
+                            Remarque <p-sortIcon field="remarque"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+                    <tr>
+                        <td>
+                            {{ prospect.date_creation | date:'dd/MM/YY' }}
+                        </td>
+                        <td>
+                            {{ prospect.nom | uppercase }}
+                        </td>
+                        <td>
+                            {{ prospect.prenom | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.email }}
+                        </td>
+                        <td>
+                            {{ prospect.phone }}
+                        </td>
+                        <td>
+                            {{ prospect.parcours }}
+                        </td>
+                        <td>
+                            {{ prospect.situation }}
+                        </td>
+                        <td>
+                            {{ prospect.pays }}
+                        </td>
+                        <td>
+                            {{ prospect.remarque }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
     </div>
     <div class="col-12">
         <div class="card">
@@ -1136,5 +1215,4 @@
         </p-table>
     </div>
     </div>
-    </div>
-</div>
+</div>    

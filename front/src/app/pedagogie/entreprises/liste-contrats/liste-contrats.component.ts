@@ -28,6 +28,7 @@ export class ListeContratsComponent implements OnInit {
   ListeContrats: ContratAlternance[] = []
   tuteurInfoPerso: any;
   EntreprisesName: any[] = [];
+  EntreprisesNameByDirId: any[] = [];
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -50,7 +51,6 @@ export class ListeContratsComponent implements OnInit {
   dropdownTuteurList = []
   ListCommercial = [];
   dropDownCommecialList = [];
-  nomCompletComm = "";
 
   //partie dedié à la mise à jour 
   showFormUpdateCa: boolean = false;
@@ -138,15 +138,13 @@ export class ListeContratsComponent implements OnInit {
 
       // LISTE A AFFICHER POUR LADMIN
       if (this.token.role == "Admin") {
-
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
-
           this.ListeContrats = Allcontrats;
 
           Allcontrats.forEach(cont => {
-
             this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
-              this.EntreprisesName[entpName._id] = entpName
+              this.EntreprisesName[entpName._id] = entpName;
+              this.EntreprisesNameByDirId[entpName.directeur_id] = entpName;
             })
           })
         })
@@ -155,23 +153,37 @@ export class ListeContratsComponent implements OnInit {
 
       /// *******LISTE A AFFICHER POUR LES CEO ENTREPRISE******** 
       else if (!this.idTuteur && this.token.type == "CEO Entreprise") {
+        this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
+          entrepriseData => {
+            this.ConnectedEntreprise = entrepriseData;
 
-        this.entrepriseService.getByDirecteurId(this.token.id).subscribe(entrepriseData => {
-          this.ConnectedEntreprise = entrepriseData;
-          this.RegisterNewCA.patchValue({ entreprise_id: this.ConnectedEntreprise })
-          this.tuteurService.getAllByEntrepriseId(this.ConnectedEntreprise._id).subscribe(listTuteur => {
-            this.TuteursList = listTuteur;
-            this.dropdownTuteurList = []
-            this.TuteursList.forEach(tut => {
-              tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
-              this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
-            })
-          }, (eror) => { console.error(eror) })
+            this.RegisterNewCA.patchValue({ entreprise_id: this.ConnectedEntreprise })
 
-          this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(listeData => {
-            this.ListeContrats = listeData;
+            this.tuteurService.getAllByEntrepriseId(this.ConnectedEntreprise._id).subscribe(
+              listTuteur => {
+                this.TuteursList = listTuteur;
+                this.dropdownTuteurList = []
+
+                // recuperation des informations du CEO actuellement connecté
+                this.authService.getInfoById(this.token.id).subscribe(
+                  ((userConnected) => {
+                    // ajout des données du representant en tant que tuteur
+                    this.dropdownTuteurList.push({ label: `${userConnected.firstname} ${userConnected.lastname}`, value: userConnected._id });
+
+                    this.TuteursList.forEach(tut => {
+                      tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
+                      this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
+                    })
+                  }),
+                  ((error) => { console.log(error); })
+                );
+
+              }, (eror) => { console.error(eror) })
+
+            this.entrepriseService.getAllContratsbyEntreprise(entrepriseData._id).subscribe(
+              listeData => { this.ListeContrats = listeData; },
+              (eror) => { console.error(eror) })
           }, (eror) => { console.error(eror) })
-        }, (eror) => { console.error(eror) })
 
       }
       // LISTE A AFFICHER POUR LES TUTEURS
@@ -262,34 +274,38 @@ export class ListeContratsComponent implements OnInit {
   }
 
 
-  loadcomName(contrat) {
-
-
-    this.authService.getInfoById(contrat.code_commercial._id).subscribe(dataCom => {
-      if (dataCom) {
-
-        this.nomCompletComm = dataCom.firstname + " " + dataCom?.lastname;
-
-      }
-      else {
-        this.nomCompletComm = "non trouvé"
-      }
-    })
-  }
   loadTuteur(idENT, idTuteur = null) {
     this.dropdownTuteurList = []
-    this.tuteurService.getAllByEntrepriseId(idENT).subscribe(listTuteur => {
-      this.TuteursList = listTuteur;
-      this.TuteursList.forEach(tut => {
-        tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
-        this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
-        if (idTuteur && idTuteur == tut._id)
-          this.formUpdateCa.patchValue({ tuteur_id: idTuteur, entreprise_id: idENT })
-      })
 
-    }, (eror) => { console.error(eror) })
+    // recuperation de l'entreprise pour avoir le nom du directeur
+    this.entrepriseService.getByIdPopulate(idENT).subscribe(
+      ((entreprise) => {
+        let byPassDirecteur: any = entreprise.directeur_id;
+
+        this.tuteurService.getAllByEntrepriseId(idENT).subscribe(
+          listTuteur => {
+            this.TuteursList = listTuteur;
+            this.dropdownTuteurList.push({ label: `${byPassDirecteur.firstname} ${byPassDirecteur.lastname}`, value: byPassDirecteur._id });
+
+            this.TuteursList.forEach(tut => {
+              tut.nomCOmplet = tut.user_id?.firstname + " " + tut.user_id?.lastname
+              this.dropdownTuteurList.push({ label: tut.nomCOmplet, value: tut._id })
+
+              if (idTuteur && idTuteur == tut._id) {
+                this.formUpdateCa.patchValue({ tuteur_id: idTuteur, entreprise_id: idENT })
+              }
+
+            })
+
+          }, (eror) => { console.error(eror) })
+      }),
+      ((error) => { console.log(error); })
+    )
 
   }
+
+
+  // creation d'un nouveau contrat d'alternance
   createNewCA() {
     let annee_scolaires = [];
 
@@ -297,16 +313,19 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, this.code_commercial, 'créé', annee_scolaires)
-    this.entrepriseService.createContratAlternance(CA_Object).subscribe(resData => {
-      this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
-      this.formAddNewCA = false
-      this.ngOnInit()
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.code_commercial, 'créé', annee_scolaires)
 
-    }, (error => { console.error(error) }))
+    this.entrepriseService.createContratAlternance(CA_Object).subscribe(
+      resData => {
+        this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été créé avec Succés" });
+        this.formAddNewCA = false
+        this.ngOnInit()
+
+      }, (error => { console.error(error) }))
   }
 
-  //Mise à jour
+
+  //Mise à jour d'un contrat d'alternance
   onUpdateCa() {
     let annee_scolaires = [];
 
@@ -314,7 +333,9 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, this.code_commercial_m, 'créé', annee_scolaires)
+    console.log(annee_scolaires)
+
+    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.code_commercial_m, 'créé', annee_scolaires)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -329,13 +350,13 @@ export class ListeContratsComponent implements OnInit {
   //Methode pour preparer le formulaire de modification d'un contrat
   onFillFormUpdate(contrat: ContratAlternance) {
     this.contratToUpdate = contrat;
-    this.loadTuteur(contrat.tuteur_id.entreprise_id, contrat.tuteur_id._id)
+    // this.loadTuteur(contrat.tuteur_id.entreprise_id, contrat.tuteur_id._id)
     let bypass_alternant: any = contrat.alternant_id
     let bypass_formation: any = contrat.formation
     let bypass_commercial: any = contrat.code_commercial
     this.formUpdateCa.patchValue({
-      entreprise_id: contrat.tuteur_id.entreprise_id,
-      tuteur_id: contrat.tuteur_id._id,
+      // entreprise_id: contrat.tuteur_id.entreprise_id,
+      // tuteur_id: contrat.tuteur_id._id,
       debut_contrat: new Date(contrat.debut_contrat),
       fin_contrat: new Date(contrat.fin_contrat),
       horaire: contrat.horaire,
@@ -346,7 +367,7 @@ export class ListeContratsComponent implements OnInit {
       coeff_hier: contrat.coeff_hierachique,
       form: bypass_formation._id,
       code_commercial: bypass_commercial._id,
-      anne_scolaire: contrat.anne_scolaire,
+      // anne_scolaire: contrat.anne_scolaire,
 
       professionnalisation: contrat.classification != "",
     });

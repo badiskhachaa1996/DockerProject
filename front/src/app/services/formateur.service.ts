@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Formateur } from '../models/Formateur';
+import { RemarqueFormateur } from '../models/RemarqueFormateur';
 import { Seance } from '../models/Seance';
 import { User } from '../models/User';
 
@@ -88,7 +89,7 @@ export class FormateurService {
 
   getAllInfos(mois: Number, year: Number) {
     let url = `${this.apiUrl}getAllInfos/${mois}/${year}`
-    return this.httpClient.get<[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }] }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+    return this.httpClient.get<[{ formateur_id: User, mois: Number, nombre_heure: Number, rapport: [{ seance: Seance, rapport: any }], remarque: RemarqueFormateur }]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }

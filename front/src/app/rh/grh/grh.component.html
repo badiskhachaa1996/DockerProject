@@ -3,7 +3,7 @@
     <div class="col-12">
         <div class="card">
             <div class="col-12">
-                <button pButton pRipple type="button" icon="pi pi-list" label="Compte rendu d'activité" class="p-button-outlined mr-2 mb-2" (click)="showSelectDateForm = true;"></button>
+                <button pButton pRipple type="button" icon="pi pi-list" label="Compte rendu d'activité" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true;"></button>
                 <button pButton pRipple type="button" icon="pi pi-file" label="Démandes de congés" class="p-button-outlined mr-2 mb-2" (click)="onGetConges(); showCongeList = true;"></button>
                 <button pButton pRipple type="button" icon="pi pi-times-circle" label="Abscences" class="p-button-outlined mr-2 mb-2" (click)="onGetAbscences(); showAbscenceList = true;"></button>
             </div>
@@ -11,29 +11,16 @@
             <div class="col-12">
                 <i class="pi pi-times-circle"
                         style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
-                        pTooltip="Fermer" *ngIf="showPresenceList == true || showSelectDateForm == true" (click)="showPresenceList = false; selectDateForm.reset(); showSelectDateForm = false;" aria-hidden="true"> </i>
-
-                <!-- Formulaire de selection de date, s'affiche lorsque le bouton présence est appuyé -->
-                <form class="formgroup-inline" [formGroup]="selectDateForm" (ngSubmit)="onGetPresences()" *ngIf="showSelectDateForm">
-                    <div class="field">
-                        <label class="p-sr-only">Début</label>
-                        <p-calendar formControlName="beginDate" [showIcon]="true" [showButtonBar]="true" placeholder="Début"></p-calendar>
-                    </div>
-                    <div class="field">
-                        <label class="p-sr-only">Fin</label>
-                        <p-calendar formControlName="endDate" [showIcon]="true" [showButtonBar]="true" placeholder="Fin"></p-calendar>
-                    </div>
-                    <button pButton type="submit" [disabled]="selectDateForm.invalid" label="Valider"></button>
-                </form>
+                        pTooltip="Fermer" *ngIf="showPresenceList == true" (click)="showPresenceList = false;" aria-hidden="true"> </i>
 
                 <!-- Table d'affichage du compte rendu d'activité -->
                 <div class="card" *ngIf="showPresenceList">
                     
-                    <h5>Liste des présence de {{ from }} à {{ to }}</h5>
+                    <h5>Liste des présences</h5>
                     
                     <p-table [value]="presences" dataKey="_id" responsiveLayout="scroll"
                              rowExpandMode="single" [rows]="10" [rowHover]="true" [totalRecords]="presences.length"
-                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'user_id.firstname', 'user_id.lastname', 'user_id.email', 'user_id.type', 'user_id.email_perso']">
+                             [paginator]="true" #dt1 [globalFilterFields]="['statut', 'principale_activity_details', 'user_id.firstname', 'user_id.lastname', 'user_id.email', 'user_id.type', 'user_id.email_perso', 'date_of_the_day']">
                     
                             <ng-template pTemplate="caption">
                                 <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
@@ -113,7 +100,7 @@
                 <div class="card" *ngIf="showCongeList">
                     <i class="pi pi-times-circle"
                         style="float:right; font-size: 20px; color: red; cursor: pointer;"
-                        pTooltip="Fermer" (click)="showCongeList = false; selectDateForm.reset();" aria-hidden="true"> </i>
+                        pTooltip="Fermer" (click)="showCongeList = false;" aria-hidden="true"> </i>
 
                     <h5>Liste des demandes de congés</h5>
                     

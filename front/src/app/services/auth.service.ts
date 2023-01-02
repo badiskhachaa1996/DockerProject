@@ -42,6 +42,20 @@ export class AuthService {
     return this.http.get<any>(loginUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  // recuperation des users pour la cv thèque
+  getAllForCV()
+  {
+    let url = `${this.apiUrl}get-all-for-cv`;
+
+    return new Promise((resolve, reject) => {
+      this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: User[]) => resolve(response),
+        error: (err: any) => console.log(err),
+        complete: () => console.log('Tous les utilisateurs de type formateur, Etudiant on étés recupérers')
+      });
+    });
+  }
+
   //Recuperation de la liste des utilisateurs en populate sur les services
   getAllPopulate() {
     let url = this.apiUrl + "getAllPopulate";

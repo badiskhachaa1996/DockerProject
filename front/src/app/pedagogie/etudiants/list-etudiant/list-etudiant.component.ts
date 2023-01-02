@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, ConfirmEventType, MessageService } from 'primeng/api';
 import { environment } from 'src/environments/environment';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Classe } from 'src/app/models/Classe';
 import { Entreprise } from 'src/app/models/Entreprise';
 import { Etudiant } from 'src/app/models/Etudiant';
@@ -19,7 +19,6 @@ import { Presence } from 'src/app/models/Presence';
 import { TuteurService } from 'src/app/services/tuteur.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
-import { CvService } from 'src/app/services/skillsnet/cv.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
 import { AdmissionService } from 'src/app/services/admission.service';
@@ -28,8 +27,6 @@ import { Diplome } from 'src/app/models/Diplome';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Service } from 'src/app/models/Service';
-import { CV } from 'src/app/models/CV';
-import { MissionService } from 'src/app/services/skillsnet/mission.service';
 import { Campus } from 'src/app/models/Campus';
 import { info } from 'console';
 import * as FileSaver from 'file-saver';
@@ -228,10 +225,11 @@ export class ListEtudiantComponent implements OnInit {
     }*/
   }
 
+  
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private CVService: CvService, private missionService: MissionService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -290,7 +288,7 @@ export class ListEtudiantComponent implements OnInit {
         if (tuteur.user_id)
           this.dropdownTuteurByEntreprise.push({ libelle: tuteur.user_id.lastname + " " + tuteur.user_id.firstname, value: tuteur._id })
       })
-    })
+    });
 
   }
 
@@ -837,39 +835,6 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  showCV: Etudiant = null
-  showUpdateCV(etudiant) {
-    this.showCV = etudiant
-    this.CVService.getByUserID(etudiant.user_id._id).subscribe(cv => {
-      this.languesCV = cv.langues
-      this.experiencesCV = cv.experiences
-      this.skillsCV = cv.connaissances
-      this.messageService.add({ severity: "info", summary: "Importation d'un CV existant", detail: "Si vous importez un CV via PDF, celui-ci sera écraser." })
-    }, err => {
-      console.error(err)
-    })
-  }
-
-
-  onUploadPDF(event, himself) {
-    if (event.files) {
-      const formData = new FormData();
-      let bypass: any = this.showCV.user_id
-      formData.append('user_id', bypass._id)
-      formData.append('file', event.files[0])
-      let avoidError: any = document.getElementById('selectedFile')
-      avoidError.value = ""
-      himself.clear()
-      this.CVService.uploadCV(formData, bypass._id).subscribe(r => {
-        this.langueFinder(r.txt)
-        this.skillFinder(r.txt)
-        this.experiencesFinder(r.txt)
-      }, err => {
-        console.error(err)
-      })
-    }
-  }
-
   langueFinder(pdf: string) {
     let pdf_lower = pdf.toLowerCase()
     this.languesCV = []
@@ -889,15 +854,6 @@ export class ListEtudiantComponent implements OnInit {
       this.languesCV.push('allemand')
   }
 
-  languesList = [
-    { label: "Français", value: "français" },
-    { label: "Anglais", value: "anglais" },
-    { label: "Arabe", value: "arabe" },
-    { label: "Espagnol", value: "espagnol" },
-    { label: "Japonais", value: "japonais" },
-    { label: "Chinos", value: "chinois" },
-    { label: "Allemand", value: "allemand" }
-  ]
 
   languesCV = []
   urlVideo = ""
@@ -908,79 +864,10 @@ export class ListEtudiantComponent implements OnInit {
     { skill: String, date_debut: Date, date_fin: Date }
   ]
 
-  skillFinder(pdf: string) {
-    let pdf_lower = pdf.toLowerCase()
-    this.CVService.getSkills().subscribe(skills => {
-      this.skillsCV = null
-      skills.forEach(skill => {
-        if (pdf_lower.indexOf(skill) != -1) {
-          if (this.skillsCV != null)
-            this.skillsCV.push({ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() })
-          else
-            this.skillsCV = [{ skill, niveau: this.ImagineYaPasDeCountEnJS(pdf_lower, skill).toString() }]
-        }
-      })
-    })
-  }
 
-  experiencesFinder(pdf: string) {
-    let pdf_lower = pdf.toLowerCase()
-    this.CVService.getExperiences().subscribe(experiences => {
-      this.experiencesCV = null
-      experiences.forEach(skill => {
-        if (pdf_lower.indexOf(skill) != -1) {
-          if (this.experiencesCV != null)
-            this.experiencesCV.push({ skill, date_debut: null, date_fin: null })
-          else
-            this.experiencesCV = [{ skill, date_debut: null, date_fin: null }]
-        }
-      })
-    })
-  }
   ImagineYaPasDeCountEnJS(string, substring) {
     //return (string.match("/" + substring + "/g") || []).length;
     return string.split(substring).length - 1;
-  }
-
-  onAddSkill() {
-    this.skillsCV.push({ skill: "", niveau: "" })
-  }
-
-  onAddExp() {
-    this.experiencesCV.push({ skill: "", date_debut: null, date_fin: null })
-  }
-
-  deleteSkill(i) {
-    this.skillsCV.splice(i, 1)
-  }
-  deleteExp(i) {
-    this.experiencesCV.splice(i, 1)
-  }
-
-  submitCV() {
-    let bypass: any = this.showCV.user_id
-    let cv: CV = new CV(null,
-      bypass._id,
-      this.languesCV,
-      this.experiencesCV,
-      this.skillsCV,
-      this.urlVideo
-    )
-    this.CVService.create(cv).subscribe(data => {
-      this.showCV = null
-      this.messageService.add(data.message)
-    }, err => {
-      console.error(err)
-      this.messageService.add({ severity: 'error', summary: "Une erreur est survenu", detail: err.error })
-    })
-  }
-
-  findMission(user_id) {
-    this.missionService.getMissionFromCV(user_id).then(d => {
-      if (d) {
-        this.router.navigate(['matching', user_id])
-      }
-    })
   }
 
 
@@ -1102,7 +989,6 @@ export class ListEtudiantComponent implements OnInit {
 
   //Methode pour filtrer par campus
   onFilterByCampus(event: any) {
-
     if (event.value) {
       this.etudiantsByCampus = [];
 
@@ -1186,6 +1072,8 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantsByCampus = [];
   }
 
+
+  
 
   exportExcel() {
     let dataExcel = []

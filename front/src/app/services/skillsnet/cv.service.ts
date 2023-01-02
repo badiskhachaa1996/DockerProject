@@ -2,43 +2,115 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CV } from 'src/app/models/CV';
-import { Message } from 'primeng/api';
 @Injectable({
   providedIn: 'root'
 })
 export class CvService {
 
-  apiUrl = environment.origin + "cv/"
+  apiUrl = `${environment.origin}cv`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
-  uploadCV(data: FormData, user_id: string) {
-    let url = this.apiUrl + "uploadCV/" + user_id;
-    return this.http.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  // methode d'ajout de cv
+  postCv(cv: CV)
+  {
+    const url = `${this.apiUrl}/post-cv`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.post<CV>(url, cv, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CV ajouté'),
+      })
+    });
   }
 
-  getAll() {
-    let url = this.apiUrl + "getAll"
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  //Methode d'envoi du fichier brute
+  postCVBrute(formData: FormData)
+  {
+    const url = `${this.apiUrl}/upload-cv`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.post<any>(url, formData, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Fichier ajouté'),
+      })
+    });
   }
 
-  create(cv: CV) {
-    let url = this.apiUrl + "create"
-    return this.http.post<{ cv: CV, message: Message }>(url, cv, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  // methode de modification de cv
+  putCv(cv: CV)
+  {
+    const url = `${this.apiUrl}/put-cv`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.put<CV>(url, cv, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CV modifié'),
+      })
+    });
   }
 
-  getSkills() {
-    let url = this.apiUrl + "getSkills"
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  // methode de recupération des cvs
+  getCvs()
+  {
+    const url = `${this.apiUrl}/get-cvs`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<CV[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CVs récupérés'),
+      })
+    });
   }
 
-  getExperiences() {
-    let url = this.apiUrl + "getExperiences"
-    return this.http.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  // methode de recupération d'un cv via son id
+  getCv(id: string)
+  {
+    const url = `${this.apiUrl}/get-cv/${id}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CV modifié'),
+      })
+    });
   }
 
-  getByUserID(user_id: string) {
-    let url = this.apiUrl + "getByUserID/" + user_id
-    return this.http.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) })
+  // methode de recupération d'un cv via son user id
+  getCvbyUserId(id: string)
+  {
+    const url = `${this.apiUrl}/get-cv-by-user_id/${id}`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<CV>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('CV modifié'),
+      })
+    });
+  }
+
+  // verification si l'utilisateur possede un cv
+  cvExists(id: string, cvLists: CV[]): boolean
+  {
+    let result = false;
+
+    for(let user_id in cvLists)
+    {
+      if(user_id == id)
+      {
+        result = true;
+      }
+      else 
+      {
+        result = false;
+      }
+    }
+    return result;
   }
 }

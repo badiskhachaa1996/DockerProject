@@ -103,15 +103,15 @@ const demandeEventsController = require('./controllers/demandeEventsController')
 const paymentController = require('./controllers/paymentController');
 const teamCommercialController = require('./controllers/teamCommercialController')
 const logementController = require('./controllers/logementController');
-const missionController = require('./controllers/missionController');
 const inTimeController = require('./controllers/inTimeController');
-const cvController = require('./controllers/cvController')
+const cvTypeController = require('./controllers/cvTypeController')
 const DemandeConseillerController = require('./controllers/demandeConseillerController')
 const congeController = require('./controllers/congeController');
 const devoirController = require('./controllers/devoirController')
 const renduDevoirController = require('./controllers/renduDevoirController')
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const factureFormateurController = require('./controllers/factureFormateurController');
+const annonceController = require('./controllers/annonceController');
 const { User } = require("./models/user");
 
 
@@ -212,7 +212,8 @@ app.use('/soc/note', noteController);
 app.use('/soc/entreprise', entrepriseController);
 
 app.use('/soc/examen', examenController);
-app.use('/soc/cv', cvController)
+
+app.use('/soc/cv', cvTypeController);
 
 app.use('/soc/prestataire', prestataireController);
 
@@ -239,8 +240,6 @@ app.use("/soc/logement", logementController);
 
 app.use('/soc/dashboard', dashboardController);
 
-app.use('/soc/mission', missionController);
-
 app.use('/soc/intime', inTimeController);
 app.use('/soc/teamCommercial', teamCommercialController)
 
@@ -252,6 +251,7 @@ app.use('/soc/factureFormateur',factureFormateurController)
 app.use('/soc/devoir', devoirController);
 app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
+app.use('/soc/annonce', annonceController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
