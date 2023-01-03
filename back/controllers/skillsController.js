@@ -6,7 +6,7 @@ const { response } = require("express");
 app.disable("x-powered-by");
 
 
-/* Profil */
+/* Profile */
 
 // création d'un nouveau profile
 app.post("/post-profile", (req, res) => {
