@@ -233,6 +233,7 @@ import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
 import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
+import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 
 
 @NgModule({
@@ -476,6 +477,7 @@ import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component'
     FormulaireIntunsComponent,
     CvthequeComponent,
     MesOffresComponent,
+    SkillsManagementComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

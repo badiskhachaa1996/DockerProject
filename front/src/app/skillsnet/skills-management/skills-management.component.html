@@ -1,0 +1,188 @@
+<p-toast></p-toast>
+<div class="grid">
+    <!-- Ajout d'un nouveau profile -->
+    <div class="col-12" *ngIf="showFormAddProfile">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormAddProfile = false; formAddProfile.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddProfile" (ngSubmit)="onAddProfile()">
+                    <div class="field col-12">
+                        <label htmlFor="libelle">Libellé</label>
+                        <input pInputText id="libelle" type="text" formControlName="libelle"/>
+                    </div>
+                    <div>
+                        <button pButton type="submit" label="Ajouter le profile" icon="pi pi-plus" [disabled]="formAddProfile.invalid"></button>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modification d'un profile -->
+    <div class="col-12" *ngIf="showFormUpdateProfile">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormUpdateProfile = false; formAddProfile.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateProfile" (ngSubmit)="onUpdateProfile()">
+                    <div class="field col-12">
+                        <label htmlFor="libelle">Libellé</label>
+                        <input pInputText id="libelle" type="text" formControlName="libelle"/>
+                    </div>
+                    <div>
+                        <button pButton type="submit" label="Modifier le profile" icon="pi pi-pencil" [disabled]="formUpdateProfile.invalid"></button>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Table d'affichage des profiles -->
+	<div class="col-12">
+		<div class="card">
+            <button pButton pRipple label="Ajouter un profile" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddProfile = true" style="float: right"></button>
+
+            <h5>Liste des profiles</h5>
+			<p-table #dt1 [value]="profiles" dataKey="_id" [rows]="10" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Libelle
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-profile>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{ profile.libelle }}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+							<i class="pi pi-pencil" title="Modifier le profile" style="cursor: pointer;" (click)="profileToUpdate = profile; onFillFormUpdateProfile(profile); showFormUpdateProfile = true;"></i>
+							<i class="pi pi-briefcase" style="margin-left: 3px; color: green; cursor: pointer;" (click)="profileSelected = profile; onGetCompetenceForprofil(); showCompetenceTable = true;" title="Voir les compétences liées au profile"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="2">Aucun profil trouvé.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="2">chargement des données.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+	</div>
+
+
+    <!-- Ajout d'une nouvelle competence -->
+    <div class="col-12" *ngIf="showFormAddCompetence">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormAddCompetence = false; formAddCompetence.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formAddCompetence" (ngSubmit)="onAddCompetence()">
+                    <div class="field col-12">
+                        <label htmlFor="libelle">Libellé</label>
+                        <input pInputText id="libelle" type="text" formControlName="libelle"/>
+                    </div>
+                    <div>
+                        <button pButton type="submit" label="Ajouter la compétence" icon="pi pi-plus" [disabled]="formAddCompetence.invalid"></button>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modification d'une compétence -->
+    <div class="col-12" *ngIf="showFormUpdateCompetence">
+        <div class="card">
+            <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showFormUpdateCompetence = false; formAddCompetence.reset()" aria-hidden="true"></i>
+
+            <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateCompetence" (ngSubmit)="onUpdateCompetence()">
+                    <div class="field col-12">
+                        <label htmlFor="libelle">Libellé</label>
+                        <input pInputText id="libelle" type="text" formControlName="libelle"/>
+                    </div>
+                    <div>
+                        <button pButton type="submit" label="Modifier la compétence" icon="pi pi-pencil" [disabled]="formUpdateCompetence.invalid"></button>
+                    </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Table des compétences pour un profile -->
+	<div class="col-12" *ngIf="showCompetenceTable">
+        <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+                (click)="showCompetenceTable = false;" aria-hidden="true"></i>
+		<div class="card">
+            
+            <button pButton pRipple label="Ajouter une compétence à ce profile" icon="pi pi-plus" class="mr-2 mb-2" (click)="showFormAddCompetence = true" style="float: right"></button>
+
+            <h5>Liste des competences pour {{ profileSelected.libelle }}</h5>
+			<p-table #dt1 [value]="competences" dataKey="_id" [rows]="10" [loading]="loadingProfile" [rowHover]="true" styleClass="p-datatable-gridlines" [paginator]="true" [globalFilterFields]="['_id', 'libelle']" responsiveLayout="scroll">
+				<ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+						<span class="p-input-icon-left mb-2">
+							<i class="pi pi-search"></i>
+							<input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" class="w-full"/>
+						</span>
+					</div>
+				</ng-template>
+				<ng-template pTemplate="header">
+					<tr>
+						<th>
+							<div class="flex justify-content-between align-items-center">
+								Libelle
+							</div>
+						</th>
+						<th style="width: 8rem">
+							<div class="flex justify-content-between align-items-center">
+								Action
+							</div>
+						</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-competence>
+					<tr>
+						<td style="min-width: 12rem;">
+							{{ competence.libelle }}
+						</td>
+						<td class="text-center" style="min-width: 8rem;">
+							<i class="pi pi-pencil" title="Modifier la competence" style="cursor: pointer;" (click)="competenceToUpdate = competence; onFillFormUpdateCompetence(competence); showFormUpdateCompetence = true;"></i>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="2">Aucune compétences trouvés pour ce profile.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="2">chargement des données.</td>
+					</tr>
+				</ng-template>
+    		</p-table>
+		</div>
+	</div>
+    
+</div>
