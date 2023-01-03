@@ -324,7 +324,7 @@
 
             <!-- justification d'abscence -->
             <div class="card" *ngIf="userConnectedNow?.role == 'Admin' || userConnectedNow?.role == 'Agent' || userConnectedNow?.role == 'Responsable'">
-                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
+                <button pButton pRipple type="button" icon="pi pi-file" style="float: right;" label="Justifier une abscence" class="p-button-outlined mr-2 mb-2" (click)="showFormjustification=true"></button>
                 <button pButton pRipple type="button" icon="pi pi-file-excel" style="float: right;" label="Voir son CRA" class="p-button-outlined mr-2 mb-2" (click)="onGetPresences(); showPresenceList = true"></button>
                 <h3>CRA</h3>
 
@@ -387,10 +387,10 @@
                                 <td>
                                     <button type="button" pButton pRipple [pRowToggler]="presence" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
                                 </td>
-                                <td style="min-width: 8rem;">{{ presence.user_id?.lastname | uppercase }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id?.firstname | titlecase }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id?.email }}</td>
-                                <td style="min-width: 8rem;">{{ presence.user_id?.type }}</td>
+                                <td style="min-width: 8rem;">{{ userco.lastname | uppercase }}</td>
+                                <td style="min-width: 8rem;">{{ userco.firstname | titlecase }}</td>
+                                <td style="min-width: 8rem;">{{ userco.email }}</td>
+                                <td style="min-width: 8rem;">{{ userco.type }}</td>
                                 <td style="min-width: 8rem;">{{ presence.date_of_the_day }}</td>
                                 <td style="min-width: 8rem; color: red; font-weight: bold;">{{ presence.statut }}</td>
                             </tr>
@@ -404,7 +404,7 @@
                                                 <tr>
                                                     <th>Téléphone</th>
                                                     <th>Heure d'arrivé</th>
-                                                    <th>heure de depart</th>
+                                                    <th>Heure de depart</th>
                                                     <th>Tâche principale</th>
                                                     <th>Tâches sécondaire</th>
                                                 </tr>
@@ -416,7 +416,7 @@
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage">
                                                 <tr>
-                                                    <td>{{ presence.user_id?.indicatif }}{{ presence.user_id?.phone }}</td>
+                                                    <td>{{ userco.indicatif }}{{userco.phone }}</td>
                                                     <td>{{ presence.in_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.out_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.principale_activity_details }}</td>
