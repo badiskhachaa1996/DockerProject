@@ -128,6 +128,7 @@ import { AnnoncesComponent } from './skillsnet/annonces/annonces.component';
 import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-intuns/formulaire-intuns.component';
 import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
+import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 
 const routes: Routes = [
     {
@@ -215,6 +216,7 @@ const routes: Routes = [
             { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
             { path: 'cvtheque', component: CvthequeComponent },
             { path: 'cvtheque/:id', component: CvthequeComponent },
+            { path: 'skills-management', component: SkillsManagementComponent },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
