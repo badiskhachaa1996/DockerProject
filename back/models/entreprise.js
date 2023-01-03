@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 // Création du schema de données de la table entreprise
 const entrepriseSchema = mongoose.Schema({
-    r_sociale: { type: String, required: true },
+    r_sociale: { type: String, required: true, unique: true },
     fm_juridique: { type: String, required: false },
     activite: { type: String, required: false },
     type_ent: { type: String, required: false },
