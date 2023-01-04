@@ -25,7 +25,8 @@ export class User {
         public nationnalite?: string,
         public verifedEmail?: boolean,
         public date_creation?:Date,
-        public departement?:string
+        public departement?:string,
+        public mention?:string,
     ){}
     
 
