@@ -101,7 +101,7 @@ export class EmergementComponent implements OnInit {
           if (bypass && this.customIndexOf(oldPresence, bypass._id) == -1) {
             oldPresence.push(bypass._id)
             this.tableauPresence.push({
-              etudiant: bypass?.firstname + ' ' + bypass?.lastname,
+              etudiant: bypass?.lastname + ' ' + bypass?.firstname,
               _id: p._id,
               isPresent: p.isPresent,
               Sign: p.signature,
@@ -117,7 +117,7 @@ export class EmergementComponent implements OnInit {
             if (this.customIndexOf(oldPresence, etu.user_id._id) == -1) {
               oldPresence.push(etu.user_id._id)
               this.tableauPresence.push({
-                etudiant: etu.user_id?.firstname + ' ' + etu.user_id?.lastname,
+                etudiant: etu.user_id?.lastname + ' ' + etu.user_id?.firstname,
                 _id: etu._id + "NEW",
                 isPresent: false,
                 Sign: false,
