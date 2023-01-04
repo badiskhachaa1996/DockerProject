@@ -9,7 +9,7 @@ const inTimeSchema = mongoose.Schema({
     out_date:                       { type: Date, required: false },
     statut:                         { type: String, required: false },
     isCheckable:                    { type: Boolean, required: false },
-    principale_activity_details:    { type: mongoose.Schema.Types.Mixed, required: false },
+    // principale_activity_details:    { type: String, required: false },
     activity_details:               { type: [String], required: false },
 });
 

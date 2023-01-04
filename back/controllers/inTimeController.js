@@ -26,7 +26,7 @@ app.patch("/just-gone", (req, res) => {
     const outDate = new Date(req.body.out_date);
     const dateOfToday = req.body.date_of_the_day;
     const ipAdress = req.body.ip_adress;  
-    const principaleActivityDetails = req.body.principale_activity_details;      
+    // const principaleActivityDetails = req.body.principale_activity_details;      
     const activityDetails = req.body.activity_details;
 
     InTime.findOne({ user_id: userId, date_of_the_day: dateOfToday })
@@ -37,15 +37,18 @@ app.patch("/just-gone", (req, res) => {
             var nbHeureTravail = ((outDate - inDate)/1000)/3600;
 
             // let nbHeureTravail = moment(inDate).diff(outDate, 'hours'); 
-            if(nbHeureTravail >= 7 && nbHeureTravail < 9 && ipAdress == inTimeFromDb.in_ip_adress)
+            // if(nbHeureTravail >= 7 && nbHeureTravail < 9 && ipAdress == inTimeFromDb.in_ip_adress)
+            if(nbHeureTravail >= 7 && nbHeureTravail < 9)
             {
-                statut = 'présent toute la journée';
+                statut = 'Présent toute la journée';
             }
-            else if(nbHeureTravail > 9 && ipAdress == inTimeFromDb.in_ip_adress)
+            // else if(nbHeureTravail > 9 && ipAdress == inTimeFromDb.in_ip_adress)
+            else if(nbHeureTravail > 9)
             {
-                statut = "Trop tard";
+                statut = "Dépointage au délà de 9h de temps";
             }
-            else if(nbHeureTravail < 7 && ipAdress == inTimeFromDb.in_ip_adress)
+            // else if(nbHeureTravail < 7 && ipAdress == inTimeFromDb.in_ip_adress)
+            else if(nbHeureTravail < 7)
             {
                 statut = "Parti avant l'heure";
             }
@@ -62,7 +65,7 @@ app.patch("/just-gone", (req, res) => {
                     out_ip_adress: ipAdress,
                     statut: statut,
                     isCheckable: false,
-                    principale_activity_details: principaleActivityDetails,
+                    // principale_activity_details: principaleActivityDetails,
                     activity_details: activityDetails,
                   })
                   .then((inTimeUpdated) => { res.status(201).send(inTimeUpdated) })
