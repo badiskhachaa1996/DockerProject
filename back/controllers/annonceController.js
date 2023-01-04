@@ -15,7 +15,7 @@ app.post("/post-annonce", (req, res) => {
 
 //Recuperation de la liste des annonces
 app.get("/get-annonces", (_, res) => {
-    Annonce.find()?.populate('entreprise_id')
+    Annonce.find()?.populate('entreprise_id')?.populate('profil')?.populate('competences')
         .then((annonces) => { res.status(200).send(annonces); })
         .catch((error) => { res.status(500).send(error.message); });
 });
@@ -23,14 +23,14 @@ app.get("/get-annonces", (_, res) => {
 
 //Récuperation d'une annonce via son identifiant
 app.get("/get-annonce/:annonceId", (req, res) => {
-    Annonce.findOne({ _id: req.params.annonceId })?.populate('entreprise_id')
+    Annonce.findOne({ _id: req.params.annonceId })?.populate('entreprise_id')?.populate('profil')?.populate('competences')
         .then((annonce) => { res.status(200).send(annonce); })
         .catch((error) => { res.status(500).send(error.message); });
 });
 
 //Récuperation des annonces via un user id
 app.get("/get-annonces-by-user-id/:userId", (req, res) => {
-    Annonce.find({ user_id: req.params.userId })?.populate('entreprise_id')
+    Annonce.find({ user_id: req.params.userId })?.populate('entreprise_id')?.populate('profil')?.populate('competences')
         .then((annonces) => { res.status(200).send(annonces); })
         .catch((error) => { res.status(500).send(error.message); });
 });
