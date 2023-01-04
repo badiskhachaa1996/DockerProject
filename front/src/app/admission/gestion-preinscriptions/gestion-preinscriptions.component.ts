@@ -645,4 +645,10 @@ export class GestionPreinscriptionsComponent implements OnInit {
     )
   }
 
+  /*prospectCalled(bol : boolean) {
+    if(!bol) {
+      return "green";
+    }
+    
+  }*/
 }

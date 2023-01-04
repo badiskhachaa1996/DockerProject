@@ -37,6 +37,22 @@ export class AddAgentComponent implements OnInit {
     { value: 'Madame', label: 'Madame' },
     { value: 'Autre', label: 'Autre' },
   ];
+
+  mentionList = [
+    { value : 'IGM - Inted Group Marketing', label : 'IGM - Inted Group Marketing'},
+    { value : 'IGN - Inted Group Partenaires', label : 'IGN - Inted Group Partenaires'},
+    { value : 'IGW - Inted Group Commercial', label : 'IGW - Inted Group Commercial'},
+    { value : 'IGE - Inted Group Admission', label : 'IGE - Inted Group Admission'},
+    { value : 'IGI - Inted Group Administration', label : 'IGI - Inted Group Administration'},
+    { value : 'IGP - Inted Group Pédagogie', label : 'IGP - Inted Group Pédagogie'},
+    { value : 'IGA - Inted Group Facturation', label : 'IGA - Inted Group Facturation'},
+    { value : 'IGL - Inted Group Juridique', label : 'IGL - Inted Group Juridique'},
+    { value : 'IGQ - Inted Group Qualité', label : 'IGQ - Inted Group Qualité'},
+    { value : 'IGA - Inted Group Comptabilité', label : 'IGA - Inted Group Comptabilité'},
+    { value : 'IGS - Inted Group Support', label : 'IGS - Inted Group Support'},
+    { value : 'IGH - Inted Group RH', label : 'IGH - Inted Group RH'},
+    { value : 'IGD - Inted Group Direction', label : 'IGD - Inted Group Direction'},
+  ];
   statutList = environment.typeUser
   campusList = []
   formationList = []
@@ -51,6 +67,7 @@ export class AddAgentComponent implements OnInit {
     phone: new FormControl('', [Validators.pattern('[- +()0-9]+')]),
     role: new FormControl('', Validators.required),
     service_id: new FormControl("", Validators.required),
+    mention : new FormControl (this.mentionList[0], [Validators.required]),
     entreprise: new FormControl(""),
     //type: new FormControl(this.statutList[0], [Validators.required, Validators.pattern('[^0-9]+')]),
     pays_adresse: new FormControl("", [Validators.pattern('[^0-9]+')]),
@@ -71,6 +88,7 @@ export class AddAgentComponent implements OnInit {
   get role() { return this.RegisterForm.get('role').value; }
   get departement() { return this.RegisterForm.get('departement').value; }
   get service_id() { return this.RegisterForm.get('service_id'); }
+  get mention()  {return this.RegisterForm.get('mention'); }
   get civilite() { return this.RegisterForm.get('civilite'); }
   get pays_adresse() { return this.RegisterForm.get('pays_adresse'); }
   get ville_adresse() { return this.RegisterForm.get('ville_adresse'); }
@@ -149,7 +167,8 @@ export class AddAgentComponent implements OnInit {
       this.RegisterForm.value.rue_adresse,
       this.RegisterForm.value.numero_adresse,
       this.RegisterForm.value.postal_adresse, null, null, null,
-      this.RegisterForm.value.departement
+      this.RegisterForm.value.departement,
+      this.RegisterForm.value.mention,
 
     );
 

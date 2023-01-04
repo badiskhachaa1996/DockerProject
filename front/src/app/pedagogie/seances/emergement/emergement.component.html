@@ -49,7 +49,7 @@
                 <p *ngIf="presence.justificatif && presence.isPresent">Votre justificatif a été accepté</p>
             </div>
             <div *ngIf="presence.isPresent">
-                <small>Vous avez été noté présent lors de cette séance</small>
+                <span>Vous avez été noté présent lors de cette séance</span>
             </div>
         </div>
         <div class="col-12" *ngIf="seance">
@@ -64,7 +64,7 @@
                     </em>
                 </li>
             </ul>
-            <small *ngIf="showFiles==null">Aucun document n'a été chargé !</small>
+            <span *ngIf="showFiles==null">Aucun document n'a été chargé !</span>
         </div>
     </div>
 </div>

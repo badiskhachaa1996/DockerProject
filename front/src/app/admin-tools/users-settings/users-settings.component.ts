@@ -54,6 +54,21 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Autre' },
   ];
 
+  mentionList: any = [
+    { label: 'IGM - Inted Group Marketing', value: 'IGM - Inted Group Marketing' },
+    { label: 'IGN - Inted Group Partenaires', value: 'IGN - Inted Group Partenaires' },
+    { label: 'IGW - Inted Group Commercial', value: 'IGW - Inted Group Commercial' },
+    { label: 'IGE - Inted Group Admission', value: 'IGE - Inted Group Admission' },
+    { label: 'IGI - Inted Group Administration', value: 'IGI - Inted Group Administration' },
+    { label: 'IGP - Inted Group Pédagogie', value: 'IGP - Inted Group Pédagogie' },
+    { label: 'IGA - Inted Group Facturation', value: 'IGA - Inted Group Facturation' },
+    { label: 'IGL - Inted Group Juridique', value: 'IGL - Inted Group Juridique' },
+    { label: 'IGQ - Inted Group Qualité', value: 'IGQ - Inted Group Qualité' },
+    { label: 'IGA - Inted Group Comptabilité', value: 'IGA - Inted Group Comptabilité' },
+    { label: 'IGS - Inted Group Support', value: 'IGS - Inted Group Support' },
+    { label: 'IGH - Inted Group RH', value: 'IGH - Inted Group RH' },
+    { label: 'IGD - Inted Group Direction', value: 'IGD - Inted Group Direction' },
+  ];
   paysList = environment.pays;
 
   etudiants: Etudiant[] = [];
@@ -81,6 +96,7 @@ export class UsersSettingsComponent implements OnInit {
       email: [''],
       email_perso: [''],
       service: [''],
+      mention: [''],
       type: [''],
       role: [''],
       pays_adresse: [''],
@@ -120,7 +136,8 @@ export class UsersSettingsComponent implements OnInit {
     //Recuperation de la liste des services
     this.serviceService.getAll().subscribe(
       ((response) => {
-        this.services.forEach((service) => {
+        this.dropDownService = []
+        response.forEach((service) => {
           this.services[service._id] = response;
           this.dropDownService.push({ label: service.label, value: service._id });
         });
@@ -164,6 +181,7 @@ export class UsersSettingsComponent implements OnInit {
       email: this.userToUpdate.email,
       email_perso: this.userToUpdate.email_perso,
       service: { label: this.services[this.userToUpdate.service_id]?.label, value: this.services[this.userToUpdate.service_id]?._id },
+      mention: { label: this.userToUpdate.mention, value: this.userToUpdate.mention },
       type: { label: this.userToUpdate.type, value: this.userToUpdate.type },
       role: { label: this.userToUpdate.role, value: this.userToUpdate.role },
       pays_adresse: { value: this.userToUpdate.pays_adresse, viewValue: this.userToUpdate.pays_adresse, actif: false },
@@ -186,6 +204,7 @@ export class UsersSettingsComponent implements OnInit {
     user.email = this.formUpdate.get('email')?.value;
     user.email_perso = this.formUpdate.get('email_perso')?.value;
     user.service_id = this.formUpdate.get('service_id')?.value.value;
+    user.mention = this.formUpdate.get('mention')?.value.value;
     user.type = this.formUpdate.get('type')?.value.value;
     user.role = this.formUpdate.get('role')?.value.value;
     user.pays_adresse = this.formUpdate.get('pays_adresse')?.value.value;
@@ -209,11 +228,11 @@ export class UsersSettingsComponent implements OnInit {
     if (confirm('Etes-vous sur de vouloir supprimer ' + user.lastname + ' ' + user.firstname + " ?"))
       this.userService.delete(user._id).subscribe(r => {
         this.messageService.add({ severity: 'success', summary: 'Gestion des utilisateurs', detail: `Utilisateur supprimé` });
-        this.users.splice(this.customIndexOf(this.users, user._id),1)
+        this.users.splice(this.customIndexOf(this.users, user._id), 1)
       }, err => {
         console.log(err)
         this.messageService.add({ severity: 'error', summary: 'L\'utilisateur n\'a pas été supprimé' });
-        
+
       })
   }
 

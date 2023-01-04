@@ -98,7 +98,11 @@ const user_schema = new mongoose.Schema({
     },
     date_creation: { type: Date, required: false },
     departement: { type: String },
-    last_connection: { type: Date}
+    last_connection: { type: Date},
+    mention : {
+        type : String,
+        required : false,
+    }
 
 });
 //creation de la table avec le nom User ( model/classe) à l'aide de la biblio mongoose et son schema
