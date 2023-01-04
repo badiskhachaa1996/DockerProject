@@ -108,7 +108,7 @@ export class SkillsManagementComponent implements OnInit {
       this.formAddProfile.reset();
       this.messageService.add({ severity: "success", summary: "Profile ajouté" })
     })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Impossible d'ajouter le profile" }); })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: "error", summary: "Impossible d'ajouter le profile" }); })
   }
 
   // methode de remplissage du formulaire de modification de profile
@@ -134,7 +134,7 @@ export class SkillsManagementComponent implements OnInit {
       this.formUpdateProfile.reset();
       this.messageService.add({ severity: "success", summary: "Profile modifié" })
     })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Impossible de modifier le profile" }); })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: "error", summary: "Impossible de modifier le profile" }); })
   }
 
   // methode d'ajout d'une nouvelle compétences
@@ -154,7 +154,7 @@ export class SkillsManagementComponent implements OnInit {
       this.onGetCompetenceForprofil();
       this.messageService.add({ severity: "success", summary: "Compétence ajouté" });
     })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Impossible d'ajouter la compétence" }); })
+    .catch((error) => { console.log(error); this.messageService.add({ severity: "error", summary: "Impossible d'ajouter la compétence" }); })
   }
 
   // methode de remplissage du formulaire de modification d'une compétence
@@ -183,6 +183,6 @@ export class SkillsManagementComponent implements OnInit {
       this.onGetCompetenceForprofil();
       this.messageService.add({ severity: "success", summary: "Compétence modifié" });
     })
-    .catch((error) => { this.messageService.add({ severity: "error", summary: "Impossible de modifier la compétence" }); });
+    .catch((error) => { console.log(error); this.messageService.add({ severity: "error", summary: "Impossible de modifier la compétence" }); });
   }
 }
