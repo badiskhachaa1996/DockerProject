@@ -28,14 +28,14 @@ app.put("/put-profile", (req, res) => {
 app.get("/get-profiles", (req, res) => {
     Profile.find()
     .then((profiles) => { res.status(200).send(profiles); })
-    .catch((error) => { require.status(400).send(error.message); })
+    .catch((error) => { res.status(400).send(error.message); })
 });
 
 // recuperation d'un profile via son id profile
 app.get("/get-profile/:id", (req, res) => {
     Profile.findOne({ _id: req.params.id })
     .then((profile) => { res.status(200).send(profile); })
-    .catch((error) => { require.status(400).send(error.message); })
+    .catch((error) => { res.status(400).send(error.message); })
 });
 
 

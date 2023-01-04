@@ -10,6 +10,8 @@ import { Entreprise } from 'src/app/models/Entreprise';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { TuteurService } from 'src/app/services/tuteur.service';
+import { SkillsService } from 'src/app/services/skillsnet/skills.service';
+import { Profile } from 'src/app/models/Profile';
 
 @Component({
   selector: 'app-mes-offres',
@@ -39,21 +41,22 @@ export class MesOffresComponent implements OnInit {
     {label: 'Oui', value: true},
   ];
 
+  profiles: Profile[] = [];
   profilsList: any = [
-    { label: '' },
-    { label: 'Développeur' },
-    { label: 'DevOps' },
-    { label: 'Testeur' },
-    { label: 'Expert base de données' },
-    { label: 'Chargé(e) Relation Clients' },
-    { label: 'Chargé(e) de recrutement bilingue Anglais' },
-    { label: 'Office Manager' },
-    { label: 'Assistant(e) de direction' },
-    { label: 'Commercial Junior Solutions' },
-    { label: 'Assistant(e) marketing' },
-    { label: 'Commercial junior' },
-    { label: 'Chargé de Communication' },
-    { label: 'Commercial/Business Developer' },
+    { label: '', value: null },
+    // { label: 'Développeur' },
+    // { label: 'DevOps' },
+    // { label: 'Testeur' },
+    // { label: 'Expert base de données' },
+    // { label: 'Chargé(e) Relation Clients' },
+    // { label: 'Chargé(e) de recrutement bilingue Anglais' },
+    // { label: 'Office Manager' },
+    // { label: 'Assistant(e) de direction' },
+    // { label: 'Commercial Junior Solutions' },
+    // { label: 'Assistant(e) marketing' },
+    // { label: 'Commercial junior' },
+    // { label: 'Chargé de Communication' },
+    // { label: 'Commercial/Business Developer' },
   ];
 
   locationOptions = [
@@ -102,7 +105,7 @@ export class MesOffresComponent implements OnInit {
 
   token: any;
 
-  constructor(private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private annonceService: AnnonceService) { }
+  constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private annonceService: AnnonceService) { }
 
   ngOnInit(): void {
     //Decodage du token
@@ -183,21 +186,24 @@ export class MesOffresComponent implements OnInit {
       ((error) => console.log(error))
     );
 
-    //Récupération de la liste des tuteurs
-    this.tuteurService.getAll().subscribe(
-      ((response) => { 
-        response.forEach((tuteur) => {
-          this.tuteurs[tuteur.user_id] = tuteur;
-        });
-      }),
-    )
+    //Récupération de la liste des profiles
+    this.skillsService.getProfiles()
+    .then((response: Profile[]) => {
+      this.profiles = response;
+
+      response.forEach((profile: Profile) => {
+        this.profilsList.push({ label: profile.libelle, value: profile._id });
+      })
+    })
+    .catch((error) => { console.log(error); });
   }
 
   //Methode qui servira à modifier le contenu de la liste de competences en fonction du profil
   chargeCompetence(event)
   {
     const label = event.value.label;
-
+    const id = event.value.value;
+    console.log(label, id);
     switch(label){
       case 'Développeur':
         this.competencesList = [
