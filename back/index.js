@@ -10,7 +10,7 @@ const jwt = require("jsonwebtoken");
 app.use(bodyParser.json({ limit: '20mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: true }))
 let origin = ["http://localhost:4200"]
-let dblog = 'mongodb://localhost:27017/learningNode'
+let dblog = 'mongodb://127.0.0.1:27017/learningNode'
 if (process.argv[2]) {
     let argProd = process.argv[2]
     console.log(argProd)
@@ -112,6 +112,7 @@ const renduDevoirController = require('./controllers/renduDevoirController')
 const abscenceCollaborateurController = require('./controllers/abscenceCollaborateurController');
 const factureFormateurController = require('./controllers/factureFormateurController');
 const annonceController = require('./controllers/annonceController');
+const skillsController = require('./controllers/skillsController');
 const { User } = require("./models/user");
 
 
@@ -252,6 +253,7 @@ app.use('/soc/devoir', devoirController);
 app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
 app.use('/soc/annonce', annonceController);
+app.use('/soc/skills', skillsController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

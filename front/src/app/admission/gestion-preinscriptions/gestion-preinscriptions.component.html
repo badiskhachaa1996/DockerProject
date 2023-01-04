@@ -738,3 +738,481 @@
             </p-table>
         </div>
     </div>
+    <div class="col-12">
+        <div class="card">
+            <h5>Liste des prospects pour le call center : Alternant</h5>
+            <small style="color: red;">Tous les champs qui sont en coulour rouge, sont des prospects qui doivent être appelé dans le call center</small>
+            <p-toast></p-toast>
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single" 
+                [value]="alternants" [paginator]="true" [pageLinks]="5" selectionMode="single"
+                (onRowSelect)="expandRow($event.data)"
+                [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines"
+                (onFilter)="onFilter($event, 'dt1')">
+
+                <ng-template pTemplate="caption">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Source"
+                        [options]="[{value:null,label:'Tous les sources'},{value:'Interne',label:'Interne'},{value:'Partenaire',label:'Partenaire'},{value:'Eduhorizons',label:'Eduhorizons'}]"
+                        (onChange)="dt1.filter($event.value, 'source','equals')"
+                        emptyFilterMessage="Pas de source trouvé" filterPlaceholder="Source" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Campus" [options]="filterCampus"
+                        (onChange)="dt1.filter($event.value, 'campus_choix_1','equals')"
+                        emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Ecole" [options]="filterEcole"
+                        (onChange)="dt1.filter($event.value, 'type_form','equals')"
+                        emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Origine"
+                        [options]="[{value:null,label:'Tous les origines'},{value:'Import IMS',label:'Import IMS'},{value:'Site Web',label:'Site Web'}]"
+                        (onChange)="dt1.filter($event.value, 'origin','equals')"
+                        emptyFilterMessage="Pas d'origin trouvé" filterPlaceholder="Origine" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Paiement"
+                        [options]="[
+                    {value:null,label:'Tous les paiements'},
+                    { value: 'Aucun',label:'Aucun' },
+                    { value: 'Pré-inscription',label:'Pré-inscription' }, { value: 'Inscription',label:'Inscription' }, { value: 'Inscription définitive',label:'Inscription définitive' }, ]"
+                        (onChange)="dt1.filter($event.value, 'statut_payement','equals')"
+                        emptyFilterMessage="Pas de paiement trouvé" filterPlaceholder="Paiement"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Rentrée Scolaire"
+                        [options]="[{value:null,label:'Toutes les rentrées scolaires'},{value:'Janvier 2023',label:'Janvier 2023'},{value:'Septembre 2023',label:'Septembre 2023'}]"
+                        (onChange)="dt1.filter($event.value, 'rentree_scolaire','equals')"
+                        emptyFilterMessage="Pas de rentrée scolaire trouvé" filterPlaceholder="Rentrée Scolaire"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Decision Admission"
+                        [options]="dropdownDecision"
+                        (onChange)="dt1.filter($event.value, 'decision_admission','equals')"
+                        emptyFilterMessage="Pas de decision trouvé" filterPlaceholder="Decision Admission"
+                        [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <p-dropdown *ngIf="!dataCommercial" filter="true" placeholder="Pays" [options]="filterPays"
+                        (onChange)="dt1.filter($event.value, 'user_id.pays_adresse','equals')"
+                        emptyFilterMessage="Pas de pays trouvé" filterPlaceholder="Pays" [style]="{'margin':'5px'}">
+                    </p-dropdown>
+                    <div class="flex table-header">
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem" scope="col"></th>
+                        <th></th>
+                        <th pSortableColumn="origine" scope="col" style="text-align: center;">
+                            Origine <p-sortIcon field="origine"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="source" scope="col" style="text-align: center;">
+                            Source <p-sortIcon field="source"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="customid" scope="col" style="text-align: center;">
+                            ID Prospect <p-sortIcon field="customid"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id.firstname" scope="col" style="text-align: center;">
+                            Prénom & Nom : <p-sortIcon field="firstname"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="formation" scope="col" style="text-align: center;">
+                            Formation <p-sortIcon field="formation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
+                           Rythme Formation <p-sortIcon field="rythme_formation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type_form" scope="col" style="text-align: center;">
+                            Etablissement <p-sortIcon field="type_form"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="campus_choix_1" scope="col" style="text-align: center;">
+                            Campus <p-sortIcon field="campus_choix_1"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="user_id.email_perso" scope="col" style="text-align: center;">
+                            Email perso <p-sortIcon field="user_id.email_perso"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="code_commercial" scope="col" style="text-align: center;">
+                            ID Commercial <p-sortIcon field="code_commercial"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="haveDoc" scope="col" style="text-align: center;">
+                            Document<p-sortIcon field="haveDoc"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
+                            Etat de dossier<p-sortIcon field="statut_dossier"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut_dossier" scope="col" style="text-align: center;">
+                            Decision Admission<p-sortIcon field="statut_dossier"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="statut_payement" scope="col" style="text-align: center;">
+                            Paiement <p-sortIcon field="statut_payement"></p-sortIcon>
+                        </th>
+                        <th scope="col" style="text-align: center;">
+                            Visa
+                        </th>
+                        <th pSortableColumn="date_creation" scope="col">
+                            Date Inscr. <p-sortIcon field="date_creation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="action" scope="col" style="text-align: center;">
+                            Action
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect let-expanded="expanded">
+                    <tr [pRowToggler]="prospect" [pSelectableRow]="prospect"
+                        [ngClass]="{'rowEntraitement': prospect.enTraitement == true}">
+
+                        <td>
+                            <button type="button" pButton pRipple class="p-button-text p-button-rounded p-button-plain"
+                                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                        </td>
+                        <td style="background-color: red;" *ngIf="!alternants.isCalled">
+
+                        </td>
+                        <td style="background-color: green;" *ngIf="alternants.isCalled">
+
+                        </td>
+
+                        <td>
+                            {{ prospect.origin }}
+                        </td>
+
+                        <td>
+                            {{ prospect.source }}
+                        </td>
+
+                        <td>
+                            {{ prospect.customid }}
+                        </td>
+
+                        <td *ngIf="prospect.user_id && prospect.user_id.lastname && prospect.user_id.firstname">
+                            {{ prospect.user_id.firstname | titlecase }}
+                            {{ prospect.user_id.lastname | uppercase }}
+                        </td>
+                        <td *ngIf="!prospect.user_id">
+                            Error Smith
+                        </td>
+                        <td>
+                            {{ prospect.formation | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.rythme_formation }}
+                        </td>
+                        <td>
+                            {{ prospect.type_form | titlecase }}
+                        </td>
+                        <td>
+                            {{ prospect.campus_choix_1 }}
+                        </td>
+                        <td>
+                            {{ prospect.user_id?.email_perso }}
+                        </td>
+                        <td>
+                            {{ prospect.code_commercial }}
+                        </td>
+                        <td *ngIf="prospect.haveDoc">
+                            Oui
+                        </td>
+                        <td *ngIf="!prospect.haveDoc">
+                            Non
+                        </td>
+                        <td>
+                            {{ prospect.statut_dossier }}
+                        </td>
+                        <td>
+                            {{ prospect.decision_admission }}
+                        </td>
+                        <td>
+                            {{ prospect.statut_payement }}
+                        </td>
+                        <td *ngIf="prospect.avancement_visa">
+                            Oui
+                        </td>
+                        <td *ngIf="!prospect.avancement_visa">
+                            Non
+                        </td>
+                        <td>
+                            {{prospect.date_creation | date :'dd/MM/yyyy' }}
+                        </td>
+                        <td *ngIf="!prospect.enTraitement">
+                            <i *ngIf="!dataCommercial" pTooltip="Changer le statut du dossier" tooltipPosition="bottom"
+                                class="pi pi-bookmark"
+                                (click)="showPayement=prospect;payementList=prospect.payement;inscriptionSelected=prospect;initStatutForm(prospect)"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
+                                (click)="showUploadFile=prospect" aria-hidden="true"></i>
+                            <i *ngIf="!dataCommercial" pTooltip="Mettre à jour les paiements" tooltipPosition="bottom"
+                                class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
+                                class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
+                            <i *ngIf="token && token.role!='user' && token.role!='Agent'"
+                                pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
+                                (click)="deleteProspect(prospect)" aria-hidden="true"></i>
+                        </td>
+                        <td *ngIf="prospect.enTraitement == true">
+                            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
+                                pTooltip="Dossier en cours de traitement"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-prospect>
+                    <tr>
+                        <td colspan="17">
+                            <div class="p-3">
+                                <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                                    <ng-template pTemplate="header">
+                    <tr>
+                        <th>Civilité</th>
+                        <th>Date de naissance</th>
+                        <th>Nationnalité</th>
+                        <th>Pays de résidence</th>
+                        <th>Email</th>
+                        <th>Statut Pro</th>
+                        <th>Téléphone</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{prospect.user_id.civilite}}</td>
+                        <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{prospect.user_id.nationnalite}}</td>
+                        <td>{{prospect.user_id.pays_adresse}}</td>
+                        <td>{{prospect.user_id.email}}</td>
+                        <td>{{prospect.statut_actuel}}</td>
+                        <td>
+                            {{ prospect.user_id.indicatif }}
+                            {{ prospect.user_id.phone }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <br>
+
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Numéro whatsapp</th>
+                        <th>Programme choisi</th>
+                        <th>Niveau Académique</th>
+                        <th>Statut actuel</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.indicatif_whatsapp }} {{ prospect.numero_whatsapp }}</td>
+                        <td>{{ prospect.programme }}</td>
+                        <td>{{ prospect.validated_academic_level }}</td>
+                        <td>{{ prospect.statut_actuel }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+
+            <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Formation</th>
+                        <th>Rentrée scolaire</th>
+                        <th>Campus Choix 1</th>
+                        <th>Campus Choix 2</th>
+                        <th>Campus Choix 3</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.formation}}</td>
+                        <td>{{ prospect.rentree_scolaire}}</td>
+                        <td>{{ prospect.campus_choix_1 }}</td>
+                        <td>{{ prospect.campus_choix_2 }}</td>
+                        <td>{{ prospect.campus_choix_3 }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!--<h5 style="text-align: center; color: red;">Service Eduhorizon</h5>
+            <ul *ngIf="prospect.servicesEh.includes(true)">
+                <li *ngIf="prospect.servicesEh[0]">Orientation et accompagnement à l'admission</li>
+                <li *ngIf="prospect.servicesEh[1]">
+                    Prépa internationale : formation de 3 mois pour augmenter vos chances de
+                    réussite de votre orientation
+                </li>
+                <li *ngIf="prospect.servicesEh[2]">
+                    Accompagnement dossier visa
+                </li>
+                <li *ngIf="prospect.servicesEh[3]">Logement</li>
+                <li *ngIf="prospect.servicesEh[4]">
+                    Attestation de virement irrévocable (AVI)
+                </li>
+            </ul>
+            <p *ngIf="!prospect.servicesEh.includes(true)">Aucun service EH choisis</p>
+
+            <h5 style="text-align: center; color: red;">Garant</h5>
+            <p *ngIf="prospect.nomGarant">{{ prospect.nomGarant }} {{ prospect.prenomGarant }}</p>
+            <p *ngIf="!prospect.nomGarant"><strong>Aucun garant declaré</strong></p>-->
+
+            <h5 style="text-align: center; color: red;">Commercial</h5>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.code_commercial" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID Commercial</th>
+                        <th>Commercial</th>
+                        <th>Email Commercial</th>
+                        <th>Agence</th>
+                        <th>Date de la demande</th>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.code_commercial }}</td>
+                        <td
+                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
+                            {{ users[infoCommercialExpand.user_id].civilite }}
+                            {{ users[infoCommercialExpand.user_id].lastname | titlecase }}
+                            {{ users[infoCommercialExpand.user_id].firstname | titlecase }}
+                        </td>
+                        <td *ngIf="!infoCommercialExpand"></td>
+                        <td *ngIf="!infoCommercialExpand"></td>
+                        <td
+                            *ngIf="infoCommercialExpand && infoCommercialExpand.user_id && users[infoCommercialExpand.user_id]">
+                            {{ users[infoCommercialExpand.user_id].email_perso }} {{
+                            users[infoCommercialExpand.user_id].email }}
+                        </td>
+                        <td *ngIf="prospect.nomAgence">{{ prospect.nomAgence }}</td>
+                        <td *ngIf="!prospect.nomAgence" style="color: red;">Ce prospect ne vient pas d'une agence</td>
+                        <td><strong>{{ prospect.date_creation | date: 'dd/MM/yyyy' }}</strong></td>
+
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 style="text-align: center; color: red;" *ngIf="prospect.date_traitement">Traitement du dossier</h5>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Date du dernier traitement</th>
+                        <th>Niveau de Langue</th>
+                        <th>Dossier traité par</th>
+                        <th>Décision Admission</th>
+                        <th>Phase complémentaire</th>
+                        <th>Statut Paiement</th>
+                        <th>Attestation traité par</th>
+                        <th>Commentaire</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.date_traitement | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ prospect.tcf }}</td>
+                        <td>
+                            {{ prospect.dossier_traited_by }}
+                        </td>
+                        <td>{{prospect.decision_admission}}</td>
+                        <td>{{prospect.phase_complementaire}}</td>
+                        <td>{{prospect.statut_payement}}</td>
+                        <td>{{prospect.traited_by}}</td>
+                        <td>{{prospect.remarque}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <h5 style="color: red; text-align: center;">Documents</h5>
+            <ul>
+                <li *ngFor="let file of ListDocuments; index as i">
+                    <div class="grid">
+
+                        <div class="field col-10 " style="border-style: 2;border: 2em;border-bottom: red;">
+                            <i class="pi pi-file-pdf " style="font-size: 20px;cursor: pointer;"
+                                pTooltip="Visualiser dans un nouvel onglet"
+                                (click)="VisualiserFichier(prospect._id,i)"></i>
+                            <em (click)="VisualiserFichier(prospect._id,i)" [id]="i" style="cursor: pointer;"
+                                pTooltip=" Visualiser dans un nouvel onglet">
+                                {{ ListPiped[i] }}
+                            </em>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-download" pTooltip="Télécharger le fichier"
+                                style=" float:right;cursor: pointer;font-size: 15px;color: rgb(3, 54, 237);"
+                                (click)="downloadFile(prospect._id,i)"></i>
+                        </div>
+                        <div class="field col-1">
+                            <i class="pi pi-times" style=" float:left;font-size: 15px;cursor:pointer;color: red;"
+                                pTooltip="Supprimer le fichier du dossier" (click)="deleteFile(prospect._id,i)"
+                                aria-hidden="true"> </i>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+
+            <p-table responsiveLayout="scroll" *ngIf="prospect.date_traitement" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Document Manquants</th>
+                        <th>Document Vérifié</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td>{{ prospect.document_manquant | arrToStr }}</td>
+                        <td>{{ prospect.document_present | arrToStr }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p *ngIf="ListDocuments==null || ListDocuments.length==0">Aucun document n'a été chargé !</p>
+
+            <h5 style="color: red; text-align: center;">Paiements</h5>
+            <p-table responsiveLayout="scroll" *ngIf="prospect.payement" styleClass="p-datatable-gridlines">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Type du Paiement</th>
+                        <th>Montant du Paiement</th>
+                        <th>Date du Paiement</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-prospect>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr *ngFor="let payement of prospect.payement;">
+                        <td>{{ payement.type }}</td>
+                        <td>{{ payement.montant }}</td>
+                        <td>{{ payement.date | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        </td>
+        </tr>
+        </ng-template>
+        </p-table>
+    </div>
+    </div>
+</div>    

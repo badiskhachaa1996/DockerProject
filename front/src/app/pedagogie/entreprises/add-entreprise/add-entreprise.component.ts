@@ -173,7 +173,8 @@ export class AddEntrepriseComponent implements OnInit {
       civilite_rep.value,
       null,
       null,
-      'Représentant',
+      // 'Représentant',
+      'CEO Entreprise',
       null,
       null,
       null,
@@ -189,10 +190,13 @@ export class AddEntrepriseComponent implements OnInit {
     this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
       ((response) => {
 
-        this.messageService.add({ severity: 'success', summary: "Ajout de l'entreprise" });
+        this.messageService.add({ severity: 'success', summary: "Entreprise ajouté" });
         this.formAddEntreprise.reset();
       }),
-      ((error) => { console.error(error); })
+      ((error) => { 
+        this.messageService.add({ severity: 'error', summary: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
+        console.error(error); 
+      })
     );
   }
 
