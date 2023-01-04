@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 // création du schema de données de la table des profils
 const profileSchema = mongoose.Schema({
-    libelle: { type: String, required: true },
+    libelle: { type: String, required: true, unique: true },
 });
 
 const Profile = mongoose.model("profiles", profileSchema);

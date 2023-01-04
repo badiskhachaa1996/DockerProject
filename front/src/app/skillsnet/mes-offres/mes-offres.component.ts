@@ -10,6 +10,9 @@ import { Entreprise } from 'src/app/models/Entreprise';
 import { EntrepriseService } from 'src/app/services/entreprise.service';
 import { Tuteur } from 'src/app/models/Tuteur';
 import { TuteurService } from 'src/app/services/tuteur.service';
+import { SkillsService } from 'src/app/services/skillsnet/skills.service';
+import { Profile } from 'src/app/models/Profile';
+import { Competence } from 'src/app/models/Competence';
 
 @Component({
   selector: 'app-mes-offres',
@@ -39,21 +42,9 @@ export class MesOffresComponent implements OnInit {
     {label: 'Oui', value: true},
   ];
 
+  profiles: Profile[] = [];
   profilsList: any = [
-    { label: '' },
-    { label: 'Développeur' },
-    { label: 'DevOps' },
-    { label: 'Testeur' },
-    { label: 'Expert base de données' },
-    { label: 'Chargé(e) Relation Clients' },
-    { label: 'Chargé(e) de recrutement bilingue Anglais' },
-    { label: 'Office Manager' },
-    { label: 'Assistant(e) de direction' },
-    { label: 'Commercial Junior Solutions' },
-    { label: 'Assistant(e) marketing' },
-    { label: 'Commercial junior' },
-    { label: 'Chargé de Communication' },
-    { label: 'Commercial/Business Developer' },
+    { label: '', value: null },
   ];
 
   locationOptions = [
@@ -102,7 +93,7 @@ export class MesOffresComponent implements OnInit {
 
   token: any;
 
-  constructor(private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private annonceService: AnnonceService) { }
+  constructor(private skillsService: SkillsService, private tuteurService: TuteurService, private entrepriseService: EntrepriseService, private messageService: MessageService, private formBuilder: FormBuilder, private userService: AuthService, private annonceService: AnnonceService) { }
 
   ngOnInit(): void {
     //Decodage du token
@@ -183,344 +174,359 @@ export class MesOffresComponent implements OnInit {
       ((error) => console.log(error))
     );
 
-    //Récupération de la liste des tuteurs
-    this.tuteurService.getAll().subscribe(
-      ((response) => { 
-        response.forEach((tuteur) => {
-          this.tuteurs[tuteur.user_id] = tuteur;
-        });
-      }),
-    )
+    //Récupération de la liste des profiles
+    this.skillsService.getProfiles()
+    .then((response: Profile[]) => {
+      this.profiles = response;
+
+      response.forEach((profile: Profile) => {
+        this.profilsList.push({ label: profile.libelle, value: profile._id });
+      })
+    })
+    .catch((error) => { console.log(error); });
   }
 
   //Methode qui servira à modifier le contenu de la liste de competences en fonction du profil
   chargeCompetence(event)
   {
+    // vidage de la table des compétences
+    this.competencesList = [];
+
     const label = event.value.label;
+    const id = event.value.value;
+    
+    // recuperation de la liste des compétences du profile
+    this.skillsService.getCompetenceByProfil(id)
+    .then((response: Competence[]) => {
+      response.forEach((competence: Competence) => {
+        this.competencesList.push({ label: competence.libelle, value: competence._id });
+      })
+    })
+    .catch((error) => { console.log(error); })
 
-    switch(label){
-      case 'Développeur':
-        this.competencesList = [
-          { label: "HTML 5" },
-          { label: "CSS 3" },
-          { label: "Java" },
-          { label: "Javascript" },
-          { label: "XML" },
-          { label: "C" },
-          { label: "C#" },
-          { label: "Python" },
-          { label: "PHP" },
-          { label: "Kotlin" },
-          { label: "SQL" },
-          { label: "NoSQL" },
-          { label: "Android" },
-          { label: "C#-ASP.NET" },
-          { label: "VB.NET" },
-          { label: "ASP" },
-          { label: "PrimeFaces" },
-          { label: "Bootstrap" },
-          { label: "Talwind" },
-          { label: "AngularJS" },
-          { label: "Angular" },
-          { label: "Ionic" },
-          { label: "Node.js" },
-          { label: "Express" },
-          { label: "React" },
-          { label: "React Native" },
-          { label: "Flutter" },
-          { label: "Vue.js" },
-          { label: "Next.js" },
-          { label: "Symfony" },
-          { label: "Laravel" },
-          { label: "CakePhp" },
-          { label: "Fortran" },
-          { label: "Coffeescript" },
-          { label: "Django" },
-          { label: "Tornado" },
-          { label: "Pyramid" },
-          { label: "Flask" },
-          { label: "Panda" },
-          { label: "Canvas" },
-          { label: "JQuery" },
-          { label: "MariaDb" },
-          { label: "MySql" },
-          { label: "SQL server" },
-          { label: "PL/SQL" },
-          { label: "PostgreSQL" },
-          { label: "Sqlite" },
-          { label: "Oracle database" },
-          { label: "MongoDb" },
-          { label: "Firebase" },
-          { label: "Cassandra" },
-          { label: "Redis" },
-          { label: "Apache HBase" },
-          { label: "Neo4J" },
-          { label: "RavenDb" },
-          { label: "DynamoDb" },
-          { label: "CouchBase" },
-          { label: "CouchDB" },
-          { label: "Git/ Gitlab CLI" },
-          { label: "GitLab" },
-          { label: "GitHub" },
-          { label: "Docker" },
-          { label: "Kubernetes" },
-          { label: "Jenkins" },
-          { label: "Linux" },
-          { label: "Windows" },
-          { label: "MacOS" },
-          { label: "Pattern MVC" },
-          { label: "Pattern Observer" },
-          { label: "Pattern Strategy" },
-          { label: "Pattern Composite" },
-          { label: "Agile Scrum" },
-          { label: "UML" },
-          { label: "Merise" },
-        ];
+    // switch(label){
+    //   case 'Développeur':
+    //     this.competencesList = [
+    //       { label: "HTML 5" },
+    //       { label: "CSS 3" },
+    //       { label: "Java" },
+    //       { label: "Javascript" },
+    //       { label: "XML" },
+    //       { label: "C" },
+    //       { label: "C#" },
+    //       { label: "Python" },
+    //       { label: "PHP" },
+    //       { label: "Kotlin" },
+    //       { label: "SQL" },
+    //       { label: "NoSQL" },
+    //       { label: "Android" },
+    //       { label: "C#-ASP.NET" },
+    //       { label: "VB.NET" },
+    //       { label: "ASP" },
+    //       { label: "PrimeFaces" },
+    //       { label: "Bootstrap" },
+    //       { label: "Talwind" },
+    //       { label: "AngularJS" },
+    //       { label: "Angular" },
+    //       { label: "Ionic" },
+    //       { label: "Node.js" },
+    //       { label: "Express" },
+    //       { label: "React" },
+    //       { label: "React Native" },
+    //       { label: "Flutter" },
+    //       { label: "Vue.js" },
+    //       { label: "Next.js" },
+    //       { label: "Symfony" },
+    //       { label: "Laravel" },
+    //       { label: "CakePhp" },
+    //       { label: "Fortran" },
+    //       { label: "Coffeescript" },
+    //       { label: "Django" },
+    //       { label: "Tornado" },
+    //       { label: "Pyramid" },
+    //       { label: "Flask" },
+    //       { label: "Panda" },
+    //       { label: "Canvas" },
+    //       { label: "JQuery" },
+    //       { label: "MariaDb" },
+    //       { label: "MySql" },
+    //       { label: "SQL server" },
+    //       { label: "PL/SQL" },
+    //       { label: "PostgreSQL" },
+    //       { label: "Sqlite" },
+    //       { label: "Oracle database" },
+    //       { label: "MongoDb" },
+    //       { label: "Firebase" },
+    //       { label: "Cassandra" },
+    //       { label: "Redis" },
+    //       { label: "Apache HBase" },
+    //       { label: "Neo4J" },
+    //       { label: "RavenDb" },
+    //       { label: "DynamoDb" },
+    //       { label: "CouchBase" },
+    //       { label: "CouchDB" },
+    //       { label: "Git/ Gitlab CLI" },
+    //       { label: "GitLab" },
+    //       { label: "GitHub" },
+    //       { label: "Docker" },
+    //       { label: "Kubernetes" },
+    //       { label: "Jenkins" },
+    //       { label: "Linux" },
+    //       { label: "Windows" },
+    //       { label: "MacOS" },
+    //       { label: "Pattern MVC" },
+    //       { label: "Pattern Observer" },
+    //       { label: "Pattern Strategy" },
+    //       { label: "Pattern Composite" },
+    //       { label: "Agile Scrum" },
+    //       { label: "UML" },
+    //       { label: "Merise" },
+    //     ];
 
-        break;
-      case 'DevOps':
-        this.competencesList = [
-          { label: "Linux" },
-          { label: "Windows" },
-          { label: "MacOS" },
-          { label: "Python" },
-          { label: "Bash" },
-          { label: "Java" },
-          { label: "C" },
-          { label: "HTML" },
-          { label: "CSS" },
-          { label: "Javascript" },
-          { label: "PHP" },
-          { label: "Bootstrap" },
-          { label: "JQuery" },
-          { label: "NodeJs" },
-          { label: "Express" },
-          { label: "Django" },
-          { label: "React" },
-          { label: "Azure" }, 
-          { label: "Cisco Packet Tracer" }, 
-          { label: "Nginx" }, 
-          { label: "Tomcat" }, 
-          { label: "JBoss" },
-          { label: "Apach Maven" },
-          { label: "Git/ Gitlab CLI" },
-          { label: "GitLab" },
-          { label: "GitHub" },
-          { label: "Docker" },
-          { label: "Confluence" },
-          { label: "Jenkins" },
-          { label: "Ansible" },
-          { label: "Swarm" },
-          { label: "Kubernetes" },
-          { label: "Prometheus" },
-          { label: "Opensearch" },
-          { label: "Grafana" },
-          { label: "VmWare" },
-          { label: "Selenium Grid" },
-          { label: "Pattern MVC" },
-          { label: "Pattern Observer" },
-          { label: "Pattern Strategy" },
-          { label: "Pattern Composite" },
-          { label: "TDMA" },
-          { label: "FDMA" },
-          { label: "CDMA/CD" },
-          { label: "LAN" },
-          { label: "WAN" },
-          { label: "VPN" },
-          { label: "Routage statique" },
-          { label: "Routage dynamique" },
-          { label: "Office Excel" },
-          { label: "Office Word" },
-          { label: "Office Power Point" },
-          { label: "Office Access" },
-          { label: "RSA" },
-          { label: "Honeypots" },
-          { label: "OWASP ZAP" },
-          { label: "Metasploit" },
-          { label: "IDS" },
-          { label: "DMZ" },
-          { label: "Dos(flood)" },
-          { label: "Agile Scrum" },
-          { label: "UML" },
-          { label: "Merise" },
-        ];
+    //     break;
+    //   case 'DevOps':
+    //     this.competencesList = [
+    //       { label: "Linux" },
+    //       { label: "Windows" },
+    //       { label: "MacOS" },
+    //       { label: "Python" },
+    //       { label: "Bash" },
+    //       { label: "Java" },
+    //       { label: "C" },
+    //       { label: "HTML" },
+    //       { label: "CSS" },
+    //       { label: "Javascript" },
+    //       { label: "PHP" },
+    //       { label: "Bootstrap" },
+    //       { label: "JQuery" },
+    //       { label: "NodeJs" },
+    //       { label: "Express" },
+    //       { label: "Django" },
+    //       { label: "React" },
+    //       { label: "Azure" }, 
+    //       { label: "Cisco Packet Tracer" }, 
+    //       { label: "Nginx" }, 
+    //       { label: "Tomcat" }, 
+    //       { label: "JBoss" },
+    //       { label: "Apach Maven" },
+    //       { label: "Git/ Gitlab CLI" },
+    //       { label: "GitLab" },
+    //       { label: "GitHub" },
+    //       { label: "Docker" },
+    //       { label: "Confluence" },
+    //       { label: "Jenkins" },
+    //       { label: "Ansible" },
+    //       { label: "Swarm" },
+    //       { label: "Kubernetes" },
+    //       { label: "Prometheus" },
+    //       { label: "Opensearch" },
+    //       { label: "Grafana" },
+    //       { label: "VmWare" },
+    //       { label: "Selenium Grid" },
+    //       { label: "Pattern MVC" },
+    //       { label: "Pattern Observer" },
+    //       { label: "Pattern Strategy" },
+    //       { label: "Pattern Composite" },
+    //       { label: "TDMA" },
+    //       { label: "FDMA" },
+    //       { label: "CDMA/CD" },
+    //       { label: "LAN" },
+    //       { label: "WAN" },
+    //       { label: "VPN" },
+    //       { label: "Routage statique" },
+    //       { label: "Routage dynamique" },
+    //       { label: "Office Excel" },
+    //       { label: "Office Word" },
+    //       { label: "Office Power Point" },
+    //       { label: "Office Access" },
+    //       { label: "RSA" },
+    //       { label: "Honeypots" },
+    //       { label: "OWASP ZAP" },
+    //       { label: "Metasploit" },
+    //       { label: "IDS" },
+    //       { label: "DMZ" },
+    //       { label: "Dos(flood)" },
+    //       { label: "Agile Scrum" },
+    //       { label: "UML" },
+    //       { label: "Merise" },
+    //     ];
 
-        break;
-      case 'Testeur':
-        this.competencesList = [
-          { label: "Réseau IP" },
-          { label: "OSI" },
-          { label: "Shell" },
-          { label: "Linux" },
-          { label: "Full Unix" },
-        ];
+    //     break;
+    //   case 'Testeur':
+    //     this.competencesList = [
+    //       { label: "Réseau IP" },
+    //       { label: "OSI" },
+    //       { label: "Shell" },
+    //       { label: "Linux" },
+    //       { label: "Full Unix" },
+    //     ];
 
-        break;
-      case 'Expert base de données':
-        this.competencesList = [
-          { label: "MariaDb" },
-          { label: "MySql" },
-          { label: "SQL server" },
-          { label: "PL/SQL" },
-          { label: "PostgreSQL" },
-          { label: "Sqlite" },
-          { label: "Oracle database" },
-          { label: "MongoDb" },
-          { label: "Firebase" },
-          { label: "Cassandra" },
-          { label: "Redis" },
-          { label: "Apache HBase" },
-          { label: "Neo4J" },
-          { label: "RavenDb" },
-          { label: "DynamoDb" },
-          { label: "CouchBase" },
-          { label: "CouchDB" },
-          { label: "UML" },
-          { label: "Merise" },
-        ];
+    //     break;
+    //   case 'Expert base de données':
+    //     this.competencesList = [
+    //       { label: "MariaDb" },
+    //       { label: "MySql" },
+    //       { label: "SQL server" },
+    //       { label: "PL/SQL" },
+    //       { label: "PostgreSQL" },
+    //       { label: "Sqlite" },
+    //       { label: "Oracle database" },
+    //       { label: "MongoDb" },
+    //       { label: "Firebase" },
+    //       { label: "Cassandra" },
+    //       { label: "Redis" },
+    //       { label: "Apache HBase" },
+    //       { label: "Neo4J" },
+    //       { label: "RavenDb" },
+    //       { label: "DynamoDb" },
+    //       { label: "CouchBase" },
+    //       { label: "CouchDB" },
+    //       { label: "UML" },
+    //       { label: "Merise" },
+    //     ];
 
-        break;
-      case 'Chargé(e) Relation Clients':
-        this.competencesList = [
-          { label: "Polyvalent(e) et capable de gérer plusieurs dossiers en parallèle" },
-          { label: "Travail en équipe" },
-          { label: "Qualités relationnelles (bienveillance et patience)" },
-          { label: "Autonome et rigoureux" },
-          { label: "Pack Office" },
-          { label: "Zendesk" },
-          { label: "Trello" },
-          { label: "Crisp" },
-          { label: "Télémarketing" },
-        ];
+    //     break;
+    //   case 'Chargé(e) Relation Clients':
+    //     this.competencesList = [
+    //       { label: "Polyvalent(e) et capable de gérer plusieurs dossiers en parallèle" },
+    //       { label: "Travail en équipe" },
+    //       { label: "Qualités relationnelles (bienveillance et patience)" },
+    //       { label: "Autonome et rigoureux" },
+    //       { label: "Pack Office" },
+    //       { label: "Zendesk" },
+    //       { label: "Trello" },
+    //       { label: "Crisp" },
+    //       { label: "Télémarketing" },
+    //     ];
 
-        break;
-      case 'Chargé(e) de recrutement bilingue Anglais':
-        this.competencesList = [
-          { label: "Identification des profils recherchés auprès des opérationnels" },
-          { label: "Diffusion des annonces" },
-          { label: "Sourcing" },
-          { label: "Tri des candidatures" },
-          { label: "Rédaction des comptes rendus d'entretien" },
-          { label: "Suivi des contrats: du recrutement jusqu’à la facturation" },
-          { label: "Suivi et analyse des indicateurs de performance du processus de recrutement" },
-          { label: "Participation à divers projets RH" },
-        ];
+    //     break;
+    //   case 'Chargé(e) de recrutement bilingue Anglais':
+    //     this.competencesList = [
+    //       { label: "Identification des profils recherchés auprès des opérationnels" },
+    //       { label: "Diffusion des annonces" },
+    //       { label: "Sourcing" },
+    //       { label: "Tri des candidatures" },
+    //       { label: "Rédaction des comptes rendus d'entretien" },
+    //       { label: "Suivi des contrats: du recrutement jusqu’à la facturation" },
+    //       { label: "Suivi et analyse des indicateurs de performance du processus de recrutement" },
+    //       { label: "Participation à divers projets RH" },
+    //     ];
 
-        break;
-      case 'Office Manager':
-        this.competencesList = [
-          { label: "Thématiques bien-être" },
-          { label: "Pratiques de quelques thérapies (hypnose, énergéticien, massages thérapeutiques, magnétiseurs, psychologue, coach)" },
-          { label: "Capacité d'organisation et de gestion des priorités" },
-          { label: "Tu as le sens du contact, et la sororité t'inspire" },
-          { label: "Capacité d'adaptation " },
-          { label: "Esprit d'initiative" },
-          { label: "Tu as une belle plume" },
-          { label: "Autonome" },
-          { label: "Force de proposition" },
-          { label: "Esprit compétitif" },
-          { label: "On dit de toi que tu es brute, authentique, et sincère" },
-        ];
+    //     break;
+    //   case 'Office Manager':
+    //     this.competencesList = [
+    //       { label: "Thématiques bien-être" },
+    //       { label: "Pratiques de quelques thérapies (hypnose, énergéticien, massages thérapeutiques, magnétiseurs, psychologue, coach)" },
+    //       { label: "Capacité d'organisation et de gestion des priorités" },
+    //       { label: "Tu as le sens du contact, et la sororité t'inspire" },
+    //       { label: "Capacité d'adaptation " },
+    //       { label: "Esprit d'initiative" },
+    //       { label: "Tu as une belle plume" },
+    //       { label: "Autonome" },
+    //       { label: "Force de proposition" },
+    //       { label: "Esprit compétitif" },
+    //       { label: "On dit de toi que tu es brute, authentique, et sincère" },
+    //     ];
 
-        break;
-      case 'Assistant(e) de direction':
-        this.competencesList = [
-          { label: "MAJ prévisionnel" },
-          { label: "Analyse des performances, aide aux décisions stratégiques" },
-          { label: "Optimisation : mise en place de processus et d’outils opérationnels pour fluidifier les opérations" },
-          { label: "Mise en place de partenariats avec des marques et fédérations" },
-          { label: "Monitoring et reporting" },
-          { label: "Création de supports de communication marketing" },
-          { label: "Gestion des activités courante de la start-up" },
-        ];
+    //     break;
+    //   case 'Assistant(e) de direction':
+    //     this.competencesList = [
+    //       { label: "MAJ prévisionnel" },
+    //       { label: "Analyse des performances, aide aux décisions stratégiques" },
+    //       { label: "Optimisation : mise en place de processus et d’outils opérationnels pour fluidifier les opérations" },
+    //       { label: "Mise en place de partenariats avec des marques et fédérations" },
+    //       { label: "Monitoring et reporting" },
+    //       { label: "Création de supports de communication marketing" },
+    //       { label: "Gestion des activités courante de la start-up" },
+    //     ];
 
-        break;
-      case 'Commercial Junior Solutions':
-        this.competencesList = [
-          { label: "Prospection, démarchage et suivi clientèle" },
-          { label: "Marketing, élaboration d’une offre commerciale" },
-          { label: "Animation du site antalis.fr pour l’activité Solutions" },
-          { label: "Gestion de la bourse de fret" },
-          { label: "Déplacements en clientèle" },
-          { label: "Autonomie" },
-          { label: "Persévérance" },
-          { label: "Ecoute active" },
-          { label: "Qualités organisationnelles et relationnelles" },
-          { label: "Pugnacité et curiosité" },
-        ];
+    //     break;
+    //   case 'Commercial Junior Solutions':
+    //     this.competencesList = [
+    //       { label: "Prospection, démarchage et suivi clientèle" },
+    //       { label: "Marketing, élaboration d’une offre commerciale" },
+    //       { label: "Animation du site antalis.fr pour l’activité Solutions" },
+    //       { label: "Gestion de la bourse de fret" },
+    //       { label: "Déplacements en clientèle" },
+    //       { label: "Autonomie" },
+    //       { label: "Persévérance" },
+    //       { label: "Ecoute active" },
+    //       { label: "Qualités organisationnelles et relationnelles" },
+    //       { label: "Pugnacité et curiosité" },
+    //     ];
 
-        break;
-      case 'Assistant(e) marketing':
-        this.competencesList = [
-          { label: "Communication(réseaux sociaux, emailing)" },
-          { label: "Création de visuels" },
-          { label: "Support aux actions marketing (newsletters, emailings, mise à jour du site e-commerce...)" },
-          { label: "Participation à la modération des communautés sur les réseaux sociaux" },
-          { label: "Aide au développement des partenariats et du programme d’affiliation" },
-          { label: "Études et analyses de marché pour aider au positionnement des futures offres de formation" },
-          { label: "Goût pour les nouveaux médias et aisance pour la découverte de nouveaux logiciels et outils de gestion" },
-          { label: "Maîtrise des codes du web" },
-          { label: "Excellente expression écrite, maîtrise de l’orthographe" },
-          { label: "Connaissances des logiciels d’édition visuelle (Canva, Photoshop, Illustrator...)" },
-          { label: "Esprit d’équipe" },
-          { label: "Créativité" },
-          { label: "Sens de l'écoute" },
-          { label: "Diplomatie" },
-          { label: "Proactivité" },
-          { label: "Force de proposition" },
-        ];
+    //     break;
+    //   case 'Assistant(e) marketing':
+    //     this.competencesList = [
+    //       { label: "Communication(réseaux sociaux, emailing)" },
+    //       { label: "Création de visuels" },
+    //       { label: "Support aux actions marketing (newsletters, emailings, mise à jour du site e-commerce...)" },
+    //       { label: "Participation à la modération des communautés sur les réseaux sociaux" },
+    //       { label: "Aide au développement des partenariats et du programme d’affiliation" },
+    //       { label: "Études et analyses de marché pour aider au positionnement des futures offres de formation" },
+    //       { label: "Goût pour les nouveaux médias et aisance pour la découverte de nouveaux logiciels et outils de gestion" },
+    //       { label: "Maîtrise des codes du web" },
+    //       { label: "Excellente expression écrite, maîtrise de l’orthographe" },
+    //       { label: "Connaissances des logiciels d’édition visuelle (Canva, Photoshop, Illustrator...)" },
+    //       { label: "Esprit d’équipe" },
+    //       { label: "Créativité" },
+    //       { label: "Sens de l'écoute" },
+    //       { label: "Diplomatie" },
+    //       { label: "Proactivité" },
+    //       { label: "Force de proposition" },
+    //     ];
 
-        break;
-      case 'Commercial junior':
-        this.competencesList = [
-          { label: "Détecter des nouveaux projets de transformation digitale au travers d’une activité de prospection commerciale quotidienne" },
-          { label: "Apprendre à identifier les nouveaux prospects et à qualifier les projets : identifier les besoins et les attentes" },
-          { label: "Planifier des nouveaux rendez-vous prospects dans le cadre des avant-vente gérées par l’équipe avant-vente" },
-          { label: "Identifier les besoins en vente de produit" },
-        ];
+    //     break;
+    //   case 'Commercial junior':
+    //     this.competencesList = [
+    //       { label: "Détecter des nouveaux projets de transformation digitale au travers d’une activité de prospection commerciale quotidienne" },
+    //       { label: "Apprendre à identifier les nouveaux prospects et à qualifier les projets : identifier les besoins et les attentes" },
+    //       { label: "Planifier des nouveaux rendez-vous prospects dans le cadre des avant-vente gérées par l’équipe avant-vente" },
+    //       { label: "Identifier les besoins en vente de produit" },
+    //     ];
 
-        break;
-      case 'Chargé de Communication':
-        this.competencesList = [
-          { label: "Plan de communication" },
-          { label: "Reporting" },
-          { label: "Community management" },
-          { label: "Organisation d'evènements" },
-          { label: "Indesign" },
-          { label: "Photoshop" },
-          { label: "Illustrator" },
-          { label: "Sens de l'initiative" },
-          { label: "Sens de l'organisation" },
-          { label: "Aisance relationnelle et rédactionnelle" },
-          { label: "Créativité" },
-          { label: "Rigueur" },
-          { label: "Réactivité" },
-        ];
+    //     break;
+    //   case 'Chargé de Communication':
+    //     this.competencesList = [
+    //       { label: "Plan de communication" },
+    //       { label: "Reporting" },
+    //       { label: "Community management" },
+    //       { label: "Organisation d'evènements" },
+    //       { label: "Indesign" },
+    //       { label: "Photoshop" },
+    //       { label: "Illustrator" },
+    //       { label: "Sens de l'initiative" },
+    //       { label: "Sens de l'organisation" },
+    //       { label: "Aisance relationnelle et rédactionnelle" },
+    //       { label: "Créativité" },
+    //       { label: "Rigueur" },
+    //       { label: "Réactivité" },
+    //     ];
 
-        break;
-      case 'Commercial/Business Developer':
-        this.competencesList = [
-          { label: "Prospection commerciale" },
-          { label: "Définir et appliquer une stratégie de prospection" },
-          { label: "Négocier des contrats" },
-          { label: "Prospecter par téléphone" },
-          { label: "Conclure de nouveaux partenariats" },
-          { label: "Etablir et suivre les KPI Marketing" },
-          { label: "Revoir et développer la stratégie Marketing" },
-          { label: "Créer des campagnes marketing ciblées" },
-          { label: "Création de supports de com à destination des cibles BtoB (avec la cellule Communication)" },
-          { label: "Répondre aux demandes de réservations de salle ou de devis événementiel + suivi/relance" },
-          { label: "Organiser les visites de nos espaces pour les clients et prospects" },
-          { label: "Faire le suivi hebdomadaire avec l’équipe opérationnelle du planning de réservation/événementiel" },
-          { label: "Mettre à jour et gérer des plateformes de réservation partenaires CRM" },
-          { label: "Réaliser un audit de nos bases de données CRM et diagnostique stratégique" },
-          { label: "Améliorer et exploiter le système du CRM" },
-        ];
+    //     break;
+    //   case 'Commercial/Business Developer':
+    //     this.competencesList = [
+    //       { label: "Prospection commerciale" },
+    //       { label: "Définir et appliquer une stratégie de prospection" },
+    //       { label: "Négocier des contrats" },
+    //       { label: "Prospecter par téléphone" },
+    //       { label: "Conclure de nouveaux partenariats" },
+    //       { label: "Etablir et suivre les KPI Marketing" },
+    //       { label: "Revoir et développer la stratégie Marketing" },
+    //       { label: "Créer des campagnes marketing ciblées" },
+    //       { label: "Création de supports de com à destination des cibles BtoB (avec la cellule Communication)" },
+    //       { label: "Répondre aux demandes de réservations de salle ou de devis événementiel + suivi/relance" },
+    //       { label: "Organiser les visites de nos espaces pour les clients et prospects" },
+    //       { label: "Faire le suivi hebdomadaire avec l’équipe opérationnelle du planning de réservation/événementiel" },
+    //       { label: "Mettre à jour et gérer des plateformes de réservation partenaires CRM" },
+    //       { label: "Réaliser un audit de nos bases de données CRM et diagnostique stratégique" },
+    //       { label: "Améliorer et exploiter le système du CRM" },
+    //     ];
 
-        break;
-      default: 
-        this.competencesList = [];
-    }
+    //     break;
+    //   default: 
+    //     this.competencesList = [];
+    // }
 
   }
 
@@ -560,14 +566,14 @@ export class MesOffresComponent implements OnInit {
     annonce.entreprise_phone_indicatif          = this.form.get('entreprise_phone_indicatif').value;
     annonce.entreprise_phone          = this.form.get('entreprise_phone')?.value;
 
-    annonce.profil                    = this.form.get('profil')?.value.label;
+    annonce.profil                    = this.form.get('profil')?.value.value;
     annonce.competences               = [];
     annonce.outils                    = [];
     annonce.workplaceType             = this.form.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.form.get('competences')?.value.forEach((competence) => {
-      annonce.competences.push(competence.label);
+      annonce.competences.push(competence.value);
     });
 
     this.form.get('outils')?.value.forEach((outil) => {
@@ -611,14 +617,14 @@ export class MesOffresComponent implements OnInit {
     annonce.entreprise_phone_indicatif          = this.formUpdate.get('entreprise_phone_indicatif').value;
     annonce.entreprise_phone          = this.formUpdate.get('entreprise_phone')?.value;
 
-    annonce.profil                    = this.formUpdate.get('profil')?.value.label;
+    annonce.profil                    = this.formUpdate.get('profil')?.value.value;
     annonce.competences               = [];
     annonce.outils                    = [];
     annonce.workplaceType             = this.formUpdate.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.formUpdate.get('competences')?.value.forEach((competence) => {
-      annonce.competences.push(competence.label);
+      annonce.competences.push(competence.value);
     });
 
     this.formUpdate.get('outils')?.value.forEach((outil) => {

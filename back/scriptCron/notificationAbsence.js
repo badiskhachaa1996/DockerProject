@@ -2,7 +2,9 @@ const { User } = require("../models/user");
 const { Etudiant } = require('../models/etudiant')
 const { Presence } = require('../models/presence')
 const { Seance } = require('../models/seance')
+const { Formateur } = require('../models/formateur')
 const { Classe } = require('../models/classe')
+const { Matiere } = require('../models/matiere')
 const mongoose = require("mongoose");
 const nodemailer = require('nodemailer');
 let date = new Date()
@@ -45,7 +47,7 @@ mongoose
                 let userIds = []
                 presences.forEach(s => {
                     userIds.push(s.user_id)
-                    if (formateurIds.hasKey(s.user_id))
+                    if (formateurIds[s.user_id] !== undefined)
                         delete formateurIds[s.user_id]
                 })
                 Etudiant.find({ classe_id: { $in: listIds }, user_id: { $nin: userIds }, valided_by_support: true }).populate('user_id').then(etudiants => {

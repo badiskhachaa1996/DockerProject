@@ -31,7 +31,7 @@ export class Etudiant {
         public isOnStage?: boolean,
         public fileRight?: [],
         public payment_reinscrit?: [],
-        public isActive?:boolean,
+        public isActive?: boolean,
         public enic_naric?: boolean,
         public campus?: string, // Campus ID
         public statut_dossier?: string[],
@@ -47,5 +47,6 @@ export class Etudiant {
         public etat_paiement?: string,
         public source?: string,
         public date_valided_by_support?: Date,
+        public ecole_id?: string
     ) { }
 }

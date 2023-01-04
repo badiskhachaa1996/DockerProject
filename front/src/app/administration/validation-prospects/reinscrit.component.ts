@@ -17,6 +17,7 @@ import { DiplomeService } from 'src/app/services/diplome.service';
 import { AdmissionService } from 'src/app/services/admission.service';
 import { Prospect } from 'src/app/models/Prospect';
 import { CommercialPartenaireService } from 'src/app/services/commercial-partenaire.service';
+import { EcoleService } from 'src/app/services/ecole.service';
 
 @Component({
   selector: 'app-reinscrit',
@@ -35,6 +36,7 @@ export class ReinscritComponent implements OnInit {
   dropdownEntreprise = [];
 
   dropdownFiliere: any[] = [];
+  dropdownEcole: any[] = [];
   dropdownCampus: any[] = [];
   statutDossier = [
     { value: "Document Manquant", label: "Document Manquant" },
@@ -101,7 +103,8 @@ export class ReinscritComponent implements OnInit {
     remarque: [''],
     campus_id: [' '],
     statut_dossier: [''],
-    annee_scolaire: ['', Validators.required]
+    annee_scolaire: ['', Validators.required],
+    ecole: ['', Validators.required]
     //email_ims: ['', Validators.required]
 
   })
@@ -158,7 +161,7 @@ export class ReinscritComponent implements OnInit {
 
   groupeList = [];
   constructor(public etudiantService: EtudiantService, private messageService: MessageService, private campusService: CampusService, private diplomeService: DiplomeService, private commercialService: CommercialPartenaireService,
-    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService) { }
+    private formBuilder: FormBuilder, public classeService: ClasseService, public userService: AuthService, private entrepriseService: EntrepriseService, private admissionService: AdmissionService, private EcoleService: EcoleService) { }
 
   ngOnInit(): void {
     this.token = jwt_decode(localStorage.getItem("token"))
@@ -193,6 +196,12 @@ export class ReinscritComponent implements OnInit {
         this.dropdownFiliere.push({ value: d._id, label: d.titre })
       })
       this.AssignForm.patchValue({ filiere: this.dropdownFiliere[0].value })
+    })
+
+    this.EcoleService.getAll().subscribe(data => {
+      data.forEach(e => {
+        this.dropdownEcole.push({ value: e._id, label: e.libelle })
+      })
     })
 
     this.commercialService.getAllPopulate().subscribe(dataC => {
@@ -241,7 +250,9 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
       true, false,
-      this.AssignForm.value.annee_scolaire
+      this.AssignForm.value.annee_scolaire,
+      null, null, null, null, null, null, null, null,
+      this.AssignForm.value.ecole
     )
     if (etd.statut_dossier.includes("Non Inscrit") == true)
       etd.isActive = false
@@ -314,7 +325,9 @@ export class ReinscritComponent implements OnInit {
       this.AssignForm.value.campus_id,
       this.AssignForm.value.statut_dossier,
       this.AssignForm.value.filiere,
-      true, false, ["2022-2023"]
+      true, false, ["2022-2023"],
+      null,null,null,null,null,null,null,null,
+      this.AssignForm.value.ecole,
     )
     if (etd.statut_dossier.includes("Non Inscrit") == true)
       etd.isActive = false

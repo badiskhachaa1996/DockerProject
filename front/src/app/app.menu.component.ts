@@ -222,6 +222,7 @@ export class AppMenuComponent implements OnInit {
                     { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                     { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
                     { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                    { label: 'Gestion des compétences', icon: 'pi pi-book', routerLink: ['/skills-management'] },
                 ]
             },
             {
