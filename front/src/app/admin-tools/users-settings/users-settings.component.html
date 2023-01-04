@@ -102,6 +102,10 @@
                         placeholder="s.hue@gmail.com" />
                 </div>
                 <div class="field col-12">
+                    <label For="mention">Mention</label>
+                    <p-dropdown [options]="mentionList" formControlName="mention" optionLabel="label"></p-dropdown>
+                </div>
+                <div class="field col-12">
                     <label For="service">Service</label>
                     <p-dropdown [options]="dropDownService" formControlName="service" optionLabel="label"></p-dropdown>
                 </div>

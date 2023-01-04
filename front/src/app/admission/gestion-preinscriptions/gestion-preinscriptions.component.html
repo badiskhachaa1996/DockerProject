@@ -953,6 +953,8 @@
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
+                            <!--<i  pTooltip="Prospect non appelé" class="pi pi-phone"></i> 
+                            <i  pTooltip="Prospect appelé" class="pi pi-phone"></i>-->
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"

@@ -142,6 +142,15 @@
                             acceptés</span>
                     </div>
                 </div>
+                <div class="field col-12 md:col-5">
+                    <label For="phone">Mention</label>
+                    <p-dropdown formControlName="mention" [options]="mentionList"
+                        placeholder="Choissisez une mention" optionDisabled="actif"></p-dropdown>
+                    <div *ngIf="mention.invalid && (mention.touched || mention.dirty)">
+                        <span style="color: red;" class="error" *ngIf="phone.errors?.required">* Le téléphone est
+                            obligatoire</span>
+                    </div>
+                </div>
                 <!--<div class="field col-12 md:col-5">
                     <label For="statut">Statut <span style="color:red"></span></label>
                     <p-dropdown [options]="statutList" optionLabel="value" formControlName="type"></p-dropdown>
