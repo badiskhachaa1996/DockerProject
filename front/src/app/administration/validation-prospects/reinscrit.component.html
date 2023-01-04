@@ -37,6 +37,13 @@
             </div>
 
             <div class="field col-12 md:col-6">
+                <label>Ecole <span style="color: red;">*</span></label>
+                <p-dropdown [options]="dropdownEcole" emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
+                    filter="true" placeholder="Choissiez l'école auquel il est rattaché"
+                    formControlName="ecole"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6">
                 <label For="campus">Campus</label>
                 <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus" formControlName="campus_id"
                     emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
@@ -61,7 +68,7 @@
                 <label for="ine">Email IMS<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>-->
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-12">
                 <label>Statut Professionel</label>
                 <p-selectButton [options]="[ {value:'Initial',label:'Initial'},{value:'Alternant',label:'Alternant'}]"
                     formControlName="statut"></p-selectButton>
@@ -184,6 +191,13 @@
             </div>
 
             <div class="field col-12 md:col-6">
+                <label>Ecole <span style="color: red;">*</span></label>
+                <p-dropdown [options]="dropdownEcole" emptyFilterMessage="Pas d'école trouvé" filterPlaceholder="Ecole"
+                    filter="true" placeholder="Choissiez l'école auquel il est rattaché"
+                    formControlName="ecole"></p-dropdown>
+            </div>
+
+            <div class="field col-12 md:col-6">
                 <label For="campus">Campus</label>
                 <p-dropdown [options]="dropdownCampus" placeholder="Choissisez un campus" formControlName="campus_id"
                     emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
@@ -214,7 +228,7 @@
                 <label for="ine">Email IMS<span style="color: red;">*</span></label>
                 <input pInputText type="text" formControlName="email_ims" placeholder="m.hue@estya.com">
             </div>-->
-            <div class="field col-12 md:col-6">
+            <div class="field col-12 md:col-12">
                 <label>Statut Professionel</label>
                 <p-selectButton [options]="[ {value:'Initial',label:'Initial'},{value:'Alternant',label:'Alternant'}]"
                     formControlName="statut"></p-selectButton>
