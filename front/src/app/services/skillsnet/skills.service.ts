@@ -129,7 +129,7 @@ export class SkillsService {
     });
   }
 
-  // recuperation de la liste des compétences d'un profil
+  // recuperation de la liste des compétences d'un profile
   getCompetenceByProfil(id: string)
   {
     const url = `${this.apiUrl}/get-competence-by-profile/${id}`;
