@@ -392,7 +392,7 @@
                                 <td style="min-width: 8rem;">{{ userco.email }}</td>
                                 <td style="min-width: 8rem;">{{ userco.type }}</td>
                                 <td style="min-width: 8rem;">{{ presence.date_of_the_day }}</td>
-                                <td style="min-width: 8rem; color: red; font-weight: bold;">{{ presence.statut }}</td>
+                                <td style="min-width: 8rem; font-weight: bold;">{{ presence.statut }}</td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="rowexpansion" let-presence>
@@ -405,13 +405,12 @@
                                                     <th>Téléphone</th>
                                                     <th>Heure d'arrivé</th>
                                                     <th>Heure de depart</th>
-                                                    <th>Tâche principale</th>
-                                                    <th>Tâches sécondaire</th>
+                                                    <th>Tâches</th>
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="body" let-presence>
                                                 <tr>
-                                                    <td colspan="8">Aucune données supplémentaires.</td>
+                                                    <td colspan="7">Aucune données supplémentaires.</td>
                                                 </tr>
                                             </ng-template>
                                             <ng-template pTemplate="emptymessage">
@@ -419,11 +418,10 @@
                                                     <td>{{ userco.indicatif }}{{userco.phone }}</td>
                                                     <td>{{ presence.in_date | date: 'H:mm' }}</td>
                                                     <td>{{ presence.out_date | date: 'H:mm' }}</td>
-                                                    <td>{{ presence.principale_activity_details }}</td>
                                                     <td>
-                                                        <ol>
+                                                        <ul>
                                                             <li *ngFor="let task of presence.activity_details; let i = index">{{ task }}</li>
-                                                        </ol>
+                                                        </ul>
                                                     </td>
                                                 </tr>
                                             </ng-template>

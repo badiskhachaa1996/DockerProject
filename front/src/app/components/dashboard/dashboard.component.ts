@@ -515,9 +515,9 @@ export class DashboardComponent implements OnInit {
         const dateOfToday = todayReplaced;
         const ipAdress = response.ip;
         const principaleActivityDetails = this.formDailyActivityDetails.get('task').value;
-        const activityDetails = this.formDailyActivityDetails.get('tasks').value;
+        let activityDetails = this.formDailyActivityDetails.get('tasks').value;
 
-        console.log(activityDetails);
+        activityDetails.push(principaleActivityDetails);
 
         this.inTimeService.patchJustGone({ user_id: userId, out_date: outDate, date_of_the_day: dateOfToday, ip_adress: ipAdress, principale_activity_details: principaleActivityDetails, activity_details: activityDetails })
           .then((response) => {

@@ -11,7 +11,7 @@ export class InTime
         public out_date?:                       Date,
         public statut?:                         string,
         public isCheckable?:                    boolean,
-        public principale_activity_details?:    any,
+        // public principale_activity_details?:    any,
         public activity_details?:               string[],
     ) {}
 }
