@@ -45,19 +45,6 @@ export class MesOffresComponent implements OnInit {
   profiles: Profile[] = [];
   profilsList: any = [
     { label: '', value: null },
-    // { label: 'Développeur' },
-    // { label: 'DevOps' },
-    // { label: 'Testeur' },
-    // { label: 'Expert base de données' },
-    // { label: 'Chargé(e) Relation Clients' },
-    // { label: 'Chargé(e) de recrutement bilingue Anglais' },
-    // { label: 'Office Manager' },
-    // { label: 'Assistant(e) de direction' },
-    // { label: 'Commercial Junior Solutions' },
-    // { label: 'Assistant(e) marketing' },
-    // { label: 'Commercial junior' },
-    // { label: 'Chargé de Communication' },
-    // { label: 'Commercial/Business Developer' },
   ];
 
   locationOptions = [
@@ -579,14 +566,14 @@ export class MesOffresComponent implements OnInit {
     annonce.entreprise_phone_indicatif          = this.form.get('entreprise_phone_indicatif').value;
     annonce.entreprise_phone          = this.form.get('entreprise_phone')?.value;
 
-    annonce.profil                    = this.form.get('profil')?.value.label;
+    annonce.profil                    = this.form.get('profil')?.value.value;
     annonce.competences               = [];
     annonce.outils                    = [];
     annonce.workplaceType             = this.form.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.form.get('competences')?.value.forEach((competence) => {
-      annonce.competences.push(competence.label);
+      annonce.competences.push(competence.value);
     });
 
     this.form.get('outils')?.value.forEach((outil) => {
@@ -630,14 +617,14 @@ export class MesOffresComponent implements OnInit {
     annonce.entreprise_phone_indicatif          = this.formUpdate.get('entreprise_phone_indicatif').value;
     annonce.entreprise_phone          = this.formUpdate.get('entreprise_phone')?.value;
 
-    annonce.profil                    = this.formUpdate.get('profil')?.value.label;
+    annonce.profil                    = this.formUpdate.get('profil')?.value.value;
     annonce.competences               = [];
     annonce.outils                    = [];
     annonce.workplaceType             = this.formUpdate.get('workplaceType')?.value.label;
     annonce.publicationDate           = new Date();
 
     this.formUpdate.get('competences')?.value.forEach((competence) => {
-      annonce.competences.push(competence.label);
+      annonce.competences.push(competence.value);
     });
 
     this.formUpdate.get('outils')?.value.forEach((outil) => {
