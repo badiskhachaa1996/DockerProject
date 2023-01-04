@@ -259,15 +259,17 @@
 
 							<div class="flex-1 text-center md:text-left">
 								<div class="font-bold text-2xl">{{ annonce.missionName }}</div>
-								<div class="mb-3">{{ annonce.missionDesc | slice: 0:47 }}...</div>
-								<div>{{ annonce.entreprise_ville }}</div>
+								<div class="mb-3">{{ annonce.missionDesc | slice: 0:20 }}...</div>
+								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
+								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
 								<div class="flex align-items-center mt-2">
 									<i class="pi pi-tag mr-2"></i>
 									<span class="font-semibold">{{ annonce.missionType }}</span>
 								</div>
 							</div>
 							<div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
-								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">{{ annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end" *ngIf="!annonce?.is_interne">{{ annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end" *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.r_sociale }}</span>
 								<p-button type="button" icon="pi pi-play" (click)="visibleSidebar = true; annonceSelected = annonce;"  label="Voir l'annonce" class="mb-2"></p-button>
 								<span [class]="'product-badge'">Début {{ annonce.debut | date: 'dd/MM/YY' }}</span>
 							</div>
@@ -278,7 +280,7 @@
 						<h4 style="font-weight:bold">{{ annonceSelected?.missionName }}</h4>
 						<hr/>
 						<p>
-							{{ annonceSelected.entreprise_name }} - {{ annonceSelected.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
+							{{ annonceSelected?.entreprise_name }} - {{ annonceSelected?.entreprise_ville }} ({{ annonceSelected?.workplaceType }}) <br />
 							Publié le {{ annonceSelected?.publicationDate | date: 'dd/MM/YYY' }}                            
 						</p>
 						
@@ -292,7 +294,7 @@
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul>
-							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
 						<h5 style="font-weight: bold">Outils</h5>
@@ -324,7 +326,7 @@
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul >
-							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
 						<h5 style="font-weight: bold">Outils</h5>
@@ -358,11 +360,13 @@
 								<img style="border: none;" src="assets/skillsnet/stage.png" *ngIf="annonce.missionType == 'Stage'" alt="{{annonce.missionType}}" class="my-4 md:my-0 w-9 md:w-10rem mr-5"/>
 								
 								<div class="text-2xl font-bold">{{ annonce.missionName | slice: 0:20 }}</div>
-								<div class="mb-3">{{ annonce.missionDesc | slice: 0:47 }}...</div>
-								<div>{{ annonce.entreprise_ville }}</div>
+								<div class="mb-3">{{ annonce.missionDesc | slice: 0:20 }}...</div>
+								<div *ngIf="!annonce?.is_interne">{{ annonce.entreprise_ville }}</div>
+								<div *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.ville_ent }}</div>
 							</div>
 							<div class="flex align-items-center justify-content-between">
-								<span class="text-2xl font-semibold">{{ annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold" *ngIf="!annonce?.is_interne">{{ annonce.entreprise_name }}</span>
+								<span class="text-2xl font-semibold" *ngIf="annonce?.is_interne">{{ annonce.entreprise_id?.r_sociale }}</span>
 								<button pButton type="button" (click)="visibleSidebar = true; annonceSelected = annonce;" icon="pi pi-play" title="Plus de détails"></button>
 							</div>
 						</div>
@@ -386,7 +390,7 @@
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul >
-							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
 						<h5 style="font-weight: bold">Outils</h5>
@@ -417,7 +421,7 @@
 						<h5 style="font-weight: bold">Compétences</h5>
 						<p>Vous devez avoir des connaissances dans les domaines suivants:</p>
 						<ul >
-							<li *ngFor="let competence of annonceSelected?.competences">{{ competence }}</li>
+							<li *ngFor="let competence of annonceSelected?.competences">{{ competence.libelle }}</li>
 						</ul>
 
 						<h5 style="font-weight: bold">Outils</h5>
