@@ -5,7 +5,7 @@ const cvTypeSchema = mongoose.Schema({
     user_id:            { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: false, unique: true },
     experiences_pro:    { type: [String], required: false },
     experiences_sco:    { type: [String], required: false },
-    competences:        { type: [String], required: false },
+    competences:        { type: [mongoose.Schema.Types.ObjectId], ref: 'competences', required: false },
     outils:             { type: [String], required: false },
     langues:            { type: [String], required: false },
     video_lien:         { type: String, required: false },
