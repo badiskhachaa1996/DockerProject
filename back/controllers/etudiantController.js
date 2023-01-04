@@ -248,7 +248,7 @@ app.get("/getAll", (req, res, next) => {
 
 //Récupérer la liste de tous les étudiants
 app.get("/getAllEtudiantPopulate", (req, res, next) => {
-    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate("user_id").populate('campus').populate('filiere')
+    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate("user_id").populate('campus').populate('filiere').populate('ecole_id')
         .then((etudiantsFromDb) => {
             res.status(200).send(etudiantsFromDb);
         })
@@ -567,7 +567,7 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
 })
 
 app.get("/getAllByCode/:code", (req, res) => {
-    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').then(result => {
+    Etudiant.find({ classe_id: { $ne: null }, isActive: { $ne: false } }).populate('classe_id').populate('user_id').populate('campus').populate('filiere').populate('ecole_id').then(result => {
         let p = []
         result.forEach(d => {
             if (d.code_partenaire == req.params.code) {
