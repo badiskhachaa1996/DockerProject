@@ -42,11 +42,6 @@
                     emptyFilterMessage="Pas de campus trouvé" filterPlaceholder="Campus" filter="true">
                 </p-dropdown>
             </div>
-            <!--<div class="field col-12 md:col-6">
-                <label>Statut Professionel</label>
-                <p-dropdown [options]=""
-                    formControlName="statut" optionLabel="value"></p-dropdown>
-            </div>-->
 
             <div class="field col-12 md:col-6">
                 <label>Statut Dossier</label>
@@ -98,40 +93,40 @@
             <!-- End -->
 
 
-            <!-- Si c'est un étudiant -->
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
+            <!-- Si c'est un Inital -->
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Initial'">
                 <label for="sos_email">Email d'urgence</label>
                 <input pInputText type="text" formControlName="sos_email" placeholder="Adresse email d'un proche">
             </div>
 
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant'">
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Initial'">
                 <label for="sos_phone">Téléphone d'urgence</label>
                 <input pInputText type="text" formControlName="sos_phone" placeholder="Numéro de téléphone d'un proche">
             </div>
 
             <!-- Si c'est un étudiant mineur -->
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Initial' && onIsMinor()">
                 <label for="nom_rl">Nom du répresentant légal</label>
                 <input pInputText type="text" formControlName="nom_rl" placeholder="Nom du répresentant légal">
             </div>
 
-            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+            <div class="field col-6" *ngIf="AssignForm.value.statut.value == 'Initial' && onIsMinor()">
                 <label for="prenom_rl">Prénom du répresentant légal</label>
                 <input pInputText type="text" formControlName="prenom_rl" placeholder="Prénom du répresentant légal">
             </div>
 
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Initial' && onIsMinor()">
                 <label for="phone_rl">Numéro de téléphone du répresentant légal</label>
                 <input pInputText type="text" formControlName="phone_rl"
                     placeholder="Numéro de téléphone du répresentant légal">
             </div>
 
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Initial' && onIsMinor()">
                 <label for="email_rl">Email du répresentant légal</label>
                 <input pInputText type="text" formControlName="email_rl" placeholder="Email du répresentant légal">
             </div>
 
-            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Etudiant' && onIsMinor()">
+            <div class="field col-12" *ngIf="AssignForm.value.statut.value == 'Initial' && onIsMinor()">
                 <label for="adresse_rl">Adresse du répresentant légal</label>
                 <textarea pInputTextArea formControlName="adresse_rl"
                     placeholder="Adresse du répresentant légal"></textarea>
