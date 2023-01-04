@@ -2,7 +2,6 @@ const express = require("express");
 const app = express(); //à travers ça je peux faire la creation des Sujets
 const { Profile } = require("../models/Profile");
 const { Competence } = require("./../models/Competence");
-const { res } = require("express");
 app.disable("x-powered-by");
 
 
