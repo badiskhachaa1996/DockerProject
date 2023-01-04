@@ -203,7 +203,7 @@ export class UsersSettingsComponent implements OnInit {
     user.phone = this.formUpdate.get('phone')?.value;
     user.email = this.formUpdate.get('email')?.value;
     user.email_perso = this.formUpdate.get('email_perso')?.value;
-    user.service_id = this.formUpdate.get('service_id')?.value.value;
+    user.service_id = this.formUpdate.get('service')?.value.value;
     user.mention = this.formUpdate.get('mention')?.value.value;
     user.type = this.formUpdate.get('type')?.value.value;
     user.role = this.formUpdate.get('role')?.value.value;
