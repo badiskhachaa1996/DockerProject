@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 // création du schema de données de la table des profils
 const competenceSchema = mongoose.Schema({
     libelle:    { type: String, required: true, unique: true },
-    profile_id:  { type: mongoose.Schema.Types.ObjectId, ref: 'Profile', required: true },
+    profile_id:  { type: mongoose.Schema.Types.ObjectId, ref: 'profiles', required: true },
 });
 
 const Competence = mongoose.model("competences", competenceSchema);

@@ -87,6 +87,7 @@ export class SkillsManagementComponent implements OnInit {
     this.skillsService.getCompetenceByProfil(this.profileSelected._id)
     .then((response: Competence[]) => { 
       this.competences = response;
+      console.log(response);
       this.loadingCompetence = false;
      })
     .catch((error) => { console.log(error) });

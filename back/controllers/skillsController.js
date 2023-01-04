@@ -72,7 +72,7 @@ app.get("/get-competence/:id", (req, res) => {
 
 // recuperation de la liste des competence d'un profil
 app.get("/get-competence-by-profile/:id", (req, res) => {
-    Competence.find({ profile_id: req.params.id })
+    Competence.find({ profile_id: req.params.id })?.populate('profile_id')
     .then((competence) => { res.status(200).send(competence); })
     .catch((error) => { response.status(500).send(error.message) });
 });
