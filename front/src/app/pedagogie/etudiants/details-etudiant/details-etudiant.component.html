@@ -2,10 +2,9 @@
 
 <div class="grid">
     <div class="grid card col-12 ">
-        <div class=" col-12 md:col-6 ">
-            Details assiduité {{Etudiant_userdata?.civilite}} {{Etudiant_userdata?.firstname }}
-            {{Etudiant_userdata?.lastname
-            }}
+        <div class="col-12 md:col-6">
+            <small style="color: green;">Pour voir les graphes appuyez sur le bouton burger du ménu, sur mobile faite une rotation d'écran</small>
+            <h4>Récapitulatif sur l'assiduité de {{ Etudiant_userdata?.civilite == 'Monsieur' ? 'M.': 'Mme.' }} {{Etudiant_userdata?.firstname }} {{ Etudiant_userdata?.lastname }}</h4>
             <p-chart #chart type="bar" [data]="barDataAJ" [options]="barOptions" width="full-vw" height="40vh">
             </p-chart>
         </div>
@@ -17,54 +16,22 @@
 
         </div>
         <div class="col-12" *ngIf="pourcentageAssiduite<80">
-
-            <span>Pourcentage d'assiduité: </span>
+            <h3>Pourcentage d'assiduité: </h3>
             <p-progressBar class="customProgress" [value]="pourcentageAssiduite">
             </p-progressBar>
         </div>
         <div class="col-11 sd:col-11 " *ngIf="pourcentageAssiduite>=80">
-            <span>Pourcentage d'assiduité : </span>
+            <h3>Pourcentage d'assiduité : </h3>
             <p-progressBar class="customProgress2" [value]="pourcentageAssiduite">
             </p-progressBar>
-        </div>
-        
-        <div class="col-1 sd:col-1 text-align:center" *ngIf="pourcentageAssiduite>=80">
-            
-            <button pButton label="" icon="pi pi-file" (click)="getAtt_ssiduitePDF()"
-                style="height:2px;margin-top: 14px;" class="p-button-success" label="PDF"
-                pTooltip="Telecharger Attestation d'assiduité" tooltipPosition="bottom" aria-hidden="true"
-                [loading]="PDFisLoading"></button>
-
         </div>
 
     </div>
     <div class="card col-12">
         <p-toast></p-toast>
+        <h4>Listes des présences</h4>
         <p-table #dt1 [value]="AssiduiteListe" dataKey="_id" responsiveLayout="scroll" [globalFilterFields]="[]"
             [rows]="10" [pageLinks]="5" [paginator]="true" [totalRecords]="AssiduiteListe?.length">
-            <ng-template pTemplate="caption">
-                <div class="grid p-fluid">
-                    <div class="col-5 ">
-                        <h4>Listes des seances</h4>
-                    </div>
-                    <div class="col-3 sd:col-1">
-                    </div>
-                    <div class="p-inputgroup col-2 sd:col:6">
-                        <p-calendar [(ngModel)]="RangeDateForPDF" showIcon=true view="month"
-                            onClickOutside="console.log(RangeDateForPDF)" selectionMode="range" dateFormat="mm/yy">
-                        </p-calendar>
-
-                    </div>
-                    <div class="p-inputgroup col-2 sd:col-6">
-                        <p-button label="Fiche de présence" pTooltip="Telecharger Fiche de présence"
-                            tooltipPosition="bottom"
-                            (click)="getAssiduitePDF(EtudiantDetail.user_id, RangeDateForPDF);load()" aria-hidden="true"
-                            [loading]="PDFisLoading" [disabled]="!RangeDateForPDF"></p-button>
-                    </div>
-
-
-                </div>
-            </ng-template>
             <ng-template pTemplate="header">
                 <tr>
                     <th>Module </th>
@@ -77,8 +44,6 @@
                     <th>Heure d'arrivé</th>
                     <th>Heure déconnexion</th>
                     <th>Justificatif </th>
-
-
                     <th>Action </th>
                 </tr>
             </ng-template>
@@ -103,7 +68,8 @@
 
                     <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "HH:mm":'locale' ) :'--' }}
                     </td>
-                    <td>{{ Assiduit.seance_id.date_fin | date:'HH:mm'}}</td>
+                    <td *ngIf="Assiduit.date_signature">{{ Assiduit.seance_id.date_fin | date:'HH:mm'}}</td>
+                    <td *ngIf="!Assiduit.date_signature">--</td>
                     <td *ngIf="Assiduit.isPresent">--</td>
                     <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">
                         <p-tag value="Justifié" icon="pi pi-check" class="p-tag-icon" severity="success"></p-tag>
