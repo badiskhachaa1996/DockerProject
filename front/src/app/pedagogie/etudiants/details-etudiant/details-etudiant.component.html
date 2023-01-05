@@ -18,12 +18,12 @@
         </div>
         <div class="col-12" *ngIf="pourcentageAssiduite<80">
 
-            <span>Taux d'assiduité : </span>
+            <span>Pourcentage d'assiduité: </span>
             <p-progressBar class="customProgress" [value]="pourcentageAssiduite">
             </p-progressBar>
         </div>
         <div class="col-11 sd:col-11 " *ngIf="pourcentageAssiduite>=80">
-            <span>Taux d'assiduité : </span>
+            <span>Pourcentage d'assiduité : </span>
             <p-progressBar class="customProgress2" [value]="pourcentageAssiduite">
             </p-progressBar>
         </div>
@@ -68,14 +68,14 @@
             <ng-template pTemplate="header">
                 <tr>
                     <th>Module </th>
-
                     <th pSortableColumn="_id">Date de la seance <p-sortIcon field="_id"></p-sortIcon>
                     </th>
                     <th pSortableColumn="seance_id">Seance<p-sortIcon field="seance_id">
                         </p-sortIcon>
                     </th>
-                    <th>Présent/Absent</th>
+                    <th>Présence</th>
                     <th>Heure d'arrivé</th>
+                    <th>Heure déconnexion</th>
                     <th>Justificatif </th>
 
 
@@ -87,7 +87,7 @@
                     <td>{{matiereDic[Assiduit.seance_id.matiere_id]?.abbrv}}</td>
 
                     <td>
-                        {{ Assiduit.seance_id.date_debut | date : "dd/MM/yyyy hh:mm:ss"}} </td>
+                        {{ Assiduit.seance_id.date_debut | date:'dd/MM/yyyy HH:mm'}} </td>
                     <td> {{ Assiduit.seance_id.libelle}}</td>
 
                     <td *ngIf="Assiduit.isPresent">
@@ -101,8 +101,9 @@
                             icon="pi pi-exclamation-circle"></p-tag>
                     </td>
 
-                    <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "hh:mm:ss":'locale' ) :'--' }}
+                    <td>{{ (Assiduit.date_signature) ? (Assiduit.date_signature | date : "HH:mm":'locale' ) :'--' }}
                     </td>
+                    <td>{{ Assiduit.seance_id.date_fin | date:'HH:mm'}}</td>
                     <td *ngIf="Assiduit.isPresent">--</td>
                     <td *ngIf="!Assiduit.isPresent && Assiduit.justificatif">
                         <p-tag value="Justifié" icon="pi pi-check" class="p-tag-icon" severity="success"></p-tag>

@@ -197,8 +197,7 @@ export class DetailsEtudiantComponent implements OnInit {
 
           this.barDataHor.datasets[0].data.push(this.nb_absencesNJ)
 
-          this.pourcentageAssiduite = 100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length)
-
+          this.pourcentageAssiduite = Math.round(100 - (this.nb_absencesNJ * 100 / this.AssiduiteListe.length));
 
         })
 
