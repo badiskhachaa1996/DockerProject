@@ -81,7 +81,6 @@ app.post("/updateById/:id", (req, res, next) => {
                 res.send(err)
             }
             else {
-                console.log(tuteurUpdated)
                 res.send(tuteurUpdated)
             }
         });

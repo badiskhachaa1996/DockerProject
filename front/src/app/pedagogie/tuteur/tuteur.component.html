@@ -19,7 +19,7 @@
                         formControlName="civilite"></p-dropdown>
                 </div>
                 <div class="field col-12 md:col-5">
-                    <label For="prenom">Prénom </label>
+                    <label For="prenom">Prénom <span style="color: red">*</span></label>
                     <input pInputText id="firstname" type="text" placeholder="John" formControlName="firstname" />
                     <div *ngIf="firstname.invalid && (firstname.touched || firstname.dirty)">
                         <span style="color: red;" class="error" *ngIf="firstname.errors?.required">* Le
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="field col-12 md:col-5">
-                    <label For="nom">Nom </label>
+                    <label For="nom">Nom  <span style="color: red">*</span></label>
                     <input pInputText id="lastname" type="text" placeholder="Smith" formControlName="lastname" />
                     <div *ngIf="lastname.invalid && (lastname.touched || lastname.dirty)">
                         <span style="color: red;" class="error" *ngIf="lastname.errors?.required">* Le nom
@@ -44,12 +44,6 @@
                 <div class="field col-12 md:col-6">
                     <label For="Indicatif">Indicatif </label>
                     <input pInputText id="indicatif" type="text" placeholder="+33" formControlName="indicatif" />
-                    <div *ngIf="indicatif.invalid && (indicatif.touched || indicatif.dirty)">
-                        <span style="color: red;" class="error" *ngIf="indicatif.errors?.required">* La fonction est
-                            obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="indicatif.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -57,10 +51,8 @@
                     <input pInputText id="phone" type="text" placeholder="0683838383" name="phone"
                         formControlName="phone" />
                     <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
-                        <span style="color: red;" class="error" *ngIf="phone.errors?.required">* L'ancienneté est
-                            obligatoire.</span>
                         <span style="color: red;" class="error" *ngIf="phone.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
+                            chiffres sont acceptés.</span>
                     </div>
                 </div>
 
@@ -68,12 +60,6 @@
                     <label For="Fonction">Fonction </label>
                     <input pInputText id="fonction" type="text" placeholder="Chef Marketing"
                         formControlName="fonction" />
-                    <div *ngIf="fonction.invalid && (fonction.touched || fonction.dirty)">
-                        <span style="color: red;" class="error" *ngIf="fonction.errors?.required">* La fonction est
-                            obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="fonction.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6" *ngIf="!this.isCEO">
@@ -91,35 +77,22 @@
                 <div class="field col-12 md:col-6">
                     <label For="Ancienneté">Ancienneté </label>
                     <input pInputText id="anciennete" type="text" placeholder="5 ans" formControlName="anciennete" />
-                    <div *ngIf="anciennete.invalid && (anciennete.touched || anciennete.dirty)">
-                        <span style="color: red;" class="error" *ngIf="anciennete.errors?.required">* La fonction est
-                            obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="anciennete.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label For="niveau_formation">Niveau de formation </label>
                     <input pInputText id="niveau_formation" type="text" placeholder="BAC +5"
                         formControlName="niveau_formation" />
-                    <div *ngIf="niveau_formation.invalid && (niveau_formation.touched || niveau_formation.dirty)">
-                        <span style="color: red;" class="error" *ngIf="niveau_formation.errors?.required">* La fonction
-                            est obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="niveau_formation.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="Email">Email </label>
+                    <label For="Email">Email <span style="color: red">*</span></label>
                     <input pInputText id="email_perso" type="text" placeholder="email@email.com"
                         formControlName="email_perso" />
                     <div *ngIf="email_perso.invalid && (email_perso.touched || email_perso.dirty)">
-                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.required">* La fonction est
+                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.required">* L'email est
                             obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
+                        <span style="color: red;" class="error" *ngIf="email_perso.errors?.pattern">* Verifiez votre saisie.</span>
                     </div>
                 </div>
 
@@ -127,47 +100,23 @@
                     <label For="Numéro de l'adresse">Numéro de la rue</label>
                     <input pInputText id="numero_adresse" type="text" placeholder="55"
                         formControlName="numero_adresse" />
-                    <div *ngIf="numero_adresse.invalid && (numero_adresse.touched || numero_adresse.dirty)">
-                        <span style="color: red;" class="error" *ngIf="numero_adresse.errors?.required">* Le
-                            niveau de formation est obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="numero_adresse.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label For="rue_adresse">Nom de la rue</label>
                     <input pInputText id="rue_adresse" type="text" placeholder="Rue du Faubourg Saint-Honoré"
                         formControlName="rue_adresse" />
-                    <div *ngIf="rue_adresse.invalid && (rue_adresse.touched || rue_adresse.dirty)">
-                        <span style="color: red;" class="error" *ngIf="rue_adresse.errors?.required">* Le
-                            niveau de formation est obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="rue_adresse.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
 
                 <div class="field col-12 md:col-6">
                     <label For="Code postale">Code postale</label>
                     <input pInputText id="postal_adresse" type="text" placeholder="75008"
                         formControlName="postal_adresse" />
-                    <div *ngIf="postal_adresse.invalid && (postal_adresse.touched || postal_adresse.dirty)">
-                        <span style="color: red;" class="error" *ngIf="postal_adresse.errors?.required">* Le
-                            niveau de formation est obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="postal_adresse.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="Ville">Ville</label>
                     <input pInputText id="ville_adresse" type="text" placeholder="Paris"
                         formControlName="ville_adresse" />
-                    <div *ngIf="ville_adresse.invalid && (ville_adresse.touched || ville_adresse.dirty)">
-                        <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.required">* Le
-                            niveau de formation est obligatoire.</span>
-                        <span style="color: red;" class="error" *ngIf="ville_adresse.errors?.pattern">* Seul les
-                            lettres sont acceptés.</span>
-                    </div>
                 </div>
                 <div class="field col-12 md:col-6">
                     <label For="Pays">Pays</label>
@@ -188,12 +137,6 @@
                     <p-calendar formControlName="date_naissance" dateFormat="dd/mm/yy" [minDate]="minDateCalendar"
                         [maxDate]="maxDateCalendar" [readonlyInput]="true" [locale]="fr" [monthNavigator]="true"
                         [yearNavigator]="true" [yearRange]="rangeYear"></p-calendar>
-                    <div *ngIf="date_naissance.invalid && (date_naissance.touched || date_naissance.dirty)">
-                        <span class="error" *ngIf="date_naissance.errors?.required" style="color: red;">* La date de
-                            naissance est obligatoire.</span>
-                        <span class="error" *ngIf="date_naissance.errors?.pattern" style="color: red;">* Le format ne
-                            correspond pas à une date dd/MM/YYYY.</span>
-                    </div>
                 </div>
 
                 <button pButton label="Ajouter le tuteur" type="submit" [disabled]="addTuteurForm.invalid"></button>
@@ -252,138 +195,132 @@
 </div>
 
 <!-- LISTE DES TUTEURS -->
-<div class="col-12" *ngIf="!isCEO">
+<div class="grid">
+    <div class="col-12" *ngIf="!isCEO">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Ajouter un tuteur"
+                    (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
+            </div>
+            <h5>Liste des tuteurs</h5>
+            <p-table #dt1 [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
+                [totalRecords]="tuteurs.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
+                responsiveLayout="scroll">
     
-    <div class="card">
-        <div style="float: right;">
-            <button pButton label="Ajouter un tuteur"
-                (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
-        </div>
-        <h5>Liste des tuteurs</h5>
-        <p-table #dt1 [globalFilterFields]="['user_id.firstname', 'user_id.lastname', 'user_id.email_perso', 'fonction', 'fonction', 'anciennete', 'niveau_formation', 'date_naissance']" rowExpandMode="single" [value]="tuteurs" dataKey="_id" [rows]="10" [rowHover]="true"
-            [totalRecords]="tuteurs.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
-            responsiveLayout="scroll">
-
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <span class="p-input-icon-left mb-2">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                            placeholder="Recherche" class="w-full" />
-                    </span>
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th> Nom <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Entreprise <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center">Action</th>
-            </ng-template>
-            <ng-template pTemplate="body" let-tuteur>
-                <tr>
-                    <td style="min-width: 12rem;">
-                        {{ tuteur.user_id.lastname }}
-
-                    </td>
-                    <td style="min-width: 12rem;">
-                        {{ tuteur.user_id.firstname }}
-                    </td>
-                    <td>
-                        {{ tuteur.user_id.phone }}
-                    </td>
-                    <td>
-                        {{ tuteur.user_id.email_perso}}
-                    </td>
-                    <td>
-                        {{ entreprises[tuteur.user_id.entreprise].r_sociale }}
-                    </td>
-                    <td>
-                        <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                            (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; OnGetByIdTuteur(tuteur); showFormAddTuteur = false;"
-                            aria-hidden="true"></i>
-
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </div>
-</div>
-<!-- LISTE DES TUTEURS PAR CEO-->
-<div class="col-12" *ngIf="isCEO">
-    <div class="card">
-        <div style="float: right;">
-            <button pButton label="Ajouter un tuteur"
-                (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
-        </div>
-        <h5>Liste des tuteurs de l'entreprise </h5>
-        <!-- {{ tuteur.user_id.entreprise }} -->
-        <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="10" [rowHover]="true"
-            styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
-
-            <ng-template pTemplate="caption">
-                <div class="flex justify-content-between flex-column sm:flex-row">
-                    <div class="field">
-                        <span style="margin-left: 2px;">
-                            <p-dropdown filter="true" [options]="formationList" optionLabel="titre"
-                                (onChange)="dt1.filter($event.value._id, 'formation_id', 'equals')"
-                                emptyFilterMessage="Pas de diplôme trouvé" filterPlaceholder="Nom du diplôme">
-                            </p-dropdown>
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
                         </span>
                     </div>
-                    <span class="p-input-icon-left mb-2">
-                        <i class="pi pi-search"></i>
-                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
-                            placeholder="Recherche" class="w-full" />
-                    </span>
-                </div>
-            </ng-template>
-            <ng-template pTemplate="header">
-                <tr>
-                    <th> Nom <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Prénom <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Téléphone <p-sortIcon></p-sortIcon>
-                    </th>
-                    <th style="text-align:center"> Email <p-sortIcon></p-sortIcon>
-                    </th>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Prénom<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Téléphone<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Email<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Entreprise<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Action</th>
+                </ng-template>
+                <ng-template pTemplate="body" let-tuteur>
+                    <tr>
+                        <td style="min-width: 12rem;">
+                            {{ tuteur.user_id?.lastname }}
+    
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ tuteur.user_id?.firstname }}
+                        </td>
+                        <td>
+                            {{ tuteur.user_id?.phone }}
+                        </td>
+                        <td>
+                            {{ tuteur.user_id?.email_perso}}
+                        </td>
+                        <td>
+                            {{ entreprises[tuteur.user_id?.entreprise]?.r_sociale }}
+                        </td>
+                        <td>
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; onFillForm(tuteur); showFormAddTuteur = false;"
+                                aria-hidden="true"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
 
 
-                    <th style="text-align:center">Action</th>
-            </ng-template>
-            <ng-template pTemplate="body" let-tuteur>
-                <tr>
-                    <td style="min-width: 12rem;" *ngIf="tuteur?.user_id">
-                        {{ tuteur.user_id.lastname }}
-                    </td>
-                    <td style="min-width: 12rem;">
-                        {{ tuteur.user_id.firstname }}
-                    </td>
-                    <td>
-                        {{ tuteur.user_id.phone }}
-                    </td>
-                    <td>
-                        {{ tuteur.user_id.email_perso}}
-                    </td>
-
-                    <td>
-                        <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-                            (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; OnGetByIdTuteur(tuteur); showFormAddTuteur = false;"
-                            aria-hidden="true"></i>
-                        <span> | </span>
-                        <i pTooltip="Liste Alternants" tooltipPosition="bottom" class="pi pi-align-justify"
-                            [routerLink]="['/liste-contrats/'+tuteur._id]" aria-hidden="true"></i>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+<!-- LISTE DES TUTEURS PAR CEO-->
+<div class="grid">
+    <div class="col-12" *ngIf="isCEO">
+        <div class="card">
+            <div style="float: right;">
+                <button pButton label="Ajouter un tuteur"
+                    (click)="showFormAddTuteur = true; showFormModifTuteur = false"></button>
+            </div>
+            <h5>Liste des tuteurs de votre entreprise </h5>
+            <p-table #dt1 rowExpandMode="single" [value]="tuteurList" dataKey="_id" [rows]="10" [rowHover]="true"
+                styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5" responsiveLayout="scroll">
+    
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <span class="p-input-icon-left mb-2">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                placeholder="Recherche" class="w-full" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Nom<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Prénom<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Téléphone<p-sortIcon></p-sortIcon>
+                        </th>
+                        <th style="text-align:center">Email<p-sortIcon></p-sortIcon>
+                        </th>
+    
+    
+                        <th style="text-align:center">Action</th>
+                </ng-template>
+                <ng-template pTemplate="body" let-tuteur>
+                    <tr>
+                        <td style="min-width: 12rem;" *ngIf="tuteur?.user_id">
+                            {{ tuteur.user_id?.lastname }}
+                        </td>
+                        <td style="min-width: 12rem;">
+                            {{ tuteur.user_id?.firstname }}
+                        </td>
+                        <td>
+                            {{ tuteur.user_id?.phone }}
+                        </td>
+                        <td>
+                            {{ tuteur.user_id?.email_perso}}
+                        </td>
+    
+                        <td style="text-align: center;">
+                            <i pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
+                                (click)="showFormModifTuteur = true; updateTuteurId = tuteur._id; onFillForm(tuteur); showFormAddTuteur = false;"
+                                aria-hidden="true"></i>
+                            <i pTooltip="Lister les alternants du tuteur" tooltipPosition="bottom" class="pi pi-align-justify"
+                                [routerLink]="['/liste-contrats/'+tuteur._id]" aria-hidden="true" style="cursor: pointer; color: green; margin-left: 3px;"></i>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
     </div>
 </div>

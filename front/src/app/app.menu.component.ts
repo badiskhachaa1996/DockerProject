@@ -556,7 +556,6 @@ export class AppMenuComponent implements OnInit {
 
                 }
                 else if (this.isCeoEntreprise) {
-
                     this.model = [
                         {
                             label: 'Accueil',
@@ -568,16 +567,16 @@ export class AppMenuComponent implements OnInit {
                             label: 'Ticketing', icon: 'pi pi-ticket',
                             items: [
 
-                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+                                { label: 'Mes tickets', icon: 'pi pi-ticket', routerLink: ['/suivi-ticket'] },
 
                             ]
                         },
                         {
                             label: "Tutelle d'Alternants & Stagiaires",
                             items: [
-                                { label: 'Liste de tous les alternants ', icon: 'pi pi-list', routerLink: ['/liste-contrats/'] },
-                                { label: 'Liste des tuteurs', icon: 'pi pi-list', routerLink: ['/tuteur'] },
-                                { label: 'Mes alternants', icon: 'pi pi-list', routerLink: ['/liste-contrats/' + this.token.id] },
+                                { label: 'Liste de tous les alternants ', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
+                                { label: 'Liste des tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur'] },
+                                { label: 'Mes alternants', icon: 'pi pi-user', routerLink: ['/liste-contrats/' + this.token.id] },
                             ]
                         },
                         {
