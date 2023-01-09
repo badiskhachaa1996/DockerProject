@@ -113,6 +113,7 @@ const abscenceCollaborateurController = require('./controllers/abscenceCollabora
 const factureFormateurController = require('./controllers/factureFormateurController');
 const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
+const progressionPedaController = require('./controllers/progressionPedaController');
 const { User } = require("./models/user");
 
 
@@ -254,6 +255,8 @@ app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
 app.use('/soc/annonce', annonceController);
 app.use('/soc/skills', skillsController);
+
+app.use('/soc/progressionPeda', progressionPedaController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

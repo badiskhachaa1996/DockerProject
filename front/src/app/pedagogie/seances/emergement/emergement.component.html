@@ -1,16 +1,84 @@
 <p-toast></p-toast>
+<p-dialog header="Pannel explicatif du rapport de séance" [(visible)]="display" modal="modal" showEffect="fade"
+    [style]="{width: '30vw'}" [breakpoints]="{'960px': '75vw'}">
+    <p class="line-height-3 m-0">
+        Voici les informations à savoir pour remplir ce rapport de séance:
+    </p>
+    <ul>
+        <li><span style="color: red;">Thème abordé</span> : Quelle était la notion abordée durant cette séance ? </li>
+        <li><span style="color: red;">Objectif de la séance</span> : Ce que l'apprenant doit savoir ou savoir faire à la
+            fin de la séance</li>
+        <li><span style="color: red;">Méthodes</span> : <a href="https://www.bienenseigner.com/methodes-pedagogiques/"
+                target="_blank">Merci de choisir parmi ces 5 méthodes les plus utilisées</a> </li>
+        <li><span style="color: red;">Supports</span> : Exemple: Le tableau numérique, le PC, les fiches , les sites,
+            les vidéos, les livres etc... </li>
+    </ul>
+    <p class="line-height-3 m-0">
+        Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Envoyer le rapport et la
+            signature"</span>
+        pour envoyer le rapport mais <span style="color: red;">n'oubliez pas de signer!</span>
+    </p>
+    <ng-template pTemplate="footer">
+        <button pButton icon="pi pi-check" (click)="display=false" label="J'ai compris"
+            class="p-button-outlined"></button>
+    </ng-template>
+</p-dialog>
 <div class="grid" *ngIf="showCanvas || (presence && presence.allowedByFormateur && presence.signature==false)">
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div class="col-12">
+        <div class="col-12" *ngIf="formateurInfo">
             <i class="pi pi-times" style="font-size: 20px;" (click)="signaturePad.clear()" aria-hidden="true"
                 pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
             <!--<canvas class="card" #canva></canvas><br>-->
-            <div
-                [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
+            <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
                 <signature-pad [options]="signaturePadOptions"></signature-pad><br>
-            </div><br>
-            <button pButton class="ui-button-raised ui-button-success" label="Envoyer"
+            </div>
+            <p style="color: red;">* La signature est obligatoire</p><br>
+            <div class="card">
+                <div class="col-6">
+                    <button (click)="display=true" pButton icon="pi pi-info-circle" label="Aide"
+                        style="width:auto;"></button>
+                </div>
+                <h4 style="text-align: center;">Rapport de séance</h4>
+                <div style="text-align: center;">
+                    <small>Tous les champs marqués d'un astérisque <span style="color: red;"> * </span> sont
+                        obligatoires</small><br>
+                    <p>Vous êtes formateur dans une des écoles du groupe INTED (ESTYA, ESPIC, ADG, STUDINFO,
+                        INTUNES).Afin de permettre le suivi de nos étudiants et la qualité de nos formations, veuillez
+                        remplir ce modèle de rapport de séance ci-dessous.<br>Pour toute information
+                        complémentaire veuillez contacter Mme GARS , référente Qualité, sur <a
+                            href="mailto:l.gars@adgeducation.com">l.gars@adgeducation.com</a>.<br>Merci de votre
+                        collaboration.</p>
+                </div>
+                <br>
+                <form class="p-fluid p-formgrid grid" [formGroup]="formPP" (ngSubmit)="getSignature();addPP()">
+                    <div class="field col-12 md:col-6">
+                        <label>Thème abordé <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="theme" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Objectif de la séance <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="objectif" placeholder="être capable de ..." />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Méthodes <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="methode" />
+                    </div>
+                    <div class="field col-12 md:col-6">
+                        <label>Supports <span style="color: red;"> * </span></label>
+                        <input pInputText type="text" formControlName="support" />
+                    </div>
+                    <div class="field col-12">
+                        <label>Observations</label>
+                        <textarea pInputTextarea type="text" formControlName="observations" ></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button [disabled]="formPP.invalid" pButton class="ui-button-raised ui-button-success"
+                            label="Envoyer le rapport et la signature" type="submit"></button>
+                    </div>
+                </form>
+            </div>
+            <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer"
                 (click)="getSignature();"></button>
         </div>
     </div>
@@ -35,7 +103,7 @@
         </div>
     </form>
 </div>
-<div class="card" *ngIf="presence && seance ">
+<div class="card" *ngIf="presence && seance">
     <!--[ngStyle]="{'background-color': presence.isPresent ? 'green' : 'tomato'}"-->
     <div class="grid">
         <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
@@ -68,9 +136,12 @@
         </div>
     </div>
 </div>
-<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif">
+<h3 *ngIf="date_debut > date">La séance n'a pas débuté, merci de revenir à l'heure de la séance pour signer.</h3>
+<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut && !showCanvas">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
+        <h3 *ngIf="date_fin_seance > date" style="color: red;">Vous êtes en retard, demandez au Formateur de vous autorisez à signer puis rechargez
+            la page</h3>
         <div class="col-12">
             <div class="md:col-offset-5 col-12">
                 <p-fileUpload #justificatif (uploadHandler)="onFileChange($event)" mode="basic"
@@ -164,102 +235,10 @@
             <button pButton (click)="getPDF(cid)" label="{{classeList[cid].abbrv}} - {{campusDic[cid]}}"> </button>
         </div>
     </div>
-    <div class="card" *ngIf="showAddEtudiant">
-        <i class="pi pi-times" style="float:right; font-size: 20px;" (click)="showAddEtudiant = false"
-            aria-hidden="true">
-        </i>
-        <h3 class="text-center" style="font-weight: bold;">
-            Ajouter un étudiant à : {{ seance.libelle }}</h3>
-        <form class="col-12" [formGroup]="formAddEtudiant">
-            <div class="grid">
-                <div class="col-12">
-                    <p-dropdown [filter]="true" [options]="dropdownEtudiant" formControlName="etudiant_id"></p-dropdown>
-                </div>
-                <div class="col-12">
-                    <button pButton class="ui-button-raised ui-button-success" label="Autorisez cette étudiant"
-                        (click)="addEtudiant();"></button>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!--<div class="card">
-        <button pButton class="ui-button-raised ui-button-success" label="Export en PDF" style="float:right;"
-            (click)="showPdf=true"></button>
-        <button pButton class="ui-button-raised ui-button-success" label="Ajouter un étudiant"
-            style="float:right;margin-right: 2px;" (click)="showAddEtudiant=true;loadDropdownEtudiant()"></button>
-        <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date :
-            "dd/MM"}}
-        </h3>
-        <div class="col-12 card shadow-lg my-5 ">
-            <p-table #dt1 *ngIf="presences" [columns]="cols" [value]="presences" rowExpandMode="single" [rows]="10"
-                [paginator]="true" [pageLinks]="5" [responsive]="true" [totalRecords]="presences.length"
-                [globalFilterFields]="['user_id.lastname','user_id.firstname']">
-                <ng-template pTemplate="caption">
-                    <div class="flex justify-content-between flex-column sm:flex-row">
-                        <p-dropdown *ngIf="groupeFilter!=null && groupeFilter.length!=1" [options]="groupeFilter"
-                            class="mb-2" (onChange)="dt1.filter($event.value, 'classe_id', 'contains')">
-                        </p-dropdown>
-                        <span class="p-input-icon-left mb-2">
-                            <i class="pi pi-search"></i>
-                            <input pInputText type="text" #filter
-                                (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Recherche" />
-                        </span>
-                    </div>
-                </ng-template>
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th pSortableColumn="user_id.lastname" scope="col">
-                            Nom <p-sortIcon field="user_id.lastname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="user_id.firstname" scope="col">
-                            Prénom <p-sortIcon field="user_id.firstname"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="isPresent" scope="col">
-                            Présent <p-sortIcon field="isPresent"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="date_signature" scope="col">
-                            Date de présence <p-sortIcon field="date_signature"></p-sortIcon>
-                        </th>
-                        <th scope="col">
-                            Action
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr class="bandeau-show">
-                        <td *ngIf="rowData.user_id">
-                            {{rowData.user_id.lastname}}
-                        </td>
-                        <td *ngIf="rowData.user_id">
-                            {{rowData.user_id.firstname}}
-                        </td>
-                        <td>
-                            {{(rowData.isPresent)?"Oui":"Non"}}
-                        </td>
-                        <td *ngIf="seance && rowData.date_signature" [style]="colorDate(rowData)">
-                            {{rowData.date_signature| date:'dd/MM/yyyy HH:mm'}}
-                        </td>
-                        <td *ngIf="!rowData.date_signature">
-                            Aucune
-                        </td>
-                        <td>
-                            <i *ngIf="rowData.justificatif" pTooltip="Télécharger la justification"
-                                tooltipPosition="bottom" class="pi pi-download" (click)="downloadFile(rowData)"
-                                aria-hidden="true"></i>
-                            <i *ngIf="!rowData.isPresent && rowData.user_id && rowData.user_id.type!='Formateur'"
-                                pTooltip="Marquer comme présent" tooltipPosition="bottom" class="pi pi-check"
-                                (click)="acceptJustif(rowData,true)" aria-hidden="true"></i>
-                            <i *ngIf="rowData.isPresent && rowData.user_id && rowData.user_id.type!='Formateur'"
-                                pTooltip="Marquer comme absent" tooltipPosition="bottom" class="pi pi-times"
-                                (click)="acceptJustif(rowData,false)" aria-hidden="true"></i>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
-    </div>
-</div>-->
     <div class="card">
+        <button *ngIf="isAdmin" pButton class="ui-button-raised ui-button-success"
+            label="Autoriser le formateur à signer" style="float:right;margin-right: 2px;"
+            (click)="allowFormateur()"></button>
         <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date :
             "dd/MM"}}
         </h3>
@@ -290,7 +269,7 @@
                         Date de présence <p-sortIcon field="date_signature"></p-sortIcon>
                     </th>
                     <th scope="col">
-                        Action
+                        Justification d'absence
                     </th>
                 </tr>
             </ng-template>
@@ -312,9 +291,9 @@
                     <td>{{(data.Sign)?"Oui":"Non"}}</td>
                     <td>{{ data.date_signature | date:'HH:mm dd/MM/YYYY' }}</td>
                     <td>
+                        <!-- Action -->
                         <i *ngIf="data.justificatif" pTooltip="Télécharger la justification" tooltipPosition="bottom"
                             class="pi pi-download" (click)="downloadFile(data)" aria-hidden="true"></i>
-                        <!-- Action -->
                     </td>
                 </tr>
             </ng-template>

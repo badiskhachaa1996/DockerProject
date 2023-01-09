@@ -408,6 +408,10 @@ export class ListFormateursComponent implements OnInit {
   showCalendar(rowData) {
     this.router.navigate(['/emploi-du-temps/formateur/' + rowData.user_id._id])
   }
+
+  showPP(rowData) {
+    this.router.navigate(['progression-pedagogique/' + rowData.user_id._id])
+  }
   onGetStatut() {
     //recupère le statut et l'affecte à la variable affichePrestataire pour determiné s'il faut ou non afficher le champs prestataire
     return this.formUpdateFormateur.get('type_contrat').value.value;

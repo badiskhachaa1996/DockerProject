@@ -458,9 +458,9 @@
                         <th pSortableColumn="user_id.firstname">Prénom & Nom<p-sortIcon field="user_id.firstname">
                             </p-sortIcon>
                         </th>
-                        <th pSortableColumn="ecole_id?.libelle">Ecole <p-sortIcon field="ecole_id?.libelle">
+                        <!--<th pSortableColumn="ecole_id?.libelle">Ecole <p-sortIcon field="ecole_id?.libelle">
                             </p-sortIcon>
-                        </th>
+                        </th>-->
                         <th pSortableColumn="filiere?.titre">Filière <p-sortIcon field="filiere?.titre">
                             </p-sortIcon>
                         </th>
@@ -492,7 +492,7 @@
                         <td>
                             {{ etudiant.user_id.firstname }} {{ etudiant.user_id.lastname | uppercase }}
                         </td>
-                        <td>{{etudiant?.ecole_id?.libelle}}</td>
+                        <!--<td>{{etudiant?.ecole_id?.libelle}}</td>-->
                         <td>{{etudiant?.filiere?.titre}}</td>
                         <td style="min-width: 10rem;">{{ etudiant.classe_id?.abbrv }}</td>
                         <td style="min-width: 10rem;">{{ etudiant?.campus?.libelle }}</td>

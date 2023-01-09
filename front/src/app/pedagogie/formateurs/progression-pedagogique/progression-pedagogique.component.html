@@ -1,0 +1,73 @@
+<div class="col-12">
+    <div class="card">
+        <h5>Progression pédagogique de {{FORMATEUR?.firstname | titlecase}} {{FORMATEUR?.lastname | uppercase}}</h5>
+        <p-table #dt2 [globalFilterFields]="['theme','objectif','methode','support']" [totalRecords]="ppList.length"
+            [pageLinks]="5" [paginator]="true" rowExpandMode="single" [rows]="10" styleClass="p-datatable-gridlines"
+            [value]="ppList" dataKey="_id" responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter
+                            (input)="dt2.filterGlobal($event.target.value, 'contains')" placeholder="Recherche"
+                            class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="seance_id.date_debut" style="text-align: center;">
+                        Date
+                        <p-sortIcon field="seance_id.date_debut"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="theme" style="text-align: center;">
+                        Thème abordé
+                        <p-sortIcon field="theme"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="objectif" style="text-align: center;">
+                        Objectif de la séance
+                        <p-sortIcon field="objectif"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="methode" style="text-align: center;">
+                        Méthodes
+                        <p-sortIcon field="methode"> </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="support" style="text-align: center;">
+                        Supports
+                        <p-sortIcon field="support"> </p-sortIcon>
+                    </th>
+                    <th>
+                        Durée de la séance
+                    </th>
+                    <th style="text-align: center;">Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-pp>
+                <tr>
+                    <td>
+                        {{pp.seance_id.date_debut| date:'dd/MM/YYYY à HH:mm'}}
+                    </td>
+                    <td>
+                        {{pp.theme}}
+                    </td>
+                    <td>
+                        {{pp.objectif}}
+                    </td>
+                    <td>
+                        {{pp.methode}}
+                    </td>
+                    <td>
+                        {{pp.support}}
+                    </td>
+                    <td>
+                        {{getDuree(pp.seance_id)}}
+                    </td>
+                    <td>
+                        <i style="margin-left: 2%;" (click)="seeSeance(pp.seance_id);" class="pi pi-send" aria-hidden="true"
+                            pTooltip="Voir le détails de la séance"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

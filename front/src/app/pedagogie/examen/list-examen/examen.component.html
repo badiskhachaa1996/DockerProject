@@ -12,7 +12,7 @@
             <p>
                 Groupe: <strong>{{ formatClasse(examSelected.classe_id) }}</strong> <br />
                 Evaluation: <strong>{{ examSelected.libelle }}</strong> <br />
-                Date d'examen: <strong>{{ examSelected.date | date:'dd/MM' }}</strong> <br />
+                Date d'examen: <strong>{{ examSelected.date | date:'dd/MM/YYYY' }}</strong> <br />
             </p>
 
             <p-table #dt2 [value]="tableauNotes" dataKey="_id" responsiveLayout="scroll" editMode="row"
@@ -240,6 +240,7 @@
                         </th>
                         <th pSortableColumn="libelle">Libellé <p-sortIcon field="libelle"></p-sortIcon>
                         </th>
+                        <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
                         <th>Action </th>
                     </tr>
                 </ng-template>
@@ -261,12 +262,10 @@
                             </span>
                         </td>
                         <td>
-                            <span *ngFor="let cid of examen.matiere_id; let index = index">
-                                <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
-                                <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
-                            </span>
+                            {{examen.matiere_id[0].abbrv}}
                         </td>
                         <td>{{ examen.libelle }}</td>
+                        <td>{{ examen.date | date:'dd/MM/YYYY'  }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
                                 class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
