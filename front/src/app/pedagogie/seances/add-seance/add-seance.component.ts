@@ -168,13 +168,16 @@ export class AddSeanceComponent implements OnInit {
     this.seanceForm.value.classe.forEach(c => {
       classeList.push(c.value)
     })
+    let salle_name = "Distanciel"
+    if (this.seanceForm.value.isPresentiel != 'Distanciel')
+      salle_name = this.seanceForm.value.salle_name
     let formateur = null
-    let libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - En Autonomie (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+    let libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - En Autonomie (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ") "+ salle_name +" "+ this.seanceForm.value.libelle
     let info = 'Classe: ' + this.seanceForm.value.classe[0].value + " Cours en Autonomie"
     if (this.seanceForm.value.seance_type != 'Séance sans Formateur') {
       formateur = this.seanceForm.value.formateur.value
       info = 'Classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom
-      libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+      libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ") " + salle_name +" "+ this.seanceForm.value.libelle
     }
     let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, formateur, info,
       this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type, this.seanceForm.value.time_max_sign);
@@ -331,8 +334,7 @@ export class AddSeanceComponent implements OnInit {
         }
         let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, this.seanceForm.value.libelle, newDateDebut, newDateFin, formateur, info,
           this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, newNumeroSeance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type, this.seanceForm.value.time_max_sign);
-        console.log(seance)
-        seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + newNumeroSeance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ")" + this.seanceForm.value.libelle
+        seance.libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + newNumeroSeance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ") "+ salle_name +" "+ this.seanceForm.value.libelle
         let calc = newDateFin.getHours() - newDateDebut.getHours()
         let choice = true
         this.formateurService.getByUserId(formateur).subscribe(data => {

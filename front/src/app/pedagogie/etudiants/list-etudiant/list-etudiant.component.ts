@@ -31,6 +31,7 @@ import { Campus } from 'src/app/models/Campus';
 import { info } from 'console';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
+import { EcoleService } from 'src/app/services/ecole.service';
 
 
 @Component({
@@ -59,6 +60,8 @@ export class ListEtudiantComponent implements OnInit {
   filterByAS: string = undefined;
   showNumbersByAS: boolean = false;
   etudiantsByAS: Etudiant[] = [];
+
+  dropdownEcole = []
 
   filterByGroupe: Classe = undefined;
   showFilterByGroupe: boolean = false;
@@ -225,11 +228,11 @@ export class ListEtudiantComponent implements OnInit {
     }*/
   }
 
-  
+
   constructor(private confirmationService: ConfirmationService, private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService,
     private formBuilder: FormBuilder, private userService: AuthService, private etudiantService: EtudiantService, private messageService: MessageService,
     private router: Router, private presenceService: PresenceService, private CommercialService: CommercialPartenaireService, private ProspectService: AdmissionService,
-    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService) { }
+    private tuteurService: TuteurService, private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService) { }
   code = this.ActiveRoute.snapshot.paramMap.get('code');
 
   ngOnInit(): void {
@@ -242,6 +245,7 @@ export class ListEtudiantComponent implements OnInit {
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
     this.onGetRole()
+
     /* Specialement pour la partie dexport des données */
     this.dropdownEntreprise = [{ libelle: 'Choisissez une entreprise', value: '' }];
     //Recuperation de la liste des entreprises
@@ -254,6 +258,12 @@ export class ListEtudiantComponent implements OnInit {
       }),
       ((error) => { console.error(error); })
     );
+
+    this.EcoleService.getAll().subscribe(data => {
+      data.forEach(p => {
+        this.dropdownEcole.push({ label: p.libelle, value: p._id })
+      })
+    })
 
     this.ProspectService.getAllEtudiant().subscribe(data => {
       data.forEach(p => {
@@ -456,7 +466,8 @@ export class ListEtudiantComponent implements OnInit {
       campus_id: [' '],
       filiere: ['', Validators.required],
       statut_dossier: [''],
-      annee_scolaire: ['', Validators.required]
+      annee_scolaire: ['', Validators.required],
+      ecole: ['', Validators.required]
     });
     this.formUpdateDossier = this.formBuilder.group({
       statut_dossier: ['']
@@ -520,7 +531,7 @@ export class ListEtudiantComponent implements OnInit {
 
     let id_tuteur = this.formUpdateEtudiant.get("id_tuteur")?.value;
     let isMinor = this.formUpdateEtudiant.get("isMinor")?.value;
-
+    let ecole = this.formUpdateEtudiant.get('ecole')?.value;
 
     let etudiant = new Etudiant(
       this.etudiantToUpdate._id,
@@ -559,7 +570,13 @@ export class ListEtudiantComponent implements OnInit {
       filiere,
       true,
       true,
-      annee_scolaire
+      annee_scolaire,
+      this.etudiantToUpdate.date_telechargement_bulletin,
+      this.etudiantToUpdate.conseiller,
+      this.etudiantToUpdate.pays_origine, this.etudiantToUpdate.etat_contract,
+      this.etudiantToUpdate.entreprise, this.etudiantToUpdate.etat_paiement,
+      this.etudiantToUpdate.source, this.etudiantToUpdate.date_valided_by_support,
+      ecole
     );
 
     this.etudiantService.update(etudiant).subscribe(
@@ -604,7 +621,7 @@ export class ListEtudiantComponent implements OnInit {
       email_ims: user.email,
       email_perso: user.email_perso,
       statut: { value: response.statut, viewValue: response.statut },
-      classe_id: { libelle: bypass.nom, value: bypass._id },
+      classe_id: { libelle: bypass.abbrv, value: bypass._id },
       nationalite: { value: response.nationalite, viewValue: response.nationalite },
       isAlternant: this.etudiantToUpdate.isAlternant,
       dernier_diplome: this.etudiantToUpdate.dernier_diplome,
@@ -622,7 +639,8 @@ export class ListEtudiantComponent implements OnInit {
       remarque: this.etudiantToUpdate.remarque,
       isOnStage: this.etudiantToUpdate.isOnStage,
       enic_naric: this.etudiantToUpdate.enic_naric,
-      annee_scolaire: this.etudiantToUpdate.annee_scolaire
+      annee_scolaire: this.etudiantToUpdate.annee_scolaire,
+      ecole: this.etudiantToUpdate.ecole_id
     });
     bypass = response.campus
     let bypassv2: any = response.filiere
@@ -1073,7 +1091,7 @@ export class ListEtudiantComponent implements OnInit {
   }
 
 
-  
+
 
   exportExcel() {
     let dataExcel = []

@@ -194,8 +194,7 @@
                         </td>
                         <td style="min-width: 8rem;">{{ user._id }}</td>
                         <td style="min-width: 10rem;">{{ user.role }}</td>
-                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{
-                            user.firstname | titlecase }}</td>
+                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
                         <td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
                         <td style="min-width: 10rem;">{{ user.email }}</td>
                         <td style="min-width: 10rem;">{{ user.email_perso }}</td>
@@ -217,6 +216,7 @@
                     <tr>
                         <th></th>
                         <th>Service</th>
+                        <th>Mention</th>
                         <th>Type</th>
                         <th>Pays</th>
                         <th>Ville</th>
@@ -231,6 +231,7 @@
                     <tr>
                         <td><img [src]="profilPicture" alt="{{ 'Pofile' | uppercase }}" width="80" height="80" /></td>
                         <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
+                        <td>{{user.mention}}</td>
                         <td>{{ user.type }}</td>
                         <td>{{ user.pays_adresse }}</td>
                         <td>{{ user.ville_adresse }}</td>

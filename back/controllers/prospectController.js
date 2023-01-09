@@ -179,6 +179,7 @@ app.post("/create", (req, res, next) => {
                                         " </ul>" +
                                         "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:contact@eduhorizons.com\">contact@eduhorizons.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
                                         "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Cordialement.</p>" +
                                         "<p><img src ='cid:SignatureEmailEH' alt=\" \" width='520' height='227' /></p>";
@@ -221,6 +222,7 @@ app.post("/create", (req, res, next) => {
                                         " </ul>" +
                                         "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@espic.com\">admission@espic.com</a></p>" +
                                         "<p>Ainsi, pour d'autres demandes d'informations, vous pouvez nous contacter sur notre WhatsApp : +33 188880659 </p>" +
+                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
                                         "<p> <br />Nous restons à votre disposition pour tout complément d'information. </p>" +
                                         " <p>Cordialement.</p>" /*+
                                     "<p><img src =''alt=\" \" width='620' height='227' /></p>"*/
@@ -269,6 +271,7 @@ app.post("/create", (req, res, next) => {
                                         "</li><li><p>CV (obligatoire).</p></li><li><p>Lettre de motivation dans laquelle vous expliquer votre choix de formation et de campus pour lequel vous voulez candidater [Paris ou Montpellier] (obligatoire).</p>" +
                                         "</li><li><p>Attestations de travail (Si vous avez une expérience professionnelle).</p></li><li><p>Attestation de niveau en anglais (optionnel).</p>" +
                                         "</li><li><p>Certifications professionnelles (optionnel). </p></li></ul></div><div> </div><div>" +
+                                        "<p>Notre call center vous contactera prochainement sur votre numéro de téléphone. </p>" +
                                         "<p>Si vous avez des difficultés à charger vos documents, vous pouvez les envoyer directement sur l'adresse mail <a href=\"mailto:admission@adgeducation.com\">admission@adgeducation.com</a> </p>" +
                                         "</div><div> </div><div><p>En vous souhaitant bonne chance pour le reste de votre démarche consulaire, nous restons à votre disposition pour toute information complémentaire.</p></div>" +
                                         "<div><p>  </p></div><div><p>Cordialement, </p></div><div> </div><div> </div>"

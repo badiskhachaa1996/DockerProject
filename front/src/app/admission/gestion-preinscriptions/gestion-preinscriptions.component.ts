@@ -19,6 +19,7 @@ import { SocketService } from 'src/app/services/socket.service';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { environment } from 'src/environments/environment';
 import { ProspectIntuns } from 'src/app/models/ProspectIntuns';
+import { CV } from 'src/app/models/CV';
 
 
 @Component({
@@ -645,10 +646,14 @@ export class GestionPreinscriptionsComponent implements OnInit {
     )
   }
 
-  /*prospectCalled(bol : boolean) {
+  onNavigateToCV(id : string) {
+    this.router.navigate(['/cvtheque', id]);
+  }
+
+  prospectCalled(bol : boolean) {
     if(!bol) {
       return "green";
     }
     
-  }*/
+  }
 }

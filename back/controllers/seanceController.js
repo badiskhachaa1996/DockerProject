@@ -112,7 +112,7 @@ app.post('/edit/:id', (req, res, next) => {
 
 //Recuperation de toutes les s
 app.get("/getAll", (req, res, next) => {
-    Seance.find().sort({ date_debut: 'asc' })
+    Seance.find().sort({ date_debut: -1 })
         .then((SeanceFromdb) => { res.status(200).send(SeanceFromdb); })
         .catch((error) => { req.status(500).send('Impossible de recupérer la liste des séances ' + error.message); });
 });

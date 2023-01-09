@@ -23,7 +23,7 @@ export class PedagogieGuardService implements CanActivate {
 
     let currenttoken: any = jwt_decode(localStorage.getItem("token"))
     let role: string = currenttoken.role;
-    let type : string = currenttoken.type;
+    let type : string = currenttoken?.type;
     let serviceName
 
     if (role == 'Admin' || type=="Formateur") {

@@ -313,7 +313,7 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 {
-                                    label: "Pédagogie",
+                                    label: "Accès Formateur",
                                     items: [
                                         { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/formateur/' + this.token.id },
                                         {
@@ -329,7 +329,7 @@ export class AppMenuComponent implements OnInit {
                             this.ETUService.getByUser_id(this.token.id).subscribe(dataEtu => {
                                 if (dataEtu)
                                     this.model.push({
-                                        label: 'Coté Etudiant',
+                                        label: 'Accès Etudiant',
                                         items: [
                                             { label: 'Emploi du temps', icon: 'pi pi-calendar', routerLink: 'emploi-du-temps/classe/' + dataEtu.classe_id },
                                             { label: 'Booking - Logements', icon: 'pi pi-home', routerLink: ['/logements'] },
