@@ -393,7 +393,7 @@
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
                             <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
-                                class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
+                                class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>  
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
@@ -950,11 +950,13 @@
                                 aria-hidden="true"></i>
                             <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
                                 class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
+                            <i pTooltip = "Voir le CV du prospect" tooltipPosition="bottom" class="pi pi-book" aria-hidden="true" 
+                                (click)="onNavigateToCV(prospect?.user_id?._id)"></i>
+                            <i pTooltip="Prospect appelé" class="pi pi-phone" (click)="prospectCalled"></i>       
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
-                            <!--<i  pTooltip="Prospect non appelé" class="pi pi-phone"></i> 
-                            <i  pTooltip="Prospect appelé" class="pi pi-phone"></i>-->
+                           
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
@@ -964,7 +966,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-prospect>
                     <tr>
-                        <td colspan="17">
+                        <td colspan="19">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
@@ -983,15 +985,15 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                     <tr>
-                        <td>{{prospect.user_id.civilite}}</td>
-                        <td>{{ prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{prospect.user_id.nationnalite}}</td>
-                        <td>{{prospect.user_id.pays_adresse}}</td>
-                        <td>{{prospect.user_id.email}}</td>
+                        <td>{{prospect.user_id?.civilite}}</td>
+                        <td>{{prospect.date_naissance | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{prospect.user_id?.nationnalite}}</td>
+                        <td>{{prospect.user_id?.pays_adresse}}</td>
+                        <td>{{prospect.user_id?.email}}</td>
                         <td>{{prospect.statut_actuel}}</td>
                         <td>
-                            {{ prospect.user_id.indicatif }}
-                            {{ prospect.user_id.phone }}
+                            {{ prospect.user_id?.indicatif }}
+                            {{ prospect.user_id?.phone }}
                         </td>
                     </tr>
                 </ng-template>

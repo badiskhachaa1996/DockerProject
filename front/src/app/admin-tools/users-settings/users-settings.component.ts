@@ -68,6 +68,8 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'IGS - Inted Group Support', value: 'IGS - Inted Group Support' },
     { label: 'IGH - Inted Group RH', value: 'IGH - Inted Group RH' },
     { label: 'IGD - Inted Group Direction', value: 'IGD - Inted Group Direction' },
+    { label: 'ETUDIANT', value: 'ETUDIANT'},
+    { label: 'FORMATEUR', value: 'FORMATEUR'},
   ];
   paysList = environment.pays;
 
