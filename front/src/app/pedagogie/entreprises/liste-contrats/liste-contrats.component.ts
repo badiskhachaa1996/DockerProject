@@ -13,6 +13,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { map } from 'rxjs';
 import { User } from 'src/app/models/User';
+import { EcoleService } from 'src/app/services/ecole.service';
 
 
 @Component({
@@ -50,7 +51,9 @@ export class ListeContratsComponent implements OnInit {
   TuteursList = [];
   dropdownTuteurList = []
   ListCommercial = [];
+
   dropDownCommecialList = [];
+  dropdownCFA = [];
 
   //partie dedié à la mise à jour 
   showFormUpdateCa: boolean = false;
@@ -70,7 +73,7 @@ export class ListeContratsComponent implements OnInit {
   constructor(private entrepriseService: EntrepriseService, private route: ActivatedRoute,
     private messageService: MessageService, private router: Router, private etudiantService: EtudiantService,
     private authService: AuthService, private tuteurService: TuteurService,
-    private formationService: DiplomeService, private formBuilder: FormBuilder,) { }
+    private formationService: DiplomeService, private formBuilder: FormBuilder, private EcoleService: EcoleService) { }
 
   get entreprise_id() { return this.RegisterNewCA.get('entreprise_id'); }
   get tuteur_id() { return this.RegisterNewCA.get('tuteur_id').value; }
@@ -132,6 +135,12 @@ export class ListeContratsComponent implements OnInit {
           //ajouter l'attribut nom complet aux objets etudiants pour les afficher
           altdata.nomcomplet = altdata.user_id?.firstname + ' ' + altdata.user_id?.lastname
           this.listAlternantDD.push({ label: altdata.nomcomplet, value: altdata._id })
+        })
+      })
+
+      this.EcoleService.getAll().subscribe(data => {
+        data.forEach(e => {
+          this.dropdownCFA.push({ value: e._id, label: e.libelle })
         })
       })
 
@@ -247,6 +256,7 @@ export class ListeContratsComponent implements OnInit {
       code_commercial: new FormControl('', Validators.required),
       professionnalisation: new FormControl(''),
       anne_scolaire: new FormControl(),
+      ecole: new FormControl('', Validators.required)
 
     })
   }
@@ -269,6 +279,7 @@ export class ListeContratsComponent implements OnInit {
       anne_scolaire: new FormControl(''),
 
       professionnalisation: new FormControl(''),
+      ecole: new FormControl('', Validators.required)
 
     })
   }
@@ -313,7 +324,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.code_commercial, 'créé', annee_scolaires)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.code_commercial, 'créé', annee_scolaires,this.RegisterNewCA.value.ecole)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -333,9 +344,8 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    console.log(annee_scolaires)
-
-    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.code_commercial_m, 'créé', annee_scolaires)
+    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.code_commercial_m, 'créé',
+      annee_scolaires, this.formUpdateCa.value.ecole)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {
       this.messageService.add({ severity: 'success', summary: 'Le contrat alternance', detail: " a été mis à jour avec succés" });
@@ -370,6 +380,7 @@ export class ListeContratsComponent implements OnInit {
       // anne_scolaire: contrat.anne_scolaire,
 
       professionnalisation: contrat.classification != "",
+      ecole: contrat.ecole
     });
   }
 

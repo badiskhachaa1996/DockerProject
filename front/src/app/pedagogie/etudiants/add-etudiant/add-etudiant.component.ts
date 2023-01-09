@@ -22,6 +22,7 @@ import { Ecole } from 'src/app/models/Ecole';
 
 import { Diplome } from 'src/app/models/Diplome';
 import { ContratAlternance } from 'src/app/models/ContratAlternance';
+import { EcoleService } from 'src/app/services/ecole.service';
 
 
 @Component({
@@ -94,6 +95,8 @@ export class AddEtudiantComponent implements OnInit {
   defaultClasse: Classe;
   entrepriseList = []
 
+  dropdownEcole = []
+
   dropdownPaiement = [
     { label: "Aucun", value: "Aucun" },
     { label: "Alternant", value: "Alternant" },
@@ -121,7 +124,7 @@ export class AddEtudiantComponent implements OnInit {
 
   constructor(private entrepriseService: EntrepriseService, private ActiveRoute: ActivatedRoute, private AuthService: AuthService, private classeService: ClasseService, private formBuilder: FormBuilder, private userService: AuthService,
     private etudiantService: EtudiantService, private messageService: MessageService, private router: Router, private CommercialService: CommercialPartenaireService, private tuteurService: TuteurService,
-    private diplomeService: DiplomeService, private campusService: CampusService) { }
+    private diplomeService: DiplomeService, private campusService: CampusService, private EcoleService: EcoleService) { }
 
 
 
@@ -136,7 +139,11 @@ export class AddEtudiantComponent implements OnInit {
     }
     //Methode de recuperation de toute les listes
     this.onGetAllClasses();
-
+    this.EcoleService.getAll().subscribe(data => {
+      data.forEach(e => {
+        this.dropdownEcole.push({ value: e._id, label: e.libelle })
+      })
+    })
     this.diplomeService.getAll().subscribe(data => {
 
       data.forEach(element => {
@@ -244,6 +251,7 @@ export class AddEtudiantComponent implements OnInit {
       adresse_rl: [""],
       suivi_handicaped: [''],
       statut_dossier: [''],
+      ecole: ['', Validators.required]
     });
   }
 
@@ -420,7 +428,8 @@ export class AddEtudiantComponent implements OnInit {
       entreprise,
       etat_paiement,
       source,
-      new Date()
+      new Date(),
+      this.formAddEtudiant.value.ecole
     );
 
     this.etudiantService.create({ 'newEtudiant': newEtudiant, 'newUser': newUser }).subscribe(

@@ -239,9 +239,9 @@
                         formControlName="statut"></p-dropdown>
                 </div>
 
-                <div class="field col-12 md:col-6">
-                    <label For="statut">Statut Dossier</label>
-                    <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
+                <div class="field col-6">
+                    <label>Ecole/CFA <span style="color: red;"> * </span></label>
+                    <p-dropdown [options]="dropdownEcole" formControlName="ecole" placeholder="Choissisez le CFA"></p-dropdown>
                 </div>
 
 
@@ -294,6 +294,11 @@
                     <p-multiSelect [options]="dropdownAnneeScolaire"
                         placeholder="Choissisez les années scolaires où cette étudiant à étudié"
                         formControlName="annee_scolaire"></p-multiSelect>
+                </div>
+
+                <div class="field col-12">
+                    <label For="statut">Statut Dossier</label>
+                    <p-multiSelect [options]="statutDossier" formControlName="statut_dossier"></p-multiSelect>
                 </div>
 
                 <div class="field col-12 md:col-6">
@@ -378,10 +383,13 @@
                 </div>
 
                 <div class="field col-12">
+                    <label For="statut">Rythme<span style="color: red;"> * </span></label>
                     <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                         formControlName="isAlternant"></p-selectButton>
                 </div>
+
                 <div class="col-12" *ngIf="!formUpdateEtudiant.value.isAlternant">
+                    <label For="statut">Stage<span style="color: red;"> * </span></label>
                     <p-selectButton [options]="[{label:'Pas de stage',value:false},{label:'En stage',value:true}]"
                         formControlName="isOnStage" (onChange)="changestage()"></p-selectButton>
 

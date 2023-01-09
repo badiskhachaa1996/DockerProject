@@ -56,7 +56,7 @@ const etudiantSchema = mongoose.Schema({
     etat_paiement: { String },
     source: { type: String, default: 'Aucune' },
     date_valided_by_support: { type: Date },
-    ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "ecole", default: mongoose.Types.ObjectId('6253f5fd322d2ce51dadafbe') },//ESTYA PAR DEFAUT
+    ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "ecole", default: '6253f5fd322d2ce51dadafbe' },//ESTYA PAR DEFAUT
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose
