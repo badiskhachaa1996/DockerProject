@@ -130,6 +130,7 @@ import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
+import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
 
 const routes: Routes = [
     {
@@ -258,7 +259,8 @@ const routes: Routes = [
     { path: 'mentions-legales', component: MentionsLegalesComponent },
     { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
     { path: 'auth', component: MsalRedirectComponent },
-    { path: 'code', redirectTo: '' }
+    { path: 'code', redirectTo: '' },
+    { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent }
 ]
 
 

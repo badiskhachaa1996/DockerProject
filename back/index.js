@@ -114,6 +114,7 @@ const factureFormateurController = require('./controllers/factureFormateurContro
 const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
 const progressionPedaController = require('./controllers/progressionPedaController');
+const QSController = require('./controllers/questionnaireSatisfactionController');
 const { User } = require("./models/user");
 
 
@@ -158,7 +159,7 @@ app.use('/', function (req, res, next) {
     } else {
         if (req.originalUrl == "/soc/user/AuthMicrosoft" || req.originalUrl == "/soc/demande-events" || req.originalUrl == "/soc/partenaire/inscription" || req.originalUrl == "/soc/notification/create" || req.originalUrl.startsWith('/soc/prospect/') || req.originalUrl.startsWith('/soc/service/getByLabel') || req.originalUrl == "/soc/demande-events/create"
             || req.originalUrl == "/soc/user/login" || req.originalUrl.startsWith("/soc/user/getByEmail") || req.originalUrl.startsWith("/soc/presence/getAtt_ssiduitePDF") || req.originalUrl == "/soc/etudiant/getAllAlternants" || req.originalUrl == "/soc/diplome/getAll" || req.originalUrl == "/soc/entreprise/createNewContrat" ||
-            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise') || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
+            req.originalUrl.startsWith('/soc/forfeitForm') || req.originalUrl.startsWith('/soc/qs') || req.originalUrl.startsWith('/soc/user/HowIsIt') || req.originalUrl.startsWith('/soc/user/pwdToken') || req.originalUrl == "/soc/partenaire/getNBAll" || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyTuteur') || req.originalUrl.startsWith('/soc/entreprise/getAllContratsbyEntreprise') || req.originalUrl.startsWith('/soc/user/reinitPwd')) {
             next()
         } else {
 
@@ -249,7 +250,7 @@ app.use('/soc/demandeConseiller', DemandeConseillerController)
 
 app.use('/soc/conge', congeController);
 
-app.use('/soc/factureFormateur',factureFormateurController)
+app.use('/soc/factureFormateur', factureFormateurController)
 app.use('/soc/devoir', devoirController);
 app.use('/soc/renduDevoir', renduDevoirController);
 app.use('/soc/abscenceCollaborateur', abscenceCollaborateurController);
@@ -257,6 +258,7 @@ app.use('/soc/annonce', annonceController);
 app.use('/soc/skills', skillsController);
 
 app.use('/soc/progressionPeda', progressionPedaController);
+app.use('/soc/qs', QSController)
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification
