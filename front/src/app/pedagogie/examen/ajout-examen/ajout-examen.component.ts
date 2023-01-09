@@ -67,7 +67,7 @@ export class AjoutExamenComponent implements OnInit {
     date: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
     niveau: new FormControl('', Validators.required),
-    note_max: new FormControl('', [Validators.required, Validators.pattern("^[0-9.]+$")]),
+    note_max: new FormControl(20, [Validators.required, Validators.pattern("^[0-9.]+$")]),
     coef: new FormControl(1, Validators.required),
     semestre: new FormControl('', Validators.required)
   })

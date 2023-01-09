@@ -21,6 +21,8 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CampusService } from 'src/app/services/campus.service';
 const io = require("socket.io-client");
 import { SignaturePad } from 'angular2-signaturepad';
+import { ProgressionPeda } from 'src/app/models/progressionPeda';
+import { ProgressionPedaService } from 'src/app/services/pedagogie/progression-peda.service';
 
 @Component({
   selector: 'app-emergement',
@@ -31,12 +33,13 @@ import { SignaturePad } from 'angular2-signaturepad';
   ]
 })
 export class EmergementComponent implements OnInit {
-
+  display = false
   matiereList = {};
 
   constructor(private MatiereService: MatiereService, private ClasseService: ClasseService, private PresenceService: PresenceService, private router: Router, private FormateurService: FormateurService, private route: ActivatedRoute,
     private AuthService: AuthService, private MessageService: MessageService, private SocketService: SocketService, private SeanceService: SeanceService,
-    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService, private CampusService: CampusService) { }
+    private DiplomeService: DiplomeService, private formBuilder: FormBuilder, private etudiantService: EtudiantService, private CampusService: CampusService,
+    private PPService: ProgressionPedaService) { }
   socket = io(environment.origin.replace('/soc', ''));
   token;
   justif_file_value;
@@ -60,6 +63,7 @@ export class EmergementComponent implements OnInit {
   formateurInfo: Formateur = null;
   dropdownEtudiant = []
   groupeFilter: [{ label: string, value: string }];
+  isAdmin = false
 
   @ViewChild('justificatif') fileInput: FileUpload;
   loading: boolean = false;
@@ -68,6 +72,14 @@ export class EmergementComponent implements OnInit {
 
   formAddEtudiant = this.formBuilder.group({
     etudiant_id: [null]
+  });
+
+  formPP = this.formBuilder.group({
+    theme: [null, Validators.required],
+    methode: [null, Validators.required],
+    support: [null, Validators.required],
+    objectif: [null, Validators.required]
+
   });
 
   @ViewChild(SignaturePad) signaturePad: SignaturePad;
@@ -138,6 +150,10 @@ export class EmergementComponent implements OnInit {
     }, error => console.error(error))
   }
 
+  refreshCanvas(){
+    this.showCanvas= this.presence == null && this.date > this.date_debut && this.date_fin > this.date
+  }
+
   ngAfterViewInit() {
     /*
     Not Working because .set('canvasWidth') est mal fait dans la lib
@@ -156,6 +172,10 @@ export class EmergementComponent implements OnInit {
     } catch (e) {
       this.token = null
     }
+    this.AuthService.getPopulate(this.token.id).subscribe(data => {
+      let bypas: any = data.service_id
+      this.isAdmin = ((bypas && bypas.label.includes('edagogie') && data.role != 'user') || data.role == "Admin")
+    })
     this.FormateurService.getByUserId(this.token.id).subscribe(data => {
       this.formateurInfo = data
     })
@@ -213,7 +233,7 @@ export class EmergementComponent implements OnInit {
         minutes_max = 0
       this.date_fin = this.date_debut + (minutes_max * 60000)
       if (this.token.id == dataS.formateur_id)
-        this.date_fin = new Date(dataS.date_fin).getTime()
+        this.date_fin = new Date(dataS.date_fin).getTime() + (60 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
       this.DiplomeService.getAll().subscribe(diplomes => {
@@ -501,6 +521,19 @@ export class EmergementComponent implements OnInit {
 
   }
 
+  addPP() {
+    let PP = new ProgressionPeda(null, this.seance.formateur_id, this.ID,
+      this.formPP.value.theme, this.formPP.value.objectif, this.formPP.value.methode, this.formPP.value.support,
+      this.matiereList[this.seance.matiere_id].semestre)
+    this.PPService.create(PP).subscribe(data => {
+      console.log(data)
+      this.MessageService.add({ severity: 'success', summary: 'Rapport de séance', detail: 'Envoyé avec succès' })
+    }, err => {
+      console.error(err)
+      this.MessageService.add({ severity: 'error', summary: 'Erreur: Rapport de séance', detail: err.error })
+    })
+  }
+
   onRowEditCancel(rowData, index: number) {
     this.tableauPresence[index] = this.clonedRowData[rowData._id];
     delete this.clonedRowData[rowData._id];
@@ -513,6 +546,24 @@ export class EmergementComponent implements OnInit {
         idx = index
     })
     return idx
+  }
+
+  allowFormateur() {
+    let presence = new Presence(
+      null,
+      this.seance._id,
+      this.seance.formateur_id,
+      false,
+      false,
+      false,
+      null,
+      true
+    )
+    this.PresenceService.create(presence).subscribe(data => {
+      this.MessageService.add({ severity: "success", summary: "Le formateur peut signer" })
+    }, error => {
+      this.MessageService.add({ severity: "error", summary: "Erreur contacté un Admin", detail: error.error })
+    })
   }
 
 

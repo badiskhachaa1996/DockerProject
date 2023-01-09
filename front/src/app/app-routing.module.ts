@@ -129,6 +129,8 @@ import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-int
 import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
+import { ProgressionPeda } from './models/progressionPeda';
+import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 
 const routes: Routes = [
     {
@@ -163,6 +165,7 @@ const routes: Routes = [
             { path: 'matieres/:id', component: MatieresComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-formateur', component: AddFormateurComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'formateurs', component: ListFormateursComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'progression-pedagogique/:formateur_id', component: ProgressionPedagogiqueComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'ajout-etudiant', component: AddEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'etudiants', component: ListEtudiantComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'gestion-etudiants', component: GestionEtudiantsComponent, canActivate: [AuthGuardService, AdminGuardService] },
