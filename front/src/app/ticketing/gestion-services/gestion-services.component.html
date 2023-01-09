@@ -95,7 +95,7 @@
                 <ng-template pTemplate="body" let-rowData>
                     <tr>
                         <td [ngStyle]="{color: getColor(rowData.active)}" [pSelectableRow]="rowData"
-                        [pSelectableRowIndex]="columns" title="Vous pouvez cliquer sur moi">
+                        [pSelectableRowIndex]="columns" title="Cliquer pour ajouter un service">
                             {{rowData.label}}
                         </td>
                         <td>
@@ -150,6 +150,7 @@
 
 
     <div class="col-12" *ngIf="currentService">
+        <i class="pi pi-times-circle" style="float:right; font-size: 15px; color: red; cursor: pointer;" title="Fermer" (click)="currentService=null" aria-hidden="true"></i>
 		<div class="card">
             <div style="float: right;">
                 <button pButton *ngIf="!showFormAddSujet" label="Ajouter" (click)="toggleFormSujetAdd()"></button>

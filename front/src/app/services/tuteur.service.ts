@@ -18,26 +18,22 @@ export class TuteurService {
   //methode d'ajout d'un tuteur
   create(tbObj: any) {
     let registreUrl = this.apiUrl + "create";
-    console.log(tbObj);
     return this.httpClient.post<Tuteur>(registreUrl, tbObj, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   updateById(id:string, tuteur : Tuteur){
     let registreUrl = this.apiUrl + "updateById/" + id; 
-    console.log('service')
     return this.httpClient.post<any>(registreUrl, tuteur, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
   //recupération des tuteurs par Id Entreprise
   getAllByEntrepriseId(entrepriseId: string) {
-    console.log('service' + entrepriseId)
     let registreUrl = this.apiUrl + "getAllByEntrepriseId/" + entrepriseId;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
    //recupération d'un tuteur par Id Entreprise
    getByEntrepriseId(entrepriseId: string) {
-    console.log('service' + entrepriseId)
     let registreUrl = this.apiUrl + "getByEntrepriseId/" + entrepriseId;
     return this.httpClient.get<any>(registreUrl, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }

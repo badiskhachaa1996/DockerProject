@@ -285,7 +285,7 @@ export class DashboardComponent implements OnInit {
               this.showEvents(resSea)
             }));
         }
-        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial)
+        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial);
       }
     })
 

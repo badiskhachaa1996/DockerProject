@@ -78,7 +78,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
         });
 
     // verification de la raison sociale de l'entreprise 
-    Entreprise.findOne()
+    Entreprise.findOne({ r_sociale: entreprise.r_sociale })
         .then((enterpriseFromDB) => {
             if (enterpriseFromDB) {
                 res.status(400).send("L'entreprise existe déjà");
@@ -89,7 +89,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                             entreprise.directeur_id = userFromDb._id;
                             entreprise.save()
                                 .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
-                                .catch((error) => { res.status(400).send('Impossible de créer la nouvelle entreprise') })
+                                .catch((error) => { console.log(error); res.status(400).send('Impossible de créer la nouvelle entreprise') })
                         }
                         else {
                             //Création des accès pour les CEO
@@ -134,6 +134,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                                                 }
                                             });
 
+                                            console.log('tout est bon');
                                             // envoi de la reponse du serveur
                                             res.status(201).send(entrepriseSaved);
                                         })
@@ -145,7 +146,7 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
                     .catch((error) => { res.status(500).send("Impossible de vérifier l'existence de l'utilisateur") });
             }
         })
-        .catch((error) => { res.status(500).send("Impossible de verifier l'existence de l'entreprise") })
+        .catch((error) => { console.log(error); res.status(500).send("Impossible de verifier l'existence de l'entreprise") })
 
 
 });
@@ -522,7 +523,7 @@ app.get("/getByIdPopulate/:id", (req, res, next) => {
 
 //recupération d'une liste d'entreprise selon id director
 app.get("/getByDirecteurId/:id", (req, res, next) => {
-    Entreprise.findOne({ Directeur_id: req.params.id })
+    Entreprise.findOne({ directeur_id: req.params.id })
         .then((entrepriseFormDb) => { res.status(200).send(entrepriseFormDb); })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer cette entreprise" }) })
 })

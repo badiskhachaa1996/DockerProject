@@ -33,8 +33,6 @@ export class TuteurComponent implements OnInit {
   entrepriseId: string;
 
   entreprises: Entreprise[] = [];
-  entrepriseDirector: Entreprise;
-  entrepriseDirectorId: string;
   updateTuteurId: string;
   tuteurList: Tuteur[] = [];
   tuteurs: Tuteur[] = [];
@@ -55,8 +53,6 @@ export class TuteurComponent implements OnInit {
   dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: null }];
 
 
-
-
   //constructeur - injection des services
   constructor(private formBuilder: FormBuilder,
     private router: Router, private tuteurService: TuteurService,
@@ -73,38 +69,25 @@ export class TuteurComponent implements OnInit {
         this.isAgent = dataUser.role == "Agent"
         this.isCEO = dataUser.type == "CEO Entreprise"
       }
-      if (this.isCEO) {
 
+      if (this.isCEO) {
         // récupération de l'entreprise du user
         this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
           ((response) => {
-            console.log(response)
-            //recupere l'entreprise avec l'id
-            this.entrepriseDirector = response
-            //selectionne l'id de l'entreprise             
-            this.entrepriseId = this.entrepriseDirector._id
-
-            // console.log(this.entrepriseDirector)
-            // récupération de la liste des tuteur par l'entreprise id
-            this.tuteurService.getAllByEntrepriseId(this.entrepriseId).subscribe(
+            this.tuteurService.getAllByEntrepriseId(response._id).subscribe(
               ((responseTuteur) => {
-                console.log(responseTuteur)
                 this.tuteurList = responseTuteur
               })
             )
-          }))
+          }
+        ))
       }
-      else if (!this.isCEO) {
-
+      else if(!this.isCEO) {
         //récupération des tuteur
         this.tuteurService.getAll().subscribe(
           (dataTuteur) => {
-            // dataTuteur.forEach(tuteur => {
-            //   this.tuteurs.push(tuteur);
-            // })
             this.tuteurs = dataTuteur;
-
-            //récupération des user
+            //récupération des users
             this.UserService.getAll().subscribe(
               (dataUser) => {
                 dataUser.forEach(user => {
@@ -115,15 +98,14 @@ export class TuteurComponent implements OnInit {
             //Liste des entreprises
             this.entrepriseService.getAll().subscribe(
               (data) => {
+                this.dropdownEntreprise = [{ libelle: 'Choissisez une entreprise', value: null }];
                 data.forEach(entreprise => {
                   this.entreprises[entreprise._id] = entreprise;
                   this.dropdownEntreprise.push({ libelle: entreprise.r_sociale, value: entreprise._id });
                 })
               })
-
           }
         );
-
       }
     })
 
@@ -160,12 +142,12 @@ export class TuteurComponent implements OnInit {
       firstname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       lastname: ['', [Validators.required, Validators.pattern('[^0-9]+')]],
       indicatif: [''],
-      phone: ['', [ Validators.pattern("^[0-9+]+$")]],
-      fonction: ['', [ Validators.pattern('[^0-9]+')]],
+      phone: ['', [Validators.pattern("^[0-9+]+$")]],
+      fonction: [''],
       entreprise: [''],
       anciennete: [''],
       niveau_formation: [''],
-      email_perso: ['', [Validators.email]],
+      email_perso: ['', [Validators.required, Validators.email]],
       numero_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
       rue_adresse: ['', [Validators.pattern('[^0-9]+')]],
       postal_adresse: ['', [Validators.pattern("^[0-9+]+$")]],
@@ -249,7 +231,6 @@ export class TuteurComponent implements OnInit {
       nationnalite,
       null,//verifedEmail
       null);//date creation
-    console.log(newUser)
 
     let newTuteur = new Tuteur(
       entreprise,//entreprise id
@@ -259,7 +240,6 @@ export class TuteurComponent implements OnInit {
       niveau_formation,
       date_naissance
     );
-    console.log(newTuteur)
 
     this.tuteurService.create({ 'newTuteur': newTuteur, 'newUser': newUser }).subscribe(
       ((response) => {
@@ -272,7 +252,7 @@ export class TuteurComponent implements OnInit {
       }),
       ((error) => {
         console.error(error)
-        this.messageService.add({ severity: 'error', summary: error.error });
+        this.messageService.add({ severity: 'error', summary: "Ajout impossible, veuillez verifier les informations saisie, si le problème persiste contactez un administrateur, i.sall@intedgroup.com, m.hue@intedgroup.com" });
       })
     );
 
@@ -291,26 +271,18 @@ export class TuteurComponent implements OnInit {
       niveau_formation: [''],
 
     })
-
   }
 
   //récupération du tuteur à modifier
-  OnGetByIdTuteur(rowData: Tuteur) {
-    this.tuteurService.getById(this.updateTuteurId).subscribe(
-      (response) => {
-        this.updateTuteur = response;
-        this.updateTuteurForm.patchValue({
-          fonction: rowData.fonction,
-          anciennete: rowData.anciennete,
-          niveau_formation: rowData.niveau_formation,
-        });
-      })
-
-
+  onFillForm(tuteur: Tuteur) {
+      this.updateTuteurForm.patchValue({
+        fonction: tuteur.fonction,
+        anciennete: tuteur.anciennete,
+        niveau_formation: tuteur.niveau_formation,
+      });
   }
 
   onUpdateTuteur() {
-
     let fonction = this.updateTuteurForm.get('fonction').value;
     let anciennete = this.updateTuteurForm.get('anciennete').value;
     let niveau_formation = this.updateTuteurForm.get('niveau_formation').value;
@@ -324,7 +296,7 @@ export class TuteurComponent implements OnInit {
     this.tuteurService.updateById(this.updateTuteurId, this.tuteurUpdate).subscribe(
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
-        console.log(this.tuteurUpdate);
+        this.ngOnInit();
       }),
       ((error) => {
         console.error(error)
@@ -332,9 +304,7 @@ export class TuteurComponent implements OnInit {
       })
 
     );
-
     this.resetUpdateTuteur()
-
   }
 
 
