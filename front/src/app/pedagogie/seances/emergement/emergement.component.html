@@ -6,9 +6,12 @@
     </p>
     <ul>
         <li><span style="color: red;">Thème abordé</span> : Quelle était la notion abordée durant cette séance ? </li>
-        <li><span style="color: red;">Objectif de la séance</span> : Ce que l'apprenant doit savoir ou savoir faire à la fin de la séance</li>
-        <li><span style="color: red;">Méthodes</span> : <a href="https://www.bienenseigner.com/methodes-pedagogiques/" target="_blank">Merci de choisir parmi ces 5 méthodes les plus utilisées</a> </li>
-        <li><span style="color: red;">Supports</span> : Exemple: Le tableau numérique, le PC, les fiches , les sites, les vidéos, les livres etc... </li>
+        <li><span style="color: red;">Objectif de la séance</span> : Ce que l'apprenant doit savoir ou savoir faire à la
+            fin de la séance</li>
+        <li><span style="color: red;">Méthodes</span> : <a href="https://www.bienenseigner.com/methodes-pedagogiques/"
+                target="_blank">Merci de choisir parmi ces 5 méthodes les plus utilisées</a> </li>
+        <li><span style="color: red;">Supports</span> : Exemple: Le tableau numérique, le PC, les fiches , les sites,
+            les vidéos, les livres etc... </li>
     </ul>
     <p class="line-height-3 m-0">
         Il vous suffit par la suite de cliquer sur le bouton <span style="font-weight: bold;">"Envoyer le rapport et la
@@ -23,13 +26,14 @@
 <div class="grid" *ngIf="showCanvas || (presence && presence.allowedByFormateur && presence.signature==false)">
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
-        <div class="col-12">
+        <div class="col-12" *ngIf="formateurInfo">
             <i class="pi pi-times" style="font-size: 20px;" (click)="signaturePad.clear()" aria-hidden="true"
                 pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
             <!--<canvas class="card" #canva></canvas><br>-->
             <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
                 <signature-pad [options]="signaturePadOptions"></signature-pad><br>
-            </div><p>La signature est obligatoire</p><br>
+            </div>
+            <p style="color: red;">* La signature est obligatoire</p><br>
             <div class="card">
                 <div class="col-6">
                     <button (click)="display=true" pButton icon="pi pi-info-circle" label="Aide"
@@ -64,11 +68,14 @@
                         <label>Supports <span style="color: red;"> * </span></label>
                         <input pInputText type="text" formControlName="support" />
                     </div>
+                    <div class="field col-12">
+                        <label>Observations</label>
+                        <textarea pInputTextarea type="text" formControlName="observations" ></textarea>
+                    </div>
                     <div class="col-12">
                         <button [disabled]="formPP.invalid" pButton class="ui-button-raised ui-button-success"
                             label="Envoyer le rapport et la signature" type="submit"></button>
                     </div>
-
                 </form>
             </div>
             <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer"
@@ -129,10 +136,11 @@
         </div>
     </div>
 </div>
-<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut">
+<h3 *ngIf="date_debut > date">La séance n'a pas débuté, merci de revenir à l'heure de la séance pour signer.</h3>
+<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut && !showCanvas">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
-        <h3 *ngIf="date_fin > date">Vous êtes en retard, demandez au Formateur de vous autorisez à signer puis rechargez
+        <h3 *ngIf="date_fin_seance > date" style="color: red;">Vous êtes en retard, demandez au Formateur de vous autorisez à signer puis rechargez
             la page</h3>
         <div class="col-12">
             <div class="md:col-offset-5 col-12">
@@ -228,8 +236,9 @@
         </div>
     </div>
     <div class="card">
-        <button *ngIf="isAdmin" pButton class="ui-button-raised ui-button-success" label="Autoriser le formateur à signer"
-            style="float:right;margin-right: 2px;" (click)="allowFormateur()"></button>
+        <button *ngIf="isAdmin" pButton class="ui-button-raised ui-button-success"
+            label="Autoriser le formateur à signer" style="float:right;margin-right: 2px;"
+            (click)="allowFormateur()"></button>
         <h3 *ngIf="seance">Liste des présence de la séance: {{seance.libelle}} du {{seance.date_debut | date :
             "dd/MM"}}
         </h3>
@@ -260,7 +269,7 @@
                         Date de présence <p-sortIcon field="date_signature"></p-sortIcon>
                     </th>
                     <th scope="col">
-                        Action
+                        Justification d'absence
                     </th>
                 </tr>
             </ng-template>
@@ -282,9 +291,9 @@
                     <td>{{(data.Sign)?"Oui":"Non"}}</td>
                     <td>{{ data.date_signature | date:'HH:mm dd/MM/YYYY' }}</td>
                     <td>
+                        <!-- Action -->
                         <i *ngIf="data.justificatif" pTooltip="Télécharger la justification" tooltipPosition="bottom"
                             class="pi pi-download" (click)="downloadFile(data)" aria-hidden="true"></i>
-                        <!-- Action -->
                     </td>
                 </tr>
             </ng-template>

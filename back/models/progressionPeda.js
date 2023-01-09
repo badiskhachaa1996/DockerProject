@@ -8,7 +8,8 @@ const sch = mongoose.Schema({
     objectif: { type: String },
     methode: { type: String },
     support: { type: String },
-    semestre: { type: String, default: 'Semestre 1' }
+    semestre: { type: String, default: 'Semestre 1' },
+    observations: { type: String }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

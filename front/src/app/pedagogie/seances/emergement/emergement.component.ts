@@ -21,7 +21,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { CampusService } from 'src/app/services/campus.service';
 const io = require("socket.io-client");
 import { SignaturePad } from 'angular2-signaturepad';
-import { ProgressionPeda } from 'src/app/models/progressionPeda';
+import { ProgressionPeda } from 'src/app/models/ProgressionPeda';
 import { ProgressionPedaService } from 'src/app/services/pedagogie/progression-peda.service';
 
 @Component({
@@ -59,7 +59,7 @@ export class EmergementComponent implements OnInit {
   seance: Seance;
   showFiles: [{ name: string, right: string, upload_by: string }];
   date = new Date().getTime()
-  date_debut; date_fin;
+  date_debut; date_fin;date_fin_seance;
   formateurInfo: Formateur = null;
   dropdownEtudiant = []
   groupeFilter: [{ label: string, value: string }];
@@ -78,7 +78,8 @@ export class EmergementComponent implements OnInit {
     theme: [null, Validators.required],
     methode: [null, Validators.required],
     support: [null, Validators.required],
-    objectif: [null, Validators.required]
+    objectif: [null, Validators.required],
+    observations: ['']
 
   });
 
@@ -150,8 +151,8 @@ export class EmergementComponent implements OnInit {
     }, error => console.error(error))
   }
 
-  refreshCanvas(){
-    this.showCanvas= this.presence == null && this.date > this.date_debut && this.date_fin > this.date
+  refreshCanvas() {
+    this.showCanvas = this.presence == null && this.date > this.date_debut && this.date_fin > this.date
   }
 
   ngAfterViewInit() {
@@ -236,6 +237,7 @@ export class EmergementComponent implements OnInit {
         this.date_fin = new Date(dataS.date_fin).getTime() + (60 * 60000)
       this.allowJustificatif = this.date < new Date(dataS.date_fin).getTime() + ((60 * 24 * 3) * 60000)
       this.showCanvas = this.showCanvas && this.date > this.date_debut && this.date_fin > this.date
+      this.date_fin_seance = new Date(dataS.date_fin).getTime()
       this.DiplomeService.getAll().subscribe(diplomes => {
         diplomes.forEach(diplome => {
           this.diplomeList[diplome._id] = diplome
@@ -524,9 +526,8 @@ export class EmergementComponent implements OnInit {
   addPP() {
     let PP = new ProgressionPeda(null, this.seance.formateur_id, this.ID,
       this.formPP.value.theme, this.formPP.value.objectif, this.formPP.value.methode, this.formPP.value.support,
-      this.matiereList[this.seance.matiere_id].semestre)
+      this.matiereList[this.seance.matiere_id].semestre, this.formPP.value.observations)
     this.PPService.create(PP).subscribe(data => {
-      console.log(data)
       this.MessageService.add({ severity: 'success', summary: 'Rapport de séance', detail: 'Envoyé avec succès' })
     }, err => {
       console.error(err)

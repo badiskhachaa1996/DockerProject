@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ProgressionPeda } from 'src/app/models/progressionPeda';
+import { ProgressionPeda } from 'src/app/models/ProgressionPeda';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

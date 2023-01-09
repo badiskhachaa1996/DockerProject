@@ -7,6 +7,7 @@ export class ProgressionPeda {
         public objectif?: string,
         public methode?: string,
         public support?: string,
-        public semestre?: string
+        public semestre?: string,
+        public observations?:string
     ) { }
 }
