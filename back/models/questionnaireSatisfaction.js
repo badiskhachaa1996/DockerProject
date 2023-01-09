@@ -3,6 +3,8 @@ const rb_sch = new mongoose.Schema({
     formation: {
         type: String,
     },
+    ecoleInscrit: { type: String },
+    campus: { type: String },
     age: {
         type: Number
     },
@@ -43,6 +45,10 @@ const rb_sch = new mongoose.Schema({
     ecole: {
         type: String
     },
+    teams: {type:String},
+    ims: {type:String},
+    ll: {type:String},
+    intuns: {type:String},
     propositions: {
         type: String
     }
