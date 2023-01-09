@@ -129,7 +129,6 @@ import { FormulaireIntunsComponent } from './formulaire-admission/formulaire-int
 import { CvthequeComponent } from './skillsnet/cvtheque/cvtheque.component';
 import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component';
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
-import { ProgressionPeda } from './models/progressionPeda';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 
 const routes: Routes = [
