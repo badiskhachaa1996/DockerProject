@@ -33,7 +33,6 @@ export class UsersSettingsComponent implements OnInit {
     { label: 'Salarié', value: 'Salarié' },
     { label: 'CEO Entreprise', value: 'CEO Entreprise' },
     { label: 'Tuteur', value: 'Tuteur' },
-    { label: 'Etudiant', value: 'Etudiant' },
     { label: 'Initial', value: 'Initial' },
     { label: 'Alternant', value: 'Alternant' },
     { label: 'Formateur', value: 'Formateur' },

@@ -137,8 +137,6 @@ export class DetailsEtudiantComponent implements OnInit {
             });
           })
 
-
-
           // boucle liste des presences totales de l'étudiants.
           this.AssiduiteListe.forEach(item => {
             if (item.isPresent != true) {
@@ -162,8 +160,6 @@ export class DetailsEtudiantComponent implements OnInit {
 
               this.nb_presences++;
               this.barData.datasets[1].data[Number(month) - 1]++
-
-
             }
           });
           this.barDataHor.datasets[0].data.push(this.nb_presences)
