@@ -336,14 +336,19 @@
             </form>
         </div>
 
+        <div class="col-12" *ngIf="token.type == 'CEO Entreprise'">
+            <div class="card">
+                <p-panel header="Notice" [toggleable]="true" class="line-height-3 m-0">
+                    Si vous rencontrez une incohérence sur un contrat n'hésitez pas créer un ticket au service commercial via le module ticketing.
+                </p-panel>
+            </div>
+        </div>
+
         <div class="card">
-            <button pButton label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()"
+            <button *ngIf="token.type != 'CEO Entreprise'" pButton label="Nouveau contrat d'alternance" (click)="ShowAddNewCA()"
                 style="float: right;"></button>
 
-            <h5>Liste des contrats <span *ngIf="ParmTuteur">du tuteur :
-                    {{ ListeContrats[0]?.tuteur_id.user_id.firstname | titlecase }} {{
-                    ListeContrats[0]?.tuteur_id.user_id.lastname | uppercase }} </span>
-            </h5>
+            <h5>Liste des contrats</h5>
 
             <p-toast></p-toast>
             <p-table #dt1 [value]="ListeContrats"
@@ -364,20 +369,12 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 8rem;"></th>
-                        <th pSortableColumn="alternant_id"> Prenom &amp; Nom <p-sortIcon field="alternant_id">
-                            </p-sortIcon>
-                        </th>
-                        <th pSortableColumn=" intitule">Intitulé du poste <p-sortIcon field="intitule">
-                            </p-sortIcon>
-                        </th>
-                        <th pSortableColumn=" statut">Statut du contrat <p-sortIcon field=" statut">
-                            </p-sortIcon>
-                        </th>
-                        <th pSortableColumn="formation" class="text-center"> Formation <p-sortIcon field="formation"></p-sortIcon>
-                        </th>
-                        <th pSortableColumn="début_contrat" style="min-width: 15rem;text-align: center; ">
-                            Date début et fin du contrat
-                        </th>
+                        <th>Prenom &amp; Nom</th>
+                        <th>Poste</th>
+                        <th>Statut</th>
+                        <th>Formation</th>
+                        <th>Ecole</th>
+                        <th>Dates du contrat</th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -392,8 +389,8 @@
                             {{ contrat.alternant_id?.user_id?.firstname }}
                             {{ contrat.alternant_id?.user_id?.lastname }}
                         </td>
-                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.intitule }}</td>
-                        <td style="min-width: 8rem;text-align: center; ">
+                        <td>{{ contrat.intitule != '' ? contrat.intitule: 'Alternant' }}</td>
+                        <td>
                             <p-tag *ngIf="contrat.statut=='créé'" icon="pi pi-exclamation-triangle" severity="info"
                                 [value]="contrat.statut">
                             </p-tag>
@@ -402,23 +399,24 @@
                             </p-tag>
                         </td>
 
-                        <td style="min-width: 8rem;text-align: center; ">{{ contrat.formation.titre_long }}</td>
-                        <td style="min-width: 15rem;text-align: center; ">{{contrat.debut_contrat | date:
+                        <td>{{ contrat.formation.titre_long }}</td>
+                        <td>{{ contrat.ecole?.libelle }}</td>
+                        <td>{{contrat.debut_contrat | date:
                             'dd/MM/yyyy'}}-{{contrat.fin_contrat | date: 'dd/MM/yyyy'}}
                         </td>
                         <td>
                             <i class="pi pi-chart-pie" pTooltip="Voir Assiduité" aria-hidden="true"
-                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center;"></i>
+                                (click)="showPresence(contrat.alternant_id._id)" style="text-align: center; color: red;"></i>
                             <i class="pi pi-pencil" pTooltip="Modifier" aria-hidden="true"
                                 (click)="onFillFormUpdate(contrat); showFormUpdateCa = true;"
-                                style="text-align: center;"></i>
+                                style="text-align: center; margin-left: 3px; color: blue" *ngIf="token.type != 'CEO Entreprise'"></i>
                         </td>
                     </tr>
                 </ng-template>
 
                 <ng-template pTemplate="rowexpansion" let-contrat>
                     <tr>
-                        <td colspan="7">
+                        <td colspan="8">
                             <div class="p-3">
                                 <p-table responsiveLayout="scroll" styleClass="p-datatable-gridlines">
                                     <ng-template pTemplate="header">
@@ -426,7 +424,7 @@
                         <th>Horaire</th>
                         <th>Classification</th>
                         <th>Niveau de la formation</th>
-                        <th>Entreprise</th>
+                        <th *ngIf="token.type != 'CEO Entreprise'">Entreprise</th>
                         <th>Coeff hierachique</th>
                         <th>Commercial</th>
                         <th>Tuteur</th>
@@ -438,17 +436,21 @@
                         <td>{{contrat.horaire}}</td>
                         <td>{{contrat.classification}}</td>
                         <td>{{contrat.niveau_formation}}</td>
-                        <td style="min-width: 5rem;" *ngIf="contrat.tuteur_id != null">{{
-                            EntreprisesName[contrat.tuteur_id.entreprise_id]?.r_sociale }}
+                        <td style="min-width: 5rem;" *ngIf="token.type != 'CEO Entreprise'">
+                            {{ contrat.entreprise_id?.r_sociale }}
                         </td>
-                        <td *ngIf="contrat.directeur_id != null">{{
-                            EntreprisesNameByDirId[contrat.directeur_id._id]?.r_sociale }}</td>
                         <td>{{contrat.coeff_hierachique}}</td>
                         <td>{{ contrat.code_commercial?.lastname }} {{ contrat.code_commercial?.firstname }}</td>
-                        <td *ngIf="contrat.tuteur_id != null">{{ contrat.tuteur_id?.user_id?.lastname }} {{
-                            contrat.tuteur_id?.user_id?.firstname }}</td>
-                        <td *ngIf="contrat.directeur_id != null">{{ contrat.directeur_id?.lastname }} {{
-                            contrat.directeur_id?.firstname }}</td>
+                        
+                        <td *ngIf="contrat.tuteur_id != null">
+                            {{ contrat.tuteur_id?.user_id?.lastname }} 
+                            {{ contrat.tuteur_id?.user_id?.firstname }}
+                        </td>
+                        <td *ngIf="contrat.directeur_id != null">
+                            {{ contrat.directeur_id?.lastname }} 
+                            {{ contrat.directeur_id?.firstname }}
+                        </td>
+
                         <td>
                             <ul>
                                 <li *ngFor="let annee of contrat.anne_scolaire; let i = index">{{ annee }}</li>

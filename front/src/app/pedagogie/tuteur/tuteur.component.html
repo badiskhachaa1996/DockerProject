@@ -218,16 +218,11 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Nom<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Prénom<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Téléphone<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Email<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Entreprise<p-sortIcon></p-sortIcon>
-                        </th>
+                        <th>Nom</th>
+                        <th style="text-align:center">Prénom</th>
+                        <th style="text-align:center">Téléphone</th>
+                        <th style="text-align:center">Email</th>
+                        <th style="text-align:center">Entreprise</th>
                         <th style="text-align:center">Action</th>
                 </ng-template>
                 <ng-template pTemplate="body" let-tuteur>
@@ -240,7 +235,7 @@
                             {{ tuteur.user_id?.firstname }}
                         </td>
                         <td>
-                            {{ tuteur.user_id?.phone }}
+                            {{ tuteur.user_id?.indicatif }} {{ tuteur.user_id?.phone }}
                         </td>
                         <td>
                             {{ tuteur.user_id?.email_perso}}
@@ -284,16 +279,10 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
-                        <th>Nom<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Prénom<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Téléphone<p-sortIcon></p-sortIcon>
-                        </th>
-                        <th style="text-align:center">Email<p-sortIcon></p-sortIcon>
-                        </th>
-    
-    
+                        <th>Nom</th>
+                        <th style="text-align:center">Prénom</th>
+                        <th style="text-align:center">Téléphone</th>
+                        <th style="text-align:center">Email</th>
                         <th style="text-align:center">Action</th>
                 </ng-template>
                 <ng-template pTemplate="body" let-tuteur>
@@ -305,7 +294,7 @@
                             {{ tuteur.user_id?.firstname }}
                         </td>
                         <td>
-                            {{ tuteur.user_id?.phone }}
+                            {{ tuteur.user_id?.indicatif }} {{ tuteur.user_id?.phone }}
                         </td>
                         <td>
                             {{ tuteur.user_id?.email_perso}}
