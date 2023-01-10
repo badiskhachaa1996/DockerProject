@@ -1,9 +1,18 @@
 const express = require('express');
+const { QFF } = require('../models/questionnaireFinFormation');
 const { QS } = require('../models/questionnaireSatisfaction');
 const app = express();
 app.disabled("x-powered-by");
 app.post('/create', (req, res, next) => {
     let r = new QS({ ...req.body })
+    r.date_creation = new Date()
+    r.save().then(data => {
+        res.send(data)
+    })
+})
+
+app.post('/createQFF', (req, res, next) => {
+    let r = new QFF({ ...req.body })
     r.date_creation = new Date()
     r.save().then(data => {
         res.send(data)

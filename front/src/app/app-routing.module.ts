@@ -133,6 +133,7 @@ import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progress
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
 import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
 import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
+import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 
 const routes: Routes = [
     {
@@ -265,7 +266,8 @@ const routes: Routes = [
     { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
     { path: 'auth', component: MsalRedirectComponent },
     { path: 'code', redirectTo: '' },
-    { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent }
+    { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent },
+    { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent }
 ]
 
 

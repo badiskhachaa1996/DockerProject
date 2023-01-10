@@ -10,11 +10,12 @@ const pwdToken_schema = new mongoose.Schema({
     locaux: { type: Boolean },
     equipments: { type: Boolean },
     outils: { type: String },
+    accueil: { type: Number },
     orga: { type: Number },
     horaires: { type: Number },
     rythme: { type: Number },
-    orga: { type: Number },
-    contenu: { type: Number },
+    methodes: { type: Number },
+    contenu_peda: { type: Number },
     disponibilite: { type: Number },
 
 });
