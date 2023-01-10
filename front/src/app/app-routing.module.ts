@@ -190,8 +190,8 @@ const routes: Routes = [
             { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
             { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
-            { path: 'tuteur', component: TuteurComponent },
-            { path: 'tuteur/:entreprise', component: TuteurComponent },
+            { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService]  },
+            { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
@@ -216,9 +216,9 @@ const routes: Routes = [
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque', component: CvthequeComponent },
-            { path: 'cvtheque/:id', component: CvthequeComponent },
-            { path: 'skills-management', component: SkillsManagementComponent },
+            { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
