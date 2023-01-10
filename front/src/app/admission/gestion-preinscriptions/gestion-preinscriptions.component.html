@@ -393,7 +393,7 @@
                                 class="pi pi-money-bill" (click)="showPayement=prospect;payementList=prospect.payement"
                                 aria-hidden="true"></i>
                             <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
-                                class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>  
+                                class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
@@ -658,7 +658,7 @@
         </ng-template>
         </p-table>
     </div>
-    <div class="col-12">
+    <!-- <div class="col-12">
         <div class="card">
             <h5>Liste des prospects Intuns</h5>
             <p-table #dt3 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
@@ -737,18 +737,17 @@
                 </ng-template>
             </p-table>
         </div>
-    </div>
+    </div>-->
     <div class="col-12">
         <div class="card">
             <h5>Liste des prospects pour le call center : Alternant</h5>
-            <small style="color: red;">Tous les champs qui sont en coulour rouge, sont des prospects qui doivent être appelé dans le call center</small>
+            <small style="color: red;">Tous les champs qui sont en couleur rouge, sont des prospects qui doivent être appelé dans le call center</small>
             <p-toast></p-toast>
-            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single" 
+            <p-table #dt1 dataKey="_id" [rows]="10" [rowHover]="true" [paginator]="true" rowExpandMode="single"
                 [value]="alternants" [paginator]="true" [pageLinks]="5" selectionMode="single"
                 (onRowSelect)="expandRow($event.data)"
                 [globalFilterFields]="['customid', 'type_form', 'code_commercial', 'programme','user_id.firstname','user_id.lastname','formation','statut_dossier','campus_choix_1','campus_choix_2','campus_choix_3','user_id.email_perso','rythme_formation']"
-                responsiveLayout="scroll" styleClass="p-datatable-gridlines"
-                (onFilter)="onFilter($event, 'dt1')">
+                responsiveLayout="scroll" styleClass="p-datatable-gridlines" (onFilter)="onFilter($event, 'dt1')">
 
                 <ng-template pTemplate="caption">
                     <span class="p-input-icon-left mb-2">
@@ -825,7 +824,7 @@
                             Formation <p-sortIcon field="formation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="rythme_formation" scope="col" style="text-align: center;">
-                           Rythme Formation <p-sortIcon field="rythme_formation"></p-sortIcon>
+                            Rythme Formation <p-sortIcon field="rythme_formation"></p-sortIcon>
                         </th>
                         <th pSortableColumn="type_form" scope="col" style="text-align: center;">
                             Etablissement <p-sortIcon field="type_form"></p-sortIcon>
@@ -950,13 +949,13 @@
                                 aria-hidden="true"></i>
                             <i pTooltip="Voir le dossier du point de vue d'un prospect" tooltipPosition="bottom"
                                 class="pi pi-search" (click)="showDossier(prospect)" aria-hidden="true"></i>
-                            <i pTooltip = "Voir le CV du prospect" tooltipPosition="bottom" class="pi pi-book" aria-hidden="true" 
-                                (click)="onNavigateToCV(prospect?.user_id?._id)"></i>
-                            <i pTooltip="Prospect appelé" class="pi pi-phone" (click)="prospectCalled"></i>       
+                            <i pTooltip="Voir le CV du prospect" tooltipPosition="bottom" class="pi pi-book"
+                                aria-hidden="true" (click)="onNavigateToCV(prospect?.user_id?._id)"></i>
+                            <i pTooltip="Prospect appelé" class="pi pi-phone" (click)="prospectCalled"></i>
                             <i *ngIf="token && token.role!='user' && token.role!='Agent'"
                                 pTooltip="Supprimer le prospect" tooltipPosition="bottom" class="pi pi-trash"
                                 (click)="deleteProspect(prospect)" aria-hidden="true"></i>
-                           
+
                         </td>
                         <td *ngIf="prospect.enTraitement == true">
                             <i class="pi pi-spin pi-spinner" style="font-size: 2rem"
@@ -1218,5 +1217,5 @@
         </ng-template>
         </p-table>
     </div>
-    </div>
-</div>    
+</div>
+</div>

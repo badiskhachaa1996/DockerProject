@@ -21,7 +21,7 @@ export class ResponsableCommercialGuard implements CanActivate {
     else
       return this.serv.getAServiceByid(currenttoken.service_id).pipe(
         map(service => {
-          if (service.dataService.label.includes("ommercial") && role == "Responsable") {
+          if (service.dataService.label.includes("Commercial") && role == "Responsable") {
             console.log("accés autorisé: " + role)
             return true
           }

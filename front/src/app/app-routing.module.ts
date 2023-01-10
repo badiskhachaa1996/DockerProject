@@ -131,6 +131,9 @@ import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component'
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
+import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
+import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
+import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 
 const routes: Routes = [
     {
@@ -191,8 +194,10 @@ const routes: Routes = [
             { path: 'assign-ims', component: CreateAccountComponent, canActivate: [AuthGuardService] },
             { path: 'devoirs', component: DevoirsComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
-            { path: 'tuteur', component: TuteurComponent },
-            { path: 'tuteur/:entreprise', component: TuteurComponent },
+            { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService]  },
+            { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
+
+            { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
@@ -217,9 +222,9 @@ const routes: Routes = [
             { path: 'offres', component: AnnoncesComponent, canActivate: [AuthGuardService] },
             { path: 'mes-offres', component: MesOffresComponent, canActivate: [AuthGuardService] },
             { path: 'matching/:user_id', component: MatchingComponent, canActivate: [AuthGuardService] },
-            { path: 'cvtheque', component: CvthequeComponent },
-            { path: 'cvtheque/:id', component: CvthequeComponent },
-            { path: 'skills-management', component: SkillsManagementComponent },
+            { path: 'cvtheque', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'cvtheque/:id', component: CvthequeComponent, canActivate: [AuthGuardService] },
+            { path: 'skills-management', component: SkillsManagementComponent, canActivate: [AuthGuardService] },
             { path: 'equipe-commercial', component: GestionEquipeComponent, canActivate: [AuthGuardService, ResponsableCommercialGuard] },
             { path: 'detail-equipe-commercial/:equipe_id', component: DetailEquipeComponent, canActivate: [AuthGuardService] },
             { path: 'liste-demande-commercial', component: DemandeConseillerComponent, canActivate: [AuthGuardService] },
@@ -234,7 +239,8 @@ const routes: Routes = [
             /** end */
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] }
+            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
+            { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] }
 
         ],
     },
@@ -260,7 +266,8 @@ const routes: Routes = [
     { path: 'politique-confidentialite', component: PolitiqueConfidentialiteComponent },
     { path: 'auth', component: MsalRedirectComponent },
     { path: 'code', redirectTo: '' },
-    { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent }
+    { path: 'questionnaire-satisfaction', component: QuestionnaireSatisfactionComponent },
+    { path: 'questionnaire-fin-formation', component: QuestionnaireFinFormationComponent }
 ]
 
 

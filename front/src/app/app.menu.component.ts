@@ -43,6 +43,7 @@ export class AppMenuComponent implements OnInit {
     isEvent = false
     isAdministration: Boolean = false;
     isConseiller: teamCommercial = null
+    isIntuns: Boolean = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
@@ -170,6 +171,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Admission',
                 items: [
                     { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                    { label: 'Gestions des prospects Intuns', icon: 'pi pi-user-plus', routerLink: ['/prospects-intuns'] },
                     { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
                 ],
             },
@@ -236,6 +238,12 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
                 ]
+            },
+            {
+                label: 'Questionnaire',
+                items: [
+                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                ]
             }
         ];
 
@@ -254,6 +262,7 @@ export class AppMenuComponent implements OnInit {
                     this.isEvent = service.label.includes('Event')
                     this.isAdministration = service.label.includes('dministration')
                     this.isFinance = service.label.includes('inanc')
+                    this.isIntuns=service.label.includes('Intuns')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -301,6 +310,7 @@ export class AppMenuComponent implements OnInit {
                                 })
                         })
                     }
+
                 } else if (this.isFormateur) {
                     //Formateur
                     this.FService.getByUserId(this.token.id).subscribe(dataF => {
@@ -548,7 +558,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
@@ -583,7 +593,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
@@ -734,7 +744,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                }else if (this.isEvent) {
+                } else if (this.isEvent) {
                     this.model = [
                         {
                             label: 'Accueil',
@@ -833,6 +843,32 @@ export class AppMenuComponent implements OnInit {
                             ]
                         }
                     ]
+                } else if (this.isIntuns) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: 'Admission',
+                            items: [
+                                {
+                                    label: 'Prospect Intuns', icon: 'pi pi-user-plus',
+                                    items: [
+                                        { label: 'Liste des prospects Intuns', icon: 'pi pi-users', routerLink: ['/prospects-intuns'] },
+                                    ]
+                                },]
+                        }]
                 } else {
                     this.model = [
                         {

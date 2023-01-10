@@ -1,0 +1,96 @@
+<p-toast></p-toast>
+<div class="grid" *ngIf="show">
+    <div>
+        <div class="col-12">
+            <div class="card">
+                <img src="\assets\images\logoIMS.png" alt="logo INTED" style="width: 10%;" class="m-2">
+                <h4 style="text-align: center;">Questionnaire de satisfaction de votre formation</h4>
+                <p style="text-align: center; font-size: 12px;">Cher/e étudiant/e, vous venez de suivre une formation
+                    dans une de nos écoles (ESPIC, ESTYA, ADG, STUDINFO, INTUNS) du GroupeINTED et nous espérons que
+                    tout s'est bien passé !
+                    Pour en être sûrs nous avons besoin de votre témoignage. Merci d'avance de vos réponses aux
+                    questions suivantes.
+                    <span style="font-weight: bold;">Ce questionnaire est entièrement anonyme.</span>
+                </p>
+                <p></p>
+
+                <form class="p-fluid p-formgrid grid" [formGroup]="satisfactionsForm" (ngSubmit)="onAddForm()">
+                    <div class="field col-12">
+                        <label>Avez-vous eu suffisamment d’informations sur la formation avant de la commencer ?</label>
+                        <p-selectButton [options]="optionSatisfaction"
+                            formControlName="assez_informations"></p-selectButton>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Le contenu de la formation a-t-il repondu à vos attentes ?</label>
+                        <p-rating [cancel]="false" formControlName="contenu"></p-rating>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Les locaux mis à votre disposition durant votre formation vous ont-ils paru adaptes
+                            ?</label>
+                        <p-selectButton [options]="optionSatisfaction" formControlName="locaux"></p-selectButton>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Les équipements mis à votre disposition durant votre formation vous ont-ils paru adaptes
+                            ?</label>
+                        <p-selectButton [options]="optionSatisfaction" formControlName="equipments"></p-selectButton>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Les outils proposes vous permettront-ils de transmettre l’information à vos collegues ou
+                            collaborateurs ?</label>
+                        <p-dropdown [options]="dropdownAttentes" formControlName="outils"
+                            placeholder="Choissisez votre réponse"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous l’accueil en formation ?</label>
+                        <p-rating [cancel]="false" formControlName="accueil"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous l’organisation générale de votre formation ?</label>
+                        <p-rating [cancel]="false" formControlName="orga"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous les horaires de votre formation ?</label>
+                        <p-rating [cancel]="false" formControlName="horaires"></p-rating>
+                    </div>
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous le rythme de votre formation ?</label>
+                        <p-rating [cancel]="false" formControlName="rythme"></p-rating>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous les méthodes pédagogiques utilisées ?</label>
+                        <p-rating [cancel]="false" formControlName="methodes"></p-rating>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous le contenu pédagogique de la formation ?</label>
+                        <p-rating [cancel]="false" formControlName="contenu_peda"></p-rating>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Comment évaluez-vous la disponibilité de vos formateurs ?</label>
+                        <p-rating [cancel]="false" formControlName="disponibilite"></p-rating>
+                    </div>
+
+                    <div>
+                        <button pButton label="Validez le formulaire" type="submit"
+                            [disabled]="satisfactionsForm.invalid"></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="!show">
+    <h2 class="col-12 flex justify-content-center flex-wrap card-container">Merci !
+        Votre formulaire a été envoyé !</h2>
+    <div class="col-12 flex justify-content-center flex-wrap card-container">
+        <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
+    </div>
+</div>

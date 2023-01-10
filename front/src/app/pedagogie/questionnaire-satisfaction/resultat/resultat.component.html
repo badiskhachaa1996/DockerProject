@@ -1,0 +1,146 @@
+<div class="col-12">
+    <div class="card">
+        <h5>Liste des résultats du questionnaire de satisfaction</h5>
+        <p-table #dt1 rowExpandMode="single" [value]="resultats" dataKey="_id" [rows]="10" [rowHover]="true"
+            [totalRecords]="resultats.length" styleClass="p-datatable-gridlines" [paginator]="true" [pageLinks]="5"
+            [globalFilterFields]="['formation','ecoleInscrit','campus','propositions']" responsiveLayout="scroll">
+
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                            placeholder="Recherche" class="w-full" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 5rem"></th>
+                    <th pSortableColumn="formation" style="text-align:center"> Formation <p-sortIcon
+                            field="formation"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="ecoleInscrit" style="text-align:center"> Ecole <p-sortIcon
+                            field="ecoleInscrit"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="campus" style="text-align:center"> Campus <p-sortIcon field="campus">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="age" style="text-align:center"> Age <p-sortIcon field="age">
+                        </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="annee_formation" style="text-align:center">Année <p-sortIcon
+                            field="annee_formation">
+                        </p-sortIcon>
+                    </th>
+                    <th style="text-align:center">Action</th>
+            </ng-template>
+            <ng-template pTemplate="body" let-result>
+                <tr>
+                    <td>
+                        <button type="button" pButton pRipple [pRowToggler]="result"
+                            class="p-button-text p-button-rounded p-button-plain"
+                            [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{ result.formation }}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{ result.ecoleInscrit }}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{ result.campus }}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{result.age}}
+                    </td>
+                    <td style="min-width: 12rem;">
+                        {{result.annee_formation}}
+                    </td>
+                    <td>
+                        <i pTooltip="Supprimer" tooltipPosition="bottom" class="pi pi-trash" (click)="delete(result._id)"
+                            aria-hidden="true"></i>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="rowexpansion" let-result>
+                <tr>
+                    <td colspan="7">
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12">
+                                <label>Question 6 :</label><br>
+                                <label>Êtes-vous satisfait des horaires de cours ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.horaire"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 7 :</label><br>
+                                <label>Êtes-vous satisfait de la charge horaire par semaine ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.charge"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 8 :</label><br>
+                                <label>Êtes-vous satisfait du nombre de matières ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_nb_matiere"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 9 :</label><br>
+                                <label>Êtes-vous satisfait du contenu du programme ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_programme"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 10 :</label><br>
+                                <label>Êtes-vous satisfait de la pédagogie des enseignants ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_pedagogie_enseignant"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 11 :</label><br>
+                                <label>Avez-vous des supports de cours ?</label>
+                                <p>{{result.support?'Oui':'Non'}}</p>
+
+                            </div>
+                            <div class="field col-12" *ngIf="result.support">
+                                <label>Question 12 :</label><br>
+                                <label>Êtes-vous satisfait des supports de cours ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_support"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 13 :</label><br>
+                                <label>Êtes-vous satisfait des modes d'évaluation ? TD, Contrôle continu, Examen final
+                                    ...</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_modes"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 14 :</label><br>
+                                <label>Êtes-vous satisfait du suivi des évaluations ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_suivi"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 15 :</label><br>
+                                <label>Êtes-vous satisfait des locaux ?</label>
+                                <p-rating [cancel]="false" [ngModel]="result.satisfait_locaux"></p-rating>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 16 :</label><br>
+                                <label>L’école répond-elle à vos attentes premières ?</label>
+                                <p>{{result.ecole}}</p>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 17 :</label><br>
+                                <label>Avez-vous accès à :</label><br>
+                                <p>Microsoft TEAMS : {{result.teams}}</p>
+                                <p>IMS : {{result.ims}}</p>
+                                <p>LINKEDIN LEARNING : {{result.ll}}</p>
+                                <p>INTUNS : {{result.intuns}}</p>
+                            </div>
+                            <div class="field col-12">
+                                <label>Question 18 :</label><br>
+                                <label>Quelles sont vos propositions d’améliorations éventuelles?</label><br>
+                                <textarea pInputTextarea readonly="true" [rows]="11" [ngModel]="result.propositions"></textarea>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

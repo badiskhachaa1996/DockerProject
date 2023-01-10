@@ -18,6 +18,8 @@ import { Note } from 'src/app/models/Note';
 import { Etudiant } from 'src/app/models/Etudiant';
 import { EtudiantService } from 'src/app/services/etudiant.service';
 import { SeanceService } from 'src/app/services/seance.service';
+import * as FileSaver from 'file-saver';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-examen',
@@ -532,5 +534,48 @@ export class ExamenComponent implements OnInit {
           }
         })
       })
+  }
+
+  exportExel(examen) {
+    let tableauNotes = []
+    this.NotesService.getAllByExamenID(examen._id).subscribe(notes => {
+      tableauNotes.push({
+        'ID Etudiant': '',
+        'Etudiant': '',
+        'Note': '',
+        'Appréciation': '',
+        'Date de Notation': '',
+        'Absence Justifié': '',
+        '':'',
+        'Formateur': examen.formateur_id?.user_id?.firstname + ' ' + examen.formateur_id?.user_id?.lastname,
+        'Module': examen.matiere_id[0].abbrv,
+        'Date de l\'éxamen': new Date(examen.date).toLocaleString(),
+        'Filière': this.formatClasse(examen.classe_id).join(', '),
+        'Semestre': examen.semestre
+      })
+      notes.forEach(n => {
+        let bypass: any = n.etudiant_id
+        if (bypass) {
+          let t = {}
+          t['ID Etudiant'] = bypass.custom_id;
+          t['Etudiant'] = bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname;
+          t['Note'] = parseFloat(n.note_val);
+          t['Appréciation'] = n.appreciation
+          t['Date de Notation'] = new Date(n.date_creation).toLocaleString()
+          t['Absence Justifié'] = (n.isAbsent) ? "Oui" : "Non";
+          tableauNotes.push(t)
+        }
+      })
+
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(tableauNotes);
+      //const worksheet2: XLSX.WorkSheet = XLSX.utils.json_to_sheet();
+      const workbook: XLSX.WorkBook = { Sheets: { 'notes': worksheet }, SheetNames: ['notes'] };
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+      const data: Blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
+      });
+      FileSaver.saveAs(data, "examen" + '_export_' + examen.libelle + "_" + new Date().toLocaleDateString("fr-FR") + ".xlsx");
+
+    })
   }
 }

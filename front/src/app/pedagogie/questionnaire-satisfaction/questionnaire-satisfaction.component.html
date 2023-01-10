@@ -1,93 +1,123 @@
 <p-toast></p-toast>
-<div class="grid">
+<div class="grid" *ngIf="show">
     <div>
         <div class="col-12">
             <div class="card">
+                <img src="\assets\images\logoIMS.png" alt="logo INTED"
+                style="width: 10%;" class="m-2">
                 <h4 style="text-align: center;">Questionnaire de satisfaction </h4>
-                <p style="text-align: center; font-size: 12px;">Vous êtes étudiant dans une des écoles du groupe INTED
-                    (ESTYA,ESPIC,ADG,STUDINFO,INTUNS). Afin d'améliorer la qualité de nos offres, veuilles remplir ce
+                <p style="text-align: center; font-size: 12px;">Vous êtes étudiant dans une des écoles de INTED GROUP
+                    (ESTYA,ESPIC,ADG,STUDINFO,INTUNS). Afin d'améliorer la qualité de nos offres, veuillez remplir le
                     formulaire ci-dessous. <span style="font-weight: bold;">Ce questionnaire est entièrement
-                        anonyme</span></p>
+                        anonyme.</span></p>
                 <p></p>
 
                 <form class="p-fluid p-formgrid grid" [formGroup]="satisfactionsForm" (ngSubmit)="onAddForm()">
                     <div class="field col-12">
-                        <label>Question 1 :</label>
-                        <label>Quelle formation suivre-vous ?</label>
+                        <label>Question 1 :</label><br>
+                        <label>Quelle formation suivez-vous ?</label>
                         <input type="text" pInputText formControlName="formation" placeholder="Ex: BTS SIO" />
                     </div>
 
                     <div class="field col-12">
-                        <label>Question 2 :</label>
-                        <label>Quelle est votre âge ?</label>
+                        <label>Question 2 :</label><br>
+                        <label>Dans quelle école êtes-vous inscrit ?</label>
+                        <p-dropdown [options]="ecoleDropdown" formControlName="ecoleInscrit"
+                            placeholder="Choissisez votre école"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Question 3 :</label><br>
+                        <label>Dans quel campus ?</label>
+                        <p-dropdown [options]="campusDropdown" formControlName="campus"
+                            placeholder="Choissisez votre campus"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Question 4 :</label><br>
+                        <label>En quelle année de formation êtes-vous ?</label>
+                        <p-dropdown [options]="choixAnnee" formControlName="annee_formation"
+                            placeholder="Choissisez votre année scolaire"></p-dropdown>
+                    </div>
+
+                    <div class="field col-12">
+                        <label>Question 5 :</label><br>
+                        <label>Quel est votre âge ?</label>
                         <p-inputNumber formControlName="age" placeholder="Ex: 18"></p-inputNumber>
                     </div>
 
                     <div class="field col-12">
-                        <label>Question 3 :</label>
-                        <label>En quelle année de formation êtes-vous ?</label>
-                        <input type="text" pInputText formControlName="annee_formation" />
-                    </div>
-                    <div class="field col-12">
-                        <label>Question 4 :</label>
+                        <label>Question 6 :</label><br>
                         <label>Êtes-vous satisfait des horaires de cours ?</label>
-                        <p-rating [cancel]="false"formControlName="horaire"></p-rating>
+                        <p-rating [cancel]="false" formControlName="horaire"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 5 :</label>
+                        <label>Question 7 :</label><br>
                         <label>Êtes-vous satisfait de la charge horaire par semaine ?</label>
-                        <p-rating [cancel]="false"formControlName="charge"></p-rating>
+                        <p-rating [cancel]="false" formControlName="charge"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 6 :</label>
+                        <label>Question 8 :</label><br>
                         <label>Êtes-vous satisfait du nombre de matières ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_nb_matiere"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_nb_matiere"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 7 :</label>
+                        <label>Question 9 :</label><br>
                         <label>Êtes-vous satisfait du contenu du programme ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_programme"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_programme"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 8 :</label>
+                        <label>Question 10 :</label><br>
                         <label>Êtes-vous satisfait de la pédagogie des enseignants ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_pedagogie_enseignant"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_pedagogie_enseignant"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 9 :</label>
+                        <label>Question 11 :</label><br>
                         <label>Avez-vous des supports de cours ?</label>
                         <p-selectButton [options]="optionSatisfaction" formControlName="support"></p-selectButton>
 
                     </div>
                     <div class="field col-12" *ngIf="satisfactionsForm.value.support">
-                        <label>Question 10 :</label>
+                        <label>Question 12 :</label><br>
                         <label>Êtes-vous satisfait des supports de cours ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_support"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_support"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 11 :</label>
+                        <label>Question 13 :</label><br>
                         <label>Êtes-vous satisfait des modes d'évaluation ? TD, Contrôle continu, Examen final
                             ...</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_modes"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_modes"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 12 :</label>
+                        <label>Question 14 :</label><br>
                         <label>Êtes-vous satisfait du suivi des évaluations ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_suivi"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_suivi"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 13 :</label>
+                        <label>Question 15 :</label><br>
                         <label>Êtes-vous satisfait des locaux ?</label>
-                        <p-rating [cancel]="false"formControlName="satisfait_locaux"></p-rating>
+                        <p-rating [cancel]="false" formControlName="satisfait_locaux"></p-rating>
                     </div>
                     <div class="field col-12">
-                        <label>Question 14 :</label>
+                        <label>Question 16 :</label><br>
                         <label>L’école répond-elle à vos attentes premières ?</label>
                         <p-dropdown [options]="dropdownAttentes" formControlName="ecole"
                             placeholder="Choissisez votre réponse"></p-dropdown>
                     </div>
                     <div class="field col-12">
-                        <label>Question 15 :</label>
+                        <label>Question 17 :</label><br>
+                        <label>Avez-vous accès à :</label><br>
+                        <label>Microsoft TEAMS</label>
+                        <p-selectButton [options]="accesChoix" formControlName="teams"></p-selectButton>
+                        <label>IMS</label>
+                        <p-selectButton [options]="accesChoix" formControlName="ims"></p-selectButton>
+                        <label>LINKEDIN LEARNING</label>
+                        <p-selectButton [options]="accesChoix" formControlName="ll"></p-selectButton>
+                        <label>INTUNS</label>
+                        <p-selectButton [options]="accesChoix" formControlName="intuns"></p-selectButton>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 18 :</label><br>
                         <label>Quelles sont vos propositions d’améliorations éventuelles?</label>
                         <textarea pInputTextarea formControlName="propositions"></textarea>
                     </div>
@@ -99,5 +129,13 @@
                 </form>
             </div>
         </div>
+    </div>
+</div>
+
+<div *ngIf="!show">
+    <h2 class="col-12 flex justify-content-center flex-wrap card-container">Merci !
+        Votre formulaire a été envoyé !</h2>
+    <div class="col-12 flex justify-content-center flex-wrap card-container">
+        <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
     </div>
 </div>
