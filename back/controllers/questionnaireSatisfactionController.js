@@ -17,13 +17,13 @@ app.get('/getAll', (req, res, next) => {
 })
 
 app.delete('/delete/:id', (req, res, next) => {
-    QS.findByIdAndRemove(req.params.id, {}, (err, doc => {
+    QS.findByIdAndRemove(req.params.id, {}, (err, doc) => {
         if (!err) {
             res.send(doc)
         } else {
             res.status(500).send(err)
         }
-    }))
+    })
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

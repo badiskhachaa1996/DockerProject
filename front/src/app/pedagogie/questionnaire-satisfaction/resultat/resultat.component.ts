@@ -64,6 +64,9 @@ export class ResultatComponent implements OnInit {
     if (confirm('Voulez-vous supprimer cette réponse ?'))
       this.QSService.delete(id).subscribe(data => {
         this.MessageService.add({ severity: 'success', summary: 'Réponse supprimé avec succès' })
+        this.QSService.getAll().subscribe(data => {
+          this.resultats = data
+        })
       }, err => {
         this.MessageService.add({ severity: 'error', summary: 'Une erreur est survenu lors de la suppresion', detail: err.message })
       })
