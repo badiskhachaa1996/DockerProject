@@ -132,6 +132,7 @@ import { SkillsManagementComponent } from './skillsnet/skills-management/skills-
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
 import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
+import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 
 const routes: Routes = [
     {
@@ -194,6 +195,8 @@ const routes: Routes = [
             { path: 'rendu-devoirs', component: DevoirsEtudiantsComponent, canActivate: [AuthGuardService] },
             { path: 'tuteur', component: TuteurComponent },
             { path: 'tuteur/:entreprise', component: TuteurComponent },
+
+            { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
 
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },

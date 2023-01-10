@@ -43,6 +43,7 @@ export class AppMenuComponent implements OnInit {
     isEvent = false
     isAdministration: Boolean = false;
     isConseiller: teamCommercial = null
+    isIntuns: Boolean = false
 
     constructor(public appMain: AppMainComponent, private userService: AuthService, private ETUService: EtudiantService, private FService: FormateurService, private CService: CommercialPartenaireService, private TCService: TeamCommercialService) { }
 
@@ -170,6 +171,7 @@ export class AppMenuComponent implements OnInit {
                 label: 'Admission',
                 items: [
                     { label: 'Gestions des prospects', icon: 'pi pi-user-plus', routerLink: ['/gestion-preinscriptions'] },
+                    { label: 'Gestions des prospects Intuns', icon: 'pi pi-user-plus', routerLink: ['/prospects-intuns'] },
                     { label: 'Gestion des participantes pour les événements', icon: 'pi pi-users', routerLink: ['/list-events'] }
                 ],
             },
@@ -307,6 +309,7 @@ export class AppMenuComponent implements OnInit {
                                 })
                         })
                     }
+
                 } else if (this.isFormateur) {
                     //Formateur
                     this.FService.getByUserId(this.token.id).subscribe(dataF => {
@@ -840,6 +843,32 @@ export class AppMenuComponent implements OnInit {
                             ]
                         }
                     ]
+                } else if (this.isIntuns) {
+                    this.model = [
+                        {
+                            label: 'Accueil',
+                            items: [
+                                { label: 'Tableau de bord', icon: 'pi pi-fw pi-home', routerLink: ['/'] }
+                            ]
+                        },
+                        {
+                            label: 'Ticketing', icon: 'pi pi-ticket',
+                            items: [
+
+                                { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
+
+                            ]
+                        },
+                        {
+                            label: 'Admission',
+                            items: [
+                                {
+                                    label: 'Prospect Intuns', icon: 'pi pi-user-plus',
+                                    items: [
+                                        { label: 'Liste des prospects Intuns', icon: 'pi pi-users', routerLink: ['/prospects-intuns'] },
+                                    ]
+                                },]
+                        }]
                 } else {
                     this.model = [
                         {

@@ -10,7 +10,7 @@ import { QSService } from 'src/app/services/qs.service';
 })
 export class QuestionnaireSatisfactionComponent implements OnInit {
 
-  show = false
+  show = true
 
   dropdownFormation = []
 

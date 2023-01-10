@@ -274,9 +274,6 @@ export class GestionPreinscriptionsComponent implements OnInit {
           }
         })
       })
-      this.admissionService.getAllProspectsIntuns().subscribe(tempIntuns => {
-        this.prospectsIntuns = tempIntuns
-      })
     })
 
   }
