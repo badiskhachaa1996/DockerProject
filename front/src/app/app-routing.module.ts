@@ -131,6 +131,7 @@ import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component'
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
+import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
 
 const routes: Routes = [
     {
@@ -234,7 +235,8 @@ const routes: Routes = [
             /** end */
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] }
+            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
+            { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] }
 
         ],
     },

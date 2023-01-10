@@ -45,13 +45,14 @@ const rb_sch = new mongoose.Schema({
     ecole: {
         type: String
     },
-    teams: {type:String},
-    ims: {type:String},
-    ll: {type:String},
-    intuns: {type:String},
+    teams: { type: String },
+    ims: { type: String },
+    ll: { type: String },
+    intuns: { type: String },
     propositions: {
         type: String
-    }
+    },
+    date_creation: { type: Date, default: Date.now() }
 })
 
 const QS = mongoose.model("QS", rb_sch);

@@ -236,6 +236,12 @@ export class AppMenuComponent implements OnInit {
                 items: [
                     { label: "Gestion des factures des formateurs", icon: "pi pi-user-edit", routerLink: ['/facture-formateur'] }
                 ]
+            },
+            {
+                label: 'Questionnaire',
+                items: [
+                    { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                ]
             }
         ];
 
@@ -735,7 +741,7 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                     ]
-                }else if (this.isEvent) {
+                } else if (this.isEvent) {
                     this.model = [
                         {
                             label: 'Accueil',
