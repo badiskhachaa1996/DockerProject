@@ -26,13 +26,13 @@
 <div class="grid" *ngIf="showCanvas || (presence && presence.allowedByFormateur && presence.signature==false)">
     <div class="col-12 card shadow-lg">
         <h3 *ngIf="seance">Signature de la séance: {{seance.libelle}} du {{seance.date_debut | date : "dd/MM"}}</h3>
+        <i class="pi pi-times" style="font-size: 20px;" (click)="signaturePad.clear()" aria-hidden="true"
+            pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
+        <!--<canvas class="card" #canva></canvas><br>-->
+        <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
+            <signature-pad [options]="signaturePadOptions"></signature-pad><br>
+        </div>
         <div class="col-12" *ngIf="formateurInfo">
-            <i class="pi pi-times" style="font-size: 20px;" (click)="signaturePad.clear()" aria-hidden="true"
-                pTooltip="Effacer la signature" tooltipPosition="bottom"></i><br>
-            <!--<canvas class="card" #canva></canvas><br>-->
-            <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
-                <signature-pad [options]="signaturePadOptions"></signature-pad><br>
-            </div>
             <p style="color: red;">* La signature est obligatoire</p><br>
             <div class="card">
                 <div class="col-6">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="field col-12">
                         <label>Observations</label>
-                        <textarea pInputTextarea type="text" formControlName="observations" ></textarea>
+                        <textarea pInputTextarea type="text" formControlName="observations"></textarea>
                     </div>
                     <div class="col-12">
                         <button [disabled]="formPP.invalid" pButton class="ui-button-raised ui-button-success"
@@ -78,9 +78,8 @@
                     </div>
                 </form>
             </div>
-            <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer"
-                (click)="getSignature();"></button>
         </div>
+        <button *ngIf="!formateurInfo" pButton class="ui-button-raised ui-button-success" label="Envoyer" (click)="getSignature();"></button>
     </div>
 </div>
 <div class="card" *ngIf="showUploadFile">
@@ -137,10 +136,12 @@
     </div>
 </div>
 <h3 *ngIf="date_debut > date">La séance n'a pas débuté, merci de revenir à l'heure de la séance pour signer.</h3>
-<div class="card" *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut && !showCanvas">
+<div class="card"
+    *ngIf="(presence==null || !presence.isPresent) && allowJustificatif && date > date_debut && !showCanvas">
     <div class="p-grid">
         <h4>Fournir un justificatif d'absence</h4>
-        <h3 *ngIf="date_fin_seance > date" style="color: red;">Vous êtes en retard, demandez au Formateur de vous autorisez à signer puis rechargez
+        <h3 *ngIf="date_fin_seance > date" style="color: red;">Vous êtes en retard, demandez au Formateur de vous
+            autorisez à signer puis rechargez
             la page</h3>
         <div class="col-12">
             <div class="md:col-offset-5 col-12">
