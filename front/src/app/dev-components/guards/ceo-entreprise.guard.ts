@@ -18,12 +18,10 @@ export class CeoEntrepriseGuard implements CanActivate {
     let type: string = currenttoken.type;
     if (currenttoken.role == "Admin")
       return true
-    else if (type == 'CEO Entreprise') {
-      console.log("accés autorisé")
+    else if (type == 'CEO Entreprise' || type == 'Tuteur') {
       return true;
     }
     else {
-      console.log("accés refusé: page resérvé au CEO d'entreprises")
       this.router.navigate(['/pages/access']);
       return false
     }

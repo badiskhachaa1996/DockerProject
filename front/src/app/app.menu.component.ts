@@ -557,7 +557,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
@@ -593,7 +593,7 @@ export class AppMenuComponent implements OnInit {
                             items: [
                                 { label: 'Offres d\'emplois', icon: 'pi pi-volume-up', routerLink: ['/offres'] },
                                 { label: 'Mes offres', icon: 'pi pi-user', routerLink: ['/mes-offres'] },
-                                // { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
+                                { label: 'Cvthèque', icon: 'pi pi-briefcase', routerLink: ['/cvtheque'] },
                             ]
                         },
                     ]
