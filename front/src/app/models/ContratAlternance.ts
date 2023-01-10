@@ -20,6 +20,7 @@ export class ContratAlternance {
         public code_commercial?: string,
         public statut?: string,
         public anne_scolaire?: string[],
+        public ecole?:string
     ) { }
 
 }

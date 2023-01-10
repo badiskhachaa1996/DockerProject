@@ -238,13 +238,17 @@
 
                         <h2 class="col-12 text-center" style="font-weight: bold;">Rythme d'étude</h2>
 
-                        <div class="field col-12">
+                        <div class="field col-6">
                             <label For="statut">Rythme<span style="color: red;"> * </span></label>
                             <!--<p-dropdown [options]="statutList" placeholder="Choissisez un rythme d'étude"
                                 formControlName="statut"></p-dropdown>-->
                             <p-selectButton [options]="[{label:'Initial',value:false},{label:'Alternant',value:true}]"
                                 formControlName="isAlternant"></p-selectButton>
 
+                        </div>
+                        <div class="field col-6">
+                            <label>Ecole/CFA <span style="color: red;"> * </span></label>
+                            <p-dropdown [options]="dropdownEcole" formControlName="ecole" placeholder="Choissisez le CFA"></p-dropdown>
                         </div>
 
                         <div class="field col-12" *ngIf="!formAddEtudiant.value.isAlternant">

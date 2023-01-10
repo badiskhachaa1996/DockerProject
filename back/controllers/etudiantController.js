@@ -9,6 +9,7 @@ const { Matiere } = require("./../models/matiere");
 const { User } = require('./../models/user');
 const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
+const { HistoCFA } = require('./../models/IMS Monitoring/historisationCFA')
 const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const sign_espic = `
@@ -357,6 +358,18 @@ app.post("/update", (req, res, next) => {
             }
         )
         me.save()
+        if (et.ecole_id != req.body.ecole_id) {
+            let cfaUpdate = new HistoCFA({
+                user_id: et.user_id,
+                old_cfa: req.body.ecole_id,
+                new_cfa: null,
+                date_debut: new Date(),
+                date_fin: null
+            })
+            HistoCFA.findOneAndUpdate({ user_id: et.user_id, date_fin: null, new_cfa: null }, { date_fin: new Date(), new_cfa: req.body.ecole_id }, { new: true }, (err, doc) => {
+                cfaUpdate.save()
+            })
+        }
     })
     Etudiant.findOneAndUpdate({ _id: req.body._id },
         {
