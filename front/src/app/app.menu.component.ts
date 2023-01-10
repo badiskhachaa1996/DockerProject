@@ -572,11 +572,10 @@ export class AppMenuComponent implements OnInit {
                             ]
                         },
                         {
-                            label: "Tutelle d'Alternants & Stagiaires",
+                            label: "Gestion d'Alternances",
                             items: [
-                                { label: 'Liste de tous les alternants ', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
+                                { label: 'Liste des alternants ', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
                                 { label: 'Liste des tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur'] },
-                                { label: 'Mes alternants', icon: 'pi pi-user', routerLink: ['/liste-contrats/' + this.token.id] },
                             ]
                         },
                         {

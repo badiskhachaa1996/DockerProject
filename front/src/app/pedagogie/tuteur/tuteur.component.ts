@@ -50,7 +50,7 @@ export class TuteurComponent implements OnInit {
   isType = false;
 
   token;
-  dropdownEntreprise: any[] = [{ libelle: 'Choissisez une entreprise', value: null }];
+  dropdownEntreprise: any[] = [];
 
 
   //constructeur - injection des services
@@ -63,17 +63,28 @@ export class TuteurComponent implements OnInit {
   ngOnInit(): void {
 
     this.token = jwt_decode(localStorage.getItem('token'));
+    this.getAllClasses();
+
+    this.onInitFormAddTuteur()
+    this.onInitUpdateTuteurForm()
+  }
+
+  // recuperation de la liste des classes
+  getAllClasses()
+  {
     this.UserService.getPopulate(this.token.id).subscribe(dataUser => {
-      if (dataUser) {
+      if(dataUser) {
         this.isAdmin = dataUser.role == "Admin"
         this.isAgent = dataUser.role == "Agent"
         this.isCEO = dataUser.type == "CEO Entreprise"
       }
 
-      if (this.isCEO) {
+      if(this.isCEO) {
         // récupération de l'entreprise du user
         this.entrepriseService.getByDirecteurId(this.token.id).subscribe(
           ((response) => {
+            this.entrepriseId = response._id;
+
             this.tuteurService.getAllByEntrepriseId(response._id).subscribe(
               ((responseTuteur) => {
                 this.tuteurList = responseTuteur
@@ -108,9 +119,6 @@ export class TuteurComponent implements OnInit {
         );
       }
     })
-
-    this.onInitFormAddTuteur()
-    this.onInitUpdateTuteurForm()
   }
 
   //
@@ -157,10 +165,6 @@ export class TuteurComponent implements OnInit {
       date_naissance: ['']
     })
 
-    if (!this.isCEO) {
-      this.addTuteurForm.controls.entreprise.setValidators([Validators.required])
-    }
-
   }
 
   //Récupération des valeur des champs - pour la partie de traitement des erreurs sur le formulaire
@@ -190,8 +194,9 @@ export class TuteurComponent implements OnInit {
     let indicatif = this.addTuteurForm.get('indicatif')?.value;
     let phone = this.addTuteurForm.get('phone')?.value;
     let fonction = this.addTuteurForm.get('fonction')?.value;
-    if (this.isCEO) {
-      var entreprise = this.entrepriseId
+    let entreprise = null;
+    if(this.isCEO) {
+      entreprise = this.entrepriseId
     } else if (!this.isCEO) {
       entreprise = this.addTuteurForm.get('entreprise')?.value.value;
     }
@@ -205,7 +210,8 @@ export class TuteurComponent implements OnInit {
     let pays_adresse = this.addTuteurForm.get('pays_adresse')?.value;
     let nationnalite = this.addTuteurForm.get('nationnalite')?.value.value;
     let date_naissance = this.addTuteurForm.get('date_naissance')?.value;
-    //Pour la création du nouvel étudiant on crée aussi un user
+
+
     let newUser = new User(
       null,
       firstname,
@@ -234,7 +240,7 @@ export class TuteurComponent implements OnInit {
 
     let newTuteur = new Tuteur(
       entreprise,//entreprise id
-      null,//question morgan user_id
+      null, //user_id se gère dans le back
       fonction,
       anciennete,
       niveau_formation,
@@ -245,10 +251,7 @@ export class TuteurComponent implements OnInit {
       ((response) => {
         this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
         this.showFormAddTuteur = false;
-        this.tuteurService.getAll().subscribe(
-          ((responseT) => { this.tuteurs = responseT; }),
-          ((error) => { console.error(error) })
-        );
+        this.getAllClasses();
       }),
       ((error) => {
         console.error(error)
@@ -295,8 +298,8 @@ export class TuteurComponent implements OnInit {
 
     this.tuteurService.updateById(this.updateTuteurId, this.tuteurUpdate).subscribe(
       ((response) => {
-        this.messageService.add({ severity: 'success', summary: 'Tuteur ajouté' });
-        this.ngOnInit();
+        this.messageService.add({ severity: 'success', summary: 'Tuteur modifié' });
+        this.getAllClasses();
       }),
       ((error) => {
         console.error(error)

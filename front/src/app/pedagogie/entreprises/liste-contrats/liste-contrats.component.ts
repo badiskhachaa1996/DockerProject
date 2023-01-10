@@ -29,7 +29,6 @@ export class ListeContratsComponent implements OnInit {
   ListeContrats: ContratAlternance[] = []
   tuteurInfoPerso: any;
   EntreprisesName: any[] = [];
-  EntreprisesNameByDirId: any[] = [];
   maxYear = new Date().getFullYear() - 16
   minYear = new Date().getFullYear() - 60
   rangeYear = this.minYear + ":" + this.maxYear
@@ -125,6 +124,7 @@ export class ListeContratsComponent implements OnInit {
 
     //Lister toutes les entreprises 
     this.entrepriseService.getAll().subscribe(listEntre => {
+      this.EntrepriseList = [];
       listEntre.forEach(ent => {
         this.EntrepriseList.push({ label: ent.r_sociale, value: ent._id })
       })
@@ -149,11 +149,10 @@ export class ListeContratsComponent implements OnInit {
       if (this.token.role == "Admin") {
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
           this.ListeContrats = Allcontrats;
-
+console.log(this.ListeContrats);
           Allcontrats.forEach(cont => {
             this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
               this.EntreprisesName[entpName._id] = entpName;
-              this.EntreprisesNameByDirId[entpName.directeur_id] = entpName;
             })
           })
         })
@@ -242,7 +241,7 @@ export class ListeContratsComponent implements OnInit {
   onInitRegisterNewCA() {
 
     this.RegisterNewCA = this.formBuilder.group({
-      entreprise_id: new FormControl('', Validators.required),
+      entreprise_id: new FormControl(''),
       tuteur_id: new FormControl('', Validators.required),
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
@@ -264,7 +263,7 @@ export class ListeContratsComponent implements OnInit {
 
   onInitFormUpdateCa() {
     this.formUpdateCa = this.formBuilder.group({
-      entreprise_id: new FormControl(this.ConnectedEntreprise ? this.ConnectedEntreprise : '', Validators.required),
+      entreprise_id: new FormControl(''),
       tuteur_id: new FormControl('', Validators.required),
       debut_contrat: new FormControl('', Validators.required),
       fin_contrat: new FormControl('', Validators.required),
@@ -324,7 +323,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.code_commercial, 'créé', annee_scolaires,this.RegisterNewCA.value.ecole)
+    let CA_Object = new ContratAlternance(null, this.debut_contrat.value, this.fin_contrat.value, this.horaire, this.alternant, this.intitule, this.classification, this.niv, this.coeff_hier, this.form, this.tuteur_id, '', this.RegisterNewCA.get('entreprise_id').value, this.code_commercial, 'créé', annee_scolaires,this.RegisterNewCA.value.ecole)
 
     this.entrepriseService.createContratAlternance(CA_Object).subscribe(
       resData => {
@@ -344,7 +343,7 @@ export class ListeContratsComponent implements OnInit {
       annee_scolaires.push(annee.label);
     });
 
-    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.code_commercial_m, 'créé',
+    let CA_Object = new ContratAlternance(this.contratToUpdate._id, this.debut_contrat_m.value, this.fin_contrat_m.value, this.horaire_m, this.alternant_m, this.intitule_m, this.classification_m, this.niv_m, this.coeff_hier_m, this.form_m, this.tuteur_id_m, '', this.formUpdateCa.get('entreprise_id').value, this.code_commercial_m, 'créé',
       annee_scolaires, this.formUpdateCa.value.ecole)
 
     this.entrepriseService.updateContratAlternance(CA_Object).subscribe(resData => {

@@ -13,6 +13,7 @@ const contrat_alternanceSch = mongoose.Schema({
     formation: { type: mongoose.Schema.Types.ObjectId, ref: "diplome" },
     tuteur_id: { type: mongoose.Schema.Types.ObjectId, ref: "tuteur", required: false },
     directeur_id: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
+    entreprise_id: { type: mongoose.Schema.Types.ObjectId, ref: "entreprise", required: false },
     code_commercial: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: false },
     statut: { type: String, required: false },
     anne_scolaire: { type: [String], required: false },
