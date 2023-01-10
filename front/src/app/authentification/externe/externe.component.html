@@ -53,28 +53,22 @@
                             </div>
                             <div class="grid">
                                 <div class="col-12 lg:col-12 xl:col-6">
-                                    <div class="card mb-0">
+                                    <div class="card mb-4">
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-15 mx-auto">
-                                                <p style="text-align: center; font-weight: bold;">Salarié/Etudiant</p>
-                                                <p style="text-align: center;">Vous êtes salarié ou êtes inscrit chez nous, veuillez vous connectez en cliquant sur le bouton bleu</p>
-                                                <button pButton pRipple label="Se connecter " icon="pi pi-microsoft"
-                                                    (click)="toLoginMiscroft()"
-                                                    class="w-full p-3 text-xl p-button-primary p-button-raised"></button>
+                                                <p style="text-align: center;">Vous êtes <span style="font-weight: bold;">salarié</span> ou êtes <span style="font-weight: bold;">inscrit chez nous</span>, veuillez vous connectez en cliquant sur le bouton bleu</p>
+                                                <button pButton pRipple label="Se connecter" icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-2 text-x4 p-button-primary p-button-raised"></button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             
                                 <div class="col-12 lg:col-12 xl:col-6">
-                                    <div class="card mb-0">
+                                    <div class="card mb-4">
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-12 mx-auto">
-                                                <p style="text-align: center; font-weight: bold;">Entreprise/Admission</p>
-                                                <p style="text-align: center;">Vous êtes une entreprise ou en process d'admission, veuillez vous connectez en cliquant sur le bouton rouge</p>
-                                                <button pButton pRipple label="Se connecter" icon="pi pi-envelope"
-                                                    (click)="showLoginPage = true;"
-                                                    class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
+                                                <p style="text-align: center;">Vous êtes une <span style="font-weight: bold;">entreprise</span> ou en <span  style="font-weight: bold;">process d'admission</span>, veuillez vous connectez en cliquant sur le bouton rouge</p>
+                                                <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="showLoginPage = true;" class="w-full p-2 text-x4 p-button-danger p-button-raised"></button>
                                             </div>
                                         </div>
                                     </div>
