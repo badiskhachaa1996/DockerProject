@@ -10,6 +10,8 @@ import { QSService } from 'src/app/services/qs.service';
 })
 export class QuestionnaireSatisfactionComponent implements OnInit {
 
+  show = true
+
   dropdownFormation = []
 
   dropdownAttentes = [
@@ -83,7 +85,7 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   onAddForm() {
     let r = { ...this.satisfactionsForm.value }
     this.QSService.create(r).subscribe(data => {
-      console.log(data)
+      this.show=false
       this.MessageService.add({ severity: 'success', summary: "Envoie avec succès", detail: "Merci pour votre avis!" })
     })
   }

@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<div class="grid">
+<div class="grid" *ngIf="show">
     <div>
         <div class="col-12">
             <div class="card">
@@ -117,7 +117,7 @@
                         <p-selectButton [options]="accesChoix" formControlName="intuns"></p-selectButton>
                     </div>
                     <div class="field col-12">
-                        <label>Question 18 :</label>
+                        <label>Question 18 :</label><br>
                         <label>Quelles sont vos propositions d’améliorations éventuelles?</label>
                         <textarea pInputTextarea formControlName="propositions"></textarea>
                     </div>
@@ -129,5 +129,13 @@
                 </form>
             </div>
         </div>
+    </div>
+</div>
+
+<div *ngIf="!show">
+    <h2 class="col-12 flex justify-content-center flex-wrap card-container">Merci !
+        Votre formulaire a été envoyé !</h2>
+    <div class="col-12 flex justify-content-center flex-wrap card-container">
+        <img src="assets/images/félicitations.png" style="width: 380px; height: 380px; text-align: center;">
     </div>
 </div>

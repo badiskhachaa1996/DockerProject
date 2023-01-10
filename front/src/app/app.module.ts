@@ -236,6 +236,8 @@ import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component'
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
+import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
+import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 
 
 @NgModule({
@@ -482,6 +484,8 @@ import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-sa
     SkillsManagementComponent,
     ProgressionPedagogiqueComponent,
     QuestionnaireSatisfactionComponent,
+    ResultatComponent,
+    ProspectsIntunsComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

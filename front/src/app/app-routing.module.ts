@@ -131,6 +131,8 @@ import { MesOffresComponent } from './skillsnet/mes-offres/mes-offres.component'
 import { SkillsManagementComponent } from './skillsnet/skills-management/skills-management.component';
 import { ProgressionPedagogiqueComponent } from './pedagogie/formateurs/progression-pedagogique/progression-pedagogique.component';
 import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-satisfaction/questionnaire-satisfaction.component';
+import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
+import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 
 const routes: Routes = [
     {
@@ -194,6 +196,8 @@ const routes: Routes = [
             { path: 'tuteur', component: TuteurComponent, canActivate: [AuthGuardService]  },
             { path: 'tuteur/:entreprise', component: TuteurComponent, canActivate: [AuthGuardService] },
 
+            { path: 'prospects-intuns', component: ProspectsIntunsComponent, canActivate: [AuthGuardService] },
+
             { path: 'liste-contrats/:idTuteur', component: ListeContratsComponent, canActivate: [CeoEntrepriseGuard] }, // Listes des apprentie d'un tuteur
             { path: 'liste-contrats', component: ListeContratsComponent, canActivate: [TuteurEntrepriseGuard] },
             { path: 'inscription-entreprise', component: InscriptionEntrepriseComponent },
@@ -234,7 +238,8 @@ const routes: Routes = [
             /** end */
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
-            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] }
+            { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
+            { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] }
 
         ],
     },

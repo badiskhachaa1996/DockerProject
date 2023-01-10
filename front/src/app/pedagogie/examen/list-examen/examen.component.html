@@ -95,7 +95,7 @@
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 title="Fermer" (click)="showFormUpdateExamen = false;formUpdateExamen.reset()" aria-hidden="true">
             </i>
-            <h3 style="text-align: center;" *ngIf="examenToUpdate">  de {{examenToUpdate.libelle}}</h3>
+            <h3 style="text-align: center;" *ngIf="examenToUpdate"> de {{examenToUpdate.libelle}}</h3>
             <form class="p-fluid p-formgrid grid" [formGroup]="formUpdateExamen" (ngSubmit)="onUpdateExamen()">
 
                 <div class="field col-12">
@@ -265,7 +265,7 @@
                             {{examen.matiere_id[0].abbrv}}
                         </td>
                         <td>{{ examen.libelle }}</td>
-                        <td>{{ examen.date | date:'dd/MM/YYYY'  }}</td>
+                        <td>{{ examen.date | date:'dd/MM/YYYY' }}</td>
                         <td>
                             <i type="button" pTooltip="Modifier" tooltipPosition="bottom" *ngIf="!isFormateur"
                                 class="pi pi-pencil" (click)="showFormUpdateExamen = true; 
@@ -278,6 +278,8 @@
 
                             <i class="pi pi-file-excel ml-1" pTooltip="Attribuer des notes" tooltipPosition="bottom"
                                 (click)="loadEtudiantsForNote(examen)"></i>
+                            <i class="pi pi-download ml-1" pTooltip="Télécharger les notes" tooltipPosition="bottom"
+                                (click)="exportExel(examen)"></i>
                         </td>
 
                     </tr>

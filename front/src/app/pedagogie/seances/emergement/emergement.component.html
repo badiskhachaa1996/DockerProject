@@ -32,8 +32,8 @@
         <div [ngStyle]="{'border':'solid 1px','width': mobilecheck()}">
             <signature-pad [options]="signaturePadOptions"></signature-pad><br>
         </div>
+        <p style="color: red;">* La signature est obligatoire</p><br>
         <div class="col-12" *ngIf="formateurInfo">
-            <p style="color: red;">* La signature est obligatoire</p><br>
             <div class="card">
                 <div class="col-6">
                     <button (click)="display=true" pButton icon="pi pi-info-circle" label="Aide"
