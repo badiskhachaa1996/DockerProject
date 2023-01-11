@@ -706,6 +706,12 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
+                                {
+                                    label: 'Questionnaire',
+                                    items: [
+                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                                    ]
+                                }
                             ]
                         },
                     ]

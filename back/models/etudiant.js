@@ -35,8 +35,7 @@ const etudiantSchema = mongoose.Schema({
         default: []
     },
     payment_reinscrit: {
-        type: [mongoose.Schema.Types.Mixed],
-        default: []
+        type: String
     },
     isActive: { type: Boolean, default: true },
     enic_naric: { type: Boolean, default: false },

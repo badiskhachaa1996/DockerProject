@@ -32,7 +32,7 @@ import { info } from 'console';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { EcoleService } from 'src/app/services/ecole.service';
-
+var CryptoJS = require("crypto-js");
 
 @Component({
   selector: 'app-list-etudiant',
@@ -223,7 +223,7 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
     })
-    this.payementList = etu.payment_reinscrit
+    this.payementList = JSON.parse(CryptoJS.AES.decrypt(etu.payment_reinscrit.toString(), 'd8a0707da72cadb1b4cc3258604154cb'));
     this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
