@@ -47,6 +47,8 @@ export class Etudiant {
         public etat_paiement?: string,
         public source?: string,
         public date_valided_by_support?: Date,
-        public ecole_id?: string
+        public ecole_id?: string,
+        public lien_livret_word?: any,//{read:'',edit:''}
+        public lien_livret_excel?: any//{read:'',edit:''}
     ) { }
 }

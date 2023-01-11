@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { Etudiant } = require("./../models/etudiant");
 const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
+const { Seance } = require("./../models/seance")
 const { Note } = require("./../models/note");
 const { Matiere } = require("./../models/matiere");
 const { User } = require('./../models/user');
@@ -919,6 +920,21 @@ app.post('/getMatiereByMatiereListAndEtudiantID/:etudiant_id', (req, res) => {
     Etudiant.findById(req.params.etudiant_id).populate('classe_id').then(etudiant => {
         Matiere.findOne({ formation_id: etudiant.classe_id.diplome_id, _id: { $in: req.body.matiere_id } }).then(r => {
             res.send(r)
+        })
+    })
+})
+
+app.get('/getAllByFormateur/:formateur_id', (req, res) => {
+    Seance.find({ formateur_id: req.params.formateur_id }).then(seances => {
+        let lClasse = []
+        seances.forEach(s => {
+            s.classe_id.forEach(cid => {
+                if (lClasse.includes(cid) == false)
+                    lClasse.push(cid)
+            })
+        })
+        Etudiant.find({ classe_id: { $in: lClasse } }).populate('user_id').populate('campus').populate('ecole_id').populate('filiere').populate('classe_id').then(etudiants => {
+            res.send(etudiants)
         })
     })
 })

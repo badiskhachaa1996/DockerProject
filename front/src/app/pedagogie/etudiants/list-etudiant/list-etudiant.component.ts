@@ -43,7 +43,7 @@ import { EcoleService } from 'src/app/services/ecole.service';
 export class ListEtudiantComponent implements OnInit {
 
   expandedRows = {};
-
+  display = false
   etudiants: Etudiant[] = [];
 
   /* partie dedié aux filtres */
@@ -74,6 +74,13 @@ export class ListEtudiantComponent implements OnInit {
   /* end */
 
   formUpdateEtudiant: FormGroup;
+
+  formLivret: FormGroup = this.formBuilder.group({
+    lien_word_read: ['', Validators.required],
+    lien_word_edit: ['', Validators.required],
+    lien_excel_read: ['', [Validators.required]],
+    lien_excel_edit: ['', [Validators.required]],
+  });
 
   typeEtudiant = [
     { label: "Tout types d'étudiants", value: null },
@@ -161,6 +168,7 @@ export class ListEtudiantComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   ListDocuments = []
   showUploadFile;
+  showLivrets: Etudiant = null;
 
   isMinor = false;
   isCommercial: boolean = false;
@@ -1124,5 +1132,37 @@ export class ListEtudiantComponent implements OnInit {
     });
     FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  onUpdateLivret() {
+    this.showLivrets.lien_livret_word = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
+    this.showLivrets.lien_livret_excel = { read: this.formLivret.value.lien_excel_read, edit: this.formLivret.value.lien_excel_edit }
+    this.etudiantService.update(this.showLivrets).subscribe(data => {
+      this.showLivrets = null
+      this.formLivret.reset()
+      this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
+    })
+  }
+  onInitLivret(etudiant) {
+    this.showLivrets = etudiant
+    this.formLivret.setValue({
+      lien_word_read: this.showLivrets.lien_livret_word.read,
+      lien_word_edit: this.showLivrets.lien_livret_word.edit,
+      lien_excel_read: this.showLivrets.lien_livret_excel.read,
+      lien_excel_edit: this.showLivrets.lien_livret_excel.edit,
+    })
   }
 }
