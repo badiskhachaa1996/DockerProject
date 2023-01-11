@@ -43,7 +43,6 @@ app.get("/getAll", (req, res, next) => {
 //creation d'une nouvelle entreprise
 app.post("/create", (req, res, next) => {
     delete req.body._id;
-    console.log(req.body)
     let entreprise = new Entreprise(
         {
             ...req.body
@@ -128,13 +127,11 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
 
                                             // envoi du mail
                                             transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                                console.log('Acces CEO Envoyés')
                                                 if (error) {
                                                     console.error(error);
                                                 }
                                             });
 
-                                            console.log('tout est bon');
                                             // envoi de la reponse du serveur
                                             res.status(201).send(entrepriseSaved);
                                         })
@@ -185,7 +182,7 @@ app.post("/createNewContrat", (req, res, next) => {
     let tuteurObject = req.body.TuteurObject
     delete tuteurObject._id
     let ContratData = req.body.contratAlternance;
-    console.log(ContratData)
+
     delete ContratData._id;
 
     let NewCeo = new User({ ...CeoData })
@@ -195,7 +192,6 @@ app.post("/createNewContrat", (req, res, next) => {
     let NewtuteurObject = new Tuteur({ ...tuteurObject })
 
     NewContrat.alternant_id = ContratData.alternant_id
-    console.log(ContratData.alternant_id + ':')
     //Verification de l'existence du mail CEO dans la BD
     User.findOne({ email: CeoData.email })
         .then((CeoFromDb) => {
@@ -246,14 +242,10 @@ app.post("/createNewContrat", (req, res, next) => {
                                                 // }]
                                             };
                                             transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                                console.log('Acces CEO Envoyés')
                                                 if (error) {
                                                     console.error(error);
                                                 }
                                             });
-
-
-
 
                                             res.status(200).send([NewContData, EntrepCreated, CeoCreated])
                                         }).catch((errorCt) => {
@@ -308,7 +300,6 @@ app.post("/createNewContrat", (req, res, next) => {
                                                         // }]
                                                     };
                                                     transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
-                                                        console.log('Acces CEO Envoyés')
                                                         if (error) {
                                                             console.error(error);
                                                         }
@@ -338,8 +329,6 @@ app.post("/createNewContrat", (req, res, next) => {
                                                         // }]
                                                     };
                                                     transporterINTED.sendMail(Tuteur_mailOptions, function (error, info) {
-                                                        console.log('Acces Tuteur Envoyés')
-
 
                                                         if (error) {
                                                             console.error(error);
@@ -365,7 +354,6 @@ app.post("/createNewContrat", (req, res, next) => {
                                 });
                         })
                         .catch((error) => {
-                            console.log("loco4")
                             res.status(400).json({ error: 'Impossible de créer un nouvel utilisateur ' + error.message })
                         });
             }
@@ -384,8 +372,6 @@ app.post("/createContratAlternance", (req, res, next) => {
         ...ContratData
     })
 
-    console.log(ContratData)
-
     // verification si le tuteur est un directeur
     Tuteur.findOne({ _id: NewContrat.tuteur_id })
         .then((tuteur) => {
@@ -394,7 +380,41 @@ app.post("/createContratAlternance", (req, res, next) => {
                 //création du contrat
                 NewContrat.save()
                     .then((NewContData) => {
-                        res.status(200).send(NewContData);
+                        // recuperation de l'adresse mail du directeur de l'entreprise
+                        Entreprise.findOne({ _id: NewContData.entreprise_id })
+                        .then((entreprise) => {
+                            User.findOne({ _id: entreprise.directeur_id})
+                            .then((user) => {
+                                // création du mail à envoyer
+                                let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
+
+                                let Ceo_mailOptions =
+                                {
+                                    from: "ims@intedgroup.com",
+                                    to: user.email_perso,
+                                    subject: 'Nouveau contrat [IMS]',
+                                    html: Ceo_htmlmail,
+                                    // attachments: [{
+                                    //     filename: 'Image1.png',
+                                    //     path: 'assets/Image1.png',
+                                    //     cid: 'Image1' //same cid value as in the html img src
+                                    // }]
+                                };
+
+
+                                // envoi du mail
+                                transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.error(error);
+                                    }
+                                });
+
+                                res.status(200).send(NewContData);
+                            })
+                            .catch((error) => { console.log(error); res.status(400).send(error) })
+                            
+                        })
+                        .catch((error) => { res.status(400).send(error); })
                     })
                     .catch((error) => {
                         res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
@@ -407,7 +427,40 @@ app.post("/createContratAlternance", (req, res, next) => {
                 //création du contrat
                 NewContrat.save()
                     .then((NewContData) => {
-                        res.status(200).send(NewContData);
+                        Entreprise.findOne({ _id: NewContData.entreprise_id })
+                        .then((entreprise) => {
+                            User.findOne({ _id: entreprise.directeur_id})
+                            .then((user) => {
+                                // création du mail à envoyer
+                                let Ceo_htmlmail = "<p>Bonjour,</p><p>Un nouveau contrat est disponible sur votre espace IMS, merci de verifier son contenu.</p><p>ims.intedgroup.com/#/login</p>";
+
+                                let Ceo_mailOptions =
+                                {
+                                    from: "ims@intedgroup.com",
+                                    to: user.email_perso,
+                                    subject: 'Nouveau contrat [IMS]',
+                                    html: Ceo_htmlmail,
+                                    // attachments: [{
+                                    //     filename: 'Image1.png',
+                                    //     path: 'assets/Image1.png',
+                                    //     cid: 'Image1' //same cid value as in the html img src
+                                    // }]
+                                };
+
+
+                                // envoi du mail
+                                transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                    if (error) {
+                                        console.error(error);
+                                    }
+                                });
+
+                                res.status(200).send(NewContData);
+                            })
+                            .catch((error) => { console.log(error); res.status(400).send(error) })
+                            
+                        })
+                        .catch((error) => { res.status(400).send(error); })
                     })
                     .catch((error) => {
                         res.status(400).json({ error: 'Impossible de créer un nouveau contrat ' + error.message })
@@ -448,7 +501,6 @@ app.post("/updateContratAlternance", (req, res, next) => {
                         res.status(201).send(value)
                     }
                 })
-
             }
         })
         .catch((error) => { res.status(500).send(error); });
@@ -456,9 +508,8 @@ app.post("/updateContratAlternance", (req, res, next) => {
 
 
 app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
-    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })
+    CAlternance.find({ tuteur_id: req.params.idTuteur }).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'formation' }).populate({ path: 'tuteur_id', populate: { path: "user_id" } })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((CAFromDb) => {
-
             res.status(200).send(CAFromDb);
         })
         .catch((error) => {
@@ -468,21 +519,11 @@ app.get("/getAllContratsbyTuteur/:idTuteur", (req, res, next) => {
             });
         });
 });
+
 app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
-    console.log("getAllContratsbyEntreprise")
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id' }).populate({ path: 'formation' })
+    CAlternance.find({ entreprise_id: req.params.entreprise_id}).populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate({ path: 'formation' })?.populate('ecole')?.populate('code_commercial')?.populate('directeur_id')?.populate('entreprise_id')
         .then((CAFromDb) => {
-            let CAbyEntreprise = [];
-
-            CAFromDb.forEach(async Contrat => {
-
-                if (Contrat.tuteur_id?.entreprise_id == req.params.entreprise_id) {
-                    CAbyEntreprise.push(Contrat)
-                }
-
-
-            })
-            res.status(200).send(CAbyEntreprise);
+            res.status(200).send(CAFromDb);
         })
         .catch((error) => {
             console.log(error);
@@ -493,8 +534,7 @@ app.get("/getAllContratsbyEntreprise/:entreprise_id", (req, res, next) => {
 });
 
 app.get("/getAllContrats/", (req, res, next) => {
-
-    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation').populate('code_commercial').populate('directeur_id')
+    CAlternance.find().populate({ path: 'alternant_id', populate: { path: "user_id" } }).populate({ path: 'tuteur_id', populate: { path: "user_id" } }).populate('formation')?.populate('code_commercial')?.populate('directeur_id')?.populate('ecole')?.populate('entreprise_id')
         .then((CAFromDb) => {
             res.status(200).send(CAFromDb);
         })
@@ -537,7 +577,6 @@ app.get("/getByEtudiantId/:id", (req, res, next) => {
 app.get("/getByEtudiantIdPopolate/:id", (req, res, next) => {
     CAlternance.findOne({ alternant_id: req.params.id }).populate({ path: 'tuteur_id' })
         .then((ContratDetails) => {
-            console.log(ContratDetails)
             res.status(200).send(ContratDetails);
         })
         .catch((error) => { res.status(500).json({ error: "Impossible de recuperer ce contrat" }) })
