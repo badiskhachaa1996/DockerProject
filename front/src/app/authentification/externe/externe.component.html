@@ -37,17 +37,17 @@
         </div>
 
         <div class="col-12 lg:col-12 xl:col-6" *ngIf="!showLoginPage">
-            <div class="card" style="height: 100%;">
+            <div class="card" style="margin-top: 40px; height: 100%">
                 <div class="flex justify-content-between mb-1">
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
                         <div class="col-12 mt-5 xl:mt-0 text-center">
                             <img src="assets/images/logo-ims.png" alt="IMS logo" class="mb-1"
                                 style="width:140px;">
                         </div>
-                        <form [formGroup]="formLogin" class="h-full w-full m-0 py-7 px-4">
+                        <div class="h-full w-full m-0 py-7 px-4">
                             <div>
                                 <div class="w-full md:w-15 mx-auto">
-                                    <p style="text-align: center;">Bienvenue sur la page d'authenfitication à Inted Management System.</p>
+                                    <p style="text-align: center;">Authenfitication Inted Management System.</p>
                                     <br>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                                     <div class="card mb-4">
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-15 mx-auto">
-                                                <p style="text-align: center;">Vous êtes <span style="font-weight: bold;">salarié</span> ou êtes <span style="font-weight: bold;">inscrit chez nous</span>, veuillez vous connectez en cliquant sur le bouton bleu</p>
+                                                <p style="text-align: center;"><span style="font-weight: bold;">Salarié</span>/ <span style="font-weight: bold;">Etudiant inscrit</span>, connectez-vous ici</p>
                                                 <button pButton pRipple label="Se connecter" icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-2 text-x4 p-button-primary p-button-raised"></button>
                                             </div>
                                         </div>
@@ -67,14 +67,14 @@
                                     <div class="card mb-4">
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-12 mx-auto">
-                                                <p style="text-align: center;">Vous êtes une <span style="font-weight: bold;">entreprise</span> ou en <span  style="font-weight: bold;">process d'admission</span>, veuillez vous connectez en cliquant sur le bouton rouge</p>
+                                                <p style="text-align: center;"><span style="font-weight: bold;">Entreprise</span>/ <span  style="font-weight: bold;">Process d'admission</span>, connectez-vous ici</p>
                                                 <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="showLoginPage = true;" class="w-full p-2 text-x4 p-button-danger p-button-raised"></button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>    
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
