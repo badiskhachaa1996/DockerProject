@@ -277,7 +277,7 @@
                             onGetById();" aria-hidden="true"></i>
 
                             <i class="pi pi-file-excel ml-1" pTooltip="Attribuer des notes" tooltipPosition="bottom"
-                                (click)="loadEtudiantsForNote(examen)"></i>
+                                (click)="loadEtudiantsForNote(examen);scrollToTop()"></i>
                             <i class="pi pi-download ml-1" pTooltip="Télécharger les notes" tooltipPosition="bottom"
                                 (click)="exportExel(examen)"></i>
                         </td>

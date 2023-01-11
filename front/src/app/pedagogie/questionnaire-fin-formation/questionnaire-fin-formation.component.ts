@@ -39,7 +39,7 @@ export class QuestionnaireFinFormationComponent implements OnInit {
     { label: 'Pas du tout', value: 'Pas du tout' },
   ]
 
-  constructor(private QFFService:QSService, private MessageService: MessageService) { }
+  constructor(private QFFService: QSService, private MessageService: MessageService) { }
 
   ngOnInit(): void {
   }
