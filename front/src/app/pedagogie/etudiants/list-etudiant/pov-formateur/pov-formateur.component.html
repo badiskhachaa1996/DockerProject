@@ -85,11 +85,17 @@
                         Initial
                     </td>
                     <td>
-                        <a *ngIf="etudiant.lien_livret_excel.edit!='' && etudiant.lien_livret_excel.edit" href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
-                                pTooltip="Voir le livret Excel" tooltipPosition="bottom" class="pi pi-file-excel"
-                                style="margin-left: 2%;" aria-hidden="true"></i></a>
-                        <a *ngIf="etudiant.lien_livret_word.edit!='' && etudiant.lien_livret_word.edit" href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
-                                pTooltip="Voir le livret Word" tooltipPosition="bottom" class="pi pi-file-pdf"
+                        <a *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
+                            href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
+                                tooltipPosition="bottom" class="pi pi-file-pdf" style="margin-left: 2%;"
+                                aria-hidden="true"></i></a>
+                        <a *ngIf="etudiant.lien_dossier_professionel!='' && etudiant.lien_dossier_professionel"
+                            href="{{etudiant.lien_dossier_professionel}}" target="_blank"><i
+                                pTooltip="Voir le dossier professionel" tooltipPosition="bottom"
+                                class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
+                        <a *ngIf="etudiant.lien_tableau_synthese!='' && etudiant.lien_tableau_synthese"
+                            href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
+                                pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom" class="pi pi-file-excel"
                                 style="margin-left: 2%;" aria-hidden="true"></i></a>
                         <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                             style="margin-left: 2%;" (click)="showUploadFile=etudiant;scrollToTop()"

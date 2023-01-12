@@ -78,8 +78,8 @@ export class ListEtudiantComponent implements OnInit {
   formLivret: FormGroup = this.formBuilder.group({
     lien_word_read: ['',],
     lien_word_edit: [''],
-    lien_excel_read: [''],
-    lien_excel_edit: [''],
+    lien_dossier_professionel: [''],
+    lien_tableau_synthese: [''],
   });
 
   typeEtudiant = [
@@ -1149,11 +1149,13 @@ export class ListEtudiantComponent implements OnInit {
 
   onUpdateLivret() {
     let index = this.etudiants.indexOf(this.showLivrets)
-    this.showLivrets.lien_livret_word = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
-    this.showLivrets.lien_livret_excel = { read: this.formLivret.value.lien_excel_read, edit: this.formLivret.value.lien_excel_edit }
+    this.showLivrets.lien_livret = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
+    this.showLivrets.lien_dossier_professionel = this.formLivret.value.lien_dossier_professionel
+    this.showLivrets.lien_tableau_synthese = this.formLivret.value.lien_tableau_synthese
     this.etudiantService.update(this.showLivrets).subscribe(data => {
-      this.etudiants[index].lien_livret_word = this.showLivrets.lien_livret_word
-      this.etudiants[index].lien_livret_excel = this.showLivrets.lien_livret_excel
+      this.etudiants[index].lien_livret = this.showLivrets.lien_livret
+      this.etudiants[index].lien_dossier_professionel = this.showLivrets.lien_dossier_professionel
+      this.etudiants[index].lien_tableau_synthese = this.showLivrets.lien_tableau_synthese
       this.showLivrets = null
       this.formLivret.reset()
       this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
@@ -1162,10 +1164,10 @@ export class ListEtudiantComponent implements OnInit {
   onInitLivret(etudiant) {
     this.showLivrets = etudiant
     this.formLivret.setValue({
-      lien_word_read: this.showLivrets.lien_livret_word.read,
-      lien_word_edit: this.showLivrets.lien_livret_word.edit,
-      lien_excel_read: this.showLivrets.lien_livret_excel.read,
-      lien_excel_edit: this.showLivrets.lien_livret_excel.edit,
+      lien_word_read: this.showLivrets.lien_livret.read,
+      lien_word_edit: this.showLivrets.lien_livret.edit,
+      lien_dossier_professionel: this.showLivrets.lien_dossier_professionel,
+      lien_tableau_synthese: this.showLivrets.lien_tableau_synthese,
     })
   }
 }

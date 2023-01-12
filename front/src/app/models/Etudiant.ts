@@ -48,7 +48,8 @@ export class Etudiant {
         public source?: string,
         public date_valided_by_support?: Date,
         public ecole_id?: string,
-        public lien_livret_word?: any,//{read:'',edit:''}
-        public lien_livret_excel?: any//{read:'',edit:''}
+        public lien_livret?: any,//{read:'',edit:''}
+        public lien_dossier_professionel?: string,
+        public lien_tableau_synthese?: string,
     ) { }
 }

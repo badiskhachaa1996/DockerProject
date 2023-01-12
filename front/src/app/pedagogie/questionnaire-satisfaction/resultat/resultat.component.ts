@@ -70,27 +70,11 @@ export class ResultatComponent implements OnInit {
         satisfait_suivi: data.reduce((total, next) => total + next.satisfait_suivi, 0) / data.length,
         satisfait_locaux: data.reduce((total, next) => total + next.satisfait_locaux, 0) / data.length,
 
-        support: data.reduce((total, next) => {
-          console.log(next.support, total, next.support.toString())
-          if (next.support.toString() == "true") //TODO
-            total + 1
-        }, 0) / data.length,
-        teams: data.reduce((total, next) => {
-          if (next.teams == 'Oui')
-            total + 1
-        }, 0) / data.length,
-        ims: data.reduce((total, next) => {
-          if (next.ims == 'Oui')
-            total + 1
-        }, 0) / data.length,
-        ll: data.reduce((total, next) => {
-          if (next.ll == 'Oui')
-            total + 1
-        }, 0) / data.length,
-        intuns: data.reduce((total, next) => {
-          if (next.intuns == 'Oui')
-            total + 1
-        }, 0) / data.length,
+        support: data.reduce((total, next) => total + (next.support ? 1 : 0), 0),
+        teams: data.reduce((total, next) => total + (next.teams == "Oui" ? 1 : 0), 0),
+        ims: data.reduce((total, next) => total + (next.ims == "Oui" ? 1 : 0), 0),
+        ll: data.reduce((total, next) => total + (next.ll == "Oui" ? 1 : 0), 0),
+        intuns: data.reduce((total, next) => total + (next.intuns == "Oui" ? 1 : 0), 0),
       }
       console.log(this.moyenne)
     })

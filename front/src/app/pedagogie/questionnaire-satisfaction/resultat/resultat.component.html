@@ -190,7 +190,7 @@
         <div class="field col-12">
             <label>Question 11 :</label><br>
             <label>Avez-vous des supports de cours ?</label>
-            <p>Oui:{{moyenne.support}} Non:{{moyenne.length-moyenne.support}}</p>
+            <p>Oui:{{moyenne.support}} Non:{{resultats.length-moyenne.support}}</p>
 
         </div>
         <div class="field col-12">
@@ -222,10 +222,10 @@
         <div class="field col-12">
             <label>Question 17 :</label><br>
             <label>Avez-vous accès à :</label><br>
-            <p>Microsoft TEAMS : {{moyenne.teams}}</p>
-            <p>IMS : {{moyenne.ims}}</p>
-            <p>LINKEDIN LEARNING : {{moyenne.ll}}</p>
-            <p>INTUNS : {{moyenne.intuns}}</p>
+            <p>Microsoft TEAMS : {{moyenne.teams*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>IMS : {{moyenne.ims*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>LINKEDIN LEARNING : {{moyenne.ll*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>INTUNS : {{moyenne.intuns*100/resultats.length | number : '1.0-0'}}%</p>
         </div>
     </div>
 </div>

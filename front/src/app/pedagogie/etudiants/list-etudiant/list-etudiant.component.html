@@ -1,6 +1,6 @@
 <p-toast></p-toast>
-<p-dialog header="Merci de suivre ces instructions pour ajouter les livrets" [(visible)]="display"
-    modal="modal" showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '75vw'}">
+<p-dialog header="Merci de suivre ces instructions pour ajouter les livrets" [(visible)]="display" modal="modal"
+    showEffect="fade" [style]="{width: '40vw'}" [breakpoints]="{'960px': '75vw'}">
     <p class="line-height-3 m-0">
         Voici les informations à savoir pour générer les liens des livrets :
     </p>
@@ -10,7 +10,9 @@
     <img src="assets/images/Tuto Sharepoint Part 2.png" />
     <p>Cliquez ensuite sur "Les membres de INTED GROUP disposant du lien peuvent modifier le contenu"</p>
     <img src="assets/images/Tuto Sharepoint Part 3.png" />
-    <p>Ensuite dans "Autres paramètres" changer la valeur par "Peut modifier" pour avoir le lien pour les formateurs et par "Consultation possible" pour avoir le lien pour les étudiants et sur le boutton "Appliquer" pour générer le lien à coller dans IMS</p>
+    <p>Ensuite dans "Autres paramètres" changer la valeur par "Peut modifier" pour avoir le lien pour les formateurs et
+        par "Consultation possible" pour avoir le lien pour les étudiants et sur le boutton "Appliquer" pour générer le
+        lien à coller dans IMS</p>
     <ng-template pTemplate="footer">
         <button pButton icon="pi pi-check" (click)="display=false" label="Ok" class="p-button-outlined"></button>
     </ng-template>
@@ -226,22 +228,22 @@
 
             <form class="p-fluid p-formgrid grid" [formGroup]="formLivret" (ngSubmit)="onUpdateLivret()">
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du word pour étudiant (lecture seulement) </label>
+                    <label For="lastname">Lien du livret pour étudiant (lecture seulement) </label>
                     <input formControlName="lien_word_read" pInputText type="text" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du word pour formateurs etc (Mis à jour) </label>
+                    <label For="lastname">Lien du livret pour formateurs etc (Mis à jour) </label>
                     <input formControlName="lien_word_edit" pInputText type="text" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du excel pour étudiant (lecture seulement) </label>
-                    <input formControlName="lien_excel_read" pInputText type="text" />
+                    <label For="lastname">Lien du tableau de synthèse (Mis à jour)</label>
+                    <input formControlName="lien_tableau_synthese" pInputText type="text" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du excel pour formateurs etc (Mis à jour) </label>
-                    <input formControlName="lien_excel_edit" pInputText type="text" />
+                    <label For="lastname">Lien du dossier professionel (Mis à jour) </label>
+                    <input formControlName="lien_dossier_professionel" pInputText type="text" />
                 </div>
 
                 <div>
@@ -591,9 +593,9 @@
                                     classeToUpdate = etudiant.classe_id?.nom;
                                     nationaliteToUpdate = etudiant.nationalite;
                             -->
-                            <i pTooltip="Ajouter les livrets" tooltipPosition="bottom" class="pi pi-file-excel"
-                                style="margin-left: 2%;" (click)="onInitLivret(etudiant);scrollToTop()"
-                                aria-hidden="true"></i>
+                            <i pTooltip="Ajouter les documents pédagogique" tooltipPosition="bottom"
+                                class="pi pi-file-excel" style="margin-left: 2%;"
+                                (click)="onInitLivret(etudiant);scrollToTop()" aria-hidden="true"></i>
                             <i pTooltip="Ajouter un document" tooltipPosition="bottom" class="pi pi-upload"
                                 style="margin-left: 2%;" (click)="showUploadFile=etudiant;scrollToTop()"
                                 aria-hidden="true"></i>
@@ -610,12 +612,18 @@
                             <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
                                 pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
                                 class="pi pi-trash" aria-hidden="true"></i>
-                            <a *ngIf="etudiant.lien_livret_excel.edit!='' && etudiant.lien_livret_excel.edit" href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
-                                    pTooltip="Voir le livret Excel" tooltipPosition="bottom" class="pi pi-file-excel"
-                                    style="margin-left: 2%;" aria-hidden="true"></i></a>
-                            <a *ngIf="etudiant.lien_livret_word.edit!='' && etudiant.lien_livret_word.edit" href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
-                                    pTooltip="Voir le livret Word" tooltipPosition="bottom" class="pi pi-file-pdf"
-                                    style="margin-left: 2%;" aria-hidden="true"></i></a>
+                            <a *ngIf="etudiant.lien_livret.edit!='' && etudiant.lien_livret.edit"
+                                href="{{etudiant.lien_livret.edit}}" target="_blank"><i pTooltip="Voir le livret"
+                                    tooltipPosition="bottom" class="pi pi-file-excel" style="margin-left: 2%;"
+                                    aria-hidden="true"></i></a>
+                            <a *ngIf="etudiant.lien_dossier_professionel!='' && etudiant.lien_dossier_professionel"
+                                href="{{etudiant.lien_dossier_professionel}}" target="_blank"><i
+                                    pTooltip="Voir le dossier professionel" tooltipPosition="bottom"
+                                    class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
+                            <a *ngIf="etudiant.lien_tableau_synthese!='' && etudiant.lien_tableau_synthese"
+                                href="{{etudiant.lien_tableau_synthese}}" target="_blank"><i
+                                    pTooltip="Voir le tableau de synthèse" tooltipPosition="bottom"
+                                    class="pi pi-file-excel" style="margin-left: 2%;" aria-hidden="true"></i></a>
                         </td>
                     </tr>
                 </ng-template>
