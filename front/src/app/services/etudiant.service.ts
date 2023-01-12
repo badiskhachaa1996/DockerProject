@@ -184,4 +184,10 @@ export class EtudiantService {
 
   }
 
+  getAllByFormateur(formateur_id) {
+    let url = this.apiUrl + "getAllByFormateur/" + formateur_id
+    return this.httpClient.get<Etudiant[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+ 
+  }
+
 }

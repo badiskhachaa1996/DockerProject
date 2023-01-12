@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const { Etudiant } = require("./../models/etudiant");
 const { Classe } = require("./../models/classe");
 const { Examen } = require("./../models/examen");
+const { Seance } = require("./../models/seance")
 const { Note } = require("./../models/note");
 const { Matiere } = require("./../models/matiere");
 const { User } = require('./../models/user');
@@ -11,6 +12,7 @@ const { CAlternance } = require('./../models/contrat_alternance');
 const { RachatBulletin } = require('./../models/RachatBulletin');
 const { HistoCFA } = require('./../models/IMS Monitoring/historisationCFA')
 const jwt = require("jsonwebtoken");
+var CryptoJS = require("crypto-js");
 app.disable("x-powered-by");
 const sign_espic = `
 <style type="text/css">
@@ -481,7 +483,6 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
             })
             Note.find({ etudiant_id: { $in: listEtudiantID }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
                 let listMatiereNOM = []
-                let listNotesEtudiants = {} // {etudiant_id:{matiere_id:[number]}}
                 let listNotesEtudiantsCoeff = {}
                 let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
                 let listMoyenne = {} // {matiere_nom:[number]}
@@ -498,34 +499,21 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     })
                 })
                 listEtudiantID.forEach(e_id => {
-                    listNotesEtudiants[e_id] = {}
                     listNotesEtudiantsCoeff[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
-                        listNotesEtudiants[e_id][m_nom] = []
                         listNotesEtudiantsCoeff[e_id][m_nom] = []
-                        let isBTS = false
-                        let isPP = false
                         notes.forEach(note => {
                             //TODO examen_id.matiere_id[]
                             n.examen_id.matiere_id.forEach(mid => {
-                                if (mid.formation_id == note.etudiant_id.classe_id.diplome_id)
-                                    if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false) {
-                                        if (note.examen_id.niveau == 'BTS Blanc' && !isBTS) {
-                                            listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
-                                            isBTS = true
-                                        } else if (note.examen_id.niveau == 'Projet Professionel' && !isPP) {
-                                            listNotesEtudiants[e_id][m_nom] = [(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))]
-                                            isPP = true
-                                        } else if (isBTS && note.examen_id.niveau == 'BTS Blanc') {
-                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                        } else if (isPP && note.examen_id.niveau == 'Projet Professionel') {
-                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                        } else if (!isBTS && !isPP) {
-                                            listNotesEtudiants[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                            for (let i = 0; i < note.examen_id.coef; i++)
+                                if (mid.formation_id == note.etudiant_id.classe_id.diplome_id && !note.isAbsent)
+                                    if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false)
+                                        if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
+                                            for (let i = 0; i < 3; i++)
+                                                listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                        else
+                                            for (let i = 0; i < (note.examen_id.coef * 2); i++)
                                                 listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
-                                        }
-                                    }
+
                             })
                         })
                     })
@@ -534,9 +522,8 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                     listMoyenneEtudiants[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
                         listMoyenneEtudiants[e_id][m_nom] = 0.00000000001
-                        if (listNotesEtudiantsCoeff[e_id][m_nom] != [] && listNotesEtudiantsCoeff[e_id][m_nom].length != 0) {
+                        if (listNotesEtudiantsCoeff[e_id][m_nom] != [] && listNotesEtudiantsCoeff[e_id][m_nom].length != 0)
                             listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiantsCoeff[e_id][m_nom])
-                        }
                     })
                 })
                 listMatiereNOM.forEach(m_nom => {
@@ -774,7 +761,8 @@ app.post('/addNewPayment/:id', (req, res) => {
         )
         me.save()
     })
-    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: req.body.payement }, function (err, data) {
+    var ciphertext = CryptoJS.AES.encrypt(req.body.payement.toString(), 'd8a0707da72cadb1b4cc3258604154cb').toString();
+    Etudiant.findByIdAndUpdate(req.params.id, { payment_reinscrit: ciphertext }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(500).send(err)
@@ -919,6 +907,21 @@ app.post('/getMatiereByMatiereListAndEtudiantID/:etudiant_id', (req, res) => {
     Etudiant.findById(req.params.etudiant_id).populate('classe_id').then(etudiant => {
         Matiere.findOne({ formation_id: etudiant.classe_id.diplome_id, _id: { $in: req.body.matiere_id } }).then(r => {
             res.send(r)
+        })
+    })
+})
+
+app.get('/getAllByFormateur/:formateur_id', (req, res) => {
+    Seance.find({ formateur_id: req.params.formateur_id }).then(seances => {
+        let lClasse = []
+        seances.forEach(s => {
+            s.classe_id.forEach(cid => {
+                if (lClasse.includes(cid) == false)
+                    lClasse.push(cid)
+            })
+        })
+        Etudiant.find({ classe_id: { $in: lClasse } }).populate('user_id').populate('campus').populate('ecole_id').populate('filiere').populate('classe_id').then(etudiants => {
+            res.send(etudiants)
         })
     })
 })

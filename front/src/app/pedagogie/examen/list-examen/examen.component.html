@@ -258,11 +258,11 @@
                         <td>
                             <span *ngFor="let cid of examen.classe_id; let index = index">
                                 <span *ngIf="cid && index==0">{{cid.abbrv}}</span>
-                                <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
+                                <span *ngIf="cid && index!=0">|<br>{{cid.abbrv}}</span>
                             </span>
                         </td>
                         <td>
-                            {{examen.matiere_id[0].abbrv}}
+                            {{examen.matiere_id[0].nom}}
                         </td>
                         <td>{{ examen.libelle }}</td>
                         <td>{{ examen.date | date:'dd/MM/YYYY' }}</td>
