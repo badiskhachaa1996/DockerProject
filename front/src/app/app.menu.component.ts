@@ -75,6 +75,12 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Tàsks',
+                items: [
+                    { label: 'Gestions des tâches', icon: 'pi pi-check-square', routerLink: ['/gestion-tickets'] },
+                ]
+            },
+            {
                 label: "Pédagogie",
                 items: [
                     { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
