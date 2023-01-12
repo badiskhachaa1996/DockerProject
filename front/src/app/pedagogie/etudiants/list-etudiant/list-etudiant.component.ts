@@ -76,10 +76,10 @@ export class ListEtudiantComponent implements OnInit {
   formUpdateEtudiant: FormGroup;
 
   formLivret: FormGroup = this.formBuilder.group({
-    lien_word_read: ['', Validators.required],
-    lien_word_edit: ['', Validators.required],
-    lien_excel_read: ['', [Validators.required]],
-    lien_excel_edit: ['', [Validators.required]],
+    lien_word_read: ['',],
+    lien_word_edit: [''],
+    lien_excel_read: [''],
+    lien_excel_edit: [''],
   });
 
   typeEtudiant = [

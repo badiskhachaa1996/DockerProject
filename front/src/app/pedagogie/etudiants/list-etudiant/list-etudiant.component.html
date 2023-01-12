@@ -221,35 +221,26 @@
             <h4 *ngIf="showLivrets.user_id" style="text-align: center;">Mis à jour des liens du livrets de
                 {{showLivrets.user_id.firstname}}
                 {{showLivrets.user_id.lastname}} </h4>
-            <div style="text-align: center;">
-                <small style="text-align: center; font-size: 12px;">Tous les champs marqués d'un astérix <span
-                        style="color: red;"> * </span> sont obligatoires</small>
-            </div>
-
             <i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
                 (click)="showLivrets = null; formLivret.reset()" aria-hidden="true"></i>
 
             <form class="p-fluid p-formgrid grid" [formGroup]="formLivret" (ngSubmit)="onUpdateLivret()">
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du word pour étudiant (lecture seulement) <span style="color: red;"> *
-                        </span></label>
+                    <label For="lastname">Lien du word pour étudiant (lecture seulement) </label>
                     <input formControlName="lien_word_read" pInputText type="text" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du word pour formateurs etc (Mis à jour) <span style="color: red;"> *
-                        </span></label>
+                    <label For="lastname">Lien du word pour formateurs etc (Mis à jour) </label>
                     <input formControlName="lien_word_edit" pInputText type="text" />
                 </div>
 
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du excel pour étudiant (lecture seulement) <span style="color: red;"> *
-                        </span></label>
+                    <label For="lastname">Lien du excel pour étudiant (lecture seulement) </label>
                     <input formControlName="lien_excel_read" pInputText type="text" />
                 </div>
                 <div class="field col-12 md:col-6">
-                    <label For="lastname">Lien du excel pour formateurs etc (Mis à jour) <span style="color: red;"> *
-                        </span></label>
+                    <label For="lastname">Lien du excel pour formateurs etc (Mis à jour) </label>
                     <input formControlName="lien_excel_edit" pInputText type="text" />
                 </div>
 
@@ -619,10 +610,10 @@
                             <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
                                 pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
                                 class="pi pi-trash" aria-hidden="true"></i>
-                            <a href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
+                            <a *ngIf="etudiant.lien_livret_excel.edit!=''" href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
                                     pTooltip="Voir le livret Excel" tooltipPosition="bottom" class="pi pi-file-excel"
                                     style="margin-left: 2%;" aria-hidden="true"></i></a>
-                            <a href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
+                            <a *ngIf="etudiant.lien_livret_word.edit!='' href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
                                     pTooltip="Voir le livret Word" tooltipPosition="bottom" class="pi pi-file-pdf"
                                     style="margin-left: 2%;" aria-hidden="true"></i></a>
                         </td>
