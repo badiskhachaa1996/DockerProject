@@ -610,10 +610,10 @@
                             <i *ngIf="this.isAdministration" (click)="disable(etudiant)"
                                 pTooltip="Désactiver l'étudiant" style="margin-left: 2%;" tooltipPosition="bottom"
                                 class="pi pi-trash" aria-hidden="true"></i>
-                            <a *ngIf="etudiant.lien_livret_excel.edit!=''" href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
+                            <a *ngIf="etudiant.lien_livret_excel.edit!='' && etudiant.lien_livret_excel.edit" href="{{etudiant.lien_livret_excel.edit}}" target="_blank"><i
                                     pTooltip="Voir le livret Excel" tooltipPosition="bottom" class="pi pi-file-excel"
                                     style="margin-left: 2%;" aria-hidden="true"></i></a>
-                            <a *ngIf="etudiant.lien_livret_word.edit!=''" href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
+                            <a *ngIf="etudiant.lien_livret_word.edit!='' && etudiant.lien_livret_word.edit" href="{{etudiant.lien_livret_word.edit}}" target="_blank"><i
                                     pTooltip="Voir le livret Word" tooltipPosition="bottom" class="pi pi-file-pdf"
                                     style="margin-left: 2%;" aria-hidden="true"></i></a>
                         </td>

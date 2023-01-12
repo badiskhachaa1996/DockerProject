@@ -1148,9 +1148,12 @@ export class ListEtudiantComponent implements OnInit {
   }
 
   onUpdateLivret() {
+    let index = this.etudiants.indexOf(this.showLivrets)
     this.showLivrets.lien_livret_word = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
     this.showLivrets.lien_livret_excel = { read: this.formLivret.value.lien_excel_read, edit: this.formLivret.value.lien_excel_edit }
     this.etudiantService.update(this.showLivrets).subscribe(data => {
+      this.etudiants[index].lien_livret_word = this.showLivrets.lien_livret_word
+      this.etudiants[index].lien_livret_excel = this.showLivrets.lien_livret_excel
       this.showLivrets = null
       this.formLivret.reset()
       this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
