@@ -169,11 +169,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                        }
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })                      }
                     }
                 })
             notes.forEach(n => {
@@ -220,16 +216,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
         })
 
         listEtudiantID.forEach(e_id => {
-            data.push({
-                nom: dicEtudiant[e_id].user_id.lastname,
-                prenom: dicEtudiant[e_id].user_id.firstname,
-                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
-                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
-                email: dicEtudiant[e_id].user_id.email,
-                notes: listMoyenneEtudiants[e_id],
-                moyenne: avgDic(listMoyenneEtudiants[e_id]),
-                appreciation: ""
-            })
             data.push({
                 nom: dicEtudiant[e_id].user_id.lastname,
                 prenom: dicEtudiant[e_id].user_id.firstname,
