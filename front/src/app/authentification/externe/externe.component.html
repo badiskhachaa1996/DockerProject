@@ -22,9 +22,7 @@
                         placeholder="Entrez votre mot de passe" class="w-full mb-3" style="padding:1rem;">
 
                     <div class="flex align-items-center justify-content-between mb-5">
-                        <a class="font-medium no-underline ml-2 text-right cursor-pointer"
-                            style="color: var(--primary-color)" (click)="router.navigate(['mot-de-passe_oublie'])">Mot
-                            de passe oublié ?</a>
+                        <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)" (click)="router.navigate(['mot-de-passe_oublie'])">Mot de passe oublié ?</a>
                     </div>
                     <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="Login()"
                         class="w-full p-3 text-xl p-button-danger p-button-raised"></button>
@@ -36,7 +34,7 @@
             </form>
         </div>
 
-        <div class="col-12 lg:col-12 xl:col-6" *ngIf="!showLoginPage">
+        <!--<div class="col-12 lg:col-12 xl:col-6" *ngIf="!showLoginPage">
             <div class="card" style="margin-top: 40px; height: 100%">
                 <div class="flex justify-content-between mb-1">
                     <div class="col-8 col-offset-2 flex justify-content-center flex-wrap card-container">
@@ -57,6 +55,7 @@
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-15 mx-auto">
                                                 <p style="text-align: center;"><span style="font-weight: bold;">Salarié</span>/ <span style="font-weight: bold;">Etudiant inscrit</span>, connectez-vous ici</p>
+                                                <br><br>
                                                 <button pButton pRipple label="Se connecter" icon="pi pi-microsoft" (click)="toLoginMiscroft()" class="w-full p-2 text-x4 p-button-primary p-button-raised"></button>
                                             </div>
                                         </div>
@@ -67,7 +66,8 @@
                                     <div class="card mb-4">
                                         <div class="flex justify-content-between mb-4">
                                             <div class="w-full md:w-12 mx-auto">
-                                                <p style="text-align: center;"><span style="font-weight: bold;">Entreprise</span>/ <span  style="font-weight: bold;">Process d'admission</span>, connectez-vous ici</p>
+                                                <p style="text-align: center;"><span style="font-weight: bold;">Entreprise</span>/ <span  style="font-weight: bold;">Process admission</span>, connectez-vous ici</p>
+                                                <br>
                                                 <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="showLoginPage = true;" class="w-full p-2 text-x4 p-button-danger p-button-raised"></button>
                                             </div>
                                         </div>
@@ -78,7 +78,49 @@
                     </div>
                 </div>
             </div>
+        </div>-->
+
+        <div class="card">
+            <img src="assets/images/logo-ims.png" alt="IMS logo" class="mb-2" style="width:135px; display: block;
+            margin-left: auto;
+            margin-right: auto ">
+            <div class="grid">
+                <div class="col-5 flex align-items-center justify-content-center">
+                    <div class="p-fluid">
+                        <form [formGroup]="formLogin">
+                            <div class="field">
+                                <label for="email1">Email</label>
+                                <input id="email1" pInputText id="username" type="text" formControlName="email" placeholder="Entrez votre adresse email" />
+                            </div>
+                            <div class="field">
+                                <label for="password1">Mot de passe</label>
+                                <input id="password1" pInputText id="password" type="password" formControlName="password" placeholder="Entrez votre mot de passe" />
+                            </div>
+                            <button pButton pRipple label="Se connecter" icon="pi pi-envelope" (click)="Login()" class="w-full p-2 text-x4 p-button-danger p-button-raised"></button>
+                            <br><br>
+                            <div class="flex align-items-center justify-content-between">
+                                <a class="font-medium no-underline ml-2 text-right cursor-pointer"style="color: var(--primary-color);">Mot de passe oublié ?</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <p-divider layout="vertical">
+                        <b>OU</b>
+                    </p-divider>
+                </div>
+                <div class="col-5 flex align-items-center justify-content-center">
+                    <div class="p-fluid">
+                        <div class="field">
+                            <img src="assets/images/logo-teams.jpg" alt="Teams logo" class="mb-2" style="width:130px;">
+                            <br><br><br><br>
+                            <button pButton pRipple label="Se connecter" icon="pi pi-microsoft" (click)="toLoginMiscroft()"  class="w-full p-2 text-x4 p-button-primary p-button-raised"></button>
+                        </div>    
+                    </div>    
+                </div>
+            </div>
         </div>
+
         <div class="layout-footer" class="col-12 col-offset-0 flex justify-content-center flex-wrap card-container">
             <span class="font-medium ml-2">
                 <a href="/#/contact" target="_blank">Contact</a> -
