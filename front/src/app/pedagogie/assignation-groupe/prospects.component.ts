@@ -136,8 +136,7 @@ export class ProspectsComponent implements OnInit {
   }
 
   onAddEtudiant() {
-    let data = { _id: this.showAssignForm._id, groupe: this.AssignForm.value.groupe }
-    console.log(data.groupe)
+    let data = { _id: this.showAssignForm._id, groupe: this.AssignForm.value.groupe, email: this.users[this.showAssignForm.user_id].email }
     //this.AssignForm.value.nom_tuteur, this.AssignForm.value.prenom_tuteur, this.AssignForm.value.adresse_tuteur, this.AssignForm.value.email_tuteur, this.AssignForm.value.phone_tuteur, this.AssignForm.value.indicatif_tuteur
     this.etudiantService.assignToGroupe(data).subscribe(data => {
       this.messageService.add({ severity: "success", summary: "Etudiant assigné à un groupe", detail: "L'étudiant a été assigné" })
@@ -247,15 +246,15 @@ export class ProspectsComponent implements OnInit {
   }
 
   disable(etudiant: Etudiant) {
-    let bypass:any = etudiant.user_id
-    if(confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
-    this.etudiantService.disable(etudiant).subscribe((data) => {
-      this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
-      this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
-    }, (error) => {
-      this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
-      console.error(error)
-    })
+    let bypass: any = etudiant.user_id
+    if (confirm(`Etes-vous sûr de vouloir désactiver ${bypass?.lastname} ${bypass?.firstname} (il/elle ne sera plus visible dans cette liste) ?`))
+      this.etudiantService.disable(etudiant).subscribe((data) => {
+        this.messageService.add({ severity: "success", summary: "L'étudiant a bien été désactivé" })
+        this.etudiants.splice(this.etudiants.indexOf(etudiant), 1)
+      }, (error) => {
+        this.messageService.add({ severity: "error", summary: "La désactivation de l'étudiant a eu un problème", detail: error.error })
+        console.error(error)
+      })
   }
 
 }

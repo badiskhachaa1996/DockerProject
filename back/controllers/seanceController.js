@@ -79,7 +79,7 @@ app.post('/create', (req, res, next) => {
 });
 
 app.get('/getAllByMatiere/:module_id', (req, res) => {
-    Seance.find({ matiere_id: req.params.module_id }).then(r => {
+    Seance.find({ matiere_id: { $in: req.params.module_id } }).then(r => {
         //CAN BE POPULATE
         res.send(r)
     })

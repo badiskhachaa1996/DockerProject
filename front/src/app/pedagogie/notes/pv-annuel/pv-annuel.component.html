@@ -1,0 +1,72 @@
+<div class="col-12">
+    <div class="card">
+        <h5>PV {{SEMESTRE}} de {{classe.abbrv}}</h5>
+        <p-toast></p-toast>
+        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="scroll" id="dt1"
+            [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email']"
+            [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
+            <ng-template pTemplate="caption">
+                <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" *ngIf="!hideForPDF"
+                    class="mr-2" pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" *ngIf="!hideForPDF"
+                    placeholder="Recherche" />
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <!--<th style="width: 3rem"></th>-->
+                    <th rowspan="2" pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
+                    </th>
+                    <th rowspan="2" pSortableColumn="prenom">Prénom<p-sortIcon field="prenom">
+                        </p-sortIcon>
+                    </th>
+                    <th rowspan="2" pSortableColumn="date_naissance">Date de naissance <p-sortIcon
+                            field="date_naissance">
+                        </p-sortIcon>
+                    </th>
+                    <th rowspan="2" pSortableColumn="date_inscrit">Date d'intégration <p-sortIcon field="date_inscrit">
+                        </p-sortIcon>
+                    </th>
+                    <th rowspan="2" pSortableColumn="email">Email INTED <p-sortIcon field="email">
+                        </p-sortIcon>
+                    </th>
+                    <th *ngFor="let col of cols">
+                        {{col.module}}
+                    </th>
+                    <th rowspan="3">Moyenne</th>
+                    <th rowspan="3">Appréciations</th>
+                </tr>
+                <tr>
+                    <th *ngFor="let col of cols">
+                        {{col.formateur}}
+                    </th>
+                </tr>
+                <tr>
+                    <th colspan="5">Coefficient</th>
+                    <th *ngFor="let col of cols">
+                        {{col.coeff}}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-data>
+                <tr>
+                    <td>{{data.nom}}</td>
+                    <td>{{data.prenom}}</td>
+                    <td>{{data.date_naissance}}</td>
+                    <td>{{data.date_inscrit}}</td>
+                    <td>{{data.email}}</td>
+                    <td *ngFor="let col of cols">
+                        <span>
+                            {{data.notes[col.module] | number : '0.2-2'}}
+                        </span>
+                    </td>
+                    <td>
+                        {{data.moyenne | number : '0.2-2'}}
+                    </td>
+                    <td>
+                        {{data.appreciation}}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

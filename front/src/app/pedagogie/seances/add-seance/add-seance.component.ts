@@ -54,7 +54,7 @@ export class AddSeanceComponent implements OnInit {
     isPresentiel: new FormControl("Distanciel", Validators.required),
     salle_name: new FormControl(this.salleNames[0]),
     isPlanified: new FormControl(false),
-    campus_id: new FormControl([], Validators.required),
+    campus_id: new FormControl("", Validators.required),
     nbseance: new FormControl(""),
     isUnique: new FormControl(true, Validators.required),
     date_fin_plannification: new FormControl(''),
@@ -110,7 +110,6 @@ export class AddSeanceComponent implements OnInit {
           this.campus[item._id] = item
           this.dropdownCampus.push({ label: item.libelle, value: item._id });
         })
-        this.seanceForm.patchValue({ campus_id: [this.dropdownCampus[0].value] })
       }
     )
     this.classeService.getAll().subscribe(
@@ -157,6 +156,7 @@ export class AddSeanceComponent implements OnInit {
   }
 
   saveSeance() {
+    //Récupérer la liste des groupes pour libelle
     let classeStr = this.dicClasse[this.seanceForm.value.classe[0].value].abbrv
     this.seanceForm.value.classe.forEach((c, index) => {
       if (index != 0)
@@ -164,13 +164,17 @@ export class AddSeanceComponent implements OnInit {
     })
     classeStr.slice(classeStr.lastIndexOf(',') - 1)
 
+    //Récupérer la liste des ids des groupes
     let classeList = []
     this.seanceForm.value.classe.forEach(c => {
       classeList.push(c.value)
     })
+
+    //Récupérer le nom de la salle pour libelle
     let salle_name = "Distanciel"
     if (this.seanceForm.value.isPresentiel != 'Distanciel')
       salle_name = this.seanceForm.value.salle_name
+    
     let formateur = null
     let libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - En Autonomie (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ") "+ salle_name +" "+ this.seanceForm.value.libelle
     let info = 'Classe: ' + this.seanceForm.value.classe[0].value + " Cours en Autonomie"
@@ -179,24 +183,19 @@ export class AddSeanceComponent implements OnInit {
       info = 'Classe: ' + this.seanceForm.value.classe[0].value + ' Formateur: ' + this.seanceForm.value.formateur.nom
       libelle = classeStr + " - " + this.matieres[this.seanceForm.value.matiere.value].abbrv + " - " + this.seanceForm.value.formateur.nom + " (" + this.seanceForm.value.nbseance + "/" + this.matieres[this.seanceForm.value.matiere.value].seance_max + ") " + salle_name +" "+ this.seanceForm.value.libelle
     }
+
     let seance = new Seance(null, classeList, this.seanceForm.value.matiere.value, libelle, this.seanceForm.value.date_debut, this.seanceForm.value.date_fin, formateur, info,
       this.seanceForm.value.isPresentiel, this.seanceForm.value.salle_name, this.seanceForm.value.isPlanified.value, this.seanceForm.value.campus_id, this.seanceForm.value.nbseance, null, this.seanceForm.value.libelle, this.seanceForm.value.seance_type, this.seanceForm.value.time_max_sign);
-    let calc = new Date(this.seanceForm.value.date_fin).getHours() - new Date(this.seanceForm.value.debut).getHours()
     let choice = true
+
+    //Vérifier les disponiblités du formateur
     this.formateurService.getByUserId(formateur).subscribe(data => {
-      /*if (!data.hasOwnProperty("volume_h") || data.volume_h == null || data.volume_h[this.seanceForm.value.matiere.value] == undefined || data.volume_h[this.seanceForm.value.matiere.value] != Number) {
-        choice = confirm("Le formateur n'a pas de volume horaire pour ce module\nVoulez-vous quand même créer cette séance ?")
-      } else {
-        if (data.hasOwnProperty("volume_h_consomme") && data.volume_h_consomme[this.seanceForm.value.matiere.value] == Number && data.volume_h_consomme[this.seanceForm.value.matiere.value] + calc > data.volume_h[this.seanceForm.value.matiere.value]) {
-          choice = confirm("Le volume horaire de ce formateur sera dépassé pour ce module.\nVoulez-vous quand même créer cette séance ?")
-        }
-      }*/
       if (choice && data && data.type_contrat == "Prestation et Vacation") {
         let date_debut = this.getScoreDate(new Date(this.seanceForm.value.date_debut))
         let date_fin = this.getScoreDate(new Date(this.seanceForm.value.date_fin))
         let score_debut = 0
         let score_fin = 10000
-        //TODO if day_debut!=day_fin
+        //TODO if day_date_debut!=day_date_fin
         let available = true
         let rmq = ""
         let day = new Date(this.seanceForm.value.date_debut).getDay()
@@ -228,12 +227,12 @@ export class AddSeanceComponent implements OnInit {
         } else {
           available = false
         }
+
         if (!(score_debut < date_debut) || !(date_fin < score_fin)) {
           available = false
         }
         if (available) {
           let dd = new Date(this.seanceForm.value.date_debut)
-          console.log(data.absences)
           if (data.absences && data.absences.length > 0)
             data.absences.forEach(d => {
               if (d) {
@@ -255,14 +254,10 @@ export class AddSeanceComponent implements OnInit {
         }
       }
       if (choice) {
-        console.log(seance)
         this.seanceService.create(seance).subscribe((data) => {
-          console.log(data)
           this.messageService.add({ severity: 'success', summary: 'Gestion des séances', detail: 'La séance a bien été ajouté!' });
         }, (error) => {
-          console.error(error)
           let serror: Seance = error.error.seance
-          console.error(error, seance)
           this.messageService.add({ severity: 'error', summary: "La séance " + serror + " rentre en conflit", detail: error.error.text })
           let classeStr = ""
           serror.classe_id.forEach(c => {
@@ -505,8 +500,6 @@ export class AddSeanceComponent implements OnInit {
       }
 
     })
-
-    this.seanceForm.patchValue({ campus_id: this.dropdownCampus[0].value })
     this.showSalles(this.dropdownCampus[0].value, true)
   }
 
