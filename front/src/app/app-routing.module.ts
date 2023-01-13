@@ -135,6 +135,8 @@ import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/result
 import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
+import { MyTaskComponent } from './projects/my-task/my-task.component';
+import { TaskManagementComponent } from './projects/task-management/task-management.component';
 
 const routes: Routes = [
     {
@@ -215,6 +217,11 @@ const routes: Routes = [
             { path: 'error', component: ErrorUrlComponent },
             { path: 'cancel', component: CancelUrlComponent },
 
+            /** end */
+
+            /** IMS Project */
+            { path: 'my-tasks', canActivate: [AuthGuardService], component: MyTaskComponent },
+            { path: 'project-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
             /** end */
 
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },

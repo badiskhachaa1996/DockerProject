@@ -149,7 +149,7 @@ export class ListeContratsComponent implements OnInit {
       if (this.token.role == "Admin") {
         this.entrepriseService.getAllContrats().subscribe(Allcontrats => {
           this.ListeContrats = Allcontrats;
-console.log(this.ListeContrats);
+          
           Allcontrats.forEach(cont => {
             this.entrepriseService.getById(cont.tuteur_id?.entreprise_id).subscribe(entpName => {
               this.EntreprisesName[entpName._id] = entpName;

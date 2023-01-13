@@ -241,6 +241,8 @@ import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
 import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/resultat-qff/resultat-qff.component';
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
+import { MyTaskComponent } from './projects/my-task/my-task.component';
+import { TaskManagementComponent } from './projects/task-management/task-management.component';
 
 
 @NgModule({
@@ -492,6 +494,8 @@ import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-f
     QuestionnaireFinFormationComponent,
     ResultatQFFComponent,
     PovFormateurComponent,
+    MyTaskComponent,
+    TaskManagementComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
