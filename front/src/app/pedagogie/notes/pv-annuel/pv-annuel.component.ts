@@ -24,6 +24,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   hideForPDF = false;
   loaded = false;
   modified = false
+  pvAnnuel = []
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
@@ -34,28 +35,41 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
+    this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+      this.cols = data.cols
+      this.dataPV = data.data
+    })
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
-      if (data && confirm('Un PV a été sauvegardé, Voulez-vous le chargez ?')) {
-        this.cols = data.pv_annuel_cols
-        this.dataPV = data.pv_annuel_data
-        this.loaded = true
-      } else {
-        this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
-          this.cols = data.cols
-          this.dataPV = data.data
-        })
-      }
+      this.pvAnnuel = data
     })
   }
 
   savePv() {
-    if (!this.loaded || (this.loaded && confirm("Un PV est déjà enregisté, Voulez-vous écraser l'ancien par celui-ci ?")))
-      this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
+    this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
+      if (data) {
+        this.modified = false
+        this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
+        this.pvAnnuel.push(data)
+      }
+    })
+  }
+
+  delete(pv) {
+    if (confirm("Etes-vous sûr de vouloir supprimer ce pv ?"))
+      this.NoteService.deletePV(pv._id).subscribe(data => {
         if (data) {
-          this.modified = false
-          this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
+          this.messageService.add({ severity: 'success', summary: "Suppresion du PV avec succès" })
+          this.pvAnnuel.splice(this.pvAnnuel.indexOf(pv, 0))
         }
       })
+  }
+
+  loadPV(pv){
+    if(!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))){
+      this.cols = pv.pv_annuel_cols
+      this.dataPV = pv.pv_annuel_data
+      this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
+    }
   }
 
   exportPDF() {
@@ -73,7 +87,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     });
   }
 
-  calculMoyenne(notes, index) {
+  calculMoyenne(notes) {
     let dicModuleCoeff = {}
     this.cols.forEach(col => {
       dicModuleCoeff[col.module] = col.coeff

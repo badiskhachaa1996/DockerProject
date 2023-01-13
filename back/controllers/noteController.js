@@ -248,32 +248,29 @@ function avgDic(myDic) {
 }
 //Sauvegarde d'un PV
 app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
-    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
-        if (pv)
-            PVAnnuel.updateOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }, { pv_annuel_data: req.body.data, pv_annuel_cols: req.body.cols }, { new: true }, (err, doc) => {
-                if (!err && doc)
-                    res.send(doc)
-                else
-                    res.send(err)
-            })
-        else {
-            let pv = new PVAnnuel({
-                date_creation: new Date(),
-                pv_annuel_cols: req.body.cols,
-                pv_annuel_data: req.body.data,
-                semestre: req.params.semestre,
-                classe_id: req.params.classe_id
-            })
-            pv.save().then(newPv => {
-                res.send(newPv)
-            })
-        }
+    let pv = new PVAnnuel({
+        date_creation: new Date(),
+        pv_annuel_cols: req.body.cols,
+        pv_annuel_data: req.body.data,
+        semestre: req.params.semestre,
+        classe_id: req.params.classe_id
+    })
+    pv.save().then(newPv => {
+        res.send(newPv)
     })
 });
 //Chargement d'un PV
 app.get("/loadPV/:semestre/:classe_id", (req, res) => {
-    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
+    PVAnnuel.find({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
         res.send(pv)
+    })
+})
+app.delete("/deletePV/:id", (req, res) => {
+    PVAnnuel.findByIdAndRemove(req.params.id, {}, (err, doc) => {
+        if (!err)
+            res.send(doc)
+        else
+            res.send(err)
     })
 })
 

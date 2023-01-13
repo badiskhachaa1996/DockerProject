@@ -117,7 +117,7 @@
                     <td>{{ user?.email }}</td>
                     <td>{{ user?.email_perso }}</td>
                     <td>{{ user?.type }}</td>
-                    <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
+                    <td>{{ user.last_connection | date:'dd/MM/YYYY à HH:mm'}}
                     </td>
                     <td>
                         <i *ngIf="user?.type=='Initial' || user?.type=='Etudiant' || user?.type=='Alternant' || user?.type=='Alternant/Stagiaire'"
@@ -202,7 +202,7 @@
                     <td>{{ user?.email }}</td>
                     <td>{{ user?.email_perso }}</td>
                     <td>{{ user?.type }}</td>
-                    <td>{{ user.last_connection | date:'dd/MM/YYYY à hh:mm'}}
+                    <td>{{ user.last_connection | date:'dd/MM/YYYY à HH:mm'}}
                     </td>
                     <td>
                         <i *ngIf="user.type=='Prospect' || !user.type" pTooltip="Rechercher dans la table prospects"

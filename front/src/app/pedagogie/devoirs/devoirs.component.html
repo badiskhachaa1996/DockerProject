@@ -95,8 +95,8 @@
                             <span *ngIf="cid && index!=0">,<br>{{cid.abbrv}}</span>
                         </span>
                     </td>
-                    <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à hh:mm"}}</td>
-                    <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à hh:mm" }}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à HH:mm"}}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à HH:mm" }}</td>
                     <td style="min-width: 10rem;">{{(devoir?.rendu)? devoir.rendu.length : 0}}</td>
                     <td>
                         <i pTooltip="Test" style="margin-left: 2%; cursor: pointer;" class="pi pi-search"
@@ -145,7 +145,7 @@
                         {{ rendu.etudiant_id?.lastname | uppercase }}
                         {{ rendu.etudiant_id.firstname | titlecase }}
                     </td>
-                    <td>{{ rendu.date_rendu | date:'dd/MM/YYYY à hh:mm'}} </td>
+                    <td>{{ rendu.date_rendu | date:'dd/MM/YYYY à HH:mm'}} </td>
                     <td>{{rendu.verified ? "Oui":"Non"}}</td>
                     <td>
                         <i *ngIf="!rendu.verified" pTooltip="Noté comme Vu" style="margin-left: 2%; cursor: pointer;"
