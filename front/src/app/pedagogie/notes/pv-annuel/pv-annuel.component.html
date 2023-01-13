@@ -2,7 +2,7 @@
     <div class="card">
         <h5 *ngIf="classe">PV {{SEMESTRE}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
-        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="scroll" id="dt1"
+        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1" 
             [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email']"
             [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
@@ -55,8 +55,8 @@
                     </th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-data>
-                <tr>
+            <ng-template pTemplate="body" let-data let-ri="rowIndex">
+                <tr><!--[ngClass]="{'html2pdf__page-break':isOdd(ri)}"-->
                     <td class="text-center">{{data.nom}}</td>
                     <td class="text-center">{{data.prenom}}</td>
                     <td class="text-center">{{data.date_naissance}}</td>
@@ -183,8 +183,7 @@
                         [pEditableColumn]="data.notes[col.module]" pEditableColumnField="module">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]"
-                                    >
+                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{data.notes[col.module] | number : '0.2-2'}}

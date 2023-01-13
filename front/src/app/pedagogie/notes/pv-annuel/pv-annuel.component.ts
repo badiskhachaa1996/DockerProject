@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Classe } from 'src/app/models/Classe';
 import { ClasseService } from 'src/app/services/classe.service';
@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-changes.guard';
 import { Observable } from 'rxjs';
 import { HostListener } from '@angular/core';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-pv-annuel',
@@ -25,11 +26,17 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   loaded = false;
   modified = false
   pvAnnuel = []
+  @ViewChild('dt1') pTableRef: Table;
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.modified
   }
+
+  ngAfterViewInit() {
+    const table = this.pTableRef.el.nativeElement.querySelector('table');
+    table.setAttribute('id', 'pvTable');
+}
 
   ngOnInit(): void {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
@@ -64,8 +71,8 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       })
   }
 
-  loadPV(pv){
-    if(!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))){
+  loadPV(pv) {
+    if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
       this.cols = pv.pv_annuel_cols
       this.dataPV = pv.pv_annuel_data
       this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
@@ -73,17 +80,21 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   }
 
   exportPDF() {
-    var element = document.getElementById('dt1');
+    var element = document.getElementById('pvTable');
+    let height = 400
+    let width = 800
+    width += this.cols.length * 100
     var opt = {
       margin: 0,
       filename: 'PV_' + this.SEMESTRE + '_' + this.classe.abbrv + '.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
+      image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'cm', format: 'a3', orientation: 'l' }
+      jsPDF: { unit: 'px', format: [element.offsetWidth,element.offsetHeight], orientation: 'l', hotfixes: ['px_scaling'] }
     };
     this.hideForPDF = true
     html2pdf().set(opt).from(element).save().then(() => {
       this.hideForPDF = false
+      //element.style.transform = '';
     });
   }
 
@@ -101,5 +112,9 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       i++;
     }
     return summ / coeffTotal;
+  }
+
+  isOdd(number: number) {
+    return number % 2 == 0
   }
 }
