@@ -35,8 +35,7 @@ const etudiantSchema = mongoose.Schema({
         default: []
     },
     payment_reinscrit: {
-        type: [mongoose.Schema.Types.Mixed],
-        default: []
+        type: String
     },
     isActive: { type: Boolean, default: true },
     enic_naric: { type: Boolean, default: false },
@@ -57,6 +56,10 @@ const etudiantSchema = mongoose.Schema({
     source: { type: String, default: 'Aucune' },
     date_valided_by_support: { type: Date },
     ecole_id: { type: mongoose.Schema.Types.ObjectId, ref: "ecole", default: '6253f5fd322d2ce51dadafbe' },//ESTYA PAR DEFAUT
+    lien_livret: { type: mongoose.Schema.Types.Mixed, default: { 'read': null, 'edit': null } },
+    lien_dossier_professionel: { type: String, default: null },
+    lien_tableau_synthese: { type: String, default: null },
+    date_inscription: { type: Date, default: Date.now() }
 });
 
 //création de la table Etudiant à l'aide de la biblio mongoose

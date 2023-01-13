@@ -1,3 +1,19 @@
+<div class="grid">
+    <div class="col-6 lg:col-6 xl:col-3">
+        <div class="card mb-0">
+            <div class="flex justify-content-between mb-3">
+                <div>
+                    <span class="block text-500 font-medium mb-3">Nombre de réponses au formulaire</span>
+                    <div class="text-900 font-medium text-xl">{{ resultats.length }}</div>
+                </div>
+                <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                    [ngStyle]="{width: '2.5rem', height: '2.5rem'}">
+                    <i class="pi pi-home text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="col-12">
     <div class="card">
         <h5>Liste des résultats du questionnaire de satisfaction</h5>
@@ -142,5 +158,74 @@
                 </tr>
             </ng-template>
         </p-table>
+    </div>
+</div>
+<div class="card" *ngIf="moyenne">
+    <div class="p-fluid p-formgrid grid">
+        <div class="field col-12">
+            <label>Question 6 :</label><br>
+            <label>Êtes-vous satisfait des horaires de cours ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.horaire"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 7 :</label><br>
+            <label>Êtes-vous satisfait de la charge horaire par semaine ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.charge"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 8 :</label><br>
+            <label>Êtes-vous satisfait du nombre de matières ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_nb_matiere"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 9 :</label><br>
+            <label>Êtes-vous satisfait du contenu du programme ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_programme"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 10 :</label><br>
+            <label>Êtes-vous satisfait de la pédagogie des enseignants ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_pedagogie_enseignant"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 11 :</label><br>
+            <label>Avez-vous des supports de cours ?</label>
+            <p>Oui:{{moyenne.support}} Non:{{resultats.length-moyenne.support}}</p>
+
+        </div>
+        <div class="field col-12">
+            <label>Question 12 :</label><br>
+            <label>Êtes-vous satisfait des supports de cours ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_support"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 13 :</label><br>
+            <label>Êtes-vous satisfait des modes d'évaluation ? TD, Contrôle continu, Examen final
+                ...</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_modes"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 14 :</label><br>
+            <label>Êtes-vous satisfait du suivi des évaluations ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_suivi"></p-rating>
+        </div>
+        <div class="field col-12">
+            <label>Question 15 :</label><br>
+            <label>Êtes-vous satisfait des locaux ?</label>
+            <p-rating [cancel]="false" [ngModel]="moyenne.satisfait_locaux"></p-rating>
+        </div>
+        <!--<div class="field col-12">
+            <label>Question 16 :</label><br>
+            <label>L’école répond-elle à vos attentes premières ?</label>
+            <p>{{result.ecole}}</p>
+        </div>-->
+        <div class="field col-12">
+            <label>Question 17 :</label><br>
+            <label>Avez-vous accès à :</label><br>
+            <p>Microsoft TEAMS : {{moyenne.teams*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>IMS : {{moyenne.ims*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>LINKEDIN LEARNING : {{moyenne.ll*100/resultats.length | number : '1.0-0'}}%</p>
+            <p>INTUNS : {{moyenne.intuns*100/resultats.length | number : '1.0-0'}}%</p>
+        </div>
     </div>
 </div>

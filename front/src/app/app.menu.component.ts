@@ -75,6 +75,12 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {
+                label: 'Tàsks',
+                items: [
+                    { label: 'Gestions des tâches', icon: 'pi pi-check-square', routerLink: ['/gestion-tickets'] },
+                ]
+            },
+            {
                 label: "Pédagogie",
                 items: [
                     { label: 'Gestions des modules', icon: 'pi pi-tags', routerLink: ['/matieres'] },
@@ -262,7 +268,7 @@ export class AppMenuComponent implements OnInit {
                     this.isEvent = service.label.includes('Event')
                     this.isAdministration = service.label.includes('dministration')
                     this.isFinance = service.label.includes('inanc')
-                    this.isIntuns=service.label.includes('Intuns')
+                    this.isIntuns = service.label.includes('Intuns')
                 }
                 this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant";
                 this.isFormateur = dataUser.type == "Formateur"
@@ -331,8 +337,8 @@ export class AppMenuComponent implements OnInit {
                                                 { label: 'Ajouter une évaluation', icon: 'pi pi-user-plus', routerLink: ['/ajout-examen'] },
                                                 { label: 'Liste des évaluations', icon: 'pi pi-sort-alpha-down', routerLink: ['/examens'] },
                                             ]
-                                        },
-                                        { label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
+                                        }, { label: 'Liste des étudiants', icon: 'pi pi-users', routerLink: '/formateur/etudiants' }
+                                        //{ label: 'Gestions des devoirs', icon: 'pi pi-book', routerLink: 'devoirs' }
                                     ]
                                 }
                             ];
@@ -706,6 +712,12 @@ export class AppMenuComponent implements OnInit {
                                     ]
                                 },
                                 { label: 'Validation des inscrits', icon: 'pi pi-check-square', routerLink: ['/validation-inscrit'] },
+                                {
+                                    label: 'Questionnaire',
+                                    items: [
+                                        { label: 'Questionnaire satisfaction', icon: 'pi pi-heart', routerLink: ['resultat-qs'] }
+                                    ]
+                                }
                             ]
                         },
                     ]

@@ -84,4 +84,10 @@ export class NoteService {
     return this.httpClient.put<Note>(registreUrl, note, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
+  getPVAnnuel(semestre, classe_id) {
+    let url = this.apiUrl + "getPVAnnuel/" + semestre + "/" + classe_id
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+
+  }
+
 }

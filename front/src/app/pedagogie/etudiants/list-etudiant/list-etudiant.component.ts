@@ -32,7 +32,7 @@ import { info } from 'console';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { EcoleService } from 'src/app/services/ecole.service';
-
+var CryptoJS = require("crypto-js");
 
 @Component({
   selector: 'app-list-etudiant',
@@ -43,7 +43,7 @@ import { EcoleService } from 'src/app/services/ecole.service';
 export class ListEtudiantComponent implements OnInit {
 
   expandedRows = {};
-
+  display = false
   etudiants: Etudiant[] = [];
 
   /* partie dedié aux filtres */
@@ -74,6 +74,13 @@ export class ListEtudiantComponent implements OnInit {
   /* end */
 
   formUpdateEtudiant: FormGroup;
+
+  formLivret: FormGroup = this.formBuilder.group({
+    lien_word_read: ['',],
+    lien_word_edit: [''],
+    lien_dossier_professionel: [''],
+    lien_tableau_synthese: [''],
+  });
 
   typeEtudiant = [
     { label: "Tout types d'étudiants", value: null },
@@ -161,6 +168,7 @@ export class ListEtudiantComponent implements OnInit {
   imageToShow: any = "../assets/images/avatar.PNG"
   ListDocuments = []
   showUploadFile;
+  showLivrets: Etudiant = null;
 
   isMinor = false;
   isCommercial: boolean = false;
@@ -215,7 +223,7 @@ export class ListEtudiantComponent implements OnInit {
     this.etudiantService.getPopulateByUserid(bypass._id).subscribe(p => {
       this.showPayement = p
     })
-    this.payementList = etu.payment_reinscrit
+    this.payementList = JSON.parse(CryptoJS.AES.decrypt(etu.payment_reinscrit.toString(), 'd8a0707da72cadb1b4cc3258604154cb'));
     this.formUpdateDossier.patchValue({ statut_dossier: etu.statut_dossier })
     /*if (this.prospects[etu.user_id]) {
       this.showPayement = this.prospects[etu.user_id]
@@ -1124,5 +1132,42 @@ export class ListEtudiantComponent implements OnInit {
     });
     FileSaver.saveAs(data, "etudiants" + '_export_' + new Date().toLocaleDateString("fr-FR") + ".xlsx");
 
+  }
+
+  scrollToTop() {
+    var scrollDuration = 250;
+    var scrollStep = -window.scrollY / (scrollDuration / 15);
+
+    var scrollInterval = setInterval(function () {
+      if (window.scrollY > 120) {
+        window.scrollBy(0, scrollStep);
+      } else {
+        clearInterval(scrollInterval);
+      }
+    }, 15);
+  }
+
+  onUpdateLivret() {
+    let index = this.etudiants.indexOf(this.showLivrets)
+    this.showLivrets.lien_livret = { read: this.formLivret.value.lien_word_read, edit: this.formLivret.value.lien_word_edit }
+    this.showLivrets.lien_dossier_professionel = this.formLivret.value.lien_dossier_professionel
+    this.showLivrets.lien_tableau_synthese = this.formLivret.value.lien_tableau_synthese
+    this.etudiantService.update(this.showLivrets).subscribe(data => {
+      this.etudiants[index].lien_livret = this.showLivrets.lien_livret
+      this.etudiants[index].lien_dossier_professionel = this.showLivrets.lien_dossier_professionel
+      this.etudiants[index].lien_tableau_synthese = this.showLivrets.lien_tableau_synthese
+      this.showLivrets = null
+      this.formLivret.reset()
+      this.messageService.add({ severity: 'success', summary: 'Lien du livret modifié' });
+    })
+  }
+  onInitLivret(etudiant) {
+    this.showLivrets = etudiant
+    this.formLivret.setValue({
+      lien_word_read: this.showLivrets.lien_livret.read,
+      lien_word_edit: this.showLivrets.lien_livret.edit,
+      lien_dossier_professionel: this.showLivrets.lien_dossier_professionel,
+      lien_tableau_synthese: this.showLivrets.lien_tableau_synthese,
+    })
   }
 }

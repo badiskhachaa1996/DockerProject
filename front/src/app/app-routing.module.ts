@@ -134,6 +134,8 @@ import { QuestionnaireSatisfactionComponent } from './pedagogie/questionnaire-sa
 import { ResultatComponent } from './pedagogie/questionnaire-satisfaction/resultat/resultat.component';
 import { ProspectsIntunsComponent } from './admission/prospects-intuns/prospects-intuns.component';
 import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fin-formation/questionnaire-fin-formation.component';
+import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
+import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 
 const routes: Routes = [
     {
@@ -240,7 +242,9 @@ const routes: Routes = [
             { path: 'infos-ims', canActivate: [AdminGuardService], component: InfoImsComponent },
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
-            { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] }
+            { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
+            { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
+            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService] }
 
         ],
     },
