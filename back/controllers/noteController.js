@@ -4,6 +4,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
+const { PVAnnuel } = require("../models/pvAnnuel");
 
 
 //Recuperation de la liste des notes
@@ -224,7 +225,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 email: dicEtudiant[e_id].user_id.email,
                 notes: listMoyenneEtudiants[e_id],
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
-                appreciation: "TEST SSSSSSSS"
+                appreciation: ""
             })
         })
         //listMoyenneEtudiants Vide TODO
@@ -245,5 +246,36 @@ function avgDic(myDic) {
     }
     return summ / ArrayLen;
 }
+//Sauvegarde d'un PV
+app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
+    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
+        if (pv)
+            PVAnnuel.updateOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }, { pv_annuel_data: req.body.data, pv_annuel_cols: req.body.cols }, { new: true }, (err, doc) => {
+                if (!err && doc)
+                    res.send(doc)
+                else
+                    res.send(err)
+            })
+        else {
+            let pv = new PVAnnuel({
+                date_creation: new Date(),
+                pv_annuel_cols: req.body.cols,
+                pv_annuel_data: req.body.data,
+                semestre: req.params.semestre,
+                classe_id: req.params.classe_id
+            })
+            pv.save().then(newPv => {
+                res.send(newPv)
+            })
+        }
+    })
+});
+//Chargement d'un PV
+app.get("/loadPV/:semestre/:classe_id", (req, res) => {
+    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
+        res.send(pv)
+    })
+})
+
 //export du module app pour l'utiliser dans les autres parties de l'application
 module.exports = app;

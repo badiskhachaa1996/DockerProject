@@ -87,7 +87,16 @@ export class NoteService {
   getPVAnnuel(semestre, classe_id) {
     let url = this.apiUrl + "getPVAnnuel/" + semestre + "/" + classe_id
     return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
 
+  loadPV(semestre, classe_id) {
+    let url = this.apiUrl + "loadPV/" + semestre + "/" + classe_id
+    return this.httpClient.get<any>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
+  }
+
+  savePV(semestre, classe_id, data) {
+    let url = this.apiUrl + "savePV/" + semestre + "/" + classe_id
+    return this.httpClient.post<any>(url, data, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) });
   }
 
 }
