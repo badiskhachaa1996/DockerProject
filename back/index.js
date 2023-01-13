@@ -115,6 +115,7 @@ const annonceController = require('./controllers/annonceController');
 const skillsController = require('./controllers/skillsController');
 const progressionPedaController = require('./controllers/progressionPedaController');
 const QSController = require('./controllers/questionnaireSatisfactionController');
+const projectController = require('./controllers/projectController');
 const { User } = require("./models/user");
 
 
@@ -259,6 +260,7 @@ app.use('/soc/skills', skillsController);
 
 app.use('/soc/progressionPeda', progressionPedaController);
 app.use('/soc/qs', QSController)
+app.use('/soc/project', projectController);
 
 io.on("connection", (socket) => {
     //Lorsqu'un utilisateur se connecte il rejoint une salle pour ses Notification

@@ -69,15 +69,16 @@ export class AppMenuComponent implements OnInit {
             {
                 label: 'Ticketing', icon: 'pi pi-ticket',
                 items: [
-                    { label: 'Gestions des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
+                    { label: 'Gestion des tickets', icon: 'pi pi-ticket', routerLink: ['/gestion-tickets'] },
                     { label: 'Suivi de mes tickets', icon: 'pi pi-check-circle', routerLink: ['/suivi-ticket'] },
                     { label: 'Gestions des services', icon: 'pi pi-sitemap', routerLink: ['/admin/gestion-services'] },
                 ]
             },
             {
-                label: 'Tàsks',
+                label: 'Projects',
                 items: [
-                    { label: 'Gestions des tâches', icon: 'pi pi-check-square', routerLink: ['/gestion-tickets'] },
+                    { label: 'Gestion des tâches', icon: 'pi pi-check-square', routerLink: ['/project-management'] },
+                    { label: 'Mes tâches', icon: 'pi pi-circle', routerLink: ['/my-tasks'] },
                 ]
             },
             {

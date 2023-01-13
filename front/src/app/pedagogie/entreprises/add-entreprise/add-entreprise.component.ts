@@ -167,7 +167,7 @@ export class AddEntrepriseComponent implements OnInit {
       email_rep,
       email_rep, 
       null,
-      'User',
+      'user',
       false,
       null,
       civilite_rep.value,
