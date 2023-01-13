@@ -12,6 +12,7 @@ import { User } from 'src/app/models/User';
 import { AuthService } from 'src/app/services/auth.service';
 import { CampusService } from 'src/app/services/campus.service';
 import { Campus } from 'src/app/models/Campus';
+import { ExamenService } from 'src/app/services/examen.service';
 
 @Component({
   selector: 'app-list-groupe',
@@ -56,7 +57,7 @@ export class ListGroupeComponent implements OnInit {
   campus: Campus[] = [];
 
   constructor(private campusService: CampusService, private diplomeService: DiplomeService, private formBuilder: FormBuilder, private classeService: ClasseService, private messageService: MessageService
-    , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService) { }
+    , private router: Router, private EtudiantService: EtudiantService, private authService: AuthService, private ExamenService: ExamenService) { }
 
   customIncludes(l: any, d: { label: string, value: string }) {
     let r = false
@@ -230,8 +231,8 @@ export class ListGroupeComponent implements OnInit {
 
   sendCalendar(def: string, objet: string) {
     this.EtudiantService.sendEDT(this.groupeEdt._id, def, objet).subscribe(data => {
-      this.objetMail=""
-      this.mailtype=""
+      this.objetMail = ""
+      this.mailtype = ""
       this.messageService.add({ severity: 'success', summary: 'Envoie des emplois du temps', detail: "Les emplois du temps ont bien été envoyé" })
     }, error => {
       console.error(error)
@@ -259,5 +260,19 @@ export class ListGroupeComponent implements OnInit {
   placeholderType = "Bonjour," + "\n" + "Voici un mail type" + "\n" + "Pour ajouter le lien de l'emploi du temps, merci d'écrire:" + "\n" + "<lien edt>" + "\n" + "pour mettre une signature d'une école merci d'écrire:" + "\n" +
     "<signature estya>" + "\n" + "<signature espic>" + "\n" + "<signature adg>" + "\n" + "<signature eduhorizons>" + "\n"
     + "La signature par défaut sera celle d'espic\nCordialement,\nl'équipe IMS"
+  semestreList = [{ label: "Annuel", value: "Annuel" },{ label: "Semestre 1", value: "Semestre 1" },{ label: "Semestre 2", value: "Semestre 2" },{ label: "Semestre 3", value: "Semestre 3" }]
+  showPV: Classe = null
+  formPV: FormGroup = this.formBuilder.group({
+    semestre: ['', Validators.required]
+  });
+  initPV(rowData) {
+    this.ExamenService.getAllByClasseId(rowData._id).subscribe(examens => {
+      this.showPV = rowData
+    })
+  }
+
+  generatePV() {
+    this.router.navigate(['pv-annuel', this.formPV.value.semestre, this.showPV._id])
+  }
 
 }

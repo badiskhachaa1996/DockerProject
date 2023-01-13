@@ -228,7 +228,7 @@ app.post("/assignToGroupe", (req, res, next) => {
         )
         me.save()
     })
-    Etudiant.findByIdAndUpdate(req.body._id, { statut_dossier: etudiantData.statut_dossier, classe_id: etudiantData.groupe }, { new: true }, function (err, data) {
+    Etudiant.findByIdAndUpdate(req.body._id, { classe_id: etudiantData.groupe, date_inscription: new Date() }, { new: true }, function (err, data) {
         if (err) {
             console.error(err)
             res.status(400).send(err)
@@ -489,32 +489,33 @@ app.get("/getBulletinV3/:etudiant_id/:semestre", (req, res, next) => {
                 let dicMatiere = {}
                 let listMoyChoose = {}
                 notes.forEach(n => {
-                    n.examen_id.matiere_id.forEach(mid => {
-                        if (mid.formation_id == n.etudiant_id.classe_id.diplome_id) {
-                            if (n.examen_id != null && !listMatiereNOM.includes(mid.abbrv)) {
-                                listMatiereNOM.push(mid.abbrv)
-                                dicMatiere[mid.abbrv] = mid
+                    if (n.examen_id && n.examen_id.matiere_id)
+                        n.examen_id.matiere_id.forEach(mid => {
+                            if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
+                                if (n.examen_id != null && !listMatiereNOM.includes(mid.abbrv)) {
+                                    listMatiereNOM.push(mid.abbrv)
+                                    dicMatiere[mid.abbrv] = mid
+                                }
                             }
-                        }
-                    })
+                        })
                 })
                 listEtudiantID.forEach(e_id => {
                     listNotesEtudiantsCoeff[e_id] = {}
                     listMatiereNOM.forEach(m_nom => {
                         listNotesEtudiantsCoeff[e_id][m_nom] = []
                         notes.forEach(note => {
-                            //TODO examen_id.matiere_id[]
-                            n.examen_id.matiere_id.forEach(mid => {
-                                if (mid.formation_id == note.etudiant_id.classe_id.diplome_id && !note.isAbsent)
-                                    if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false)
-                                        if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
-                                            for (let i = 0; i < 3; i++)
-                                                listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                        else
-                                            for (let i = 0; i < (note.examen_id.coef * 2); i++)
-                                                listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
+                            if (note.examen_id && note.examen_id.matiere_id)
+                                note.examen_id.matiere_id.forEach(mid => {
+                                    if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
+                                        if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id.abbrv == m_nom && note.isAbsent == false)
+                                            if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
+                                                for (let i = 0; i < 3; i++)
+                                                    listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                            else
+                                                for (let i = 0; i < (note.examen_id.coef * 2); i++)
+                                                    listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
 
-                            })
+                                })
                         })
                     })
                 })

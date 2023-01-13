@@ -51,8 +51,8 @@
                     <td style="min-width: 10rem;"> {{ devoir.libelle }} </td>
                     <td style="min-width: 10rem;">{{devoir.formateur_id.lastname | uppercase}}
                         {{devoir.formateur_id.firstname | titlecase}}</td>
-                    <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à hh:mm"}}</td>
-                    <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à hh:mm" }}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_rendu | date : "dd/MM/yyyy à HH:mm"}}</td>
+                    <td style="min-width: 10rem;">{{ devoir.date_debut | date : "dd/MM/yyyy à HH:mm" }}</td>
                     <td>
                         <i pTooltip="Faire un rendu pour ce devoir" style="margin-left: 2%; cursor: pointer;"
                             class="pi pi-send" (click)="addRendu(devoir)" aria-hidden="true"></i>

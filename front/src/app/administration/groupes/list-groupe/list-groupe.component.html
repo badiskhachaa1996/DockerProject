@@ -1,12 +1,15 @@
 <p-toast></p-toast>
-<p-dialog header="Envoie de mail" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '90vw',height:'90vw'}"
-	[draggable]="false" [resizable]="false">
-	<input class="mb-2" pInputText type="text" [(ngModel)]="objetMail" placeholder="Objet du mail"/><br/>
-	<textarea pInputTextarea [(ngModel)]="mailtype" [style]="{width: '85vw',height:'35vw'}" [placeholder]=placeholderType></textarea>
+<p-dialog header="Envoie de mail" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}"
+	[style]="{width: '90vw',height:'90vw'}" [draggable]="false" [resizable]="false">
+	<input class="mb-2" pInputText type="text" [(ngModel)]="objetMail" placeholder="Objet du mail" /><br />
+	<textarea pInputTextarea [(ngModel)]="mailtype" [style]="{width: '85vw',height:'35vw'}"
+		[placeholder]=placeholderType></textarea>
 	<ng-template pTemplate="footer">
 		<p-button (click)="loadDefautEDT()" label="Charger le mail type 'Emploi du temps' par défaut"
 			styleClass="p-button-text"></p-button>
-		<p-button [disabled]="mailtype==''||objetMail==''" (click)="displayResponsive=false;sendCalendar(mailtype,objetMail)" label="Envoyer ce mail" styleClass="p-button-text">
+		<p-button [disabled]="mailtype==''||objetMail==''"
+			(click)="displayResponsive=false;sendCalendar(mailtype,objetMail)" label="Envoyer ce mail"
+			styleClass="p-button-text">
 		</p-button>
 	</ng-template>
 </p-dialog>
@@ -40,6 +43,23 @@
 				</div>
 				<div style="justify-content: right;">
 					<button pButton label="Modifier" type="submit" [disabled]="formUpdateClasse.invalid"></button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="col-12" *ngIf="showPV">
+		<div class="card">
+			<i class="pi pi-times-circle" style="float:right; font-size: 20px; color: red; cursor: pointer;"
+				(click)="showPV = null; formPV.reset()"> </i>
+			<h4 style="text-align: center;">Générer un PV</h4>
+			<form class="p-fluid p-formgrid grid" [formGroup]="formPV" (ngSubmit)="generatePV()">
+				<div class="field col-12">
+					<label for="campus">Semestre</label>
+					<p-dropdown [options]="semestreList" formControlName="semestre" placeholder="Choissisez un semestre"></p-dropdown>
+				</div>
+				<div style="justify-content: right;">
+					<button pButton label="Générer" type="submit" [disabled]="formPV.invalid"></button>
 				</div>
 			</form>
 		</div>
@@ -120,14 +140,18 @@
 						</td>
 						<td style="min-width: 10rem;">
 							<i aria-hidden="true" pTooltip="Modifier" tooltipPosition="bottom" class="pi pi-pencil"
-								*ngIf="user.departement==rowData.diplome_id.domaine || user.role=='Admin'" tooltipPosition="bottom"
+								*ngIf="user.departement==rowData.diplome_id.domaine || user.role=='Admin'"
+								tooltipPosition="bottom"
 								(click)="idClasseToUpdate = rowData._id; onGetById(); showFormUpdateClasse = true; showFormAddClasse = false; diplomeToUpdate = rowData.diplome_id.titre;"></i>
-							<i class="pi pi-calendar" aria-hidden="true" (click)="showCalendar(rowData)" tooltipPosition="bottom"
-								pTooltip="Voir le calendrier du groupe"></i>
-							<i class="pi pi-envelope" aria-hidden="true" (click)="displayResponsive=true;mailtype='';groupeEdt=rowData" tooltipPosition="bottom"
+							<i class="pi pi-calendar" aria-hidden="true" (click)="showCalendar(rowData)"
+								tooltipPosition="bottom" pTooltip="Voir le calendrier du groupe"></i>
+							<i class="pi pi-envelope" aria-hidden="true"
+								(click)="displayResponsive=true;mailtype='';groupeEdt=rowData" tooltipPosition="bottom"
 								pTooltip="Envoyer un mail au groupe"></i>
-							<i class="pi pi-file" pTooltip="Lister les notes du groupe" (click)="sendNotes(rowData)" tooltipPosition="bottom"
-								aria-hidden="true"></i>
+							<i class="pi pi-file" pTooltip="Lister les notes du groupe" (click)="sendNotes(rowData)"
+								tooltipPosition="bottom" aria-hidden="true"></i>
+							<i class="pi pi-file-excel" pTooltip="Générer un PV Semestriel/Annuel" (click)="initPV(rowData)"
+								tooltipPosition="bottom" aria-hidden="true"></i>
 						</td>
 					</tr>
 				</ng-template>

@@ -137,6 +137,8 @@ import { QuestionnaireFinFormationComponent } from './pedagogie/questionnaire-fi
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
+import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
 
 const routes: Routes = [
     {
@@ -249,7 +251,8 @@ const routes: Routes = [
             { path: 'suivi-preinscription/:user_id', component: SuiviePreinscriptionComponent, canActivate: [AuthGuardService] },
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
-            { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] }
+            { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
+            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] }
 
         ],
     },

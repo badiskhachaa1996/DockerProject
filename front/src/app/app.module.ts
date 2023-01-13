@@ -243,6 +243,7 @@ import { ResultatQFFComponent } from './pedagogie/questionnaire-fin-formation/re
 import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-formateur/pov-formateur.component';
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
+import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 
 
 @NgModule({
@@ -496,6 +497,7 @@ import { TaskManagementComponent } from './projects/task-management/task-managem
     PovFormateurComponent,
     MyTaskComponent,
     TaskManagementComponent,
+    PvAnnuelComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

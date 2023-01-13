@@ -4,6 +4,7 @@ const app = express();
 const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
+const { PVAnnuel } = require("../models/pvAnnuel");
 
 
 //Recuperation de la liste des notes
@@ -133,19 +134,157 @@ app.put("/updateById/:id", (req, res, next) => {
 });
 
 app.put("/updateV2/:id", (req, res) => {
-    Note.updateOne({ _id: req.params.id }, { ...req.body } )
-    .then((response) => {
-        let nUpdated = new UpdateNote({
-            note_id: req.params.id,
-            user_id: jwt.decode(req.header("token")).id,
-            old_note: response.note_val,
-            new_note: req.body.note_val,
-            date_creation: new Date
+    Note.updateOne({ _id: req.params.id }, { ...req.body })
+        .then((response) => {
+            let nUpdated = new UpdateNote({
+                note_id: req.params.id,
+                user_id: jwt.decode(req.header("token")).id,
+                old_note: response.note_val,
+                new_note: req.body.note_val,
+                date_creation: new Date
+            })
+            nUpdated.save()
+            res.status(201).send(response);
         })
-        nUpdated.save()
-        res.status(201).send(response);
+        .catch((error) => { res.status(500).send(error.message); })
+})
+
+app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
+    Note.find({ classe_id: { $in: req.params.classe_id }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+        let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
+        let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
+        let listMatiereNOM = []
+        let listNotesEtudiantsCoeff = {}
+        let listMoyenneEtudiants = {} // {etudiant_id:{matiere_id:number}}
+        let listMoyenne = {} // {matiere_nom:[number]}
+        let dicMatiere = {}
+        let listEtudiantID = []
+        let dicEtudiant = {}
+        notes.forEach(n => {
+            if (n.examen_id && n.examen_id.matiere_id)
+                n.examen_id.matiere_id.forEach(mid => {
+                    //console.log(n.etudiant_id,mid.formation_id)
+                    if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
+
+                        if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
+                            listMatiereNOM.push(mid.nom)
+                            dicMatiere[mid.nom] = mid
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                        }
+                    }
+                })
+            notes.forEach(n => {
+                if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1) {
+                    dicEtudiant[n.etudiant_id._id] = n.etudiant_id
+                    listEtudiantID.push(n.etudiant_id._id)
+                }
+            })
+        })
+        listEtudiantID.forEach(e_id => {
+            listNotesEtudiantsCoeff[e_id] = {}
+            listMatiereNOM.forEach(m_nom => {
+                listNotesEtudiantsCoeff[e_id][m_nom] = []
+                notes.forEach(note => {
+                    if (note.examen_id && note.examen_id.matiere_id)
+                        note.examen_id.matiere_id.forEach(mid => {
+                            if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
+                                if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id[0].nom == m_nom && note.isAbsent == false)
+                                    if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
+                                        for (let i = 0; i < 3; i++)
+                                            listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                    else
+                                        for (let i = 0; i < (note.examen_id.coef * 2); i++)
+                                            listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
+
+                        })
+                })
+            })
+        })
+        console.log(listNotesEtudiantsCoeff)
+        listEtudiantID.forEach(e_id => {
+            listMoyenneEtudiants[e_id] = {}
+            listMatiereNOM.forEach(m_nom => {
+                listMoyenneEtudiants[e_id][m_nom] = 0
+                if (listNotesEtudiantsCoeff[e_id][m_nom] != [] && listNotesEtudiantsCoeff[e_id][m_nom].length != 0)
+                    listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiantsCoeff[e_id][m_nom])
+            })
+        })
+        listMatiereNOM.forEach(m_nom => {
+            listMoyenne[m_nom] = []
+            listEtudiantID.forEach(e_id => {
+                listMoyenne[m_nom].push(listMoyenneEtudiants[e_id][m_nom])
+            })
+        })
+
+        listEtudiantID.forEach(e_id => {
+            data.push({
+                nom: dicEtudiant[e_id].user_id.lastname,
+                prenom: dicEtudiant[e_id].user_id.firstname,
+                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
+                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
+                email: dicEtudiant[e_id].user_id.email,
+                notes: listMoyenneEtudiants[e_id],
+                moyenne: avgDic(listMoyenneEtudiants[e_id]),
+                appreciation: ""
+            })
+            data.push({
+                nom: dicEtudiant[e_id].user_id.lastname,
+                prenom: dicEtudiant[e_id].user_id.firstname,
+                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
+                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
+                email: dicEtudiant[e_id].user_id.email,
+                notes: listMoyenneEtudiants[e_id],
+                moyenne: avgDic(listMoyenneEtudiants[e_id]),
+                appreciation: ""
+            })
+        })
+        //listMoyenneEtudiants Vide TODO
+        res.send({ data, cols })
     })
-    .catch((error) => { res.status(500).send(error.message); })
+})
+function avg(myArray) {
+    var i = 0, summ = 0, ArrayLen = myArray.length;
+    while (i < ArrayLen) {
+        summ = summ + myArray[i++];
+    }
+    return summ / ArrayLen;
+}
+function avgDic(myDic) {
+    var i = 0, summ = 0, ArrayDic = Object.keys(myDic), ArrayLen = ArrayDic.length;
+    while (i < ArrayLen) {
+        summ = summ + myDic[ArrayDic[i++]];
+    }
+    return summ / ArrayLen;
+}
+//Sauvegarde d'un PV
+app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
+    let pv = new PVAnnuel({
+        date_creation: new Date(),
+        pv_annuel_cols: req.body.cols,
+        pv_annuel_data: req.body.data,
+        semestre: req.params.semestre,
+        classe_id: req.params.classe_id
+    })
+    pv.save().then(newPv => {
+        res.send(newPv)
+    })
+});
+//Chargement d'un PV
+app.get("/loadPV/:semestre/:classe_id", (req, res) => {
+    PVAnnuel.find({ semestre: req.params.semestre, classe_id: req.params.classe_id }).then(pv => {
+        res.send(pv)
+    })
+})
+app.delete("/deletePV/:id", (req, res) => {
+    PVAnnuel.findByIdAndRemove(req.params.id, {}, (err, doc) => {
+        if (!err)
+            res.send(doc)
+        else
+            res.send(err)
+    })
 })
 
 //export du module app pour l'utiliser dans les autres parties de l'application

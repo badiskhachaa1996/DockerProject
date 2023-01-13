@@ -84,7 +84,7 @@
                 </div>
                 <div class="field col-12 md:col-6">
                     <label>Campus <span style="color: red;"> * </span></label><br>
-                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus"
+                    <p-dropdown formControlName="campus_id" [options]="dropdownCampus" placeholder="Choissiez un campus"
                         (onChange)="showSalles($event.value)" emptyFilterMessage="Pas de campus trouvé"
                         filterPlaceholder="Nom du campus" filter="true">
                     </p-dropdown>

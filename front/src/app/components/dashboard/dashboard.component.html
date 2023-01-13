@@ -310,7 +310,7 @@
     <h1 *ngIf="user && dataEtudiant">Bienvenue {{user.firstname | titlecase}} {{user.lastname | uppercase}}
         N°{{dataEtudiant?.custom_id}}
     </h1>
-    <p *ngIf="dataEtudiant && dataEtudiant.statut_dossier.includes('Document Manquant')" style="color:red;">Votre
+    <p *ngIf="dataEtudiant && dataEtudiant?.statut_dossier?.includes('Document Manquant')" style="color:red;">Votre
         dossier n'est pas complet, il manque des documents, veuillez contacter l'administration via Ticketing
     </p>
 
