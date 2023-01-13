@@ -42,22 +42,20 @@ export class PovFormateurComponent implements OnInit {
   }
 
   onGetAllClasses() {
-    this.searchClass = [{ libelle: 'Toutes les groupes', value: null }];
+    this.searchClass = [{ label: 'Toutes les groupes', value: null }];
 
     //Recuperation de la liste des classes
     this.classeService.getAll().subscribe(
       ((response) => {
         response.forEach(classe => {
-          this.searchClass.push({ libelle: classe.abbrv, value: classe._id });
+          this.searchClass.push({ label: classe.abbrv, value: classe._id });
         })
       }),
       ((error) => { console.error(error); })
     );
-    this.filterCampus = [{ libelle: "Tout les campus", value: null }]
+    this.filterCampus = [{ label: "Tout les campus", value: null }]
     this.campusService.getAllPopulate().subscribe(data => {
       data.forEach(c => {
-        let e: any = c.ecole_id
-        let n = e.libelle + " - " + c.libelle
         this.filterCampus.push({ value: c._id, label: c.libelle })
       })
     })

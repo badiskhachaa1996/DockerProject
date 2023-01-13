@@ -8,8 +8,8 @@
             <ng-template pTemplate="caption">
                 <button type="button" pButton pRipple icon="pi pi-file-pdf" (click)="exportPDF()" *ngIf="!hideForPDF"
                     class="mr-2" pTooltip="Exporter en PDF" tooltipPosition="bottom"></button>
-                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')" *ngIf="!hideForPDF"
-                    placeholder="Recherche" />
+                <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                    *ngIf="!hideForPDF" placeholder="Recherche" />
             </ng-template>
             <ng-template pTemplate="header">
                 <tr>
@@ -54,10 +54,16 @@
                     <td>{{data.date_naissance}}</td>
                     <td>{{data.date_inscrit}}</td>
                     <td>{{data.email}}</td>
-                    <td *ngFor="let col of cols">
-                        <span>
-                            {{data.notes[col.module] | number : '0.2-2'}}
-                        </span>
+                    <td *ngFor="let col of cols" [pEditableColumn]="data.notes[col.module]"
+                        pEditableColumnField="module">
+                        <p-cellEditor>
+                            <ng-template pTemplate="input">
+                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
+                            </ng-template>
+                            <ng-template pTemplate="output">
+                                {{data.notes[col.module]}}
+                            </ng-template>
+                        </p-cellEditor>
                     </td>
                     <td>
                         {{data.moyenne | number : '0.2-2'}}
