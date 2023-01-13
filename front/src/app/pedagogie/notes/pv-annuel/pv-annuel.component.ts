@@ -5,13 +5,16 @@ import { ClasseService } from 'src/app/services/classe.service';
 import { NoteService } from 'src/app/services/note.service';
 import * as html2pdf from 'html2pdf.js';
 import { MessageService } from 'primeng/api';
+import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-changes.guard';
+import { Observable } from 'rxjs';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-pv-annuel',
   templateUrl: './pv-annuel.component.html',
   styleUrls: ['./pv-annuel.component.scss']
 })
-export class PvAnnuelComponent implements OnInit {
+export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
 
   dataPV = []//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15" }
   cols = []//{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
@@ -20,7 +23,12 @@ export class PvAnnuelComponent implements OnInit {
   classe: Classe;
   hideForPDF = false;
   loaded = false;
+  modified = false
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.modified
+  }
 
   ngOnInit(): void {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
@@ -43,8 +51,10 @@ export class PvAnnuelComponent implements OnInit {
   savePv() {
     if (!this.loaded || (this.loaded && confirm("Un PV est déjà enregisté, Voulez-vous écraser l'ancien par celui-ci ?")))
       this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
-        if (data)
+        if (data) {
+          this.modified = false
           this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
+        }
       })
   }
 

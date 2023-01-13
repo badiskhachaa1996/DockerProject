@@ -66,7 +66,8 @@
                         pEditableColumnField="module">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]">
+                                <input pInputText type="text" [(ngModel)]="data.notes[col.module]"
+                                (input)="modified=true">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{data.notes[col.module] | number : '0.2-2'}}
@@ -79,7 +80,7 @@
                     <td class="text-center" [pEditableColumn]="data.appreciation" pEditableColumnField="appreciation">
                         <p-cellEditor>
                             <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="data.appreciation">
+                                <input pInputText type="text" [(ngModel)]="data.appreciation" (input)="modified=true">
                             </ng-template>
                             <ng-template pTemplate="output">
                                 {{data.appreciation}}
