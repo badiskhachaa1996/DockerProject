@@ -549,7 +549,7 @@ export class ExamenComponent implements OnInit {
         '':'',
         'Formateur': examen.formateur_id?.user_id?.firstname + ' ' + examen.formateur_id?.user_id?.lastname,
         'Module': examen.matiere_id[0].abbrv,
-        'Date de l\'éxamen': new Date(examen.date).toLocaleString(),
+        'Date de l\'éxamen': new Date(examen.date).toLocaleString('fr-FR'),
         'Filière': this.formatClasse(examen.classe_id).join(', '),
         'Semestre': examen.semestre
       })
@@ -561,7 +561,7 @@ export class ExamenComponent implements OnInit {
           t['Etudiant'] = bypass?.user_id?.firstname + ' ' + bypass?.user_id?.lastname;
           t['Note'] = parseFloat(n.note_val);
           t['Appréciation'] = n.appreciation
-          t['Date de Notation'] = new Date(n.date_creation).toLocaleString()
+          t['Date de Notation'] = new Date(n.date_creation).toLocaleString('fr-FR')
           t['Absence Justifié'] = (n.isAbsent) ? "Oui" : "Non";
           tableauNotes.push(t)
         }

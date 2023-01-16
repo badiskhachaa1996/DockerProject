@@ -244,6 +244,7 @@ import { PovFormateurComponent } from './pedagogie/etudiants/list-etudiant/pov-f
 import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
+import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 
 
 @NgModule({
@@ -498,6 +499,7 @@ import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.compone
     MyTaskComponent,
     TaskManagementComponent,
     PvAnnuelComponent,
+    BulletinComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

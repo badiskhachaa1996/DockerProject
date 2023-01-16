@@ -139,13 +139,14 @@ import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
+import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 
 const routes: Routes = [
     {
         path: '', component: AppMainComponent,
         children: [
             { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
-            { path: 'notes', component: NotesComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
+            { path: 'notes', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdminGuardService] },
             { path: 'admin/partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
             { path: 'admin/ajout-de-partenaire', component: ListPartenaireComponent, canActivate: [AuthGuardService, AdmissionGuardService] },
