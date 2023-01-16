@@ -3,8 +3,7 @@
     <div>
         <div class="col-12">
             <div class="card">
-                <img src="\assets\images\logoIMS.png" alt="logo INTED"
-                style="width: 10%;" class="m-2">
+                <img src="\assets\images\logoIMS.png" alt="logo INTED" style="width: 10%;" class="m-2">
                 <h4 style="text-align: center;">Questionnaire de satisfaction </h4>
                 <p style="text-align: center; font-size: 12px;">Vous êtes étudiant dans une des écoles de INTED GROUP
                     (ESTYA,ESPIC,ADG,STUDINFO,INTUNS). Afin d'améliorer la qualité de nos offres, veuillez remplir le
@@ -22,8 +21,7 @@
                     <div class="field col-12">
                         <label>Question 2 :</label><br>
                         <label>Dans quelle école êtes-vous inscrit ?</label>
-                        <p-dropdown [options]="ecoleDropdown" formControlName="ecoleInscrit"
-                            placeholder="Choissisez votre école"></p-dropdown>
+                        <input type="text" pInputText formControlName="ecoleInscrit" placeholder="Ex: Estya" />
                     </div>
 
                     <div class="field col-12">
@@ -104,7 +102,7 @@
                     </div>
                     <div class="field col-12" *ngIf="satisfactionsForm.value.ecole=='Pas tout à fait'">
                         <label>Question 16b :</label><br>
-                        <label>Que manque-t-il à l'école pour répondre à vos attentes premières  ?</label>
+                        <label>Que manque-t-il à l'école pour répondre à vos attentes premières ?</label>
                         <textarea pInputTextarea formControlName="ecole_propositions"></textarea>
                     </div>
                     <div class="field col-12">

@@ -24,14 +24,6 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
     { label: 'Non', value: false }
   ]
 
-  ecoleDropdown = [
-    { label: 'Intuns', value: 'Intuns' },
-    { label: 'Estya', value: 'Estya' },
-    { label: 'Adg', value: 'Adg' },
-    { label: 'Studinfo', value: 'Studinfo' },
-    { label: 'Espic', value: 'Espic' },
-  ]
-
   accesChoix = [
     { label: 'Oui', value: 'Oui' },
     { label: 'Non', value: 'Non' },
