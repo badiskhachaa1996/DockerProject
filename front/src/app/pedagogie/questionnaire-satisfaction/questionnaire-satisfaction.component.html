@@ -102,7 +102,7 @@
                         <p-dropdown [options]="dropdownAttentes" formControlName="ecole" (onChange)="changeAttente()"
                             placeholder="Choissisez votre réponse"></p-dropdown>
                     </div>
-                    <div class="field col-12">
+                    <div class="field col-12" *ngIf="satisfactionsForm.value.ecole=='Pas tout à fait'">
                         <label>Question 16b :</label><br>
                         <label>Que manque-t-il à l'école pour répondre à vos attentes premières  ?</label>
                         <textarea pInputTextarea formControlName="ecole_propositions"></textarea>
