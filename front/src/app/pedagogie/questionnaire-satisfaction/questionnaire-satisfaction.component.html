@@ -29,15 +29,13 @@
                     <div class="field col-12">
                         <label>Question 3 :</label><br>
                         <label>Dans quel campus ?</label>
-                        <p-dropdown [options]="campusDropdown" formControlName="campus"
-                            placeholder="Choissisez votre campus"></p-dropdown>
+                        <input type="text" pInputText formControlName="campus" placeholder="Ex: Paris" />
                     </div>
 
                     <div class="field col-12">
                         <label>Question 4 :</label><br>
                         <label>En quelle année de formation êtes-vous ?</label>
-                        <p-dropdown [options]="choixAnnee" formControlName="annee_formation"
-                            placeholder="Choissisez votre année scolaire"></p-dropdown>
+                        <input type="text" pInputText formControlName="annee_formation" placeholder="Ex: 2022-2024" />
                     </div>
 
                     <div class="field col-12">
@@ -101,8 +99,13 @@
                     <div class="field col-12">
                         <label>Question 16 :</label><br>
                         <label>L’école répond-elle à vos attentes premières ?</label>
-                        <p-dropdown [options]="dropdownAttentes" formControlName="ecole"
+                        <p-dropdown [options]="dropdownAttentes" formControlName="ecole" (onChange)="changeAttente()"
                             placeholder="Choissisez votre réponse"></p-dropdown>
+                    </div>
+                    <div class="field col-12">
+                        <label>Question 16b :</label><br>
+                        <label>Que manque-t-il à l'école pour répondre à vos attentes premières  ?</label>
+                        <textarea pInputTextarea formControlName="ecole_propositions"></textarea>
                     </div>
                     <div class="field col-12">
                         <label>Question 17 :</label><br>

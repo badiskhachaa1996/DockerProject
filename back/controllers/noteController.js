@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
 const { PVAnnuel } = require("../models/pvAnnuel");
+const { get } = require("mongoose");
 
 
 //Recuperation de la liste des notes
@@ -169,7 +170,8 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })                      }
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                        }
                     }
                 })
             notes.forEach(n => {
@@ -270,6 +272,12 @@ app.delete("/deletePV/:id", (req, res) => {
             res.send(doc)
         else
             res.send(err)
+    })
+})
+
+app.get('/getLastPV/:semestre/:classe_id', (req, res) => {
+    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id },{}, { sort: { date_creation : -1 } }).then(pv => {
+        res.send(pv)
     })
 })
 

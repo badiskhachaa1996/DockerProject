@@ -334,6 +334,25 @@
         </div>
     </div>
 
+    <div class="col-12 card">
+        <h4>Documents</h4>
+        <div class="grid" *ngIf="dataEtudiant.lien_livret.read || dataEtudiant.lien_dossier_professionel ||dataEtudiant.lien_tableau_synthese">
+            
+            <div class="card col-3"  *ngIf="dataEtudiant.lien_livret.read">
+                <h5>Livret</h5>
+                <a href="{{dataEtudiant.lien_livret.read}}" target="_blank"><img style="max-height: 20vh;" src="assets/images/word.png"/></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_dossier_professionel" >
+                <h5>Dossier professionel</h5>
+                <a href="{{dataEtudiant.lien_dossier_professionel}}" target="_blank"><img style="max-height: 20vh;" src="assets/images/word.png"/></a>
+            </div>
+            <div class="card col-3" *ngIf="dataEtudiant.lien_tableau_synthese">
+                <h5>Tableau synthèse</h5>
+                <a href="{{dataEtudiant.lien_tableau_synthese}}" target="_blank"><img style="max-height: 20vh;" src="assets/images/word.png"/></a>
+            </div>
+        </div>
+    </div>
+
     <div class="col-12 md:col-6">
         <div class="card">
             <div class="col-12 flex justify-content-center flex-wrap card-container">
