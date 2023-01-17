@@ -223,7 +223,7 @@ const routes: Routes = [
 
             /** IMS Project */
             { path: 'my-tasks', canActivate: [AuthGuardService], component: MyTaskComponent },
-            { path: 'project-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
+            { path: 'task-management', canActivate: [AuthGuardService], component: TaskManagementComponent },
             /** end */
 
             { path: 'logements', canActivate: [AuthGuardService], component: LogementComponent },

@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
   isEtudiant = false
   isFormateur = false
   isCommercial = false
+  isCEO = false
   isReinscrit = false
   isUnknow = false
 
@@ -251,9 +252,10 @@ export class DashboardComponent implements OnInit {
           this.isAdmission = service.label.includes('Admission')
           this.isPedagogie = service.label.includes('dagogie')
         }
-        this.isEtudiant = dataUser.type == "Etudiant" || dataUser.type == "Initial" || dataUser.type == "Alternant"
+        this.isEtudiant = dataUser.type == "Initial" || dataUser.type == "Alternant"
         this.isFormateur = dataUser.type == "Formateur"
         this.isCommercial = dataUser.type == "Commercial"
+        this.isCEO = dataUser.type == "CEO Entreprise";
         if (this.isEtudiant) {
           this.EtuService.getByUser_id(this.token.id).subscribe(dataEtu => {
             this.dataEtudiant = dataEtu
@@ -285,7 +287,7 @@ export class DashboardComponent implements OnInit {
               this.showEvents(resSea)
             }));
         }
-        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial);
+        this.isUnknow = !(this.isAdmin || this.isAgent || this.isEtudiant || this.isFormateur || this.isCommercial || this.isCEO);
       }
     })
 
