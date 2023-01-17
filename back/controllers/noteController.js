@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 app.disable("x-powered-by");
 const { Note } = require('../models/note');
 const { PVAnnuel } = require("../models/pvAnnuel");
+const { get } = require("mongoose");
 
 
 //Recuperation de la liste des notes
@@ -170,9 +171,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
                             cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
                     }
                 })
@@ -230,16 +228,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
                 appreciation: ""
             })
-            data.push({
-                nom: dicEtudiant[e_id].user_id.lastname,
-                prenom: dicEtudiant[e_id].user_id.firstname,
-                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
-                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
-                email: dicEtudiant[e_id].user_id.email,
-                notes: listMoyenneEtudiants[e_id],
-                moyenne: avgDic(listMoyenneEtudiants[e_id]),
-                appreciation: ""
-            })
         })
         //listMoyenneEtudiants Vide TODO
         res.send({ data, cols })
@@ -284,6 +272,12 @@ app.delete("/deletePV/:id", (req, res) => {
             res.send(doc)
         else
             res.send(err)
+    })
+})
+
+app.get('/getLastPV/:semestre/:classe_id', (req, res) => {
+    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id },{}, { sort: { date_creation : -1 } }).then(pv => {
+        res.send(pv)
     })
 })
 

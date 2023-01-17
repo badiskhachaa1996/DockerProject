@@ -16,29 +16,12 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
 
   dropdownAttentes = [
     { label: 'Oui', value: 'Oui' },
-    { label: 'Non', value: 'Non' },
-    { label: 'Je ne sais pas', value: 'Je ne sais pas' },
-    { label: 'Sans Opinion', value: 'Sans Opinion' },
+    { label: 'Pas tout à fait', value: 'Pas tout à fait' }
   ]
 
   optionSatisfaction = [
     { label: 'Oui', value: true },
     { label: 'Non', value: false }
-  ]
-
-  ecoleDropdown = [
-    { label: 'Intuns', value: 'Intuns' },
-    { label: 'Estya', value: 'Estya' },
-    { label: 'Adg', value: 'Adg' },
-    { label: 'Studinfo', value: 'Studinfo' },
-    { label: 'Espic', value: 'Espic' },
-  ]
-
-  campusDropdown = [
-    { label: 'Paris', value: 'Paris' },
-    { label: 'Montpellier', value: 'Montpellier' },
-    { label: 'Dubaï', value: 'Dubaï' },
-    { label: 'Online', value: 'Online' },
   ]
 
   accesChoix = [
@@ -47,15 +30,10 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
     { label: 'Ne sais pas', value: 'Ne sais pas' }
   ]
 
-  choixAnnee = [
-    { label: '2021-2023', value: '2021-2023' },
-    { label: '2022-2023', value: '2022-2023' },
-    { label: '2022-2024', value: '2022-2024' }
-  ]
-
   satisfactionsForm: FormGroup = new FormGroup({
     formation: new FormControl('', Validators.required),
     ecole: new FormControl('', Validators.required),
+    ecole_propositions: new FormControl(''),
     ecoleInscrit: new FormControl('', [Validators.required]),
     campus: new FormControl('', [Validators.required]),
     age: new FormControl('', [Validators.required]),
@@ -85,9 +63,17 @@ export class QuestionnaireSatisfactionComponent implements OnInit {
   onAddForm() {
     let r = { ...this.satisfactionsForm.value }
     this.QSService.create(r).subscribe(data => {
-      this.show=false
+      this.show = false
       this.MessageService.add({ severity: 'success', summary: "Envoie avec succès", detail: "Merci pour votre avis!" })
     })
+  }
+
+  changeAttente() {
+    if (this.satisfactionsForm.value.ecole == 'Pas tout à fait') {
+      this.satisfactionsForm.get('ecole_propositions').setValidators([Validators.required])
+    }else{
+      this.satisfactionsForm.get('ecole_propositions').setValidators([])
+    }
   }
 
 }
