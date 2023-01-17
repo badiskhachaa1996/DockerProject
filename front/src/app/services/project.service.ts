@@ -15,14 +15,130 @@ export class ProjectService {
   /** Project part */
 
   // create a new project
-  postProject(project: Project)
+  postProject(project: Project): Promise<any> 
   {
     const url = `${this.apiUrl}/post-project`;
 
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post<Project>(url, project, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Projet crée')
+      });
+    });
+  }
+
+  // update project
+  putProject(project: Project): Promise<any> 
+  {
+    const url = `${this.apiUrl}/put-project`;
+
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.put<Project>(url, project, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Projet modifié')
+      });
+    });
+  }
+
+  // get all project
+  getProjects(): Promise<Project[]>
+  {
+    const url = `${this.apiUrl}/get-projects`;
+
+    return new Promise<Project[]>((resolve, reject) => {
+      this.httpClient.get<Project[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Projets récuperés')
+      });
+    });
+  }
+  
+  // get project by id
+  getProject(id: string): Promise<Project>
+  {
+    const url = `${this.apiUrl}/get-project/${id}`;
+
+    return new Promise<Project>((resolve, reject) => {
+      this.httpClient.get<Project>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Projet récuperé')
+      });
+    });
+  }
+
+  /** Task part */
+
+  // create new task
+  postTask(task: Task): Promise<any>
+  {
+    const url = `${this.apiUrl}/post-task`;
+
     return new Promise((resolve, reject) => {
-      this.httpClient.post<Project>(url, project, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe(
-        
-      );
+      this.httpClient.post<Task>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâche créée')
+      });
+    });
+  }
+
+  // update task
+  putTask(task: Task): Promise<any>
+  {
+    const url = `${this.apiUrl}/put-task`;
+
+    return new Promise((resolve, reject) => {
+      this.httpClient.put<Task>(url, task, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches modifié')
+      });
+    });
+  }
+
+  // get all tasks
+  getTasks(): Promise<Task[]>
+  {
+    const url = `${this.apiUrl}/get-tasks`;
+
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches récuperés')
+      });
+    });
+  }
+
+  // get task by id task
+  getTask(id: string): Promise<Task>
+  {
+    const url = `${this.apiUrl}/get-task/${id}`;
+
+    return new Promise<Task>((resolve, reject) => {
+      this.httpClient.get<Task>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâche récuperé')
+      });
+    });
+  }
+
+  // get tasks by id project
+  getTasksByIdProject(id: string): Promise<Task[]>
+  {
+    const url = `${this.apiUrl}/get-tasks/${id}`;
+
+    return new Promise<Task[]>((resolve, reject) => {
+      this.httpClient.get<Task[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response) => resolve(response),
+        error: (error) => reject(error),
+        complete: () => console.log('Tâches du projet récuperés')
+      });
     });
   }
 

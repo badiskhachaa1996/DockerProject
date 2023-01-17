@@ -190,11 +190,11 @@ export class AddEntrepriseComponent implements OnInit {
     this.entrepriseService.createEntrepriseRepresentant({'newEntreprise': entreprise, 'newRepresentant': representant}).subscribe(
       ((response) => {
 
-        this.messageService.add({ severity: 'success', summary: "Entreprise ajouté" });
+        this.messageService.add({ severity: 'success', summary: 'Entreprise', detail: "Entreprise ajouté" });
         this.formAddEntreprise.reset();
       }),
       ((error) => { 
-        this.messageService.add({ severity: 'error', summary: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
+        this.messageService.add({ severity: 'error', summary: 'Entreprise', detail: "Ajout impossible, verifiez que l'entreprise n'existe pas déjà, si le problème persiste veuillez contacter un administrateur via la solution ticketing" });
         console.error(error); 
       })
     );

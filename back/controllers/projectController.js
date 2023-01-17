@@ -33,7 +33,7 @@ app.post("/post-project", (req, res, next) => {
     const project = new Project({ ...req.body });
 
     // envoi du projet en base de données
-    Project.insertOne({ project })
+    project.save()
     .then((projectCreated) => { res.status(201).json({ project: projectCreated, success: 'Projet crée' }) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de créer le projet, si le problème persite veuillez créer un ticket au service IMS' }); })
 });
@@ -50,17 +50,17 @@ app.put("/put-project", (req, res, next) => {
 
 
 // get all projects
-app.get('get-projects', (req, res, next) => {
-    Project.find()
-    .then((projects) => { res.status(200).json({ projects: projects, success: 'Projets récuperés'}) })
+app.get('/get-projects', (req, res, next) => {
+    Project.find()?.populate('creator_id')
+    .then((projects) => { res.status(200).send(projects) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperer les projets' }); })
 });
 
 
 // get project by id project
 app.get('/get-project/:id', (req, res, next) => {
-    Project.findOne({ _id: req.params.id })
-    .then((project) => { res.status(200);json({ project: project, success: 'Projet récuperé '}); })
+    Project.findOne({ _id: req.params.id })?.populate('creator_id')
+    .then((project) => { res.status(200).send(project); })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperer le projet'}); })
 });
 
@@ -72,7 +72,7 @@ app.get('/get-project/:id', (req, res, next) => {
 app.post("/post-task", (req, res, next) => {
     const task = new Task({ ...req.body });
 
-    Task.insertOne({ task })
+    task.save()
     .then((taskCreated) => { res.status(201).json({ task: taskCreated, success: 'Tâche créée' }); })
     .catch((error) => { console.log(error); res.status(500).send({ error: 'Impossible de créer une nouvelle tâche' }); });
 });
@@ -90,24 +90,24 @@ app.put("/put-task", (req, res, next) => {
 
 // get all Tasks
 app.get("/get-tasks", (req, res, next) => {
-    Task.find()
-    .then((tasksFromDb) => { res.status(200).json({ tasks: tasksFromDb, success: 'Tâches récuperées' }) })
+    Task.find()?.populate('project_id')?.populate('attribuate_to')
+    .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
 });
 
 
 // get task by id task
 app.get("/get-task/:id", (req, res, next) => {
-    Task.findOne({ _id: req.params.id })
-    .then((taskFromDb) => { res.status(200).json({ task: taskFromDb, success: 'Tâche récuperée' }) })
+    Task.findOne({ _id: req.params.id })?.populate('project_id')?.populate('attribuate_to')
+    .then((taskFromDb) => { res.status(200).send(taskFromDb) })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de récuperé la tâche' }); });
 });
 
 
 // get tasks by id project
 app.get("/get-tasks/:id", (req, res, next) => {
-    Task.find({ project_id: req.params.id })
-    .then((tasksFromDb) => { res.status(200).json({ tasks: tasksFromDb, success: 'Tâches récuperées' }) })
+    Task.find({ project_id: req.params.id })?.populate('project_id')?.populate('attribuate_to')
+    .then((tasksFromDb) => { res.status(200).send(tasksFromDb) })
     .catch((error) => { console.log(error); res.status(500).json({ error: 'Impossible de récuperé la liste des tâches' }); });
 });
 
