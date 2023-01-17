@@ -81,15 +81,53 @@ app.post("/createEntrepriseRepresentant", (req, res, next) => {
         .then((enterpriseFromDB) => {
             if (enterpriseFromDB) {
                 res.status(400).send("L'entreprise existe déjà");
-            } else {
+            } 
+            else {
                 User.findOne({ email_perso: representantData.email_perso })
                     .then((userFromDb) => {
+                        /**
+                         *  Si l'utilisateur existe déjà on attribut son id au directeur_id de l'entreprise
+                         *  et un mail lui est envoyé pour lui dire qu'une nouvelle entreprise est ajouté en son nom pour son espace
+                        */
                         if (userFromDb) {
                             entreprise.directeur_id = userFromDb._id;
                             entreprise.save()
-                                .then((entrepriseSaved) => { res.status(201).send(entrepriseSaved); })
+                                .then((entrepriseSaved) => { 
+
+                                    // création du mail à envoyer
+                                    let Ceo_htmlmail =
+                                    "<p>Bonjour,</p><p>Une nouvelle entreprise vous à été attribuer sur votre espace, merci de consulter et de consulter les contrats d'alternances, vous récevrez un mail à chaque ajout de contrat.</p>" +
+                                    " <p>Cordialement.</p>";
+
+
+                                    let Ceo_mailOptions =
+                                    {
+                                        from: "ims@intedgroup.com",
+                                        to: userFromDb.email_perso,
+                                        subject: 'Votre acces [IMS] ',
+                                        html: Ceo_htmlmail,
+                                        // attachments: [{
+                                        //     filename: 'Image1.png',
+                                        //     path: 'assets/Image1.png',
+                                        //     cid: 'Image1' //same cid value as in the html img src
+                                        // }]
+                                    };
+
+
+                                    // envoi du mail
+                                    transporterINTED.sendMail(Ceo_mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.error(error);
+                                        }
+                                    });
+                                    
+                                    res.status(201).send(entrepriseSaved); 
+                                })
                                 .catch((error) => { console.log(error); res.status(400).send('Impossible de créer la nouvelle entreprise') })
                         }
+                        /**
+                         * Si l'utilisateur saisie n'existe pas dans la base de données alors on le créer et un mail avec ses identifiants lui sont envoyés
+                         */
                         else {
                             //Création des accès pour les CEO
                             let Ceo_Pwd = representant.firstname.substring(0, 3) + "@" + (Math.random() + 1).toString(16).substring(7).replace(' ', '');
