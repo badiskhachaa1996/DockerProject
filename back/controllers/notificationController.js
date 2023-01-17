@@ -5,6 +5,18 @@ const { Notification } = require("./../models/notification");
 const fs = require("fs");
 const { Ticket } = require("../models/ticket");
 const io = require("socket.io");
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    host: "smtp.office365.com",
+    port: 587,
+    secure: false, // true for 587, false for other ports
+    requireTLS: true,
+    auth: {
+        user: 'ims@intedgroup.com',
+        pass: 'InTeDGROUP@@0908',
+    },
+});
+
 
 //Création d'une nouvelle notification
 app.post("/create", (req, res) => {
@@ -116,5 +128,37 @@ app.post("/viewNotifs", (req, res) => {
     });
     res.status(200).send(returnTick)
 });
+
+app.post("/newEtudiantIMS",(req,res)=>{
+    let htmlmail = `
+    <p style="font-size:20px; color:black">Bonjour,</p>
+    <p>   </p>
+    <p style="font-size:20px; color:black">Un nouveau étudiant `+req.body.lastname+' '+req.body.firstname +` s'est inscrit sur la plateforme <a href='https://ims.intedgroup.com'>IMS</a>.</p>
+    <p style="font-size:20px; color:black">Merci de vérifier ces documents et de le mettre dans la bonne formation avec <a href='https://ims.intedgroup.com/#/validation-inscrit'>cette page</a></p>
+    <p>   </p>
+    <p style="font-size:20px; color:red">Ce mail étant envoyé par un robot, merci d'adresser vos demandes à <a href='mailto:m.hue@intedgroup.com'>m.hue@intedgroup.com</a></p>
+    <p>   </p>
+    <p style="font-size:20px;">Cordialement,</p>
+    
+    <footer> <img src="cid:red"/></footer>
+    `
+    let attachments = [{
+        filename: 'signature_mh.png',
+        path: '/home/ubuntu/ems3/back/assets/signature_mh.png',
+        cid: 'red' //same cid value as in the html img src
+    }]
+    let mailOptions = {
+        from: 'noreply@intedgroup.com',
+        to: 'm.hue@intedgroup.com',
+        subject: '[IMS] Nouveau Etudiant',
+        html: htmlmail,
+        attachments: attachments
+    };
+    Intedtransporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.error(error);
+        }
+    });
+})
 
 module.exports = app;

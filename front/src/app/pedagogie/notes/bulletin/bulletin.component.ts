@@ -7,13 +7,15 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 import { NoteService } from 'src/app/services/note.service';
 import * as html2pdf from 'html2pdf.js';
 import { MessageService } from 'primeng/api';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-bulletin',
   templateUrl: './bulletin.component.html',
   styleUrls: ['./bulletin.component.scss']
 })
 export class BulletinComponent implements OnInit {
-  constructor(private GroupeService: ClasseService, private NoteS: NoteService, private EtuService: EtudiantService, private CFAService: EcoleService, private messageService: MessageService) { }
+  constructor(private GroupeService: ClasseService, private NoteS: NoteService, private EtuService: EtudiantService,
+    private CFAService: EcoleService, private messageService: MessageService, private sanitizer: DomSanitizer) { }
 
   ngOnInit(): void {
     this.GroupeService.getAll().subscribe(classes => {
@@ -61,6 +63,24 @@ export class BulletinComponent implements OnInit {
   SEMESTRE = ""
   etudiantFromClasse = []
 
+  loadEcoleImage() {
+    this.PICTURE = { cachet: 'assets/images/service-administratif.png', logo: "assets/images/logo-estya-flag.png", pied_de_page: "assets/images/footer-bulletinv2.png" }
+    this.CFAService.downloadCachet(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.cachet = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+    this.CFAService.downloadLogo(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.logo = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+    this.CFAService.downloadPied(this.ECOLE._id).subscribe(blob => {
+      let objectURL = URL.createObjectURL(blob);
+      this.PICTURE.pied_de_page = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    })
+  }
+
+
+
   configureBulletin(etu) {
     this.dropdownEcoles = []
     this.ETUDIANT = etu
@@ -70,11 +90,8 @@ export class BulletinComponent implements OnInit {
           this.ECOLE = ecol
         this.dropdownEcoles.push({ value: ecol, label: ecol.libelle })
       })
-      if (!this.ECOLE)
-        this.ECOLE = this.dropdownEcoles[0].value
-      if (!this.ECOLE.logo) { this.ECOLE.logo = "assets/images/logo-estya-flag.png" }
-      if (!this.ECOLE.cachet) { this.ECOLE.cachet = "assets/images/service-administratif.png" }
-      if (!this.ECOLE.pied_de_page) { this.ECOLE.pied_de_page = "assets/images/footer-bulletinv2.png" }
+      if (!this.ECOLE) { this.ECOLE = this.dropdownEcoles[0].value }
+      this.loadEcoleImage()
     })
 
     if (this.formAGSPV.value.pv == "Aucun/Nouveau PV") {
@@ -96,7 +113,7 @@ export class BulletinComponent implements OnInit {
   NOTES;// {module:"",formateur:"",coeff:0 note_etudiant:"",note_moy_groupe:0,note_min_groupe:0,note_max_groupe:0,ects:0,appreciation_module:""}
   APPRECIATION_GENERALE = ""
   MOYENNE = {} //{ 'module': { moy: 0, min: 0, max: 0 } }
-  is
+  PICTURE; //= { logo: "assets/images/logo-estya-flag.png", cachet: "assets/images/service-administratif.png", pied_de_page: "assets/images/footer-bulletinv2.png" }
 
   calculMoyenne() {
     var i = 0, summ = 0, ArrayLen = this.NOTES.length, coeffTotal = 0;

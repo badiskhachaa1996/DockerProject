@@ -18,7 +18,8 @@ export class Seance {
         public remarque?: string,
         public seance_type?: string,
         public time_max_sign?: number,
-        public forcedAllowedByFormateur?: Boolean
+        public forcedAllowedByFormateur?: Boolean,
+        public isOptionnel?: Boolean
     ) { }
 }
 
