@@ -101,7 +101,7 @@ export class ListEtudiantComponent implements OnInit {
   minYear = new Date().getFullYear() - 80
   rangeYear = this.minYear + ":" + this.maxYear
 
-  etudiantToUpdate: Etudiant;
+  etudiantToUpdate: any;
 
   users: User[] = [];
   dropdownUser: any[] = [{ libelle: '', value: '' }];
@@ -648,7 +648,7 @@ export class ListEtudiantComponent implements OnInit {
       isOnStage: this.etudiantToUpdate.isOnStage,
       enic_naric: this.etudiantToUpdate.enic_naric,
       annee_scolaire: this.etudiantToUpdate.annee_scolaire,
-      ecole: this.etudiantToUpdate.ecole_id
+      ecole: this.etudiantToUpdate.ecole_id._id
     });
     bypass = response.campus
     let bypassv2: any = response.filiere
