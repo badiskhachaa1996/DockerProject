@@ -189,7 +189,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                     if (note.examen_id && note.examen_id.matiere_id)
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
-                                if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id[0].nom == m_nom && note.isAbsent == false)
+                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false)
                                     if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
                                         for (let i = 0; i < 3; i++)
                                             listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
@@ -201,7 +201,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 })
             })
         })
-        console.log(listNotesEtudiantsCoeff)
         listEtudiantID.forEach(e_id => {
             listMoyenneEtudiants[e_id] = {}
             listMatiereNOM.forEach(m_nom => {

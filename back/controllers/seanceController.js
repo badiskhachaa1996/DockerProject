@@ -474,7 +474,7 @@ app.post('/sendMailModify', (req, res) => {
         to: 'm.hue@intedgroup.com',//pastFormateur.user_id.email
         subject: 'IMS - Suppression d\'une séance',
         html: `<p>Bonjour,<br>
-        La séance prévue pour le ${strDateP} a été supprimé<br>
+        La séance prévue pour le ${strDateP} a été supprimer<br>
         Merci de votre compréhension
         </p>
         `
