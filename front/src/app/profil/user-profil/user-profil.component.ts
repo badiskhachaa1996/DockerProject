@@ -72,7 +72,7 @@ export class UserProfilComponent implements OnInit {
 
   pwdmsgerr: string = "";
   PreinscriptionData: any;
-  listConseiller: any[] = [{ label: "Peut m'importe", value: "Peut m'importe" }]
+  listConseiller: any[] = [{ label: "Peu m'importe", value: "Peu m'importe" }]
 
   demandeConseiller: DemandeConseiller;
 
