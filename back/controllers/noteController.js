@@ -151,7 +151,7 @@ app.put("/updateV2/:id", (req, res) => {
 })
 
 app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
-    Note.find({ classe_id: { $in: req.params.classe_id }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+    Note.find({ classe_id: req.params.classe_id, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
         let listMatiereNOM = []
@@ -172,7 +172,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname.toUpperCase() + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
                     }
                 })
@@ -199,7 +199,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                         for (let i = 0; i < 3; i++)
                                             listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
                                     else
-                                        for (let i = 0; i < (note.examen_id.coef * 2); i++)
+                                        for (let i = 0; i < 2; i++)
                                             listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
                         })
                     }
@@ -225,8 +225,8 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
             data.push({
                 nom: dicEtudiant[e_id].user_id.lastname,
                 prenom: dicEtudiant[e_id].user_id.firstname,
-                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
-                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
+                date_naissance: formatDate(new Date(dicEtudiant[e_id]?.date_naissance)),
+                date_inscrit: formatDate((dicEtudiant[e_id].user_id?.date_creation)),
                 email: dicEtudiant[e_id].user_id.email,
                 notes: listMoyenneEtudiants[e_id],
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
@@ -234,9 +234,16 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
             })
         })
         //listMoyenneEtudiants Vide TODO
-        res.send({ data, cols })
+        res.send({ data, cols:cols.sort(compare) })
     })
 })
+function padTo2Digits(num) { return num.toString().padStart(2, '0'); }
+function formatDate(date) {
+    date = new Date(date)
+    if (date != 'Invalid Date' && date.getFullYear() != '1970')
+        return [padTo2Digits(date.getDate()), padTo2Digits(date.getMonth() + 1), date.getFullYear(),].join('/');
+    else return ''
+}
 function avg(myArray) {
     var i = 0, summ = 0, ArrayLen = myArray.length;
     while (i < ArrayLen) {
@@ -251,6 +258,15 @@ function avgDic(myDic) {
     }
     return summ / ArrayLen;
 }
+function compare( a, b ) {
+    if ( a.formateur < b.formateur ){
+      return -1;
+    }
+    if ( a.formateur > b.formateur ){
+      return 1;
+    }
+    return 0;
+  }
 //Sauvegarde d'un PV
 app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
     let pv = new PVAnnuel({
