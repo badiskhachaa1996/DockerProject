@@ -507,6 +507,7 @@ export class ExamenComponent implements OnInit {
     else
       this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
         this.dropdownModule = [{ label: 'Tous les modules', value: null }]
+        console.log(classe_id._id,modules)
         modules.forEach(matiere => {
           let bypa: any = matiere.formation_id
           if (Array.isArray(matiere.formation_id))
