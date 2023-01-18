@@ -142,8 +142,7 @@
                 </div>
                 <div class="field md:col-6 col-12">
                     <label For="postal_adresse">Date création</label>
-                    <input pInputText formControlName="date_creation" type="date"
-                        placeholder="Ex: 20/01/2000" />
+                    <input pInputText formControlName="date_creation" type="date" placeholder="Ex: 20/01/2000" />
                 </div>
                 <div>
                     <button pButton label="Modifier" type="submit" [disabled]="formUpdate.invalid"></button>
@@ -159,8 +158,8 @@
         <div class="card" *ngIf="showUsersList">
             <h5>Gestion des utilisateurs</h5>
             <p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-                [globalFilterFields]="['_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
-                [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
+                [globalFilterFields]="['_id', 'type', 'role', 'lastname','firstname','email','email_perso']" [rows]="10"
+                [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
                 <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
@@ -181,11 +180,14 @@
                         <th style="width: 3rem"></th>
                         <th>#</th>
                         <th>Rôle</th>
-                        <th>Nom prénom</th>
-                        <th>Type</th>
+                        <th pSortableColumn="type">Type <p-sortIcon field="type">
+                            </p-sortIcon></th>
+                        <th pSortableColumn="lastname">Nom prénom <p-sortIcon field="lastname">
+                            </p-sortIcon></th>
                         <th>Email</th>
                         <th>Email perso</th>
-                        <th>Date d'insertion</th>
+                        <th pSortableColumn="date_creation">Date d'insertion <p-sortIcon field="date_creation">
+                        </p-sortIcon></th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -201,7 +203,8 @@
                         <td style="min-width: 8rem;">{{ user._id }}</td>
                         <td style="min-width: 10rem;">{{ user.role }}</td>
                         <td>{{ user.type }}</td>
-                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
+                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{
+                            user.firstname | titlecase }}</td>
                         <td style="min-width: 10rem;">{{ user.email }}</td>
                         <td style="min-width: 10rem;">{{ user.email_perso }}</td>
                         <td style="min-width: 10rem;">{{ user.date_creation | date:'dd/MM/YYYY' }}</td>

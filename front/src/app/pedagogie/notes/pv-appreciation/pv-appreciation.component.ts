@@ -28,6 +28,10 @@ export class PvAppreciationComponent implements OnInit {
   pvAnnuel = []
   @ViewChild('dt1') pTableRef: Table;
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
+  @HostListener('window:beforeunload')
+  canDeactivate(): Observable<boolean> | boolean {
+    return !this.modified
+  }
 
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
@@ -45,6 +49,52 @@ export class PvAppreciationComponent implements OnInit {
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
     })
+  }
+  savePv() {
+    this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
+      if (data) {
+        this.modified = false
+        this.messageService.add({ severity: 'success', summary: "Sauvegarde du PV avec succès" })
+        this.pvAnnuel.push(data)
+      }
+    })
+  }
+
+  delete(pv) {
+    if (confirm("Etes-vous sûr de vouloir supprimer ce pv ?"))
+      this.NoteService.deletePV(pv._id).subscribe(data => {
+        if (data) {
+          this.messageService.add({ severity: 'success', summary: "Suppresion du PV avec succès" })
+          this.pvAnnuel.splice(this.pvAnnuel.indexOf(pv, 0))
+        }
+      })
+  }
+
+  loadPV(pv) {
+    if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
+      this.cols = pv.pv_annuel_cols
+      this.dataPV = pv.pv_annuel_data
+      this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
+    }
+  }
+
+  exportPDF() {
+    var element = document.getElementById('pvTable');
+    let height = 400
+    let width = 800
+    width += this.cols.length * 100
+    var opt = {
+      margin: 0,
+      filename: 'PV_' + this.SEMESTRE + '_' + this.classe.abbrv + '.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'px', format: [element.offsetWidth, element.offsetHeight], orientation: 'l', hotfixes: ['px_scaling'] }
+    };
+    this.hideForPDF = true
+    html2pdf().set(opt).from(element).save().then(() => {
+      this.hideForPDF = false
+      //element.style.transform = '';
+    });
   }
 
 }

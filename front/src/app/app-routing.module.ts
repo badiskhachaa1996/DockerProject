@@ -255,7 +255,7 @@ const routes: Routes = [
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
-            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService] }
+            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] }
 
         ],
     },
