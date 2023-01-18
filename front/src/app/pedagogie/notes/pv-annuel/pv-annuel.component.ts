@@ -36,7 +36,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
-}
+  }
 
   ngOnInit(): void {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
@@ -89,7 +89,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       filename: 'PV_' + this.SEMESTRE + '_' + this.classe.abbrv + '.pdf',
       image: { type: 'jpeg', quality: 1 },
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'px', format: [element.offsetWidth,element.offsetHeight], orientation: 'l', hotfixes: ['px_scaling'] }
+      jsPDF: { unit: 'px', format: [element.offsetWidth, element.offsetHeight], orientation: 'l', hotfixes: ['px_scaling'] }
     };
     this.hideForPDF = true
     html2pdf().set(opt).from(element).save().then(() => {

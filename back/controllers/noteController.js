@@ -247,6 +247,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 email: dicEtudiant[e_id].user_id.email,
                 notes: listMoyenneEtudiants[e_id],
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
+                appreciation_modules : {},
                 appreciation: ""
             })
         })
