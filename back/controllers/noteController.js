@@ -240,6 +240,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
 
         listEtudiantID.forEach(e_id => {
             data.push({
+                custom_id: dicEtudiant[e_id].custom_id,
                 nom: dicEtudiant[e_id].user_id.lastname,
                 prenom: dicEtudiant[e_id].user_id.firstname,
                 date_naissance: formatDate(new Date(dicEtudiant[e_id]?.date_naissance)),
@@ -247,7 +248,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 email: dicEtudiant[e_id].user_id.email,
                 notes: listMoyenneEtudiants[e_id],
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
-                appreciation_modules : {},
+                appreciation_modules: {},
                 appreciation: ""
             })
         })

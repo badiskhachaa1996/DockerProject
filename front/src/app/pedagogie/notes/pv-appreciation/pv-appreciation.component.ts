@@ -38,6 +38,7 @@ export class PvAppreciationComponent implements OnInit {
       this.classe = c
     })
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+      console.log(data)
       this.cols = data.cols
       this.dataPV = data.data
     })
