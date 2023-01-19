@@ -245,7 +245,11 @@ import { MyTaskComponent } from './projects/my-task/my-task.component';
 import { TaskManagementComponent } from './projects/task-management/task-management.component';
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
+<<<<<<< HEAD
+import { ListEntrepriseCeoComponent } from './pedagogie/entreprises/list-entreprise-ceo/list-entreprise-ceo.component';
+=======
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+>>>>>>> f7be6bc2c2c563327346eb6c12d98d650095d90d
 
 
 @NgModule({
@@ -501,7 +505,11 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
     TaskManagementComponent,
     PvAnnuelComponent,
     BulletinComponent,
+<<<<<<< HEAD
+    ListEntrepriseCeoComponent,
+=======
     PvAppreciationComponent,
+>>>>>>> f7be6bc2c2c563327346eb6c12d98d650095d90d
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

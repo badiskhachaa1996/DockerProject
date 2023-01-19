@@ -43,7 +43,7 @@ app.post("/post-project", (req, res, next) => {
 app.put("/put-project", (req, res, next) => {
     const project = new Project({ ...req.body });
 
-    Project.updateOne({ _id: project._id }, { project })
+    Project.updateOne({ _id: project._id }, { ...req.body })
     .then((project) => { res.status(201).json({ project: project, success: 'Projet mis à jour'}); })
     .catch((error) => { console.log(error); res.status(400).json({ error: 'Impossible de mettre à jour le projet, si le problème persite veuillez créer un ticket au service IMS' }); });
 });

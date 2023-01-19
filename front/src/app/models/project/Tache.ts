@@ -1,4 +1,4 @@
-export class Task{
+export class Tache{
     constructor
     (
         public _id?:            string,
@@ -6,7 +6,7 @@ export class Task{
         public percent?:        number,
         public attribuate_to?:  string[],
         public project_id?:     string,
-        public number_of_days?: number,
+        public date_limite?:    Date,
         public created_at?:     Date,
     ){}
 }
