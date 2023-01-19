@@ -246,6 +246,7 @@ import { TaskManagementComponent } from './projects/task-management/task-managem
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
 import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
+import { AppreciationInputComponent } from './pedagogie/formateurs/appreciation-input/appreciation-input.component';
 
 
 @NgModule({
@@ -502,6 +503,7 @@ import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-ap
     PvAnnuelComponent,
     BulletinComponent,
     PvAppreciationComponent,
+    AppreciationInputComponent,
   ],
   providers: [MessageService, ConfirmationService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },

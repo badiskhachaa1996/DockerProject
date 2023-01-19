@@ -1,25 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { Table } from 'primeng/table';
 import { Classe } from 'src/app/models/Classe';
 import { ClasseService } from 'src/app/services/classe.service';
 import { NoteService } from 'src/app/services/note.service';
 import * as html2pdf from 'html2pdf.js';
-import { MessageService } from 'primeng/api';
-import { ComponentCanDeactivate } from 'src/app/dev-components/guards/pending-changes.guard';
+import { ExamenService } from 'src/app/services/examen.service';
 import { Observable } from 'rxjs';
-import { HostListener } from '@angular/core';
-import { Table } from 'primeng/table';
-
-
 @Component({
-  selector: 'app-pv-appreciation',
-  templateUrl: './pv-appreciation.component.html',
-  styleUrls: ['./pv-appreciation.component.scss']
+  selector: 'app-appreciation-input',
+  templateUrl: './appreciation-input.component.html',
+  styleUrls: ['./appreciation-input.component.scss']
 })
-export class PvAppreciationComponent implements OnInit {
-  dataPV = []//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{} }
+export class AppreciationInputComponent implements OnInit {
+  dataPV = []//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15" }
   cols = []//{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
+  colsExamen;
+  dataExamen;
   ID = this.route.snapshot.paramMap.get('classe_id');
+  FORMATEUR_ID = this.route.snapshot.paramMap.get('formateur_id');
   SEMESTRE = this.route.snapshot.paramMap.get('semestre');
   classe: Classe;
   hideForPDF = false;
@@ -27,29 +27,35 @@ export class PvAppreciationComponent implements OnInit {
   modified = false
   pvAnnuel = []
   @ViewChild('dt1') pTableRef: Table;
-  constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
+  constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService, private ExamenService: ExamenService) { }
   @HostListener('window:beforeunload')
   canDeactivate(): Observable<boolean> | boolean {
     return !this.modified
   }
-
+  
   ngAfterViewInit() {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
   }
+
   ngOnInit(): void {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
-      console.log(data)
       this.cols = data.cols
       this.dataPV = data.data
     })
     this.NoteService.loadPV(this.SEMESTRE, this.ID).subscribe(data => {
       this.pvAnnuel = data
     })
+    this.ExamenService.getAppreciation(this.SEMESTRE, this.ID, this.FORMATEUR_ID).subscribe(data => {
+      this.colsExamen = data.cols
+      this.dataExamen = data.data
+      console.log(this.colsExamen, this.dataExamen)
+    })
   }
+
   savePv() {
     this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
       if (data) {
@@ -76,9 +82,9 @@ export class PvAppreciationComponent implements OnInit {
         if (!d.appreciation_modules) {
           d.appreciation_modules = {}
         }
-        this.cols.forEach(col => {
-          if (!d.appreciation_modules[col.module])
-            d.appreciation_modules[col.module] = ""
+        this.colsExamen.module.forEach(col_m => {
+          if (!d.appreciation_modules[col_m])
+            d.appreciation_modules[col_m] = ""
         })
         pv.pv_annuel_data[index] = d
       })

@@ -126,4 +126,21 @@ app.get('/getALLByDiplomeABBRV/:abbrv', (req, res) => {
         res.status(404).send("erreur :" + error);
     })
 })
+
+app.get('/getAllByFormateurID/:formateur_id', (req, res) => {
+    Seance.find({ formateur_id: req.params.formateur_id }).populate('classe_id').then(seances => {
+        let r = []
+        let rid = []
+        console.log(seances)
+        seances.forEach(seance => {
+            seance.classe_id.forEach(classe => {
+                if (rid.includes(classe._id) == false) {
+                    r.push(classe)
+                    rid.push(classe._id)
+                }
+            })
+        })
+        res.status(200).send(r)
+    })
+})
 module.exports = app;

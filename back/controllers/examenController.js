@@ -61,17 +61,17 @@ app.post("/create", (req, res, next) => {
         {
             ...data
         });
-   /* let note = new Note({
-        note_val: "0",
-        semestre: examen.semestre,
-        etudiant_id: 'NULL',
-        examen_id: examen._id,
-        appreciation:"TEST NULL",
-        classe_id:"NULL",
-        matiere_id:examen.matiere_id[0],
-        isAbsent:false,
-        date_creation: new Date()
-    })*/
+    /* let note = new Note({
+         note_val: "0",
+         semestre: examen.semestre,
+         etudiant_id: 'NULL',
+         examen_id: examen._id,
+         appreciation:"TEST NULL",
+         classe_id:"NULL",
+         matiere_id:examen.matiere_id[0],
+         isAbsent:false,
+         date_creation: new Date()
+     })*/
     examen.save()
         .then((examenSaved) => { res.status(200).send(examenSaved); })
         .catch((error) => { res.status(400).send(error.message); });
@@ -128,6 +128,45 @@ app.get('/getFormateurByModuleID/:module_id', (req, res) => {
                 formateurs.push(s.formateur_id)
         })
         res.status(201).send(formateurs)
+    })
+})
+
+app.get('/getAppreciation/:semestre/:classe_id/:formateur_id', (req, res) => {
+    Examen.find({ classe_id: { $in: req.params.classe_id }, formateur_id: req.params.formateur_id, semestre: req.params.semestre }).populate("matiere_id").populate({ path: 'formateur_id', populate: { path: "user_id" } }).then(seances => {
+        let cols = { module: [], eval: {} } // {module:['Module1'],eval:{'Module1':['Eval1']}}
+        let data = {}// {'etudiant_email':{'Eval1':{'appreciation':'dab','note':10}}}
+        let examens = []
+
+        seances.forEach(s => {
+            examens.push(s._id)
+            s.matiere_id.forEach(mid=>{
+                if (mid && cols.module.includes(mid.nom) == false) {
+                    cols.module.push(mid.nom)
+                    if (!cols.eval[mid.nom])
+                        cols.eval[mid.nom] = [s.libelle]
+                    else
+                        cols.eval[mid.nom].push(s.libelle)
+                }
+            })
+
+        })
+        console.log(examens)
+        Note.find({ examen_id: { $in: examens } }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+            notes.forEach(n => {
+                if (n.etudiant_id && n.etudiant_id.user_id && n.examen_id) {
+                    if (data[n.etudiant_id.user_id.email])
+                        data[n.etudiant_id.user_id.email][n.examen_id.libelle] = { 'appreciation': n.appreciation, 'note': n.note_val }
+                    else{
+                        data[n.etudiant_id.user_id.email] = {}
+                        data[n.etudiant_id.user_id.email][n.examen_id.libelle] = { 'appreciation': n.appreciation, 'note': n.note_val }
+                    }
+                }
+
+
+            })
+            res.status(201).send({ cols, data })
+        })
+
     })
 })
 

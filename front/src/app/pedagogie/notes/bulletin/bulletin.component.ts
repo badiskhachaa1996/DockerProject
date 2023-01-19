@@ -142,10 +142,10 @@ export class BulletinComponent implements OnInit {
         if (pv.email == this.ETUDIANT.user_id.email) {
           this.APPRECIATION_GENERALE = pv.appreciation
           listModule.forEach(n => {
-            let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: "" }
-            if (pv?.appreciation_module && pv?.appreciation_module[n]) {
+            let t = { module: n, formateur: dicFormateur[n], coeff: dicCoeff[n], note_etudiant: pv.notes[n], ects: 0, appreciation_module: pv.appreciation_module }
+            /*if (pv?.appreciation_module && pv?.appreciation_module[n]) {
               t.appreciation_module = pv.appreciation_module[n]
-            }
+            }*/
             this.NOTES.push(t)
           })
         }
