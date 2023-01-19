@@ -55,6 +55,20 @@ export class AuthService {
       });
     });
   }
+ 
+  // recuperation des salarié pour la partie project
+  getAllSalarie(): Promise<User[]>
+  {
+    let url = `${this.apiUrl}get-all-salarie`;
+
+    return new Promise<User[]>((resolve, reject) => {
+      this.http.get<User[]>(url, { headers: new HttpHeaders({ 'Access-Control-Allow-Origin': '*', "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept" }).append('token', localStorage.getItem('token')) }).subscribe({
+        next: (response: User[]) => resolve(response),
+        error: (err: any) => reject(err),
+        complete: () => console.log('Tous les utilisateurs de type alternant, Salariés et admins on étés recupérers')
+      });
+    });
+  }
 
   //Recuperation de la liste des utilisateurs en populate sur les services
   getAllPopulate() {

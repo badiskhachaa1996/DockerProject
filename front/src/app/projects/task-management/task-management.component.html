@@ -1,47 +1,112 @@
-<p-toast></p-toast>
-<!-- Affichage des tâches du projet -->
-<!-- <div class="grid">
+<!-- Formulaire d'ajout d'une nouvelle tâche à un projet -->
+<div class="grid" *ngIf="showFormAddTache">
 	<div class="col-12">
 		<div class="card">
-			<h3>Tâches du projet</h3>
-			
-			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container">
-				<div class="md:col-4">
-					<p-card header="Simple Card" [style]="{'width': '25rem', 'margin-bottom': '2em'}">
-						<ng-template pTemplate="header">
-							<img alt="Card" src="assets/showcase/images/usercard.png">
-						</ng-template>
-						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-							quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
-					</p-card>
-				</div>				
-			</div>			
+			<i class="pi pi-times-circle"
+					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+					pTooltip="Fermer" (click)="showFormAddTache = false" aria-hidden="true"> </i>
+
+			<h3>AUjouter une tâche à <span style="font-weight: bold;">{{ projectSelected.libelle | titlecase }}</span></h3>
+			<form class="p-fluid" [formGroup]="formAddTache" (ngSubmit)="onAddTask()">
+				<div class="p-formgrid grid">
+					<div class="field col-12">
+						<label htmlFor="libelle">Libelle</label>
+						<textarea pInputTextarea id="libelle" type="text" formControlName="libelle" placeholder="Détails de la tâche"></textarea>
+					</div>
+					<div class="field col-12">
+						<label htmlFor="dateLimite">Date limite</label>
+						<p-calendar [showIcon]="true" [showButtonBar]="true" formControlName="dateLimite" placeholder="Date limite à la réalisation de cette tâches"></p-calendar>
+					</div>
+
+					<div class="field col-12">
+						<label htmlFor="attribuateTo">Attribution</label>
+						<p-multiSelect [options]="dropdownUser" [(ngModel)]="selectedMulti" defaultLabel="Selectionner les personnes qui vont effectuer cette tâche" optionLabel="label" class="multiselect-custom" formControlName="attribuateTo">
+							<ng-template let-value pTemplate="selectedItems">
+								<div class="country-item country-item-value inline-flex align-items-center py-1 px-2 bg-primary text-primary border-round mr-2" *ngFor="let option of selectedMulti">
+									<div>{{option.label}}</div>
+								</div>
+								<div *ngIf="!selectedMulti || selectedMulti.length === 0" class="country-placeholder">
+									Selectionner les personnes qui vont effectuer cette tâche
+								</div>
+							</ng-template>
+							<ng-template let-user pTemplate="item">
+								<div class="flex align-items-center country-item">
+									<div>{{user.label}}</div>
+								</div>
+							</ng-template>
+						</p-multiSelect>
+					</div>
+					
+					<div>
+						<button pButton type="submit" label="Ajouter la tâche" icon="pi pi-plus" [disabled]="formAddTache.invalid"></button>
+					</div>
+				</div>
+			</form>
+
 		</div>
 	</div>
-</div> -->
+</div>
+
+
+<!-- Affichage des tâches du projet -->
+<div class="grid" *ngIf="showProjectTaches">
+	<div class="col-12">
+		<div class="card">
+			<i class="pi pi-times-circle"
+				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+				pTooltip="Fermer" (click)="showProjectTaches = false;" aria-hidden="true"> </i>
+
+			<h3>Tâches du projet</h3>
+			
+			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="projectTaches?.length > 0">
+				<div class="md:col-4" *ngFor="let task of projectTaches; let i = index">
+					<p-card header="{{ task.percent }}%" [style]="{'width': '25rem', 'height': '20rem', 'margin-bottom': '2em'}">
+						<p>
+							<i class="pi pi-list" style="color: green;"></i> {{ task.libelle }}
+						</p>
+						<p>
+							<i class="pi pi-calendar" style="color: orange;"></i> {{ task.date_limite | date: 'dd/MM/YYYY' }}
+						</p>
+						<p>
+							<i class="pi pi-user" style="color: #6366F1;"></i> <span *ngFor="let user of task.attribuate_to"> {{ user.firstname }}, </span>
+						</p>
+					</p-card>
+				</div>
+			</div>
+
+			<div class="flex align-items- justify-content-center flex-wrap card-container blue-container" *ngIf="projectTasks?.length == 0">
+				<div class="col-12">
+					<h5 style="text-align: center; background-color: green; border-radius: 30px; color: white;">Cet projet n'a aucune tâches</h5>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 <!-- Formulaire d'ajout d'un nouveau projet -->
-<div class="col-12" *ngIf="showFormAddProject">
-	<div class="card">
-		<i class="pi pi-times-circle"
-				style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
-				pTooltip="Fermer" (click)="showFormAddProject = false" aria-hidden="true"> </i>
+<div class="grid" *ngIf="showFormAddProject">
+	<div class="col-12">
+		<div class="card">
+			<i class="pi pi-times-circle"
+					style="float:right; margin-right: 30px; font-size: 20px; color: red; cursor: pointer;"
+					pTooltip="Fermer" (click)="showFormAddProject = false" aria-hidden="true"> </i>
 
-		<h3>Nouveau projet</h3>
-		<form class="p-fluid" [formGroup]="formAddProject" (ngSubmit)="onAddProject()">
-			<div class="p-formgrid grid">
-				<div class="field col-12">
-					<label htmlFor="libelle">Libelle</label>
-					<input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Titre du projet"/>
+			<h3>Nouveau projet</h3>
+			<form class="p-fluid" [formGroup]="formAddProject" (ngSubmit)="onAddProject()">
+				<div class="p-formgrid grid">
+					<div class="field col-12">
+						<label htmlFor="libelle">Libelle</label>
+						<input pInputText id="libelle" type="text" formControlName="libelle" placeholder="Titre du projet"/>
+					</div>
+					
+					<div>
+						<button pButton type="submit" label="Ajouter le projet" icon="pi pi-plus" [disabled]="formAddProject.invalid"></button>
+					</div>
 				</div>
-				
-				<div>
-					<button pButton type="submit" label="Ajouter le projet" icon="pi pi-plus" [disabled]="formAddProject.invalid"></button>
-				</div>
-			</div>
-		</form>
+			</form>
 
+		</div>
 	</div>
 </div>
 
@@ -52,7 +117,7 @@
 		<div class="card">
 			<button pButton label="Nouveau projet" icon="pi pi-plus" style="float: right;" (click)="showFormAddProject = true"></button>
 			<h5>Projets</h5>
-			<p-table #dt1 [value]="projects" dataKey="_id" editMode="row" [tableStyle]="{'min-width': '50rem'}"
+			<p-table #dt1 [value]="projects" dataKey="_id" editMode="row"
 					 [rows]="10" [rowHover]="true" [paginator]="true"
 					 [globalFilterFields]="['libelle','percent','creator_id?.lastname','creator_id?.firstname', 'creator_id?.email', 'creator_id?.email_perso']"
 					 responsiveLayout="scroll">
@@ -70,11 +135,11 @@
 
 				<ng-template pTemplate="header">
 					<tr>
-						<th style="width:20%">Libelle</th>
-						<th style="width:20%">Avancement</th>
-						<th style="width:20%">Créateur</th>
-						<th style="width:20%">Date de création</th>
-						<th style="width:20%"></th>
+						<th>Libelle</th>
+						<th>Avancement</th>
+						<th>Créateur</th>
+						<th>Date de création</th>
+						<th></th>
 					</tr>
 				</ng-template>
 				<ng-template pTemplate="body" let-project let-editing="editing" let-ri="rowIndex">
@@ -90,24 +155,30 @@
 							</p-cellEditor>
 						</td>
 						<td>
-							{{project.percent}}
+							{{project.percent}}%
 						</td>
 						<td>
 							{{ project.creator_id?.firstname  }} {{ project.creator_id?.lastname  }}
 						</td>
-						<td style="min-width: 12rem;">
+						<td>
 							{{ project.created_at | date: 'dd/MM/YYYY HH:mm' }}
 						</td>
 						<td>
 							<div class="flex align-items-center justify-content-center gap-2">
 								<button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow
-									icon="pi pi-pencil" (click)="onRowEditInit(product)"
+									icon="pi pi-pencil" (click)="onRowEditInit(project)"
 									class="p-button-rounded p-button-text"></button>
+								<button *ngIf="!editing" pButton pRipple type="button"
+									icon="pi pi-align-center" title="Voir les tâches du projet" (click)="onGetProjectTasks(project._id);"
+									class="p-button-rounded p-button-text" style="color: green;"></button>
+								<button *ngIf="!editing" pButton pRipple type="button"
+									icon="pi pi-plus" title="Ajouter une tâche au projet" (click)="projectSelected = project; showFormAddTache = true;"
+									class="p-button-rounded p-button-text" style="color: orangered;"></button>
 								<button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow
-									icon="pi pi-check" (click)="onRowEditSave(product)"
+									icon="pi pi-check" (click)="onRowEditSave(project)"
 									class="p-button-rounded p-button-text p-button-success mr-2"></button>
 								<button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow
-									icon="pi pi-times" (click)="onRowEditCancel(product, ri)"
+									icon="pi pi-times" (click)="onRowEditCancel(project, ri)"
 									class="p-button-rounded p-button-text p-button-danger"></button>
 							</div>
 						</td>
