@@ -591,7 +591,8 @@ export class AppMenuComponent implements OnInit {
                         {
                             label: "Gestion d'Alternances",
                             items: [
-                                { label: 'Liste des alternants ', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
+                                { label: 'Alternants par entreprise', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
+                                { label: 'Liste des alternants', icon: 'pi pi-file', routerLink: ['/liste-contrats/'] },
                                 { label: 'Liste des tuteurs', icon: 'pi pi-users', routerLink: ['/tuteur'] },
                             ]
                         },
