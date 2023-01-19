@@ -135,10 +135,14 @@
                     <input pInputText id="rue_adresse" formControlName="rue_adresse" type="text"
                         placeholder="rue du louvre" />
                 </div>
-                <div class="field col-12">
+                <div class="field md:col-6 col-12">
                     <label For="postal_adresse">Code postale</label>
                     <input pInputText id="postal_adresse" formControlName="postal_adresse" type="number"
                         placeholder="94200" />
+                </div>
+                <div class="field md:col-6 col-12">
+                    <label For="postal_adresse">Date création</label>
+                    <input pInputText formControlName="date_creation" type="date" placeholder="Ex: 20/01/2000" />
                 </div>
                 <div>
                     <button pButton label="Modifier" type="submit" [disabled]="formUpdate.invalid"></button>
@@ -154,8 +158,8 @@
         <div class="card" *ngIf="showUsersList">
             <h5>Gestion des utilisateurs</h5>
             <p-table [value]="users" dataKey="_id" responsiveLayout="scroll" responsiveLayout="scroll" #dt1
-                [globalFilterFields]="['_id', 'type', 'role', 'lastname','firstname','email','email_perso']"
-                [rows]="10" [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
+                [globalFilterFields]="['_id', 'type', 'role', 'lastname','firstname','email','email_perso']" [rows]="10"
+                [pageLinks]="10" [paginator]="true" rowExpandMode="single" [totalRecords]="users.length">
                 <ng-template pTemplate="caption">
                     <input pInputText type="text" #filter (input)="dt1.filterGlobal($event.target.value, 'contains')"
                         placeholder="Recherche" />
@@ -176,10 +180,14 @@
                         <th style="width: 3rem"></th>
                         <th>#</th>
                         <th>Rôle</th>
-                        <th>Nom prénom</th>
-                        <th>Téléphone</th>
+                        <th pSortableColumn="type">Type <p-sortIcon field="type">
+                            </p-sortIcon></th>
+                        <th pSortableColumn="lastname">Nom prénom <p-sortIcon field="lastname">
+                            </p-sortIcon></th>
                         <th>Email</th>
                         <th>Email perso</th>
+                        <th pSortableColumn="date_creation">Date d'insertion <p-sortIcon field="date_creation">
+                        </p-sortIcon></th>
                         <th>Action</th>
                     </tr>
                 </ng-template>
@@ -194,10 +202,12 @@
                         </td>
                         <td style="min-width: 8rem;">{{ user._id }}</td>
                         <td style="min-width: 10rem;">{{ user.role }}</td>
-                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{ user.firstname | titlecase }}</td>
-                        <td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
+                        <td>{{ user.type }}</td>
+                        <td style="min-width: 10rem;">{{ user.civilite }} {{ user.lastname | uppercase }} {{
+                            user.firstname | titlecase }}</td>
                         <td style="min-width: 10rem;">{{ user.email }}</td>
                         <td style="min-width: 10rem;">{{ user.email_perso }}</td>
+                        <td style="min-width: 10rem;">{{ user.date_creation | date:'dd/MM/YYYY' }}</td>
                         <td style="min-width: 10rem;">
                             <i pTooltip="Modifier" style="margin-left: 2%; cursor: pointer;" class="pi pi-pencil"
                                 (click)="userToUpdate = user; onPatchData(); showFormUpdate = true;"
@@ -217,7 +227,7 @@
                         <th></th>
                         <th>Service</th>
                         <th>Mention</th>
-                        <th>Type</th>
+                        <th>Téléphone</th>
                         <th>Pays</th>
                         <th>Ville</th>
                         <th>Rue</th>
@@ -232,7 +242,7 @@
                         <td><img [src]="profilPicture" alt="{{ 'Pofile' | uppercase }}" width="80" height="80" /></td>
                         <td>{{ user.service_id ? user.service_id.label : 'Sans service' }}</td>
                         <td>{{user.mention}}</td>
-                        <td>{{ user.type }}</td>
+                        <td style="min-width: 10rem;">{{ user.indicatif }} {{ user.phone }}</td>
                         <td>{{ user.pays_adresse }}</td>
                         <td>{{ user.ville_adresse }}</td>
                         <td>{{ user.numero_adresse }} {{ user.rue_adresse }} <br /> {{ user.postal_adresse }}</td>

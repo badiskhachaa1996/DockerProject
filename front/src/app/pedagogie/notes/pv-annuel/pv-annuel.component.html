@@ -2,7 +2,7 @@
     <div class="card">
         <h5 *ngIf="classe">PV {{SEMESTRE}} de {{classe.abbrv}}</h5>
         <p-toast></p-toast>
-        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1" 
+        <p-table #dt1 [value]="dataPV" dataKey="_id" responsiveLayout="stack" id="dt1"
             [globalFilterFields]="['statut', 'user_id', 'classe_id','user_id.lastname','user_id.firstname','custom_id','user_id.email']"
             [totalRecords]="dataPV.length" styleClass="p-datatable-gridlines">
             <ng-template pTemplate="caption">
@@ -137,6 +137,9 @@
                             <ng-template pTemplate="header">
                 <tr>
                     <!--<th style="width: 3rem"></th>-->
+                    <th class="text-center" rowspan="2" pSortableColumn="custom_id">ID Etudiant<p-sortIcon
+                            *ngIf="!hideForPDF" field="custom_id"></p-sortIcon>
+                    </th>
                     <th class="text-center" rowspan="2" pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon>
                     </th>
                     <th class="text-center" rowspan="2" pSortableColumn="prenom">Prénom<p-sortIcon field="prenom">
@@ -174,6 +177,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-data>
                 <tr>
+                    <td class="text-center">{{data.custom_id}}</td>
                     <td class="text-center">{{data.nom}}</td>
                     <td class="text-center">{{data.prenom}}</td>
                     <td class="text-center">{{data.date_naissance}}</td>

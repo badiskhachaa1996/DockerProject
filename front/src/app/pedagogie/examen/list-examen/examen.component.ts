@@ -58,7 +58,8 @@ export class ExamenComponent implements OnInit {
   dropdownNiveau: any[] = [
     { label: "Control Continu", value: "Control Continu" },
     { label: "Examen final", value: "Examen final" },
-    { label: "Soutenance", value: "Soutenance" }
+    { label: "BTS Blanc", value: "BTS Blanc" },
+    { label: "Projet Professionel", value: "Projet Professionel" }
   ]
 
   dropdownType: any[] = [
@@ -507,6 +508,7 @@ export class ExamenComponent implements OnInit {
     else
       this.examenService.getModulesByGroupeID(classe_id._id).subscribe(modules => {
         this.dropdownModule = [{ label: 'Tous les modules', value: null }]
+        console.log(classe_id._id,modules)
         modules.forEach(matiere => {
           let bypa: any = matiere.formation_id
           if (Array.isArray(matiere.formation_id))

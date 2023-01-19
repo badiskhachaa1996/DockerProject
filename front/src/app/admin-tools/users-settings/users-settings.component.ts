@@ -105,6 +105,7 @@ export class UsersSettingsComponent implements OnInit {
       postal_adresse: [''],
       rue_adresse: [''],
       ville_adresse: [''],
+      date_creation:['']
     });
   }
 
@@ -173,6 +174,7 @@ export class UsersSettingsComponent implements OnInit {
 
   //Methode pour pre-remplir le formulaire de mise à jour
   onPatchData() {
+    console.log(this.userToUpdate.date_creation)
     this.formUpdate.patchValue({
       civilite: { label: this.userToUpdate.civilite },
       lastname: this.userToUpdate.lastname,
@@ -189,9 +191,18 @@ export class UsersSettingsComponent implements OnInit {
       postal_adresse: this.userToUpdate.postal_adresse,
       rue_adresse: this.userToUpdate.rue_adresse,
       ville_adresse: this.userToUpdate.ville_adresse,
+      date_creation: this.formatDate(this.userToUpdate.date_creation)
     });
   }
-
+  private formatDate(date) {
+    const d = new Date(date);
+    let month = '' + (d.getMonth() + 1);
+    let day = '' + d.getDate();
+    const year = d.getFullYear();
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+    return [year, month, day].join('-');
+  }
   //Methode de modification des infos
   onUpdateUser() {
     const user = new User();
@@ -213,6 +224,7 @@ export class UsersSettingsComponent implements OnInit {
     user.numero_adresse = this.formUpdate.get('numero_adresse')?.value;
     user.rue_adresse = this.formUpdate.get('rue_adresse')?.value;
     user.ville_adresse = this.formUpdate.get('ville_adresse')?.value;
+    user.date_creation = new Date(this.formUpdate.get('date_creation')?.value)
 
     this.userService.patchById(user)
       .then((response) => {

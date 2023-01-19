@@ -284,6 +284,7 @@ app.patch("/patchById", (req, res) => {
         rue_adresse: user.rue_adresse,
         numero_adresse: user.numero_adresse,
         postal_adresse: user.postal_adresse,
+        date_creation: user.date_creation
     })
         .then((response) => { res.status(201).send(response); })
         .catch((error) => { res.status(400).json({ msg: error.message }); });

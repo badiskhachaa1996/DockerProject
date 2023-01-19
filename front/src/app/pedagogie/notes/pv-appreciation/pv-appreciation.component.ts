@@ -10,14 +10,14 @@ import { Observable } from 'rxjs';
 import { HostListener } from '@angular/core';
 import { Table } from 'primeng/table';
 
-@Component({
-  selector: 'app-pv-annuel',
-  templateUrl: './pv-annuel.component.html',
-  styleUrls: ['./pv-annuel.component.scss']
-})
-export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
 
-  dataPV = []//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15" }
+@Component({
+  selector: 'app-pv-appreciation',
+  templateUrl: './pv-appreciation.component.html',
+  styleUrls: ['./pv-appreciation.component.scss']
+})
+export class PvAppreciationComponent implements OnInit {
+  dataPV = []//{ prenom: "Morgan", nom: "HUE", date_naissance: "21/12/2000", email: "m.hue@estya.com", notes: { "NomModule": 0, "Python": 20 }, moyenne: "15", appreciation_module:{} }
   cols = []//{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }, { module: "Python", formateur: "Anis", coeff: 2 }
   ID = this.route.snapshot.paramMap.get('classe_id');
   SEMESTRE = this.route.snapshot.paramMap.get('semestre');
@@ -37,12 +37,12 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     const table = this.pTableRef.el.nativeElement.querySelector('table');
     table.setAttribute('id', 'pvTable');
   }
-
   ngOnInit(): void {
     this.GroupeService.getPopulate(this.ID).subscribe(c => {
       this.classe = c
     })
     this.NoteService.getPVAnnuel(this.SEMESTRE, this.ID).subscribe(data => {
+      console.log(data)
       this.cols = data.cols
       this.dataPV = data.data
     })
@@ -50,7 +50,6 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
       this.pvAnnuel = data
     })
   }
-
   savePv() {
     this.NoteService.savePV(this.SEMESTRE, this.ID, { cols: this.cols, data: this.dataPV }).subscribe(data => {
       if (data) {
@@ -98,23 +97,4 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     });
   }
 
-  calculMoyenne(notes) {
-    let dicModuleCoeff = {}
-    this.cols.forEach(col => {
-      dicModuleCoeff[col.module] = col.coeff
-    })
-    var i = 0, summ = 0, ArrayDic = Object.keys(notes), ArrayLen = ArrayDic.length, coeffTotal = 0;
-    while (i < ArrayLen) {
-      if (!Number.isNaN(notes[ArrayDic[i]])) {
-        summ = summ + (notes[ArrayDic[i]]) * dicModuleCoeff[ArrayDic[i]];
-        coeffTotal += dicModuleCoeff[ArrayDic[i]]
-      }
-      i++;
-    }
-    return summ / coeffTotal;
-  }
-
-  isOdd(number: number) {
-    return number % 2 == 0
-  }
 }

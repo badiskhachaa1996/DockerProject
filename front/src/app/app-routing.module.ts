@@ -140,6 +140,7 @@ import { TaskManagementComponent } from './projects/task-management/task-managem
 import { PvAnnuelComponent } from './pedagogie/notes/pv-annuel/pv-annuel.component';
 import { PendingChangesGuard } from './dev-components/guards/pending-changes.guard';
 import { BulletinComponent } from './pedagogie/notes/bulletin/bulletin.component';
+import { PvAppreciationComponent } from './pedagogie/notes/pv-appreciation/pv-appreciation.component';
 
 const routes: Routes = [
     {
@@ -253,7 +254,8 @@ const routes: Routes = [
             { path: 'facture-formateur', component: FactureFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'resultat-qs', component: ResultatComponent, canActivate: [AuthGuardService] },
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
-            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] }
+            { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
+            { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] }
 
         ],
     },

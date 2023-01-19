@@ -151,7 +151,7 @@ app.put("/updateV2/:id", (req, res) => {
 })
 
 app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
-    Note.find({ classe_id: { $in: req.params.classe_id }, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
+    Note.find({ classe_id: req.params.classe_id, semestre: req.params.semestre }).populate({ path: "examen_id", populate: { path: "matiere_id" } }).populate({ path: "examen_id", populate: { path: "formateur_id", populate: { path: "user_id" } } }).populate({ path: "etudiant_id", populate: { path: "user_id" } }).populate({ path: "etudiant_id", populate: { path: "classe_id" } }).then(notes => {
         let cols = [] //{ module: "NomModule", formateur: "NomFormateur", coeff: 1 }
         let data = [] //{ prenom: "M", nom: "H", date_naissance: "2", email: "m", notes: { "NomModule": 0}, moyenne: "15" }
         let listMatiereNOM = []
@@ -162,7 +162,9 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
         let listEtudiantID = []
         let dicEtudiant = {}
         notes.forEach(n => {
-            if (n.examen_id && n.examen_id.matiere_id)
+            if (n.examen_id && n.examen_id.matiere_id) {
+                if (!Array.isArray(n.examen_id.matiere_id))
+                    n.examen_id.matiere_id = [n.examen_id.matiere_id]
                 n.examen_id.matiere_id.forEach(mid => {
                     //console.log(n.etudiant_id,mid.formation_id)
                     if (n.etudiant_id && n.etudiant_id.classe_id && mid.formation_id.includes(n.etudiant_id.classe_id.diplome_id)) {
@@ -170,10 +172,11 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         if (n.examen_id != null && !listMatiereNOM.includes(mid.nom)) {
                             listMatiereNOM.push(mid.nom)
                             dicMatiere[mid.nom] = mid
-                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
+                            cols.push({ module: mid.nom, formateur: n.examen_id.formateur_id.user_id.lastname.toUpperCase() + " " + n.examen_id.formateur_id.user_id.firstname, coeff: mid.coeff })
                         }
                     }
                 })
+            }
             notes.forEach(n => {
                 if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1) {
                     dicEtudiant[n.etudiant_id._id] = n.etudiant_id
@@ -184,30 +187,48 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
         listEtudiantID.forEach(e_id => {
             listNotesEtudiantsCoeff[e_id] = {}
             listMatiereNOM.forEach(m_nom => {
-                listNotesEtudiantsCoeff[e_id][m_nom] = []
+                listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0 }
                 notes.forEach(note => {
-                    if (note.examen_id && note.examen_id.matiere_id)
+                    if (note.examen_id && note.examen_id.matiere_id) {
+                        if (!Array.isArray(note.examen_id.matiere_id))
+                            note.examen_id.matiere_id = [note.examen_id.matiere_id]
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
-                                if (note.etudiant_id._id.toString() == e_id.toString() && note.examen_id.matiere_id[0].nom == m_nom && note.isAbsent == false)
-                                    if (note.examen_id.niveau == 'Projet Professionel' || note.examen_id.niveau == 'BTS Blanc')
-                                        for (let i = 0; i < 3; i++)
-                                            listNotesEtudiantsCoeff[e_id][m_nom].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false) {
+                                    if (note.examen_id.niveau == 'Control Continu')
+                                        for (let i = 0; i < note.examen_id.coef; i++)
+                                            listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
                                     else
-                                        for (let i = 0; i < (note.examen_id.coef * 2); i++)
-                                            listNotesEtudiantsCoeff[e_id][m_nom].push((parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max)))
-
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                }
                         })
+                        note.examen_id.matiere_id.forEach(mid => {
+                            if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
+                                if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false) {
+                                    listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'])
+                                    if (isNaN(listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'])) {
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['MoyCC'] = 0
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'] = [0]
+                                    }
+                                    if (isNaN(avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']))) {
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'] = [0]
+                                    }
+                                    if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0)
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
+                                    else
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'])
+                                }
+                        })
+                    }
                 })
             })
         })
-        console.log(listNotesEtudiantsCoeff)
         listEtudiantID.forEach(e_id => {
             listMoyenneEtudiants[e_id] = {}
             listMatiereNOM.forEach(m_nom => {
                 listMoyenneEtudiants[e_id][m_nom] = 0
-                if (listNotesEtudiantsCoeff[e_id][m_nom] != [] && listNotesEtudiantsCoeff[e_id][m_nom].length != 0)
-                    listMoyenneEtudiants[e_id][m_nom] = avg(listNotesEtudiantsCoeff[e_id][m_nom])
+                if (listNotesEtudiantsCoeff[e_id][m_nom]['Total'])
+                    listMoyenneEtudiants[e_id][m_nom] = listNotesEtudiantsCoeff[e_id][m_nom]['Total']
             })
         })
         listMatiereNOM.forEach(m_nom => {
@@ -219,20 +240,29 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
 
         listEtudiantID.forEach(e_id => {
             data.push({
+                custom_id: dicEtudiant[e_id].custom_id,
                 nom: dicEtudiant[e_id].user_id.lastname,
                 prenom: dicEtudiant[e_id].user_id.firstname,
-                date_naissance: new Date(dicEtudiant[e_id]?.date_naissance).toLocaleDateString(),
-                date_inscrit: new Date(dicEtudiant[e_id].user_id?.date_creation).toLocaleDateString(),
+                date_naissance: formatDate(new Date(dicEtudiant[e_id]?.date_naissance)),
+                date_inscrit: formatDate((dicEtudiant[e_id].user_id?.date_creation)),
                 email: dicEtudiant[e_id].user_id.email,
                 notes: listMoyenneEtudiants[e_id],
                 moyenne: avgDic(listMoyenneEtudiants[e_id]),
+                appreciation_modules: {},
                 appreciation: ""
             })
         })
         //listMoyenneEtudiants Vide TODO
-        res.send({ data, cols })
+        res.send({ data, cols: cols.sort(compare) })
     })
 })
+function padTo2Digits(num) { return num.toString().padStart(2, '0'); }
+function formatDate(date) {
+    date = new Date(date)
+    if (date != 'Invalid Date' && date.getFullYear() != '1970')
+        return [padTo2Digits(date.getDate()), padTo2Digits(date.getMonth() + 1), date.getFullYear(),].join('/');
+    else return ''
+}
 function avg(myArray) {
     var i = 0, summ = 0, ArrayLen = myArray.length;
     while (i < ArrayLen) {
@@ -246,6 +276,15 @@ function avgDic(myDic) {
         summ = summ + myDic[ArrayDic[i++]];
     }
     return summ / ArrayLen;
+}
+function compare(a, b) {
+    if (a.formateur < b.formateur) {
+        return -1;
+    }
+    if (a.formateur > b.formateur) {
+        return 1;
+    }
+    return 0;
 }
 //Sauvegarde d'un PV
 app.post("/savePV/:semestre/:classe_id", (req, res, next) => {
@@ -276,7 +315,7 @@ app.delete("/deletePV/:id", (req, res) => {
 })
 
 app.get('/getLastPV/:semestre/:classe_id', (req, res) => {
-    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id },{}, { sort: { date_creation : -1 } }).then(pv => {
+    PVAnnuel.findOne({ semestre: req.params.semestre, classe_id: req.params.classe_id }, {}, { sort: { date_creation: -1 } }).then(pv => {
         res.send(pv)
     })
 })

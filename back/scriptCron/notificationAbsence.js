@@ -30,7 +30,7 @@ mongoose
     .then(() => {
         console.log('Start DB')
         let emailList = []
-        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date } }).populate('matiere_id').populate('formateur_id').then(seances => {
+        Seance.find({ date_debut: { $lt: date }, date_fin: { $gt: date }, isOptionnel: false }).populate('matiere_id').populate('formateur_id').then(seances => {
             let seanceIds = []
             let formateurIds = {}
             let listIds = []

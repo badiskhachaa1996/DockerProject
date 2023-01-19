@@ -96,6 +96,7 @@
 <!-- Modèle de bulletin de note -->
 <div class="col-12 grid" *ngIf="NOTES">
     <div style="float: left;" class="col-12">
+        <p-dropdown [options]="dropdownEcoles" [(ngModel)]="ECOLE" (onChange)="loadEcoleImage()"></p-dropdown>
         <button pButton class="ml-1" icon="pi pi-save" (click)="saveToPV()" type="button" style="float:right;"
             label="Enregistrer les modifications dans le PV">
         </button>
@@ -107,7 +108,7 @@
         <h3>Prévisualisation du bulletin</h3>
         <div id="semestriel">
             <div style="float: left; margin-left: 20px;">
-                <img src="{{ECOLE?.logo}}" alt="LOGO" width="130" height="80">
+                <img [src]="PICTURE.logo" alt="LOGO" style="max-width: 20vh;max-height: 20vh;">
                 <p *ngIf="SEMESTRE && GROUPE?.diplome_id">
                     <!--Année scolaire <strong>{{ anneScolaire.libelle }}</strong> <br>-->
                     Bulletin du {{ SEMESTRE }} <br>
@@ -166,7 +167,8 @@
                             pEditableColumnField="note_etudiant">
                             <p-cellEditor>
                                 <ng-template pTemplate="input">
-                                    <input pInputText type="text" [(ngModel)]="note.note_etudiant" (input)="calculMoy()">
+                                    <input pInputText type="text" [(ngModel)]="note.note_etudiant"
+                                        (input)="calculMoy()">
                                 </ng-template>
                                 <ng-template pTemplate="output">
                                     {{note.note_etudiant | number : '0.2-2'}}
@@ -226,10 +228,11 @@
             </p-table>
             <br>
             <p style="font-size: 10px;">AUCUN DUPLICATA NE SERA DELIVRE</p>
-            <img src="{{ECOLE?.cachet}}" alt="signature" style="float: right; width: 30%; height: 30%;">
-            <img src="{{ECOLE?.pied_de_page}}" alt="footer"
-                style="display: block; margin-left: auto; margin-right: auto; clear: both;" width="800">
+            <img [src]="PICTURE.cachet" alt="signature"
+                style="float: right; max-width: 50%; max-height: 20vh;">
+            <img [src]="PICTURE.pied_de_page" alt="footer"
+                style="display: block; max-width: 50%; max-height: 20vh;">
 
         </div>
     </div>
-</div>
+</div>  

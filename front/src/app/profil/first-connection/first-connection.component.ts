@@ -15,6 +15,7 @@ import { Entreprise } from 'src/app/models/Entreprise';
 import { DiplomeService } from 'src/app/services/diplome.service';
 import { Diplome } from 'src/app/models/Diplome';
 import { EtudiantService } from 'src/app/services/etudiant.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-first-connection',
@@ -24,7 +25,7 @@ import { EtudiantService } from 'src/app/services/etudiant.service';
 export class FirstConnectionComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, private AuthService: AuthService, private messageService: MessageService, private classeService: ClasseService,
-    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService) { }
+    private entrepriseService: EntrepriseService, private ss: EventEmitterService, private diplomeService: DiplomeService, private etuService: EtudiantService, private NotifService: NotificationService) { }
 
   civiliteList = environment.civilite;
   dropdownClasse: any[] = [];
@@ -276,15 +277,21 @@ export class FirstConnectionComponent implements OnInit {
         }
         this.AuthService.updateEtudiant(user, this.dataEtudiant).subscribe((data: any) => {
           localStorage.removeItem('modify')
+          this.NotifService.newEtudiantIMS(data).subscribe(d => {
+
+          }, err => {
+            console.error(err);
+
+          })
           this.messageService.add({ severity: 'success', summary: 'Profil', detail: 'Création du profil Etudiant réussie' });
           this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
             this.ss.connected()
             this.router.navigate(["/"]);
           });
+
         }, (error) => {
           if (error.status == 500) {
             //Bad Request (Champ non fourni)
-            console.log("problème ici")
             console.error(error)
             this.messageService.add({ severity: 'error', summary: 'Profil', detail: 'Tous les champs ne sont pas remplis' });
           } else {

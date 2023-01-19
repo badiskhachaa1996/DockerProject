@@ -1,4 +1,5 @@
 const express = require("express");
+const { Note } = require("../models/note");
 const app = express();
 app.disable("x-powered-by");
 const { Examen } = require('./../models/examen');
@@ -60,7 +61,17 @@ app.post("/create", (req, res, next) => {
         {
             ...data
         });
-
+   /* let note = new Note({
+        note_val: "0",
+        semestre: examen.semestre,
+        etudiant_id: 'NULL',
+        examen_id: examen._id,
+        appreciation:"TEST NULL",
+        classe_id:"NULL",
+        matiere_id:examen.matiere_id[0],
+        isAbsent:false,
+        date_creation: new Date()
+    })*/
     examen.save()
         .then((examenSaved) => { res.status(200).send(examenSaved); })
         .catch((error) => { res.status(400).send(error.message); });

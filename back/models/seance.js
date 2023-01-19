@@ -18,7 +18,8 @@ const seanceSchema = mongoose.Schema({
     remarque: { type: String },
     seance_type: { type: String, default: "Séance" },
     time_max_sign: { type: Number, default: 30 },
-    forcedAllowedByFormateur: { type: Boolean, default: false }
+    forcedAllowedByFormateur: { type: Boolean, default: false },
+    isOptionnel: { type: Boolean, default: false }
 });
 
 //Creation de la table seance et export du model Seance

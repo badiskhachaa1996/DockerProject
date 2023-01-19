@@ -275,4 +275,8 @@ export class ListGroupeComponent implements OnInit {
     this.router.navigate(['pv-annuel', this.formPV.value.semestre, this.showPV._id])
   }
 
+  generatePVApp() {
+    this.router.navigate(['pv-appreciation', this.formPV.value.semestre, this.showPV._id])
+  }
+
 }
