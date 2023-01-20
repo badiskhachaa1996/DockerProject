@@ -178,7 +178,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 })
             }
             notes.forEach(n => {
-                if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1) {
+                if (n.etudiant_id && listEtudiantID.indexOf(n.etudiant_id._id) == -1 && n.etudiant_id.classe_id._id == req.params.classe_id) {
                     dicEtudiant[n.etudiant_id._id] = n.etudiant_id
                     listEtudiantID.push(n.etudiant_id._id)
                 }
