@@ -195,13 +195,19 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
                                 if (note.etudiant_id._id.toString() == e_id.toString() && mid.nom == m_nom && note.isAbsent == false) {
-                                    if (note.examen_id.niveau == 'Control Continu')
+                                    if (note.examen_id.niveau == 'Control Continu') {
+                                        if (m_nom.includes('Culture économique, juridique et managériale'))
+                                            console.log(note._id, 'CC', m_nom)
                                         for (let i = 0; i < note.examen_id.coef; i++)
                                             listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
-                                    else
-                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max))
+                                    }
+                                    else {
+                                        listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].push(parseFloat(note.note_val) * 20 / parseFloat(note.examen_id.note_max));
+                                        //if (m_nom.includes('Culture économique, juridique et managériale'))
+                                            console.log(note._id, 'EF', m_nom);
+                                    }
                                 }
-                                else console.log(e_id, note._id, note.examen_id._id)
+                            //else console.log(e_id, note._id, note.examen_id._id)
                         })
                         note.examen_id.matiere_id.forEach(mid => {
                             if (note.etudiant_id && note.etudiant_id.classe_id && mid.formation_id.includes(note.etudiant_id.classe_id.diplome_id) && !note.isAbsent)
