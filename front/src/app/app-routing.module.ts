@@ -257,8 +257,8 @@ const routes: Routes = [
             { path: 'formateur/etudiants', component: PovFormateurComponent, canActivate: [AuthGuardService] },
             { path: 'pv-annuel/:semestre/:classe_id', component: PvAnnuelComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
             { path: 'pv-appreciation/:semestre/:classe_id', component: PvAppreciationComponent, canActivate: [AuthGuardService], canDeactivate: [PendingChangesGuard] },
-            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService]}
-
+            { path: 'appreciation/:semestre/:classe_id/:formateur_id', component: AppreciationInputComponent, canActivate: [AuthGuardService]},
+            { path: 'bulletin/:semestre/:classe_id/:etudiant_id/:pv_id', component: BulletinComponent, canActivate: [AuthGuardService, PedagogieGuardService] },
         ],
     },
     { path: "formulaire-entreprise/:code", component: InscriptionEntrepriseComponent },

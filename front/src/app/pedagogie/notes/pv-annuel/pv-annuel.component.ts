@@ -26,6 +26,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
   loaded = false;
   modified = false
   pvAnnuel = []
+  PVID = "Nouveau"
   @ViewChild('dt1') pTableRef: Table;
   constructor(private NoteService: NoteService, private route: ActivatedRoute, private GroupeService: ClasseService, private messageService: MessageService) { }
   @HostListener('window:beforeunload')
@@ -75,6 +76,7 @@ export class PvAnnuelComponent implements OnInit, ComponentCanDeactivate {
     if (!this.modified || (this.modified && confirm("Des modifications ne sont pas enregistrés, Voulez-vous quand même charger ce PV ?"))) {
       this.cols = pv.pv_annuel_cols
       this.dataPV = pv.pv_annuel_data
+      this.PVID = pv._id
       this.messageService.add({ severity: 'success', summary: "Chargement du PV avec succès" })
     }
   }
