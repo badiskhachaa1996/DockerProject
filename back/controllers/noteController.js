@@ -185,9 +185,11 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
             })
         })
         listEtudiantID.forEach(e_id => {
-            listNotesEtudiantsCoeff[e_id] = {}
+            if (!listNotesEtudiantsCoeff[e_id])
+                listNotesEtudiantsCoeff[e_id] = {}
             listMatiereNOM.forEach(m_nom => {
-                listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0 }
+                if (!listNotesEtudiantsCoeff[e_id][m_nom])
+                    listNotesEtudiantsCoeff[e_id][m_nom] = { 'Control Continu': [], 'Exam Finale': [], MoyCC: 1, Total: 0 }
                 notes.forEach(note => {
                     if (note.examen_id && note.examen_id.matiere_id) {
                         if (!Array.isArray(note.examen_id.matiere_id))
@@ -213,7 +215,7 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                                     }
                                     /*if (isNaN(avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']))) {
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'] = [0]
-                                    }*/                                        
+                                    }*/
                                     if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length != 0)
                                         listNotesEtudiantsCoeff[e_id][m_nom]['Total'] = (avg(listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu']) * 2 + avg(listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale']) * 3) / 5
                                     else if (listNotesEtudiantsCoeff[e_id][m_nom]['Control Continu'].length != 0 && listNotesEtudiantsCoeff[e_id][m_nom]['Exam Finale'].length == 0) {
@@ -227,7 +229,6 @@ app.get("/getPVAnnuel/:semestre/:classe_id", (req, res) => {
                 })
             })
         })
-        console.log(listNotesEtudiantsCoeff)
         listEtudiantID.forEach(e_id => {
             listMoyenneEtudiants[e_id] = {}
             listMatiereNOM.forEach(m_nom => {

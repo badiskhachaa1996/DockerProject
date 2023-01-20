@@ -154,7 +154,7 @@ app.post("/newEtudiantIMS",(req,res)=>{
         html: htmlmail,
         attachments: attachments
     };
-    Intedtransporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.error(error);
         }
